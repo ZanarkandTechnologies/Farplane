@@ -205,6 +205,18 @@ def run_metrics_primitives_cli(args: argparse.Namespace) -> int:
     return int(run_primitives(args))
 
 
+def run_metrics_push_cli(args: argparse.Namespace) -> int:
+    from farplane_metric_push import run_push
+
+    return int(run_push(args))
+
+
+def run_loop_monday_cli(args: argparse.Namespace) -> int:
+    from farplane_loop import run_monday
+
+    return int(run_monday(args))
+
+
 def run_project_snapshot_cli(args: argparse.Namespace) -> int:
     from farplane_project_snapshot import run_snapshot
 
@@ -261,6 +273,15 @@ def run_reports_repair_refs_cli(args: argparse.Namespace) -> int:
     return int(run_repair_refs(args))
 
 
+def default_wiki_root(cwd: Path) -> Path:
+    """Nearest ancestor whose Wiki already holds pages, so one company Wiki serves every subfolder."""
+    for directory in (cwd, *cwd.parents):
+        entities = directory / ".farplane" / "entities"
+        if entities.is_dir() and any(entities.glob("*.md")):
+            return directory
+    return cwd
+
+
 def run_wiki_cli(args: argparse.Namespace) -> int:
     from farplane_wiki import (
         WikiError,
@@ -271,6 +292,8 @@ def run_wiki_cli(args: argparse.Namespace) -> int:
         run_sync,
     )
 
+    if args.project_root is None:
+        args.project_root = str(default_wiki_root(Path.cwd()))
     try:
         action = args.wiki_command
         if action == "doctor":

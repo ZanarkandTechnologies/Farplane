@@ -88,18 +88,38 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
                 "prompt": "$lean-check",
             }
 
+            posted: list[dict[str, object]] = []
+
+            class Accepted:
+                status = 200
+
+                def __enter__(self) -> "Accepted":
+                    return self
+
+                def __exit__(self, *_: object) -> None:
+                    return None
+
+                def read(self, *_: object) -> bytes:
+                    return b'{"ok":true}'
+
+            def fake_urlopen(req: object, timeout: float = 0) -> Accepted:
+                posted.append(json.loads(req.data))  # type: ignore[attr-defined]
+                return Accepted()
+
+            env = {"FARPLANE_TELEMETRY_API_URL": "https://example-site.convex.site/ingest", "FARPLANE_TELEMETRY_TOKEN": "test-token"}
             with patch.object(sys, "stdin", io.StringIO(json.dumps(payload))):
-                with patch.dict(os.environ, {"FARPLANE_TELEMETRY_API_URL": ""}, clear=False):
+                with patch.dict(os.environ, env, clear=False), patch("urllib.request.urlopen", side_effect=fake_urlopen):
                     self.assertEqual(capture_user_turn.main(), 0)
+            local_events = list((project_root / ".farplane").glob("events/*.jsonl"))
 
-            event_path = next((project_root / ".farplane" / "events").glob("*.jsonl"))
-            events = [json.loads(line) for line in event_path.read_text(encoding="utf-8").splitlines()]
-
-        requested = next(event for event in events if event["event_type"] == "skill_requested")
+        self.assertEqual(local_events, [])
+        requested = next(row for row in posted if row["activityType"] == "skill_requested")
+        detail = json.loads(str(requested["detail"]))
         self.assertEqual(requested["source"], "user_explicit_request")
-        self.assertEqual(requested["status"], "requested")
-        self.assertEqual(requested["metadata"]["producer"], "capture_user_turn.py")
-        self.assertEqual(requested["metadata"]["registry_source"], "docs/skills/registry.jsonl")
+        self.assertEqual(requested["skillId"], "lean-check")
+        self.assertEqual(detail["status"], "requested")
+        self.assertEqual(detail["metadata"]["producer"], "capture_user_turn.py")
+        self.assertEqual(detail["metadata"]["registry_source"], "docs/skills/registry.jsonl")
 
     def test_missing_registry_is_observable_and_control_detection_survives(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

@@ -2,9 +2,13 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import tempfile
 import unittest
+from datetime import datetime
 from pathlib import Path
+from unittest.mock import patch
+from urllib.error import URLError
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -13,6 +17,65 @@ SPEC = importlib.util.spec_from_file_location("farplane_metric_refresh", SCRIPT)
 assert SPEC and SPEC.loader
 metric_refresh = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(metric_refresh)
+
+
+CONVEX_ENV = {
+    "FARPLANE_CONFIG_DISABLE": "1",
+    "FARPLANE_CONVEX_SITE_URL": "https://example-site.convex.site",
+    "CONVEX_URL": "https://example-site.convex.cloud",
+    "FARPLANE_TELEMETRY_TOKEN": "test-token",
+}
+
+
+def ms(iso: str) -> int:
+    return int(datetime.fromisoformat(iso.replace("Z", "+00:00")).timestamp() * 1000)
+
+
+class FakeConvex:
+    """Answers `/api/query` like the deployment: hook rows, then runtime activity-feed pages."""
+
+    def __init__(self, hook_rows: list[dict] | None = None, runtime_events: list[dict] | None = None) -> None:
+        self.hook_rows = hook_rows or []
+        self.runtime_events = runtime_events or []
+        self.calls: list[dict] = []
+
+    def __call__(self, req: object, timeout: float = 0) -> "FakeConvex.Answer":
+        body = json.loads(req.data)  # type: ignore[attr-defined]
+        self.calls.append(body)
+        if body["path"].endswith(":listHookTelemetryEvents"):
+            value: object = self.hook_rows
+        else:
+            value = {"events": self.runtime_events, "hasMore": False}
+        return FakeConvex.Answer({"status": "success", "value": value})
+
+    class Answer:
+        status = 200
+
+        def __init__(self, payload: dict) -> None:
+            self.payload = payload
+
+        def __enter__(self) -> "FakeConvex.Answer":
+            return self
+
+        def __exit__(self, *_: object) -> None:
+            return None
+
+        def read(self, *_: object) -> bytes:
+            return json.dumps(self.payload).encode()
+
+
+def hook_prompt(at: str, session: str, turn: str) -> dict:
+    return {
+        "hookName": "farplane-console-ping",
+        "hookType": "UserPromptSubmit",
+        "sessionId": session,
+        "eventAt": ms(at),
+        "payload": {"eventType": "turn_start", "turnId": turn},
+    }
+
+
+def convex(fake: object):
+    return patch.dict(os.environ, CONVEX_ENV), patch("urllib.request.urlopen", side_effect=fake)
 
 
 class FarplaneMetricRefreshTests(unittest.TestCase):
@@ -123,22 +186,27 @@ guard: "proof required"
         self.assertEqual(reading["value"], 1)
         self.assertEqual(reading["payload"]["tickets"][0]["ticket_id"], "TASK-0001")
 
-    def test_calculates_autonomy_time_ratio_from_runtime_folder(self) -> None:
+    def test_calculates_autonomy_time_ratio_from_convex_events(self) -> None:
+        # The hook and the runtime both record human-1's first prompt; it counts once.
+        fake = FakeConvex(
+            hook_rows=[
+                hook_prompt("2026-07-02T10:00:00Z", "human-1", "t1"),
+                hook_prompt("2026-07-02T10:20:00Z", "human-1", "t2"),
+                hook_prompt("2026-07-02T12:00:00Z", "human-2", "t3"),
+                hook_prompt("2026-07-03T08:00:00Z", "human-2", "t4"),
+            ],
+            runtime_events=[
+                {
+                    "activityType": "turn_start",
+                    "sessionKey": "human-1",
+                    "occurredAt": ms("2026-07-02T10:00:00.400Z"),
+                    "detail": json.dumps({"turnId": "t1"}),
+                },
+                {"activityType": "skill_requested", "sessionKey": "human-1", "occurredAt": ms("2026-07-02T10:00:01Z")},
+            ],
+        )
         with tempfile.TemporaryDirectory() as tmp:
             runtime = Path(tmp) / ".farplane"
-            event_dir = runtime / "events"
-            event_dir.mkdir(parents=True)
-            (event_dir / "codex.jsonl").write_text(
-                "\n".join(
-                    [
-                        json.dumps({"timestamp": "2026-07-02T10:00:00Z", "event_type": "turn_start", "session_id": "human-1"}),
-                        json.dumps({"timestamp": "2026-07-02T10:20:00Z", "event_type": "turn_start", "session_id": "human-1"}),
-                        json.dumps({"timestamp": "2026-07-02T12:00:00Z", "event_type": "turn_start", "session_id": "human-2"}),
-                    ]
-                )
-                + "\n",
-                encoding="utf-8",
-            )
             state_dir = runtime / "state"
             state_dir.mkdir(parents=True)
             (state_dir / "ticket-thread-associations.jsonl").write_text(
@@ -171,8 +239,14 @@ guard: "proof required"
                 encoding="utf-8",
             )
 
-            reading = metric_refresh.calculate_autonomy_time_ratio(runtime, "2026-07-02")
+            env, urlopen = convex(fake)
+            with env, urlopen:
+                reading = metric_refresh.calculate_autonomy_time_ratio(runtime, "2026-07-02")
 
+        hook_query = fake.calls[0]
+        self.assertEqual(hook_query["args"]["hookType"], "UserPromptSubmit")
+        self.assertTrue(hook_query["args"]["projectId"].startswith("codex-proj-"))
+        self.assertEqual(fake.calls[1]["path"], "modules/telemetry/queries:getTeamActivityFeed")
         self.assertEqual(reading["status"], "available")
         self.assertEqual(reading["value"], 1.5)
         self.assertEqual(reading["payload"]["human_prompt_count"], 3)
@@ -212,26 +286,34 @@ updated_at: 2026-07-02T10:30:00Z
                 + "\n",
                 encoding="utf-8",
             )
-            event_dir = runtime / "events"
-            event_dir.mkdir(parents=True)
-            (event_dir / "events.jsonl").write_text(
-                json.dumps(
-                    {
-                        "timestamp": "2026-07-02T10:10:00Z",
-                        "event_type": "turn_start",
-                        "thread_id": "thread-a",
-                        "actor": "user",
-                    }
-                )
-                + "\n",
-                encoding="utf-8",
-            )
-
-            readings = metric_refresh.calculate_ticket_intervention_metrics(root / "tickets", runtime, "2026-07-02")
+            fake = FakeConvex(hook_rows=[hook_prompt("2026-07-02T10:10:00Z", "thread-a", "t1"), hook_prompt("2026-07-02T11:10:00Z", "thread-a", "t2")])
+            env, urlopen = convex(fake)
+            with env, urlopen:
+                readings = metric_refresh.calculate_ticket_intervention_metrics(root / "tickets", runtime, "2026-07-02")
 
         self.assertEqual(readings["ticket_intervention_turn_count"]["value"], 1)
         self.assertEqual(readings["intervention_free_ticket_count"]["value"], 0)
         self.assertEqual(readings["auto_completion_rate"]["value"], 0.0)
+
+    def test_unreachable_convex_is_a_named_source_gap_not_a_zero(self) -> None:
+        def offline(req: object, timeout: float = 0) -> None:
+            raise URLError("offline")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            runtime = Path(tmp) / ".farplane"
+            runtime.mkdir()
+            env, urlopen = convex(offline)
+            with env, urlopen:
+                reading = metric_refresh.calculate_autonomy_time_ratio(runtime, "2026-07-02")
+            with patch.dict(os.environ, {"FARPLANE_CONFIG_DISABLE": "1"}, clear=True):
+                unset = metric_refresh.calculate_autonomy_time_ratio(runtime, "2026-07-02")
+
+        self.assertEqual(reading["status"], "source_gap")
+        self.assertIsNone(reading["value"])
+        self.assertIn("telemetry_unavailable:convex events", reading["payload"]["gaps"][0])
+        self.assertIn("unreachable", reading["payload"]["gaps"][0])
+        self.assertNotIn("test-token", json.dumps(reading))
+        self.assertIn("CONVEX_URL is not set", unset["payload"]["gaps"][0])
 
     def test_ticket_intervention_empty_window_is_not_source_gap_for_counts(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -240,11 +322,11 @@ updated_at: 2026-07-02T10:30:00Z
             ticket_dir.mkdir()
             runtime = root / ".farplane"
             (runtime / "state").mkdir(parents=True)
-            (runtime / "events").mkdir()
             (runtime / "state" / "ticket-thread-associations.jsonl").write_text("", encoding="utf-8")
-            (runtime / "events" / "events.jsonl").write_text("", encoding="utf-8")
 
-            readings = metric_refresh.calculate_ticket_intervention_metrics(ticket_dir, runtime, "2026-07-02")
+            # No completed ticket needs a thread's prompts, so Convex isn't asked at all.
+            with patch("urllib.request.urlopen", side_effect=AssertionError("no telemetry read expected")):
+                readings = metric_refresh.calculate_ticket_intervention_metrics(ticket_dir, runtime, "2026-07-02")
 
         self.assertEqual(readings["ticket_intervention_turn_count"]["status"], "available")
         self.assertEqual(readings["ticket_intervention_turn_count"]["value"], 0)

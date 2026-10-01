@@ -10,6 +10,11 @@ from typing import Mapping
 from uuid import uuid4
 from urllib import error, request
 
+CORE_DIR = Path(__file__).resolve().parents[1] / "core"
+if str(CORE_DIR) not in sys.path:
+    sys.path.insert(0, str(CORE_DIR))
+from farplane_convex import RUNTIME_AGENT, TELEMETRY_TEAM, telemetry_project_id  # noqa: E402
+
 
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -35,14 +40,28 @@ def _safe_metadata_value(value: object) -> str | int | float | bool | None:
     return str(value)[:500]
 
 
-def event_log_path(project_root: Path, timestamp: str) -> Path:
-    day = timestamp[:10] if len(timestamp) >= 10 else now_iso()[:10]
-    return project_root / ".farplane" / "events" / f"{day}.jsonl"
+def _config_value(name: str) -> str:
+    """A setting from the environment, else Farplane's runtime config (as the hooks read it)."""
+    value = os.environ.get(name, "").strip()
+    if value:
+        return value
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "core"))
+        from runtime_config import read_config_value  # type: ignore
+
+        return str(read_config_value(name) or "").strip()
+    except Exception:
+        return ""
 
 
 def telemetry_config() -> tuple[str, str, float]:
-    url = os.environ.get("FARPLANE_TELEMETRY_API_URL", "").strip()
-    token = os.environ.get("FARPLANE_TELEMETRY_API_TOKEN", "").strip()
+    # Every event goes to Convex only: an explicit endpoint, else the Convex site's /ingest, the same
+    # deployment the hook telemetry posts to. Nothing is logged locally; the metric engine reads Convex.
+    url = _config_value("FARPLANE_TELEMETRY_API_URL")
+    if not url:
+        site = _config_value("FARPLANE_CONVEX_SITE_URL")
+        url = f"{site.rstrip('/')}/ingest" if site else ""
+    token = _config_value("FARPLANE_TELEMETRY_TOKEN")
     raw_timeout = os.environ.get("FARPLANE_TELEMETRY_TIMEOUT_SECS", "").strip()
     try:
         timeout = float(raw_timeout) if raw_timeout else 2.0
@@ -109,22 +128,52 @@ def build_event(
     }
 
 
-def write_local_event(project_root: Path, event: Mapping[str, object]) -> Path:
+def convex_runtime_row(project_root: Path, event: Mapping[str, object]) -> dict[str, object]:
+    """The event as a runtime row of Convex's `events` table (the `/ingest` payload).
+
+    The original event type rides in `activityType`; turn, ticket and counts ride in `detail` as JSON.
+    """
+    event_type = _safe_str(event.get("event_type")) or "runtime_event"
     timestamp = _safe_str(event.get("timestamp")) or now_iso()
-    path = event_log_path(project_root, timestamp)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(dict(event), sort_keys=True) + "\n")
-    return path
+    try:
+        occurred_at = int(datetime.fromisoformat(timestamp.replace("Z", "+00:00")).timestamp() * 1000)
+    except ValueError:
+        occurred_at = int(datetime.now(timezone.utc).timestamp() * 1000)
+    detail = {
+        "eventId": event.get("event_id", ""),
+        "turnId": event.get("turn_id", ""),
+        "hookName": event.get("hook_name", ""),
+        "phase": event.get("phase", ""),
+        "status": event.get("status", ""),
+        "outcome": event.get("outcome", ""),
+        "counts": event.get("counts", {}),
+        "metadata": event.get("metadata", {}),
+    }
+    row: dict[str, object] = {
+        "teamId": TELEMETRY_TEAM,
+        "projectId": telemetry_project_id(project_root),
+        "agentId": RUNTIME_AGENT,
+        "eventType": "activity_log",
+        "activityType": event_type,
+        "label": (_safe_str(event.get("summary")) or event_type)[:200],
+        "detail": json.dumps(detail, sort_keys=True),
+        "source": _safe_str(event.get("source")) or "runtime_telemetry",
+        "stepKey": _safe_str(event.get("event_id")),
+        "sessionKey": _safe_str(event.get("session_id")),
+        "skillId": _safe_str(event.get("skill_name")),
+        "taskId": _safe_str(event.get("ticket_id")),
+        "occurredAt": occurred_at,
+    }
+    return {key: value for key, value in row.items() if value != ""}
 
 
 def emit_farplane_event(project_root: Path, event: Mapping[str, object]) -> bool:
-    write_local_event(project_root, event)
+    """Send one event to Convex; False when it isn't configured or didn't take it (never raises)."""
     url, token, timeout = telemetry_config()
     if not url:
         return False
 
-    data = json.dumps(dict(event)).encode("utf-8")
+    data = json.dumps(convex_runtime_row(project_root, event)).encode("utf-8")
     headers = {"Content-Type": "application/json"}
     if token:
         headers["Authorization"] = f"Bearer {token}"
@@ -133,22 +182,9 @@ def emit_farplane_event(project_root: Path, event: Mapping[str, object]) -> bool
         with request.urlopen(req, timeout=timeout) as response:
             response.read(1)
             return 200 <= response.status < 300
-    except (error.URLError, TimeoutError, OSError):
-        failed = project_root / ".farplane" / "events" / "failed-sync.jsonl"
-        failed.parent.mkdir(parents=True, exist_ok=True)
-        with failed.open("a", encoding="utf-8") as handle:
-            handle.write(
-                json.dumps(
-                    {
-                        "timestamp": now_iso(),
-                        "event_id": event.get("event_id", ""),
-                        "event_type": event.get("event_type", ""),
-                        "reason": "network_error",
-                    },
-                    sort_keys=True,
-                )
-                + "\n"
-            )
+    except (error.URLError, TimeoutError, OSError) as exc:
+        reason = getattr(exc, "code", None) or getattr(exc, "reason", None) or type(exc).__name__
+        print(f"farplane: runtime telemetry not delivered to Convex ({reason})", file=sys.stderr)
         return False
 
 

@@ -155,7 +155,7 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "owner": "farplane-core",
         "command": "python3 bin/core/farplane_metric_refresh.py autonomy-time-ratio --runtime-dir .farplane --date <YYYY-MM-DD>",
         "store_to": ".farplane/metrics/observations/autonomy_time_feedback/<YYYY-MM-DD>.json",
-        "required_inputs": [".farplane/events/*.jsonl", ".farplane/state/ticket-thread-associations.jsonl", ".farplane/automation/rewards.jsonl"],
+        "required_inputs": ["convex:events (hook + runtime human prompts)", ".farplane/state/ticket-thread-associations.jsonl", ".farplane/automation/rewards.jsonl"],
         "emits": ["auto_time_ratio", "human_attention_minutes_estimated", "autonomous_worker_elapsed_minutes"],
         "source_gap_policy": "Emit source_gap only when all runtime feedback sources are missing.",
     },
@@ -165,7 +165,7 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "owner": "farplane-core",
         "command": "python3 bin/core/farplane_metric_refresh.py ticket-intervention-metrics --ticket-dir tickets --runtime-dir .farplane --date <YYYY-MM-DD>",
         "store_to": ".farplane/metrics/observations/ticket_intervention_feedback/<YYYY-MM-DD>.json",
-        "required_inputs": ["tickets/**/ticket.md", ".farplane/state/ticket-thread-associations.jsonl", ".farplane/events/*.jsonl"],
+        "required_inputs": ["tickets/**/ticket.md", ".farplane/state/ticket-thread-associations.jsonl", "convex:events (hook + runtime human prompts)"],
         "emits": ["auto_completion_rate", "intervention_free_ticket_count", "ticket_intervention_turn_count"],
         "source_gap_policy": "Emit source_gap when no completed ticket can be associated with its execution thread.",
     },
@@ -645,15 +645,11 @@ def load_automations(project_root: Path) -> tuple[list[dict[str, Any]], list[str
         except (AutomationMarkdownError, OSError):
             gaps.append(f"invalid_automation_markdown:{path.name}")
             continue
-        automations.append(
-            {
-                "id": str(item.get("id") or ""),
-                "name": str(item.get("name") or ""),
-                "kind": str(item.get("kind") or ""),
-                "status": str(item.get("status") or ""),
-                "source_ref": {"path": f"farplane/automations/{path.name}"},
-            }
-        )
+        if item.get("schema") == "farplane_automation_recipe":
+            gaps.append(f"unconfigured_automation_recipe:{path.name}")
+            continue
+        row = {key: str(item.get(key) or "") for key in ("id", "name", "kind", "status")}
+        automations.append({**row, "source_ref": {"path": f"farplane/automations/{path.name}"}})
     if not automations and not gaps: gaps.append("empty_automations_dir")
     return automations, gaps
 

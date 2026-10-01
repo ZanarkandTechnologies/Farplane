@@ -13,7 +13,7 @@ from farplane_cli_commands import (
     run_content_select_cli, run_content_validate_cli, run_doctor,
     run_eval_init_cli, run_eval_promptfoo_cli,
     run_harness_health_compile_cli,
-    run_metrics_primitives_cli, run_mining_cli, run_project_snapshot_cli,
+    run_loop_monday_cli, run_metrics_primitives_cli, run_metrics_push_cli, run_mining_cli, run_project_snapshot_cli,
     run_capability_profiles_cli,
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
     run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
@@ -280,6 +280,23 @@ def build_parser() -> argparse.ArgumentParser:
     metrics_primitives.add_argument("--no-write", action="store_true", help="Print readings without writing .farplane metric files.")
     metrics_primitives.add_argument("--json", action="store_true")
     metrics_primitives.set_defaults(func=run_metrics_primitives_cli)
+    metrics_push = metrics_sub.add_parser("push", help="Send snapshot readings and the company's Whop cash to Convex.")
+    metrics_push.add_argument("--project-root", help="Push only this project's snapshot (default: all, plus cash).")
+    metrics_push.add_argument("--cash", type=float, help="Record a cash balance (USD) the operator reported.")
+    metrics_push.add_argument("--json", action="store_true")
+    metrics_push.set_defaults(func=run_metrics_push_cli)
+
+    loop = sub.add_parser("loop", help="Run the business loop's step plans in the office.")
+    loop_sub = loop.add_subparsers(dest="loop_command")
+    loop_monday = loop_sub.add_parser(
+        "monday",
+        help="Review each step plan's output week on week and seed this week's routine tasks on its floor's queue.",
+    )
+    loop_monday.add_argument("--office", help="Folder the office runs in (holds .agent-office). Default: $AGENT_OFFICE_DIR or here.")
+    loop_monday.add_argument("--today", help="The run's date, YYYY-MM-DD. Default: today.")
+    loop_monday.add_argument("--dry-run", action="store_true", help="Compute quotas without queueing.")
+    loop_monday.add_argument("--json", action="store_true")
+    loop_monday.set_defaults(func=run_loop_monday_cli)
 
     project = sub.add_parser("project", help="Compile project-level projections for UI and intervals.")
     project_sub = project.add_subparsers(dest="project_command")
@@ -341,14 +358,14 @@ def build_parser() -> argparse.ArgumentParser:
     wiki_doctor = wiki_sub.add_parser(
         "doctor", help="Check Python SQLite FTS5/trigram readiness and Wiki cache state."
     )
-    wiki_doctor.add_argument("--project-root", default=os.getcwd())
+    wiki_doctor.add_argument("--project-root", default=None)
     wiki_doctor.add_argument("--json", action="store_true")
     wiki_doctor.set_defaults(func=run_wiki_cli)
 
     wiki_rebuild = wiki_sub.add_parser(
         "rebuild", help="Rebuild the generated Wiki database and JSON projections from Markdown."
     )
-    wiki_rebuild.add_argument("--project-root", default=os.getcwd())
+    wiki_rebuild.add_argument("--project-root", default=None)
     wiki_rebuild.add_argument("--no-write", action="store_true")
     wiki_rebuild.add_argument("--json", action="store_true")
     wiki_rebuild.set_defaults(func=run_wiki_cli)
@@ -356,7 +373,7 @@ def build_parser() -> argparse.ArgumentParser:
     wiki_sync = wiki_sub.add_parser(
         "sync", help="Reparse changed Wiki pages, replace their emitted edges, and export projections."
     )
-    wiki_sync.add_argument("--project-root", default=os.getcwd())
+    wiki_sync.add_argument("--project-root", default=None)
     wiki_sync.add_argument("--path", action="append", default=[])
     wiki_sync.add_argument("--no-write", action="store_true")
     wiki_sync.add_argument("--json", action="store_true")
@@ -366,8 +383,9 @@ def build_parser() -> argparse.ArgumentParser:
         "search", help="Return exact, lexical, and trigram entity candidates."
     )
     wiki_search.add_argument("query")
-    wiki_search.add_argument("--project-root", default=os.getcwd())
+    wiki_search.add_argument("--project-root", default=None)
     wiki_search.add_argument("--kind")
+    wiki_search.add_argument("--role", help="Only pages with this role, e.g. creator or client.")
     wiki_search.add_argument("--limit", type=int, default=10)
     wiki_search.add_argument("--json", action="store_true")
     wiki_search.set_defaults(func=run_wiki_cli)

@@ -7,12 +7,12 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from bin.core.farplane_convex import ConvexUnavailable, read_human_prompts, telemetry_gap
 from bin.core.farplane_metric_shared import (
     iter_ticket_files,
     parse_iso_datetime,
     parse_ticket_frontmatter,
     read_jsonl,
-    read_jsonl_glob,
     row_date,
     ticket_has_acceptance_evidence,
     ticket_has_completion_proof,
@@ -58,18 +58,20 @@ def reward_ticket_ids(rows: list[dict[str, Any]], date: str) -> set[str]:
 def calculate_autonomy_time_ratio(runtime_dir: Path, date: str) -> dict[str, Any]:
     """calculate_autonomy_time_ratio(runtime_dir, date) -> MetricReading."""
     root = runtime_dir.resolve()
-    event_rows = read_jsonl_glob(root, "events/*.jsonl")
+    # Human prompts come from Convex's telemetry events (hook + runtime rows) for the checkout above `.farplane`.
+    day_start = parse_iso_datetime(date)
+    if day_start is None:
+        return {"value": None, "status": "source_gap", "payload": {"gaps": [f"invalid_date:{date}"]}}
+    try:
+        event_rows, gaps = read_human_prompts(root.parent, day_start)
+    except ConvexUnavailable as exc:
+        return {"value": None, "status": "source_gap", "payload": {"gaps": [telemetry_gap(exc)]}}
     association_rows = read_jsonl(root / "state" / "ticket-thread-associations.jsonl")
     reward_rows = read_jsonl(root / "automation" / "rewards.jsonl")
-    gaps = []
-    if not (root / "events").exists():
-        gaps.append("missing:events")
     if not (root / "state" / "ticket-thread-associations.jsonl").exists():
         gaps.append("missing:state/ticket-thread-associations.jsonl")
     if not (root / "automation" / "rewards.jsonl").exists():
         gaps.append("missing:automation/rewards.jsonl")
-    if len(gaps) == 3:
-        return {"value": None, "status": "source_gap", "payload": {"gaps": gaps}}
 
     autonomous_thread_ids = {
         str(row.get("thread_id") or row.get("session_id"))
@@ -178,6 +180,8 @@ def calculate_autonomy_savings(ticket_dir: Path, runtime_dir: Path, date: str, b
     """Project accepted/nonaccepted clone hours through ticket proof and TAS-A."""
     attention = calculate_autonomy_time_ratio(runtime_dir, date)
     human_minutes = float(attention.get("payload", {}).get("human_attention_minutes_estimated") or 0.0)
+    # Without the human side (telemetry unreachable), savings can't be computed.
+    attention_known = attention.get("status") == "available"
     by_ticket: dict[str, list[dict[str, Any]]] = {}
     for row in read_jsonl(runtime_dir / "state" / "ticket-thread-associations.jsonl"):
         if row.get("ticket_id"):
@@ -186,7 +190,7 @@ def calculate_autonomy_savings(ticket_dir: Path, runtime_dir: Path, date: str, b
     intervals: list[tuple[datetime, datetime]] = []
     terminal_count = attributed_count = 0
     items: list[dict[str, Any]] = []
-    gaps: list[str] = []
+    gaps: list[str] = [] if attention_known else list(attention.get("payload", {}).get("gaps") or [])
     for ticket in iter_ticket_files(ticket_dir.resolve()):
         fm = parse_ticket_frontmatter(ticket)
         status = str(fm.get("status") or "").lower()
@@ -223,7 +227,7 @@ def calculate_autonomy_savings(ticket_dir: Path, runtime_dir: Path, date: str, b
     if terminal_count and not attributed_count:
         gaps.append("missing:accepted_runtime_attribution")
     coverage = attributed_count / terminal_count if terminal_count else None
-    saved_minutes = max(accepted_minutes - human_minutes, 0.0) if attributed_count else None
+    saved_minutes = max(accepted_minutes - human_minutes, 0.0) if attributed_count and attention_known else None
     return {"value": round(saved_minutes / 60.0, 4) if saved_minutes is not None else None, "status": "available" if saved_minutes is not None else "source_gap", "payload": {"clone_hours": round((accepted_minutes + nonaccepted_minutes) / 60.0, 4), "concurrent_agent_wall_hours": round(union_minutes / 60.0, 4), "accepted_clone_hours": round(accepted_minutes / 60.0, 4), "nonaccepted_clone_hours": round(nonaccepted_minutes / 60.0, 4), "human_attention_hours_estimated": round(human_minutes / 60.0, 4), "potential_human_time_saved_hours_estimated": round(saved_minutes / 60.0, 4) if saved_minutes is not None else None, "attribution_coverage": round(coverage, 4) if coverage is not None else None, "baseline_provenance": {"reasonable_hours_per_day": baseline_reasonable_hours, "max_hours_per_day": baseline_max_hours, "source": "operator_provided" if baseline_reasonable_hours is not None or baseline_max_hours is not None else "not_provided"}, "formula": "max(accepted_clone_hours - human_attention_hours_estimated, 0)", "items": items, "gaps": gaps}}
 
 
@@ -263,9 +267,6 @@ def calculate_ticket_intervention_metrics(ticket_dir: Path, runtime_dir: Path, d
     association_rows = read_jsonl(runtime_root / "state" / "ticket-thread-associations.jsonl")
     if not association_rows:
         gaps.append("missing_ticket_thread_association_source")
-    event_rows = read_jsonl_glob(runtime_root, "events/*.jsonl")
-    if not (runtime_root / "events").exists():
-        gaps.append("missing:events")
 
     associations_by_ticket: dict[str, list[dict[str, Any]]] = {}
     for row in association_rows:
@@ -273,10 +274,7 @@ def calculate_ticket_intervention_metrics(ticket_dir: Path, runtime_dir: Path, d
         if ticket_id:
             associations_by_ticket.setdefault(ticket_id, []).append(row)
 
-    counted_tickets = 0
-    intervention_free = 0
-    total_interventions = 0
-    items: list[dict[str, Any]] = []
+    windows: list[tuple[str, str, str, datetime, datetime]] = []
     for ticket_id, (_ticket_path, relative_ticket, completed_at) in completed.items():
         associations = associations_by_ticket.get(ticket_id, [])
         if not associations:
@@ -297,7 +295,25 @@ def calculate_ticket_intervention_metrics(ticket_dir: Path, runtime_dir: Path, d
         if started_at is None:
             gaps.append(f"{relative_ticket}:missing_execution_start")
             continue
-        thread_id = next(iter(thread_ids))
+        windows.append((ticket_id, relative_ticket, next(iter(thread_ids)), started_at, completed_at))
+
+    event_rows: list[dict[str, Any]] = []
+    if windows:
+        try:
+            event_rows, telemetry_gaps = read_human_prompts(runtime_root.parent, min(window[3] for window in windows))
+        except ConvexUnavailable as exc:
+            gap_payload = {"tickets": [], "gaps": [*gaps, telemetry_gap(exc)]}
+            return {
+                metric_id: {"value": None, "status": "source_gap", "payload": gap_payload}
+                for metric_id in ("auto_completion_rate", "intervention_free_ticket_count", "ticket_intervention_turn_count")
+            }
+        gaps.extend(telemetry_gaps)
+
+    counted_tickets = 0
+    intervention_free = 0
+    total_interventions = 0
+    items: list[dict[str, Any]] = []
+    for ticket_id, relative_ticket, thread_id, started_at, completed_at in windows:
         turn_count = 0
         for row in event_rows:
             if str(row.get("thread_id") or row.get("session_id") or "") != thread_id:

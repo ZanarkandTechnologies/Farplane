@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import importlib.util
+import io
+import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 _PATH = Path(__file__).parents[1] / "core" / "farplane_metric_refresh.py"
 _SPEC = importlib.util.spec_from_file_location("farplane_metric_refresh_contract", _PATH)
@@ -46,7 +50,16 @@ class RefreshPlanTests(unittest.TestCase):
             state = root / ".farplane" / "state"
             state.mkdir(parents=True)
             (state / "ticket-thread-associations.jsonl").write_text('{"ticket_id":"TASK-0001","thread_id":"thread-1","execution_started_at":"2026-07-12T10:00:00Z"}\n', encoding="utf-8")
-            result = calculate_autonomy_savings(root / "tickets", root / ".farplane", "2026-07-12", 10, 20)
+            def no_prompts(req: object, timeout: float = 0) -> object:
+                path = json.loads(req.data)["path"]  # type: ignore[attr-defined]
+                value = [] if path.endswith(":listHookTelemetryEvents") else {"events": [], "hasMore": False}
+                answer = io.BytesIO(json.dumps({"status": "success", "value": value}).encode())
+                answer.__enter__ = lambda: answer  # type: ignore[method-assign]
+                return answer
+
+            env = {"FARPLANE_CONFIG_DISABLE": "1", "CONVEX_URL": "https://example-site.convex.cloud"}
+            with patch.dict(os.environ, env), patch("urllib.request.urlopen", side_effect=no_prompts):
+                result = calculate_autonomy_savings(root / "tickets", root / ".farplane", "2026-07-12", 10, 20)
         self.assertEqual(result["payload"]["accepted_clone_hours"], 2.0)
         self.assertEqual(result["payload"]["nonaccepted_clone_hours"], 0.0)
         self.assertEqual(result["payload"]["attribution_coverage"], 1.0)
