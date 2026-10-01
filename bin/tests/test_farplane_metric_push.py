@@ -110,6 +110,12 @@ class WhopCashTests(unittest.TestCase):
         self.assertEqual(readings, [])
         self.assertIn("company:balance:read", gaps[0])
 
+    def test_an_accessible_ledger_with_no_balances_holds_zero(self) -> None:
+        readings, gaps = push.whop_cash_readings(["biz_A"], "key", lambda *_: {"balances": [], "treasury_balance": None})
+        self.assertEqual((readings[0]["value"], gaps), (0.0, []))
+        self.assertEqual(push.whop_balance_usd({"balances": [{"currency": "usd", "balance": 5}], "treasury_balance": None}), 5.0)
+        self.assertIsNone(push.whop_balance_usd({"balances": [{"currency": "eur", "balance": 5}]}))
+
     def test_no_key_or_no_binding_is_a_gap(self) -> None:
         self.assertEqual(push.whop_cash_readings(["biz_A"], "", lambda *_: {}), ([], ["whop_api_key_missing"]))
         self.assertEqual(push.whop_cash_readings([], "key", lambda *_: {}), ([], ["no_whop_company_bound"]))

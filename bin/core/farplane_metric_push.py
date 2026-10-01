@@ -1,4 +1,7 @@
-"""`farplane metrics push`: send snapshot metric readings and the company's cash to Convex.
+"""`farplane metrics refresh` and `farplane metrics push`: today's readings for every project, then Convex.
+
+`refresh` is the daily job in one command: Core's primitive readings and the project snapshot for each
+company.json project that is its own Git checkout, then one push. `push` sends what the snapshots hold.
 
 Each project's `.farplane/project/ui/latest.json` holds every metric's observed series; each point becomes
 one reading (project slug from company.json, metric id, value, day). Cash is the Whop balance of every
@@ -15,7 +18,9 @@ import json
 import math
 import os
 import re
+import subprocess
 import time
+from datetime import datetime
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -142,9 +147,8 @@ def whop_cash_readings(companies: list[str], api_key: str, fetch=None) -> tuple[
         except (urllib.error.URLError, TimeoutError, ValueError) as exc:
             gaps.append(f"whop_unreachable:{company}:{str(exc)[:80]}")
             continue
-        treasury = body.get("treasury_balance") if isinstance(body, dict) else None
-        value = treasury.get("balance_usd") if isinstance(treasury, dict) else None
-        if isinstance(value, bool) or not isinstance(value, (int, float)):
+        value = whop_balance_usd(body)
+        if value is None:
             gaps.append(f"whop_balance_missing:{company}")
             continue
         total += float(value)
@@ -153,6 +157,21 @@ def whop_cash_readings(companies: list[str], api_key: str, fetch=None) -> tuple[
         return [], gaps
     note = "Whop balance of " + ", ".join(read) + ("; missing " + ", ".join(gaps) if gaps else "")
     return [reading(COMPANY_PROJECT, "cash", total, "USD", today_ms(), "whop", note)], gaps
+
+
+def whop_balance_usd(body: Any) -> float | None:
+    """The ledger's USD balance: its treasury balance, else its USD balances; a ledger with none holds $0."""
+    if not isinstance(body, dict) or not isinstance(body.get("balances", []), list):
+        return None
+    treasury = body.get("treasury_balance")
+    if isinstance(treasury, dict) and isinstance(treasury.get("balance_usd"), (int, float)):
+        return float(treasury["balance_usd"])
+    usd = [row.get("balance") for row in body.get("balances") or [] if isinstance(row, dict) and str(row.get("currency")).lower() == "usd"]
+    if any(isinstance(v, bool) or not isinstance(v, (int, float)) for v in usd):
+        return None
+    if body.get("balances") and not usd:
+        return None  # balances only in other currencies: report a gap rather than guess a rate
+    return float(sum(usd))
 
 
 def _whop_get(url: str, api_key: str) -> Any:
@@ -185,21 +204,10 @@ def push_project(root: Path, slug: str, settings: dict[str, str]) -> dict[str, A
     return result
 
 
-def run_push(args: argparse.Namespace) -> int:
-    home = farplane_home()
-    projects = company_projects(home)
+def push_all(targets: list[tuple[Path, str]], cash_reported: float | None, everything: bool) -> list[dict[str, Any]]:
+    """Each target's snapshot readings, then (for a full run) the company's cash: reported, else Whop's."""
     settings = convex_settings()
     results: list[dict[str, Any]] = []
-    if args.project_root:
-        root = Path(args.project_root).expanduser().resolve()
-        row = project_for_root(projects, root)
-        targets = [(root, project_slug(str(row.get("name") or "")) if row else "")]
-    else:
-        targets = [
-            (Path(str(row["trackingContext"])).expanduser().resolve(), project_slug(str(row.get("name") or "")))
-            for row in projects
-            if row.get("trackingContext")
-        ]
     for root, slug in targets:
         if not slug:
             results.append({"project": str(root), "status": "skipped", "reason": "not a company.json project"})
@@ -208,9 +216,9 @@ def run_push(args: argparse.Namespace) -> int:
             results.append(push_project(root, slug, settings))
         except ConvexUnavailable as exc:
             results.append({"project": slug, "status": "failed", "reason": str(exc)})
-    if not args.project_root:
-        if getattr(args, "cash", None) is not None:
-            cash = [reading(COMPANY_PROJECT, "cash", float(args.cash), "USD", today_ms(), "operator", "reported by the operator")]
+    if everything:
+        if cash_reported is not None:
+            cash = [reading(COMPANY_PROJECT, "cash", float(cash_reported), "USD", today_ms(), "operator", "reported by the operator")]
             gaps: list[str] = []
         else:
             cash, gaps = whop_cash_readings(whop_companies([root for root, _ in targets]), os.environ.get("WHOP_API_KEY", "").strip())
@@ -219,13 +227,79 @@ def run_push(args: argparse.Namespace) -> int:
             results.append({"project": COMPANY_PROJECT, "status": "pushed", "readings": len(cash), "gaps": gaps, **pushed})
         except ConvexUnavailable as exc:
             results.append({"project": COMPANY_PROJECT, "status": "failed", "reason": str(exc)})
+    return results
 
-    if args.json:
+
+def targets_for(projects: list[dict[str, Any]], project_root: str | None) -> list[tuple[Path, str]]:
+    """One project (by its root) or every company.json project with a folder, with its Convex slug."""
+    if project_root:
+        root = Path(project_root).expanduser().resolve()
+        row = project_for_root(projects, root)
+        return [(root, project_slug(str(row.get("name") or "")) if row else "")]
+    return [
+        (Path(str(row["trackingContext"])).expanduser().resolve(), project_slug(str(row.get("name") or "")))
+        for row in projects
+        if row.get("trackingContext")
+    ]
+
+
+def print_results(results: list[dict[str, Any]], as_json: bool) -> None:
+    if as_json:
         print(json.dumps({"results": results}, indent=2, sort_keys=True))
-    else:
-        for row in results:
-            if row["status"] == "pushed":
-                print(f"{row['project']}: pushed {row['readings']} readings ({row['inserted']} new, {row['updated']} replaced)")
-            else:
-                print(f"{row['project']}: {row['status']} ({row['reason']})")
+        return
+    for row in results:
+        if row["status"] == "pushed":
+            print(f"{row['project']}: pushed {row['readings']} readings ({row['inserted']} new, {row['updated']} replaced)")
+        elif row["status"] == "refreshed":
+            print(f"{row['project']}: refreshed ({row['gaps']} source gaps)")
+        else:
+            print(f"{row['project']}: {row['status']} ({row['reason']})")
+
+
+def run_push(args: argparse.Namespace) -> int:
+    targets = targets_for(company_projects(farplane_home()), args.project_root)
+    results = push_all(targets, getattr(args, "cash", None), everything=not args.project_root)
+    print_results(results, args.json)
+    return 1 if any(row["status"] == "failed" for row in results) else 0
+
+
+def is_repo_root(root: Path) -> bool:
+    """A folder that is its own Git checkout (not a folder inside another repo)."""
+    try:
+        top = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=root, capture_output=True, text=True, timeout=15).stdout.strip()
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return bool(top) and Path(top).resolve() == root.resolve()
+
+
+def refresh_project(root: Path, slug: str, date_value: str, codex_home: Path) -> dict[str, Any]:
+    """Core's primitive readings for the day, then the project snapshot the office reads."""
+    try:
+        from farplane_primitive_metrics import primitive_snapshot
+        from farplane_project_snapshot import PROJECT_SNAPSHOT_PATH, load_project_snapshot, write_project_ui_snapshot
+    except ImportError:  # pragma: no cover - package import path used by tests
+        from bin.core.farplane_primitive_metrics import primitive_snapshot
+        from bin.core.farplane_project_snapshot import PROJECT_SNAPSHOT_PATH, load_project_snapshot, write_project_ui_snapshot
+
+    name = slug or str(root)
+    if not root.is_dir() or not is_repo_root(root):
+        return {"project": name, "status": "skipped", "reason": "folder missing or not its own Git checkout"}
+    try:
+        primitive_snapshot(project_root=root, date_value=date_value, codex_home=codex_home, monthly_spend=None, write=True)
+        snapshot = load_project_snapshot(root, date_value)
+        write_project_ui_snapshot(snapshot, root / PROJECT_SNAPSHOT_PATH)
+    except Exception as exc:  # one project's failure is that project's gap; the rest carry on
+        return {"project": name, "status": "failed", "reason": (str(exc).splitlines() or [type(exc).__name__])[0]}
+    return {"project": name, "status": "refreshed", "gaps": len(snapshot.get("source_gaps", []))}
+
+
+def run_refresh(args: argparse.Namespace) -> int:
+    """`farplane metrics refresh`: every project's readings for today, its snapshot, then one push to Convex."""
+    date_value = args.date or datetime.now().astimezone().date().isoformat()
+    targets = targets_for(company_projects(farplane_home()), args.project_root)
+    results = [refresh_project(root, slug, date_value, Path(args.codex_home).expanduser()) for root, slug in targets]
+    refreshed = [(root, slug) for (root, slug), r in zip(targets, results) if r["status"] == "refreshed"]
+    if not args.no_push:
+        results += push_all(refreshed, getattr(args, "cash", None), everything=not args.project_root)
+    print_results(results, args.json)
     return 1 if any(row["status"] == "failed" for row in results) else 0
