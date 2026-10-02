@@ -12,6 +12,24 @@ BatchStatus = Literal["available", "source_gap", "partial", "blocked"]
 
 OBSERVATION_ROOT = Path(".farplane/metrics/observations")
 
+# A metric needs only an id (its name) and how to read it: `refresh` (instructions) or `refresh_ref` (a
+# refresher that provides it). Everything else has a default, so `farplane/metrics.yaml` stays two lines a
+# metric unless a field says something the default doesn't.
+DEFAULT_MAX_AGE_DAYS = 7
+
+
+def with_metric_defaults(definition: dict[str, Any]) -> dict[str, Any]:
+    """A metric definition with every left-out field filled: a reading (stock) of a count, higher is better,
+    stale after a week, charted as a line (a flow as daily bars plus the running total)."""
+    filled = dict(definition)
+    metric_type = filled.setdefault("type", "stock")
+    if metric_type in {"flow", "stock"}:
+        filled.setdefault("unit", "count")
+        filled.setdefault("direction", "maximize")
+        filled.setdefault("display", "bar_plus_cumulative" if metric_type == "flow" else "line")
+    filled.setdefault("max_age_days", DEFAULT_MAX_AGE_DAYS)
+    return filled
+
 
 class MetricObservation(BaseModel):
     model_config = ConfigDict(extra="forbid")

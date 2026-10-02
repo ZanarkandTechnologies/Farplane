@@ -15,10 +15,10 @@ from typing import Any, TypedDict
 import yaml
 try:
     from farplane_automation_file import AutomationMarkdownError, load_automation_markdown
-    from farplane_metric_schema import batch_path, read_metric_batches
+    from farplane_metric_schema import batch_path, read_metric_batches, with_metric_defaults
 except ImportError:  # pragma: no cover - package import path used by tests
     from bin.core.farplane_automation_file import AutomationMarkdownError, load_automation_markdown
-    from bin.core.farplane_metric_schema import batch_path, read_metric_batches
+    from bin.core.farplane_metric_schema import batch_path, read_metric_batches, with_metric_defaults
 
 try:
     from farplane_metric_projection import (
@@ -487,7 +487,7 @@ def load_bindings(project_root: Path) -> dict[str, Any]:
 def load_metric_definitions(project_root: Path) -> dict[str, Any]:
     payload = read_yaml(project_root / "farplane" / "metrics.yaml")
     metrics = payload.get("metrics") if isinstance(payload, dict) else None
-    return metrics if isinstance(metrics, dict) else {}
+    return {key: with_metric_defaults(row) if isinstance(row, dict) else row for key, row in metrics.items()} if isinstance(metrics, dict) else {}
 
 
 def load_harness_config(project_root: Path) -> dict[str, Any]:

@@ -141,11 +141,14 @@ one inline `refresh`, but never both. The Daily Interval agent resolves stale
 selected metrics into unique groups, executes each prompt once, and stores
 separate flat observations.
 
-Each **quantitative** definition requires
-`type: flow | stock`, `unit`, `direction: maximize | minimize`, and one refresh
-source. Labels, descriptions, display hints, freshness, pinned state, and hard
-guards are optional. Flow means additive activity; stock means a point-in-time
-balance. `harness.yaml` selects active objectives/guards and owns objective
+A metric needs two things: its id (the name; `label` defaults to it) and how to
+read it (`refresh` or `refresh_ref`). Everything else has a default, filled by
+`with_metric_defaults` in `bin/core/farplane_metric_schema.py` wherever the file
+is read: `type: stock`, `unit: count`, `direction: maximize`, `max_age_days: 7`,
+and `display` from the type (a flow charts as daily bars plus the running total,
+a stock as a line). Write a field only when the default is wrong for that
+metric. Flow means additive activity; stock means a point-in-time balance.
+`harness.yaml` selects active objectives/guards and owns objective
 priority. Unselected non-guard metrics are tracked observations, not ordinary
 planner context.
 

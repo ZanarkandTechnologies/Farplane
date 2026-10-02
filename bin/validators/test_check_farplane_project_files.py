@@ -734,13 +734,12 @@ metric_bindings:
 
     errors = validate(tmp_path)
 
-    assert "farplane/metrics.yaml metrics.accepted_harness_improvements uses unsupported derived/projection config: formula, kind, windows; declare only type: flow|stock and let refreshers emit facts while Core derives window views." in errors
-    assert "farplane/metrics.yaml metrics.accepted_harness_improvements.type must be a non-empty string." in errors
+    assert "farplane/metrics.yaml metrics.accepted_harness_improvements uses unsupported derived/projection config: formula, kind, windows; declare only type: flow|stock|markdown and let refreshers emit facts while Core derives window views." in errors
     assert "farplane/metrics.yaml metrics.accepted_harness_improvements.display must be one of: bar_plus_cumulative, line, reading." in errors
     assert "farplane/metrics.yaml metrics.accepted_harness_improvements.pinned must be boolean when present." in errors
 
 
-def test_metric_definitions_require_refresh_and_direction(tmp_path: Path) -> None:
+def test_metric_definitions_require_how_to_read_them(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
@@ -761,7 +760,7 @@ metrics:
     errors = validate(tmp_path)
 
     assert "farplane/metrics.yaml metrics.defined_only must declare exactly one of refresh_ref or refresh." in errors
-    assert "farplane/metrics.yaml metrics.defined_only.direction must be a non-empty string." in errors
+    assert not any("defined_only.direction" in error for error in errors)
 
 
 def test_old_bindings_metrics_and_semantic_binding_fields_are_rejected(tmp_path: Path) -> None:
@@ -912,7 +911,7 @@ def test_metric_observation_batch_duplicate_metric_fails(tmp_path: Path) -> None
     )
 
 
-def test_selected_rows_require_direction_freshness_and_guard_rule(tmp_path: Path) -> None:
+def test_selected_guard_needs_its_guard_rule(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
@@ -963,66 +962,27 @@ metric_bindings:
     errors = validate(tmp_path)
 
     assert (
-        "farplane/metrics.yaml metric definitions must declare direction: "
-        "accepted_harness_improvements, todo_unclaimed_ticket_count."
-    ) in errors
-    assert (
         "farplane/harness.yaml guard refs lack metrics.yaml guard rules: todo_unclaimed_ticket_count."
     ) in errors
-    assert (
-        "farplane/metrics.yaml selected definitions must declare positive max_age_days: "
-        "accepted_harness_improvements, todo_unclaimed_ticket_count."
-    ) in errors
+    assert not any("direction" in error or "max_age_days" in error for error in errors)
 
 
-def test_objective_metric_without_unit_fails(tmp_path: Path) -> None:
+def test_a_metric_needs_only_its_name_and_how_to_read_it(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
     select_project_objective(farplane, "accepted_harness_improvements")
-    (farplane / "metrics.yaml").write_text(
-        """kind: project-metrics
-framework_template_version: "0.2.0"
-metrics:
-  accepted_harness_improvements:
-    label: Accepted harness improvements
-    description: Accepted improvements.
-    type: flow
-    display: bar_plus_cumulative
-    direction: maximize
-    max_age_days: 7
-  accepted_product_output:
-    label: Accepted product output
-    description: Accepted product output.
-    type: flow
-    unit: artifacts
-    display: bar_plus_cumulative
-    direction: maximize
-    max_age_days: 7
-""",
-        encoding="utf-8",
-    )
-    (farplane / "bindings.yaml").write_text(
-        """kind: project-bindings
-framework_template_version: "0.1.0"
-project: {}
-metric_bindings:
-  accepted_harness_improvements:
-    refresh: Count accepted improvements.
-  accepted_product_output:
-    refresh: Count accepted product outputs.
-""",
-        encoding="utf-8",
-    )
+    metrics = yaml.safe_load((farplane / "metrics.yaml").read_text(encoding="utf-8"))
+    metrics["metrics"]["accepted_harness_improvements"] = {
+        "label": "Accepted harness improvements",
+        "refresh": "Count accepted improvements.",
+    }
+    (farplane / "metrics.yaml").write_text(yaml.safe_dump(metrics, sort_keys=False), encoding="utf-8")
 
     errors = validate(tmp_path)
 
-    assert (
-        "farplane/metrics.yaml selected metric definitions lack unit: accepted_harness_improvements."
-        in errors
-    )
-
+    assert not [error for error in errors if "metrics.yaml" in error]
 
 def test_stale_project_snapshot_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"

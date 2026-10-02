@@ -21,7 +21,7 @@ if str(ROOT) not in sys.path:
 
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
 from bin.core.farplane_automation_file import AutomationMarkdownError, load_automation_markdown
-from bin.core.farplane_metric_schema import MetricObservationBatch
+from bin.core.farplane_metric_schema import MetricObservationBatch, with_metric_defaults
 from bin.validators.farplane_metric_contract import validate_metric_definition_schema
 TEXT_SUFFIXES = {
     ".json",
@@ -547,7 +547,7 @@ def load_metrics(metrics_file: Path) -> dict[str, dict]:
     metrics = data.get("metrics") if isinstance(data, dict) else {}
     if not isinstance(metrics, dict):
         return {}
-    return {str(metric_id): recipe if isinstance(recipe, dict) else {} for metric_id, recipe in metrics.items()}
+    return {str(metric_id): with_metric_defaults(recipe if isinstance(recipe, dict) else {}) for metric_id, recipe in metrics.items()}
 
 
 def read_yaml_file(path: Path) -> dict[str, Any]:
@@ -746,34 +746,11 @@ def validate_cross_file_contract(root: Path) -> list[str]:
         if str(row.get("metric_id") or "").strip()
     }
     selected_ids = objective_ids | area_metric_ids | set(guard_ids) | problem_metric_ids(harness)
-    planning_control_ids = objective_ids | set(guard_ids)
     unknown_selected_ids = sorted(selected_ids - set(metrics))
     if unknown_selected_ids:
         errors.append(
             "farplane/harness.yaml metric refs lack metrics.yaml definitions: "
             f"{', '.join(unknown_selected_ids)}."
-        )
-    metric_definitions_without_direction = sorted(
-        metric_id
-        for metric_id, definition in metrics.items()
-        if definition.get("type") in {"flow", "stock"}
-        if definition.get("direction") not in {"maximize", "minimize"}
-    )
-    selected_definitions_without_freshness = sorted(
-        metric_id
-        for metric_id in planning_control_ids
-        if metric_id in metrics
-        and (not isinstance(metrics[metric_id].get("max_age_days"), int) or metrics[metric_id]["max_age_days"] < 1)
-    )
-    if metric_definitions_without_direction:
-        errors.append(
-            "farplane/metrics.yaml metric definitions must declare direction: "
-            f"{', '.join(metric_definitions_without_direction)}."
-        )
-    if selected_definitions_without_freshness:
-        errors.append(
-            "farplane/metrics.yaml selected definitions must declare positive max_age_days: "
-            f"{', '.join(selected_definitions_without_freshness)}."
         )
     selected_guard_ids = set(guard_ids)
     defined_guard_ids = {
@@ -794,17 +771,6 @@ def validate_cross_file_contract(root: Path) -> list[str]:
             f"{', '.join(unselected_guard_rules)}."
         )
 
-
-    selected_metrics_without_unit = sorted(
-        kpi_id
-        for kpi_id in selected_ids
-        if kpi_id in metrics and not str(metrics[kpi_id].get("unit") or "").strip()
-    )
-    if selected_metrics_without_unit:
-        errors.append(
-            "farplane/metrics.yaml selected metric definitions lack unit: "
-            f"{', '.join(selected_metrics_without_unit)}."
-        )
 
     selected_markdown_metrics = sorted(
         metric_id

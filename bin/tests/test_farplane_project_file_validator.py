@@ -238,11 +238,7 @@ metric_bindings:
             errors = validate(root)
 
         self.assertIn(
-            "farplane/metrics.yaml metrics.accepted_harness_improvements uses unsupported derived/projection config: formula, kind, windows; declare only type: flow|stock and let refreshers emit facts while Core derives window views.",
-            errors,
-        )
-        self.assertIn(
-            "farplane/metrics.yaml metrics.accepted_harness_improvements.type must be a non-empty string.",
+            "farplane/metrics.yaml metrics.accepted_harness_improvements uses unsupported derived/projection config: formula, kind, windows; declare only type: flow|stock|markdown and let refreshers emit facts while Core derives window views.",
             errors,
         )
         self.assertIn(
@@ -254,7 +250,7 @@ metric_bindings:
             errors,
         )
 
-    def test_selected_rows_require_direction_freshness_and_guard_rule(self) -> None:
+    def test_selected_guard_needs_its_guard_rule(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             farplane = root / "farplane"
@@ -307,19 +303,12 @@ metric_bindings:
             errors = validate(root)
 
         self.assertIn(
-            "farplane/metrics.yaml metric definitions must declare direction: accepted_harness_improvements, todo_unclaimed_ticket_count.",
-            errors,
-        )
-        self.assertIn(
             "farplane/harness.yaml guard refs lack metrics.yaml guard rules: todo_unclaimed_ticket_count.",
             errors,
         )
-        self.assertIn(
-            "farplane/metrics.yaml selected definitions must declare positive max_age_days: accepted_harness_improvements, todo_unclaimed_ticket_count.",
-            errors,
-        )
+        self.assertFalse([error for error in errors if "direction" in error or "max_age_days" in error])
 
-    def test_objective_metric_without_unit_fails(self) -> None:
+    def test_a_metric_needs_only_its_name_and_how_to_read_it(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             farplane = root / "farplane"
@@ -327,47 +316,16 @@ metric_bindings:
             write_framework_manifest(farplane)
             write_required_project_files(root)
             select_project_objective(farplane, "accepted_harness_improvements")
-            (farplane / "metrics.yaml").write_text(
-                """kind: project-metrics
-framework_template_version: "0.2.0"
-metrics:
-  accepted_harness_improvements:
-    label: Accepted harness improvements
-    description: Accepted improvements.
-    type: flow
-    display: bar_plus_cumulative
-    direction: maximize
-    max_age_days: 7
-  accepted_product_output:
-    label: Accepted product output
-    description: Accepted product output.
-    type: flow
-    unit: artifacts
-    display: bar_plus_cumulative
-    direction: maximize
-    max_age_days: 7
-""",
-                encoding="utf-8",
-            )
-            (farplane / "bindings.yaml").write_text(
-                """kind: project-bindings
-framework_template_version: "0.1.0"
-project: {}
-metric_bindings:
-  accepted_harness_improvements:
-    refresh: Count accepted improvements.
-  accepted_product_output:
-    refresh: Count accepted product outputs.
-""",
-                encoding="utf-8",
-            )
+            metrics = yaml.safe_load((farplane / "metrics.yaml").read_text(encoding="utf-8"))
+            metrics["metrics"]["accepted_harness_improvements"] = {
+                "label": "Accepted harness improvements",
+                "refresh": "Count accepted improvements.",
+            }
+            (farplane / "metrics.yaml").write_text(yaml.safe_dump(metrics, sort_keys=False), encoding="utf-8")
 
             errors = validate(root)
 
-        self.assertIn(
-            "farplane/metrics.yaml selected metric definitions lack unit: accepted_harness_improvements.",
-            errors,
-        )
+        self.assertFalse([error for error in errors if "metrics.yaml" in error])
 
     def test_stale_project_snapshot_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

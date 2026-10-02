@@ -93,13 +93,6 @@ def validate_metric_definition_schema(metrics: dict[str, dict]) -> list[str]:
                 errors.append(
                     f"{prefix} type markdown cannot declare: {', '.join(disallowed_markdown_fields)}."
                 )
-        elif is_numeric:
-            if not str(definition.get("unit") or "").strip():
-                errors.append(f"{prefix}.unit must be a non-empty string.")
-            if not str(definition.get("direction") or "").strip():
-                errors.append(f"{prefix}.direction must be a non-empty string.")
-            elif definition.get("direction") not in {"maximize", "minimize"}:
-                errors.append(f"{prefix}.direction must be maximize or minimize.")
         if "max_age_days" in definition and (
             not isinstance(definition.get("max_age_days"), int) or definition.get("max_age_days", 0) < 1
         ):
