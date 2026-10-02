@@ -24,28 +24,24 @@ Execution boundary:
 - Write only Farplane's own metric files under each Project's `.farplane/` (what the commands
   and refreshers below write). Never write GitHub, Notion, Whop, or any provider.
 - Never spend. A metric whose source would cost money stays a gap.
-- The only other writes go to Farplane-UI's Convex: step 2's `source-totals` call, the A/B tests'
-  own counts, and step 3's push inside `farplane metrics refresh`, the metric readings and cash.
+- The only other writes go to Farplane-UI's Convex, all inside step 2's `farplane metrics refresh`: the
+  metric readings, cash, and the tests' version totals.
 
 ## Steps
 
 1. **The other refreshers.** For each Project whose `trackingContext` is its own Git checkout, follow
-   every refresher in its `farplane/metrics.yaml` except `local_project_metrics` (step 3's command covers
+   every refresher in its `farplane/metrics.yaml` except `local_project_metrics` (step 2's command covers
    it): connected sources such as Whop billing, a company file or a platform API, and local ones such as
    `farplane harness health compile`. Write today's observations for the metrics each one `provides`. A
    source it can't read is a gap, never a zero. Run credentialed reads through `farplane run -- <command>`.
-2. **A/B tests that count themselves:** list the running tests (`POST /experiments/list` on the Convex
-   site URL, header `x-farplane-telemetry-token`). For each option whose `metricSource.kind` is
-   `whop_plan`, read that Whop plan's paid payments since the test started (`ref` is the plan id; free
-   claims and refunds don't count), then `POST /experiments/ab` with `op: source-totals` and
-   `{project, testId, option, successes, attempts, at}`: successes = paid payments, attempts = the
-   plan's checkouts started when Whop reports them, else leave it out (never guess it). Options of other
-   kinds are left to whoever runs that step. A plan Whop won't read is that test's gap.
-3. **Everything else, in one command:** `farplane run -- farplane metrics refresh --json`. For every
+2. **Everything else, in one command:** `farplane run -- farplane metrics refresh --json`. For every
    company.json Project that is its own Git checkout it writes Core's primitive readings and the project
    snapshot for today (this machine's date), then pushes every snapshot's readings and today's company
    cash (the Whop balance of every bound Whop company, `company`/`cash`, source `whop`) to Convex
-   `/metrics/readings`; reruns replace the same readings. It skips a folder that is missing or not its
+   `/metrics/readings`; reruns replace the same readings. It also counts every running test's versions
+   from their sources since the test began (a Whop plan's paid sales out of its payment attempts, a set of
+   Zernio posts' clicks out of their views; `bin/core/farplane_test_versions.py`) and records them on the
+   test. Versions with no source are left to whoever runs that step (`office-ab outcome`). It skips a folder that is missing or not its
    own checkout and says why; a Project that fails is that Project's gap and the rest carry on. There is
    no bank feed: a cash gap is reported, never filled, and a balance the operator sends is recorded with
    `farplane run -- farplane metrics push --cash <USD>`. If Convex is unreachable the local snapshots

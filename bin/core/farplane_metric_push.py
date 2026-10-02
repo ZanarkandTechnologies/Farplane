@@ -250,6 +250,8 @@ def print_results(results: list[dict[str, Any]], as_json: bool) -> None:
     for row in results:
         if row["status"] == "pushed":
             print(f"{row['project']}: pushed {row['readings']} readings ({row['inserted']} new, {row['updated']} replaced)")
+        elif row["status"] == "counted":
+            print(f"{row['project']}: {row['successes']} of {row['attempts']} ({row['kind']})")
         elif row["status"] == "refreshed":
             zernio = row.get("zernio")
             extra = f"; zernio {zernio['posts']} posts" if zernio and zernio["status"] == "read" else f"; zernio gap: {zernio['reason']}" if zernio else ""
@@ -301,6 +303,23 @@ def refresh_project(root: Path, slug: str, date_value: str, codex_home: Path) ->
     return result
 
 
+def count_test_versions(targets: list[tuple[Path, str]]) -> list[dict[str, Any]]:
+    """Running tests' versions counted from their sources (farplane_test_versions.py), then sent to Convex."""
+    try:
+        from farplane_convex import site_post
+        from farplane_test_versions import refresh_versions
+    except ImportError:  # pragma: no cover - package import path used by tests
+        from bin.core.farplane_convex import site_post
+        from bin.core.farplane_test_versions import refresh_versions
+    try:
+        tests = (site_post("/experiments/list", {}) or {}).get("tests") or []
+        keys = {"whop": os.environ.get("WHOP_API_KEY", "").strip(), "zernio": os.environ.get("ZERNIO_API_KEY", "").strip()}
+        lines = refresh_versions(tests, {slug: root for root, slug in targets}, keys, lambda body: site_post("/experiments/ab", body), int(time.time() * 1000))
+    except ConvexUnavailable as exc:
+        return [{"project": "tests", "status": "failed", "reason": str(exc)}]
+    return [{"project": f"test {line['test']} · {line['version']}", **line} for line in lines]
+
+
 def run_refresh(args: argparse.Namespace) -> int:
     """`farplane metrics refresh`: every project's readings for today, its snapshot, then one push to Convex."""
     date_value = args.date or datetime.now().astimezone().date().isoformat()
@@ -309,5 +328,6 @@ def run_refresh(args: argparse.Namespace) -> int:
     refreshed = [(root, slug) for (root, slug), r in zip(targets, results) if r["status"] == "refreshed"]
     if not args.no_push:
         results += push_all(refreshed, getattr(args, "cash", None), everything=not args.project_root)
+        results += count_test_versions(targets)
     print_results(results, args.json)
     return 1 if any(row["status"] == "failed" for row in results) else 0
