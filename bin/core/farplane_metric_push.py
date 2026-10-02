@@ -277,7 +277,7 @@ def is_repo_root(root: Path) -> bool:
 
 
 def refresh_project(root: Path, slug: str, date_value: str, codex_home: Path) -> dict[str, Any]:
-    """Core's primitive readings for the day, then the project snapshot the office reads."""
+    """Zernio's readings, Core's primitive readings for the day, then the project snapshot the office reads."""
     try:
         from farplane_primitive_metrics import primitive_snapshot
         from farplane_project_snapshot import PROJECT_SNAPSHOT_PATH, load_project_snapshot, write_project_ui_snapshot
@@ -291,8 +291,9 @@ def refresh_project(root: Path, slug: str, date_value: str, codex_home: Path) ->
     if not root.is_dir() or not is_repo_root(root):
         return {"project": name, "status": "skipped", "reason": "folder missing or not its own Git checkout"}
     try:
-        primitive_snapshot(project_root=root, date_value=date_value, codex_home=codex_home, monthly_spend=None, write=True)
+        # Zernio first: Core's reach sums the views readings it writes.
         zernio = refresh_zernio(root, os.environ.get("ZERNIO_API_KEY", "").strip(), date.fromisoformat(date_value))
+        primitive_snapshot(project_root=root, date_value=date_value, codex_home=codex_home, monthly_spend=None, write=True)
         snapshot = load_project_snapshot(root, date_value)
         write_project_ui_snapshot(snapshot, root / PROJECT_SNAPSHOT_PATH)
     except Exception as exc:  # one project's failure is that project's gap; the rest carry on
