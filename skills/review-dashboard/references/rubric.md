@@ -10,7 +10,9 @@ The screen exists for one or two questions from its stories, and the answer
 sits top-left of the first screen in words and a number.
 
 - **Signals:** the first heading names the answer, not the data source; the
-  answer is visible without scrolling at 1440×900.
+  answer is visible without scrolling at 1440×900; analysis opens with a
+  plain-English verdict sentence ("Version B is winning, 96% likely to be
+  best") before its tables.
 - **Mistakes:** a banner about a pipeline error takes the top third; a row of
   every metric comes before the one that's red; a picker of all projects comes
   before the project's own state.
@@ -43,7 +45,9 @@ Labels, statuses and empty states use the words the operator says out loud.
 - **Signals:** no internal ids (`biz_…`, ticket hashes), file paths, ISO
   timestamps, seconds counts, pipeline verbs (emitted, rollup, projection,
   sync), tier or template codes, or a paragraph explaining where the data comes
-  from.
+  from; labels in sentence case, with letter-spaced capitals kept for one small
+  eyebrow per group; dates relative in feeds (`2 days ago`) and short in tables
+  (`4 Oct`).
 - **Mistakes:** `last read 2026-10-04T00:00:00.000Z`; `The final 61,204 seconds
   are uncovered`; `TEMPLATE STALE` on 91 rows; a footer showing a folder path.
 - **Before → After:** `last read 2026-10-04T00:00:00.000Z` → `read this
@@ -57,7 +61,8 @@ operator should act on now.
 
 - **Signals:** statuses are words (On track · Behind · Not read · No goal), not
   colour alone; `Blocked` only when something is blocked; most items are not
-  red; masked money still leaves a readable status or trend.
+  red; every headline number carries its comparison (`↑ 14% on last week`, `of
+  3,000`); masked money still leaves a readable status or trend.
 - **Mistakes:** every card says `Blocked` because each is a little behind pace;
   every eval row is red; a cash screen that is a grid of `******` with no trend
   word when money is hidden.
@@ -100,7 +105,9 @@ The first screen fits a density budget; the rest is one click away inside the
 same screen (drawer, row expand, detail page).
 
 - **Signals (from `scripts/screen_stats.mjs`):** words above the fold ≤ ~150,
-  controls ≤ ~12, font sizes ≤ 4, competing big numbers ≤ 6.
+  controls ≤ ~12, font sizes ≤ 4, competing big numbers ≤ 6; an index is a list
+  or table with detail in a side panel, not cards of paragraphs; a media card
+  carries at most one overlay on its image.
 - **Mistakes:** every eval run's failing tasks inline; a paragraph summary on
   every card; six stat tiles of harness jargon above the list.
 - **Before → After:** 335 words above the fold → the headline, a 5-row table,
@@ -111,10 +118,13 @@ same screen (drawer, row expand, detail page).
 
 Each job uses the app's one shared component and the app's visual language.
 
-- **Signals:** one tab or segmented control, one filter chip, one stat tile,
-  one card, one chart, one table, one date format, one empty state, one graph
-  node grammar (shape encodes kind, fill encodes status, corners match the
-  app's — square apps use square nodes).
+- **Signals:** underline or segmented tabs for views, chips only for filters;
+  one stat tile, one card, one chart, one table, one date format, one empty
+  state; one primary action, top-right of the screen's header, and one
+  page-level date range beside it; one graph node grammar (shape encodes kind,
+  fill encodes status, corners match the app's: square apps use square nodes;
+  entity graphs elsewhere mostly use circles, catalog maps icon rects, so say
+  which you follow and why).
 - **Mistakes:** tabs drawn as square buttons on one screen, pills on another,
   a vertical list on a third; one graph with square icon nodes and another with
   circles; dates as ISO, `Oct 4, 2026, 12:00 AM` and `4 Oct` on neighbouring
