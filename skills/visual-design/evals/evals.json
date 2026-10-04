@@ -24,6 +24,78 @@
           ]
         }
       }
+    },
+    {
+      "id": "visual_design_concept_and_directions_01",
+      "prompt": "New iPhone app for a neighborhood bakery's pre-order pickup. The workflow is settled: browse today's bakes, reserve, show a pickup code at the counter. There is no existing design system. Make it look good and not like every other ordering app.",
+      "expected_output": "Classifies the register, writes a scene sentence, names a concept from the bakery's world rather than an adjective, sketches three directions that differ in concept, picks one with reasons for rejecting the others, sets dials, and plans a key-screen render at phone viewport with critique before handoff.",
+      "files": [],
+      "assertions": [
+        "Names a visual concept drawn from the bakery or neighborhood world, not only adjectives such as clean, warm, or premium.",
+        "Presents three directions that differ in concept, not only in palette, font, or radius.",
+        "Chooses one direction against the scene sentence, focal action, or dials and gives a reason each other direction lost.",
+        "Keeps the reserve action and pickup code clear; the concept does not hurt the primary job.",
+        "Renders a key screen as a static HTML mock at a phone viewport with realistic content and reports its path and critique scores, or labels the critique `unrendered` with the reason; a text-only critique without that label fails.",
+        "Avoids banned AI tells such as purple-blue gradients, identical icon card grids, and gradient text."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Starts a new direction from a domain concept and three compared directions",
+          "tags": [
+            "skill",
+            "visual-design",
+            "concept",
+            "anti-slop"
+          ]
+        }
+      }
+    },
+    {
+      "id": "visual_design_polish_skips_divergence_01",
+      "prompt": "Our accepted operator dashboard already has a dark token set and component library. The task list screen feels flat: every row has equal weight and the overdue items do not stand out. Polish it.",
+      "expected_output": "Treats this as polish of an existing design system: preserves tokens and components, does not invent a new concept or run three directions, fixes hierarchy with the smallest change, and re-renders and re-scores the screen.",
+      "files": [],
+      "assertions": [
+        "Preserves the existing tokens and components instead of proposing a new visual system or palette.",
+        "Does not invent a new concept or run three new directions; names the existing concept or `none recorded`.",
+        "Fixes the hierarchy problem (overdue emphasis, row weight) with a small concrete change.",
+        "Reports a rendered screenshot path with scores after the fix, or labels the critique `unrendered` with the reason."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Polish of an accepted design system skips concept divergence",
+          "tags": [
+            "skill",
+            "visual-design",
+            "polish",
+            "existing-system"
+          ]
+        }
+      }
+    },
+    {
+      "id": "visual_design_quiet_product_concept_01",
+      "prompt": "New internal dispatch dashboard for a courier company: dispatchers watch about 40 live deliveries, spot late ones, and reassign drivers all shift long. No design system exists yet. Give the visual direction.",
+      "expected_output": "Treats this as product register for repeated work: names a concept from the courier world but keeps it quiet (accent, status color, icons, one signature moment) while layout stays dense and scannable; the three directions vary concept without turning the dashboard cinematic; dials stay in product or data-heavy ranges.",
+      "files": [],
+      "assertions": [
+        "Classifies the surface as product or data-heavy register for repeated work.",
+        "Names a concept from the courier or dispatch world and limits it to accent, status color, icons, naming, or one signature moment rather than layout or decorative motion.",
+        "Keeps late deliveries and reassignment as the visual focus, scannable at about 40 rows.",
+        "Sets density at 6 or higher and motion at 4 or lower, or justifies any departure.",
+        "Does not propose a hero section, illustrated backgrounds, or cinematic motion for the working view."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Keeps a domain concept quiet on a repeated-use dashboard",
+          "tags": [
+            "skill",
+            "visual-design",
+            "concept",
+            "product-register"
+          ]
+        }
+      }
     }
   ]
 }

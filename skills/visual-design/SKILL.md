@@ -5,7 +5,7 @@ description: "Turn an accepted UI workflow and visual references into a visual s
 tier: 3
 department: operations
 source: local
-allowed-tools: Read, Grep, Glob, web_search
+allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 ---
 
 # Visual Design
@@ -31,10 +31,24 @@ allowed-tools: Read, Grep, Glob, web_search
   trait, `adopt | adapt | reject`, and the resulting visual constraint.
 - [ ] Use the native planning phase to choose the visual register and accepted
   tradeoff before specifying style.
+- [ ] Name a **visual concept** drawn from the product's own world (a place,
+  object, craft, or ritual), not an adjective like "clean" or "premium". Reject
+  any concept that would fit an unrelated app. For polish, name the existing
+  concept or `none recorded`; do not invent one.
+- [ ] For a new direction, sketch **three materially different directions**
+  (different concepts, not palette swaps) before committing; pick one against
+  the scene sentence, focal action, and dials, and record why the others lost.
+  Skip per the existing-design-system branch below.
 - [ ] Set numeric taste dials for density, variance, motion, color commitment,
-  and materiality.
+  and materiality; the dials set how loudly the concept is expressed.
 - [ ] Define typography, color roles, spacing rhythm, radius/elevation,
   component treatment, icon/media language, and motion vocabulary.
+- [ ] **Render, critique, refine.** Write the key screen as a standalone static
+  HTML mock in the ticket folder (never edit app source), screenshot it in the
+  in-app Browser at the target viewport with the project's real fonts, tokens,
+  and realistic content, and score it with `critique-audit.md`. Refine at most
+  twice; then hand off with `verdict: revise` and the open issue. With no
+  browser available, label the critique `unrendered`.
 - [ ] Write or update a durable design brief when the surface is substantial or
   delegated.
 - [ ] Hand the accepted visual brief to [impl-plan](../impl-plan/SKILL.md) for
@@ -64,12 +78,13 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 2. **Run the Steve Jobs Focus & Simplicity Pass.** State the user-facing benefit, visual focal action, elements to remove or defer, and deliberate `no`; do not remove functional requirements, accessibility, or necessary state.
 3. **Classify register.** Product UI serves repeated work; brand UI creates memory and desire. Choose the register before taste decisions.
 4. **Write a scene sentence.** Name who uses the surface, where, under what ambient light, and in what mood. Let that force dark/light, density, and contrast.
-5. **Choose numeric taste dials.** Set visual density, design variance, motion intensity, color commitment, and materiality on a 1-10 scale with one-line rationale for each.
-6. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary.
-7. **Write a durable design brief when the work is substantial.** For a new app surface, redesign, multi-screen UI, or delegated implementation, create or update a ticket/spec-local `DESIGN_BRIEF.md` or equivalent ticket section before build handoff.
-8. **Reject AI tells.** Run the anti-slop check from `taste-dials.md` and `critique-audit.md`.
-9. **Hand off to planning.** Produce concrete constraints that `impl-plan`
-   incorporates into the ticket design baseline.
+5. **Find the visual concept.** One idea from the product's world that typography, layout, color, illustration, and motion can all borrow from. In the brand register it drives the whole surface; in the product register it stays quiet (accent, icons, empty and loading states, one signature moment) and never costs scanability. For polish, name the existing concept or `none recorded`. See `references/concept-and-directions.md`.
+6. **Diverge, then commit.** For a new direction, sketch three directions that differ in concept, not just palette. Compare them and keep one; record the losers as `reject` with a reason.
+7. **Choose numeric taste dials.** Set visual density, design variance, motion intensity, color commitment, and materiality on a 1-10 scale with one-line rationale for each.
+8. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary, each traceable to the concept.
+9. **Render, critique, refine.** Run the render loop from the Todo List: static HTML mock, in-app Browser screenshot at the target viewport, `critique-audit.md` score, at most two refine passes.
+10. **Write a durable design brief when the work is substantial.** For a new app surface, redesign, multi-screen UI, or delegated implementation, create or update a ticket/spec-local `DESIGN_BRIEF.md` or equivalent ticket section before build handoff.
+11. **Hand off to planning.** Produce concrete constraints that `impl-plan` incorporates into the ticket `design.md` baseline; link the rendered mock from it as reference evidence, not a second baseline.
 
 ## Decision Branches
 
@@ -79,11 +94,14 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 | AI workflow/chat | clear message hierarchy, strong state visibility, careful empty/loading/error states |
 | Brand/marketing surface | more committed color, image-led composition, stronger typography |
 | Creative/portfolio | higher variance and motion, still readable and responsive |
-| Existing design system | preserve tokens and components; improve hierarchy and rhythm before inventing new style |
+| Existing design system or accepted board | preserve tokens and components; skip the three directions and keep the existing concept; improve hierarchy and rhythm before inventing new style |
 
 ## Top Gotchas
 
 - Do not use visual polish to hide weak functionality.
+- Do not commit to the first direction, and do not pass off three palette swaps
+  of one layout as three directions.
+- Do not accept an adjective ("clean", "modern", "premium") as a concept.
 - Do not default to dark mode, purple-blue gradients, identical card grids, or generic SaaS hero metrics.
 - Do not create unnecessary columns for sequential workflows. Use one full-width
   flow first; reserve columns for genuinely parallel comparison, inspector
@@ -101,6 +119,7 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 ## Reference Map
 
 - `references/brand-product-register.md` - product vs brand visual rules.
+- `references/concept-and-directions.md` - concept test, direction cards, render spec.
 - `references/taste-dials.md` - density, variance, motion, color, anti-slop.
 - `references/design-brief.md` - durable visual-system handoff shape.
 - `references/critique-audit.md` - review checklist and score shape.
@@ -114,11 +133,16 @@ Return a concise visual brief with:
 
 - `Register`
 - `Scene sentence`
+- `Visual concept` and how loudly it shows in this register
+- `Directions considered`: three direction cards with the chosen one and why
+  the others lost, or the skip reason
 - `Steve Jobs Focus & Simplicity Pass`: user-facing benefit, visual focal
   action, elements removed or deferred, and deliberate `no`
 - `Taste dials` with 1-10 numeric values
 - `Visual system`
 - `Visual evidence receipt`
+- `Render receipt`: rendered key-screen path, viewport, critique scores, and
+  refine passes used
 - `Design brief path` when one was created or updated
 - `Anti-slop constraints`
 - `Implementation handoff`

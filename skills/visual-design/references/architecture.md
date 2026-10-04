@@ -13,9 +13,11 @@ Outputs:
 
 - register,
 - scene sentence,
+- visual concept and directions considered,
 - taste dials,
 - visual system,
 - anti-slop constraints,
+- rendered key screen with its critique receipt,
 - implementation handoff.
 
 It feeds `impl-plan`, which adds current implementation evidence only when the

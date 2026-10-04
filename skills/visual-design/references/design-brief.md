@@ -34,7 +34,15 @@ Deliberate no:
 
 Product or brand:
 Scene sentence:
+Visual concept:
+Concept loudness in this register:
 Non-goals:
+
+## Directions Considered
+
+Chosen direction:
+Rejected directions and why:
+Skip reason (accepted board or design system):
 
 ## Taste Dials
 
@@ -70,6 +78,13 @@ States that must be captured:
 Forbidden patterns:
 Content realism rules:
 
+## Render Receipt
+
+Rendered key screen:
+Viewport(s):
+Critique scores and verdict:
+Refine passes used:
+
 ## Implementation Handoff
 
 Frontend references:
@@ -83,5 +98,6 @@ QA gates:
 - Do not let the brief replace `functional-ui`; it assumes workflow and states
   are already known.
 - Record numeric taste dials.
+- Record the concept, the directions considered, and the render receipt.
 - Record whether shadcn/tweakcn/theme changes are intended.
 - For delegated frontend work, pass this path in the delegate prompt.
