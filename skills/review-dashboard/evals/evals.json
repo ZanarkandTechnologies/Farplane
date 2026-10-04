@@ -1,0 +1,48 @@
+{
+  "skill_name": "review-dashboard",
+  "evals": [
+    {
+      "id": "review_dashboard_repeated_metric_01",
+      "prompt": "Review our business home screen. Top to bottom it shows: a row of 11 project chips, five metric tiles (revenue, subscriptions, posts, views per post, reach), a 'Goals' list with revenue and subscriptions again, a 13-week status heatmap of the same two metrics, four 'needs you' counters that all read 0, and 'last read 2026-10-04T00:00:00.000Z' under each goal. The operator says it's information overload.",
+      "expected_output": "States the screen's story first (start of day: which number is behind and what to do); flags revenue and subscriptions repeated three times (D2), the ISO timestamps (D3), the zero counters (D5) and the chip row above the answer (D1); verdict fix with Before/After that puts the behind metric and its next step on top and folds the rest; compares with Stripe or Shopify home",
+      "files": [],
+      "assertions": [
+        "Writes at least one story as When/I want/so with a cadence before proposing changes",
+        "Quotes the repeated metrics and the ISO timestamp verbatim as evidence",
+        "Replaces the four zero counters with a one-sentence empty state",
+        "Names a real comparable home screen and what it puts first, or marks the reference unknown",
+        "Does not add a new screen or tab to fix the overload",
+        "Does not sum the grades into a total score"
+      ],
+      "metadata": {"farplane": {"title": "Fold a home screen that repeats its metrics", "tags": ["skill", "review-dashboard", "normal"]}}
+    },
+    {
+      "id": "review_dashboard_portfolio_inconsistency_01",
+      "prompt": "Audit all our dashboards for consistency. Notes from a walkthrough: Skill map draws square icon nodes, the Wiki graph draws circles; tabs are square buttons on Telemetry, pills on Content, a vertical list on Wiki graph; dates show as ISO on the CEO desk, 'Oct 4, 2026, 12:00 AM' on Cash and '4 Oct' on Metrics; Library and Mood board show the same eight saved links; 'Skill Rollout' opens Skill OS with a filter.",
+      "expected_output": "Runs the cross-screen pass: an inventory per job (graph nodes, tabs, dates) naming one style to keep and the diverging screens; picks square nodes to match the app's square corners; flags Library/Mood board as a merge pair and Skill Rollout as a duplicate entry; proposes a regrouped menu with at most seven top-level entries",
+      "files": [],
+      "assertions": [
+        "Lists each job with exactly one kept style and the screens that diverge",
+        "Chooses one graph node grammar and states what shape and fill encode",
+        "Recommends one date format and applies it to all three examples",
+        "Marks Library and Mood board as a merge with a named surviving screen",
+        "Folds Skill Rollout into Skill OS as a filter rather than a second menu entry",
+        "Keeps the top-level navigation at seven entries or fewer"
+      ],
+      "metadata": {"farplane": {"title": "Standardize components across a dashboard portfolio", "tags": ["skill", "review-dashboard", "hardcase"]}}
+    },
+    {
+      "id": "review_dashboard_requested_metaphor_01",
+      "prompt": "The operator asked for the goal board to look like a heist cork board with sticky notes and red string. A reviewer wants to replace it with a plain table because it looks busy. The board's goal title is cut to 'SIGN THREE PILOT CUSTO…', 18 labels end in '…', and it uses two handwriting fonts at 12 different sizes. Review it.",
+      "expected_output": "Keeps the requested cork-board metaphor; judges legibility inside it: the truncated goal (D6), 12 font sizes (D7/D8) and strings that carry no meaning; proposes stickies that grow to fit, one handwriting face at three sizes, and strings only where an item feeds another; does not swap the board for a table without the operator",
+      "files": [],
+      "assertions": [
+        "Does not recommend removing the operator-requested metaphor",
+        "Flags the truncated goal title as the top defect",
+        "Proposes a concrete type scale limit inside the metaphor",
+        "Treats a redesign to a table as a proposal for the operator, not a decision"
+      ],
+      "metadata": {"farplane": {"title": "Fix legibility inside a requested metaphor", "tags": ["skill", "review-dashboard", "boundary"]}}
+    }
+  ]
+}
