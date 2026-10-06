@@ -2,8 +2,6 @@
 schema: farplane_project_automation
 framework_template_version: 1.0.0
 owner: automation-advisor
-source_template: automations/weekly-operating-review.md
-source_template_version: 1.0.0
 id: farplane-weekly-interval
 name: Farplane Weekly Operating Review
 kind: cron
@@ -179,4 +177,4 @@ Add two sections to the same company report:
 - `github_writes: <n comments | none>`.
 
 Config source:
-farplane/automations/weekly-operating-review.md id="farplane-weekly-interval"
+farplane/automations/report-gen.md id="farplane-weekly-interval"

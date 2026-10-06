@@ -19,12 +19,12 @@ Run Farplane's **Intel Digest** automation on Claude Code: first the bookmarks, 
 
 Work in `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`. Run the two records below in order, following each body exactly; the front matter is metadata. If the first part is blocked, still run the second.
 
-**Part 1: Bookmarks.** Run `farplane/automations/bookmark-recovery.md`: its sources, ledger, validator, person matches against open Wiki problems, write policy and final response.
+**Part 1: Bookmarks.** Run `farplane/automations/steps/bookmark-recovery.md`: its sources, ledger, validator, person matches against open Wiki problems, write policy and final response.
 - **X is read in the browser only, never through the X API.** Use Claude in Chrome (the operator's logged-in Chrome): x.com → Bookmarks, read-only.
 - Never like, repost, reply, bookmark or follow, and never change an X setting.
 - If Chrome isn't connected or X asks to sign in, report that as this part's blocker. Never type credentials.
 
-**Part 2: Feed Scout.** Run `farplane/automations/feed-scout.md`, with this boundary:
+**Part 2: Feed Scout.** Run `farplane/automations/steps/feed-scout.md`, with this boundary:
 - Use public and direct sources and the browser only. **No Apify or any other paid scraping.** A source that needs one is a source gap.
 - **Never create, comment on or label GitHub issues.** Report recovery candidates in the report only.
 - Write its dated report and `latest.json` under `.farplane/reports/feed-scout/` as the record says. The office's Intel panel reads them.

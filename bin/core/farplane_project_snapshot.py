@@ -645,9 +645,6 @@ def load_automations(project_root: Path) -> tuple[list[dict[str, Any]], list[str
         except (AutomationMarkdownError, OSError):
             gaps.append(f"invalid_automation_markdown:{path.name}")
             continue
-        if item.get("schema") == "farplane_automation_recipe":
-            gaps.append(f"unconfigured_automation_recipe:{path.name}")
-            continue
         row = {key: str(item.get(key) or "") for key in ("id", "name", "kind", "status")}
         automations.append({**row, "source_ref": {"path": f"farplane/automations/{path.name}"}})
     if not automations and not gaps: gaps.append("empty_automations_dir")

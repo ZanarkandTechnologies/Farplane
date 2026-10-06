@@ -7,7 +7,7 @@ updated_at: 2026-10-02
 refs:
   - bin/core/farplane_cli_parser.py
   - bin/README.md
-  - farplane/automations/metrics-refresh.md
+  - farplane/automations/steps/metrics-refresh.md
 tags:
   - farplane
   - cli

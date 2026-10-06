@@ -2,8 +2,6 @@
 schema: farplane_project_automation
 framework_template_version: 1.0.0
 owner: automation-advisor
-source_template: automations/feed-scout.md
-source_template_version: 1.0.0
 id: farplane-feed-scout
 name: Farplane Feed Scout
 kind: cron
@@ -47,4 +45,4 @@ Final response:
 - Include the no-execution receipt.
 
 Config source:
-farplane/automations/feed-scout.md id="farplane-feed-scout"
+farplane/automations/steps/feed-scout.md id="farplane-feed-scout"

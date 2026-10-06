@@ -2,8 +2,6 @@
 schema: farplane_project_automation
 framework_template_version: 1.0.0
 owner: automation-advisor
-source_template: automations/bookmark-recovery.md
-source_template_version: 1.0.0
 id: farplane-bookmark-recovery
 name: Farplane Bookmark Recovery
 kind: cron
@@ -174,4 +172,4 @@ Return rules:
   `github_writes: none`.
 
 Config source:
-farplane/automations/bookmark-recovery.md id="farplane-bookmark-recovery"
+farplane/automations/steps/bookmark-recovery.md id="farplane-bookmark-recovery"

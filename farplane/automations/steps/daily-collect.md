@@ -2,8 +2,6 @@
 schema: farplane_project_automation
 framework_template_version: 1.0.0
 owner: automation-advisor
-source_template: automations/daily-collect.md
-source_template_version: 1.0.0
 id: farplane-daily-collect
 name: Farplane Daily Collect
 kind: cron
@@ -143,4 +141,4 @@ Cache rules:
 - Return the run folder, Projects collected, and every incomplete source.
 
 Config source:
-farplane/automations/daily-collect.md id="farplane-daily-collect"
+farplane/automations/steps/daily-collect.md id="farplane-daily-collect"

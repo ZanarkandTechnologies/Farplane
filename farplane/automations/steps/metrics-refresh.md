@@ -56,4 +56,4 @@ Final response:
 - `github_writes: none`.
 
 Config source:
-farplane/automations/metrics-refresh.md id="farplane-metrics-refresh"
+farplane/automations/steps/metrics-refresh.md id="farplane-metrics-refresh"

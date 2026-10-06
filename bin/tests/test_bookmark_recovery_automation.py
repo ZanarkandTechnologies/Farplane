@@ -1,24 +1,14 @@
 from __future__ import annotations
 
-import sys
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-CORE_DIR = ROOT / "bin" / "core"
-if str(CORE_DIR) not in sys.path:
-    sys.path.insert(0, str(CORE_DIR))
-
-from farplane_project_snapshot import load_automations
 
 
 class BookmarkRecoveryAutomationTests(unittest.TestCase):
     def test_record_calls_one_skill_and_preserves_boundaries(self) -> None:
-        records, gaps = load_automations(ROOT)
-        self.assertEqual(gaps, [])
-        record = next(row for row in records if row["id"] == "farplane-bookmark-recovery")
-        prompt = (ROOT / record["source_ref"]["path"]).read_text(encoding="utf-8").split("---\n", 2)[2]
-        self.assertEqual(record["kind"], "cron")
+        prompt = (ROOT / "farplane/automations/steps/bookmark-recovery.md").read_text(encoding="utf-8").split("---\n", 2)[2]
         self.assertEqual(prompt.count("$bookmark-recovery"), 2)
         self.assertNotIn("$progress-update", prompt)
         self.assertIn("provider_mutations: 0", prompt)

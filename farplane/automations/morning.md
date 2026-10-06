@@ -19,10 +19,10 @@ Run Farplane's **Morning** chain on Claude Code: four records, run in this order
 
 Work in `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`.
 
-1. **Fetch Context:** `farplane/automations/daily-collect.md`. Write today's run and its `_run.json` marker. Also copy each floor's whiteboard strategy doc found under `~/.farplane` into the run folder as `_strategy/<file>`, unchanged. That copy is the day's snapshot of the rolling strategy notes.
-2. **Metrics Refresh:** `farplane/automations/metrics-refresh.md`.
-3. **Knowledge Update:** `farplane/automations/knowledge-update.md`, on the run from step 1.
-4. **Progress Updater:** `farplane/automations/daily-operating-update.md`, on the run from step 1 and the fresh metrics from step 2, including its pace check.
+1. **Fetch Context:** `farplane/automations/steps/daily-collect.md`. Write today's run and its `_run.json` marker. Also copy each floor's whiteboard strategy doc found under `~/.farplane` into the run folder as `_strategy/<file>`, unchanged. That copy is the day's snapshot of the rolling strategy notes.
+2. **Metrics Refresh:** `farplane/automations/steps/metrics-refresh.md`.
+3. **Knowledge Update:** `farplane/automations/steps/knowledge-update.md`, on the run from step 1.
+4. **Progress Updater:** `farplane/automations/steps/daily-operating-update.md`, on the run from step 1 and the fresh metrics from step 2, including its pace check.
 
 If a step fails or is blocked, record why in its receipt, then carry on with the later steps where they can still run. Steps 3, 4 and 5 need step 1's completion marker; without it, report them as blocked. Steps 1–4 are plumbing: don't narrate them.
 

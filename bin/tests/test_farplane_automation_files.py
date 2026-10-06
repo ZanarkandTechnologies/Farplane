@@ -36,8 +36,7 @@ class AutomationFileTests(unittest.TestCase):
 
     def test_configured_automations_name_github_task_record(self) -> None:
         folder = ROOT / "farplane" / "automations"
-        for name in ("feed-scout", "work-pulse", "weekly-self-improvement",
-                     "monthly-registry-consolidation", "weekly-thread-friction-audit"):
+        for name in ("steps/feed-scout", "session-friction-retro"):
             text = (folder / f"{name}.md").read_text(encoding="utf-8")
             self.assertIn("Task record: GitHub Issues of each project's repo", text)
             self.assertNotIn("Multica CLI", text)
@@ -53,16 +52,6 @@ class AutomationFileTests(unittest.TestCase):
 
         self.assertEqual(records, [])
         self.assertEqual(gaps, ["invalid_automation_markdown:broken.md"])
-
-    def test_recipe_is_not_exposed_as_configured_automation(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            folder = Path(tmp) / "farplane/automations"
-            folder.mkdir(parents=True)
-            (folder / "recipe.md").write_text(
-                "---\nschema: farplane_automation_recipe\nid: example\n---\nUse $progress-update.\n")
-            records, gaps = load_automations(Path(tmp))
-        self.assertEqual(records, [])
-        self.assertEqual(gaps, ["unconfigured_automation_recipe:recipe.md"])
 
 
 if __name__ == "__main__":

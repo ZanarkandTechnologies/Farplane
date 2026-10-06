@@ -37,19 +37,17 @@ This table is the current state; the dated sections below are history. Each leve
 a job serves: **mancave** is the operator's life, a **floor** is one business, and **harness** is
 Farplane itself.
 
-### Jobs: one record each in `farplane/automations/`
+### Jobs: one record each in `farplane/automations/`, only live routines
 
-| Job | Level | Record | Steps it calls, in order | Runtime · task | When (KL) | State |
-|---|---|---|---|---|---|---|
-| Morning | mancave + floors | `morning.md` | daily-collect → metrics-refresh → knowledge-update → daily-operating-update | claude · `farplane-morning` | daily 05:00 | active |
-| Intel Digest | mancave | `intel-digest.md` | bookmark-recovery → feed-scout | claude · `farplane-intel-digest` | daily 23:15 | active |
-| Session Friction Retro | harness | `weekly-thread-friction-audit.md` | none | claude · `farplane-session-friction-retro` | daily 23:40 | active |
-| Report Gen | mancave + floors | `weekly-operating-review.md` | `$report-gen` | claude · `farplane-report-gen` | Mon 05:45 | active |
-| Burn Before Reset | harness | `token-burn.md` | `$token-burn` | claude · `burn-before-reset` | daily 20:00 | active |
-| Profile Refresh | mancave | `profile-refresh.md` | none | claude · `farplane-profile-refresh` | 1st, 09:00 | paused |
-| Task Runner | floors | `work-pulse.md` | `$pulse-update` | codex · `farplane-ticket-update` | interval | paused |
+| Job | Level | Record | Steps it calls, in order | Runtime · task | When (KL) |
+|---|---|---|---|---|---|
+| Morning | mancave + floors | `morning.md` | daily-collect → metrics-refresh → knowledge-update → daily-operating-update, then the brief | claude · `farplane-morning` | daily 05:00 |
+| Intel Digest | mancave | `intel-digest.md` | bookmark-recovery → feed-scout | claude · `farplane-intel-digest` | daily 23:15 |
+| Session Friction Retro | harness | `session-friction-retro.md` | none | claude · `farplane-session-friction-retro` | daily 23:40 |
+| Report Gen | mancave + floors | `report-gen.md` | `$report-gen` | claude · `farplane-report-gen` | Mon 05:45 |
+| Burn Before Reset | harness | `token-burn.md` | `$token-burn` | claude · `burn-before-reset` | daily 20:00 |
 
-### Steps: called by a job, never scheduled alone (`status: paused`)
+### Steps: `farplane/automations/steps/`, called by a job, never scheduled alone
 
 | Step record | Called by | Skill it uses |
 |---|---|---|
@@ -62,20 +60,21 @@ Farplane itself.
 
 Target: each step's procedure moves into its skill, and the job record calls the skills directly.
 
-### Retired
+### Deleted 2026-10-06
 
-- Records: `weekly-self-improvement.md` and `monthly-registry-consolidation.md` (killed 2026-09-30).
-- Claude tasks disabled, not deleted: `farplane-fetch-context`, `farplane-metrics-refresh`,
-  `farplane-knowledge-update` and `farplane-progress-updater` (Morning runs them now).
-- Codex: all 23 automations under `~/.codex/automations/` are paused, kept as a rollback.
+- The product's root `automations/` recipes folder; bootstrap now creates an empty
+  `farplane/automations/`, and automation-advisor's `templates/` start new jobs.
+- Records for jobs that don't run: Work Pulse (paused; it needs a redesign around the bunker's
+  Queue), Weekly Self-Improvement and Monthly Registry Consolidation (killed 2026-09-30), and
+  Profile Refresh (disabled).
+- Still present outside the repo, switched off: the Claude tasks `farplane-fetch-context`,
+  `farplane-metrics-refresh`, `farplane-knowledge-update`, `farplane-progress-updater` and
+  `farplane-profile-refresh`, and all 23 Codex automations (paused, a rollback).
 
 ### Drift between the live prompt and the repo
 
-- None for Morning, Session Friction Retro and Report Gen: each live prompt is its record's body,
-  rendered by hand on 2026-10-06 and ending with "Rendered from <record>". Intel Digest, Profile
-  Refresh and Burn Before Reset records are verbatim copies of their live prompts.
-- `automations/` holds generic recipes for any office, and `farplane/automations/` holds this office's
-  records. They differ by design, but nothing keeps their shared rules in step.
+- None: each live job's prompt is its record's body, rendered by hand and ending with
+  "Rendered from <record>". Burn Before Reset and Intel Digest records are verbatim copies.
 
 ### Render rule (target, not built)
 

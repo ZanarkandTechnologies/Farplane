@@ -2,8 +2,6 @@
 schema: farplane_project_automation
 framework_template_version: 1.0.0
 owner: automation-advisor
-source_template: automations/weekly-thread-friction-audit.md
-source_template_version: 1.0.0
 id: farplane-weekly-thread-friction-audit
 name: Farplane Session Friction Retro
 kind: cron
@@ -81,4 +79,4 @@ Final response:
   automation, source-history, or execution changes.
 
 Config source:
-farplane/automations/weekly-thread-friction-audit.md id="farplane-weekly-thread-friction-audit"
+farplane/automations/session-friction-retro.md id="farplane-weekly-thread-friction-audit"

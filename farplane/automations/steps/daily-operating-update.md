@@ -2,8 +2,6 @@
 schema: farplane_project_automation
 framework_template_version: 1.0.0
 owner: automation-advisor
-source_template: automations/daily-operating-update.md
-source_template_version: 1.0.0
 id: farplane-daily-interval
 name: Farplane Daily Operating Update
 kind: cron
@@ -228,4 +226,4 @@ bunker PRD's "The operating loop"); that tick is the only authorization here.
    plan (`No step plans yet: …`).
 
 Config source:
-farplane/automations/daily-operating-update.md id="farplane-daily-interval"
+farplane/automations/steps/daily-operating-update.md id="farplane-daily-interval"

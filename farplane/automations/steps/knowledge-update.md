@@ -2,8 +2,6 @@
 schema: farplane_project_automation
 framework_template_version: 1.0.0
 owner: automation-advisor
-source_template: automations/knowledge-update.md
-source_template_version: 1.0.0
 id: farplane-knowledge-update
 name: Farplane Knowledge Update
 kind: cron
@@ -62,4 +60,4 @@ Execution boundary:
   the operator, and sync diagnostics.
 
 Config source:
-farplane/automations/knowledge-update.md id="farplane-knowledge-update"
+farplane/automations/steps/knowledge-update.md id="farplane-knowledge-update"
