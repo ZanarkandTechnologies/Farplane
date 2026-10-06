@@ -71,9 +71,9 @@ Target: each step's procedure moves into its skill, and the job record calls the
 
 ### Drift between the live prompt and the repo
 
-- Session Friction Retro's and Report Gen's Claude tasks add rules their records don't have. Report
-  Gen adds the friction and showcase sections. Session Friction Retro adds the transcript locations
-  and its report-only boundary.
+- None for Morning, Session Friction Retro and Report Gen: each live prompt is its record's body,
+  rendered by hand on 2026-10-06 and ending with "Rendered from <record>". Intel Digest, Profile
+  Refresh and Burn Before Reset records are verbatim copies of their live prompts.
 - `automations/` holds generic recipes for any office, and `farplane/automations/` holds this office's
   records. They differ by design, but nothing keeps their shared rules in step.
 
