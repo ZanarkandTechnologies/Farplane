@@ -112,8 +112,8 @@ returns: recommendation, source links, changed records, unresolved gaps
   `priorities + request -> day plan | meeting deltas | weekly review`
 
   Rules:
-  - For a day plan, choose one main outcome and a realistic amount of supporting
-    work.
+  - Day plan: one main outcome plus realistic supporting work. Plan or negotiate
+    interactively with [plan-day](references/plan-day.md) or [plan-week](references/plan-week.md).
   - For meeting ingestion, derive concrete commitments and project context from
     the source.
   - For a weekly review, compare:
