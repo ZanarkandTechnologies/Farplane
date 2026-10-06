@@ -15,7 +15,7 @@ schedule:
   timezone: Asia/Kuala_Lumpur
   time: "05:00"
 ---
-Run Farplane's **Morning** chain on Claude Code. It's four records, run in this order in one session, each followed exactly. The front matter is metadata; each record owns its steps and write policy.
+Run Farplane's **Morning** chain on Claude Code: four records, run in this order in one session and each followed exactly, then one brief. The front matter is metadata; each record owns its steps and write policy.
 
 Work in `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`.
 
@@ -25,14 +25,6 @@ Work in `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`.
 4. **Progress Updater:** `farplane/automations/daily-operating-update.md`, on the run from step 1 and the fresh metrics from step 2, including its pace check.
 
 If a step fails or is blocked, record why in its receipt, then carry on with the later steps where they can still run. Steps 3, 4 and 5 need step 1's completion marker; without it, report them as blocked. Steps 1–4 are plumbing: don't narrate them.
-
-Runtime notes (they don't change the records' rules):
-- A skill written `$name` in a record is the Claude skill `name` (e.g. `progress-update`, `manage-wiki`); invoke it with the Skill tool.
-- Tasks are GitHub Issues of each project's own repo; use the `gh` CLI. The only write allowed is a `gh issue comment` on an existing issue, through Progress Updater's allowlist. Public repos (Farplane, Farplane-UI, farplane-bunker) get engineering facts only. Multica is archived.
-- Read Notion (the Plan Week and Life Plan adapter, and call notes) through the Notion connector, read-only.
-- Credentialed commands go through `farplane run -- <command>`; never print secrets.
-- Wiki: anything that is leverage for Kenji's life, career included. It stays local, outside every git repo. No health details.
-- Never send messages, publish, spend, or change settings. Other people's actions and unclear ownership stay proposals.
 
 5. **Morning brief.** This is the mancave's job: it serves Kenji's whole life, and each business is
    one floor of it. Read the Life Plan (game, money rules, tracks, guardrails, decision triggers)
@@ -63,3 +55,11 @@ footer line, and only when it weakens a claim above (e.g. "Calls: 1 of 3 readabl
 names its source; inferences go in *italics*. Absolute dates. Never a value without its maths.
 "None identified" rather than dropping a section. Under ~400 words, with the receipt path in the
 footer.
+
+Runtime notes (they don't change the records' rules):
+- A skill written `$name` in a record is the Claude skill `name` (e.g. `progress-update`, `manage-wiki`); invoke it with the Skill tool.
+- Tasks are GitHub Issues of each project's own repo; use the `gh` CLI. The only write allowed is a `gh issue comment` on an existing issue, through Progress Updater's allowlist. Public repos (Farplane, Farplane-UI, farplane-bunker) get engineering facts only. Multica is archived.
+- Read Notion (the Plan Week and Life Plan adapter, and call notes) through the Notion connector, read-only.
+- Credentialed commands go through `farplane run -- <command>`; never print secrets.
+- Wiki: anything that is leverage for Kenji's life, career included. It stays local, outside every git repo. No health details.
+- Never send messages, publish, spend, or change settings. Other people's actions and unclear ownership stay proposals.
