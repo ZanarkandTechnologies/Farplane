@@ -7,7 +7,7 @@ source_template_version: 1.0.0
 id: farplane-daily-collect
 name: Farplane Daily Collect
 kind: cron
-status: active
+status: paused
 target:
   workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 schedule:

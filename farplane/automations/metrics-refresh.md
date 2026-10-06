@@ -5,7 +5,7 @@ owner: automation-advisor
 id: farplane-metrics-refresh
 name: Farplane Metrics Refresh
 kind: cron
-status: active
+status: paused
 target:
   workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 schedule:

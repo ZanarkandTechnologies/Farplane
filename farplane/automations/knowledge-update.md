@@ -7,7 +7,7 @@ source_template_version: 1.0.0
 id: farplane-knowledge-update
 name: Farplane Knowledge Update
 kind: cron
-status: active
+status: paused
 target:
   workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 schedule:

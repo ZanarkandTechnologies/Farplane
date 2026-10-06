@@ -7,7 +7,7 @@ source_template_version: 1.0.0
 id: farplane-bookmark-recovery
 name: Farplane Bookmark Recovery
 kind: cron
-status: active
+status: paused
 target:
   workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 schedule:

@@ -8,6 +8,8 @@ id: farplane-weekly-thread-friction-audit
 name: Farplane Session Friction Retro
 kind: cron
 status: active
+runtime: claude
+runtime_task: farplane-session-friction-retro
 target:
   workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 schedule:

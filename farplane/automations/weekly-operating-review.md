@@ -8,6 +8,8 @@ id: farplane-weekly-interval
 name: Farplane Weekly Operating Review
 kind: cron
 status: active
+runtime: claude
+runtime_task: farplane-report-gen
 target:
   workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 schedule:
