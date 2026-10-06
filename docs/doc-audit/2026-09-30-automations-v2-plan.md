@@ -31,7 +31,61 @@ Claude scheduled task (thin prompt: "run farplane/automations/<record>.md")
 - Readers start an hour after Fetch Context (the scheduler adds a few minutes of jitter), and
   block rather than fetch when no complete run under 12 hours old exists.
 
-## Phase 1 — live today (this plan)
+## Catalog (2026-10-06)
+
+This table is the current state; the dated sections below are history. Each level says whose life
+a job serves: **mancave** is the operator's life, a **floor** is one business, and **harness** is
+Farplane itself.
+
+### Jobs: one record each in `farplane/automations/`
+
+| Job | Level | Record | Steps it calls, in order | Runtime · task | When (KL) | State |
+|---|---|---|---|---|---|---|
+| Morning | mancave + floors | `morning.md` | daily-collect → metrics-refresh → knowledge-update → daily-operating-update | claude · `farplane-morning` | daily 05:00 | active |
+| Intel Digest | mancave | `intel-digest.md` | bookmark-recovery → feed-scout | claude · `farplane-intel-digest` | daily 23:15 | active |
+| Session Friction Retro | harness | `weekly-thread-friction-audit.md` | none | claude · `farplane-session-friction-retro` | daily 23:40 | active |
+| Report Gen | mancave + floors | `weekly-operating-review.md` | `$report-gen` | claude · `farplane-report-gen` | Mon 05:45 | active |
+| Burn Before Reset | harness | `token-burn.md` | `$token-burn` | claude · `burn-before-reset` | daily 20:00 | active |
+| Profile Refresh | mancave | `profile-refresh.md` | none | claude · `farplane-profile-refresh` | 1st, 09:00 | paused |
+| Task Runner | floors | `work-pulse.md` | `$pulse-update` | codex · `farplane-ticket-update` | interval | paused |
+
+### Steps: called by a job, never scheduled alone (`status: paused`)
+
+| Step record | Called by | Skill it uses |
+|---|---|---|
+| `daily-collect.md` | Morning | none yet (fetch logic lives in the record) |
+| `metrics-refresh.md` | Morning | none yet |
+| `knowledge-update.md` | Morning | `$manage-wiki` |
+| `daily-operating-update.md` | Morning | `$progress-update` |
+| `bookmark-recovery.md` | Intel Digest | `$bookmark-recovery` |
+| `feed-scout.md` | Intel Digest | `$feed-scout` |
+
+Target: each step's procedure moves into its skill, and the job record calls the skills directly.
+
+### Retired
+
+- Records: `weekly-self-improvement.md` and `monthly-registry-consolidation.md` (killed 2026-09-30).
+- Claude tasks disabled, not deleted: `farplane-fetch-context`, `farplane-metrics-refresh`,
+  `farplane-knowledge-update` and `farplane-progress-updater` (Morning runs them now).
+- Codex: all 23 automations under `~/.codex/automations/` are paused, kept as a rollback.
+
+### Drift between the live prompt and the repo
+
+- Session Friction Retro's and Report Gen's Claude tasks add rules their records don't have. Report
+  Gen adds the friction and showcase sections. Session Friction Retro adds the transcript locations
+  and its report-only boundary.
+- `automations/` holds generic recipes for any office, and `farplane/automations/` holds this office's
+  records. They differ by design, but nothing keeps their shared rules in step.
+
+### Render rule (target, not built)
+
+The repo is the harness's config. `farplane install` would render each `status: active` record for
+its `runtime` only. For `claude`, that's `~/.claude/scheduled-tasks/<runtime_task>/SKILL.md`; for
+`codex`, it's `~/.codex/automations/<id>/automation.toml`. The other runtime's copy stays paused, so a
+job never runs twice. Claude's schedule and on/off state live in the app, so the render would check
+them through the scheduled-tasks tool and report drift instead of writing them.
+
+## Phase 1 — live 2026-09-30 (history; see the catalog above)
 
 | Job (Catalog v2) | Record | Claude task | When (KL) |
 |---|---|---|---|
