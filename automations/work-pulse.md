@@ -1,5 +1,5 @@
 ---
-schema: farplane_project_automation
+schema: farplane_automation_recipe
 framework_template_version: 1.0.0
 owner: automation-advisor
 id: project-work-pulse
@@ -12,6 +12,8 @@ schedule:
   type: interval
   interval_minutes: 30
 ---
+Task record: GitHub Issues of each project's repo (tickets/README.md); this job never writes them.
+
 Use $pulse-update.
 
 Run one bounded multi-phase Work Pulse: maintenance, due review service,

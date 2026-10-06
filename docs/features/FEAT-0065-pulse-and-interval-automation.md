@@ -47,7 +47,7 @@ Current ownership is split:
 
 - [FEAT-0071](FEAT-0071-project-work-pulse.md) owns the sole execution heartbeat.
 - [FEAT-0067](FEAT-0067-daily-interval-review-reports.md) owns Company OS Daily
-  and Weekly through `pm-daily` and `pm-weekly`.
+  and Weekly through `progress-update` and `report-gen`.
 - `automation-advisor` owns desired and live scheduler configuration.
 - Farplane Core owns metric refresh planning and deterministic reducers.
 

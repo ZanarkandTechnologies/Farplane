@@ -1,5 +1,5 @@
 ---
-schema: farplane_project_automation
+schema: farplane_automation_recipe
 framework_template_version: 1.0.0
 owner: automation-advisor
 id: project-monthly-registry-consolidation
@@ -14,6 +14,8 @@ schedule:
   day_of_month: 1
   time: 06:15
 ---
+Task record: GitHub Issues of each project's repo (tickets/README.md); this job never writes them.
+
 Use $consolidate.
 
 Review project registries for duplication, staleness, and wrong ownership.

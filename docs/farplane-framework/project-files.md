@@ -113,12 +113,18 @@ ledger, or product controller state here.
 
 ### `farplane/automations/`
 
-Human-reviewable desired state for Codex automations. Each `*.md` file owns
-one complete automation. The folder contains exactly one Work Pulse heartbeat
-plus project-local cron/manual jobs such as Feed Scout, Dogfood
-self-improvement, and low-frequency maintenance. The AI Office root
-`automations/` owns one global Company OS Daily and Weekly pair across every
-managed project.
+Committed desired state for every configured automation. Each `*.md` file owns
+one complete record. The folder contains one Work Pulse heartbeat and selected
+cron jobs. In the designated AI Office, this same folder holds the single
+portfolio-wide Daily/Weekly pair. Ordinary project bootstrap excludes that
+pair; `bootstrap.sh --office` includes it.
+
+The Farplane product's root `automations/` holds reusable paused recipes with
+schema `farplane_automation_recipe`. Bootstrap converts selected recipes to
+`farplane_project_automation`, records their recipe origin, and preserves
+existing customized records. Only configured records may be activated. Recipe
+updates do not overwrite instances automatically. Both are committed; generated
+run data stays in ignored `.farplane/`, and live schedules stay in Codex.
 
 YAML front matter owns identity, schedule, workspace, and status. The Markdown
 body is the exact project-specific prompt. Generic workflow behavior remains in the called skill. Scheduled
@@ -269,6 +275,7 @@ owner:
 ```text
 .farplane/
   views.yaml
+  notes/
   entities/
   wiki/
   reports/
@@ -294,10 +301,16 @@ are generated projections over canonical files and runtime evidence. If a
 projection is stale, run `farplane wiki rebuild` from its owners rather than
 hand-editing it.
 
+`.farplane/notes/` holds thread notes: one `YYYY-MM-DD-<slug>.md` file per
+research finding, with `title` and `summary` front matter, written so a later
+thread can pick it up with `rg` instead of redoing the work. Notes that any
+project could use go in `~/.farplane/notes/` instead. Notes have no index,
+schema, or projection; ingested source data still goes through the Wiki.
+
 The ignored `.farplane/` boundary normally owns generated/runtime state, with
-two explicit authored local exceptions: entity Markdown and `views.yaml`.
-These remain local because they may contain personal research and relationship
-organization. Shared connector/source coordinates still belong in tracked
+three explicit authored local exceptions: notes, entity Markdown, and
+`views.yaml`. These remain local because they may contain personal research
+and relationship organization. Shared connector/source coordinates still belong in tracked
 `farplane/bindings.yaml`; do not introduce a generic `.farplane/config.yaml`.
 
 ## Runtime Secrets

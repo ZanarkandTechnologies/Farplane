@@ -2,10 +2,12 @@
 schema: farplane_project_automation
 framework_template_version: 1.0.0
 owner: automation-advisor
+source_template: automations/monthly-registry-consolidation.md
+source_template_version: 1.0.0
 id: farplane-monthly-registry-consolidation
 name: Farplane Monthly Registry Consolidation
 kind: cron
-status: active
+status: paused
 target:
   workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 schedule:
@@ -14,13 +16,7 @@ schedule:
   day_of_month: 1
   time: 06:15
 ---
-Task storage override: follow tickets/README.md. Multica is dashboard-only;
-resolve project bindings, keep issues unassigned, and use --no-start for updates.
-Create/update task records through the existing Multica CLI, never ticket.md.
-Do not invoke filesystem materializers, finalizers or dispatch based on local
-migration snapshots. If a phase requires such a legacy adapter, report that
-phase as unavailable; continue independent read-only reporting. Never start
-Multica agents, squads, autopilots or runs.
+Task record: GitHub Issues of each project's repo (tickets/README.md); this job never writes them.
 
 Use $consolidate.
 

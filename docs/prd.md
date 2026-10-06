@@ -3,7 +3,7 @@ title: "PRD: Farplane V1"
 status: active
 owner: farplane
 created_at: 2026-05-26
-updated_at: 2026-09-19
+updated_at: 2026-10-01
 version: "1.0"
 refs:
   - docs/farplane-framework/lifecycle.md
@@ -46,9 +46,17 @@ next consequential action visible.
 
 This PRD is the accepted product direction. The money-execution boundary and
 lean Daily/Weekly Company OS contract are implemented by the active automation
-prompts and the `pm-daily` and `pm-weekly` skills. The AI Office hierarchy is
+prompts and the `progress-update` and `report-gen` skills. The AI Office hierarchy is
 not yet fully implemented. The Interval weekly-draft and broad promotion
 machinery is legacy reference and has no active Daily or Weekly binding.
+
+Since 2026-10-01, active tasks live in GitHub Issues in each project's own
+repository (`tickets/README.md`); `tickets/TASK-*/` is legacy proof and
+migration history. Scheduled jobs run as Claude Code scheduled tasks over
+`farplane/automations/` records
+(`docs/doc-audit/2026-09-30-automations-v2-plan.md`). Work Pulse is paused
+until its Task Runner redesign; until then no automation executes tickets, and
+Weekly Self-Improvement and Monthly Registry Consolidation are killed.
 
 ## Problem
 
@@ -143,9 +151,10 @@ artifacts, or governance machinery.
 | `farplane/harness.yaml` | identity, planning areas/instructions, authority, capability refs, selected metrics |
 | `farplane/metrics.yaml` | metric meaning, direction, freshness, and guard rules |
 | `farplane/bindings.yaml` | safe provider coordinates |
-| `automations/` | one office-wide Company OS Daily and Weekly review |
-| `farplane/automations/` | one project Work Pulse plus bounded project-local jobs |
-| `tickets/TASK-*/` | work, program, progress, reward, evidence, QA, review |
+| `automations/` | reusable automation recipes shipped with Farplane |
+| `farplane/automations/` | all configured automation records, including the office's single Daily/Weekly pair |
+| GitHub issue in the project's repo | work, Goal program, progress comments, blockers, review |
+| `tickets/` | ticket policy, template, legacy `TASK-*` proof and history |
 | `skills/*`, `.agents/skills/*` | reusable and project-local capabilities |
 | `.farplane/reports/`, `.farplane/metrics/` | derived context and observations |
 
@@ -168,7 +177,7 @@ remain in the ticket body, Goal Packet, progress log, or artifacts.
 | Work Pulse next-wave planner | globally ranked tickets when no unclaimed executable or due-check-in work exists |
 | Feed Scout | source report, candidates, and bounded direct recovery tickets |
 | Daily/Weekly review | project memory, targeted follow-ups, weekly reports, and operator-visible work proposals; no independent strategy or ticket admission |
-| Dogfood Review | complete self-improvement portfolio checkpoint and bounded planner context |
+| Dogfood Review | killed with Weekly Self-Improvement on 2026-09-30; no active binding |
 | Operator | explicit direction, feedback, correction, or approval |
 
 Only Work Pulse executes tickets and matured check-ins.
@@ -183,8 +192,9 @@ Only Work Pulse executes tickets and matured check-ins.
 
 ### FR-2: Ticket-As-Program
 
-- A material task can be reconstructed from `ticket.md`, `program.md`,
-  `progress.md`, and linked artifacts.
+- A material task can be reconstructed from its GitHub issue body (scope,
+  `## Goal program`, `## Current Goal state`), its top-level comments, and
+  linked repository artifacts.
 - Ticket state is sufficient for selection, resumption, proof, review, and
   closeout without transcript memory.
 
@@ -222,39 +232,9 @@ Only Work Pulse executes tickets and matured check-ins.
 
 ## AI Office Product Story
 
-The AI Office is the visible version of this loop. It should feel like a
-founder operating a small company, not watching agents perform activity.
-
-**Before:** the office foregrounds teams, sessions, skills, memory, and runtime
-state. These surfaces explain what exists, but the operator must infer whether
-the company is getting closer to money.
-
-**After:** the office opens on the commercial bet, current money state, the
-constraint closest to the next monetization event, and the few projects and
-commitments affecting it. Agents, sessions, leverage, resources, and memory
-remain drill-down evidence and execution surfaces.
-
-**Example:** an operator defines a customer, painful inventory problem, paid
-offer, price, and route to sale. The office shows that customer validation is
-complete, the proposal is awaiting a decision, and one missing margin input
-blocks pricing. The next visible mission is to obtain that input and close or
-reject the offer; adding another research project is not presented as progress.
-
-The primary app sequence becomes:
-
-```text
-Set the commercial bet
--> see money and the next monetization event
--> inspect the blocking project or decision
--> approve or perform the smallest useful action
--> observe the result
--> continue, revise, or stop
-```
-
-This story reuses the existing Office, Leverage and its Finance-owned Capital
-view, Projects, Tasks, Memory, and review surfaces. It changes their hierarchy:
-commercial movement is the frame; the existing modules explain or operate that
-movement.
+The AI office is the Farplane bunker. Its one product doc, covering what it is, why, what was turned
+down and what's next, is `docs/prd.md` in the farplane-bunker repo (Farplane-UI-v2). This PRD covers the
+engine underneath it.
 
 ### FR-6: Self-Improvement
 
@@ -363,7 +343,9 @@ cards.
 
 - [x] Product-scoped Pulse controllers and product state are retired.
 - [x] `harness.yaml` owns typed identity, planning areas, capabilities, and metric selection.
-- [x] One project Work Pulse handles ordinary tickets and matured check-ins.
+- [ ] One project Work Pulse handles ordinary tickets and matured check-ins
+      (implemented over filesystem tickets; paused since 2026-09-30 pending
+      the Task Runner redesign over GitHub Issues).
 - [x] Ticket metadata is reduced to lifecycle and sparse routing.
 - [x] Human review and signal waits release workers.
 - [x] Daily/Weekly uses the project-memory, money-linked review contract and

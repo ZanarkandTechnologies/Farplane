@@ -25,7 +25,7 @@ farplane/
   manifest.json    # versioned Farplane project spec for this project
   harness.yaml     # typed charter, planning areas, capability refs, metric selection
   metrics.yaml     # metric definitions, direction, freshness, guard rules
-  automations/     # project-local Work Pulse and scheduled sources
+  automations/     # all configured records, including this office's PM pair
   bindings.yaml    # non-secret project IDs and provider coordinates
   pm.json          # optional UI thread manifest for one visual project PM
   capability-profiles.yaml # optional restriction-only Project PM access policy

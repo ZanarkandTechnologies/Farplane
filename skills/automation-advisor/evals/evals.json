@@ -73,14 +73,14 @@
     {
       "id": "automation_advisor_company_os_boundary_01",
       "prompt": "Replace the existing Daily and Weekly Interval bindings with the Zanarkand-style Company OS flow. Multica remains dashboard-only and the skills must be file-in/file-out. Do not create another scheduled job.",
-      "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Calls pm-daily once per eligible Project and pm-weekly once over the complete frozen set; Makes the automation own provider access, caching, rendering, existing-issue effects, and readback; Gives each skill local files and exactly one JSON output with no provider access; Forbids task admission, strategy invention, broad knowledge promotion, Multica execution, and external side effects; Preserves one Pulse heartbeat",
+      "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Calls progress-update once per eligible Project and report-gen once over the complete frozen set; Makes the automation own provider access, caching, rendering, existing-issue effects, and readback; Gives each skill local files and exactly one JSON output with no provider access; Forbids task admission, strategy invention, broad knowledge promotion, Multica execution, and external side effects; Preserves one Pulse heartbeat",
       "files": [
         "automations/",
         "skills/automation-advisor/evals/fixtures/farplane/automations/work-pulse.md"
       ],
       "assertions": [
         "Updates existing Daily and Weekly cron records without creating another job",
-        "Calls pm-daily once per eligible Project and pm-weekly once over the complete frozen set",
+        "Calls progress-update once per eligible Project and report-gen once over the complete frozen set",
         "Makes the automation own provider access, caching, rendering, effects, and readback",
         "Keeps both skills file-in-file-out with one exact JSON output",
         "Limits actions to authorized existing issues",
@@ -93,8 +93,8 @@
           "tags": [
             "automation-advisor",
             "company-os",
-            "pm-daily",
-            "pm-weekly"
+            "progress-update",
+            "report-gen"
           ]
         }
       }

@@ -3,12 +3,14 @@
 Start from the complete operated templates below. They are the Farplane
 adaptation of Zanarkand AI's Company OS automations:
 
-- `<office-root>/automations/daily-operating-update.md`
-- `<office-root>/automations/weekly-operating-review.md`
+- `<office-root>/farplane/automations/daily-operating-update.md`
+- `<office-root>/farplane/automations/weekly-operating-review.md`
 
-`office-root` is the explicit AI Office checkout, never the installed skill
-directory and never a managed project's thin `farplane/` adapter. If it is not
-bound, stop with the missing input instead of searching for another copy.
+`office-root` is the explicit AI Office workspace. Start new configured records
+from the Farplane source checkout's root `automations/` recipes.
+`bootstrap.sh --office` materializes both paused records in the office's
+`farplane/automations/`. Ordinary project bootstrap excludes them. Bind the
+office before activation.
 
 Replace project identity, source bindings, destinations, and schedules. Retain
 the full stage contract: collection boundaries, exact matching, pagination,
@@ -17,7 +19,7 @@ checks, provider allowlists, readback, and receipts. This outline is a review
 map, not a replacement prompt:
 
 ```text
-Use $pm-daily | $pm-weekly.
+Use $progress-update | $report-gen.
 
 1. Fetch the bounded provider and project context; freeze sources and coverage.
 2. Cache exact local inputs with IDs, revisions, timestamps, URLs, and hashes.

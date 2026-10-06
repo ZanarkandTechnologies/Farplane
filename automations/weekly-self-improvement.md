@@ -1,5 +1,5 @@
 ---
-schema: farplane_project_automation
+schema: farplane_automation_recipe
 framework_template_version: 1.0.0
 owner: automation-advisor
 id: project-weekly-self-improvement
@@ -15,6 +15,8 @@ schedule:
   - Mon
   time: 06:00
 ---
+Task record: GitHub Issues of each project's repo (tickets/README.md); this job never writes them.
+
 Use $dogfood-review.
 
 Bind a cutoff, page through all exact `self_improvement` admission receipts in

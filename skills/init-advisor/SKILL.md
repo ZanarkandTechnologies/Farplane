@@ -10,22 +10,17 @@ source: local
 # Init Advisor Skill
 
 ## Context
-
 One-time setup for new or migrated projects. Every initialized project is a
 Farplane project by default: it gets tracked `farplane/` config, ignored
 `.farplane/` runtime state, ignored active ticket work with tracked ticket
 templates, docs, QA guidance, and optional app-stack scaffolding.
 
-The skill's completion point is initialization, not full operating-model
-discovery. It scaffolds `farplane/harness.yaml` as the typed human charter,
-descriptive-product, capability-reference, and metric-selection surface, and
-`farplane/metrics.yaml` as the measurable
-objective, guard, and metric-definition contract. In `full` mode, route the operating-model setup through
-`harness-creator` after the substrate exists. `harness-creator` owns the
-real-world-equivalent
-grounding and composes downstream advisors such as `metric-advisor`,
-`harness-advisor`, `skill-creator`, and `goal-advisor` when they are needed.
-Init advisor should not separately orchestrate those advisor calls.
+Scaffold `farplane/harness.yaml` for the human charter, product description,
+capability references, and metric selection; `farplane/metrics.yaml` owns
+objectives, guards, and metric definitions. In `full` mode, hand operating-model
+discovery and grounding to `harness-creator` after substrate setup. It owns
+routing to `metric-advisor`, `harness-advisor`, `skill-creator`, and
+`goal-advisor`; do not orchestrate those calls separately.
 
 This skill also owns the place where reusable stack setup recipes live for
 common repo types such as Convex, Next.js, Clerk, shadcn, React apps, and
@@ -41,10 +36,12 @@ descriptions, refresh prompts, bindings, tickets, and docs. Do not use
 `bootstrap.sh --force` as a general project upgrade because bootstrap owns
 whole-file scaffolding.
 
-Reusable project automation config templates live in
-[AUTOMATION_TEMPLATE.toml](references/AUTOMATION_TEMPLATE.toml). Generated
-project config includes `farplane/automations.toml` as the reviewable desired
-state copied into Codex automations; live activation belongs to
+Reusable automation recipes live in the Farplane source checkout's
+`automations/`. Bootstrap writes configured records to `farplane/automations/`.
+Use `--office` only for the single AI Office workspace to include Daily/Weekly.
+Installed bootstrap resolves recipes through the installed `farplane` CLI;
+`--recipes-dir <Farplane-source>/automations` supplies an explicit source.
+Existing configured records are preserved. Live activation belongs to
 `automation-advisor`.
 
 For "what does init create?" answers, load [README.md](README.md) or the
@@ -56,22 +53,11 @@ the first-load Todo List guardrails and apply it as preflight plus finish check.
 
 ```text
 init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mode?, human_intake?, force?)
-  -> project_substrate
-   + farplane_config
-   + readiness_audit
-   + project_identity
-   + static_harness_charter
-   + operating_model_handoff_or_result?
-  + metric_objective_delta?
-   + metric_contract
-   + capability_workflow_handoff?
-   + optional_code_scaffold?
-   + ticket_system
-   + qa_surface
-   + runtime_contract
-   + business_foundation_tickets
-   + automation_setup_handoff?
-   + next_planning_handoff
+  -> project_substrate + farplane_config + readiness_audit + project_identity
+   + static_harness_charter + operating_model_handoff_or_result?
+   + metric_objective_delta? + metric_contract + capability_workflow_handoff?
+   + optional_code_scaffold? + ticket_system + qa_surface + runtime_contract
+   + business_foundation_tickets + automation_setup_handoff? + next_planning_handoff
 state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds, optional stack scaffold, and three dependent business-foundation tickets
 gates: existing_files_preserved; spec_version_recorded; human_gates_named; human_intake_decision_recorded; secrets_not_written; no_hidden_automation; interactive_stack_steps_stop_for_human
 routes: harness-creator | automation-advisor | prd | spec-to-ticket | implementation-research
@@ -118,21 +104,6 @@ meaning, hard constraints, planning areas, and selected metric refs in
 rules in `farplane/metrics.yaml`; use
 `goal-advisor` only after a ticket is concrete enough for a Goal Packet.
 
-```text
-setup_project_operating_model(bootstrap_brief, project_context,
-                              existing_harness?, existing_capability_skills?,
-                              existing_metrics?, human_intake?)
-  -> readiness_status
-   + human_intake_decision
-   + first_missing_question?
-   + focused_clarification_handoff?
-   + harness_delta?
-   + capability_skill_delta?
-   + metric_objective_delta?
-  + initial_metric_objectives?
-   + goal_advisor_handoff?
-```
-
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
@@ -161,9 +132,8 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - [ ] Use [GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) as the
         canonical generated `.gitignore` block for Farplane local runtime and
         work state.
-  - [ ] Use [AUTOMATION_TEMPLATE.toml](references/AUTOMATION_TEMPLATE.toml) as
-        the `farplane/automations.toml` source; do not duplicate automation
-        config rules in this skill.
+  - [ ] Materialize root `automations/` recipes into `farplane/automations/`;
+        include the PM pair only for the designated office via `--office`.
   - [ ] Create or preserve `farplane/metrics.yaml` as the metric-definition and
         grouped-refresh contract; keep only non-secret connector/provider
         coordinates in `farplane/bindings.yaml`.
@@ -205,7 +175,7 @@ setup_project_operating_model(bootstrap_brief, project_context,
         live automation activation.
   - [ ] When live activation is requested, call `automation-advisor` after the
         substrate exists so it can create or update the loops named in
-        `farplane/automations.toml`.
+        `farplane/automations/`.
   - [ ] Write PM-visible thread IDs to `farplane/pm.json`; keep runtime
         automation IDs in the Codex app automation store.
   - [ ] If activation is skipped or unavailable, report
@@ -226,49 +196,5 @@ setup_project_operating_model(bootstrap_brief, project_context,
 
 ## Reference Map
 
-- [README.md](README.md) - load when the user asks what InitAdvisor sets up,
-  how to run bootstrap manually, or how brownfield migration works.
-- [references/project-profiles.md](references/project-profiles.md) - load when
-  selecting project type, components, advice axes, prototype gates, and
-  downstream handoff.
-- [references/project-lifecycle.md](references/project-lifecycle.md) - load
-  when recording the bootstrap route and next lifecycle phase.
-- [references/MANIFEST_TEMPLATE.json](references/MANIFEST_TEMPLATE.json) -
-  copied to `farplane/manifest.json` for the Farplane project spec instance.
-- [references/FRAMEWORK_CHANGELOG.md](references/FRAMEWORK_CHANGELOG.md) -
-  load before bumping `farplane-framework` versions or migrating projects
-  between framework spec versions.
-- [references/GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) - appended to
-  `.gitignore` so generated local runtime state and active ticket work stay out
-  of commits while shared ticket and local-skill scaffold remains trackable.
-- [references/FEATURES_README_TEMPLATE.md](references/FEATURES_README_TEMPLATE.md)
-  - copied to `docs/features/README.md` for feature-spec guidance.
-- [references/SYSTEMS_README_TEMPLATE.md](references/SYSTEMS_README_TEMPLATE.md)
-  - copied to `docs/systems/README.md` for system/product grouping guidance.
-- [references/AUTOMATION_TEMPLATE.toml](references/AUTOMATION_TEMPLATE.toml) -
-  copied to `farplane/automations.toml` for reviewable Codex automation
-  configs.
-- [references/CODE_SCAFFOLD_RECIPES.md](references/CODE_SCAFFOLD_RECIPES.md) -
-  load only when `include_code_scaffold == true`, the user asks which stack can
-  be scaffolded, or stack setup commands need review.
-- [references/FOUNDATION_FIND_CUSTOMER_TICKET_TEMPLATE.md](references/FOUNDATION_FIND_CUSTOMER_TICKET_TEMPLATE.md),
-  [references/FOUNDATION_DELIVER_VALUE_TICKET_TEMPLATE.md](references/FOUNDATION_DELIVER_VALUE_TICKET_TEMPLATE.md),
-  and [references/FOUNDATION_COLLECT_REVENUE_TICKET_TEMPLATE.md](references/FOUNDATION_COLLECT_REVENUE_TICKET_TEMPLATE.md)
-  - copied to `TASK-0001` through `TASK-0003` as the dependency-ordered
-    business foundation.
-- [references/PROJECT_RULES_TEMPLATE.md](references/PROJECT_RULES_TEMPLATE.md)
-  - copied to `PROJECT_RULES.md` for project stack, runtime, and QA commands.
-- [references/TICKETS_README_TEMPLATE.md](references/TICKETS_README_TEMPLATE.md)
-  and [references/TICKET_TEMPLATE.md](references/TICKET_TEMPLATE.md) - packaged
-  ticket lifecycle/template scaffolds used by both source and installed runs.
-- [references/qa/](references/qa/) - copied when creating the QA cookbook
-  surface.
-- [../harness-creator/SKILL.md](../harness-creator/SKILL.md) - call in full
-  mode after substrate setup when static charter, capability workflows, metric objectives, feedback
-  loops, missing systems, automation/binding deltas, or metric objectives
-  need project-specific setup.
-- [../../docs/farplane-framework/project-files.md](../../docs/farplane-framework/project-files.md)
-  - load when the user asks why a Farplane project has these files or how the
-  spec should evolve.
-- [prompts/plan.md](prompts/plan.md) and [prompts/build.md](prompts/build.md) -
-  load only when the user asks for reusable planning/build prompts.
+Load [reference-map.md](references/reference-map.md) when selecting scaffold
+templates, migration guidance, optional stack recipes, or reusable prompts.

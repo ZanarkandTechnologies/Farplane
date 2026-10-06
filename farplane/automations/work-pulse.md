@@ -2,23 +2,19 @@
 schema: farplane_project_automation
 framework_template_version: 1.0.0
 owner: automation-advisor
+source_template: automations/work-pulse.md
+source_template_version: 1.0.0
 id: farplane-ticket-update
 name: Farplane Work Pulse
 kind: heartbeat
-status: active
+status: paused
 target:
   thread_id: 019ed47a-3182-73f3-879f-a53797759b2a
 schedule:
   type: interval
   interval_minutes: 30
 ---
-Task storage override: follow tickets/README.md. Multica is dashboard-only;
-resolve project bindings, keep issues unassigned, and use --no-start for updates.
-Create/update task records through the existing Multica CLI, never ticket.md.
-Do not invoke filesystem materializers, finalizers or dispatch based on local
-migration snapshots. If a phase requires such a legacy adapter, report that
-phase as unavailable; continue independent read-only reporting. Never start
-Multica agents, squads, autopilots or runs.
+Task record: GitHub Issues of each project's repo (tickets/README.md); this job never writes them.
 
 Use $pulse-update.
 

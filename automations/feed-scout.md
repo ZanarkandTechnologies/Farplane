@@ -1,5 +1,5 @@
 ---
-schema: farplane_project_automation
+schema: farplane_automation_recipe
 framework_template_version: 1.0.0
 owner: automation-advisor
 id: project-feed-scout
@@ -13,29 +13,31 @@ schedule:
   timezone: <timezone>
   time: 05:15
 ---
+Task record: GitHub Issues of each project's repo (tickets/README.md); this job never writes them.
+
 Use $feed-scout.
 
 Run the bounded daily Feed Scout. Write its dated report, then update and
 validate the configured Scout Brief in place with canonical ICPs, current
 trends, notable things, and source gaps. Merge current synthesis rather than
 creating daily/monthly snapshots. Then produce bounded source-backed candidate
-interventions. You may create one direct recovery
-ticket only for an evidenced existing failure with known fix and no experiment
-debt. Opportunities remain planner candidates. Do not execute tickets.
+interventions. Report at most one direct recovery candidate, only for an
+evidenced existing failure with known fix and no experiment debt; never create
+the issue. Opportunities remain planner candidates. Do not execute tickets.
 
 Params:
 project_root = "<project-root>"
 config_ref = "farplane/bindings.yaml#feed_scout"
 window = "last_24h"
 recovery_ticket_limit = 1
-write_policy = "local recovery tickets only; no opportunity or experiment tickets"
+write_policy = "no task-record writes; recovery and opportunity candidates stay in the report"
 
 Final response:
 - Link the Feed Scout report path and summarize the strongest findings in 2-4 bullets.
 - Link the Scout Brief path and report changed headings, source refs, and validation.
-- List direct recovery tickets created or updated, or `none`.
-- List candidate interventions and their admission result: `created`,
-  `planner_candidate`, `source_gap`, `blocked_by_gate`, or `not_ticketable`.
+- List the direct recovery candidate, or `none`.
+- List candidate interventions and their admission result:
+  `recovery_candidate`, `planner_candidate`, `source_gap`, `blocked_by_gate`, or `not_ticketable`.
 - Name source gaps, external side-effect gates, and next owner.
 - Include the no-execution receipt.
 
