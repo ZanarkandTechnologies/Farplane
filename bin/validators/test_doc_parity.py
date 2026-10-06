@@ -21,7 +21,7 @@ README_TEXT = """\
 - Architecture map: [ARCHITECTURE.md](/abs/ARCHITECTURE.md)
 - Feature/spec registry: [docs/features/README.md](/abs/docs/features/README.md)
 - Review scoring: [skills/review/README.md](/abs/skills/review/README.md)
-- Active queue: Multica, using the project binding in `farplane/bindings.yaml`.
+- Active queue: GitHub Issues in each project's own repo (`tickets/README.md`).
 """
 
 ARCHITECTURE_TEXT = """\
@@ -138,7 +138,7 @@ class CheckDocParityTest(unittest.TestCase):
                 """\
 # Farplane
 
-- Active queue: Multica, using the project binding in `farplane/bindings.yaml`.
+- Active queue: GitHub Issues in each project's own repo (`tickets/README.md`).
 """,
             )
             result = self.run_validator(root)

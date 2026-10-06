@@ -32,7 +32,7 @@ RULES: tuple[FileRule, ...] = (
             "Architecture map: [ARCHITECTURE.md]",
             "Feature/spec registry: [docs/features/README.md]",
             "Review scoring: [skills/review/README.md]",
-            "Active queue: Multica, using the project binding in `farplane/bindings.yaml`.",
+            "Active queue: GitHub Issues in each project's own repo (`tickets/README.md`).",
         ),
         forbidden_substrings=(
             "Active queue: none currently",

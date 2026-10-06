@@ -11,10 +11,11 @@ needs it before a ticket, skill, or owner document can take over.
 - Farplane is a harness built from visible tickets, skills, docs, bounded
   subagents, and small deterministic control points. Prefer those surfaces to
   hidden orchestration.
-- The active Multica issue is the task contract, scope boundary, proof
-  scoreboard, and handoff. Multica is dashboard-only and unassigned; execution
-  stays in Codex. Follow `tickets/README.md` and do not keep durable state only
-  in chat.
+- The active GitHub issue in the project's own repository is the task
+  contract, scope boundary, proof scoreboard, and handoff; execution stays in
+  Codex. The repository is public, so issues carry engineering facts only.
+  Multica is archived read-only; don't read or write it. Follow
+  `tickets/README.md` and do not keep durable state only in chat.
 - For material work, the issue body holds Goal program policy and the current
   checkpoint; top-level comments hold append-only progress. Repository files
   hold structured designs and proof when useful, not a second writable task.
@@ -23,7 +24,7 @@ needs it before a ticket, skill, or owner document can take over.
   unless required inputs, an approval gate, or destructive/external side effects
   block. Keep issue body and metadata current. Material completion requires its
   `Done / Proof`, QA/reviewer receipts, and `$close-ticket` updating the same
-  Multica issue without starting a run. Compare ticket, program, and progress at material
+  GitHub issue without starting a run. Compare ticket, program, and progress at material
   continuations; use drift review when self-approval risk is high. Ticket
   lifecycle and thread mechanics stay in `tickets/README.md`.
 - Every implementation ticket needs a compact Contract Diagram. UI tickets also
@@ -69,6 +70,13 @@ makes one relevant.
 - Put reusable procedure in its skill, task-local decisions and proof in the
   ticket, cross-surface policy in its canonical doc, and deterministic checks
   in validators. Link to an owner; do not copy its contract here.
+- Keep one executable entrypoint per lifecycle boundary. New harness workflow
+  surfaces may own dedicated folders only under `skills/` or `hooks/`. For
+  validators, migrations, CLI checks, and similar repository automation, prefer
+  fewer scripts in the existing owner directory: add related checks as named
+  functions behind the existing runner and one `main()` instead of creating a
+  folder or executable file per check. Split reusable or domain-heavy logic into
+  helper modules only when the runner remains the single public entrypoint.
 - Browser/user-visible proof uses the project QA lane and ticket proof policy:
   use in-app Browser for public or unauthenticated browsing, reproducible browser
   extraction, and normal QA; use Chrome or Computer Use only when existing
@@ -94,7 +102,7 @@ makes one relevant.
 
 ## Durable truth
 
-- Multica holds active task state and blockers. `tickets/` retains local proof,
+- GitHub Issues hold active task state and blockers. `tickets/` retains local proof,
   migration snapshots, templates, and legacy records.
 - `docs/HISTORY.md` records meaningful milestones and migrations.
 - `docs/MEMORY.md` holds current project invariants that are worth retrieving

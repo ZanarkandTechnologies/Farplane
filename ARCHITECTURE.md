@@ -1,10 +1,9 @@
 # Farplane Architecture
 
-Active task state lives in the Multica project bound by
-`farplane/bindings.yaml`; Multica remains dashboard-only and execution stays in
-Codex. Files under `tickets/` are proof, templates, migration snapshots, and
-legacy records. Diagrams below that show `tickets/TASK-*` describe the retained
-legacy implementation, not the active queue contract.
+Active task state lives in GitHub Issues in each project's own repository
+(`farplane/bindings.yaml#integrations.kanban.provider: github_issues`);
+execution stays in the agent runtime. Multica is archived read-only. Files under
+`tickets/` are proof, templates, migration snapshots, and legacy records.
 
 Current-state system map for Farplane.
 
@@ -88,21 +87,21 @@ flowchart LR
 
   subgraph Skills["Skill Layer"]
     primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>direct Todo List"]:::callout
-    interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>harness-advisor"]:::callout
+    interfaces["Tier 2 interfaces<br/>brainstorm<br/>*-research skills<br/>harness-advisor"]:::callout
     intake["brainstorm<br/>direct clarification<br/>prd<br/>deep-system-design<br/>visual-design"]:::skill
     readiness["agent-testability-plan<br/>Run Hints"]:::callout
-    research["documentation<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>self-improve"]:::skill
+    research["doc-advisor<br/>feed-scout<br/>harness-scout<br/>*-research skills<br/>best-of-worlds<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
-    goalSkill["goal-advisor<br/>native Goal<br/>heartbeat<br/>batch"]:::callout
+    goalSkill["goal-advisor<br/>native Goal"]:::callout
     execSkill["goal-advisor<br/>native Codex task checkout"]:::callout
-    assetSkill["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::skill
+    assetSkill["ai-image-advisor<br/>ai-video-advisor<br/>remotion-render"]:::skill
     externalCli["delegate-cli<br/>Pi/OpenRouter profile"]:::skill
     closeSkill["demo -> close-ticket<br/>video-first GitHub issue<br/>commit<br/>pr-splitting"]:::callout
   end
 
   subgraph Board["Ticket + QA Surfaces"]
-    tickets[(tickets/TASK-*/ticket.md<br/>state, plan, evidence, blockers)]:::surface
+    tickets[(GitHub issue<br/>state, plan, evidence, blockers)]:::surface
     template[(tickets/templates/ticket.md<br/>canonical shape)]:::surface
     cookbook[(qa/cookbook/*<br/>agent-efficient proof paths)]:::surface
   end
@@ -116,7 +115,7 @@ flowchart LR
 
   subgraph Proof["Proof + Review"]
     qa["qa-tester<br/>proof-advisor<br/>visual-qa<br/>Codex Browser"]:::quality
-    review["review<br/>reviewer agents<br/>completion-reviewer<br/>lean-check + unslop"]:::callout
+    review["review<br/>reviewer agent<br/>lean-check + unslop"]:::callout
   stop["Stop hook<br/>telemetry only"]:::quality
   end
 
@@ -216,6 +215,16 @@ during cleanup unless the replacement carries the same routing information.
 - [ARCHITECTURE.md](ARCHITECTURE.md)
   Purpose: system map, ownership boundaries, and where each concern lives
 
+### Automation ownership
+
+- Product `automations/` owns reusable recipes (`farplane_automation_recipe`).
+- Workspace `farplane/automations/` owns complete configured records
+  (`farplane_project_automation`), including the AI Office's PM pair.
+- Bootstrap materializes selected recipes and preserves customized instances.
+  `--office` includes Daily/Weekly once; ordinary projects exclude them.
+- Codex owns live schedules; `.farplane/` owns ignored run data.
+- Skills own file-to-file business logic; automation records own integrations.
+
 ### Knowledge surfaces
 
 - [docs/features/README.md](docs/features/README.md)
@@ -263,8 +272,8 @@ during cleanup unless the replacement carries the same routing information.
   Purpose: canonical compact ticket-as-program shape for task scope, delta,
   program pseudocode, map, `Done / Proof`, state, links, and optional agent
   contract/run hints for delegated or unattended work
-- [tickets](tickets)
-  Purpose: active ticket board
+- GitHub Issues in the project's own repository
+  Purpose: active task board (see `tickets/README.md`)
 - `tickets/archive-index.jsonl`
   Purpose: compact identity, status, and URL locator for new closed issues in
   each project's configured GitHub repository; not a duplicate ticket archive
@@ -307,8 +316,8 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 
 - Root docs should stay map-like.
 - Detailed behavior belongs in feature docs under `docs/features/`.
-- Active task state belongs in the bound Multica issue and its comments, not
-  in chat. Repository files may hold structured proof or migration snapshots.
+- Active task state belongs in the project's GitHub issue and its comments,
+  not in chat. Repository files may hold structured proof or migration snapshots.
 - Reusable QA shortcuts and deterministic browser-entry guidance belong in
   `qa/cookbook/*`, not in ticket prose or transient chat.
 - Review scoring belongs in `skills/review/*`.

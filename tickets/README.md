@@ -1,62 +1,67 @@
 # Tickets
 
-Active Farplane work lives in **Multica issues**. Multica is the dashboard and
-task memory only; execution stays in Codex. This policy supersedes the legacy
-filesystem procedures below for this project and any project bound to Multica.
+Active Farplane work lives in **GitHub Issues** in each project's own repository
+(`ZanarkandTechnologies/Farplane` for this project). Issues are the task record
+only; execution stays in Codex. This policy supersedes the legacy filesystem
+procedures below for this project and any project with a GitHub repository.
 
-## Current Multica workflow
+## Current GitHub Issues workflow
 
-- Resolve workspace and project once from `farplane/bindings.yaml`:
-  `integrations.multica.workspace_id` and `project_id`. Do not repeat service
-  bindings in each issue. `execution_enabled: false` is a policy setting, not
-  an API switch that prevents runs by itself.
-- Search the bound project before creation. Create one **unassigned** issue
-  using the existing Multica CLI and `--description-file` or
-  `--description-stdin`. Use native project, status and priority fields.
-  The issue body carries scope, plan, acceptance/proof, decisions and blockers.
-  The template's body remains useful; its YAML queue metadata is not needed.
-- Never assign an agent/squad, mention agents, configure autopilots, or start
-  Multica runs. Pass `--no-start` to `issue update` and status changes. Verify
-  the resulting issue, including its assignee, before claiming success.
-- Update the same issue as work progresses. `todo`, `in_progress`, `in_review`,
-  `blocked`, and `done` represent queue state, not Multica execution telemetry.
-  Waiting for a signal belongs in the blocker text. Do not invent live claims
-  from imported `claimed_by` values.
+- Resolve the repository once from the project root: `gh repo view --json
+  nameWithOwner`, else the `origin` remote. This project also records it in
+  `farplane/bindings.yaml#integrations.github.repo`. Do not repeat it in each
+  issue. The project list lives in `~/.farplane/company.json` `projects[]`.
+- Search open issues before creating one (`gh issue list -R <owner/repo>`).
+  Create one issue with `gh issue create --body-file`. The issue body carries
+  scope, plan, acceptance/proof, decisions and blockers. The template's body
+  remains useful; its YAML queue metadata is not needed.
+- A check-in is an open issue labelled `check-in` whose body has a line
+  `Due: YYYY-MM-DD`. Daily Collect records each due date and Progress Updater
+  lists the due and overdue ones.
+- Update the same issue as work progresses. Put queue state such as blocked or
+  in review in labels or the body; waiting for a signal belongs in the blocker
+  text. Do not invent live claims from imported `claimed_by` values.
 - For a Goal, put executable loop policy under `## Goal program` in the issue
   body and mirror the latest checkpoint under `## Current Goal state`. Append
   each meaningful observation, evidence, decision, remaining budget, blocker,
   and next action as a top-level comment. The body is the fast resume surface;
   comments are the append-only evidence history.
 - Keep structured or versioned support such as designs, hypothesis trees,
-  prompts, and proof in repository files when useful. Attach packet-critical
-  snapshots when teammates need access from Multica. Local paths alone are not
-  shared artifacts. Do not upload an entire packet or push a repository without
-  authorization.
-- `$close-ticket` records verified results and closes the **same Multica issue**
-  with `--no-start`. Do not create a second GitHub closeout issue, invoke
-  `farplane ticket finalize`, or delete the local supporting files.
-- Resume the existing Codex task from the full issue body plus recent comment
-  roots. Open older threads or attachments only for a named evidence gap.
-  Preserve the existing proof, review and approval requirements.
+  prompts, and proof in repository files when useful. Link committed paths or
+  attach snapshots when teammates need them from the issue. Local paths alone
+  are not shared artifacts. Do not push a repository without authorization.
+- `$close-ticket` records verified results and closes the **same issue**. Do not
+  create a second closeout issue, invoke `farplane ticket finalize`, or delete
+  the local supporting files.
+- Resume the existing Codex task from the full issue body plus recent comments.
+  Open older threads or attachments only for a named evidence gap. Preserve the
+  existing proof, review and approval requirements.
+- Automations never create, close, label, assign, or edit issues and never start
+  agents or runs. Their only task write is `gh issue comment` on an existing
+  issue through Progress Updater's existing-issue action allowlist.
 
-For example, a content plan is one unassigned issue with the audience, deliverable,
+**Where confidential work goes.** Farplane, Farplane-UI and farplane-bunker are
+public repositories: their issues and comments carry engineering facts only, never
+client names, money, prices, strategy or personal details. Client and business work
+goes in private repositories' issues instead: the business's own private repo
+and each client deployment's own private repo. Strategy docs, metrics, prices and targets stay in `~/.farplane`,
+never on GitHub.
+
+For example, a content plan is one issue with the audience, deliverable,
 acceptance criteria and artifact links in its body. Codex produces and reviews
-the artifact, then updates that issue; Multica never executes the plan.
+the artifact, then comments on that issue.
 
-The 2026-09-20 import retains existing `TASK-*` identities for lookup. Source
-files remain migration snapshots, not writable task mirrors. The verified
-mapping lives in `.farplane/migrations/multica-2026-09-20/receipt.json`.
-Goal Packet migration proof lives in
-`.farplane/migrations/multica-goal-packets-2026-09-20/receipt.json`.
-New tasks use Multica's issue identity. No parallel local ticket is required.
+**Archive.** Multica is archived read-only; don't read or write it. Its
+2026-09-20 import receipts under `.farplane/migrations/` remain lookup records
+for old `TASK-*` identities, not writable task mirrors.
 
 ## Legacy filesystem implementation reference
 
 The remaining sections describe the old implementation for unbound projects,
 legacy records and maintenance of that code. They **do not authorize** new
-filesystem tickets or filesystem finalization for a Multica-bound project.
-Legacy scripts and validators are not Multica adapters; do not invoke their
-ticket-creation, dispatch or cleanup paths for this project.
+filesystem tickets or filesystem finalization for a project with a GitHub
+repository. Legacy scripts and validators are not GitHub Issues adapters; do not
+invoke their ticket-creation, dispatch or cleanup paths for this project.
 
 Historically, active work lived in `tickets/TASK-*/ticket.md`.
 
