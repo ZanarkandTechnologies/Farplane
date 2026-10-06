@@ -158,7 +158,7 @@ Action rules:
 Add two sections to the same company report:
 
 - the week's daily Session Friction Retro reports
-  (`.farplane/research/*-session-friction-retro.md`): friction patterns and where
+  (`.farplane/reports/session-friction-retro/*-session-friction-retro.md`): friction patterns and where
   the time went; and
 - a short showcase of what shipped this week, with links to proof. It's a draft
   only; never post it anywhere.

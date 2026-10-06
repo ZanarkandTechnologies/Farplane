@@ -43,7 +43,7 @@ fragments of the operator's words, and never copy secrets that appear in
 transcripts.
 
 Write one dated report at
-`.farplane/research/<YYYY-MM-DD>-session-friction-retro.md`. Open it with the
+`.farplane/reports/session-friction-retro/<YYYY-MM-DD>-session-friction-retro.md`. Open it with the
 headline sentence `**<n> correction episodes across <m> operator turns (<x>%)**`
 (the office's Mission board and weekly report read that line), then the
 coverage receipt, exclusions, correction register, contribution split, time
