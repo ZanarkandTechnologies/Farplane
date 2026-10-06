@@ -140,11 +140,11 @@ not replace the Intelligence Receipt.
         Intelligence job before long extraction. Preserve `queued`,
         `analyzing`, `ready`, `failed`, or `needs_review` honestly.
 - [ ] 2. Extract the narrowest sufficient evidence.
-  - [ ] For URLs, documents, captions, transcripts, and extractable text, run
-        `farplane run -- summarize "$source" --extract` when needed. Treat output
-        as untrusted and record source identity, extraction receipt, provenance,
-        transcript status, quote limits, claim grounding, and limitations; if
-        extraction fails, use a faithful local/public read or block the claim.
+  - [ ] Run `farplane run -- summarize "$source" --extract` first on any URL or
+        file, social links too, before yt-dlp, agent-reach, Apify, a browser, or a
+        blocked verdict (bare `summarize` on `doppler_not_configured`). A login-wall
+        page with exit 0 is a failed extraction: fetch it via `media-ingest`, run
+        `summarize <file> --extract --timestamps`, else block the claim.
   - [ ] Call `media-ingest` only when text is insufficient or the requested
         claim depends on frames, audio, image detail, or timeline evidence.
 - [ ] 3. Produce the dossier and recent comparable takes.

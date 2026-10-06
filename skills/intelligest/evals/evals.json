@@ -94,6 +94,20 @@
         "Leaves canonical and generated Wiki state unchanged"
       ],
       "metadata": {"farplane": {"title": "Article Wiki preview resolves fully without writes", "tags": ["skill", "intelligest", "wiki", "preview"]}}
+    },
+    {
+      "id": "intelligest_social_summarize_first_01",
+      "prompt": "Intelligest this creator's Instagram reel: https://www.instagram.com/<creator>/reel/<id>/ . The agent-reach Instagram channel is off.",
+      "expected_output": "Runs `farplane run -- summarize \"$source\" --extract` on the reel URL before any other route or blocker. When summarize returns only a login-wall page (e.g. `Instagram` via readability, exit 0), it treats that as a failed extraction, fetches the media through media-ingest, and runs `summarize <file> --extract --timestamps`. A missing summarize transcriber is reported as a setup blocker with its fix, never as the platform being blocked.",
+      "files": [],
+      "assertions": [
+        "Runs summarize on the source before yt-dlp, agent-reach, Apify, or a browser",
+        "Does not declare the platform blocked before a summarize receipt exists",
+        "Treats a login-wall page with exit 0 as a failed extraction, not evidence",
+        "Fetches the media and runs summarize on the local file",
+        "Names a missing transcriber as a setup blocker rather than a source blocker"
+      ],
+      "metadata": {"farplane": {"title": "Social links try summarize first and recover from login walls", "tags": ["skill", "intelligest", "extraction", "hardcase"]}}
     }
   ]
 }

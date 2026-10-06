@@ -106,8 +106,11 @@ storyboard or reimplementation claims inside media-ingest.
   - [ ] Record each attempted browser, absence, blocker, command, result, and
     destination; do not export or store cookie jars in tracked files.
 - [ ] 4. Extract transcript evidence when audio or speech matters.
-  - [ ] Use the direct CLI extraction above, platform transcript support, or
-    local Whisper. If transcription fails or is unavailable, set
+  - [ ] Run `farplane run -- summarize "$workdir/source.mp4" --extract
+    --timestamps` on fetched media first, then platform transcript support or
+    local Whisper. A missing summarize transcriber (no Groq, ONNX, whisper.cpp
+    model, or provider key) is a setup blocker to name, not a source blocker.
+    If transcription fails or is unavailable, set
     `transcript_status` to `failed`, `partial`, or `visual-only`.
 - [ ] 5. Extract music evidence only when the operator selected the music,
   song, beat, or audio bed.
