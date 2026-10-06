@@ -9,6 +9,7 @@ local plugin marketplace at <claude>/farplane/:
 - agents/*.toml       -> plugin/agents/<name>.md (invoked as farplane:<name>)
 - runtimes/claude     -> plugin/.claude-plugin/plugin.json with a content version
 - templates/global    -> <claude>/farplane/AGENTS.md, imported from CLAUDE.md
+- ~/.farplane/USER.md -> imported from CLAUDE.md, so every session sees the operator profile
 """
 
 from __future__ import annotations
@@ -151,7 +152,7 @@ def retire_legacy_agents(claude_home: Path, backup_root: Path) -> list[str]:
 
 def claude_md_block(claude_home: Path) -> str:
     contract = managed_root(claude_home) / "AGENTS.md"
-    return f"{CLAUDE_MD_BEGIN}\n# Farplane global contract\n@{contract}\n{CLAUDE_MD_END}\n"
+    return f"{CLAUDE_MD_BEGIN}\n# Farplane global contract\n@{contract}\n\n# Operator profile\n@~/.farplane/USER.md\n{CLAUDE_MD_END}\n"
 
 
 def merge_claude_md(text: str, block: str) -> str:

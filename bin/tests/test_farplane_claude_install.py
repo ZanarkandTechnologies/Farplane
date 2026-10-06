@@ -47,6 +47,7 @@ class ClaudeInstallTests(unittest.TestCase):
             claude_md = (home / "CLAUDE.md").read_text()
             self.assertTrue(claude_md.startswith("# mine\n"))
             self.assertEqual(claude_md.count(claude_install.CLAUDE_MD_BEGIN), 1)
+            self.assertIn("@~/.farplane/USER.md", claude_md)
 
             self.assertTrue(first["plugin"])
             self.assertFalse(second["plugin"] or second["claude_md"] or second["retired_agents"])
