@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.3.2"
+template_version: "0.4.0"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -127,6 +127,22 @@ residual_risk: none
 
 <!-- Add Gap Analysis, Docs Strategy, Agent Contract, or Run Hints only when the
 branch needs them; use tickets/README.md for their compact contracts. -->
+
+## Autonomy Preflight
+
+<!-- Required before approval. Filled by impl-plan from probes it actually ran,
+so the run can go unattended. Standing permissions and the spend cap come from
+the operator's private profile; never copy the cap or credentials here. -->
+
+- Will do myself: every command, browser step, check, and allowed spend the run
+  needs without asking.
+- Checks I run: each QA Strategy check, run by the agent, with its evidence path.
+- Blockers (probed): `dependency -> probe result -> fix or fallback`, one per
+  login, key, service, site, or tool the run touches.
+- Needs you before AFK: only what the agent may not do (passwords, account
+  creation, CAPTCHAs, OAuth grants, spend over the cap); empty when none.
+- Interrupt only for: reputational harm, financial harm over the cap, or
+  irreversible loss of the operator's data.
 
 ## State
 

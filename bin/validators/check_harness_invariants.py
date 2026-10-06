@@ -131,6 +131,7 @@ RULES: tuple[HarnessRule, ...] = (
             "## Change Plan",
             "## Done",
             "## QA Strategy",
+            "## Autonomy Preflight",
         ),
         remediation=(
             "keep the ticket template aligned with the ticket/runtime identity "

@@ -1,0 +1,10 @@
+{
+  "name": "pricing-app",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "test": "vitest run",
+    "e2e": "playwright test"
+  },
+  "dependencies": { "next": "15.0.0", "react": "19.0.0", "stripe": "17.0.0" }
+}

@@ -97,6 +97,12 @@ materially improve understanding; validate the companion when present.
   implementation-plan, architecture when relevant, and evidence-quality.
 - Do not claim `approval_ready` while context, architecture, proof, budget, or
   review gates remain open.
+- Fill `Autonomy Preflight` from probes actually run: CLI auth, secret names,
+  dev server, and each site via built-in browser, then logged-in browser, then
+  desktop control. Every QA check is one the agent runs. Each blocker has a
+  probe result and a fix or fallback. `Needs you before AFK` holds only
+  platform-limited or over-cap items from the operator's standing permissions;
+  do not claim `approval_ready` until it is empty or explicitly accepted.
 - After human approval, hand the same ticket to `goal-advisor`; it compiles
   execution and does not redo planning.
 

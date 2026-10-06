@@ -34,9 +34,7 @@ are missing or stale: `functional-ui` for interaction evidence and wireflow,
 `visual-design` for reference-backed visual direction, `asset-advisor` for
 actual media needs, and `landing-page` for a one-page offer/story. This skill
 merges accepted results into one ticket and `design.md`; it is not a frontend
-router or a second design author. When either UI facet is material, preserve
-its accepted **Steve Jobs Focus & Simplicity Pass** conclusion in the ticket's
-existing design baseline rather than adding a second ticket section.
+router or a second design author.
 
 ## Skill Signature
 
@@ -52,13 +50,14 @@ gates:
   ticket_bound; internal_reuse_inspected; required_context_resolved_or_blocked;
   code_seams_named; change_order_executable; done_and_proof_concrete;
   ui_design_baseline_copy_complete_or_approval_blocked; lean_receipt_passed;
-  ticket_context_budget_checked; material_review_reconciled
+  autonomy_preflight_probed; ticket_context_budget_checked; material_review_reconciled
 
 fails:
   chat_only_material_plan; parallel_ticket_schema; repeated_advisor_work;
   advisor_owned_gap_self_authored; blocked_facet_erases_honest_plan;
   duplicated_global_and_per_change_policy; proof_weakened_for_line_count;
-  readiness_with_open_gate; implementation_before_approval
+  readiness_with_open_gate; implementation_before_approval;
+  unprobed_blocker; permitted_step_handed_to_user
 ```
 
 A buyer-facing UI handoff is not approval-ready without its ticket-local,
@@ -89,10 +88,7 @@ permission to drop scope. When a resolver cannot run, record `block` rather
 than inventing its result.
 
 For a material request with no selected ticket, create or request the canonical
-`tickets/TASK-XXXX/ticket.md` before returning a substantive plan. When
-accepted UI context includes a **Steve Jobs Focus & Simplicity Pass**, preserve
-its core action, subtraction, and deliberate `no` in the ticket's existing
-design baseline; never replace it with a chat-only summary or a new schema.
+`tickets/TASK-XXXX/ticket.md` before returning a substantive plan.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -154,12 +150,16 @@ design baseline; never replace it with a chat-only summary or a new schema.
     literal visible copy, reader question, proof, takeaway, action, and
     assertion. Make QA compare captures and behavior against its IDs and
     assertions; a link alone is not proof.
-- [ ] 6. Keep presentation proportional.
+- [ ] 6. Prove the run can go unattended.
+  - [ ] Fill the ticket's `Autonomy Preflight` from probes actually run, per
+    [autonomy preflight](references/autonomy-preflight.md); `approval_ready`
+    requires `Needs you before AFK` empty or explicitly accepted.
+- [ ] 7. Keep presentation proportional.
   - [ ] Keep the required Contract Diagram compact and type-appropriate. Create
     `diagrams.md` only when multiple detailed architecture views or independent
     diagram review materially help; validate it when linked.
   - [ ] Move execution history and bulky proof to `progress.md` or `artifacts/`.
-- [ ] 7. Run minimality and mechanical gates.
+- [ ] 8. Run minimality and mechanical gates.
   - [ ] Call the Lean Check direct command once after context resolution
     and before finalizing the Change Plan. Preserve its first sufficient rung,
     evidence, and smallest action only where they change scope, a change unit,
@@ -167,7 +167,7 @@ design baseline; never replace it with a chat-only summary or a new schema.
   - [ ] Run `farplane ticket check <ticket> --phase planning`; inspect raw
     first-load and Markdown category counts, then consolidate duplicated policy
     or bulky evidence when pressure is reported.
-- [ ] 8. Review and hand off.
+- [ ] 9. Review and hand off.
   - [ ] Reapply the first-load Todo List guardrails to the completed ticket
     after drafting and after any repair. Resolve every `revise`, stop on
     `block`, and record the finish-gate verdict before reviewer handoff.
