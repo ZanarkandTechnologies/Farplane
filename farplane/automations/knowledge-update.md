@@ -18,7 +18,7 @@ schedule:
 # Knowledge update
 
 Turn the newest collected call notes into Wiki pages so people, companies,
-problems, and resources stay current for bookmark matching, CRM, and plays.
+problems, and resources stay current as leverage for the operator's life for bookmark matching, CRM, and plays.
 
 Execution boundary:
 
@@ -40,9 +40,10 @@ Execution boundary:
 - Run `$manage-wiki` once per call with `publication_intent: apply` (standing
   operator instruction) at the company Wiki root: the nearest ancestor whose
   `.farplane/entities/` already holds pages.
-- Keep only durable business facts on `person` and `company` pages, each claim
-  ending in a link to the call note URL. A creator or client is a person with
-  that entry in `roles`.
+- Keep durable facts that are leverage anywhere in the operator's life (business,
+  career, relationships, the operator's own moves) on `person` and `company`
+  pages, each claim ending in a link to the call note URL. A creator or client is
+  a person with that entry in `roles`.
 - Record a problem as an item in its owner's `problems:` list (`id`, `text`,
   `since`, `source`) and a resource as an item in its owner's `resources:` list.
   When a resource from the call would help another page's open problem, add
@@ -50,7 +51,8 @@ Execution boundary:
   `suggested` until the operator confirms.
 - Mark a problem `status: solved` or `dropped` only when a call says so; `size`
   and `ongoing` are the operator's to set.
-- Exclude family, health, and other personal details; the Wiki is not a dossier.
+- Keep personal notes only when they're worth remembering for the relationship;
+  leave out health details and anything said in confidence.
 - Add or update `funnel` only for people or companies in an active deal.
 
 ## 3. Close the run
