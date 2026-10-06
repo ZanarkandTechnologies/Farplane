@@ -18,12 +18,11 @@ Use this skill to create, revise, or audit Farplane Codex automations. Work
 Pulse is the only heartbeat and owns ticket execution. Company OS Daily and
 Weekly, Feed Scout, Dogfood, and maintenance are separate `cron` records.
 
-Root `automations/*.md` owns reusable recipes with schema
-`farplane_automation_recipe`. Every configured record lives in its owning
-workspace's `farplane/automations/*.md`, including the AI Office's single
-Daily/Weekly pair. Configured records use `farplane_project_automation` and
-carry `source_template` and `source_template_version`. Only configured records
-may be activated. YAML front matter owns id, name,
+Every live job lives in its owning workspace's `farplane/automations/*.md`, one
+file per routine, schema `farplane_project_automation`, tagged with the
+`runtime` and `runtime_task` that run it so it runs on one side only. Steps a
+job calls live in `farplane/automations/steps/` and are never scheduled alone.
+Start new jobs from this skill's `templates/`. YAML front matter owns id, name,
 kind, status, target, and schedule; the body is the exact prompt. Runtime IDs, logs, and mutable
 memory stay in the Codex automation store or ignored `.farplane/` state. Do not
 add a compiler, scheduler thread, or second manifest.
@@ -47,9 +46,9 @@ receipts. Do not replace that contract with a four-line workflow synopsis.
 automation_advisor(intent, project_refs, current_automation?, activate?, office_root?)
   -> template_choice + config_delta + automation_delta?
    + state_contract_check + proof_checklist
-state: reads(active feature/spec, automations/?, farplane/automations/?, current prompts,
+state: reads(active feature/spec, farplane/automations/?, current prompts,
              target skill, templates, first-load Todo List guardrails);
-       writes(automations/ recipes or farplane/automations/ configured records)
+       writes(farplane/automations/ job records and steps/)
 gates: loop_choice; cadence; one_owning_skill; full_parseable_record;
   file_in_file_out_boundary; side_effect_gates; one_heartbeat;
   no_hidden_scheduler
@@ -69,10 +68,10 @@ fails: logs in tracked config; provider access inside pm skills; generated
   - [ ] Use cron for every report, source, self-improvement, or maintenance pass.
 - [ ] 2. Bind current project surfaces.
   - [ ] For Company OS, bind `office_root` to the explicit AI Office checkout
-        that contains `farplane/automations/daily-operating-update.md` and
-        `farplane/automations/weekly-operating-review.md`. Do not infer it from the
+        that contains `farplane/automations/steps/daily-operating-update.md` and
+        `farplane/automations/report-gen.md`. Do not infer it from the
         installed skill path or from a managed project's `farplane/` folder.
-  - [ ] Read the active feature/spec, root `automations/`, relevant project
+  - [ ] Read the active feature/spec, the relevant project
         `farplane/automations/`, exact live
         prompt, target skill, template, and first-load Todo List guardrails.
   - [ ] Read [prompt engineering](../../docs/fundamentals/prompt-engineering.md)

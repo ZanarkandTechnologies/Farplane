@@ -24,7 +24,6 @@ surfaces:
   - skills/report-gen/SKILL.md
   - skills/report-gen/templates/project-report.md
   - skills/report-gen/templates/company-report.md
-  - automations/
   - farplane/automations/
 source_refs:
   - docs/farplane-framework/pulse-and-interval-loop.md

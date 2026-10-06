@@ -186,14 +186,14 @@ change_rule: Static charter changes require approval.
     (root / ".farplane" / "project" / "ui").mkdir(parents=True)
 
 
-def test_missing_automations_file_fails(tmp_path: Path) -> None:
+def test_project_without_jobs_needs_no_automations_folder(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
 
     errors = validate(tmp_path)
 
-    assert "farplane/automations/ is required for per-automation config files." in errors
+    assert not any(error.startswith("farplane/automations/") for error in errors)
 
 
 def test_bindings_accept_filesystem_and_notion_kanban_contracts(tmp_path: Path) -> None:
@@ -448,7 +448,7 @@ def test_retired_steer_files_fail(tmp_path: Path) -> None:
     assert "farplane/steer.config.toml is retired; use farplane/automations/." in errors
     assert ".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling." in errors
 
-def test_automations_require_exactly_one_pulse_heartbeat(tmp_path: Path) -> None:
+def test_automations_allow_at_most_one_pulse_heartbeat(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
@@ -470,7 +470,7 @@ schedule:
 Use $dogfood-review.
 ''', encoding="utf-8")
     errors = validate(tmp_path)
-    assert "farplane/automations/ must define exactly one heartbeat record for Work Pulse; found 2." in errors
+    assert "farplane/automations/ may define at most one heartbeat record for Work Pulse; found 2." in errors
 
 def test_retired_file_growth_hook_config_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"

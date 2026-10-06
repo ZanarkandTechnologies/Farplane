@@ -146,7 +146,7 @@ Return or write the approved subset of:
 ```text
 Typed Charter / Area-Capability-Metric Selection Delta: farplane/harness.yaml
 Metric Objective Delta: farplane/metrics.yaml
-Binding and Automation Manifest Delta: farplane/bindings.yaml, automations/
+Binding and Automation Manifest Delta: farplane/bindings.yaml, farplane/automations/
 Capability Skill Reuse Map; Local Skill Stubs or Refinement Ticket
 Values, Priorities, Strategy Axes, KPI Map, and Feedback Skill Loops
 Feedback Primitive Plan; Missing-System and Operator-Unblock Tickets

@@ -36,13 +36,8 @@ descriptions, refresh prompts, bindings, tickets, and docs. Do not use
 `bootstrap.sh --force` as a general project upgrade because bootstrap owns
 whole-file scaffolding.
 
-Reusable automation recipes live in the Farplane source checkout's
-`automations/`. Bootstrap writes configured records to `farplane/automations/`.
-Use `--office` only for the single AI Office workspace to include Daily/Weekly.
-Installed bootstrap resolves recipes through the installed `farplane` CLI;
-`--recipes-dir <Farplane-source>/automations` supplies an explicit source.
-Existing configured records are preserved. Live activation belongs to
-`automation-advisor`.
+Bootstrap creates an empty `farplane/automations/`. Jobs are added one file
+per live routine, and activated, by `automation-advisor`.
 
 For "what does init create?" answers, load [README.md](README.md) or the
 manifest template rather than duplicating the generated-file inventory here.
@@ -132,8 +127,7 @@ rules in `farplane/metrics.yaml`; use
   - [ ] Use [GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) as the
         canonical generated `.gitignore` block for Farplane local runtime and
         work state.
-  - [ ] Materialize root `automations/` recipes into `farplane/automations/`;
-        include the PM pair only for the designated office via `--office`.
+  - [ ] Create an empty `farplane/automations/`; jobs come from automation-advisor.
   - [ ] Create or preserve `farplane/metrics.yaml` as the metric-definition and
         grouped-refresh contract; keep only non-secret connector/provider
         coordinates in `farplane/bindings.yaml`.

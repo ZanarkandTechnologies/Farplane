@@ -310,8 +310,6 @@ def validate_automations_dir(root: Path, automations_dir: Path) -> list[str]:
     rel_dir = automations_dir.relative_to(root).as_posix()
     files = sorted(automations_dir.glob("*.md")) if automations_dir.is_dir() else []
     errors = [f"{path.relative_to(root).as_posix()} is retired; use one Markdown file per automation." for path in sorted(automations_dir.glob("*.toml"))]
-    if not files:
-        return [f"{rel_dir}/ must contain at least one automation Markdown file.", *errors]
     seen_ids: set[str] = set()
     heartbeat_records: list[tuple[str, str]] = []
     for path in files:
@@ -374,9 +372,9 @@ def validate_automations_dir(root: Path, automations_dir: Path) -> list[str]:
             errors.append(f"{rel_path}.schedule.day_of_month must be an integer.")
         if schedule_type in {"interval", "active_hours_interval"} and not isinstance(schedule.get("interval_minutes"), int):
             errors.append(f"{rel_path}.schedule.interval_minutes must be an integer.")
-    if len(heartbeat_records) != 1:
-        errors.append(f"{rel_dir}/ must define exactly one heartbeat record for Work Pulse; found {len(heartbeat_records)}.")
-    elif "$pulse-update" not in heartbeat_records[0][1]:
+    if len(heartbeat_records) > 1:
+        errors.append(f"{rel_dir}/ may define at most one heartbeat record for Work Pulse; found {len(heartbeat_records)}.")
+    elif heartbeat_records and "$pulse-update" not in heartbeat_records[0][1]:
         errors.append(f"{rel_dir}/ heartbeat {heartbeat_records[0][0]} must invoke $pulse-update.")
     return errors
 
@@ -1086,9 +1084,7 @@ def validate(root: Path) -> list[str]:
     if retired_harness_markdown.exists():
         errors.append("farplane/harness.md is retired; use farplane/harness.yaml.")
 
-    if not automations_dir.is_dir():
-        errors.append("farplane/automations/ is required for per-automation config files.")
-    else:
+    if automations_dir.is_dir():
         errors.extend(validate_automations_dir(root, automations_dir))
 
     if not harness.exists():

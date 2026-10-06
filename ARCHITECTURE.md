@@ -217,11 +217,11 @@ during cleanup unless the replacement carries the same routing information.
 
 ### Automation ownership
 
-- Product `automations/` owns reusable recipes (`farplane_automation_recipe`).
-- Workspace `farplane/automations/` owns complete configured records
-  (`farplane_project_automation`), including the AI Office's PM pair.
-- Bootstrap materializes selected recipes and preserves customized instances.
-  `--office` includes Daily/Weekly once; ordinary projects exclude them.
+- `farplane/automations/` holds one record per live scheduled job
+  (`farplane_project_automation`), tagged with the `runtime` and `runtime_task`
+  that run it. Steps a job calls live in `farplane/automations/steps/`.
+- Bootstrap creates an empty `farplane/automations/`; automation-advisor adds jobs
+  from its templates.
 - Codex owns live schedules; `.farplane/` owns ignored run data.
 - Skills own file-to-file business logic; automation records own integrations.
 

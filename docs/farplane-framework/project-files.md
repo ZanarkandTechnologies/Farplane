@@ -113,18 +113,12 @@ ledger, or product controller state here.
 
 ### `farplane/automations/`
 
-Committed desired state for every configured automation. Each `*.md` file owns
-one complete record. The folder contains one Work Pulse heartbeat and selected
-cron jobs. In the designated AI Office, this same folder holds the single
-portfolio-wide Daily/Weekly pair. Ordinary project bootstrap excludes that
-pair; `bootstrap.sh --office` includes it.
-
-The Farplane product's root `automations/` holds reusable paused recipes with
-schema `farplane_automation_recipe`. Bootstrap converts selected recipes to
-`farplane_project_automation`, records their recipe origin, and preserves
-existing customized records. Only configured records may be activated. Recipe
-updates do not overwrite instances automatically. Both are committed; generated
-run data stays in ignored `.farplane/`, and live schedules stay in Codex.
+Committed desired state for the project's scheduled jobs: one `*.md` file per
+live routine, tagged with the `runtime` (`claude` or `codex`) and `runtime_task`
+that run it, so a job runs on one side only. Steps a job calls live in
+`farplane/automations/steps/` and are never scheduled on their own. A project
+with no jobs has an empty or absent folder; automation-advisor adds jobs from its
+templates. Generated run data stays in ignored `.farplane/`.
 
 YAML front matter owns identity, schedule, workspace, and status. The Markdown
 body is the exact project-specific prompt. Generic workflow behavior remains in the called skill. Scheduled

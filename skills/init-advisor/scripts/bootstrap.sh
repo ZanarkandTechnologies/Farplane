@@ -12,8 +12,6 @@ set -euo pipefail
 
 FORCE=0
 TARGET_DIR="."
-RECIPE_DIR=""
-INCLUDE_OFFICE=0
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -22,16 +20,8 @@ while [ $# -gt 0 ]; do
       shift
       ;;
     --help|-h)
-      echo "Usage: $(basename "$0") [--force] [--office] [--recipes-dir DIR] [target_project_dir]"
+      echo "Usage: $(basename "$0") [--force] [target_project_dir]"
       exit 0
-      ;;
-    --office)
-      INCLUDE_OFFICE=1
-      shift
-      ;;
-    --recipes-dir)
-      RECIPE_DIR="${2:?--recipes-dir requires a directory}"
-      shift 2
       ;;
     *)
       TARGET_DIR="$1"
@@ -43,21 +33,6 @@ done
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 REF_DIR="${SKILL_DIR}/references"
-
-# Source-checkout execution and installed skill copies use the same recipe owner.
-if [ -z "$RECIPE_DIR" ]; then
-  RECIPE_DIR="$(cd "${SKILL_DIR}/../.." && pwd)/automations"
-  if [ ! -f "$RECIPE_DIR/work-pulse.md" ]; then
-    FARPLANE_CLI="$(command -v farplane || true)"
-    if [ -n "$FARPLANE_CLI" ]; then
-      RECIPE_DIR="$(python3 -c 'import pathlib,sys; print(pathlib.Path(sys.argv[1]).resolve().parents[1] / "automations")' "$FARPLANE_CLI")"
-    fi
-  fi
-fi
-if [ ! -f "$RECIPE_DIR/work-pulse.md" ]; then
-  echo "Error: reusable automation recipes unavailable; pass --recipes-dir <Farplane-source>/automations" >&2
-  exit 1
-fi
 
 if [ ! -d "$REF_DIR" ]; then
   echo "Error: references directory not found: $REF_DIR" >&2
@@ -82,32 +57,6 @@ copy_file() {
 
   mkdir -p "$(dirname "$dest")"
   cp "$src" "$dest"
-  echo "Wrote: $dest"
-}
-
-copy_automation() {
-  local name="$1"
-  local dest="${TARGET_DIR}/farplane/automations/${name}.md"
-  if [ -e "$dest" ] && [ "$FORCE" -ne 1 ]; then
-    echo "Skip (exists): $dest"
-    return 0
-  fi
-  python3 - "$RECIPE_DIR/${name}.md" "$dest" <<'PY'
-from pathlib import Path
-import sys
-
-source, destination = map(Path, sys.argv[1:])
-text = source.read_text()
-if "schema: farplane_automation_recipe\n" not in text:
-    raise SystemExit(f"Not an automation recipe: {source}")
-text = text.replace("schema: farplane_automation_recipe\n", "schema: farplane_project_automation\n", 1)
-# Recipe lineage is replaced by the configured record's direct recipe origin.
-header, body = text.split("\n---\n", 1)
-header = "\n".join(line for line in header.splitlines()
-                   if not line.startswith(("source_template:", "source_template_version:")))
-header += f"\nsource_template: automations/{source.name}\nsource_template_version: 1.0.0"
-destination.write_text(header + "\n---\n" + body)
-PY
   echo "Wrote: $dest"
 }
 
@@ -163,15 +112,8 @@ copy_file "${REF_DIR}/FARPLANE_README_TEMPLATE.md" "${TARGET_DIR}/farplane/READM
 copy_file "${REF_DIR}/MANIFEST_TEMPLATE.json" "${TARGET_DIR}/farplane/manifest.json"
 copy_file "${REF_DIR}/HARNESS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/harness.yaml"
 copy_file "${REF_DIR}/METRICS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/metrics.yaml"
+# Jobs are added one file each by automation-advisor; a new project starts with none.
 mkdir -p "${TARGET_DIR}/farplane/automations"
-for automation_name in work-pulse feed-scout weekly-self-improvement monthly-registry-consolidation; do
-  copy_automation "$automation_name"
-done
-if [ "$INCLUDE_OFFICE" -eq 1 ]; then
-  copy_automation daily-collect
-  copy_automation daily-operating-update
-  copy_automation weekly-operating-review
-fi
 copy_file "${REF_DIR}/BINDINGS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/bindings.yaml"
 copy_file "${REF_DIR}/LOCAL_SKILLS_README_TEMPLATE.md" "${TARGET_DIR}/.agents/skills/README.md"
 copy_file "${REF_DIR}/PM_TEMPLATE.json" "${TARGET_DIR}/farplane/pm.json"
@@ -238,12 +180,11 @@ echo "  - Review farplane/manifest.json for the current Farplane project spec ve
 echo "  - Fill in farplane/harness.yaml, or run harness-creator as the internal operating-program phase."
 echo "  - Fill in farplane/metrics.yaml with measurable objectives, guards, metric meaning, and display fields."
 echo "  - Fill in farplane/bindings.yaml with non-secret project IDs, connector coordinates, and metric refresh recipes."
-echo "  - Fill in farplane/automations/ with one Work Pulse heartbeat plus separate Feed Scout, BAU review, self-improvement, and optional cron records."
+echo "  - Add scheduled jobs to farplane/automations/ with automation-advisor, one file per live routine."
 echo "  - Keep skills generic and parameterized; configure project paths, cadence, schedule, thread IDs, and exact prompts in farplane/automations/."
 echo "  - Use .agents/skills/ for project-local capability skills; promote only stable cross-project workflows to root skills/."
 echo "  - Use metric-advisor to shape measurable objectives and guards when they are missing or weak."
 echo "  - Use goal-advisor to compile the first executable frontier after goals are concrete."
-echo "  - Run automation-advisor when you want to activate the live Work Pulse and scheduled automations; bootstrap only creates the files."
 echo "  - Fill in farplane/pm.json with PM-visible chat and automation thread IDs so the UI groups them under one employee."
 echo "  - Use owner-named .farplane/ paths for ignored reports, metric observations, eval outputs, content, logs, and tool-specific state; do not add generic runtime, evidence, or review buckets."
 echo "  - Keep each Wiki article in flat .farplane/entities/<id>.md; run 'farplane wiki doctor' then 'farplane wiki rebuild' to generate search state and JSON projections. Skill reports link entities with entity_refs."

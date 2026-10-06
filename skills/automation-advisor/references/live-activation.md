@@ -20,8 +20,7 @@ activate_farplane_automations(project_root, desired_records,
    automation identity rather than creating duplicates.
 2. Update the owning Markdown first with the exact desired prompt, target,
    cadence, and status in the owning workspace's `farplane/automations/`.
-   The AI Office owns one configured Daily/Weekly pair there. Never activate
-   a root `farplane_automation_recipe` or an unresolved placeholder.
+   Never activate a step from `steps/` or an unresolved placeholder.
 3. Reuse the existing Project Pulse thread for the one heartbeat. Target Feed
    Scout, Dogfood, and maintenance cron jobs at the project workspace. Target
    the single Daily/Weekly pair at the AI Office workspace.

@@ -3,14 +3,12 @@
 Start from the complete operated templates below. They are the Farplane
 adaptation of Zanarkand AI's Company OS automations:
 
-- `<office-root>/farplane/automations/daily-operating-update.md`
-- `<office-root>/farplane/automations/weekly-operating-review.md`
+- `<office-root>/farplane/automations/steps/daily-operating-update.md`
+- `<office-root>/farplane/automations/report-gen.md`
 
-`office-root` is the explicit AI Office workspace. Start new configured records
-from the Farplane source checkout's root `automations/` recipes.
-`bootstrap.sh --office` materializes both paused records in the office's
-`farplane/automations/`. Ordinary project bootstrap excludes them. Bind the
-office before activation.
+`office-root` is the explicit AI Office workspace. Copy these records from the
+Farplane checkout into the office's `farplane/automations/` and bind the office
+before activation.
 
 Replace project identity, source bindings, destinations, and schedules. Retain
 the full stage contract: collection boundaries, exact matching, pagination,

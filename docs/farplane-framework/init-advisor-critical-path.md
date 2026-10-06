@@ -108,7 +108,7 @@ Key ownership:
 - `metrics.yaml`: provider-independent metric definitions with direction,
   freshness, and optional guard rules;
 - `.agents/skills/`: project-local recurring capability workflows;
-- `automations/`: one project Work Pulse heartbeat plus project-local scheduled sources;
+- `automations/`: one record per live scheduled job, added by automation-advisor;
 - `bindings.yaml`: non-secret connector/provider coordinates;
 - tickets: executable commitments and all QA/review evidence;
 - `.farplane/**`: generated/local observations and reports, not strategy.

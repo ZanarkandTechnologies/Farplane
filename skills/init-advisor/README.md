@@ -81,15 +81,8 @@ exists, use `harness-creator` in full mode to shape the static charter,
 capability workflows, metric objectives, guards, and feedback loops. `harness-creator`
 routes to `metric-advisor` or `goal-advisor` only when those narrower advisor
 calls are needed. When live loops are explicitly requested, use
-`automation-advisor` to activate the single Work Pulse heartbeat plus separate
-project-local Feed Scout, self-improvement, and optional cron records. The AI
-Office stores one global Daily and Weekly pair in its `farplane/automations/`.
-Use `bash scripts/bootstrap.sh --office <office-root>` to include those paused
-records; ordinary project bootstrap omits them. Reusable recipes live in the
-Farplane source checkout's `automations/`. An installed skill resolves that
-checkout through the installed `farplane` CLI, or accepts
-`--recipes-dir <Farplane-source>/automations`. Existing configuration is
-preserved on rerun; recipe upgrades do not overwrite customized records.
+`automation-advisor` to add and activate jobs, one file per live routine in
+`farplane/automations/`; bootstrap creates the folder empty.
 Activation creates or reuses the dedicated loop threads, creates or updates the
 Codex automations, and appends PM-visible thread IDs to `farplane/pm.json`.
 
@@ -308,7 +301,7 @@ Those can come after one clean ticket run.
 - [ ] `farplane/harness.yaml` exists or `init_mode=substrate` has a recorded readiness gap
 - [ ] `farplane/metrics.yaml` declares at least one measurable objective and defines every objective/guard metric ID
 - [ ] every metric definition has exactly one inline `refresh` or valid `refresh_ref` in `farplane/metrics.yaml`, with an explicit source-gap route
-- [ ] `farplane/automations/` contains exactly one Work Pulse heartbeat plus project-local Feed Scout, self-improvement, consolidation, and optional scheduled workflows; the AI Office's `farplane/automations/` owns the single global Daily/Weekly pair
+- [ ] `farplane/automations/` holds only live routines (one file each), with the steps they call in `steps/`
 - [ ] `farplane/bindings.yaml` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
 - [ ] `.agents/skills/README.md` exists as the local capability-skill home
 - [ ] `farplane/pm.json` exists when the UI should fold chat and automation thread IDs into one visual project PM
