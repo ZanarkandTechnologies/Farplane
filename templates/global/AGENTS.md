@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.1
+template_version: 0.3.2
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -156,6 +156,12 @@ goal = ticket + program + progress + artifacts
 - Start with the highest available source that can answer the question. Prefer
   semantic connectors, APIs, and documentation tools before UI operation. Use
   a specialist evidence workflow only for a named artifact or unresolved gap.
+- Share research between threads as notes: one Markdown file per finding, named
+  `YYYY-MM-DD-<slug>.md` with `title` and `summary` front matter, in
+  `<project>/.farplane/notes/` when scoped to one project or `~/.farplane/notes/`
+  when any project could use it. Before researching, `rg` both folders; when a
+  thread finds something another thread would reuse, write a note. Notes are
+  not the ingested-data Wiki or curated project memory.
 - Keep private handles, workspace IDs, services, local conventions, credentials,
   private runtime state, and unsanitized personal data out of shared artifacts.
 - When consolidating guidance, map each requirement to what retains it or to an
