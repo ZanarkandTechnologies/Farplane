@@ -84,3 +84,7 @@ tickets/templates/goal-loop/*
 !tickets/templates/goal-loop/progress.md
 !tickets/templates/goal-loop/hypothesis-tree.json
 artifacts/
+
+# Local-only outputs and machine config
+meshy_output/
+.claude/launch.json
