@@ -65,6 +65,7 @@ Then open only the contract needed for the current question:
 | How do Pulse, planning, reports, Feed Scout, and Dogfood coordinate? | [Work Pulse And Scheduled Ticket Sources](pulse-and-interval-loop.md) |
 | How does a shaped idea become reviewed completed work? | [Ticket Execution Loop](ticket-execution-loop.md) |
 | What may hooks do, and where does runtime state live? | [Hooks And Runtime](hooks-and-runtime.md) |
+| Where does one thread leave research for another thread? | [Thread Notes](notes.md) |
 | Where do canonical Wiki articles, hybrid search, generated SQLite, named views, graph, and CRM projections live? | [Wiki Storage And Projections](entities.md) |
 | How do I resolve entities and author links, question provenance, timelines, view tags, and CRM funnel state? | [Entity Markdown Authoring](entity-markdown-authoring.md) |
 | How do typed views distinguish observations, dependencies, and directed resource transfers? | [Entity View Projection Standard](entity-view-projection-standard.md) |

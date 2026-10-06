@@ -269,7 +269,6 @@ owner:
 ```text
 .farplane/
   views.yaml
-  notes/
   entities/
   wiki/
   reports/
@@ -295,15 +294,13 @@ are generated projections over canonical files and runtime evidence. If a
 projection is stale, run `farplane wiki rebuild` from its owners rather than
 hand-editing it.
 
-`.farplane/notes/` holds thread notes: one `YYYY-MM-DD-<slug>.md` file per
-research finding, with `title` and `summary` front matter, written so a later
-thread can pick it up with `rg` instead of redoing the work. Notes that any
-project could use go in `~/.farplane/notes/` instead. Notes have no index,
-schema, or projection; ingested source data still goes through the Wiki.
+Thread notes are not project files. A project's notes live in
+`~/.farplane/notes/projects/<project>/`, inside the one local-only notes git
+repo, so no pushable checkout ever holds them. See [Thread Notes](notes.md).
 
 The ignored `.farplane/` boundary normally owns generated/runtime state, with
-three explicit authored local exceptions: notes, entity Markdown, and
-`views.yaml`. These remain local because they may contain personal research
+two explicit authored local exceptions: entity Markdown and `views.yaml`.
+These remain local because they may contain personal research
 and relationship organization. Shared connector/source coordinates still belong in tracked
 `farplane/bindings.yaml`; do not introduce a generic `.farplane/config.yaml`.
 

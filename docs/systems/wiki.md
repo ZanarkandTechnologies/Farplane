@@ -51,6 +51,9 @@ human-readable Markdown article; explicit entity links make those articles a
 knowledge graph without moving canonical truth into a database or generated
 JSON.
 
+Wiki is for ingested source data. Scoped research that one thread hands to
+another goes in [Thread Notes](../farplane-framework/notes.md) instead.
+
 ```text
 wiki(source_ref, publication_intent = preview, project_context?)
   -> staged_or_changed_articles + resolution_receipt + projection_refs

@@ -505,7 +505,20 @@ install_rendered_skill_profiles() {
   done
 }
 
+# Thread notes: one local-only git repo (docs/farplane-framework/notes.md).
+ensure_notes_repo() {
+  local notes_dir="${FARPLANE_NOTES_DIR:-$HOME/.farplane/notes}"
+  if [ ! -d "$notes_dir/.git" ]; then
+    mkdir -p "$notes_dir/projects"
+    git -C "$notes_dir" init -q -b main
+    echo "Created local notes repo at $notes_dir"
+  fi
+  printf '#!/bin/sh\necho "notes repo is local-only: push blocked" >&2\nexit 1\n' > "$notes_dir/.git/hooks/pre-push"
+  chmod +x "$notes_dir/.git/hooks/pre-push"
+}
+
 trap cleanup_profile_render EXIT
+ensure_notes_repo
 
 if [ "$RUNTIME" = "claude" ]; then
   install_claude_runtime farplane

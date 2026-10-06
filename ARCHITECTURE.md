@@ -83,6 +83,7 @@ flowchart LR
     featureRegistry[(docs/features<br/>generated feature index)]:::surface
     doctrine[(harness-engineering-doctrine.md<br/>surface routing)]:::surface
     memories[(HISTORY.md<br/>MEMORY.md)]:::memory
+    notes[(~/.farplane/notes<br/>thread notes, local git)]:::memory
   end
 
   subgraph Skills["Skill Layer"]
