@@ -220,9 +220,12 @@ Common optional frontmatter:
 | `latitude`, `longitude` | Optional paired numeric coordinates; compilation never geocodes |
 | `links` | External source or profile URLs |
 | `funnel` | Non-empty mapping that includes the entity in `crm.json` |
+| `roles` | What a person or company is to you, such as `client` or `creator`; `client` also includes it in `crm.json` |
+| `problems` | Owner's problems: items with `id`, `text`, and optional `since`, `status`, `ongoing`, `size`, `source` |
+| `resources` | Owner's resources: items with `id`, `text`, optional `source`, and `helps` (`problem`, `impact`, `status`) |
 
-Keep view-specific roles, metrics, statuses, and relation vocabulary out of
-generic frontmatter. Put them in named view sections and `.farplane/views.yaml`.
+Keep view-specific metrics, statuses, and relation vocabulary out of generic
+frontmatter. Put them in named view sections and `.farplane/views.yaml`.
 
 ## Entity Links And Associations
 

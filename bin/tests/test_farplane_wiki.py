@@ -376,6 +376,38 @@ class FarplaneWikiTests(unittest.TestCase):
         self.assertNotEqual(retired.returncode, 0)
         self.assertIn("invalid choice", retired.stderr)
 
+    def test_cli_without_project_root_uses_nearest_ancestor_wiki(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            company = Path(tmp)
+            entities = company / ".farplane" / "entities"
+            entities.mkdir(parents=True)
+            (entities / "alex-hormozi.md").write_text(
+                "---\nid: alex-hormozi\nkind: person\nname: Alex Hormozi\nroles:\n  - creator\n---\n\n# Alex Hormozi\n",
+                encoding="utf-8",
+            )
+            (entities / "hank-globex.md").write_text(
+                "---\nid: hank-globex\nkind: person\nname: Hank Globex\nroles:\n  - client\n---\n\n# Hank Globex\n",
+                encoding="utf-8",
+            )
+            subprocess.run(
+                [sys.executable, str(CLI), "wiki", "rebuild", "--project-root", str(company)],
+                capture_output=True, text=True, check=True,
+            )
+            nested = company / "Analyst"
+            nested.mkdir()
+            found = subprocess.run(
+                [sys.executable, str(CLI), "wiki", "search", "Alex Hormozi", "--role", "creator", "--json"],
+                capture_output=True, text=True, check=False, cwd=nested,
+            )
+            clients = subprocess.run(
+                [sys.executable, str(CLI), "wiki", "search", "Alex Hormozi", "--role", "client", "--json"],
+                capture_output=True, text=True, check=False, cwd=nested,
+            )
+
+        self.assertEqual(found.returncode, 0, found.stderr)
+        self.assertEqual(json.loads(found.stdout)["candidates"][0]["id"], "alex-hormozi")
+        self.assertNotIn("alex-hormozi", [c["id"] for c in json.loads(clients.stdout)["candidates"]])
+
     def test_doctor_reports_generated_database_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

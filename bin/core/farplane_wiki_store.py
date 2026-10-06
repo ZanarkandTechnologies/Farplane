@@ -22,6 +22,7 @@ from farplane_entities import (
     field_text,
     write_entity_projections,
 )
+from farplane_entity_items import OWNER_ITEM_FIELDS, owner_items
 
 
 WIKI_ROOT = Path(".farplane/wiki")
@@ -162,6 +163,16 @@ def aliases_for(record: dict[str, Any]) -> list[str]:
     return list(by_normalized.values())
 
 
+def searchable_body(record: dict[str, Any]) -> str:
+    """The page body plus the problems and resources kept in its frontmatter, so both are searchable."""
+    items = [
+        item["text"]
+        for field in OWNER_ITEM_FIELDS
+        for item in owner_items(record["frontmatter"], field)
+    ]
+    return "\n".join([str(record["body"]), *items])
+
+
 def replace_page(
     connection: sqlite3.Connection,
     record: dict[str, Any],
@@ -205,7 +216,7 @@ def replace_page(
     )
     connection.execute(
         "INSERT INTO entity_fts(entity_id, name, aliases, body) VALUES (?, ?, ?, ?)",
-        (entity_id, record["name"], " ".join(aliases), record["body"]),
+        (entity_id, record["name"], " ".join(aliases), searchable_body(record)),
     )
     identity_text = " ".join(
         normalize_identity(label) for label in [entity_id, record["name"], *aliases]
@@ -225,7 +236,7 @@ def replace_page(
                 json.dumps(edge, sort_keys=True, separators=(",", ":")),
             )
             for edge in graph_edges
-            if edge["source_entity_id"] == entity_id
+            if edge.get("path") == record["path"]
         ],
     )
 

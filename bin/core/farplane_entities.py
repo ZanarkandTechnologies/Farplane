@@ -17,6 +17,9 @@ from typing import Any
 
 import yaml
 
+from farplane_entity_items import (crm_entry, entity_roles, goal_issues, item_index_fields, owner_item_graph,
+                                   owner_item_issues, problem_refs, validate_id)
+
 
 ENTITY_ROOT = Path(".farplane/entities")
 VIEW_CONFIG_PATH = Path(".farplane/views.yaml")
@@ -143,14 +146,6 @@ def read_entity(path: Path) -> tuple[dict[str, Any] | None, str, str | None]:
 def field_text(frontmatter: dict[str, Any], field: str) -> str:
     value = frontmatter.get(field)
     return "" if value is None else str(value).strip()
-
-
-def validate_id(entity_id: str) -> str | None:
-    if not entity_id:
-        return "missing:id"
-    if entity_id.startswith(('.', '-')) or any(char not in "abcdefghijklmnopqrstuvwxyz0123456789-_" for char in entity_id):
-        return "invalid_id"
-    return None
 
 
 def load_entity_views(
@@ -735,10 +730,13 @@ def finalize_entity_registry(
                 existing["entity_ids"] = sorted(set(existing["entity_ids"] + [record["id"]]))
                 existing["paths"] = sorted(set(existing["paths"] + [record["path"]]))
 
+    known_problem_refs = problem_refs(records)
     for record in records:
         for field, ref in reference_values(record["frontmatter"]):
             if ref not in known_ids:
                 issues.append(EntityIssue(record["path"], f"unresolved_ref:{field}:{ref}"))
+        for issue_code in owner_item_issues(record["frontmatter"], known_problem_refs) + goal_issues(record["frontmatter"], known_ids):
+            issues.append(EntityIssue(record["path"], issue_code))
         funnel = record["frontmatter"].get("funnel")
         if funnel is not None and not isinstance(funnel, dict):
             issues.append(EntityIssue(record["path"], "invalid_funnel:not_object"))
@@ -837,6 +835,7 @@ def build_entity_index(registry: dict[str, Any]) -> dict[str, Any]:
         location = field_text(frontmatter, "location")
         if location:
             entry["location"] = location
+        entry.update(item_index_fields(frontmatter))
         references: dict[str, list[str]] = {}
         for field, ref in reference_values(frontmatter):
             references.setdefault(field, []).append(ref)
@@ -879,7 +878,12 @@ def build_graph_projection(registry: dict[str, Any], project_root: Path) -> dict
         if latitude is not None and longitude is not None:
             node["latitude"] = latitude
             node["longitude"] = longitude
+        roles = entity_roles(frontmatter)
+        if roles:
+            node["roles"] = roles
         nodes.append(node)
+
+        nodes.extend(owner_item_graph(record, project_id, edges_by_key))
 
         for link in body_links(record):
             target_id = link["target_entity_id"]
@@ -1525,23 +1529,10 @@ def build_view_projections(
 
 
 def build_crm_projection(registry: dict[str, Any], project_root: Path) -> dict[str, Any]:
-    """Project funnel-bearing entities without creating a second source of truth."""
+    """Project clients (the client role) and funnel-bearing entities without a second source of truth."""
     identity = project_identity(project_root)
     project_id = identity["id"]
-    entries: list[dict[str, Any]] = []
-    for record in registry["entities"]:
-        funnel = record["frontmatter"].get("funnel")
-        if not isinstance(funnel, dict) or not funnel:
-            continue
-        entries.append({
-            "key": f"{project_id}:{record['id']}",
-            "project_id": project_id,
-            "entity_id": record["id"],
-            "kind": record["kind"],
-            "name": record["name"],
-            "path": record["path"],
-            "funnel": funnel,
-        })
+    entries = [entry for record in registry["entities"] if (entry := crm_entry(record, project_id))]
     entries.sort(key=lambda item: item["key"])
     return {
         "schema_version": 4,

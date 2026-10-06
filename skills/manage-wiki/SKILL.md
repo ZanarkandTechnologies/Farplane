@@ -154,6 +154,9 @@ changeset contains update, create, link, ambiguity, and question provenance.
   touching an endpoint entity.
 - A Wiki article may hold sourced narrative context; generated search rows and
   graph edges never become a second canonical record.
+- Only people and companies get pages. A creator or client is a person with that
+  role; a problem or resource is an item on its owner's page (`owner#item`), never
+  a page of its own.
 
 ## Reference Map
 

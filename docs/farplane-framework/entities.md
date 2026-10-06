@@ -83,7 +83,48 @@ Prospective design partner. Prefers concrete demonstrations.
 `funnel` is optional. Adding a non-empty funnel mapping promotes the existing
 entity into the generated CRM view; it never creates a second CRM record.
 Entities without funnel state remain in the entity index and Wiki graph projection but do
-not appear in `crm.json`.
+not appear in `crm.json`, unless `roles` includes `client`.
+
+## People, Roles, Problems, And Resources
+
+People and companies are the only owners. A creator or a client is a person with
+that entry in `roles`; there is no separate creator or CRM record. Problems and
+resources are items on their owner's page, not pages of their own, and a resource
+points at the problems it can solve with `helps`:
+
+```yaml
+# .farplane/entities/hank-globex.md
+roles: [client]
+problems:
+  - id: leads                      # referenced elsewhere as hank-globex#leads
+    text: Needs commercial property leads
+    since: 2026-09-23              # recency for matching
+    ongoing: true                  # optional, operator-set; kept until cleared
+    size: big                      # optional, operator-set
+    status: open                   # open (default), solved, or dropped
+    source: https://…
+# .farplane/entities/kenji-phang.md
+resources:
+  - id: agent-workflows
+    text: Agent-built workflow automation
+    helps:
+      - {problem: hank-globex#leads, impact: high, status: suggested}
+```
+
+A company page can also carry `goals`: each goal has `title`, optional `unit`,
+`target` (a number, or unset until chosen) and `deadline`, and `setups` whose
+`steps` form the critical path (`status`: `todo`, `next`, `done` or `blocked`).
+A setup may name `for` (a person or company), `owner`, `done_when` and `project`
+(the project floor it runs on). Clients' deals carry `funnel.value`
+(`{amount, currency, per: month|project, note}`).
+
+Compilation validates that every `helps.problem` resolves to an existing
+`<owner-id>#<item-id>`, that `impact` is `high`, `medium` or `low`, and that
+`status` is `suggested` (default) or `confirmed`. `graph.json` emits each item as
+a `problem` or `resource` node with `owner_entity_id`, an `owns` edge from its
+owner, and a directed `helps` edge carrying `impact` and `status`. `farplane wiki
+search --role creator` filters by role; item text is searchable through its
+owner's page.
 
 ## Named Views
 

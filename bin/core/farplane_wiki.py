@@ -27,6 +27,7 @@ from farplane_entities import (
     finalize_entity_registry,
     parse_entity_record,
 )
+from farplane_entity_items import entity_roles
 from farplane_wiki_store import (
     WIKI_DATABASE_PATH,
     WIKI_SCHEMA_VERSION,
@@ -320,6 +321,7 @@ def search(
     query: str,
     kind: str | None = None,
     limit: int = 10,
+    role: str | None = None,
 ) -> dict[str, Any]:
     if limit <= 0:
         raise WikiError("wiki_search_invalid_limit")
@@ -336,11 +338,15 @@ def search(
             raise WikiError("wiki_database_stale:run farplane wiki sync")
         normalized = normalize_identity(query)
         rows = connection.execute(
-            "SELECT entity_id, path, kind, name, location, normalized_id, normalized_name "
+            "SELECT entity_id, path, kind, name, location, normalized_id, normalized_name, record_json "
             "FROM pages" + (" WHERE kind = ?" if kind else ""),
             ((kind,) if kind else ()),
         ).fetchall()
-        pages = {str(row["entity_id"]): dict(row) for row in rows}
+        pages = {
+            str(row["entity_id"]): {key: row[key] for key in row.keys() if key != "record_json"}
+            for row in rows
+            if not role or role in entity_roles(json.loads(row["record_json"])["frontmatter"])
+        }
         aliases: dict[str, list[str]] = {entity_id: [] for entity_id in pages}
         for row in connection.execute(
             "SELECT entity_id, alias, normalized_alias FROM aliases ORDER BY alias"
@@ -481,6 +487,7 @@ def run_search(args: argparse.Namespace) -> int:
         args.query,
         kind=args.kind,
         limit=args.limit,
+        role=args.role,
     )
     print_operation(payload, args.json)
     return 0
