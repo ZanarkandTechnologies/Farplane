@@ -247,7 +247,7 @@ flowchart LR
 - QA cookbook surface: [qa/README.md](qa/README.md)
 - Review scoring: [skills/review/README.md](skills/review/README.md)
 - Maintainability code review: [skills/code-review/README.md](skills/code-review/README.md)
-- Active queue: Multica, using the project binding in `farplane/bindings.yaml`.
+- Active queue: GitHub Issues in each project's own repo (`tickets/README.md`).
 - Task policy and legacy records: [tickets](tickets)
 
 ## Local CLI Onboarding
