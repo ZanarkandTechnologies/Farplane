@@ -166,7 +166,7 @@ label = "Reporter"
 department = "operations"
 deliverable = "a project report"
 primary = "recap-task"
-skills = ["recap-task", "dogfood-review", "pm-daily", "pm-weekly"]
+skills = ["recap-task", "dogfood-review", "progress-update", "report-gen"]
 
 [specialists.automation-engineer]
 label = "Automation Engineer"
