@@ -1,5 +1,5 @@
 ---
-name: pm-weekly
+name: report-gen
 description: "Turn a complete frozen week of Farplane Project Memory and coverage evidence into grounded project reviews, a company rollup, and next-week memory JSON."
 tier: 3
 source: local
@@ -9,13 +9,13 @@ department: operations
 allowed-tools: Read, Write, Glob, Grep
 ---
 
-# PM Weekly
+# Report Gen
 
 ## Context
 
 Use once after the final Daily run freezes the complete reporting set. This
 skill reads local evidence and writes one JSON handoff. The Weekly automation
-owns rendering, Multica effects, and readback. This workflow is adapted from
+owns rendering, GitHub issue comments, and readback. This workflow is adapted from
 Zanarkand AI's operated Company OS Weekly.
 
 ## Skill Signature
@@ -81,7 +81,7 @@ returns: extraction path + ready|blocked
   `Project reviews -> actions[]`
 
   Rule: propose only evidence-backed comment, checkpoint, status, or priority
-  updates on exact existing Multica issues. Weekly reports proposals for new
+  updates on exact existing GitHub issues. Weekly reports proposals for new
   work but does not admit, assign, or execute them.
 
   Assert:
@@ -89,6 +89,9 @@ returns: extraction path + ready|blocked
   - The issue ID belongs to the frozen Project inventory.
   - The action matches the exact allowlist below and contains no extra fields.
   - Provider-facing text excludes private paths and opaque IDs.
+  - Provider-facing text carries engineering facts only; Project repositories
+    are public, so client names, money, prices, strategy, and personal details
+    stay in local Project Memory.
 
 - [ ] **N6 — Emit one complete JSON handoff.**
   `Project reviews + company review + carry-forward -> extraction JSON`
@@ -121,8 +124,9 @@ company sections follow [Company report](templates/company-report.md).
 ### Action Contract
 
 Every action has exactly `type`, `issue_id`, `expected_revision`, `reason`,
-`sources`, and `payload`. `issue_id` must exist in the frozen Project inventory
-and `expected_revision` must equal its frozen revision. Reject the whole action
+`sources`, and `payload`. `issue_id` is a GitHub issue number that must exist in
+the frozen Project inventory, and `expected_revision` must equal its frozen
+`updatedAt`. Reject the whole action
 when either check fails, when a field is extra, or when `payload` contains
 creation, assignment, agent, squad, autopilot, run, execution, or start fields.
 

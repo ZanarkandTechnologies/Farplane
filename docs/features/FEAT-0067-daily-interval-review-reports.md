@@ -10,8 +10,8 @@ tags:
   - sys-0003
   - company-os
 refs:
-  - skills/pm-daily/SKILL.md
-  - skills/pm-weekly/SKILL.md
+  - skills/progress-update/SKILL.md
+  - skills/report-gen/SKILL.md
   - skills/automation-advisor/SKILL.md
   - docs/farplane-framework/pulse-and-interval-loop.md
 feature_id: FEAT-0067
@@ -19,19 +19,20 @@ system_id: SYS-0003
 category: planning
 public: true
 surfaces:
-  - skills/pm-daily/SKILL.md
-  - skills/pm-daily/templates/project-memory.md
-  - skills/pm-weekly/SKILL.md
-  - skills/pm-weekly/templates/project-report.md
-  - skills/pm-weekly/templates/company-report.md
+  - skills/progress-update/SKILL.md
+  - skills/progress-update/templates/project-memory.md
+  - skills/report-gen/SKILL.md
+  - skills/report-gen/templates/project-report.md
+  - skills/report-gen/templates/company-report.md
   - automations/
+  - farplane/automations/
 source_refs:
   - docs/farplane-framework/pulse-and-interval-loop.md
   - docs/prd.md
 external_refs: []
 evidence_refs:
-  - skills/pm-daily/evals/evals.json
-  - skills/pm-weekly/evals/evals.json
+  - skills/progress-update/evals/evals.json
+  - skills/report-gen/evals/evals.json
   - skills/automation-advisor/audits/2026-09-20-company-os-adoption.md
 known_limits: "Daily and Weekly maintain operating memory and existing work. They do not choose strategy, admit tasks, start Multica execution, or perform external side effects."
 metrics:
@@ -57,12 +58,12 @@ automation fetches and freezes sources
 -> automation validates, renders, applies, and reads back
 ```
 
-Daily runs `pm-daily` once per eligible Project. It reconstructs the
+Daily runs `progress-update` once per eligible Project. It reconstructs the
 operator-defined commercial bet from project-local Farplane configuration,
 judges movement from results, identifies the constraint closest to the next
 monetization event, and selects one next commitment.
 
-Weekly runs `pm-weekly` once over the complete frozen Project set. It
+Weekly runs `report-gen` once over the complete frozen Project set. It
 consolidates observed movement, results, constraints, decisions, and next-week
 commitments. Missing Project coverage blocks weekly effects.
 
@@ -80,8 +81,8 @@ commitments. Missing Project coverage blocks weekly effects.
 
 ## Proof
 
-- Desired and live Daily prompts call `pm-daily`.
-- Desired and live Weekly prompts call `pm-weekly`.
+- Desired and live Daily prompts call `progress-update`.
+- Desired and live Weekly prompts call `report-gen`.
 - Exactly one Work Pulse heartbeat remains the execution owner.
 - Eval contracts cover activity-versus-result judgment, incomplete coverage,
   money-adjacent unblocking, and the automation/skill boundary.

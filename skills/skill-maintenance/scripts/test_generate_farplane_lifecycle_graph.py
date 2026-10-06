@@ -121,8 +121,8 @@ routes:
         self.assertIn(("skill:harness-advisor", "skill:proof-advisor", "routes_to"), edges)
         self.assertIn(("skill:proof-advisor", "skill:eval", "routes_to"), edges)
         self.assertIn(("automation:pulse", "skill:pulse-update", "triggers"), edges)
-        self.assertIn(("automation:daily-operating-update", "skill:pm-daily", "triggers"), edges)
-        self.assertIn(("automation:weekly-operating-review", "skill:pm-weekly", "triggers"), edges)
+        self.assertIn(("automation:daily-operating-update", "skill:progress-update", "triggers"), edges)
+        self.assertIn(("automation:weekly-operating-review", "skill:report-gen", "triggers"), edges)
 
     def test_core_graph_excludes_noisy_detail_nodes(self) -> None:
         repo = Path(__file__).resolve().parents[3]

@@ -1,5 +1,5 @@
 {
-  "skill_name": "pm-daily",
+  "skill_name": "progress-update",
   "evals": [
     {
       "id": "pm_daily_result_over_activity_01",
@@ -9,13 +9,13 @@
       "assertions": [
         "Does not treat commits, comments, or status churn as commercial movement",
         "Preserves unknown revenue rather than inventing zero or growth",
-        "Produces no new ticket or Multica execution action"
+        "Produces no new issue or run-starting action"
       ],
       "metadata": {
         "farplane": {
           "title": "Daily distinguishes activity from results",
           "tags": [
-            "pm-daily",
+            "progress-update",
             "money",
             "hardcase"
           ]
@@ -36,7 +36,7 @@
         "farplane": {
           "title": "Daily selects one money-adjacent unblock",
           "tags": [
-            "pm-daily",
+            "progress-update",
             "unblocking"
           ]
         }
@@ -56,7 +56,7 @@
         "farplane": {
           "title": "Daily survives a source gap",
           "tags": [
-            "pm-daily",
+            "progress-update",
             "coverage"
           ]
         }
@@ -76,7 +76,7 @@
         "farplane": {
           "title": "Daily rejects an unbounded provider action",
           "tags": [
-            "pm-daily",
+            "progress-update",
             "actions",
             "hardcase"
           ]

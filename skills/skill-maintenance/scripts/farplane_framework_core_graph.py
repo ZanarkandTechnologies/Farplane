@@ -94,7 +94,7 @@ WORKFLOWS = [
         "label": "Autonomy loops",
         "description": "Run Pulse plus Company OS Daily and Weekly for bounded execution and operating review.",
         "doc": "docs/farplane-framework/hooks-and-runtime.md",
-        "skills": ["automation-advisor", "pulse-update", "pm-daily", "pm-weekly"],
+        "skills": ["automation-advisor", "pulse-update", "progress-update", "report-gen"],
     },
     {
         "id": "workflow:proof",

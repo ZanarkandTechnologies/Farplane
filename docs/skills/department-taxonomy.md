@@ -25,7 +25,7 @@ skill invokes another.
 
 The Capability Map is organized by **specialist desks**. A specialist groups
 skill variants that one office employee offers (for example `reporter` holds
-`pm-daily`, `pm-weekly`, `recap-task`, and `dogfood-review`).
+`progress-update`, `report-gen`, `recap-task`, and `dogfood-review`).
 `rules/skill-workflows.toml` `[specialists]` owns each desk's label, department,
 deliverable, primary skill (its default verb), and member `skills`. A member
 must be a Tier 3 skill in the desk's department and sits at only one desk; the

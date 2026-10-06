@@ -1,5 +1,5 @@
 {
-  "skill_name": "pm-weekly",
+  "skill_name": "report-gen",
   "evals": [
     {
       "id": "pm_weekly_complete_set_01",
@@ -15,7 +15,7 @@
         "farplane": {
           "title": "Weekly rolls up a complete mixed-evidence set",
           "tags": [
-            "pm-weekly",
+            "report-gen",
             "coverage"
           ]
         }
@@ -29,13 +29,13 @@
       "assertions": [
         "Blocks the company rollup",
         "Does not silently omit the missing Project",
-        "Produces no Multica action"
+        "Produces no GitHub issue action"
       ],
       "metadata": {
         "farplane": {
           "title": "Weekly blocks incomplete portfolio coverage",
           "tags": [
-            "pm-weekly",
+            "report-gen",
             "hardcase"
           ]
         }
@@ -55,7 +55,7 @@
         "farplane": {
           "title": "Weekly preserves operator strategy ownership",
           "tags": [
-            "pm-weekly",
+            "report-gen",
             "commercial-boundary"
           ]
         }
@@ -75,7 +75,7 @@
         "farplane": {
           "title": "Weekly rejects stale or extra action fields",
           "tags": [
-            "pm-weekly",
+            "report-gen",
             "actions",
             "hardcase"
           ]

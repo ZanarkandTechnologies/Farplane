@@ -168,8 +168,8 @@ operating_principles:
 stable_capabilities:
 - pulse-update
 - plan-next-wave
-- pm-daily
-- pm-weekly
+- progress-update
+- report-gen
 - feed-scout
 - dogfood-review
 - eval

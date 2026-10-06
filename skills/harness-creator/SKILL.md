@@ -101,7 +101,7 @@ returns: charter/metric/capability/feedback decisions, proof, and next owner
 
   Rule: Use one `pulse-update` heartbeat for board reconciliation and bounded
   dispatch; use Feed Scout, Company OS Daily/Weekly, and Dogfood as
-  report/context lanes. `pm-daily` and `pm-weekly` maintain project memory and
+  report/context lanes. `progress-update` and `report-gen` maintain project memory and
   may propose exact existing-issue updates but do not admit or dispatch work;
   `dogfood-review` emits bounded candidates. When no ticket can
   advance, inspect missing systems, weak metrics, stale assumptions, and safe

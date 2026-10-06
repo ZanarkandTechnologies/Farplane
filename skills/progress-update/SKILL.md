@@ -1,5 +1,5 @@
 ---
-name: pm-daily
+name: progress-update
 description: "Turn one Farplane project's frozen daily context, commercial configuration, metrics, and prior memory into grounded memory and existing-task action JSON."
 tier: 3
 source: local
@@ -9,14 +9,14 @@ department: operations
 allowed-tools: Read, Write, Glob, Grep
 ---
 
-# PM Daily
+# Progress Update
 
 ## Context
 
 Use once per eligible Project after the Daily automation collects and partitions
 the evidence window. This skill interprets local evidence and writes one JSON
-handoff. The automation owns provider reads, rendering, Multica updates, and
-readback. This workflow is adapted from Zanarkand AI's operated Company OS Daily.
+handoff. The automation owns provider reads, rendering, GitHub issue comments,
+and readback. This workflow is adapted from Zanarkand AI's operated Company OS Daily.
 
 ## Skill Signature
 
@@ -82,17 +82,20 @@ returns: extraction path + update|no_change|blocked
   - The commitment has supplied ownership when known and a visible completion signal.
 
 - [ ] **N5 — Propose bounded existing-task actions.**
-  `reviewed Multica issues + next commitment -> actions[]`
+  `reviewed GitHub issues + next commitment -> actions[]`
 
   Rule: propose only a comment, checkpoint, status, or priority update on an
   exact existing issue. Ask one precise question when one missing fact blocks
-  movement. Do not create work, assign anyone, or start Multica execution.
+  movement. Do not create work, assign anyone, or start agents or runs.
 
   Assert:
   - Every action carries issue ID, reason, source refs, and expected revision.
   - The issue ID belongs to this Project's frozen issue inventory.
   - The action matches the exact allowlist below and contains no extra fields.
   - Provider-facing text contains no private paths or opaque IDs.
+  - Provider-facing text carries engineering facts only; Project repositories
+    are public, so client names, money, prices, strategy, and personal details
+    stay in local Project Memory.
 
 - [ ] **N6 — Emit the complete JSON handoff.**
   `desired memory + actions -> parseable extraction JSON`
@@ -134,8 +137,9 @@ Each item has `text` and `sources`; machine details belong in optional
 ### Action Contract
 
 Every action has exactly `type`, `issue_id`, `expected_revision`, `reason`,
-`sources`, and `payload`. `issue_id` must exist in the frozen Project inventory
-and `expected_revision` must equal its frozen revision. Reject the whole action
+`sources`, and `payload`. `issue_id` is a GitHub issue number that must exist in
+the frozen Project inventory, and `expected_revision` must equal its frozen
+`updatedAt`. Reject the whole action
 when either check fails, when a field is extra, or when `payload` contains
 creation, assignment, agent, squad, autopilot, run, execution, or start fields.
 
