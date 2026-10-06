@@ -70,6 +70,11 @@ Farplane Core also owns the global `farplane` CLI. App-specific commands stay
 with their owning module repos, but install, hooks, doctor checks, UI linking,
 UI start, and local delegation all route through this Core-owned command.
 
+Reusable automation recipes live in `automations/`; configured schedules and
+prompts live in each workspace's committed `farplane/automations/`. This checkout
+also serves as an AI Office, so its Daily/Weekly instances live there with the
+other configured jobs. See the [automation ownership contract](docs/farplane-framework/project-files.md#farplaneautomations).
+
 Current repo shape:
 
 | Surface | Path | Owns |
