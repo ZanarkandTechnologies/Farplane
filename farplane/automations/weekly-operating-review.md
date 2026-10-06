@@ -155,6 +155,16 @@ Action rules:
 - Record `applied`, `proposed`, `duplicate`, `blocked`, or `failed`; unattempted is not success.
 - Missing tools, ambiguous targets, or failed readback never authorize a fallback.
 
+## 5. Fold in the week's retro and showcase
+
+Add two sections to the same company report:
+
+- the week's daily Session Friction Retro reports
+  (`.farplane/research/*-session-friction-retro.md`): friction patterns and where
+  the time went; and
+- a short showcase of what shipped this week, with links to proof. It's a draft
+  only; never post it anywhere.
+
 ## Outputs
 
 - `.farplane/company-os/weekly/context/<run-id>.json`

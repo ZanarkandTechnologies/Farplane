@@ -39,6 +39,11 @@ for the day, with rework and correction time shown separately.
 Ground every material finding in replayable session/turn locators. Plan-vs-
 actual and goal attainment belong to Report Gen; do not duplicate them here.
 
+The Farplane project's sessions include every session whose working folder is
+under `/Users/kenjipcx/Zanarkand Technologies/projects/`. Quote at most short
+fragments of the operator's words, and never copy secrets that appear in
+transcripts.
+
 Write one dated report at
 `.farplane/research/<YYYY-MM-DD>-session-friction-retro.md`. Open it with the
 headline sentence `**<n> correction episodes across <m> operator turns (<x>%)**`
