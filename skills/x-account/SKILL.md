@@ -74,7 +74,7 @@ first live posting branch.
   - [ ] Allowed actions: `validate_post`, `validate_thread`,
         `publish_post`, `publish_thread`, `get_profile_metrics`,
         `get_post_metrics`, `import_metrics_export`,
-        `normalize_metrics_snapshot`.
+        `normalize_metrics_snapshot`, `get_bookmarks`.
   - [ ] Resolve the account alias from `farplane/bindings.yaml`.
 - [ ] 2. Check safety gates before touching account state.
   - [ ] For publish actions, require explicit user or ticket approval naming
@@ -96,6 +96,8 @@ first live posting branch.
         validation; record the resulting post IDs and evidence.
   - [ ] 4. Broad-read branch: route to `apify` or `feed-scout` instead of using
         account credentials for discovery.
+  - [ ] 5. Bookmark branch: use `scripts/fetch_bookmarks.py` with OAuth 2.0
+        user context; retain unknown save time and complete pagination receipts.
 - [ ] 4. Execute the selected branch.
   - [ ] For validation, return blocking issues, warnings, and suggested fixes;
         do not mutate account state. Use `scripts/validate_post_payload.py`
@@ -163,6 +165,7 @@ Normalized metric snapshot:
   Add `--deep` for retention/click observations such as `x_retention_score`,
   `x_video_completions`, `x_profile_clicks`, and `x_url_clicks` when the API
   returns owned-content analytics.
+- `scripts/fetch_bookmarks.py` - fetch and paginate the authenticated user's private bookmarks into a redacted collection cache; requires OAuth 2.0 user context.
 - `scripts/publish_post.py` - dry-run or publish an approved X post/thread
   from JSON using OAuth 2.0 user auth. If the stored OAuth 2.0 access token is
   unauthorized and refresh credentials exist, the script refreshes OAuth 2.0

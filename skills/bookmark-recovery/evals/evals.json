@@ -1,0 +1,44 @@
+{
+  "skill_name": "bookmark-recovery",
+  "evals": [
+    {
+      "id": "bookmark_recovery_preserves_blocked_sources",
+      "prompt": "The X cache is complete with two new bookmarks. Instagram authentication failed and WhatsApp has no configured adapter. Produce the recovery behavior.",
+      "expected_output": "Keeps X complete, Instagram blocked, and WhatsApp blocked as distinct coverage rows; ranks only the two X items; records the provider limitations; does not treat failed sources as empty; does not fetch providers or save anything to Resource Bank.",
+      "files": ["skills/bookmark-recovery/SKILL.md"],
+      "assertions": [
+        "Preserves complete and blocked coverage distinctly",
+        "Ranks only valid cached items",
+        "Does not treat failure as empty",
+        "Performs no provider or Resource Bank write"
+      ],
+      "metadata": {"farplane": {"title": "Bookmark recovery preserves source gaps", "tags": ["bookmark-recovery", "coverage", "boundary"]}}
+    },
+    {
+      "id": "bookmark_recovery_dedupes_prior_intelligest_source",
+      "prompt": "A saved X post has canonical ID 123 and the prior ledger links x:123 to an existing ready IntelliGest job. Another saved post has ID 456 and no prior record.",
+      "expected_output": "Places x:123 in duplicates with the existing canonical job reference; keeps x:456 as the only new candidate; does not reanalyze either source; returns routing recommendations only.",
+      "files": ["skills/bookmark-recovery/SKILL.md"],
+      "assertions": [
+        "Uses provider identity for exact dedupe",
+        "Retains the prior job reference",
+        "Keeps only the new item as a candidate",
+        "Does not invoke IntelliGest"
+      ],
+      "metadata": {"farplane": {"title": "Bookmark recovery avoids duplicate analysis", "tags": ["bookmark-recovery", "dedupe"]}}
+    },
+    {
+      "id": "bookmark_recovery_does_not_invent_saved_time_or_intent",
+      "prompt": "The X API returns post creation timestamps but no bookmark-save timestamp or operator note. The post discusses an unfamiliar design system.",
+      "expected_output": "Uses prior-seen ledger state rather than post creation time to determine newness; labels any proposed use as a low-confidence AI hypothesis; does not claim why the operator saved it or infer explicit reuse intent.",
+      "files": ["skills/bookmark-recovery/SKILL.md"],
+      "assertions": [
+        "Does not treat post creation time as bookmark time",
+        "Uses ledger state for newness",
+        "Labels possible use as an AI hypothesis",
+        "Does not infer reuse permission"
+      ],
+      "metadata": {"farplane": {"title": "Bookmark recovery preserves weak intent", "tags": ["bookmark-recovery", "intent", "hardcase"]}}
+    }
+  ]
+}

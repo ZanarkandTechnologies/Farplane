@@ -7,6 +7,7 @@ source_refs:
   - https://docs.x.com/x-api/introduction
   - https://docs.x.com/x-api/fundamentals/data-dictionary
   - https://docs.x.com/x-api/posts/timelines/introduction
+  - https://docs.x.com/x-api/posts/bookmarks/introduction
 ---
 
 # X API Reference
@@ -23,6 +24,9 @@ Load this before live X API work.
   that still require them.
 - X API access is pay-per-use/rate-limited. Treat live calls as budgeted
   external operations.
+- `GET /2/users/:id/bookmarks` reads private bookmarks for the authenticated
+  user and requires OAuth 2.0 user context. The response does not establish a
+  bookmark-save timestamp, so recovery newness comes from a prior-seen ledger.
 - The read-only metrics script uses OAuth 2.0 user access when available,
   falling back to app-only bearer reads. Private or organic analytics require
   user-context auth and account access level support.
