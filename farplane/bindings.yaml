@@ -212,6 +212,28 @@ feed_scout:
       - '"Luke The Dev"'
       - iamlukethedev
       - Claw3D
+bookmark_recovery:
+  enabled: true
+  timezone: Asia/Kuala_Lumpur
+  inbox_root: .farplane/bookmark-recovery/inbox
+  context_root: .farplane/bookmark-recovery/context
+  ledger: .farplane/bookmark-recovery/ledger.jsonl
+  wiki_root: /Users/kenjipcx/Zanarkand Technologies/.farplane/entities
+  pointers: .farplane/bookmark-recovery/pointers.json
+  candidate_limit: 20
+  project_match_limit: 3
+  sources:
+    x:
+      enabled: true
+      adapter: browser:x.com/i/history#bookmarks
+    instagram:
+      enabled: false
+      adapter: null
+      limitation: No authenticated saved-post adapter is configured.
+    whatsapp_self:
+      enabled: false
+      adapter: null
+      limitation: No durable WhatsApp self-message adapter is configured.
 event_routes:
 - route_id: ticket-completion-learning-v1
   event_name: farplane.ticket.completed

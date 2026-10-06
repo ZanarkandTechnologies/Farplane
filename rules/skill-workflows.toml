@@ -75,7 +75,7 @@ label = "Scout"
 department = "intelligence"
 deliverable = "a dated source report"
 primary = "feed-scout"
-skills = ["feed-scout", "harness-scout"]
+skills = ["feed-scout", "bookmark-recovery", "harness-scout"]
 
 [specialists.librarian]
 label = "Librarian"
