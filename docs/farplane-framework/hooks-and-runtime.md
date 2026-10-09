@@ -76,8 +76,8 @@ The three Stop handlers have separate responsibilities and Codex toggles:
 | `hooks/lifecycle-telemetry/farplane_console_ping.py` | Resolves task/project metadata and existing local ticket bindings; sends a `turn_end` event to the configured telemetry endpoint with a two-second HTTP timeout. No endpoint means no send; network errors are logged and allowed. Stop does not create ticket bindings. | No; no block response is emitted. |
 
 All three registrations have five-second hook timeouts. The response accountant
-excludes supported diagram blocks, media embeds, and trailing link-only
-references from prose counts; use `farplane response check --stdin --json`
+excludes supported diagram blocks, media embeds, labeled proof lines of at
+most 30 words, and trailing link-only references from prose counts; use `farplane response check --stdin --json`
 to inspect a particular response. Telemetry contains metadata, not the final
 answer or full transcript. A Stop event can precede another continuation, so
 `turn_end` must not be read as Goal or ticket completion.

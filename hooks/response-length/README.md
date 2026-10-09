@@ -27,7 +27,8 @@ empty hook input produces no feedback. Over-limit retries remain subject to the
 same caps; this gate has no retry limit and makes no network requests.
 
 Supported diagram blocks, exact media embed lines, marker-only blockquote spacers,
-and a final link-only References/Citations section are excluded by the shared
+labeled proof lines (`Verified:`, `Unverified:`, `Limit:`, `Grounding:`) of at
+most 30 words, and a final link-only References/Citations section are excluded by the shared
 [`response accountant`](../../bin/core/farplane_response.py). Inspect a draft with
 `farplane response check --stdin --json`.
 

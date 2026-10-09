@@ -27,6 +27,14 @@ _MEDIA_EMBED = re.compile(
 )
 _FENCE_OPEN_ANY = re.compile(r"^ {0,3}(`{3,}|~{3,}).*$")
 _BLOCKQUOTE_SPACER = re.compile(r"^ {0,3}(?:>\s*)+$")
+# A short labeled proof line cites evidence; long ones stay prose so the label
+# cannot hide a paragraph from the budget.
+_PROOF_LINE = re.compile(
+    r"^ {0,3}(?:[-*+]\s+)?[*_]{0,2}(?:verified|unverified|limit|grounding)"
+    r"[*_]{0,2}\s*:[*_]{0,2}\s+\S",
+    re.IGNORECASE,
+)
+MAX_PROOF_LINE_WORDS = 30
 _MEDIA_EXTENSIONS = (
     ".avif",
     ".gif",
@@ -59,6 +67,8 @@ class ResponseMeasure:
     media_embeds: int
     media_words: int
     media_nonblank_lines: int
+    proof_lines: int
+    proof_words: int
     reference_entries: int
     reference_words: int
     reference_nonblank_lines: int
@@ -93,6 +103,8 @@ class ResponseMeasure:
                 "media_embeds": self.media_embeds,
                 "media_words": self.media_words,
                 "media_nonblank_lines": self.media_nonblank_lines,
+                "proof_lines": self.proof_lines,
+                "proof_words": self.proof_words,
                 "reference_entries": self.reference_entries,
                 "reference_words": self.reference_words,
                 "reference_nonblank_lines": self.reference_nonblank_lines,
@@ -182,6 +194,10 @@ def _is_media_embed(line: str) -> bool:
     )
 
 
+def _is_proof_line(line: str) -> bool:
+    return bool(_PROOF_LINE.match(line)) and len(line.split()) <= MAX_PROOF_LINE_WORDS
+
+
 def measure_response(markdown: str) -> ResponseMeasure:
     lines = markdown.splitlines()
     fence_indices = _fence_indices(lines)
@@ -211,6 +227,15 @@ def measure_response(markdown: str) -> ResponseMeasure:
         and index not in fence_indices
         and _is_media_embed(line)
     }
+    proof_indices = {
+        index
+        for index, line in enumerate(lines)
+        if index not in reference_indices
+        and index not in mermaid_indices
+        and index not in wireframe_indices
+        and index not in fence_indices
+        and _is_proof_line(line)
+    }
     prose_indices = (
         set(range(len(lines)))
         - reference_indices
@@ -218,6 +243,7 @@ def measure_response(markdown: str) -> ResponseMeasure:
         - wireframe_indices
         - blockquote_spacer_indices
         - media_indices
+        - proof_indices
     )
 
     def selected(indices: set[int]) -> list[str]:
@@ -228,6 +254,7 @@ def measure_response(markdown: str) -> ResponseMeasure:
     mermaid_lines = selected(mermaid_indices)
     wireframe_lines = selected(wireframe_indices)
     media_lines = selected(media_indices)
+    proof_lines = selected(proof_indices)
     reference_lines = selected(reference_indices)
     return ResponseMeasure(
         total_words=_word_count(lines),
@@ -246,6 +273,8 @@ def measure_response(markdown: str) -> ResponseMeasure:
         media_embeds=len(media_indices),
         media_words=_word_count(media_lines),
         media_nonblank_lines=_nonblank_count(media_lines),
+        proof_lines=len(proof_indices),
+        proof_words=_word_count(proof_lines),
         reference_entries=reference_entries,
         reference_words=_word_count(reference_lines),
         reference_nonblank_lines=_nonblank_count(reference_lines),

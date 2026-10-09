@@ -123,6 +123,7 @@ def _markdown_accounting(markdowns: tuple[str, ...]) -> str:
         f"wireframe={sum(item.wireframe_blocks for item in measures)}b/"
         f"{sum(item.wireframe_nonblank_lines for item in measures)}l "
         f"media={sum(item.media_embeds for item in measures)} "
+        f"proof={sum(item.proof_lines for item in measures)} "
         f"references={sum(item.reference_entries for item in measures)}"
     )
 

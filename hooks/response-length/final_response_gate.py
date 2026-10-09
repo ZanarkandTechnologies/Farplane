@@ -124,7 +124,8 @@ def gate_response(
         "- **Prefer:** Links to durable artifacts over copied detail.\n"
         "- **Budget exclusions:** Closed Mermaid and `wireframe` blocks, exact "
         "image/video embed lines, marker-only Markdown blockquote spacer lines, "
-        "and a final link-only References/Citations section are outside the prose "
+        "`Verified:`/`Unverified:`/`Limit:`/`Grounding:` lines of at most 30 "
+        "words, and a final link-only References/Citations section are outside the prose "
         "budget, but must not introduce new topic breadth.\n"
         "- **Return:** The revised final answer only; do not mention this gate."
     )

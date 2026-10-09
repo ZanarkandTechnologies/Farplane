@@ -112,6 +112,30 @@ class ResponseMeasureTests(unittest.TestCase):
         self.assertEqual(result.media_embeds, 0)
         self.assertEqual(result.prose_nonblank_lines, 3)
 
+    def test_short_labeled_proof_lines_are_excluded(self) -> None:
+        markdown = (
+            "Worked now.\n"
+            "- **Verified:** 42 unit tests passed.\n"
+            "**Limit**: production remains unverified.\n"
+            "Unverified: no device was available.\n"
+            "Grounding: local hook code and the eval run."
+        )
+        result = measure_response(markdown)
+        self.assertEqual(result.proof_lines, 4)
+        self.assertEqual(result.prose_words, 2)
+        self.assertEqual(result.prose_nonblank_lines, 1)
+
+    def test_long_unlabeled_or_fenced_proof_lines_count(self) -> None:
+        long_line = "Verified: " + " ".join(["word"] * 30)
+        markdown = (
+            f"{long_line}\n"
+            "I verified: the tests pass.\n"
+            "```text\nVerified: inside a fence\n```"
+        )
+        result = measure_response(markdown)
+        self.assertEqual(result.proof_lines, 0)
+        self.assertEqual(result.prose_nonblank_lines, 5)
+
     def test_final_link_only_references_are_excluded(self) -> None:
         markdown = (
             "Worked.\n\n### References\n"
