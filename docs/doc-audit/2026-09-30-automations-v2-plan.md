@@ -46,6 +46,7 @@ Farplane itself.
 | Session Friction Retro | harness | `session-friction-retro.md` | none | claude · `farplane-session-friction-retro` | daily 23:40 |
 | Report Gen | mancave + floors | `report-gen.md` | `$report-gen` | claude · `farplane-report-gen` | Mon 05:45 |
 | Burn Before Reset | harness | `token-burn.md` | `$token-burn` | claude · `burn-before-reset` | daily 20:00 |
+| Profile Refresh | mancave | `profile-refresh.md` | none | claude · `farplane-profile-refresh` | Mon 06:30 |
 
 ### Steps: `farplane/automations/steps/`, called by a job, never scheduled alone
 
@@ -65,11 +66,11 @@ Target: each step's procedure moves into its skill, and the job record calls the
 - The product's root `automations/` recipes folder; bootstrap now creates an empty
   `farplane/automations/`, and automation-advisor's `templates/` start new jobs.
 - Records for jobs that don't run: Work Pulse (paused; it needs a redesign around the bunker's
-  Queue), Weekly Self-Improvement and Monthly Registry Consolidation (killed 2026-09-30), and
-  Profile Refresh (disabled).
+  Queue), and Weekly Self-Improvement and Monthly Registry Consolidation (killed 2026-09-30).
+  Profile Refresh was deleted while off, then came back as a Monday job; its record returned 2026-10-09.
 - Still present outside the repo, switched off: the Claude tasks `farplane-fetch-context`,
-  `farplane-metrics-refresh`, `farplane-knowledge-update`, `farplane-progress-updater` and
-  `farplane-profile-refresh`, and all 23 Codex automations (paused, a rollback).
+  `farplane-metrics-refresh`, `farplane-knowledge-update` and `farplane-progress-updater`, and
+  all 23 Codex automations (paused, a rollback).
 
 ### Drift between the live prompt and the repo
 
