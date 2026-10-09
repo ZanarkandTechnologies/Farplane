@@ -1,5 +1,5 @@
 {
-  "description": "Farplane: independent continuation and response-length gates; classified lifecycle telemetry is observational, never completion authority.",
+  "description": "Farplane: one blocking Stop gate (length, continuation, response format; at most one nudge per stop); classified lifecycle telemetry is observational, never completion authority.",
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -37,14 +37,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/continuation/continuation_gate.py\"",
-            "statusMessage": "Continuation — Jev checks whether useful authorized work remains",
-            "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/response-length/final_response_gate.py\"",
-            "statusMessage": "Response length — requests rewrite above configured prose limits",
+            "command": "python3 \"$HOME/.codex/hooks/stop-gate/stop_gate.py\"",
+            "statusMessage": "Stop gate — length, then continuation, then response format; at most one nudge",
             "timeout": 5
           },
           {

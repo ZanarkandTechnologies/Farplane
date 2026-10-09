@@ -20,6 +20,7 @@ from final_response_gate import (
     configured_max_prose_words, gate_response, legacy_gate_response,
 )
 from skill_suggestion import HttpDecisionClient, MODEL_ENV, _provider_config, ENDPOINT_ENV
+import response_format
 
 MAX_HEAD_BYTES = 1024 * 1024
 MAX_TAIL_BYTES = 8 * 1024 * 1024
@@ -189,6 +190,20 @@ def bounded_rollout_lines(source: Path) -> tuple[list[str], bool]:
     )
 
 
+def edits_files(row: Mapping[str, object]) -> bool:
+    """True for a Claude tool_use or Codex tool call that edits files."""
+    message = row.get("message")
+    if row.get("type") == "assistant" and isinstance(message, dict):
+        content = message.get("content")
+        return isinstance(content, list) and any(
+            isinstance(part, dict) and part.get("type") == "tool_use"
+            and response_format.is_edit_tool(part.get("name")) for part in content)
+    item = row.get("payload")
+    return (row.get("type") == "response_item" and isinstance(item, dict)
+            and item.get("type") in {"function_call", "custom_tool_call"}
+            and response_format.is_edit_tool(item.get("name")))
+
+
 def read_dialogue(path: str, final: str, *, max_words: int = 500,
                   max_lines: int = 50) -> dict[str, object] | None:
     source = Path(path)
@@ -198,12 +213,15 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
     last_user_text = ""
     last_user_index = -1
     nudges = 0
+    format_nudges = 0
+    files_changed = False
     length_feedback = False
     previous_assistant = ""
     for line in lines:
         row = json.loads(line)
         if not isinstance(row, dict):
             return None
+        files_changed = files_changed or edits_files(row)
         if row.get("type") in {"user", "assistant"} and "message" in row:
             entry = claude_entry(row)
             if entry is None:
@@ -216,8 +234,11 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
                 last_user_text = text
                 last_user_index = len(messages)
                 nudges = 0
+                format_nudges = 0
+                files_changed = False
                 length_feedback = False
             elif role == "hook":
+                format_nudges += response_format.TAG in text
                 if TAG_PATTERN.search(text):
                     if not any(nudge in text for nudge in KNOWN_NUDGES):
                         return None
@@ -249,6 +270,8 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
             last_user_text = text
             last_user_index = len(messages)
             nudges = 0
+            format_nudges = 0
+            files_changed = False
             length_feedback = False
             previous_assistant = ""
         elif role == "user" and isinstance(kinds, list) and kinds:
@@ -264,7 +287,10 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
                 continue
             text = envelope.group(1)
             kinds = []
-        if role == "user" and not kinds and TAG_PATTERN.search(text):
+        if role == "user" and not kinds and response_format.TAG in text:
+            format_nudges += 1
+            role = "hook"
+        elif role == "user" and not kinds and TAG_PATTERN.search(text):
             if text.strip() not in KNOWN_NUDGES:
                 return None
             nudges += 1
@@ -295,6 +321,8 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         "recent_dialogue": [{"role": m["role"], "text": bounded_text(m["text"])} for m in tail],
         "proposed_final": bounded_text(final),
         "own_nudges_this_user_turn": nudges,
+        "format_nudges_this_user_turn": format_nudges,
+        "files_changed": files_changed,
         "recognized_length_feedback_this_user_turn": length_feedback,
         "source_truncated": rollout_truncated or len(messages) > MAX_MESSAGES or any(
             len(redact(m["text"])) > MAX_TEXT for m in messages
@@ -308,7 +336,12 @@ def allow_stop(status: str) -> None:
 
 
 def evaluate_stop(payload: Mapping[str, object], *, environ: Mapping[str, str],
-                  client: object | None = None) -> dict[str, str] | None:
+                  client: object | None = None,
+                  checks: frozenset[str] = frozenset({"continuation"})) -> dict[str, str] | None:
+    """One Jev request answers continuation and, when enabled, response format.
+
+    Continuation wins; format nudges at most once per real user turn.
+    """
     if payload.get("hook_event_name") != "Stop":
         return None
     final, path = payload.get("last_assistant_message"), payload.get("transcript_path")
@@ -324,9 +357,13 @@ def evaluate_stop(payload: Mapping[str, object], *, environ: Mapping[str, str],
         if state is None:
             return allow_stop("ambiguous_transcript")
         if (payload.get("stop_hook_active") and state["own_nudges_this_user_turn"] == 0
+                and not state["format_nudges_this_user_turn"]
                 and not state["recognized_length_feedback_this_user_turn"]):
             return allow_stop("unknown_previous_hook")
-        if state["own_nudges_this_user_turn"] >= MAX_NUDGES:
+        ask_nudge = ("continuation" in checks
+                     and state["own_nudges_this_user_turn"] < MAX_NUDGES)
+        ask_format = "format" in checks and not state["format_nudges_this_user_turn"]
+        if not ask_nudge and not ask_format:
             return allow_stop("nudge_cap")
         config = _provider_config(environ)
         if config is None:
@@ -344,17 +381,31 @@ def evaluate_stop(payload: Mapping[str, object], *, environ: Mapping[str, str],
             if secret:
                 encoded = encoded.replace(json.dumps(secret)[1:-1], "[REDACTED PROVIDER KEY]")
         state = json.loads(encoded)
-        result = client.system_one(state=state,
-            questions={"nudge": {"type": "noul", "instructions": QUESTION}},
+        questions: dict[str, object] = {}
+        if ask_nudge:
+            questions["nudge"] = {"type": "noul", "instructions": QUESTION}
+        if ask_format:
+            questions.update(response_format.questions())
+        result = client.system_one(state=state, questions=questions,
             model=environ.get(MODEL_ENV) or config["model"])
-        value = result["answers"]["nudge"]["noul"]
-        if isinstance(value, bool) or not isinstance(value, (float, int)):
-            return allow_stop("invalid_decision")
-        if not math.isfinite(value) or not 0 <= value <= 1:
-            return allow_stop("invalid_decision")
-        if value >= 0.5:
-            print(json.dumps({"hook": "continuation", "status": "nudge"}), file=sys.stderr)
-            return {"decision": "block", "reason": NUDGE}
+        answers = result["answers"]
+        if ask_nudge:
+            value = answers["nudge"]["noul"]
+            if isinstance(value, bool) or not isinstance(value, (float, int)):
+                return allow_stop("invalid_decision")
+            if not math.isfinite(value) or not 0 <= value <= 1:
+                return allow_stop("invalid_decision")
+            if value >= 0.5:
+                print(json.dumps({"hook": "continuation", "status": "nudge"}), file=sys.stderr)
+                return {"decision": "block", "reason": NUDGE}
+        if ask_format:
+            shape, gaps = response_format.select_gaps(
+                answers, files_changed=bool(state["files_changed"]),
+                cited=response_format.has_citation(final))
+            if gaps:
+                print(json.dumps({"hook": "response-format", "status": "nudge",
+                                  "shape": shape, "gaps": gaps}), file=sys.stderr)
+                return {"decision": "block", "reason": response_format.feedback(gaps)}
     except Exception:
         return allow_stop("unavailable")
     return allow_stop("allow")

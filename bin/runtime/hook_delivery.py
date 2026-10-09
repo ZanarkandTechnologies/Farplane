@@ -18,7 +18,7 @@ if str(CORE_DIR) not in sys.path:
 from runtime_config import farplane_home
 
 EVENTS = ("UserPromptSubmit", "Stop", "SubagentStart", "SubagentStop", "GateBlocked")
-GATES = ("response-length", "continuation", "skill-length")
+GATES = ("response-length", "continuation", "response-format", "skill-length")
 PING_SCRIPT = Path(__file__).resolve().parents[2] / "hooks" / "lifecycle-telemetry" / "farplane_console_ping.py"
 
 

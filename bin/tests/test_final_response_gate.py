@@ -105,17 +105,6 @@ class FinalResponseGateTests(unittest.TestCase):
         report.assert_called_once()
         self.assertEqual(report.call_args.args[1], "response-length")
 
-    def test_root_hook_config_invokes_managed_gate(self) -> None:
-        payload = json.loads((ROOT / "hooks.json").read_text(encoding="utf-8"))
-        commands = [
-            hook["command"]
-            for group in payload["hooks"]["Stop"]
-            for hook in group["hooks"]
-        ]
-        self.assertIn(
-            'python3 "$HOME/.codex/hooks/response-length/final_response_gate.py"', commands
-        )
-
 
 if __name__ == "__main__":
     unittest.main()

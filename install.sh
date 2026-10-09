@@ -155,6 +155,7 @@ INSTALL_BIN_FILES=(
 INSTALL_HOOK_DIRS=(
   continuation
   response-length
+  stop-gate
   lifecycle-telemetry
   skill-length
   user-turn

@@ -37,6 +37,7 @@ ticket_close(project_root, ticket_id)
 
 Each active hook lives in a [documented folder](../../hooks/README.md). Its README
 owns entrypoint usage, configuration, failure behavior, and focused checks:
+[stop gate](../../hooks/stop-gate/README.md),
 [continuation](../../hooks/continuation/README.md),
 [response length](../../hooks/response-length/README.md),
 [lifecycle telemetry](../../hooks/lifecycle-telemetry/README.md),
@@ -53,7 +54,7 @@ Root `hooks.json` currently defines:
 | --- | --- | --- |
 | `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
 | `PostToolUse` | `skill_file_line_gate.py` | after `apply_patch`, return repair feedback when a touched `skills/**/SKILL.md` exceeds 200 physical lines; the edit remains applied |
-| `Stop` | `continuation_gate.py`, `final_response_gate.py`, `farplane_console_ping.py --expect-event Stop` | independently check useful continuation, request over-limit response rewrites, and observe stop attempts; none certifies task completion |
+| `Stop` | `stop_gate.py`, `farplane_console_ping.py --expect-event Stop` | one blocking gate checks length, then continuation, then response format (at most one nudge per stop), and telemetry observes stop attempts; neither certifies task completion |
 | `SubagentStart` | `farplane_console_ping.py` | send sanitized subagent-start lifecycle telemetry |
 | `SubagentStop` | `farplane_console_ping.py` | send sanitized subagent-stop lifecycle telemetry |
 
@@ -67,26 +68,27 @@ timeout, and source owner. Add `--json` for structured output, or use
 Farplane's managed configuration, not Codex's effective trust decisions or
 other project/plugin hooks. Codex `/hooks` owns the effective hook controls.
 
-The three Stop handlers have separate responsibilities and Codex toggles:
+Two Stop handlers are registered:
 
 | Handler | Reads / effects | Can request continuation? |
 | --- | --- | --- |
-| `hooks/continuation/continuation_gate.py` | Sends bounded, best-effort redacted dialogue to the configured Jev provider through `farplane run`; asks whether concrete evidence shows an unfinished requested outcome with useful authorized work possible now. Threshold 0.5, at most three identifiable own nudges per real user turn; exact versioned feedback keeps active transcripts parseable, while unknown provenance/provider failure allows stopping. | Yes, with fixed feedback requiring a concrete in-scope action. Defers over-limit responses to the existing length gate. |
-| `hooks/response-length/final_response_gate.py` | Measures `last_assistant_message`; defaults to 500 prose words and 50 nonblank prose lines, configurable through `FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS` and `FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES`. Returns rewrite feedback; does not edit files or call a model/network service. | Yes, whenever either cap is exceeded, including repeated attempts; no retry cap. |
+| `hooks/stop-gate/stop_gate.py` | Runs, in order: the length check (500 prose words and 50 nonblank prose lines by default, configurable through `FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS` and `FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES`); then one Jev request through `farplane run` that scores continuation (threshold 0.5, at most three nudges per real user turn) and classifies the answer's shape and missing sections (threshold 0.6, at most two, once per user turn). A completed change that edited files and cites nothing gets one proof nudge. `FARPLANE_STOP_CHECKS` selects checks. Unknown provenance or provider failure allows stopping. | Yes, at most one block per stop: length, else continuation, else format. |
 | `hooks/lifecycle-telemetry/farplane_console_ping.py` | Resolves task/project metadata and existing local ticket bindings; sends a `turn_end` event to the configured telemetry endpoint with a two-second HTTP timeout. No endpoint means no send; network errors are logged and allowed. Stop does not create ticket bindings. | No; no block response is emitted. |
 
-All three registrations have five-second hook timeouts. The response accountant
+The `continuation_gate.py` and `final_response_gate.py` entrypoints stay installed,
+unregistered, for sessions with cached commands; the stop gate reuses their logic.
+
+Both registrations have five-second hook timeouts. The response accountant
 excludes supported diagram blocks, media embeds, labeled proof lines of at
 most 30 words, and trailing link-only references from prose counts; use `farplane response check --stdin --json`
 to inspect a particular response. Telemetry contains metadata, not the final
 answer or full transcript. A Stop event can precede another continuation, so
 `turn_end` must not be read as Goal or ticket completion.
 
-Telemetry remains separate from both behavioral hooks. Blocking feedback uses a
+Telemetry remains separate from the stop gate. Blocking feedback uses a
 level-four Markdown hook name followed by labeled instruction bullets. The length
-hook owns rewrites; continuation defers over-limit candidates and recognizes
-current or immediately previous exact generated feedback before reassessing a
-shortened response. The order in JSON is not a dependency contract. No hook
+check owns rewrites; continuation and format recognize their own versioned
+feedback and exact length feedback before reassessing a revised response. No hook
 certifies native Goal completion.
 
 The continuation reader uses Codex desktop actual-user metadata, preserves the
