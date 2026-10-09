@@ -1,0 +1,252 @@
+[
+  {
+    "id": "explain-clean",
+    "latest_user_request": "Why does the export skip rows after a blank record?",
+    "proposed_final": "The export loop exits on the first blank record, so every later row is skipped. The `break` in the record loop should be a `continue`.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": []
+  },
+  {
+    "id": "explain-buried",
+    "latest_user_request": "Is the nightly sync failing because of the token or the schedule?",
+    "proposed_final": "I started by opening the scheduler config, then I read through the last three run logs one by one, then I compared the cron expression against the server timezone, and after that I checked the token expiry dates in the secrets file, which were all still valid for another month. Looking at the logs again, the job is firing at 02:00 UTC as configured. After going through all of this, it turns out the failure is the token: the API returns 401 because the token lacks the read:sync scope.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": [
+      "conclusion_first"
+    ]
+  },
+  {
+    "id": "short-fact",
+    "latest_user_request": "What port does the dev server use?",
+    "proposed_final": "Port 5173, set in `vite.config.ts`.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": []
+  },
+  {
+    "id": "plan-clean",
+    "latest_user_request": "How should we make retries safer in the uploader?",
+    "proposed_final": "Retry only idempotent uploads, keyed by content hash.\n\n> **Before:** A timeout retries the whole upload and can create duplicates.\n>\n> **After:** Retries reuse the content hash, so a repeat upload is a no-op.\n>\n> **Example:** Two timeouts on `a.png` produce one stored object.\n\n**Proof planned:** a test that forces two timeouts and asserts one object.",
+    "files_changed": false,
+    "expected_shape": "proposed_change",
+    "expected_fixes": []
+  },
+  {
+    "id": "plan-vague",
+    "latest_user_request": "Propose how to stop the cache from serving stale prices.",
+    "proposed_final": "We should change how the cache handles invalidation so that prices are fresher. I would update the invalidation logic and make it smarter about when entries expire, which should solve the stale price problem in most cases.",
+    "files_changed": false,
+    "expected_shape": "proposed_change",
+    "expected_fixes": [
+      "before_after_example",
+      "proof_planned"
+    ]
+  },
+  {
+    "id": "plan-no-proof",
+    "latest_user_request": "Design a fix for duplicate webhook deliveries.",
+    "proposed_final": "Store each webhook's delivery ID and drop repeats.\n\n> **Before:** The provider retries on slow responses and we process the same event twice.\n>\n> **After:** A delivery-ID table rejects repeats before processing.\n>\n> **Example:** Event `evt_1` delivered twice creates one order.",
+    "files_changed": false,
+    "expected_shape": "proposed_change",
+    "expected_fixes": [
+      "proof_planned"
+    ]
+  },
+  {
+    "id": "built-cited",
+    "latest_user_request": "Fix the blank-record export bug.",
+    "proposed_final": "### Export\n\n> **Before:** A blank first record stopped the export.\n>\n> **After:** Blank records are skipped and valid rows export.\n>\n> **Example:** `[blank, Alice]` exports Alice.\n\n**Worked.**\n\n- **Verified:** `test_export` blank-first, blank-middle and all-blank cases pass.",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": []
+  },
+  {
+    "id": "built-uncited",
+    "latest_user_request": "Add the dark mode toggle to the settings page.",
+    "proposed_final": "Done. I added the dark mode toggle to the settings page and wired it to the theme store, so it now switches the whole app between light and dark.",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": [
+      "proof"
+    ]
+  },
+  {
+    "id": "built-ui-screenshot",
+    "latest_user_request": "Make the sidebar collapse on mobile.",
+    "proposed_final": "> **Before:** The sidebar covered half the screen on phones.\n>\n> **After:** It collapses behind a menu button below 768px.\n>\n> **Example:** At 375px the content is full width.\n\n**Worked.**\n\n![Mobile sidebar collapsed](/Users/dev/app/proof/sidebar-375.png)",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": []
+  },
+  {
+    "id": "built-no-status",
+    "latest_user_request": "Rename the config key and update callers.",
+    "proposed_final": "Renamed `max_retry` to `max_retries` in the config loader and its four callers. See [the diff](https://github.com/example/repo/pull/12).",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": []
+  },
+  {
+    "id": "built-partial-unclear",
+    "latest_user_request": "Migrate the jobs table to the new schema.",
+    "proposed_final": "I wrote the migration and ran it against the local database. Some rows had null owner IDs which I had to handle, and there were a few other things along the way. The jobs table now has the new columns. Verified: the migration test passes locally.",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": [
+      "status_line"
+    ]
+  },
+  {
+    "id": "blocked-clean",
+    "latest_user_request": "Deploy the fix to staging.",
+    "proposed_final": "**Partial: the fix is merged, but staging deploy is blocked.**\n\n- **Blocker:** The staging deploy key expired yesterday.\n- **Evidence:** `deploy staging` returns 403 `key_expired`.\n- **Recovery:** Rotate the key in the provider console, then rerun `deploy staging`.",
+    "files_changed": false,
+    "expected_shape": "blocked",
+    "expected_fixes": []
+  },
+  {
+    "id": "blocked-vague",
+    "latest_user_request": "Run the end-to-end tests against staging.",
+    "proposed_final": "I couldn't get the end-to-end tests running against staging, something isn't working there right now. Let me know how you'd like to proceed.",
+    "files_changed": false,
+    "expected_shape": "blocked",
+    "expected_fixes": [
+      "blocker_recovery"
+    ]
+  },
+  {
+    "id": "decision-clean",
+    "latest_user_request": "Should we use Postgres or SQLite for the local cache?",
+    "proposed_final": "**Recommend SQLite.** The cache is single-process and local, so Postgres adds a server for no gain.\n\n- **Choice:** SQLite (recommended) or Postgres.\n- **Consequence:** Postgres means running a service on every dev machine.\n- **Safe default:** SQLite; switching later is one adapter.",
+    "files_changed": false,
+    "expected_shape": "decision_needed",
+    "expected_fixes": []
+  },
+  {
+    "id": "decision-no-rec",
+    "latest_user_request": "Which queue should we pick for background jobs?",
+    "proposed_final": "There are a few options. Redis queues are fast and simple. A database-backed queue avoids another service. A managed cloud queue scales without ops work. Each has tradeoffs. Which one do you want?",
+    "files_changed": false,
+    "expected_shape": "decision_needed",
+    "expected_fixes": [
+      "decision_choice"
+    ]
+  },
+  {
+    "id": "progress-clean",
+    "latest_user_request": "Keep going on the importer rewrite and tell me where you are.",
+    "proposed_final": "Goal: Replace the CSV importer with a streaming one.\nTrack: Parser.\nProgress: Streaming parser passes the fixture suite; wiring it into the upload route next.",
+    "files_changed": true,
+    "expected_shape": "progress",
+    "expected_fixes": []
+  },
+  {
+    "id": "research-answer",
+    "latest_user_request": "Find out whether the payment SDK supports refunds over its API.",
+    "proposed_final": "Yes. The SDK exposes `refunds.create(payment_id, amount)`, and partial refunds are supported ([API reference](https://docs.example.com/refunds)).",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": []
+  },
+  {
+    "id": "built-small-config",
+    "latest_user_request": "Bump the request timeout to 30 seconds.",
+    "proposed_final": "Set `REQUEST_TIMEOUT=30` in `config/defaults.toml`.",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": [
+      "proof"
+    ]
+  },
+  {
+    "id": "review-findings",
+    "latest_user_request": "Review this diff for bugs.",
+    "proposed_final": "Two issues:\n\n1. `parse_date` returns `None` on a timezone suffix, and the caller doesn't check it (`importer.py:88`).\n2. The retry loop never resets `attempt`, so the second batch gets no retries (`worker.py:41`).\n\nNo other bugs found.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": []
+  },
+  {
+    "id": "built-unverified-honest",
+    "latest_user_request": "Add the camera calibration step to the robot startup script.",
+    "proposed_final": "**Partial: calibration step added, not run on hardware.**\n\n- **Changed:** `startup.sh` now runs `calibrate --camera front` before the policy server.\n- **Unverified:** no robot is connected here; run `./startup.sh` on the robot to confirm.",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": []
+  },
+  {
+    "id": "h-long-explain-clean",
+    "latest_user_request": "How does the rate limiter decide when to reject?",
+    "proposed_final": "It rejects when the token bucket for the caller is empty.\n\nEach caller gets a bucket of 60 tokens that refills at one per second. Every request takes a token; a request that finds zero tokens gets a 429 with a `Retry-After` header. Buckets live in Redis keyed by API key, so limits hold across server instances.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": []
+  },
+  {
+    "id": "h-built-test-output",
+    "latest_user_request": "Fix the off-by-one in pagination.",
+    "proposed_final": "**Worked.** Page offsets now start at 0, so page 2 no longer repeats the last row of page 1.\n\n```text\n$ pytest tests/test_pagination.py\n6 passed in 0.21s\n```",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": []
+  },
+  {
+    "id": "h-built-vague",
+    "latest_user_request": "Wire the new pricing table into checkout.",
+    "proposed_final": "All done, checkout now uses the new pricing table everywhere it needs to.",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": [
+      "proof"
+    ]
+  },
+  {
+    "id": "h-plan-vague",
+    "latest_user_request": "How should we reduce cold-start time for the API?",
+    "proposed_final": "We could optimize the startup path and lazy-load some of the heavier modules, and maybe cache a few things. That should make cold starts noticeably faster.",
+    "files_changed": false,
+    "expected_shape": "proposed_change",
+    "expected_fixes": [
+      "before_after_example",
+      "proof_planned"
+    ]
+  },
+  {
+    "id": "h-blocked-vague",
+    "latest_user_request": "Publish the package to the registry.",
+    "proposed_final": "Publishing didn't work, there was an error. I'll need you to take a look.",
+    "files_changed": false,
+    "expected_shape": "blocked",
+    "expected_fixes": [
+      "blocker_recovery"
+    ]
+  },
+  {
+    "id": "h-decision-clean",
+    "latest_user_request": "Monorepo or two repos for the app and the API?",
+    "proposed_final": "**Recommend a monorepo.** The app and API share types and ship together, so one repo keeps them in step.\n\n- **Choice:** monorepo (recommended) or two repos.\n- **Safe default:** monorepo; splitting later is a history-preserving move.",
+    "files_changed": false,
+    "expected_shape": "decision_needed",
+    "expected_fixes": []
+  },
+  {
+    "id": "h-buried-answer",
+    "latest_user_request": "Did last night's backup succeed?",
+    "proposed_final": "I went to the backup dashboard and filtered to the last 24 hours, then opened the job history, scrolled through the entries for each database, compared sizes with the previous week, and looked at the storage bucket listing to make sure the files were actually there. Everything lined up across all of those checks. So yes, last night's backup succeeded for all three databases.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": [
+      "conclusion_first"
+    ]
+  },
+  {
+    "id": "h-built-artifact",
+    "latest_user_request": "Build the weekly metrics dashboard.",
+    "proposed_final": "**Worked.** The dashboard shows signups, activation and churn by week: https://claude.ai/artifact/abc123\n\nUnverified: the churn numbers use last week's export until the live source is connected.",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": []
+  }
+]
