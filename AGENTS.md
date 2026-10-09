@@ -91,9 +91,9 @@ makes one relevant.
   worktrees. Native subagents share the checkout and require a single-writer
   boundary.
 - The normal Farplane shared checkout is `main` only. Do not create or switch
-  local branches. Serialize writers; when the operator requests a PR, use the
-  project commit workflow to push the isolated `HEAD` commit to a temporary
-  remote `codex/*` branch without changing the local checkout.
+  local branches. Serialize writers. Publishing means pushing `main` straight to
+  `origin/main` through the project commit workflow; open a `codex/*` PR only
+  when the operator asks for one.
 - Credentialed commands run through `farplane run -- <command>` or
   `doppler run -- <command>`. `farplane doctor` reports readiness and
   `farplane install` owns safe render/link/repair work.

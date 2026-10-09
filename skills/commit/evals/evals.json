@@ -64,19 +64,39 @@
       }
     },
     {
-      "id": "single_worktree_remote_pr_branch",
-      "prompt": "Farplane uses one shared worktree on local main. The operator asks to commit the current isolated change and open a PR, while unrelated edits from read-only tasks remain in the worktree. Describe the exact Git behavior without running commands.",
-      "expected_output": "Creates one isolated commit from explicit paths or hunks, preserves unrelated edits, confirms origin/main..HEAD contains only the intended serial PR range, pushes HEAD directly to a temporary remote codex branch without creating or switching a local branch, opens the PR against main, and verifies the PR head and files. It rejects concurrent Git writers, direct main pushes, accidental stacked commits, and squash merging; after merge it fast-forwards local main.",
+      "id": "push_main_with_moved_origin",
+      "prompt": "Farplane uses one shared worktree on local main. The operator says: commit this and push. origin/main gained one commit since the last fetch, and other threads have staged and unstaged edits in the worktree. The repository is public. Describe the exact Git behavior without running commands.",
+      "expected_output": "Creates one isolated commit from explicit paths or hunks, fetches origin/main, and because the index holds other threads' staged work, builds one merge commit with merge-tree and commit-tree after confirming the incoming paths do not overlap local changes, refreshing only those paths. It lists every outgoing commit, scans the outgoing diff for secrets and private data, pushes main straight to origin/main without force or rebase, verifies origin/main equals HEAD, and reports the published commits. It opens no PR.",
       "assertions": [
-        "Keeps the local checkout on main and permits one Git writer",
-        "Pushes HEAD directly to refs/heads/codex/<task-name> without a local branch switch",
-        "Preserves unrelated staged and unstaged work",
-        "Rejects direct main pushes and unintended stacked commit ranges",
-        "Uses merge commit then fast-forwards local main before the next writing task"
+        "Pushes main directly to origin/main and opens no PR",
+        "Integrates the moved origin/main with a merge commit, never a rebase or force push",
+        "Preserves other threads' staged and unstaged work",
+        "Scans the outgoing range for secrets and private data before pushing a public repo",
+        "Verifies origin/main equals HEAD and names the published commits"
       ],
       "metadata": {
         "farplane": {
-          "title": "Single worktree: publish a remote PR branch",
+          "title": "Push: straight to main after origin moved",
+          "tags": [
+            "commit",
+            "push",
+            "single-worktree"
+          ]
+        }
+      }
+    },
+    {
+      "id": "explicit_pr_request",
+      "prompt": "Farplane uses one shared worktree on local main. The operator asks to commit the current isolated change and open a PR. Describe the exact Git behavior without running commands.",
+      "expected_output": "Creates one isolated commit, then follows the single-worktree PR route: pushes HEAD to a temporary remote codex branch without creating or switching a local branch, opens the PR against main, and does not push main directly.",
+      "assertions": [
+        "Pushes HEAD to refs/heads/codex/<task-name> without a local branch switch",
+        "Opens the PR against main",
+        "Does not push main directly when a PR was requested"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "PR only on request",
           "tags": [
             "commit",
             "pull-request",

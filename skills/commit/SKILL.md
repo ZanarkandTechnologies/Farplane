@@ -1,7 +1,7 @@
 ---
 name: commit
-version: 0.4.0
-description: "Turn a requested worktree change into one isolated commit and optionally publish it as a single-worktree PR."
+version: 0.5.0
+description: "Turn a requested worktree change into one isolated commit and, when asked to push, publish it straight to main."
 tier: 2
 source: local
 capability:
@@ -18,18 +18,18 @@ allowed-tools: Read, Glob, Grep, Bash
 
 Use this shortcut when the operator asks to commit or publish a change. Resolve
 what “this change” means from the current task, isolate that boundary from the
-worktree, create one local commit, and verify it. In a project whose policy is
-single-worktree `main`, publish an explicitly requested PR by pushing `HEAD` to
-a temporary remote branch without creating or switching a local branch.
+worktree, create one local commit, and verify it. When the operator asks to
+push or publish, push `main` straight to `origin/main`. Open a PR only when the
+operator asks for one.
 
 ## Skill Signature
 
 ```text
-commit(change, subject?, publish_pr?) -> commit_receipt | pr_receipt | boundary_blocker
+commit(change, subject?, push?, pr?) -> commit_receipt | push_receipt | pr_receipt | boundary_blocker
 reads: current task, worktree, index, requested diff, and recent commit style
 does: isolates and stages the requested change, then creates one local commit
-writes: Git index, one local commit, and optional remote PR branch/PR
-returns: commit SHA, subject, committed paths, preservation proof, and optional PR URL
+writes: Git index, one local commit, optional merge commit and push to main, or a requested PR
+returns: commit SHA, subject, committed paths, preservation proof, and pushed range or PR URL
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -65,7 +65,7 @@ returns: commit SHA, subject, committed paths, preservation proof, and optional 
   `requested staged diff + repo history -> local commit | commit_failure`
 
   Rule: Choose a compact `type(scope): lower-case imperative summary` and pass it
-  to the isolation helper. Never push, amend, rebase, or rewrite history.
+  to the isolation helper. Never amend, rebase, or rewrite pushed history.
 
   Assert:
   - The commit subject describes the main behavior change.
@@ -80,19 +80,19 @@ returns: commit SHA, subject, committed paths, preservation proof, and optional 
   Assert:
   - The requested change is committed and the requested portion left the index.
   - Unrelated work remains uncommitted; the receipt reports any residual risk.
-- [ ] **N5 — Publish without changing the shared checkout when requested.**
-  `verified commit + project policy -> remote temporary branch + PR | blocker`
+- [ ] **N5 — Push to main when asked.**
+  `verified commit + push request -> origin/main == HEAD | blocker`
 
-  Rule: Load [single-worktree PR publication](references/single-worktree-pr.md).
-  Require local `main`, one writer, and no prior unpublished commit in the PR
-  range. Push `HEAD` directly to `refs/heads/codex/<task-name>` and create the
-  PR against `main`; never create or switch a local branch.
+  Rule: Load [push to main](references/push-main.md). Fetch, integrate a
+  moved `origin/main` with one merge commit, check the outgoing range (scan it
+  for secrets and private data on a public repo), then `git push origin main`.
+  Use [single-worktree PR publication](references/single-worktree-pr.md) only
+  when the operator asks for a PR.
 
   Assert:
-  - The remote branch contains only the intended serial commit range.
-  - Local branch, index, and unrelated work remain unchanged.
-  - Direct `main` push, squash merge, accidental stacking, and concurrent Git
-    writers are rejected.
+  - `origin/main` equals local `HEAD` after the push; no force, no rebase.
+  - Local branch and unrelated staged and unstaged work remain unchanged.
+  - The receipt names every commit the push published.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Gotchas
@@ -103,12 +103,14 @@ returns: commit SHA, subject, committed paths, preservation proof, and optional 
   requested skill instead of committing the whole generated file.
 - If ownership cannot be separated safely at hunk level, return the exact
   conflict. Do not commit a mixed boundary to avoid asking a question.
-- The single-worktree PR route is serial. If another unmerged local commit is
-  already ahead of `origin/main`, finish that PR before starting another.
+- `git merge` refuses while other threads have staged work; build the merge
+  commit with `merge-tree` instead of unstaging their work.
+- A push publishes every local commit ahead of `origin/main`, not only this one.
 
 ## References
 
 - [commit message style](references/style.md)
+- [push to main](references/push-main.md)
 - [single-worktree PR publication](references/single-worktree-pr.md)
 
 ## Output
@@ -119,6 +121,6 @@ subject: <commit subject when committed>
 commit: <HEAD SHA when committed>
 paths: [<committed path>]
 unrelated_work: preserved | <specific verification gap>
-push: not_requested | remote_branch_created
+push: not_requested | main | remote_branch_created
 pr: not_requested | <url>
 ```
