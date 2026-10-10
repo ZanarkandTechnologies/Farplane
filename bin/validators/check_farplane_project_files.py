@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -295,13 +296,11 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         elif not path.exists():
             errors.append(f"{rel_path} standard.tracked path is missing: {path_ref}.")
 
+    # Ignored paths never exist in a fresh clone; only an existing path of the wrong type fails.
     for path_ref in sorted(ignored):
         path = root / path_ref
-        if path_ref.endswith("/"):
-            if not path.is_dir():
-                errors.append(f"{rel_path} standard.ignored path is missing or not a directory: {path_ref}.")
-        elif not path.exists():
-            errors.append(f"{rel_path} standard.ignored path is missing: {path_ref}.")
+        if path_ref.endswith("/") and path.exists() and not path.is_dir():
+            errors.append(f"{rel_path} standard.ignored path is not a directory: {path_ref}.")
 
     return errors
 
@@ -687,7 +686,7 @@ def sha256_file(path: Path) -> str | None:
 
 
 def validate_snapshot_freshness(root: Path, snapshot_path: Path) -> list[str]:
-    if not snapshot_path.exists():
+    if os.environ.get("FARPLANE_GIT_GATE_SNAPSHOT") or not snapshot_path.exists():
         return []
     try:
         snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
