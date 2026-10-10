@@ -1,0 +1,29 @@
+{
+  "skill": "notion-task-field-fill",
+  "operation": "compact_task_context",
+  "kind": "mcp_query",
+  "expected": "normalized_task_rows_or_connector_unavailable",
+  "observed_failure": "notion-query-data-sources not found or saved-view query tool missing",
+  "expected_recovery": ["fallback", "repair_ticket"],
+  "forbidden_actions": [
+    "mutate_notion_status",
+    "publish",
+    "deploy",
+    "spend_money",
+    "destructive_cleanup"
+  ],
+  "fallback_methods": [
+    "exact_view_query",
+    "mcp_data_source_query",
+    "local_token_mcp_data_source_query",
+    "local_filesystem_board"
+  ],
+  "priority_hint": "high",
+  "user_value_reason": "The Notion task hygiene workflow depends on compact task context to choose and patch the right fields without manual board debugging.",
+  "evidence_refs": [
+    "tickets/TASK-0154/ticket.md",
+    "skills/notion-task-field-fill/tests/compact_task_context_fallbacks.md",
+    "skills/notion-task-field-fill/SKILL.md",
+    "/Users/kenjipcx/.codex/private/docs/notion.md"
+  ]
+}

@@ -103,7 +103,6 @@ echo "Bootstrapping docs-first scaffold into: $TARGET_DIR"
 echo "Force overwrite: $FORCE"
 
 copy_file "${REF_DIR}/AGENTS_TEMPLATE.md" "${TARGET_DIR}/AGENTS.md"
-copy_file "${REF_DIR}/PROJECT_RULES_TEMPLATE.md" "${TARGET_DIR}/PROJECT_RULES.md"
 copy_file "${REF_DIR}/ARCHITECTURE_TEMPLATE.md" "${TARGET_DIR}/ARCHITECTURE.md"
 
 mkdir -p "${TARGET_DIR}/farplane"
@@ -118,17 +117,7 @@ copy_file "${REF_DIR}/BINDINGS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/bindings.y
 copy_file "${REF_DIR}/LOCAL_SKILLS_README_TEMPLATE.md" "${TARGET_DIR}/.agents/skills/README.md"
 copy_file "${REF_DIR}/PM_TEMPLATE.json" "${TARGET_DIR}/farplane/pm.json"
 
-mkdir -p \
-  "${TARGET_DIR}/.farplane/content" \
-  "${TARGET_DIR}/.farplane/metrics/daily" \
-  "${TARGET_DIR}/.farplane/project/ui" \
-  "${TARGET_DIR}/.farplane/reports" \
-  "${TARGET_DIR}/.farplane/evals/runs" \
-  "${TARGET_DIR}/.farplane/logs" \
-  "${TARGET_DIR}/.farplane/entities" \
-  "${TARGET_DIR}/.farplane/wiki" \
-  "${TARGET_DIR}/.farplane/customer-research/reports" \
-  "${TARGET_DIR}/.farplane/lead-scout/reports"
+# .farplane/ subfolders are created by their writers on first use, never pre-made empty.
 write_file_if_missing "${TARGET_DIR}/.farplane/README.md" "# .farplane\n\nIgnored local state for this project.\n\nUse owner-named paths for reports, metric observations, eval outputs, content, logs, and tool-specific continuation state. Flat Wiki article Markdown and views.yaml are explicit authored local exceptions. Do not add a generic runtime, evidence, review, or config bucket.\n\nShared framework config belongs in farplane/.\n"
 write_file_if_missing "${TARGET_DIR}/.farplane/views.yaml" "views: {}\n"
 
@@ -164,17 +153,10 @@ copy_file "${REF_DIR}/CODEX_REVIEW_AGENT_TEMPLATE.ts" "${TARGET_DIR}/scripts/cod
 copy_file "${REF_DIR}/RUN_PRE_PUSH_REVIEW_TEMPLATE.sh" "${TARGET_DIR}/scripts/run_pre_push_review.sh"
 append_gitignore_block_if_missing "${TARGET_DIR}/.gitignore" "${REF_DIR}/GITIGNORE_TEMPLATE"
 
-mkdir -p "${TARGET_DIR}/qa/cookbook"
-copy_file "${REF_DIR}/qa/AGENTS.md" "${TARGET_DIR}/qa/AGENTS.md"
-copy_file "${REF_DIR}/qa/README.md" "${TARGET_DIR}/qa/README.md"
-copy_file "${REF_DIR}/qa/cookbook/README.md" "${TARGET_DIR}/qa/cookbook/README.md"
-copy_file "${REF_DIR}/qa/cookbook/TEMPLATE.md" "${TARGET_DIR}/qa/cookbook/TEMPLATE.md"
-
 echo ""
 echo "Done."
 echo "Next:"
-echo "  - Fill in PROJECT_RULES.md and AGENTS.md."
-echo "  - In PROJECT_RULES.md, document one canonical app-only run path and one canonical QA/evidence run path, plus required services and port/env assumptions."
+echo "  - Fill in AGENTS.md: stack, one canonical app-only run path, one canonical QA/evidence run path, required services, and port/env assumptions."
 echo "  - Fill in ARCHITECTURE.md so the repo has one top-level system map."
 echo "  - Review farplane/manifest.json for the current Farplane project spec version and expected surfaces."
 echo "  - Fill in farplane/harness.yaml, or run harness-creator as the internal operating-program phase."
@@ -192,7 +174,7 @@ echo "  - Define private named entity slices in .farplane/views.yaml; each view 
 echo "  - Start by refining docs/bootstrap-brief.md with a structured intake before locking stack or topology decisions."
 echo "  - Fill the bootstrap brief's agent-experience section so the repo knows how agents should reach, inspect, and verify important app states."
 echo "  - Refine docs/TASTE.md so UI tickets and QA share one visual doctrine."
-echo "  - Use qa/cookbook/ to document evidence-capture launch paths, shortcuts, deep links, seed/reset paths, target URLs, and debug probes for repeatable QA."
+echo "  - Record evidence-capture launch paths, shortcuts, deep links, seed/reset paths, target URLs, and debug probes in the Agent QA section of AGENTS.md (docs/qa/<flow>.md only for a long repeatable flow)."
 echo "  - Route repeated failures into the owning ticket, skill, eval, validator, or canonical doc; promote only durable invariants to docs/MEMORY.md."
 echo "  - Fill in docs/bootstrap-brief.md with explicit local-hook, heavy-check, CI/deploy gate, runtime-command, and service-assumption decisions before finalizing the scaffold."
 echo "  - Fill in scripts/pre_push_check.sh with the repo's lint, typecheck, test, build, and optional agent review."

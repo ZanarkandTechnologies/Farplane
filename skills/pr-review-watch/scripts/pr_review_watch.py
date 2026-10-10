@@ -200,7 +200,7 @@ def parse_project_pipeline(text: str, source_path: str) -> PrReviewPipelineConfi
 
 
 def load_project_pipeline(repo_path: Path) -> PrReviewPipelineConfig:
-    candidates = [repo_path / "docs" / "pr-review-pipeline.md", repo_path / "PROJECT_RULES.md"]
+    candidates = [repo_path / "docs" / "pr-review-pipeline.md", repo_path / "AGENTS.md"]
     errors: list[str] = []
     for candidate in candidates:
         if not candidate.exists():
@@ -211,7 +211,7 @@ def load_project_pipeline(repo_path: Path) -> PrReviewPipelineConfig:
             errors.append(f"{candidate}: {exc}")
     if errors:
         raise PipelineConfigError("; ".join(errors))
-    raise PipelineConfigError("missing docs/pr-review-pipeline.md or PROJECT_RULES.md")
+    raise PipelineConfigError("missing docs/pr-review-pipeline.md or AGENTS.md")
 
 
 def _normalize_check_runs(raw_checks: object) -> list[dict[str, object]]:

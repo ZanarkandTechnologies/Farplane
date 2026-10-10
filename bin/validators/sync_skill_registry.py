@@ -295,7 +295,7 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
     skill_paths = sorted((repo_root / "skills").glob("*/SKILL.md"))
 
     specialists: dict[str, dict[str, Any]] = {}
-    if (repo_root / "rules" / "skill-workflows.toml").exists():
+    if (repo_root / "config" / "skill-workflows.toml").exists():
         try:
             specialists = load_skill_specialists(repo_root, SKILL_DEPARTMENTS)
         except CapabilityAdmissionConfigError as exc:

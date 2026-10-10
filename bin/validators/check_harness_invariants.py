@@ -37,17 +37,17 @@ RULES: tuple[HarnessRule, ...] = (
         relative_path="AGENTS.md",
         required_substrings=(
             "project-local context for developing Farplane itself.",
-            "templates/global/AGENTS.md",
+            "runtimes/AGENTS.md",
             "Prefer `.farplane/` for live runtime state.",
         ),
         remediation=(
             "keep root AGENTS repo-local, point install policy at "
-            "`templates/global/AGENTS.md`, and preserve `.farplane/` as the "
+            "`runtimes/AGENTS.md`, and preserve `.farplane/` as the "
             "live runtime root"
         ),
     ),
     HarnessRule(
-        relative_path="templates/global/AGENTS.md",
+        relative_path="runtimes/AGENTS.md",
         required_substrings=(
             "# Global Agent Guidance",
             "## Context",
@@ -177,7 +177,7 @@ def validate_root(root: Path, *, include_project_contract: bool = True) -> list[
 def validate_agent_kernel_subsections(root: Path) -> list[str]:
     """Require each reader-facing section's behavior groups to remain visible."""
 
-    relative_path = "templates/global/AGENTS.md"
+    relative_path = "runtimes/AGENTS.md"
     path = root / relative_path
     if not path.is_file():
         return []
@@ -216,7 +216,7 @@ def validate_agent_kernel_subsections(root: Path) -> list[str]:
 def validate_turn_mode_contract(root: Path) -> list[str]:
     """Require question-versus-correction routing in active global prose."""
 
-    relative_path = "templates/global/AGENTS.md"
+    relative_path = "runtimes/AGENTS.md"
     path = root / relative_path
     if not path.is_file():
         return []
@@ -241,7 +241,7 @@ def validate_turn_mode_contract(root: Path) -> list[str]:
 def validate_neutral_reasoning_contract(root: Path) -> list[str]:
     """Require the high-risk reasoning contract in active section prose."""
 
-    relative_path = "templates/global/AGENTS.md"
+    relative_path = "runtimes/AGENTS.md"
     path = root / relative_path
     if not path.is_file():
         return []
@@ -350,7 +350,7 @@ def validate_agent_kernel_inventory(root: Path) -> list[str]:
         )
         return errors
 
-    tracked_surfaces = {"AGENTS.md", "templates/global/AGENTS.md"}
+    tracked_surfaces = {"AGENTS.md", "runtimes/AGENTS.md"}
     documented = {(surface, section) for _feature_id, surface, section in rows}
     for _feature_id, surface, _section in rows:
         if surface not in tracked_surfaces:

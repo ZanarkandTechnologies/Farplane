@@ -8,9 +8,9 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNTIME_DIR = ROOT / "bin" / "runtime"
-if str(RUNTIME_DIR) not in sys.path:
-    sys.path.insert(0, str(RUNTIME_DIR))
+for RUNTIME_DIR in (ROOT / "hooks" / "shared",):
+    if str(RUNTIME_DIR) not in sys.path:
+        sys.path.insert(0, str(RUNTIME_DIR))
 
 import skill_suggestion
 

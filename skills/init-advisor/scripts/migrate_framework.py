@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply the field-preserving Farplane framework 2.0.16 migration."""
+"""Apply the field-preserving Farplane framework 2.0.17 migration."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from typing import Any
 
 import yaml
 
-FRAMEWORK_VERSION = "2.0.16"
+FRAMEWORK_VERSION = "2.0.17"
 METRICS_TEMPLATE_VERSION = "0.4.0"
 HARNESS_TEMPLATE_VERSION = "0.5.3"
 BINDINGS_TEMPLATE_VERSION = "0.5.0"
@@ -372,6 +372,34 @@ def _migrate_scout_brief(project_root: Path) -> tuple[Path | None, str, list[str
     return current_path, migrated, changes
 
 
+def _migrate_project_rules(project_root: Path) -> tuple[str, list[str]]:
+    """Fold a retired PROJECT_RULES.md into AGENTS.md, keeping every line."""
+    rules_path = project_root / "PROJECT_RULES.md"
+    if not rules_path.is_file():
+        return "", []
+    agents_path = project_root / "AGENTS.md"
+    agents = agents_path.read_text(encoding="utf-8") if agents_path.is_file() else ""
+    lines = rules_path.read_text(encoding="utf-8").splitlines()
+    if lines and lines[0].startswith("# "):
+        lines = lines[1:]
+    folded: list[str] = []
+    in_fence = False
+    for line in lines:
+        if line.lstrip().startswith("```"):
+            in_fence = not in_fence
+        elif not in_fence and re.match(r"^#{1,5} ", line):
+            line = "#" + line
+        folded.append(line)
+    section = (
+        "## Project Rules\n\n"
+        f"Folded from `PROJECT_RULES.md` by the framework {FRAMEWORK_VERSION} migration.\n"
+        + "\n".join(folded).rstrip()
+        + "\n"
+    )
+    merged = (agents.rstrip() + "\n\n" if agents.strip() else "") + section
+    return merged, ["PROJECT_RULES.md folded into AGENTS.md and removed"]
+
+
 def migrate_project(project_root: Path, *, force: bool) -> dict[str, Any]:
     root = project_root.resolve()
     manifest_path = root / "farplane" / "manifest.json"
@@ -391,12 +419,14 @@ def migrate_project(project_root: Path, *, force: bool) -> dict[str, Any]:
         _migrate_bindings(bindings_path) if bindings_path.is_file() else ("", [])
     )
     scout_brief_path, scout_brief_text, scout_brief_changes = _migrate_scout_brief(root)
+    agents_text, project_rules_changes = _migrate_project_rules(root)
     changes = (
         manifest_changes
         + metrics_changes
         + harness_changes
         + bindings_changes
         + scout_brief_changes
+        + project_rules_changes
     )
     if force:
         _atomic_write(manifest_path, manifest_text)
@@ -423,6 +453,13 @@ def migrate_project(project_root: Path, *, force: bool) -> dict[str, Any]:
             os.replace(temporary, scout_brief_path)
             if legacy_scout_brief_path != scout_brief_path:
                 legacy_scout_brief_path.unlink(missing_ok=True)
+        if project_rules_changes:
+            agents_path = root / "AGENTS.md"
+            if agents_path.is_file():
+                _atomic_write(agents_path, agents_text)
+            else:
+                agents_path.write_text(agents_text, encoding="utf-8")
+            (root / "PROJECT_RULES.md").unlink()
     return {
         "ok": True,
         "project_root": str(root),
@@ -435,7 +472,7 @@ def migrate_project(project_root: Path, *, force: bool) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Migrate one Farplane project to framework 2.0.16 without replacing human-authored files."
+        description="Migrate one Farplane project to framework 2.0.17 without replacing human-authored files."
     )
     parser.add_argument("--project-root", type=Path, default=Path.cwd())
     parser.add_argument(

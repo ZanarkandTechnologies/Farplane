@@ -32,15 +32,15 @@ This skill's `create_task`/`poll_task`/`download` template functions are reused 
 
 When this skill is first activated in a session, inform the user:
 
-> All generated files will be saved to `meshy_output/` in the current working directory. Each project gets its own folder (`{YYYYMMDD_HHmmss}_{prompt}_{id}/`) with model files, textures, thumbnails, and metadata. History is tracked in `meshy_output/history.json`.
+> All generated files will be saved to `.farplane/meshy/` in the current working directory. Each project gets its own folder (`{YYYYMMDD_HHmmss}_{prompt}_{id}/`) with model files, textures, thumbnails, and metadata. History is tracked in `.farplane/meshy/history.json`.
 
 This only needs to be said **once per session**, at the beginning.
 
 ## IMPORTANT: File Organization
 
-All downloaded files MUST go into a structured `meshy_output/` directory in the current working directory. **Do NOT scatter files randomly.**
+All downloaded files MUST go into a structured `.farplane/meshy/` directory under the project root (the current working directory). **Do NOT scatter files randomly.**
 
-- Each project gets its own folder: `meshy_output/{YYYYMMDD_HHmmss}_{prompt_slug}_{task_id_prefix}/`
+- Each project gets its own folder: `.farplane/meshy/{YYYYMMDD_HHmmss}_{prompt_slug}_{task_id_prefix}/`
 - For chained tasks (preview → refine → rig), reuse the same `project_dir`
 - Track tasks in `metadata.json` per project, and global `history.json`
 - Auto-download thumbnails alongside models
@@ -339,7 +339,7 @@ def download(url, filepath):
 import re, json
 from datetime import datetime
 
-OUTPUT_ROOT = os.path.join(os.getcwd(), "meshy_output")
+OUTPUT_ROOT = os.path.join(os.getcwd(), ".farplane", "meshy")
 os.makedirs(OUTPUT_ROOT, exist_ok=True)
 HISTORY_FILE = os.path.join(OUTPUT_ROOT, "history.json")
 

@@ -248,7 +248,7 @@ flowchart LR
 - Skill best practices: [docs/skills/best-practices.md](docs/skills/best-practices.md)
 - Ticket contract: [tickets/README.md](tickets/README.md)
 - Goal loop contract: [docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md)
-- QA cookbook surface: [qa/README.md](qa/README.md)
+- QA guide: [skills/qa/references/guide.md](skills/qa/references/guide.md)
 - Review scoring: [skills/review/README.md](skills/review/README.md)
 - Maintainability code review: [skills/code-review/README.md](skills/code-review/README.md)
 - Active queue: GitHub Issues in each project's own repo (`tickets/README.md`).
@@ -330,7 +330,7 @@ store Doppler tokens in the repo. Private `~/.farplane/config.toml` stores
 non-secret UI-managed machine/operator settings only; Core ignores credential
 fields there and `farplane doctor` reports their names for migration. See
 [secret management](docs/fundamentals/secret-management.md).
-`config.toml.example` still renders the installed `~/.codex/config.toml`, but
+`runtimes/codex/config.toml.example` still renders the installed `~/.codex/config.toml`, but
 that file is a Codex adapter output and the lowest-priority fallback, not the
 Farplane source of truth.
 

@@ -17,10 +17,10 @@ refs:
   - docs/systems/registry.jsonl
   - docs/templates/registry.jsonl
   - docs/templates/README.md
-  - rules/template-registry.toml
-  - rules/template-version-watch.toml
+  - config/template-registry.toml
+  - config/template-version-watch.toml
   - bin/validators/sync_template_registry.py
-  - templates/global/AGENTS.md
+  - runtimes/AGENTS.md
   - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/systems/documentation-os.md
   - docs/review/rubrics/documentation-quality.md
@@ -39,10 +39,10 @@ surfaces:
   - docs/systems/registry.jsonl
   - docs/templates/registry.jsonl
   - docs/templates/README.md
-  - rules/template-registry.toml
-  - rules/template-version-watch.toml
+  - config/template-registry.toml
+  - config/template-version-watch.toml
   - bin/validators/sync_template_registry.py
-  - templates/global/AGENTS.md
+  - runtimes/AGENTS.md
   - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/systems/documentation-os.md
   - docs/review/rubrics/documentation-quality.md
@@ -169,10 +169,10 @@ Owner surfaces:
 - `docs/systems/registry.jsonl`
 - `docs/templates/registry.jsonl`
 - `docs/templates/README.md`
-- `rules/template-registry.toml`
-- `rules/template-version-watch.toml`
+- `config/template-registry.toml`
+- `config/template-version-watch.toml`
 - `bin/validators/sync_template_registry.py`
-- `templates/global/AGENTS.md`
+- `runtimes/AGENTS.md`
 - `docs/systems/documentation-os.md`
 - `docs/review/rubrics/documentation-quality.md`
 - `skills/doc-advisor/SKILL.md`

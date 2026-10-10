@@ -56,14 +56,19 @@ def read_blob(spec: str, *, root: Path = ROOT) -> bytes | None:
     return result.stdout if result.returncode == 0 else None
 
 
-def changed_paths(mode: str, base: str, *, root: Path = ROOT) -> tuple[list[str], str]:
+def changed_paths(mode: str, base: str, *, root: Path = ROOT) -> tuple[list[tuple[str, str]], str]:
+    """Changed (path, previous path) pairs; a moved file is measured against its old path."""
     if mode == "staged":
-        result = git("diff", "--cached", "--name-only", "--diff-filter=ACMR", root=root)
-        return result.stdout.decode().splitlines(), "HEAD"
-
-    merge_base = git("merge-base", base, "HEAD", root=root).stdout.decode().strip()
-    result = git("diff", "--name-only", "--diff-filter=ACMR", f"{merge_base}...HEAD", root=root)
-    return result.stdout.decode().splitlines(), merge_base
+        comparison = "HEAD"
+        result = git("diff", "--cached", "-M", "--name-status", "--diff-filter=ACMR", root=root)
+    else:
+        comparison = git("merge-base", base, "HEAD", root=root).stdout.decode().strip()
+        result = git("diff", "-M", "--name-status", "--diff-filter=ACMR", f"{comparison}...HEAD", root=root)
+    pairs = []
+    for line in result.stdout.decode().splitlines():
+        fields = line.split("\t")
+        pairs.append((fields[-1], fields[1] if fields[0].startswith("R") else fields[-1]))
+    return pairs, comparison
 
 
 def source_deltas(
@@ -83,14 +88,14 @@ def source_deltas(
         and read_blob(f"{comparison}:{baseline_path}", root=root) is None
     )
     deltas: list[SourceDelta] = []
-    for path in paths:
+    for path, previous_path in paths:
         if not matches(path, globs):
             continue
         current_spec = f":{path}" if mode == "staged" else f"HEAD:{path}"
         current = read_blob(current_spec, root=root)
         if current is None:
             continue
-        previous = read_blob(f"{comparison}:{path}", root=root)
+        previous = read_blob(f"{comparison}:{previous_path}", root=root)
         previous_lines = line_count(previous) if previous is not None else None
         if use_adoption_baseline and baseline and path in baseline:
             previous_lines = baseline[path]

@@ -53,7 +53,7 @@ LOCAL_PATH_RE = re.compile(
     r"((?:\.\./|./)?"
     r"(?:docs|skills|tickets|templates|agents|bin|rules|qa|experiments|farplane)/"
     r"[A-Za-z0-9_./#@:+%=-]+"
-    r"|(?:AGENTS|README|ARCHITECTURE|PROJECT_RULES)\.md)"
+    r"|(?:AGENTS|README|ARCHITECTURE)\.md)"
 )
 
 
@@ -103,14 +103,13 @@ def iter_scan_files(repo_root: Path) -> list[Path]:
         repo_root / "AGENTS.md",
         repo_root / "ARCHITECTURE.md",
         repo_root / "README.md",
-        repo_root / "PROJECT_RULES.md",
         repo_root / "docs",
         repo_root / "skills",
-        repo_root / "templates",
+        repo_root / "runtimes",
         repo_root / "agents",
         repo_root / "bin",
         repo_root / "farplane",
-        repo_root / "rules",
+        repo_root / "config",
         repo_root / "tickets" / "README.md",
     ]
     cached_rel_paths = git_cached_rel_paths(repo_root)

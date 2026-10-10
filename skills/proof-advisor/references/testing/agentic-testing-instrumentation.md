@@ -5,7 +5,7 @@ Agents can’t “understand” a UI the way humans do. When testing is hard, th
 ### 1) Always add stable selectors
 - Add `data-testid` for any critical interactive element and any assertion target.
 - Prefer `getByTestId`, `getByRole`, `getByLabel` in Playwright.
-- Record the intended selector contract in `qa/cookbook/*.md` when the repo has
+- Record the intended selector contract in `docs/qa/*.md` when the repo has
   a QA cookbook surface.
 
 ### 2) Add a debug overlay for complex UIs
@@ -33,7 +33,7 @@ When QA keeps repeating the same setup path, add fast-entry controls:
 - reset / seed / pause / resume / step helpers
 - a debug route or mode that jumps to the scenario under test
 
-Document those helpers in `qa/cookbook/*.md` so Playwright and the Codex
+Document those helpers in `docs/qa/*.md` so Playwright and the Codex
 in-app Browser both reuse the same deterministic entry path.
 
 ### 5) Multiplayer: always provide a multi-client harness

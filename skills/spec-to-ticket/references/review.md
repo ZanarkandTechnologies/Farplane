@@ -33,7 +33,7 @@ If any answer is weak, tighten the tickets first.
 - Did we call out any instrumentation work needed for difficult UI or runtime verification?
 - Are we defining proof in the cheapest deterministic way, for example a CLI check, seed path, debug route, or sanity script?
 - If an `Agent Testability Brief` exists, did we actually preserve its surfaces in the ticket contract instead of re-deriving them inconsistently?
-- If the repo has `qa/cookbook/`, did we seed or update the matching workflow
+- If the repo has `docs/qa/`, did we seed or update the matching workflow
   entry for the slice instead of leaving QA to rediscover the flow from the
   ticket alone?
 - For UI work, is the design intent readable for a human reviewer rather than only executable by an agent?
@@ -61,7 +61,7 @@ If any answer is weak, tighten the tickets first.
 - an `Agent Testability Brief` exists, but the resulting ticket never turns it into concrete `Test hook`, `Stabilize`, `Inspect`, or proof expectations
 - bootstrap `Agent Experience / Testability` defaults exist, but the first
   UI-bearing or agentically hard ticket ignores them
-- the repo has `qa/cookbook/`, but the planning output never seeds a matching
+- the repo has `docs/qa/`, but the planning output never seeds a matching
   workflow entry for the ticket's proof path
 - a complex pipeline is split into parse/chunk/embed/index-style microtickets without a true boundary trigger
 - the first ticket ships only scaffolding and no usable proof path

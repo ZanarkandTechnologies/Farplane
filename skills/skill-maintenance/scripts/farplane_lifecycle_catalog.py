@@ -29,7 +29,6 @@ CURATED_FILES = {
     "AGENTS.md": ("file", "Project operating policy", ["project", "policy"]),
     "README.md": ("file", "Project README", ["project", "docs"]),
     "ARCHITECTURE.md": ("file", "Project architecture", ["project", "docs"]),
-    "PROJECT_RULES.md": ("file", "Project rules", ["project", "policy"]),
     "farplane/README.md": ("file", "Framework local README", ["farplane", "tracked-config"]),
     "farplane/manifest.json": ("file", "Framework manifest", ["farplane", "tracked-config"]),
     "farplane/harness.yaml": ("file", "Project harness", ["farplane", "tracked-config"]),
@@ -55,12 +54,11 @@ CURATED_FILES = {
     "docs/farplane-framework/lifecycle.md": ("doc", "Lifecycle hub", ["docs", "framework"]),
     "docs/farplane-framework/graph-contract.md": ("doc", "Lifecycle graph contract", ["docs", "framework", "graph"]),
     "docs/farplane-framework/hooks-and-runtime.md": ("doc", "Hooks and runtime", ["docs", "framework", "hooks"]),
-    "hooks.json": ("file", "Codex hook config", ["hooks", "runtime"]),
+    "hooks/hooks.json": ("file", "Codex hook config", ["hooks", "runtime"]),
 }
 
 CURATED_EDGES = [
     ("skill:init-advisor", "file:AGENTS.md", "writes", "docs/farplane-framework/init-advisor-critical-path.md"),
-    ("skill:init-advisor", "file:PROJECT_RULES.md", "writes", "docs/farplane-framework/init-advisor-critical-path.md"),
     ("skill:init-advisor", "file:ARCHITECTURE.md", "writes", "docs/farplane-framework/init-advisor-critical-path.md"),
     ("skill:init-advisor", "file:farplane/manifest.json", "writes", "docs/farplane-framework/project-files.md"),
     ("skill:init-advisor", "file:farplane/harness.yaml", "writes", "docs/farplane-framework/project-files.md"),

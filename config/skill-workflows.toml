@@ -1,0 +1,190 @@
+# Capability Map: specialist desks.
+#
+# A specialist is one desk in the office that groups skill variants. Each desk
+# owns its display label, department, deliverable, primary skill (its default
+# verb), and member `skills`. A member must be a Tier 3 skill in the desk's
+# department and may sit at only one desk. Skills at no desk are internal:
+# planners dispatch them, and the map omits them.
+
+
+[specialists.pm-assistant]
+label = "PM Assistant"
+department = "back-office"
+deliverable = "a daily plan and task updates"
+primary = "pm"
+skills = ["pm", "notion-task-field-fill"]
+
+[specialists.phone-chaser]
+label = "Phone Chaser"
+department = "back-office"
+deliverable = "a reminder call"
+primary = "phone-chaser"
+skills = ["phone-chaser"]
+
+[specialists.customer-researcher]
+label = "Customer Researcher"
+department = "customer"
+deliverable = "a customer research brief"
+primary = "customer-research"
+skills = ["customer-research"]
+
+[specialists.proposal-writer]
+label = "Proposal Writer"
+department = "deals"
+deliverable = "a priced proposal"
+primary = "proposal-pricing"
+skills = ["proposal-pricing", "personalized-offer"]
+
+[specialists.solution-shaper]
+label = "Solution Shaper"
+department = "deals"
+deliverable = "a solution brief"
+primary = "solution-shaping"
+skills = ["solution-shaping"]
+
+[specialists.lead-scout]
+label = "Lead Scout"
+department = "sales"
+deliverable = "a ranked prospect list"
+primary = "lead-scout"
+skills = ["lead-scout"]
+
+[specialists.outreach-planner]
+label = "Outreach Planner"
+department = "sales"
+deliverable = "an approval-ready outreach campaign"
+primary = "outreach-impl-plan"
+skills = ["outreach-impl-plan", "first-value-outreach"]
+
+[specialists.offer-reviewer]
+label = "Offer Reviewer"
+department = "sales"
+deliverable = "an offer or business model review"
+primary = "review-offer"
+skills = ["review-offer", "review-model"]
+
+[specialists.analyst]
+label = "Analyst"
+department = "intelligence"
+deliverable = "an intelligence dossier"
+primary = "intelligest"
+skills = ["intelligest", "agency-opportunity-research", "learn-from-video"]
+
+[specialists.scout]
+label = "Scout"
+department = "intelligence"
+deliverable = "a dated source report"
+primary = "feed-scout"
+skills = ["feed-scout", "bookmark-recovery", "harness-scout"]
+
+[specialists.librarian]
+label = "Librarian"
+department = "intelligence"
+deliverable = "updated wiki articles"
+primary = "manage-wiki"
+skills = ["manage-wiki"]
+
+[specialists.content-producer]
+label = "Content Producer"
+department = "marketing"
+deliverable = "a content production ticket"
+primary = "content-impl-plan"
+skills = ["content-impl-plan", "storyboard"]
+
+[specialists.social-manager]
+label = "Social Manager"
+department = "marketing"
+deliverable = "an approval-ready social post"
+primary = "x-thread"
+skills = ["x-thread", "instagram-account", "social-content", "x-account"]
+
+[specialists.copywriter]
+label = "Copywriter"
+department = "marketing"
+deliverable = "page or article copy"
+primary = "copywriting-advisor"
+skills = ["copywriting-advisor", "landing-page", "newsletter-writer", "seo-content-advisor"]
+
+[specialists.visual-designer]
+label = "Visual Designer"
+department = "marketing"
+deliverable = "a finished image asset"
+primary = "ai-image-advisor"
+skills = ["ai-image-advisor", "infographic", "product-photography", "reel-collage"]
+
+[specialists.video-producer]
+label = "Video Producer"
+department = "marketing"
+deliverable = "a rendered video"
+primary = "remotion"
+skills = ["remotion", "ai-video-advisor", "remotion-render"]
+
+[specialists.ads-manager]
+label = "Ads Manager"
+department = "marketing"
+deliverable = "an approval-ready ad campaign"
+primary = "ad-impl-plan"
+skills = ["ad-impl-plan", "ad-advisor", "meta-ads"]
+
+[specialists.clipper]
+label = "Clipper"
+department = "marketing"
+deliverable = "a Resource Bank capture"
+primary = "ingest-content"
+skills = ["ingest-content"]
+
+[specialists.character-artist]
+label = "Character Artist"
+department = "marketing"
+deliverable = "a 3D asset or animated pet"
+primary = "meshy-3d-generation"
+skills = ["meshy-3d-generation", "hatch-pet"]
+
+[specialists.product-planner]
+label = "Product Planner"
+department = "operations"
+deliverable = "a PRD or ticket plan"
+primary = "prd"
+skills = ["prd", "agent-testability-plan", "functional-ui", "review-dashboard", "spec-to-ticket", "visual-design"]
+
+[specialists.engineer]
+label = "Engineer"
+department = "operations"
+deliverable = "a planned and implemented change"
+primary = "impl-plan"
+skills = ["impl-plan", "close-ticket", "code-audit", "goal-advisor", "pr-review-watch", "pr-splitting"]
+
+[specialists.qa-engineer]
+label = "QA Engineer"
+department = "operations"
+deliverable = "QA proof and a demo"
+primary = "qa"
+skills = ["qa", "demo", "demo-realism", "eval"]
+
+[specialists.reporter]
+label = "Reporter"
+department = "operations"
+deliverable = "a project report"
+primary = "recap-task"
+skills = ["recap-task", "dogfood-review", "progress-update", "report-gen"]
+
+[specialists.automation-engineer]
+label = "Automation Engineer"
+department = "operations"
+deliverable = "a scheduled automation"
+primary = "automation-advisor"
+skills = ["automation-advisor", "plan-next-wave", "pulse-update"]
+
+[specialists.harness-engineer]
+label = "Harness Engineer"
+department = "operations"
+deliverable = "an improved skill or harness"
+primary = "skill-creator"
+skills = ["skill-creator", "harness-creator", "leverage-rollout", "ml-autoresearch", "optimize-harness", "self-improve", "skill-maintenance"]
+
+[specialists.setup-technician]
+label = "Setup Technician"
+department = "operations"
+deliverable = "a verified setup"
+primary = "setup-advisor"
+skills = ["setup-advisor", "init-advisor"]

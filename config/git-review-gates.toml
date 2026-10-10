@@ -1,0 +1,160 @@
+[pre_commit]
+# Fast, staged-only checks. Keep this cheap enough that normal commits still feel
+# local and predictable.
+mode = "block"
+checks = [
+  "staged_diff_check",
+  "ticket_closure_gate",
+  "ticket_terminal_hygiene",
+  "template_version_staged",
+  "lint_changed",
+  "large_file_guard",
+  "source_line_growth_staged",
+]
+
+[[pre_commit.path_check]]
+globs = [
+  "bin/core/skill_contract.py",
+  "bin/core/farplane_lint.py",
+  "bin/core/lint/**",
+  "bin/core/farplane_cli_commands.py",
+  "bin/core/farplane_cli_parser.py",
+  "bin/farplane.py",
+  "bin/validators/check_doc_frontmatter.py",
+  "bin/validators/test_check_doc_frontmatter.py",
+  "bin/validators/check_skill_frontmatter.py",
+  "bin/validators/test_check_skill_frontmatter.py",
+  "bin/validators/test_check_skill_contract.py",
+  "bin/validators/sync_skill_registry.py",
+  "bin/validators/test_sync_skill_registry.py",
+  "bin/validators/test_run_git_gate.py",
+  "bin/tests/test_sync_skill_registry.py",
+  "bin/tests/test_farplane_frontmatter_validation.py",
+  "skills/skill-creator/scripts/quick_validate.py",
+  "skills/skill-creator/scripts/test_quick_validate.py",
+  "config/skill-departments.toml",
+  "config/skill-workflows.toml",
+  "docs/skills/system.md",
+  "docs/skills/README.md",
+  "docs/skills/templates/SKILL_TEMPLATE.md",
+]
+# Regression coverage is separate from static-contract selection, which is
+# centralized in `lint_changed` above.
+checks = ["lint_contract_tests"]
+
+[[pre_commit.path_check]]
+globs = [
+  "skills/skill-maintenance/scripts/generate_skill_graph.py",
+  "skills/skill-maintenance/scripts/test_generate_skill_graph.py",
+]
+checks = ["skill_projection"]
+
+[[pre_commit.path_check]]
+globs = ["skills/**/SKILL.md"]
+checks = ["skill_file_line_count"]
+
+[pre_push]
+# Branch-level checks. This is where cross-commit drift, duplicated patterns,
+# stale docs, and heavyweight review belong.
+mode = "block"
+base = "origin/main"
+checks = [
+  "branch_diff_check",
+  "lint_branch",
+  "source_line_growth_branch",
+]
+
+[[pre_push.path_check]]
+globs = [
+  "bin/core/skill_contract.py",
+  "bin/core/farplane_lint.py",
+  "bin/core/lint/**",
+  "bin/core/farplane_cli_commands.py",
+  "bin/core/farplane_cli_parser.py",
+  "bin/farplane.py",
+  "bin/validators/check_doc_frontmatter.py",
+  "bin/validators/test_check_doc_frontmatter.py",
+  "bin/validators/check_skill_frontmatter.py",
+  "bin/validators/test_check_skill_frontmatter.py",
+  "bin/validators/test_check_skill_contract.py",
+  "bin/validators/sync_skill_registry.py",
+  "bin/validators/test_sync_skill_registry.py",
+  "bin/validators/test_run_git_gate.py",
+  "bin/tests/test_sync_skill_registry.py",
+  "bin/tests/test_farplane_frontmatter_validation.py",
+  "skills/skill-creator/scripts/quick_validate.py",
+  "skills/skill-creator/scripts/test_quick_validate.py",
+  "config/skill-departments.toml",
+  "config/skill-workflows.toml",
+  "docs/skills/system.md",
+  "docs/skills/README.md",
+  "docs/skills/templates/SKILL_TEMPLATE.md",
+]
+checks = ["lint_contract_tests"]
+
+[[pre_push.path_check]]
+globs = [
+  "skills/skill-maintenance/scripts/generate_skill_graph.py",
+  "skills/skill-maintenance/scripts/test_generate_skill_graph.py",
+]
+checks = ["skill_projection"]
+
+[large_file_guard]
+max_bytes = 1048576
+skip_globs = [
+  "docs/features/*.md",
+]
+
+[checks.staged_diff_check]
+argv = ["git", "diff", "--cached", "--check"]
+
+[checks.branch_diff_check]
+argv = ["git", "diff", "--check", "{base}...HEAD"]
+
+[checks.template_version_staged]
+argv = ["python3", "bin/validators/check_template_version_metadata.py", "--staged"]
+
+[checks.lint_changed]
+argv = ["python3", "bin/farplane.py", "lint", "all", "--changed"]
+
+[checks.lint_branch]
+argv = ["python3", "bin/farplane.py", "lint", "all", "--changed", "--base", "{base}"]
+
+[checks.lint_contract_tests]
+argv = [
+  "python3",
+  "-m",
+  "unittest",
+  "bin.tests.test_sync_skill_registry",
+  "bin.validators.test_sync_skill_registry",
+  "bin.validators.test_check_skill_frontmatter",
+  "bin.validators.test_check_skill_contract",
+  "bin.validators.test_check_doc_frontmatter",
+  "bin.validators.test_run_git_gate",
+  "bin.tests.test_farplane_frontmatter_validation",
+  "skills.skill-creator.scripts.test_quick_validate",
+]
+
+[checks.skill_projection]
+argv = [
+  "python3",
+  "-m",
+  "unittest",
+  "skills.skill-maintenance.scripts.test_generate_skill_graph",
+]
+
+[checks.ticket_closure_gate]
+argv = ["python3", "bin/validators/check_ticket_closure_gate.py"]
+
+[checks.ticket_terminal_hygiene]
+argv = ["python3", "bin/validators/check_ticket_closure_gate.py", "--terminal-hygiene"]
+mode = "warn"
+
+[checks.source_line_growth_staged]
+argv = ["python3", "bin/validators/check_source_line_growth.py", "--mode", "staged", "--max-lines", "500", "--glob", "bin/**/*.py"]
+
+[checks.skill_file_line_count]
+argv = ["python3", "bin/validators/check_source_line_growth.py", "--mode", "staged", "--max-lines", "200", "--glob", "skills/**/SKILL.md"]
+
+[checks.source_line_growth_branch]
+argv = ["python3", "bin/validators/check_source_line_growth.py", "--mode", "branch", "--base", "{base}", "--baseline", "config/source-line-baseline.toml", "--max-lines", "500", "--glob", "bin/**/*.py"]

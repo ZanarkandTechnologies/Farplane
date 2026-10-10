@@ -15,7 +15,7 @@ class CapabilityAdmissionConfigError(ValueError):
 
 
 def load_skill_departments(repo_root: Path) -> dict[str, str]:
-    path = repo_root / "rules" / "skill-departments.toml"
+    path = repo_root / "config" / "skill-departments.toml"
     try:
         payload = tomllib.loads(path.read_text(encoding="utf-8"))
     except (OSError, tomllib.TOMLDecodeError) as exc:
@@ -45,7 +45,7 @@ def load_skill_specialists(
     Each desk lists its member skills; a skill may sit at only one desk.
     """
     department_labels = departments or load_skill_departments(repo_root)
-    path = repo_root / "rules" / "skill-workflows.toml"
+    path = repo_root / "config" / "skill-workflows.toml"
     try:
         payload = tomllib.loads(path.read_text(encoding="utf-8"))
     except (OSError, tomllib.TOMLDecodeError) as exc:

@@ -11,7 +11,7 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
-for directory in (ROOT / "bin/runtime", ROOT / "bin/core", ROOT / "hooks"):
+for directory in (ROOT / "hooks/shared", ROOT / "hooks/continuation", ROOT / "bin/core"):
     sys.path.insert(0, str(directory))
 import continuation  # noqa: E402
 import response_format  # noqa: E402
@@ -158,7 +158,7 @@ class EntrypointTests(unittest.TestCase):
         self.assertEqual(stop_gate.gate_name("#### Response length"), "response-length")
 
     def test_root_hooks_register_only_the_merged_blocking_gate(self):
-        payload = json.loads((ROOT / "hooks.json").read_text(encoding="utf-8"))
+        payload = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8"))
         commands = [hook["command"] for group in payload["hooks"]["Stop"] for hook in group["hooks"]]
         self.assertIn('python3 "$HOME/.codex/hooks/stop-gate/stop_gate.py"', commands)
         self.assertFalse(any("continuation_gate" in c or "final_response_gate" in c for c in commands))
@@ -167,7 +167,7 @@ class EntrypointTests(unittest.TestCase):
 class CatalogTests(unittest.TestCase):
     def test_every_shape_mirrors_an_agents_template_heading(self):
         headings = set(re.findall(r"^### (.+)$",
-                                  (ROOT / "templates/global/AGENTS.md").read_text(), re.M))
+                                  (ROOT / "runtimes/AGENTS.md").read_text(), re.M))
         for name, spec in response_format.SHAPES.items():
             with self.subTest(shape=name):
                 self.assertIn(spec["template"], headings)

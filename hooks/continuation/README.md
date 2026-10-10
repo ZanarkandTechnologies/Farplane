@@ -28,7 +28,7 @@ ledger.
 
 ## Install and control
 
-Registration lives only in [root `hooks.json`](../../hooks.json). From the primary
+Registration lives only in [`hooks/hooks.json`](../hooks.json). From the primary
 Farplane checkout, run `farplane hooks install`, then review/trust changed commands
 in Codex `/hooks`. Use that control to enable or disable this handler.
 `farplane hooks list` displays the configured command; `farplane hooks doctor`
@@ -43,7 +43,7 @@ Credentials are injected through `farplane run` from the installed Farplane sour
 directory, never the caller's project. Missing credentials trigger a bounded
 bootstrap; setup errors are captured and allow stopping quietly. Do not place API
 keys in hook registration. Shared implementation lives in
-[`bin/runtime/continuation.py`](../../bin/runtime/continuation.py).
+[`continuation.py`](continuation.py).
 
 ## Checks
 

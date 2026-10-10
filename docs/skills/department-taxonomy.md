@@ -4,7 +4,7 @@ status: active
 owner: skills/skill-maintenance
 created_at: 2026-08-13
 updated_at: 2026-09-28
-source_of_truth: [rules/skill-departments.toml, rules/skill-workflows.toml]
+source_of_truth: [config/skill-departments.toml, config/skill-workflows.toml]
 ---
 
 # Skill department taxonomy
@@ -26,7 +26,7 @@ skill invokes another.
 The Capability Map is organized by **specialist desks**. A specialist groups
 skill variants that one office employee offers (for example `reporter` holds
 `progress-update`, `report-gen`, `recap-task`, and `dogfood-review`).
-`rules/skill-workflows.toml` `[specialists]` owns each desk's label, department,
+`config/skill-workflows.toml` `[specialists]` owns each desk's label, department,
 deliverable, primary skill (its default verb), and member `skills`. A member
 must be a Tier 3 skill in the desk's department and sits at only one desk; the
 registry projects it as the row's `specialist`. Skill files stay unchanged, so
@@ -34,7 +34,7 @@ oversized skills are never grown by desk membership.
 Skills without a specialist are internal: planners dispatch them as needed and
 the map omits them. The technical Skill Library remains the full registry.
 
-This is source visibility, not active-session availability. `rules/skill-profiles.toml`
+This is source visibility, not active-session availability. `config/skill-profiles.toml`
 controls named-profile enablement; a profile-gated desk remains visible
 here so filtering cannot look like deletion.
 

@@ -10,7 +10,7 @@ refs:
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/skills/README.md
-  - templates/global/AGENTS.md
+  - runtimes/AGENTS.md
   - skills/optimize-harness/SKILL.md
   - skills/goal-advisor/SKILL.md
 ---

@@ -139,7 +139,7 @@ only from `modules/runtime/index.ts`, and update both call sites."
 
 ## Framework And Project Guides
 
-Use project-local docs first: `PROJECT_RULES.md`, root `AGENTS.md`,
+Use project-local docs first: root `AGENTS.md`,
 module-local `README.md` / `AGENTS.md`, and `docs/code_review.md`.
 
 When React, Vite, Next.js, client data fetching, rendering, or component

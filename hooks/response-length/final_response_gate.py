@@ -25,7 +25,7 @@ from farplane_response import (  # noqa: E402
 )
 from runtime_config import load_runtime_env  # noqa: E402
 
-sys.path.insert(0, str(CORE_DIR.parent / "runtime"))
+sys.path.insert(0, str(CORE_DIR.parents[1] / "hooks" / "shared"))
 from hook_delivery import report_gate_block  # noqa: E402
 
 

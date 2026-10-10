@@ -137,7 +137,7 @@ Interpretation:
 For material harness changes, compare these surfaces:
 
 1. repo-local `AGENTS.md`
-2. `templates/global/AGENTS.md`
+2. `runtimes/AGENTS.md`
 3. `docs/fundamentals/*` or feature docs under `docs/features/`
 4. `skills/*`
 5. `agents/*.toml`

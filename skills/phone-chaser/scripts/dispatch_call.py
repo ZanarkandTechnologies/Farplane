@@ -12,15 +12,15 @@ from pathlib import Path
 
 
 SCRIPT_PATH = Path(__file__).resolve()
-RUNTIME_RELATIVE_PATH = Path("farplane") / "phone-chaser"
+# The LiveKit worker lives in the Farplane UI checkout; `lk` reads its livekit.toml.
+RUNTIME_RELATIVE_PATH = Path("apps") / "phone-chaser"
 CORE_RELATIVE_PATH = Path("bin") / "core"
 
 
 def _valid_repo_root(path: Path) -> bool:
-    return (
-        (path / RUNTIME_RELATIVE_PATH).is_dir()
-        and (path / CORE_RELATIVE_PATH / "runtime_config.py").exists()
-    )
+    # The checkout's bin/core is a real folder; an install home only links to it.
+    core = path / CORE_RELATIVE_PATH
+    return core.is_dir() and not core.is_symlink() and (core / "runtime_config.py").exists()
 
 
 def _first_valid_parent(path: Path) -> Path | None:
@@ -44,8 +44,8 @@ def resolve_repo_root(script_path: Path = SCRIPT_PATH) -> Path:
             return linked
 
     raise SystemExit(
-        "missing Farplane Phone Chaser runtime; expected "
-        f"{RUNTIME_RELATIVE_PATH} in the checkout or through installed {CORE_RELATIVE_PATH}"
+        "missing Farplane checkout; expected "
+        f"{CORE_RELATIVE_PATH} in the checkout or through the installed link"
     )
 
 
@@ -61,7 +61,15 @@ DEFAULT_URGENCY = "normal"
 
 
 def runtime_dir() -> Path:
-    return ROOT / RUNTIME_RELATIVE_PATH
+    from farplane_cli_base import load_config
+
+    ui_repo = load_config().ui_repo_path
+    if ui_repo is None or not (ui_repo / RUNTIME_RELATIVE_PATH / "livekit.toml").is_file():
+        raise SystemExit(
+            f"missing Phone Chaser worker; expected <Farplane UI>/{RUNTIME_RELATIVE_PATH}/livekit.toml "
+            "(set the UI checkout with `farplane ui link`)"
+        )
+    return ui_repo / RUNTIME_RELATIVE_PATH
 
 
 def parse_args() -> argparse.Namespace:

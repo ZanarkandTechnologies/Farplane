@@ -60,7 +60,8 @@ content ticket through `content-impl-plan` and execute/render through
 
 - Keep the compact lifecycle invariant in generated project `AGENTS.md` because
   agents load it every loop.
-- Keep technical stack, commands, runtime, and QA paths in `PROJECT_RULES.md`.
+- Keep technical stack, commands, runtime, and QA paths in generated
+  `AGENTS.md` too; a project has one root rules file.
 - Keep project-specific profile, lifecycle route, prototype gates, and handoff
   choices in `docs/bootstrap-brief.md`.
 - Keep the detailed lifecycle theory here until multiple higher-tier skills

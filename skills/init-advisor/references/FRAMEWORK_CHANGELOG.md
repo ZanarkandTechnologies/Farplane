@@ -3,10 +3,45 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-08-23
+updated_at: 2026-10-09
 ---
 
 # Farplane Framework Changelog
+
+## 2.0.17
+
+Date: 2026-10-09
+
+Primary change: retire `PROJECT_RULES.md` and the `qa/` scaffold. A project has one root rules file,
+`AGENTS.md`, which now carries the stack, build/run and QA paths, validation and
+quality-tool slots, a Where Files Go table, UI baseline, and review policy.
+
+Changed surfaces:
+
+- `bootstrap.sh` no longer copies `PROJECT_RULES_TEMPLATE.md`, which is deleted;
+  `AGENTS_TEMPLATE.md` absorbs its sections;
+- `MANIFEST_TEMPLATE.json` drops `PROJECT_RULES.md` from `standard.tracked`, and
+  `check_farplane_project_files.py` no longer requires it;
+- `pr-review-watch` reads its `pr_review_pipeline` block from
+  `docs/pr-review-pipeline.md`, then `AGENTS.md`;
+- `refactoring`, `hardening`, `code-review`, and the review-context collector
+  read commands from `AGENTS.md`;
+- bootstrap no longer copies `qa/` (`README.md`, `AGENTS.md`, `cookbook/`) or pre-makes
+  empty `.farplane/` folders. QA entry notes live in the `AGENTS.md` Agent QA section,
+  a long repeatable flow gets `docs/qa/<flow>.md`, and the shared QA guide, runbook
+  contract and template live in `skills/qa/references/`.
+
+Migration steps:
+
+1. Run `python3 skills/init-advisor/scripts/migrate_framework.py --project-root <repo>`
+   to preview, then add `--force`. It appends `PROJECT_RULES.md` to `AGENTS.md`
+   under `## Project Rules` (headings demoted one level, nothing dropped),
+   deletes `PROJECT_RULES.md`, and bumps the manifest.
+2. Tidy the folded section into the template's sections and drop anything that
+   repeats them.
+3. Move each project-specific `qa/cookbook/<flow>.md` worth keeping to
+   `docs/qa/<flow>.md` (or into the Agent QA section when short), then delete `qa/`.
+   The migration script leaves `qa/` alone because it is human-authored.
 
 ## 2.0.16
 

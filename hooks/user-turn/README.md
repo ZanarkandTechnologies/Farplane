@@ -7,7 +7,7 @@
 
 ## Install and control
 
-Registration lives only in [root `hooks.json`](../../hooks.json). From the primary
+Registration lives only in [`hooks/hooks.json`](../hooks.json). From the primary
 Farplane checkout, run `farplane hooks install`, then review/trust changed commands
 in Codex `/hooks`. Use that control to enable or disable this handler.
 `farplane hooks list` displays the configured command; `farplane hooks doctor`
@@ -17,7 +17,8 @@ checks its installed target. The installer links this entire folder under
 ## Configuration and failure behavior
 
 The adapter delegates persistence and classification to
-[`bin/runtime/user_turn.py`](../../bin/runtime/user_turn.py). Internal injected
+[`bin/core/user_turn.py`](../../bin/core/user_turn.py), which the `farplane` CLI also uses;
+`runtime_telemetry.py` here sends the intent event. Internal injected
 prompts, empty/invalid input, other events, and requests without a resolved project
 are ignored. It does not mark tickets complete or invoke suggested skills.
 

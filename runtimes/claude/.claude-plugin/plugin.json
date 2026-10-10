@@ -1,6 +1,6 @@
 {
   "name": "farplane",
-  "description": "Farplane harness for Claude Code: lifecycle hooks and subagents rendered from root hooks.json and agents/*.toml.",
+  "description": "Farplane harness for Claude Code: lifecycle hooks and subagents rendered from hooks/hooks.json and agents/*.toml.",
   "version": "0.1.0",
   "author": { "name": "Zanarkand Technologies" }
 }

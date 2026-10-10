@@ -10,9 +10,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNTIME_DIR = ROOT / "bin" / "runtime"
-if str(RUNTIME_DIR) not in sys.path:
-    sys.path.insert(0, str(RUNTIME_DIR))
+for RUNTIME_DIR in (ROOT / "hooks" / "user-turn", ROOT / "hooks" / "shared", ROOT / "bin" / "core"):
+    if str(RUNTIME_DIR) not in sys.path:
+        sys.path.insert(0, str(RUNTIME_DIR))
 
 import capture_user_turn
 

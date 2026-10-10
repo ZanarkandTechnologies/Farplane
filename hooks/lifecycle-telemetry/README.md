@@ -7,7 +7,7 @@
 
 ## Install and control
 
-Registration lives only in [root `hooks.json`](../../hooks.json). From the primary
+Registration lives only in [`hooks/hooks.json`](../hooks.json). From the primary
 Farplane checkout, run `farplane hooks install`, then review/trust changed commands
 in Codex `/hooks`. Use that control to enable or disable this handler.
 `farplane hooks list` displays the configured command; `farplane hooks doctor`
@@ -30,7 +30,7 @@ Latest per-event receipts live under `~/.farplane/state/hook-delivery/`, respect
 `FARPLANE_STATE_DIR`, and appear in `farplane hooks list`. Status is `unconfigured`,
 `attempted`, `accepted`, or `failed`; accepted means HTTP 2xx, not verified UI state.
 Receipts exclude credentials and payloads. Transport is shared in
-[`bin/runtime/hook_delivery.py`](../../bin/runtime/hook_delivery.py).
+[`hooks/shared/hook_delivery.py`](../shared/hook_delivery.py).
 
 Each new Stop payload receives a distinct event key. Farplane UI shows Stop as
 idle / “Codex stop attempted”; newer observed tool activity restores running.

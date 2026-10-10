@@ -12,14 +12,14 @@ updated_at: 2026-07-13
 materially change harness behavior or framework rollout.
 
 Use `docs/templates/global-agents-qa-checklist.md` before changing
-`templates/global/AGENTS.md`. It is a companion process doc, not a tracked
+`runtimes/AGENTS.md`. It is a companion process doc, not a tracked
 template row, unless it later becomes a reusable template with consumers.
 
 ## Current Scope
 
 The registry is deliberately focused on high-leverage surfaces:
 
-- `templates/global/AGENTS.md`
+- `runtimes/AGENTS.md`
 - `docs/skills/templates/SKILL_TEMPLATE.md`
 - `docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md`
 - `skills/skill-creator/references/EVAL_TASK_TEMPLATE.json`

@@ -16,8 +16,9 @@ Before adding a top-level `bin/*` file, classify it:
 - keep top-level `bin/` files only for live installed hook/runtime shims, the
   global Farplane CLI edge, shared cross-skill commands, or repo-wide validator
   wrappers
-- put Core helper implementations under `bin/core/`, Codex hook/runtime
-  implementations under `bin/runtime/`, and Core-owned tests under `bin/tests/`
+- put Core helper implementations under `bin/core/` and Core-owned tests under
+  `bin/tests/`; hook code belongs in `hooks/<name>/` (shared hook code in
+  `hooks/shared/`) and runtime-only files in `runtimes/<name>/`
 - move skill-specific implementations and their tests to
   `skills/<owner>/scripts/`
 - move repo-wide validators and validator tests to `bin/validators/`

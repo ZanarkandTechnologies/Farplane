@@ -20,7 +20,7 @@ ROOT_AGENTS_TEXT = """\
 
 This file is the project-local context for developing Farplane itself.
 
-The install-time global harness contract now lives at `templates/global/AGENTS.md` and is what `install.sh` links into the live Codex home as `~/.codex/AGENTS.md`.
+The install-time global harness contract now lives at `runtimes/AGENTS.md` and is what `install.sh` links into the live Codex home as `~/.codex/AGENTS.md`.
 
 ## Operating model
 
@@ -88,9 +88,9 @@ AGENT_KERNEL_TEXT = """\
 <!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->
 | ID | Surface | Required section | Behavior group |
 | --- | --- | --- | --- |
-| `AK-G01` | `templates/global/AGENTS.md` | `## Context` | context |
-| `AK-G02` | `templates/global/AGENTS.md` | `## Behavior` | behavior |
-| `AK-G03` | `templates/global/AGENTS.md` | `## Output Formatting` | output |
+| `AK-G01` | `runtimes/AGENTS.md` | `## Context` | context |
+| `AK-G02` | `runtimes/AGENTS.md` | `## Behavior` | behavior |
+| `AK-G03` | `runtimes/AGENTS.md` | `## Output Formatting` | output |
 | `AK-P01` | `AGENTS.md` | `## Operating model` | model |
 | `AK-P02` | `AGENTS.md` | `## Context budget` | context |
 | `AK-P03` | `AGENTS.md` | `## Local boundaries` | boundaries |
@@ -158,7 +158,7 @@ def write_file(path: Path, text: str) -> None:
 class CheckHarnessInvariantsTest(unittest.TestCase):
     def build_repo(self, root: Path) -> None:
         write_file(root / "AGENTS.md", ROOT_AGENTS_TEXT)
-        write_file(root / "templates/global/AGENTS.md", GLOBAL_AGENTS_TEXT)
+        write_file(root / "runtimes/AGENTS.md", GLOBAL_AGENTS_TEXT)
         write_file(root / "docs/systems/agent-kernel.md", AGENT_KERNEL_TEXT)
         write_file(
             root / "docs/templates/global-agents-qa-checklist.md",
@@ -208,7 +208,7 @@ This file is generic instructions.
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("templates/global/AGENTS.md", result.stdout)
+            self.assertIn("runtimes/AGENTS.md", result.stdout)
             self.assertIn("remediation", result.stdout)
 
     def test_validator_fails_when_independent_reasoning_contract_is_weakened(self) -> None:
@@ -216,7 +216,7 @@ This file is generic instructions.
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "templates/global/AGENTS.md",
+                root / "runtimes/AGENTS.md",
                 GLOBAL_AGENTS_TEXT.replace(
                     "- Lead with the conclusion or evidence, not praise.\n", ""
                 ),
@@ -230,7 +230,7 @@ This file is generic instructions.
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "templates/global/AGENTS.md",
+                root / "runtimes/AGENTS.md",
                 GLOBAL_AGENTS_TEXT.replace(
                     "- A question about unfinished requested work is a correction.\n",
                     "",
@@ -245,7 +245,7 @@ This file is generic instructions.
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "templates/global/AGENTS.md",
+                root / "runtimes/AGENTS.md",
                 GLOBAL_AGENTS_TEXT.replace(
                     "### Operate the workspace safely\n",
                     "",
@@ -260,7 +260,7 @@ This file is generic instructions.
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "templates/global/AGENTS.md",
+                root / "runtimes/AGENTS.md",
                 GLOBAL_AGENTS_TEXT.replace(
                     "- Lead with the conclusion or evidence, not praise.",
                     "<!-- - Lead with the conclusion or evidence, not praise. -->",
@@ -275,7 +275,7 @@ This file is generic instructions.
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "templates/global/AGENTS.md",
+                root / "runtimes/AGENTS.md",
                 GLOBAL_AGENTS_TEXT + "\n## Hidden New Policy\n",
             )
             result = self.run_validator(root)
@@ -287,7 +287,7 @@ This file is generic instructions.
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "templates/global/AGENTS.md",
+                root / "runtimes/AGENTS.md",
                 GLOBAL_AGENTS_TEXT.replace("## Context\n", ""),
             )
             result = self.run_validator(root)
@@ -299,7 +299,7 @@ This file is generic instructions.
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "templates/global/AGENTS.md",
+                root / "runtimes/AGENTS.md",
                 GLOBAL_AGENTS_TEXT + "\n```markdown\n## Example Only\n```\n",
             )
             result = self.run_validator(root)

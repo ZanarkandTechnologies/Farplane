@@ -108,7 +108,7 @@ class PrReviewWatchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             repo = Path(temp_dir)
             (repo / "docs").mkdir()
-            (repo / "PROJECT_RULES.md").write_text("no config here", encoding="utf-8")
+            (repo / "AGENTS.md").write_text("no config here", encoding="utf-8")
             (repo / "docs" / "pr-review-pipeline.md").write_text(
                 (FIXTURES / "pipeline-config.md").read_text(encoding="utf-8"),
                 encoding="utf-8",

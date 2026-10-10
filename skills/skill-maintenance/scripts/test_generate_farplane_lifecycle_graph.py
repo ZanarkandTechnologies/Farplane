@@ -223,7 +223,7 @@ routes:
             repo = Path(tmp)
             (repo / "docs").mkdir(parents=True)
             (repo / "farplane").mkdir()
-            (repo / "rules").mkdir()
+            (repo / "config").mkdir()
             (repo / "skills" / "alpha-skill").mkdir(parents=True)
             (repo / "skills" / "init-advisor").mkdir(parents=True)
             (repo / "skills" / "harness-creator").mkdir(parents=True)
@@ -231,10 +231,10 @@ routes:
                 "See [second](docs/second.md), [child](docs/child.md), and alpha-skill.\n",
                 encoding="utf-8",
             )
-            (repo / "docs" / "child.md").write_text("See `rules/rule.toml`.\n", encoding="utf-8")
+            (repo / "docs" / "child.md").write_text("See `config/rule.toml`.\n", encoding="utf-8")
             (repo / "docs" / "leaf.md").write_text("Leaf only.\n", encoding="utf-8")
-            (repo / "rules" / "rule.toml").write_text("name = 'rule'\n", encoding="utf-8")
-            (repo / "docs" / "second.md").write_text("See `rules/rule.toml`.\n", encoding="utf-8")
+            (repo / "config" / "rule.toml").write_text("name = 'rule'\n", encoding="utf-8")
+            (repo / "docs" / "second.md").write_text("See `config/rule.toml`.\n", encoding="utf-8")
             (repo / "skills" / "alpha-skill" / "SKILL.md").write_text(
                 "---\nname: alpha-skill\ndescription: test\n---\n",
                 encoding="utf-8",
@@ -272,7 +272,7 @@ routes:
         self.assertEqual(nodes["workflow:lifecycle"]["framework_role"], "workflow")
         self.assertEqual(nodes["workflow:bootstrap"]["kind"], "workflow")
         self.assertEqual(nodes["skill:alpha-skill"]["framework_role"], "linked")
-        self.assertNotIn("file:rules/rule.toml", nodes)
+        self.assertNotIn("file:config/rule.toml", nodes)
         self.assertNotIn("file:docs/child.md", nodes)
         self.assertNotIn("file:docs/leaf.md", nodes)
         self.assertIn(("file:docs/root.md", "file:docs/second.md", "markdown-link"), edges)

@@ -5,7 +5,7 @@
     "query": "Design an eval system for our agent harness.",
     "reference_points": [
       "States that the decision is about how to evaluate the agent harness, not only how to write one prompt test",
-      "Checks local Farplane evidence such as AGENTS.md, templates/global/AGENTS.md, skills/eval, docs/skills, or existing eval files before recommending the design",
+      "Checks local Farplane evidence such as AGENTS.md, runtimes/AGENTS.md, skills/eval, docs/skills, or existing eval files before recommending the design",
       "Looks for current external best practice or peer examples for agent or prompt evals instead of inventing the approach from scratch",
       "Separates evidence gathered from the final recommendation",
       "Recommends the local harness-native eval runner first for system-prompt workflow behavior",
@@ -26,7 +26,7 @@
     "query": "Add support for recursive skill todo rendering in the global AGENTS template.",
     "reference_points": [
       "Reads the nearest project AGENTS.md before editing",
-      "Reads templates/global/AGENTS.md before editing",
+      "Reads runtimes/AGENTS.md before editing",
       "Checks at least one relevant ownership or skill-system source such as docs/skills/README.md, ARCHITECTURE.md, or docs/fundamentals/harness-engineering-doctrine.md",
       "Decides whether the rule belongs in the always-loaded global template rather than blindly editing the requested file",
       "Keeps the global rule compact and operational instead of adding a long checklist procedure",
@@ -196,7 +196,7 @@
       "Recognizes this as Farplane harness-policy design, not a direct file-edit request",
       "Names `ticket.md` as the development contract primitive for Farplane work",
       "Proposes a ticket-ready plan with scope, delta, proof, and eval coverage before implementation",
-      "Does not edit `templates/global/AGENTS.md`, `AGENTS.md`, skills, or eval files in the answer",
+      "Does not edit `runtimes/AGENTS.md`, `AGENTS.md`, skills, or eval files in the answer",
       "Distinguishes full autonomy inside an approved ticket or native Goal Packet from feedback-first design outside those boundaries",
       "Preserves the exception for clear direct fixes so the harness does not become timid"
     ],

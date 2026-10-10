@@ -21,8 +21,8 @@ when Work Pulse selects a due review escalation from the operator-approved
 structured chase policy in `farplane/bindings.yaml`.
 
 This skill owns the harness workflow and dispatch guardrails. The deployable
-LiveKit worker lives at `../../farplane/phone-chaser/` and should stay there
-unless the runtime is being changed.
+LiveKit worker lives in the Farplane UI checkout at `apps/phone-chaser/`
+(found through `farplane ui link`); `dispatch_call.py` runs `lk` from there.
 
 Phone calls are external side effects. The default recipient is Kenji's
 configured reminder number, but the operator may provide a recipient override
@@ -37,7 +37,7 @@ write live phone numbers, keys, or SIP credentials into tracked files.
 ```text
 phone_chaser(call_request, state?) -> dispatch_receipt | blocked_report
 state: reads(the first-load Todo List guardrails, references/setup.md when setup or deployment is
-      needed, ../../farplane/phone-chaser/README.md for runtime details,
+      needed, <Farplane UI>/apps/phone-chaser/README.md for runtime details,
       runtime env/private config through scripts/dispatch_call.py, ticket.md
       and artifacts through scripts/compile_review_call.py for review calls)
       writes(no tracked files by default)
@@ -97,7 +97,7 @@ ticketed before editing the deployable agent.
     `scripts/compile_review_call.py`, then dispatch with
     `scripts/dispatch_call.py --metadata-file <metadata.json>`.
   - [ ] For setup/repair, keep tracked runtime edits in
-    `../../farplane/phone-chaser/` and private values in local config/env.
+    Farplane UI `apps/phone-chaser/` and private values in local config/env.
 - [ ] 5. Finish gate.
   - [ ] Apply the first-load Todo List guardrails again.
   - [ ] Report whether a LiveKit dispatch was created, skipped, or blocked.

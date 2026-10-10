@@ -78,13 +78,13 @@ class SourceLineGrowthTests(unittest.TestCase):
 
     def test_adoption_baseline_is_valid(self) -> None:
         root = MODULE_PATH.parents[2]
-        baseline = MODULE.load_baseline(root / "rules/source-line-baseline.toml")
+        baseline = MODULE.load_baseline(root / "config/source-line-baseline.toml")
         self.assertEqual(1753, baseline["bin/core/farplane_mining.py"])
         self.assertNotIn("bin/farplane.py", baseline)
 
     def test_adoption_baseline_covers_current_oversized_python(self) -> None:
         root = MODULE_PATH.parents[2]
-        baseline = MODULE.load_baseline(root / "rules/source-line-baseline.toml")
+        baseline = MODULE.load_baseline(root / "config/source-line-baseline.toml")
         for path in (root / "bin").rglob("*.py"):
             relative = path.relative_to(root).as_posix()
             current_lines = len(path.read_bytes().splitlines())
@@ -104,6 +104,21 @@ class SourceLineGrowthTests(unittest.TestCase):
 
         self.assertEqual([MODULE.SourceDelta("bin/new.py", None, 501)], deltas)
         self.assertEqual(1, len(MODULE.violations(deltas, 500)))
+
+    def test_staged_mode_measures_a_moved_file_against_its_old_path(self) -> None:
+        root = self.make_repo()
+        source = root / "bin/runtime/legacy.py"
+        source.parent.mkdir(parents=True)
+        source.write_text("pass\n" * 501, encoding="utf-8")
+        subprocess.run(["git", "add", "bin/runtime/legacy.py"], cwd=root, check=True)
+        subprocess.run(["git", "commit", "-qm", "base"], cwd=root, check=True)
+        (root / "bin/core").mkdir()
+        subprocess.run(["git", "mv", "bin/runtime/legacy.py", "bin/core/legacy.py"], cwd=root, check=True)
+
+        deltas = MODULE.source_deltas("staged", "origin/main", ["bin/**/*.py"], root=root)
+
+        self.assertEqual([MODULE.SourceDelta("bin/core/legacy.py", 501, 501)], deltas)
+        self.assertEqual([], MODULE.violations(deltas, 500))
 
     def test_staged_mode_blocks_growth_from_head(self) -> None:
         root = self.make_repo()

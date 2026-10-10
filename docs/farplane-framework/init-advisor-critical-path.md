@@ -56,7 +56,6 @@ Create or preserve:
 
 ```text
 AGENTS.md
-PROJECT_RULES.md
 README.md
 ARCHITECTURE.md
 docs/bootstrap-brief.md

@@ -29,7 +29,7 @@ def write_feature_registry(root: Path) -> None:
 
 
 def write_config(root: Path, *paths: str) -> Path:
-    path = root / "rules" / "template-registry.toml"
+    path = root / "config" / "template-registry.toml"
     path.parent.mkdir(parents=True)
     rendered_paths = ", ".join(f'"{item}"' for item in paths)
     path.write_text(f"[template_registry]\npaths = [{rendered_paths}]\n", encoding="utf-8")

@@ -12,7 +12,6 @@ refs:
   - skills/impl-plan/SKILL.md
   - skills/functional-ui/SKILL.md
   - skills/visual-design/SKILL.md
-  - skills/delegate-cli/SKILL.md
 system_record_json: |
   {
     "id": "SYS-0010",
@@ -27,8 +26,7 @@ system_record_json: |
     "refs": [
       "skills/impl-plan/SKILL.md",
       "skills/functional-ui/SKILL.md",
-      "skills/visual-design/SKILL.md",
-      "skills/delegate-cli/SKILL.md"
+      "skills/visual-design/SKILL.md"
     ],
     "last_verified": "2026-06-26"
   }
@@ -107,7 +105,6 @@ Domain Skill Families package specialized workflows on top of the same ticket, s
 - `skills/impl-plan/SKILL.md`
 - `skills/functional-ui/SKILL.md`
 - `skills/visual-design/SKILL.md`
-- `skills/delegate-cli/SKILL.md`
 
 ## Proof And Maintenance
 

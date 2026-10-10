@@ -219,7 +219,7 @@ Source rows: MEM-0013, MEM-0018, MEM-0019, MEM-0071, MEM-0108, MEM-0109,
 MEM-0135, MEM-0136, MEM-0137.
 
 - Root `AGENTS.md` is the project-local map. The shipped global contract lives
-  in `templates/global/AGENTS.md`.
+  in `runtimes/AGENTS.md`.
 - `docs/HISTORY.md` records meaningful project events: shipped milestones,
   migrations, cleanup events, and project-shaping behavior, workflow, API,
   architecture, or governance shifts. Routine code deltas belong in git.

@@ -11,9 +11,9 @@ from unittest.mock import patch
 from urllib.error import URLError
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNTIME_DIR = ROOT / "bin" / "runtime"
-if str(RUNTIME_DIR) not in sys.path:
-    sys.path.insert(0, str(RUNTIME_DIR))
+for RUNTIME_DIR in (ROOT / "hooks" / "user-turn", ROOT / "bin" / "core"):
+    if str(RUNTIME_DIR) not in sys.path:
+        sys.path.insert(0, str(RUNTIME_DIR))
 
 from runtime_telemetry import build_event, emit_hook_telemetry, telemetry_config
 

@@ -87,7 +87,7 @@ checklist item.
   - [ ] For browser, UI, or API proof, bind the runtime from the ticket,
     explicit caller handoff, or a verified cookbook entry; never guess a port,
     URL, process, account, fixture, or stale session.
-  - [ ] When a matching `qa/cookbook/*.md` entry exists, use its verified fast
+  - [ ] When a matching `docs/qa/*.md` entry exists, use its verified fast
     entry, setup, reset, and verification path before manual exploration. The
     cookbook accelerates capture; it does not prove the current run passed.
   - [ ] CLI/artifact proof may use logs or generated files. Browser/UI proof
@@ -215,7 +215,7 @@ Canonical `result.json`:
   required.
 - [Visual QA](../visual-qa/SKILL.md) — load after UI capture when visual
   judgment is required.
-- `qa/cookbook/*.md` — read the matching project runbook before manual
+- `docs/qa/*.md` — read the matching project runbook before manual
   exploration; update it only after a reusable path is verified.
 
 ## Output

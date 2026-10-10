@@ -566,7 +566,7 @@ browser navigation to improvisation. It should name:
 When the repo has `docs/bootstrap-brief.md` with `Agent Experience /
 Testability` defaults, or a richer `Agent Testability Brief`, carry those
 surfaces into the first relevant ticket instead of restating them from memory.
-When the repo has `qa/cookbook/`, point the ticket at the matching workflow doc
+When the repo has `docs/qa/`, point the ticket at the matching workflow doc
 or seed one during planning.
 
 For tickets that may be drained by Goal Advisor/heartbeat, run unattended,

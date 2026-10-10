@@ -37,4 +37,4 @@ themselves implementation specs, schemas, runtime contracts, or ticket flows.
 - Put buildable behavior contracts, schemas, lifecycle specs, execution loops,
   runtime adapters, and proof gates in `docs/features/`.
 - Put operational workflows in `skills/`.
-- Put machine-readable rule files in `rules/`.
+- Put machine-readable harness settings in `config/`; runtime-only files go in `runtimes/<name>/`.

@@ -2,7 +2,7 @@
 
 This file is the project-local context for developing Farplane itself. It is a
 routing kernel. The global Codex contract is
-[templates/global/AGENTS.md](templates/global/AGENTS.md).
+[runtimes/AGENTS.md](runtimes/AGENTS.md).
 Keep this file navigational: a rule belongs here only when every Farplane task
 needs it before a ticket, skill, or owner document can take over.
 
@@ -64,7 +64,7 @@ makes one relevant.
 - Before proposing a new Farplane policy, skill, agent, hook, validator, or
   template, use `harness-advisor` to select the smallest owner surface. Root
   prompt text is the last lever, not the default.
-- Before changing this file or `templates/global/AGENTS.md`, apply
+- Before changing this file or `runtimes/AGENTS.md`, apply
   `docs/templates/global-agents-qa-checklist.md`. Preserve a concrete
   before/after/example and name the destination of removed behavior.
 - Put reusable procedure in its skill, task-local decisions and proof in the
@@ -107,19 +107,45 @@ makes one relevant.
 - `docs/HISTORY.md` records meaningful milestones and migrations.
 - `docs/MEMORY.md` holds current project invariants that are worth retrieving
   outside their owner surface.
-- Prefer `.farplane/` for live runtime state. It also holds generated state.
+- Prefer `.farplane/` for live runtime state. It also holds generated output.
 - `docs/` holds current contracts and references; stale content is folded into
   its owner or deleted rather than preserved as live guidance.
 
-## Map
+## Where files go
 
-- `README.md` — product entry points and setup.
-- `ARCHITECTURE.md` — system boundaries and canonical workflow map.
-- `tickets/` — supporting proof, templates, migration snapshots, and legacy records.
-- `skills/` — progressively loaded workflows and their local references.
-- `docs/features/` and `docs/systems/` — capability and system contracts.
-- `bin/` — live CLI, runtime, and shared validators.
-- `templates/global/` — install-time global Codex contract.
+One home per job. If a file has no row here, it belongs to the owner that
+writes or reads it (usually a skill), not a new top-level folder.
+
+| Path | Holds | Git |
+| --- | --- | --- |
+| `AGENTS.md`, `ARCHITECTURE.md`, `README.md` | Project rules, system map, setup. No other root rules file. | tracked |
+| `agents/`, `hooks/`, `skills/` | Shared harness sources; `hooks/hooks.json` is the one hook registration. | tracked |
+| `config/` | Farplane's own settings files: skill groups and profiles, validation and git-gate checks, template registry. | tracked |
+| `bin/` | CLI, runtime, validators; placement rules in `bin/AGENTS.md`. | tracked |
+| `docs/` | Current contracts and references. | tracked |
+| `runtimes/<name>/` | What one runtime (`codex`, `claude`) needs beyond the shared sources, e.g. Codex `default.rules`. | tracked |
+| `runtimes/AGENTS.md` | Install-time global contract shared by both runtimes. | tracked |
+| `farplane/` | This project's committed config only: harness, metrics, bindings, automations. Bunker strategy docs (`farplane/strategy/`) belong only in private business repos, never here. | tracked |
+| `tickets/` | Issue templates and the frozen legacy archive. | tracked |
+| `.agents/skills/` | Project-local skills (Codex convention). | tracked |
+| `.farplane/` | Everything generated or private: runs, output, scratch, caches, media. | ignored |
+| `.agent-office/` | The bunker's runtime state for this checkout (upstream agent-office's folder name; see Farplane-UI-v2 `docs/prd.md`). | excluded |
+
+- Never write output, downloads, or scratch to a new root folder (`output/`,
+  `tmp/`, `<tool>_output/`). Use `.farplane/<owner>/`, or the session
+  scratchpad for throwaway files. A skill that writes files names its
+  `.farplane/` subfolder.
+- A file that should never be committed lives under `.farplane/`, not behind
+  an extra ignore rule elsewhere. Keep `config.toml` local; version
+  `runtimes/codex/config.toml.example`.
+- Do not enable local git hooks or live automations unless the operator asks.
+- Delete empty folders, `.DS_Store`, and stray caches when you see them.
+- Checks: `python3 bin/validators/check_farplane_project_files.py`,
+  `python3 bin/validators/check_harness_invariants.py`,
+  `python3 bin/validators/check_doc_refs.py`, and
+  `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
+  Push mechanics live in `skills/commit/references/push-main.md`; PR mechanics,
+  for requested PRs only, in `skills/commit/references/single-worktree-pr.md`.
 
 ## Stop and surface a decision
 

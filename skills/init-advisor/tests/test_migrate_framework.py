@@ -51,14 +51,14 @@ metrics:
             metrics = (root / "farplane" / "metrics.yaml").read_text()
             self.assertEqual(result["mode"], "applied")
             self.assertEqual(manifest["project"]["name"], "Keep me")
-            self.assertEqual(manifest["spec_version"], "2.0.16")
+            self.assertEqual(manifest["spec_version"], "2.0.17")
             self.assertEqual(
                 manifest["template_uses"]["farplane-framework"],
-                "2.0.16",
+                "2.0.17",
             )
             self.assertEqual(
                 manifest["_template_metadata"]["template_version"],
-                "2.0.16",
+                "2.0.17",
             )
             self.assertIn("type: flow", metrics)
             self.assertIn("Keep this human definition.", metrics)
@@ -205,6 +205,37 @@ metrics: {}
 
             with self.assertRaisesRegex(ValueError, "both retired and current"):
                 MODULE.migrate_project(root, force=True)
+
+    def test_force_folds_project_rules_into_agents(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_base_project(root)
+            (root / "farplane" / "metrics.yaml").write_text(
+                """kind: project-metrics
+updated_at: 2026-01-01
+framework_template_version: "0.4.0"
+metrics: {}
+""",
+                encoding="utf-8",
+            )
+            (root / "AGENTS.md").write_text("# Project AGENTS\n\nKeep me.\n", encoding="utf-8")
+            (root / "PROJECT_RULES.md").write_text(
+                "# Project Rules: Demo\n\n## Runtime\n- Dev: `pnpm dev`\n\n```bash\n# Install\npnpm i\n```\n",
+                encoding="utf-8",
+            )
+
+            dry_run = MODULE.migrate_project(root, force=False)
+            self.assertTrue((root / "PROJECT_RULES.md").exists())
+            self.assertIn("PROJECT_RULES.md folded into AGENTS.md and removed", dry_run["changes"])
+
+            MODULE.migrate_project(root, force=True)
+            agents = (root / "AGENTS.md").read_text(encoding="utf-8")
+            self.assertFalse((root / "PROJECT_RULES.md").exists())
+            self.assertTrue(agents.startswith("# Project AGENTS\n\nKeep me.\n"))
+            self.assertIn("## Project Rules\n", agents)
+            self.assertIn("### Runtime\n- Dev: `pnpm dev`", agents)
+            self.assertIn("```bash\n# Install\npnpm i\n```", agents)
+            self.assertNotIn("Project Rules: Demo", agents)
 
 
 if __name__ == "__main__":

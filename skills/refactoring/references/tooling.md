@@ -44,7 +44,7 @@ without operator approval or a project setup ticket.
 
 ## Project Rules Slots
 
-Record adopted commands in `PROJECT_RULES.md`:
+Record adopted commands in the Validation section of the project's `AGENTS.md`:
 
 ```text
 Maintainability:

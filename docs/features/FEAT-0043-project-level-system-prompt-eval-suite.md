@@ -11,7 +11,7 @@ tags:
 refs:
   - skills/eval/examples/farplane-global-harness/tasks.json
   - skills/eval
-  - templates/global/AGENTS.md
+  - runtimes/AGENTS.md
   - skills/eval/references/eval-best-practices.md
   - docs/HISTORY.md
   - skills/eval/tests/test_run_evals.py
@@ -22,7 +22,7 @@ public: true
 surfaces:
   - skills/eval/examples/farplane-global-harness/tasks.json
   - skills/eval
-  - templates/global/AGENTS.md
+  - runtimes/AGENTS.md
 source_refs:
   - skills/eval/references/eval-best-practices.md
   - docs/HISTORY.md
@@ -97,7 +97,7 @@ flowchart LR
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
-  prompt["prompt surfaces<br/>templates/global/AGENTS.md<br/>project AGENTS.md"]:::keep
+  prompt["prompt surfaces<br/>runtimes/AGENTS.md<br/>project AGENTS.md"]:::keep
   retired["FEAT-0043<br/>status: retired<br/>superseded_by: FEAT-0039"]:::retired
   evals["FEAT-0039 Farplane evals<br/>skills/eval"]:::changed
   proof["SYS-0005 Proof And Review<br/>docs/systems/proof-review.md"]:::changed
@@ -114,7 +114,7 @@ Owner surfaces:
 
 - `skills/eval/examples/farplane-global-harness/tasks.json`
 - `skills/eval`
-- `templates/global/AGENTS.md`
+- `runtimes/AGENTS.md`
 
 Source context:
 

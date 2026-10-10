@@ -1,0 +1,26 @@
+[template_version_watch]
+# Humans own this watchlist. Keep it focused on high-impact prompt-shaped
+# templates whose structure materially changes harness behavior.
+paths = [
+  "docs/skills/templates/SKILL_TEMPLATE.md",
+  "docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
+  "skills/skill-creator/references/EVAL_TASK_TEMPLATE.json",
+  "runtimes/AGENTS.md",
+  "tickets/templates/ticket.md",
+  "tickets/templates/goal-loop/program.md",
+  "skills/harness-creator/templates/project-harness.md",
+  "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
+  "docs/templates/HUMAN_REPORT_TEMPLATE.md",
+]
+
+globs = []
+
+exclude_globs = [
+  "skills/skill-maintenance/templates/archive/*",
+  "skills/skill-maintenance/templates/archive/**/*",
+  "tickets/archive/*",
+  "tickets/archive/**/*",
+  "**/__pycache__/**/*",
+  "**/*.pyc",
+  "**/*lock.yaml",
+]

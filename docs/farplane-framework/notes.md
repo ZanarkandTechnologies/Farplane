@@ -9,7 +9,7 @@ tags:
   - notes
   - memory
 refs:
-  - templates/global/AGENTS.md
+  - runtimes/AGENTS.md
   - install.sh
   - docs/farplane-framework/project-files.md
   - docs/systems/wiki.md

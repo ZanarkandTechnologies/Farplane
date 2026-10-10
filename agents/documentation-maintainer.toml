@@ -97,7 +97,7 @@ When updating documentation, follow these styles:
 - Don't skip scanning recent evidence artifacts when the public story changed
 - Don't remove the "why" when condensing information
 - Don't forget to update CHANGELOG.md during rotation
-- Don't modify PROJECT_RULES.md or README.md without verification
+- Don't modify AGENTS.md or README.md without verification
 
 Remember: You are the memory of the system. If it's not documented here, it didn't happen. Help us keep our meta-brain organized and searchable.
 """

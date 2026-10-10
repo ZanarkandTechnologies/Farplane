@@ -5,7 +5,7 @@ owner: templates
 created_at: 2026-06-28
 updated_at: 2026-08-29
 refs:
-  - templates/global/AGENTS.md
+  - runtimes/AGENTS.md
   - AGENTS.md
   - docs/systems/agent-kernel.md
   - docs/features/FEAT-0042-lean-global-agent-operating-kernel.md
@@ -15,7 +15,7 @@ refs:
 
 # Global AGENTS Template QA Checklist
 
-Use this checklist before changing `templates/global/AGENTS.md`. The global
+Use this checklist before changing `runtimes/AGENTS.md`. The global
 template is first-load context: keep rules there only when agents need them
 before project files, tickets, or skills can reliably take over.
 
@@ -52,7 +52,7 @@ is asserted without examples.
 ## Agent Kernel Feature Fidelity Gate
 
 Run this gate for every edit, rewrite, or consolidation of `AGENTS.md` or
-`templates/global/AGENTS.md`:
+`runtimes/AGENTS.md`:
 
 1. Read the `AGENTS Feature Inventory` in
    `docs/systems/agent-kernel.md` before changing either AGENTS surface.

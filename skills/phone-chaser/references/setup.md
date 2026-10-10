@@ -16,7 +16,7 @@ skill first-load contract.
 The deployable worker lives at:
 
 ```text
-farplane/phone-chaser/
+<Farplane UI>/apps/phone-chaser/
 ```
 
 The skill owns dispatch workflow and safety gates. The runtime module owns:
@@ -76,7 +76,7 @@ runtime module with deployment proof.
 Run locally:
 
 ```bash
-cd farplane/phone-chaser
+cd <Farplane UI>/apps/phone-chaser
 uv sync
 uv run src/agent.py dev
 ```
@@ -84,7 +84,7 @@ uv run src/agent.py dev
 Deploy:
 
 ```bash
-cd farplane/phone-chaser
+cd <Farplane UI>/apps/phone-chaser
 lk agent deploy . --secrets-file .env.local --ignore-empty-secrets
 ```
 

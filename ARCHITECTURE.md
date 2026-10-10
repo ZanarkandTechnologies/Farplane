@@ -72,7 +72,7 @@ flowchart LR
 
   subgraph Entry["Entry + Policy Surfaces"]
     localAgents[(AGENTS.md<br/>repo-local map)]:::surface
-    globalAgents[(templates/global/AGENTS.md<br/>install contract)]:::surface
+    globalAgents[(runtimes/AGENTS.md<br/>install contract)]:::surface
     readme[(README.md<br/>product + workflow map)]:::surface
     architecture[(ARCHITECTURE.md<br/>ownership guide)]:::surface
   end
@@ -97,18 +97,17 @@ flowchart LR
     goalSkill["goal-advisor<br/>native Goal"]:::callout
     execSkill["goal-advisor<br/>native Codex task checkout"]:::callout
     assetSkill["ai-image-advisor<br/>ai-video-advisor<br/>remotion-render"]:::skill
-    externalCli["delegate-cli<br/>Pi/OpenRouter profile"]:::skill
     closeSkill["demo -> close-ticket<br/>video-first GitHub issue<br/>commit<br/>pr-splitting"]:::callout
   end
 
   subgraph Board["Ticket + QA Surfaces"]
     tickets[(GitHub issue<br/>state, plan, evidence, blockers)]:::surface
     template[(tickets/templates/ticket.md<br/>canonical shape)]:::surface
-    cookbook[(qa/cookbook/*<br/>agent-efficient proof paths)]:::surface
+    cookbook[(AGENTS.md Agent QA + docs/qa/*<br/>agent-efficient proof paths)]:::surface
   end
 
   subgraph Runtime["Runtime + Tooling"]
-    hooks[(hooks.json<br/>Stop + input hooks)]:::runtime
+    hooks[(hooks/hooks.json<br/>Stop + input hooks)]:::runtime
     bin[(bin/*<br/>runtime, validators, launchers)]:::runtime
     harness[(.farplane/state/*<br/>session + local runtime state)]:::runtime
     agentsDir[(agents/*.toml<br/>bounded specialists)]:::runtime
@@ -156,9 +155,6 @@ flowchart LR
   execSkill --> agentsDir
   execSkill --> bin
   execSkill --> harness
-  execSkill --> externalCli
-  externalCli --> bin
-  externalCli --> harness
   execSkill --> qa
   hooks --> stop
   harness --> stop
@@ -259,10 +255,9 @@ during cleanup unless the replacement carries the same routing information.
   Purpose: curated durable invariants and constraints
 - [docs/TASTE.md](docs/TASTE.md)
   Purpose: shared visual doctrine when a repo has UI work
-- [qa/README.md](qa/README.md)
-  Purpose: repo-owned QA/browser-test entry guidance and cookbook policy
-- [qa/cookbook](qa/cookbook)
-  Purpose: reusable shortcuts, deep links, seeds, probes, and workflow runbooks for agent-efficient QA
+- [skills/qa/references/guide.md](skills/qa/references/guide.md)
+  Purpose: QA/browser-test entry guidance and runbook policy; a project's own
+  runbooks live in its `AGENTS.md` Agent QA section, plus one docs page per long flow
 
 ### Execution surfaces
 
@@ -303,10 +298,6 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
   Purpose: canonical execution compiler that turns listed files, trigger mode,
   budget, and proof policy into native Goal, heartbeat, batch, rollout,
   feedback, or direct-route prompts
-- [skills/delegate-cli/SKILL.md](skills/delegate-cli/SKILL.md)
-  Purpose: public external CLI delegation workflow for routing bounded builder
-  work through profile/adapter contracts while Farplane keeps ticket, QA, and
-  review authority
 - [bin](bin)
   Purpose: hooks, validators, runtime helpers
 - `.farplane/` local state
@@ -320,7 +311,8 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - Active task state belongs in the project's GitHub issue and its comments,
   not in chat. Repository files may hold structured proof or migration snapshots.
 - Reusable QA shortcuts and deterministic browser-entry guidance belong in
-  `qa/cookbook/*`, not in ticket prose or transient chat.
+  the project's `AGENTS.md` Agent QA section (plus one docs page per long flow,
+  made when the first one exists), not in ticket prose or transient chat.
 - Review scoring belongs in `skills/review/*`.
 - Runtime machinery belongs in `bin/`, `hooks.json`, and runtime feature specs.
 - Reusable workflow detail belongs in `skills/*`.

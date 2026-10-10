@@ -12,7 +12,6 @@ refs:
   - skills/impl-plan
   - skills/functional-ui
   - skills/visual-design
-  - skills/delegate-cli
   - skills/visual-qa
   - skills/landing-page
   - "docs/MEMORY.md#MEM-0085"
@@ -25,7 +24,6 @@ surfaces:
   - skills/impl-plan
   - skills/functional-ui
   - skills/visual-design
-  - skills/delegate-cli
   - skills/visual-qa
   - skills/landing-page
 source_refs:
@@ -130,7 +128,6 @@ Owner surfaces:
 - `skills/impl-plan`
 - `skills/functional-ui`
 - `skills/visual-design`
-- `skills/delegate-cli`
 - `skills/visual-qa`
 - `skills/landing-page`
 

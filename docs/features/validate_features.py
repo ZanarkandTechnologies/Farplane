@@ -94,7 +94,7 @@ ACTIVE_SPEC_REF_SCAN_PATHS = [
     ROOT / "AGENTS.md",
     ROOT / "README.md",
     ROOT / "ARCHITECTURE.md",
-    ROOT / "templates" / "global" / "AGENTS.md",
+    ROOT / "runtimes" / "AGENTS.md",
     ROOT / "tickets" / "README.md",
     ROOT / "tickets" / "templates",
     ROOT / "agents",

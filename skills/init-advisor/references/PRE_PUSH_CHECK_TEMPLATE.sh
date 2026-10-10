@@ -154,7 +154,7 @@ if [ -s "$utility_tmp" ]; then
   sort -t "$(printf '\t')" -k1,1nr -k2,2 "$utility_tmp" | while IFS=$'\t' read -r lines path; do
     printf '  - %s lines :: %s\n' "$lines" "$path"
   done
-  echo "  Review whether these belong in the shared utility location declared in PROJECT_RULES.md."
+  echo "  Review whether these belong in the shared utility location declared in AGENTS.md."
 fi
 
 if [ -s "$block_tmp" ]; then

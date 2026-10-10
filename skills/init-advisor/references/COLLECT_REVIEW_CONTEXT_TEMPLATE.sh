@@ -125,8 +125,7 @@ write_command_block "Diff Stat Since Base" git diff --stat "$base_ref"...HEAD
   echo
   echo "## Project Maintainability Standards"
 } >>"$OUTPUT"
-truncate_repo_file_to_block "Root AGENTS.md" "AGENTS.md" 140
-truncate_repo_file_to_block "PROJECT_RULES.md" "PROJECT_RULES.md" 180
+truncate_repo_file_to_block "Root AGENTS.md" "AGENTS.md" 260
 truncate_repo_file_to_block "docs/code_review.md" "docs/code_review.md" 180
 truncate_repo_file_to_block "ui/src/modules/README.md" "ui/src/modules/README.md" 180
 truncate_repo_file_to_block "src/modules/README.md" "src/modules/README.md" 180

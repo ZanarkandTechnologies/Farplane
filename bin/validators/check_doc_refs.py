@@ -60,9 +60,9 @@ KNOWN_TOP_LEVELS = {
     "docs",
     "experiments",
     "qa",
-    "rules",
+    "config",
+    "runtimes",
     "skills",
-    "templates",
     "tests",
     "tickets",
 }

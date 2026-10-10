@@ -93,8 +93,8 @@ class TicketValidationTest(unittest.TestCase):
     def test_validation_writes_deterministic_receipts(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            (root / "rules").mkdir()
-            (root / "rules" / "validation.toml").write_text(RULES)
+            (root / "config").mkdir()
+            (root / "config" / "validation.toml").write_text(RULES)
             ticket_dir = root / "tickets" / "TASK-0001"
             ticket_dir.mkdir(parents=True)
             ticket = ticket_dir / "ticket.md"

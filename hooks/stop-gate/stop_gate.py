@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-for directory in (ROOT / "bin" / "runtime", ROOT / "bin" / "core", ROOT / "hooks"):
+for directory in (ROOT / "hooks" / "shared", ROOT / "hooks" / "continuation", ROOT / "bin" / "core"):
     sys.path.insert(0, str(directory))
 
 from continuation import evaluate_stop  # noqa: E402

@@ -94,7 +94,7 @@ requires promotion to history, a spec, or another canonical owner instead.
    defer, or block any lost behavior, evidence, ID, route, safety condition,
    metric, owner boundary, or future action. A shorter artifact is insufficient
    unless it remains at least as useful and more owner-correct.
-   For `AGENTS.md` or `templates/global/AGENTS.md`, first load the Agent Kernel
+   For `AGENTS.md` or `runtimes/AGENTS.md`, first load the Agent Kernel
    canonical feature inventory at `docs/systems/agent-kernel.md` and apply the
    bidirectional Feature Fidelity Gate in
    `docs/templates/global-agents-qa-checklist.md`: every documented behavior

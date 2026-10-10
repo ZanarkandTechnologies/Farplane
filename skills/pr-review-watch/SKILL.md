@@ -26,7 +26,7 @@ common_chains:
 - [ ] Use the checkout assigned to the current Codex task. Treat a different
   checkout or runtime target as explicit caller input rather than creating
   Farplane runtime state.
-- [ ] Load `docs/pr-review-pipeline.md` first, then `PROJECT_RULES.md`, and
+- [ ] Load `docs/pr-review-pipeline.md` first, then `AGENTS.md`, and
   require an explicit `pr_review_pipeline` JSON block before live watching.
 - [ ] Use adaptive backoff from `docs/features/FEAT-0065-pulse-and-interval-automation.md` for repeated
   wait states unless project memory declares a narrower PR-specific cadence.
@@ -68,7 +68,7 @@ This skill composes existing Farplane surfaces:
 ## Project Memory Contract
 
 Before live polling, read `docs/pr-review-pipeline.md` in the target repo. If it
-does not exist, read `PROJECT_RULES.md`. One of those files must contain a
+does not exist, read the project's `AGENTS.md`. One of those files must contain a
 fenced JSON block with `pr_review_pipeline`.
 
 Minimal shape:

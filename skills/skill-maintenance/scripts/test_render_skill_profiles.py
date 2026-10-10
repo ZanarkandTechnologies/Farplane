@@ -30,7 +30,7 @@ class RenderSkillProfilesTests(unittest.TestCase):
             result = renderer.render_profiles(ROOT, output)
 
             self.assertEqual(result["profile_count"], 12)
-            self.assertEqual(result["managed_skill_count"], 65)
+            self.assertEqual(result["managed_skill_count"], 64)
             all_skills = enabled_skills(output / "base.config.toml")
             self.assertEqual(all_skills, renderer.registry_skill_names(ROOT))
             self.assertIn("intelligest", all_skills)
@@ -67,9 +67,9 @@ class RenderSkillProfilesTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             (root / "docs/skills").mkdir(parents=True)
-            (root / "rules").mkdir()
+            (root / "config").mkdir()
             (root / "docs/skills/registry.jsonl").write_text('{"name":"known"}\n')
-            (root / "rules/skill-profiles.toml").write_text('[profiles]\nexample = ["missing"]\n')
+            (root / "config/skill-profiles.toml").write_text('[profiles]\nexample = ["missing"]\n')
 
             with self.assertRaisesRegex(renderer.ProfileRenderError, "missing_from_registry"):
                 renderer.render_profiles(root, root / "rendered")

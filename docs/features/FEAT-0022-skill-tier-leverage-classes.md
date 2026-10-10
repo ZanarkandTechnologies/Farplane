@@ -9,7 +9,7 @@ tags:
   - feature
   - sys-0006
 refs:
-  - templates/global/AGENTS.md
+  - runtimes/AGENTS.md
   - docs/skills/system.md
   - skills/reference-grounding
   - skills/prototyping
@@ -27,7 +27,7 @@ system_id: SYS-0006
 category: skills
 public: true
 surfaces:
-  - templates/global/AGENTS.md
+  - runtimes/AGENTS.md
   - docs/skills/system.md
   - skills/reference-grounding
   - skills/prototyping
@@ -136,7 +136,7 @@ Gray is existing input, amber is changed tier behavior, and green is the owned d
 
 Owner surfaces:
 
-- `templates/global/AGENTS.md`
+- `runtimes/AGENTS.md`
 - `docs/skills/system.md`
 - `skills/reference-grounding`
 - `skills/prototyping`

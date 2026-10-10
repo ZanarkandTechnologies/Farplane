@@ -10,7 +10,7 @@ tags:
   - agent-kernel
 refs:
   - AGENTS.md
-  - templates/global/AGENTS.md
+  - runtimes/AGENTS.md
   - docs/fundamentals/harness-engineering-doctrine.md
   - bin/README.md
 system_record_json: |
@@ -26,7 +26,7 @@ system_record_json: |
     ],
     "refs": [
       "AGENTS.md",
-      "templates/global/AGENTS.md",
+      "runtimes/AGENTS.md",
       "docs/fundamentals/harness-engineering-doctrine.md",
       "bin/README.md"
     ],
@@ -124,14 +124,14 @@ either AGENTS file must be listed here.
 <!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->
 | ID | Surface | Required section | Behavior group |
 | --- | --- | --- | --- |
-| `AK-G01` | `templates/global/AGENTS.md` | `## Context` | User collaboration, current task state, verified evidence, and smallest-owner routing |
-| `AK-G02` | `templates/global/AGENTS.md` | `## Behavior` | Authority, reasoning, grounding, execution, task state, thread notes, skills, delegation, and workspace safety |
-| `AK-G03` | `templates/global/AGENTS.md` | `## Output Formatting` | Conditional long-horizon progress ledger, route tables, examples, visuals, proof, and completion handoff |
+| `AK-G01` | `runtimes/AGENTS.md` | `## Context` | User collaboration, current task state, verified evidence, and smallest-owner routing |
+| `AK-G02` | `runtimes/AGENTS.md` | `## Behavior` | Authority, reasoning, grounding, execution, task state, thread notes, skills, delegation, and workspace safety |
+| `AK-G03` | `runtimes/AGENTS.md` | `## Output Formatting` | Conditional long-horizon progress ledger, route tables, examples, visuals, proof, and completion handoff |
 | `AK-P01` | `AGENTS.md` | `## Operating model` | Farplane's visible ticket, skill, Goal Packet, and proof model |
 | `AK-P02` | `AGENTS.md` | `## Context budget` | Project-local context budget and owner routing |
 | `AK-P03` | `AGENTS.md` | `## Local boundaries` | Farplane placement, browser proof, checkout, credential, and runtime boundaries |
 | `AK-P04` | `AGENTS.md` | `## Durable truth` | Canonical state and documentation ownership |
-| `AK-P05` | `AGENTS.md` | `## Map` | Repository navigation map |
+| `AK-P05` | `AGENTS.md` | `## Where files go` | One home per job: folder ownership, output in `.farplane/`, checks |
 | `AK-P06` | `AGENTS.md` | `## Stop and surface a decision` | Architectural conflict and rollback decision gates |
 <!-- END AGENT_KERNEL_FEATURE_INVENTORY -->
 
@@ -153,7 +153,7 @@ flowchart LR
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   repo["repo-local policy<br/>AGENTS.md"]:::keep
-  global["install template<br/>templates/global/AGENTS.md"]:::keep
+  global["install template<br/>runtimes/AGENTS.md"]:::keep
   doctrine["harness doctrine<br/>docs/fundamentals/*"]:::keep
   kernel["SYS-0001 Agent Kernel<br/>entry rules and response shape"]:::changed
   retired["FEAT-0042<br/>retired kernel lean-down feature"]:::retired
@@ -171,7 +171,7 @@ The Agent Kernel turns local and install-time policy into the operating shape ev
 ## Surfaces
 
 - `AGENTS.md`
-- `templates/global/AGENTS.md`
+- `runtimes/AGENTS.md`
 - `docs/fundamentals/harness-engineering-doctrine.md`
 
 ## Proof And Maintenance

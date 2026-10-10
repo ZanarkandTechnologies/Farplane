@@ -32,7 +32,8 @@ Playwright is not sufficient alone when:
   deterministic.
 - Keep the Codex in-app Browser as the debugging lane for failed Playwright
   runs and for evidence capture while the UI is still in flux.
-- Store reusable shortcuts, deep links, seeds, and test hooks in `qa/`.
+- Store reusable shortcuts, deep links, seeds, and test hooks in the Agent QA
+  section of `AGENTS.md`, or `docs/qa/<flow>.md` for a long flow.
 
 ### Step 2: Pick backpressure types (mix as needed)
 - **Unit tests**: deterministic logic, pure functions, small modules.

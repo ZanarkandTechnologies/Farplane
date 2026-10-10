@@ -245,7 +245,6 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
 
     required_paths = {
         "AGENTS.md",
-        "PROJECT_RULES.md",
         "ARCHITECTURE.md",
         "farplane/README.md",
         "farplane/manifest.json",
@@ -294,7 +293,8 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         elif not path.exists():
             errors.append(f"{rel_path} standard.tracked path is missing: {path_ref}.")
 
-    # Ignored paths never exist in a fresh clone; only an existing path of the wrong type fails.
+    # Ignored paths never exist in a fresh clone; their writers create them on demand,
+    # so only a path that exists with the wrong type is an error.
     for path_ref in sorted(ignored):
         path = root / path_ref
         if path_ref.endswith("/") and path.exists() and not path.is_dir():

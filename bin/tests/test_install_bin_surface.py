@@ -22,7 +22,7 @@ class InstallBinSurfaceTests(unittest.TestCase):
     def test_installed_bin_allowlist_contains_only_cli_and_required_edges(self) -> None:
         self.assertEqual(
             shell_array("INSTALL_BIN_FILES"),
-            ("_compat.py", "farplane", "farplane.py", "notify.py"),
+            ("farplane", "farplane.py"),
         )
 
     def test_removed_standalone_commands_are_retired_on_install(self) -> None:
@@ -49,6 +49,7 @@ class InstallBinSurfaceTests(unittest.TestCase):
                 "lifecycle-telemetry",
                 "skill-length",
                 "user-turn",
+                "shared",
             ),
         )
 
@@ -59,7 +60,7 @@ class InstallBinSurfaceTests(unittest.TestCase):
 
     def test_installed_hook_allowlist_covers_hook_config_commands(self) -> None:
         managed = set(shell_array("INSTALL_HOOK_DIRS"))
-        hook_config = json.loads((ROOT / "hooks.json").read_text(encoding="utf-8"))
+        hook_config = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8"))
         referenced = {
             Path(match.group(1)).parts[0]
             for groups in hook_config["hooks"].values()

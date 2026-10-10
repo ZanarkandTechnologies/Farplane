@@ -49,7 +49,7 @@ services without explicit operator approval.
 
 ## Project Rules Slots
 
-Record adopted commands in `PROJECT_RULES.md`:
+Record adopted commands in the Validation section of the project's `AGENTS.md`:
 
 ```text
 Hardening:

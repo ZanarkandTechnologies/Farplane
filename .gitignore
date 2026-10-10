@@ -85,6 +85,8 @@ tickets/templates/goal-loop/*
 !tickets/templates/goal-loop/hypothesis-tree.json
 artifacts/
 
-# Local-only outputs and machine config
-meshy_output/
+# Local-only machine config
 .claude/launch.json
+
+# Bunker runtime state for this checkout (Farplane-UI-v2 writes it; see AGENTS.md)
+.agent-office/

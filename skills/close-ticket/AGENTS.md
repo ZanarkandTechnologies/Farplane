@@ -35,4 +35,4 @@
 
 - Re-read `SKILL.md` once and confirm it is executable without opening other files.
 - Compare the canonical name and alias wording against
-  `bin/runtime/user_turn.py` when the runtime control-skill contract changes.
+  `bin/core/user_turn.py` when the runtime control-skill contract changes.

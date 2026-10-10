@@ -10,7 +10,7 @@ import urllib.error
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "runtime"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "hooks" / "shared"))
 import hook_delivery
 
 

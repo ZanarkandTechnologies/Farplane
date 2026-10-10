@@ -190,7 +190,7 @@ def hook_inventory_issues(commands: list[dict[str, Any]]) -> tuple[list[str], li
 def hooks_list_payload(target: Path | None = None) -> dict[str, Any]:
     codex_home = (target or DEFAULT_CODEX_HOME).expanduser().resolve()
     hooks_json_dest = codex_home / "hooks.json"
-    hooks_json_src = CORE_ROOT / "hooks.json"
+    hooks_json_src = CORE_ROOT / "hooks" / "hooks.json"
     source = hooks_json_dest if hooks_json_dest.exists() else hooks_json_src
     commands = hook_command_inventory(codex_home, source)
     for command in commands:
@@ -260,16 +260,11 @@ def install_hooks(codex_home: Path, *, dry_run: bool = False) -> dict[str, Any]:
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     backup_root = codex_home / ".install-backups" / f"hooks-{stamp}"
     operations = [
-        _replace_symlink(CORE_ROOT / "hooks.json", codex_home / "hooks.json", backup_root=backup_root, dry_run=dry_run),
-        _replace_symlink(CORE_ROOT / "bin" / "_compat.py", codex_home / "bin" / "_compat.py", backup_root=backup_root / "bin", dry_run=dry_run),
+        _replace_symlink(CORE_ROOT / "hooks" / "hooks.json", codex_home / "hooks.json", backup_root=backup_root, dry_run=dry_run),
         _replace_symlink(CORE_ROOT / "bin" / "core", codex_home / "bin" / "core", backup_root=backup_root / "bin", dry_run=dry_run),
-        _replace_symlink(
-            CORE_ROOT / "bin" / "runtime",
-            codex_home / "bin" / "runtime",
-            backup_root=backup_root / "bin",
-            dry_run=dry_run,
-        ),
     ]
+    for retired in (codex_home / "bin" / "_compat.py", codex_home / "bin" / "runtime"):
+        operations.append(_retire_path(retired, backup_root=backup_root / "retired-bin", dry_run=dry_run))
     for hook_name in RETIRED_HOOK_FILES:
         operations.append(
             _retire_path(
@@ -409,7 +404,7 @@ def run_install(args: argparse.Namespace) -> int:
 
 def hooks_doctor(target: Path | None = None) -> dict[str, Any]:
     codex_home = (target or DEFAULT_CODEX_HOME).expanduser().resolve()
-    hooks_json_src = CORE_ROOT / "hooks.json"
+    hooks_json_src = CORE_ROOT / "hooks" / "hooks.json"
     hooks_json_dest = codex_home / "hooks.json"
     issues: list[str] = []
     hints: list[str] = []

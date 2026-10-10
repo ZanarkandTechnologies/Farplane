@@ -19,7 +19,7 @@ if str(ROOT) not in sys.path:
 
 from bin.core.lint.source import MarkdownFrontmatterError, parse_markdown_frontmatter_document
 
-DEFAULT_CONFIG = ROOT / "rules" / "template-registry.toml"
+DEFAULT_CONFIG = ROOT / "config" / "template-registry.toml"
 DEFAULT_REGISTRY = ROOT / "docs" / "templates" / "registry.jsonl"
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
 
@@ -195,7 +195,7 @@ def load_feature_ids(root: Path) -> set[str]:
 
 
 def build_registry(root: Path = ROOT, config_path: Path | None = None) -> list[dict[str, Any]]:
-    config = config_path or root / "rules" / "template-registry.toml"
+    config = config_path or root / "config" / "template-registry.toml"
     feature_ids = load_feature_ids(root)
     rows: list[dict[str, Any]] = []
     seen_ids: dict[str, str] = {}
@@ -273,7 +273,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     root = args.root.resolve()
-    config = args.config.resolve() if args.config else root / "rules" / "template-registry.toml"
+    config = args.config.resolve() if args.config else root / "config" / "template-registry.toml"
     out = args.out.resolve() if args.out else root / "docs" / "templates" / "registry.jsonl"
 
     try:

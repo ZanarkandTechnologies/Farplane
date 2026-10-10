@@ -8,8 +8,8 @@
 | Order | Check | How | Blocks when |
 | --- | --- | --- | --- |
 | 1 | Length | Deterministic ([`farplane_response.py`](../../bin/core/farplane_response.py)) | Prose is over the word or line limit |
-| 2 | Continuation | Jev `nudge` score ([`continuation.py`](../../bin/runtime/continuation.py)) | Score ≥ 0.5 and fewer than three continuation nudges this user turn |
-| 3 | Response format | Jev `shape` choice plus `gap::<section>` scores ([`response_format.py`](../../bin/runtime/response_format.py)) | A gap of the chosen shape scores ≥ 0.6, or a completed change that edited files cites nothing |
+| 2 | Continuation | Jev `nudge` score ([`continuation.py`](../continuation/continuation.py)) | Score ≥ 0.5 and fewer than three continuation nudges this user turn |
+| 3 | Response format | Jev `shape` choice plus `gap::<section>` scores ([`response_format.py`](../shared/response_format.py)) | A gap of the chosen shape scores ≥ 0.6, or a completed change that edited files cites nothing |
 
 Continuation and format share one Jev request. Format nudges at most once per
 real user turn and names at most two additions.
@@ -34,7 +34,7 @@ length check.
 
 ## Install and control
 
-Registration lives only in [root `hooks.json`](../../hooks.json). Run
+Registration lives only in [`hooks/hooks.json`](../hooks.json). Run
 `farplane hooks install` (Codex) or `install.sh --runtime claude` (Claude Code),
 then review/trust the changed command in Codex `/hooks`.
 

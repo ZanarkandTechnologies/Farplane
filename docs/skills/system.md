@@ -78,7 +78,7 @@ phase_protocol(task, skill_signature?, state?)
 
 Codex native planning and execution modes already own much of this runtime
 behavior. Farplane uses Tier 0 to describe the expected phase shape in
-`templates/global/AGENTS.md`, skill templates, tickets, and reviewer handoffs.
+`runtimes/AGENTS.md`, skill templates, tickets, and reviewer handoffs.
 Do not create `tier: 0` skills for phases such as plan, execute, or review.
 Phases are inherited by skills; they are not lower-level skill dependencies.
 
@@ -312,7 +312,7 @@ Manual fields:
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding.
 - `group`: required for Tier 3 only; one canonical operating department from
-  [`rules/skill-departments.toml`](../../rules/skill-departments.toml). The
+  [`config/skill-departments.toml`](../../config/skill-departments.toml). The
   graph uses it as explicit department membership, not as a workflow edge.
 - `capability`: optional static projection for a package that is ready to be
   shown in the Capability Map and Office. It has exactly one of three typed

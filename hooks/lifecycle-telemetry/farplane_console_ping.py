@@ -21,7 +21,7 @@ if str(CORE_DIR) not in sys.path:
 
 from runtime_config import codex_home, hydrate_process_env, read_config_value
 
-RUNTIME_DIR = CORE_DIR.parent / "runtime"
+RUNTIME_DIR = CORE_DIR.parents[1] / "hooks" / "shared"
 if str(RUNTIME_DIR) not in sys.path:
     sys.path.insert(0, str(RUNTIME_DIR))
 from hook_delivery import deliver, gate_from_argv, validate_event
@@ -86,10 +86,13 @@ def find_project_root(start: object) -> Path | None:
     start_path = resolve_directory(start)
     if start_path is None:
         return None
+    git_root = find_git_root(start)
+    if git_root is not None and ((git_root / "tickets").is_dir() or (git_root / ".farplane").is_dir()):
+        return git_root
     for candidate in (start_path, *start_path.parents):
         if (candidate / "tickets").is_dir() or (candidate / ".farplane").is_dir():
             return candidate
-    return find_git_root(start)
+    return git_root
 
 
 def get_project_metadata(event: dict[str, object]) -> tuple[str | None, str | None]:

@@ -121,7 +121,7 @@ class ValidateQaResultTest(unittest.TestCase):
 
     def test_learning_reference_rules(self):
         self.assertTrue(any("requires a non-empty reference" in error for error in validate(valid_result(learning={"outcome": "cookbook_update", "ref": None}))))
-        payload = valid_result(learning={"outcome": "cookbook_update", "ref": "qa/cookbook/ui-browser-proof.md"})
+        payload = valid_result(learning={"outcome": "cookbook_update", "ref": "docs/qa/checkout.md"})
         self.assertEqual(validate(payload), [])
         self.assertTrue(any("requires null" in error for error in validate(valid_result(learning={"outcome": "ticket_only", "ref": "report.md"}))))
 

@@ -47,5 +47,5 @@ chmod +x .githooks/pre-commit
 - Use Farplane reviewer agents for material review instead of external
   pre-push review CLIs.
 - Utility-sharing warnings should stay advisory by default. Put the real shared
-  utility placement convention in `PROJECT_RULES.md`.
+  utility placement convention in `AGENTS.md`.
 - Remove or rename the hook files if the project should not use them.

@@ -27,13 +27,9 @@
   and [references/FOUNDATION_COLLECT_REVENUE_TICKET_TEMPLATE.md](FOUNDATION_COLLECT_REVENUE_TICKET_TEMPLATE.md)
   - copied to `TASK-0001` through `TASK-0003` as the dependency-ordered
     business foundation.
-- [references/PROJECT_RULES_TEMPLATE.md](PROJECT_RULES_TEMPLATE.md)
-  - copied to `PROJECT_RULES.md` for project stack, runtime, and QA commands.
 - [references/TICKETS_README_TEMPLATE.md](TICKETS_README_TEMPLATE.md)
   and [references/TICKET_TEMPLATE.md](TICKET_TEMPLATE.md) - packaged
   ticket lifecycle/template scaffolds used by both source and installed runs.
-- [references/qa/](qa/) - copied when creating the QA cookbook
-  surface.
 - [../harness-creator/SKILL.md](../../harness-creator/SKILL.md) - call in full
   mode after substrate setup when static charter, capability workflows, metric objectives, feedback
   loops, missing systems, automation/binding deltas, or metric objectives

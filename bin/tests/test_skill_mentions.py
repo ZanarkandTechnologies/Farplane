@@ -7,9 +7,9 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNTIME_DIR = ROOT / "bin" / "runtime"
-if str(RUNTIME_DIR) not in sys.path:
-    sys.path.insert(0, str(RUNTIME_DIR))
+for RUNTIME_DIR in (ROOT / "bin" / "core",):
+    if str(RUNTIME_DIR) not in sys.path:
+        sys.path.insert(0, str(RUNTIME_DIR))
 
 from skill_registry import extract_skill_mentions, load_skill_registry
 from user_turn import extract_control_surfaces

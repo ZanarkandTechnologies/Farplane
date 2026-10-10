@@ -5,10 +5,10 @@ Claude Code reads the same SKILL.md packages and a compatible hook payload
 schema, so this helper only translates the Codex-shaped single sources into a
 local plugin marketplace at <claude>/farplane/:
 
-- hooks.json          -> plugin/hooks/hooks.json
+- hooks/hooks.json    -> plugin/hooks/hooks.json
 - agents/*.toml       -> plugin/agents/<name>.md (invoked as farplane:<name>)
 - runtimes/claude     -> plugin/.claude-plugin/plugin.json with a content version
-- templates/global    -> <claude>/farplane/AGENTS.md, imported from CLAUDE.md
+- runtimes/AGENTS.md  -> <claude>/farplane/AGENTS.md, imported from CLAUDE.md
 - ~/.farplane/USER.md -> imported from CLAUDE.md, so every session sees the operator profile
 """
 
@@ -87,7 +87,7 @@ def render_agent(toml_path: Path) -> tuple[str, str]:
 
 
 def plugin_files(repo: Path, claude_home: Path) -> dict[str, str]:
-    files = {"hooks/hooks.json": json.dumps(claude_hooks(repo / "hooks.json", claude_home), indent=2) + "\n"}
+    files = {"hooks/hooks.json": json.dumps(claude_hooks(repo / "hooks" / "hooks.json", claude_home), indent=2) + "\n"}
     for path in sorted((repo / "agents").glob("*.toml")):
         name, text = render_agent(path)
         files[f"agents/{name}.md"] = text

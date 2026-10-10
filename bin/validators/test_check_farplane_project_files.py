@@ -39,7 +39,6 @@ def write_framework_manifest(farplane: Path) -> None:
                 "standard": {
                     "tracked": [
                         "AGENTS.md",
-                        "PROJECT_RULES.md",
                         "ARCHITECTURE.md",
                         "farplane/README.md",
                         "farplane/manifest.json",
@@ -90,7 +89,7 @@ project_root = "/tmp/project"
 
 def write_required_project_files(root: Path) -> None:
     farplane = root / "farplane"
-    for path in ("AGENTS.md", "PROJECT_RULES.md", "ARCHITECTURE.md"):
+    for path in ("AGENTS.md", "ARCHITECTURE.md"):
         (root / path).write_text(f"# {path}\n", encoding="utf-8")
 
     for name in ("README.md",):
@@ -1039,7 +1038,6 @@ def test_framework_manifest_shape_is_validated(tmp_path: Path) -> None:
     )
     for path in [
         "AGENTS.md",
-        "PROJECT_RULES.md",
         "ARCHITECTURE.md",
         "farplane/README.md",
         "farplane/metrics.yaml",

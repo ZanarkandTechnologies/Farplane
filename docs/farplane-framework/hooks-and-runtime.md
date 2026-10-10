@@ -11,7 +11,7 @@ tags:
   - runtime
   - lifecycle
 refs:
-  - hooks.json
+  - hooks/hooks.json
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/project-files.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
@@ -20,7 +20,7 @@ refs:
 
 # Farplane Hooks and Runtime
 
-Farplane has one installed hook surface. Root `hooks.json` contains small Codex
+Farplane has one installed hook surface. `hooks/hooks.json` contains small Codex
 lifecycle telemetry commands, edit/response gates, and a bounded Jev continuation check. Ticket
 completion and mining are explicit CLI operations; hooks do not infer durable
 state transitions from arbitrary writes.
@@ -46,9 +46,9 @@ owns entrypoint usage, configuration, failure behavior, and focused checks:
 `farplane hooks install` links these complete folders. Temporary installed-only
 migration links keep old flat command paths usable by active Codex sessions with
 cached registrations; remove them only after those sessions retire or reload.
-Root `hooks.json` remains the single registration source and uses the new paths.
+`hooks/hooks.json` remains the single registration source and uses the new paths.
 
-Root `hooks.json` currently defines:
+`hooks/hooks.json` currently defines:
 
 | Event | Commands | Purpose |
 | --- | --- | --- |

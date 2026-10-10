@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "bin" / "runtime"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "hooks" / "shared"))
 from hook_delivery import report_gate_block  # noqa: E402
 
 

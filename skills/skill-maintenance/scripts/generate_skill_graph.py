@@ -473,7 +473,7 @@ def build_capability_graph(
     """Project departments, their specialist desks, and declared artifact flow.
 
     A specialist is one desk (workstation) that lists its member skill variants
-    in rules/skill-workflows.toml. Member skills with an integration capability are
+    in config/skill-workflows.toml. Member skills with an integration capability are
     drawn as system facilities beside their desk. Unassigned skills are omitted.
     """
     departments = department_labels or {}
@@ -644,7 +644,7 @@ def build_capability_graph(
         },
         extras={
             "source": {
-                "contract": "rules/skill-workflows.toml specialists (label, department, deliverable, primary, skills) + skills/*/SKILL.md frontmatter department + capability",
+                "contract": "config/skill-workflows.toml specialists (label, department, deliverable, primary, skills) + skills/*/SKILL.md frontmatter department + capability",
                 "link_semantics": "department membership of specialist desks, integration facilities beside their desk, and directed artifact-flow edges where a member skill produces an artifact ID another member consumes; flow is a declared handoff contract, not an automatic call or publish action",
                 "omits": "skills at no specialist desk, methods, Markdown references, Todo references, runtime files, task state, and delivery state",
             }

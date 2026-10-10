@@ -8,7 +8,7 @@ Keep this skill explicit, bounded, and project-config driven.
   always-on policy.
 - Keep live provider behavior optional; unit tests must rely on local fixtures.
 - Keep project-specific commands in `docs/pr-review-pipeline.md` or
-  `PROJECT_RULES.md`, not in the skill body.
+  the project's `AGENTS.md`, not in the skill body.
 - Use the checkout assigned to the current Codex task and `review` / reviewer
   lanes for material review instead of duplicating those contracts here.
 

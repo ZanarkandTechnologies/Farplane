@@ -216,12 +216,11 @@ def canonical_ref(value: str) -> tuple[str, str, str, list[str]]:
         pathish = "tickets/TASK-*/ticket.md"
     if pathish.startswith("tickets/progress"):
         return f"state:{slug(raw)}", "state", raw, ["abstract-state"]
-    if pathish.startswith(("farplane/", ".farplane/", "docs/", "tickets/", "skills/", "qa/")) or pathish in {
+    if pathish.startswith(("farplane/", ".farplane/", "docs/", "tickets/", "skills/")) or pathish in {
         "AGENTS.md",
         "README.md",
         "ARCHITECTURE.md",
-        "PROJECT_RULES.md",
-        "hooks.json",
+        "hooks/hooks.json",
     }:
         kind, label, tags = CURATED_FILES.get(pathish, ("file", pathish, ["parsed"]))
         if pathish.startswith(".farplane/"):
@@ -292,17 +291,17 @@ def route_target_node(route: str, repo_root: Path) -> dict[str, Any]:
 
 
 def parse_hooks(repo_root: Path, nodes: dict[str, dict[str, Any]], edges: list[dict[str, Any]], seen: set[tuple[str, str, str, str]]) -> None:
-    hooks_path = repo_root / "hooks.json"
+    hooks_path = repo_root / "hooks" / "hooks.json"
     if not hooks_path.exists():
         return
     data = json.loads(hooks_path.read_text())
-    hooks_node = add_ref_node(nodes, "hooks.json")
+    hooks_node = add_ref_node(nodes, "hooks/hooks.json")
     if hooks_node is None:
         return
     for event, blocks in data.get("hooks", {}).items():
         event_id = f"hook:{event}"
-        add_node(nodes, make_node(event_id, "hook", event, path="hooks.json", tags=["hook"]))
-        add_edge(edges, seen, hooks_node, event_id, "contains", "hooks.json", "explicit")
+        add_node(nodes, make_node(event_id, "hook", event, path="hooks/hooks.json", tags=["hook"]))
+        add_edge(edges, seen, hooks_node, event_id, "contains", "hooks/hooks.json", "explicit")
         for block in blocks:
             for hook in block.get("hooks", []):
                 command = hook.get("command", "")
@@ -313,13 +312,13 @@ def parse_hooks(repo_root: Path, nodes: dict[str, dict[str, Any]], edges: list[d
                         command_id,
                         "command",
                         command,
-                        path="hooks.json",
+                        path="hooks/hooks.json",
                         tags=["command", "hook"],
                         timeout=hook.get("timeout"),
                         statusMessage=hook.get("statusMessage", ""),
                     ),
                 )
-                add_edge(edges, seen, event_id, command_id, "triggers", "hooks.json", "explicit", hook.get("statusMessage"))
+                add_edge(edges, seen, event_id, command_id, "triggers", "hooks/hooks.json", "explicit", hook.get("statusMessage"))
 
 
 def add_curated_framework(nodes: dict[str, dict[str, Any]], edges: list[dict[str, Any]], seen: set[tuple[str, str, str, str]]) -> None:

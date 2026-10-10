@@ -12,7 +12,7 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "bin" / "runtime"))
+sys.path.insert(0, str(ROOT / "hooks" / "shared"))
 
 from response_format import has_citation, questions, select_gaps  # noqa: E402
 from skill_suggestion import (  # noqa: E402

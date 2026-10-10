@@ -26,7 +26,7 @@ class TemplateVersionMetadataTests(unittest.TestCase):
             paths=frozenset({"docs/skills/templates/SKILL_TEMPLATE.md"}),
             globs=("tickets/templates/*", "tickets/templates/**/*"),
             exclude_globs=("tickets/templates/archive/*", "tickets/templates/archive/**/*"),
-            source=Path("rules/template-version-watch.toml"),
+            source=Path("config/template-version-watch.toml"),
         )
 
         self.assertTrue(
@@ -121,7 +121,7 @@ class TemplateVersionMetadataTests(unittest.TestCase):
             )
             self._git(root, "add", ".")
 
-            config = validator.load_watch_config(root / "rules" / "template-version-watch.toml")
+            config = validator.load_watch_config(root / "config" / "template-version-watch.toml")
             errors = validator.validate_staged(root, config)
             self.assertTrue(any("template_version stayed" in error for error in errors))
 
@@ -147,7 +147,7 @@ class TemplateVersionMetadataTests(unittest.TestCase):
             )
             self._git(root, "add", ".")
 
-            config = validator.load_watch_config(root / "rules" / "template-version-watch.toml")
+            config = validator.load_watch_config(root / "config" / "template-version-watch.toml")
             self.assertEqual(validator.validate_staged(root, config), [])
 
     def test_unwatched_template_like_file_is_ignored(self) -> None:
@@ -161,7 +161,7 @@ class TemplateVersionMetadataTests(unittest.TestCase):
             self._write_config(root, "templates/only-this.md")
             self._git(root, "add", ".")
 
-            config = validator.load_watch_config(root / "rules" / "template-version-watch.toml")
+            config = validator.load_watch_config(root / "config" / "template-version-watch.toml")
             self.assertEqual(validator.validate_staged(root, config), [])
 
     @staticmethod
@@ -177,7 +177,7 @@ class TemplateVersionMetadataTests(unittest.TestCase):
 
     @staticmethod
     def _write_config(root: Path, *paths: str) -> None:
-        config = root / "rules" / "template-version-watch.toml"
+        config = root / "config" / "template-version-watch.toml"
         config.parent.mkdir()
         rendered_paths = ", ".join(f'"{path}"' for path in paths)
         config.write_text(

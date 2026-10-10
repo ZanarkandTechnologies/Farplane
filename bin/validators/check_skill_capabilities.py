@@ -182,13 +182,6 @@ def validate_capability(raw: dict[str, Any], path: Path) -> SkillCapability:
 
 def capability_paths(root: Path) -> list[Path]:
     paths: list[Path] = []
-    tests_root = root / "tests"
-    if tests_root.exists():
-        paths.extend(
-            path
-            for path in tests_root.glob("*/*.json")
-            if path.parent.name != "value-signals"
-        )
     skills_root = root / "skills"
     if skills_root.exists():
         paths.extend(skills_root.glob("*/tests/*.json"))
@@ -426,10 +419,7 @@ def write_repair_ticket(root: Path, packet: SkillFailurePacket) -> Path:
 
 
 def value_signal_paths(root: Path) -> list[Path]:
-    value_root = root / "tests" / "value-signals"
-    if not value_root.exists():
-        return []
-    return sorted(value_root.glob("*.json"))
+    return sorted((root / "skills").glob("*/tests/value-signals/*.json"))
 
 
 def validate_value_signal(raw: dict[str, Any], path: Path) -> UserValueSignal:

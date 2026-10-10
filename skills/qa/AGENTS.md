@@ -12,7 +12,7 @@ Rules for the `qa` skill module.
   surface. The coordinating lane should route browser/tool-driving work to
   `qa-tester` instead of self-certifying operated proof. See `MEM-0069`.
 - QA owns artifact capture and ticket reconciliation; `visual-qa` owns the separate UI judgment pass.
-- Keep reusable browser-entry guidance in repo-owned `qa/` docs and cookbook pages, not in transient chat or ticket-local prose.
+- Keep reusable browser-entry guidance in the project's `AGENTS.md` Agent QA section or `docs/qa/<flow>.md`, not in transient chat or ticket-local prose. The shared guide lives in `references/guide.md`.
 
 ## Notes
 

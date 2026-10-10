@@ -13,11 +13,11 @@ artifact defaults for new or migrated repos.
 - adaptive direct clarification as the canonical intake for ambiguous bootstrap work
 - `docs/bootstrap-brief.md` as the visible bootstrap brief surface
 - bootstrap-owned agent-experience/testability decisions captured in
-  `docs/bootstrap-brief.md` and scaffolded `qa/` surfaces
+  `docs/bootstrap-brief.md` and the generated `AGENTS.md` Agent QA section
 - bootstrap-owned runtime and evidence-capture command guidance captured in
-  `docs/bootstrap-brief.md`, `PROJECT_RULES.md`, and scaffolded `qa/` surfaces
+  `docs/bootstrap-brief.md` and generated `AGENTS.md`
 - bootstrap-owned frontend UI initialization guidance captured in
-  `docs/bootstrap-brief.md`, `PROJECT_RULES.md`, and `docs/TASTE.md` when the
+  `docs/bootstrap-brief.md`, generated `AGENTS.md`, and `docs/TASTE.md` when the
   generated or migrated repo has a UI surface
 - bootstrap-owned decisions about local hooks, optional heavy local gates, and
   separate CI/deploy protection captured in `docs/bootstrap-brief.md`

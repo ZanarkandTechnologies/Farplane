@@ -8,6 +8,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -75,7 +76,7 @@ class DispatchCallRuntimeResolutionTest(unittest.TestCase):
         resolved = dispatch_call.resolve_repo_root(SOURCE_SCRIPT)
 
         self.assertEqual(resolved, EXPECTED_REPO_ROOT)
-        self.assertTrue((resolved / "farplane" / "phone-chaser").is_dir())
+        self.assertTrue((resolved / "bin" / "core").is_dir())
 
     def test_installed_skill_copy_resolves_repo_runtime_through_core_link(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -92,7 +93,26 @@ class DispatchCallRuntimeResolutionTest(unittest.TestCase):
 
         self.assertEqual(resolved, EXPECTED_REPO_ROOT)
         self.assertNotEqual(resolved, codex_home)
-        self.assertTrue((resolved / "farplane" / "phone-chaser").is_dir())
+        self.assertTrue((resolved / "bin" / "core").is_dir())
+
+
+class DispatchCallUiRuntimeTest(unittest.TestCase):
+    def test_runtime_dir_is_the_linked_farplane_ui_worker(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            ui_repo = Path(tmp)
+            worker = ui_repo / "apps" / "phone-chaser"
+            worker.mkdir(parents=True)
+            (worker / "livekit.toml").write_text("[project]\n", encoding="utf-8")
+            config = type("Config", (), {"ui_repo_path": ui_repo})()
+            with patch("farplane_cli_base.load_config", return_value=config):
+                self.assertEqual(dispatch_call.runtime_dir(), worker)
+
+    def test_runtime_dir_explains_a_missing_ui_checkout(self) -> None:
+        config = type("Config", (), {"ui_repo_path": None})()
+        with patch("farplane_cli_base.load_config", return_value=config):
+            with self.assertRaises(SystemExit) as raised:
+                dispatch_call.runtime_dir()
+        self.assertIn("farplane ui link", str(raised.exception))
 
 
 if __name__ == "__main__":

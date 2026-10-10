@@ -33,7 +33,7 @@ def registry_skill_names(repo: Path) -> set[str]:
 
 
 def load_profile_map(repo: Path, known_skills: set[str]) -> dict[str, tuple[str, ...]]:
-    manifest_path = repo / "rules" / "skill-profiles.toml"
+    manifest_path = repo / "config" / "skill-profiles.toml"
     try:
         payload = tomllib.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, tomllib.TOMLDecodeError) as exc:

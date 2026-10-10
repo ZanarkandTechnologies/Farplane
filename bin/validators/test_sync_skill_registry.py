@@ -346,8 +346,8 @@ capability:
         )
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
-            (repo / "rules").mkdir()
-            (repo / "rules" / "skill-workflows.toml").write_text(desks)
+            (repo / "config").mkdir()
+            (repo / "config" / "skill-workflows.toml").write_text(desks)
             write_skill(repo, "recap-task", tier=3, department="operations")
             write_skill(repo, "writer", tier=3, department="operations")
             rows = {row["name"]: row for row in sync_skill_registry.build_registry(repo)}
@@ -355,8 +355,8 @@ capability:
             self.assertNotIn("specialist", rows["writer"])
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
-            (repo / "rules").mkdir()
-            (repo / "rules" / "skill-workflows.toml").write_text(desks)
+            (repo / "config").mkdir()
+            (repo / "config" / "skill-workflows.toml").write_text(desks)
             write_skill(repo, "recap-task", tier=3, department="marketing")
             with self.assertRaisesRegex(sync_skill_registry.RegistryError, "specialist 'reporter' requires"):
                 sync_skill_registry.build_registry(repo)

@@ -147,10 +147,8 @@ BACKUP_ROOT="${TARGET_DIR}/.install-backups/${STAMP}"
 LOCAL_TOML_FILE="${TARGET_DIR}/config.local.toml"
 LOCAL_TOML_MARKER="# Machine-local config appended from config.local.toml"
 INSTALL_BIN_FILES=(
-  _compat.py
   farplane
   farplane.py
-  notify.py
 )
 INSTALL_HOOK_DIRS=(
   continuation
@@ -159,6 +157,7 @@ INSTALL_HOOK_DIRS=(
   lifecycle-telemetry
   skill-length
   user-turn
+  shared
 )
 RETIRED_INSTALL_PATHS=(
   bin/ticket_runtime.py
@@ -168,6 +167,8 @@ RETIRED_INSTALL_PATHS=(
   bin/farplane_invocation.py
   bin/runtime_telemetry.py
   bin/user_turn.py
+  bin/_compat.py
+  bin/runtime
   bin/file_growth_hook.py
   hooks/farplane_file_change.py
   hooks/farplane_local_event.py
@@ -188,7 +189,7 @@ install_claude_runtime() {
   local hook_name
   echo "Installing Claude Code harness from $REPO_DIR to $TARGET_DIR"
   mkdir -p "$TARGET_DIR/$1/hooks" "$TARGET_DIR/skills" "$TARGET_DIR/agents"
-  copy_path "$REPO_DIR/templates/global/AGENTS.md" "$TARGET_DIR/$1/AGENTS.md"
+  copy_path "$REPO_DIR/runtimes/AGENTS.md" "$TARGET_DIR/$1/AGENTS.md"
   for hook_name in "${INSTALL_HOOK_DIRS[@]}"; do
     link_path "$REPO_DIR/hooks/$hook_name" "$TARGET_DIR/$1/hooks/$hook_name"
   done
@@ -203,7 +204,7 @@ install_claude_runtime() {
 }
 
 render_config() {
-  local config_template="${1:-$REPO_DIR/config.toml.example}"
+  local config_template="${1:-$REPO_DIR/runtimes/codex/config.toml.example}"
   local skill_profile_matrix="${2:-}"
   if [ -e "$TARGET_DIR/config.toml" ]; then
     python3 - "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$LOCAL_TOML_MARKER" <<'PY'
@@ -387,7 +388,7 @@ else:
 output_path.write_text(text)
 PY
 
-  echo "Rendered $TARGET_DIR/config.toml from config.toml.example"
+  echo "Rendered $TARGET_DIR/config.toml from runtimes/codex/config.toml.example"
   if [ -e "$LOCAL_TOML_FILE" ]; then
     echo "Appended machine-local TOML from $LOCAL_TOML_FILE"
   fi
@@ -553,17 +554,17 @@ if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
   exit 0
 fi
 
-copy_path "$REPO_DIR/templates/global/AGENTS.md" "$TARGET_DIR/AGENTS.md"
-link_path "$REPO_DIR/PROJECT_RULES.md" "$TARGET_DIR/PROJECT_RULES.md"
+copy_path "$REPO_DIR/runtimes/AGENTS.md" "$TARGET_DIR/AGENTS.md"
 link_path "$REPO_DIR/docs/review/rubrics" "$TARGET_DIR/docs/review/rubrics"
-if [ -f "$REPO_DIR/hooks.json" ]; then
-  link_path "$REPO_DIR/hooks.json" "$TARGET_DIR/hooks.json"
+if [ -f "$REPO_DIR/hooks/hooks.json" ]; then
+  link_path "$REPO_DIR/hooks/hooks.json" "$TARGET_DIR/hooks.json"
 fi
 
 for bin_name in "${INSTALL_BIN_FILES[@]}"; do
   link_path "$REPO_DIR/bin/$bin_name" "$TARGET_DIR/bin/$bin_name"
 done
 link_path "$REPO_DIR/bin/core" "$TARGET_DIR/bin/core"
+link_path "$REPO_DIR/runtimes/codex/notify.py" "$TARGET_DIR/bin/notify.py"
 link_global_cli "$TARGET_DIR/bin/farplane"
 
 for hook_name in "${INSTALL_HOOK_DIRS[@]}"; do
@@ -589,9 +590,7 @@ python3 "$REPO_DIR/skills/skill-maintenance/scripts/install_selected_skills.py" 
   --all \
   --prune
 
-for rule_file in "$REPO_DIR"/rules/*; do
-  link_path "$rule_file" "$TARGET_DIR/rules/$(basename "$rule_file")"
-done
+link_path "$REPO_DIR/runtimes/codex/default.rules" "$TARGET_DIR/rules/default.rules"
 
 render_config "" "$PROFILE_RENDER_DIR/base.config.toml"
 

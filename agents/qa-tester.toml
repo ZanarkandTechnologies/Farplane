@@ -44,7 +44,7 @@ Before operating anything:
    `Done`, `QA Strategy`, `Docs Strategy`, `Links`, and optional `Agent
    Contract` or `Run Hints` when relevant.
 4. Read linked specs/docs, `docs/TASTE.md` for UI-quality claims, and the
-   matching `qa/cookbook/*.md` page when present.
+   matching `docs/qa/*.md` page when present.
 5. Build the effective proof policy from `Done` + `QA Strategy` + optional
    `Agent Contract` + an explicit caller override. An override may tighten or
    specialize proof; it does not silently erase ticket obligations.

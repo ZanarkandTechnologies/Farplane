@@ -6,8 +6,8 @@ Executable helpers for the Codex harness.
 
 This folder contains public command wrappers used by the live Codex config plus
 shared repo commands that are intentionally broader than one skill package.
-Core implementations live under `bin/core/`; hook/runtime implementations live
-under `bin/runtime/`; Core tests live under `bin/tests/`; validators live under
+Core implementations live under `bin/core/`; hook code lives in `hooks/`;
+Core tests live under `bin/tests/`; validators live under
 `bin/validators/`; package-specific scripts should live with their owning
 package, such as `skills/<name>/scripts/`.
 
@@ -94,12 +94,12 @@ or removing a `farplane` command.
 - `validators/check_skill_capabilities.py` - skill capability fixture validator
 - `validators/check_template_version_metadata.py` - staged metadata and
   version-bump guard for template files listed in
-  `rules/template-version-watch.toml`
+  `config/template-version-watch.toml`
 - `validators/check_source_line_growth.py` - deterministic pre-commit and
   pre-push guard that blocks new Python files over 500 lines and growth in
   already-oversized files. The 200-line `SKILL.md` check uses the same
   ratchet: new or enlarged oversized skills fail, while legacy skills must not
-  grow. `rules/source-line-baseline.toml` is the one-time Python adoption
+  grow. `config/source-line-baseline.toml` is the one-time Python adoption
   ceiling until the comparison base contains the guard.
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `runtime/skill_suggestion.py` - optional dependency-free OpenRouter or
@@ -113,10 +113,9 @@ or removing a `farplane` command.
   `farplane/manifest.json` pins, optional project `.agents/skills/`, feature/template
   registries, drift, and Office-consumable adoption stats; implementation lives
   in `bin/core/farplane_adoption.py`
-- `notify.py` - local notification helper
 The installed binary allowlist contains one user-facing command, `farplane`,
-plus the hook and notification launchers that Codex configuration calls
-directly. Internal helpers are imported from `bin/core/` or `bin/runtime/`;
+plus `farplane.py`; Codex's notify script installs from
+`runtimes/codex/notify.py`. Internal helpers are imported from `bin/core/`;
 they are not separately installed command surfaces.
 
 `farplane.py` is only the executable edge. Parser construction, install/hooks,
@@ -169,12 +168,6 @@ are not authoritative runtime ownership surfaces.
 Use the existing helpers directly, but prefer output modes that keep routine
 success quiet and make failure output the thing that stands out.
 
-- `python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json`
-  Use before a live external CLI run to check the profile templates, copied
-  skill sources, executable, and required environment variables
-- `python3 skills/delegate-cli/scripts/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket <ticket> --dry-run --json`
-  Use to render the Pi/Kimi frontend delegation prompt, command, runtime logs,
-  and durable ticket artifacts without spending tokens or editing files
 - `python3 skills/skill-maintenance/scripts/install_selected_skills.py --search frontend`
   Use to discover shareable skills without rendering the full Farplane config.
 - `python3 skills/skill-maintenance/scripts/install_selected_skills.py --skills review,visual-qa --dry-run`
@@ -207,18 +200,6 @@ Examples:
 followup ok: TASK-0033 -> building pane=%42 session=main run=.farplane/runs/task-0033-building-20260410T091500000000Z.json dry-run
 ```
 
-## Minimal Example
-
-```bash
-python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json
-python3 skills/delegate-cli/scripts/delegate_cli_agent.py run \
-  --profile frontend-pi-kimi \
-  --ticket tickets/TASK-0014/ticket.md \
-  --dry-run \
-  --json
-
-```
-
 In the live interactive path, `goal-advisor` compiles the Goal-backed ticket
 execution contract. Native Goal mode owns persistence and ticket-local
 QA/review evidence owns completion. Independent Stop hooks add bounded Jev
@@ -231,15 +212,13 @@ continuation advice, the final-response length retry, and observational telemetr
 - `python3 bin/validators/check_doc_refs.py`
 - `python3 -m unittest bin/validators/test_harness_invariants.py`
 - `python3 -m unittest bin/validators/test_doc_parity.py`
-- `python3 -m unittest skills/delegate-cli/scripts/test_delegate_cli_agent.py`
 - `python3 -m unittest skills/pr-review-watch/scripts/test_pr_review_watch.py`
 - `python3 -m unittest bin/tests/test_ticket_metadata.py`
 - `python3 -m unittest bin/tests/test_ticket_runtime.py`
 - `python3 -m py_compile bin/core/farplane_ticket_runtime.py bin/tests/test_ticket_runtime.py`
-- `python3 -m py_compile bin/capture_user_turn.py bin/runtime/capture_user_turn.py bin/runtime/user_turn.py`
+- `python3 -m py_compile hooks/user-turn/capture_user_turn.py bin/core/user_turn.py`
 - `python3 -m py_compile bin/validators/check_harness_invariants.py bin/validators/test_harness_invariants.py`
 - `python3 -m py_compile bin/validators/check_doc_parity.py bin/validators/test_doc_parity.py`
 - `python3 -m py_compile bin/validators/check_doc_refs.py bin/validators/test_check_doc_refs.py`
 - `python3 -m unittest bin/validators/test_check_template_version_metadata.py`
-- `python3 -m py_compile skills/delegate-cli/scripts/delegate_cli_agent.py`
 - `python3 -m unittest discover -s bin/tests -p 'test_*.py'`

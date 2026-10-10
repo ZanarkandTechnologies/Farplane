@@ -32,7 +32,7 @@ lane installed at `~/.codex/agents/reviewer.toml` or the TAS review contract in
 
 ## Project Rules
 
-- Read `AGENTS.md`, `PROJECT_RULES.md`, and the active ticket before judging
+- Read `AGENTS.md` and the active ticket before judging
   broad implementation choices.
 - Read nearest module `README.md` / `AGENTS.md` when changed files are under a
   module-like folder.

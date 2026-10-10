@@ -51,7 +51,8 @@ class BootstrapTest(unittest.TestCase):
             )
             self.assertTrue(all("approval_required" not in ticket for ticket in tickets))
             self.assertNotIn("Draft initial PRD", "\n".join(path.read_text() for path in ticket_paths))
-            self.assertTrue((root / ".farplane" / "wiki").is_dir())
+            self.assertTrue((root / ".farplane" / "README.md").is_file())
+            self.assertEqual(sorted(p.name for p in (root / ".farplane").iterdir()), ["README.md", "views.yaml"])
             self.assertIn("farplane wiki doctor", result.stdout)
             self.assertIn("farplane wiki rebuild", result.stdout)
 

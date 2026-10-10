@@ -159,7 +159,7 @@ Manual fields:
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding
 - `department`: required for Tier 3 only; one canonical operating department from
-  [`rules/skill-departments.toml`](../../rules/skill-departments.toml)
+  [`config/skill-departments.toml`](../../config/skill-departments.toml)
 - `capability`: optional static projection into the Capability Map and Office:
   `artifact` declares exactly one output family in `produces` and optional
   `consumes`; `integration` declares the artifact families it `consumes` at its
@@ -255,7 +255,7 @@ Numeric tiers are compound leverage classes: lower numeric tiers are upgraded
 first because improvements there propagate through more workflows. Tiered
 loading is the separate first-load todo-link contract derived from those
 classes. Tier 0 phase steps are not skill links; they are inherited from
-`templates/global/AGENTS.md` and may be written as `## Phase Contract` in a
+`runtimes/AGENTS.md` and may be written as `## Phase Contract` in a
 skill when useful.
 
 When ranking which skill to improve next, use
@@ -357,9 +357,9 @@ Project lifecycle is currently an `init-advisor` reference, not a public
 top-level skill. Use
 `skills/init-advisor/references/project-lifecycle.md` for the shared
 `bootstrap -> interview -> PRD -> tickets -> native planning phase -> implement -> proof/review -> close`
-shape. Generated project `AGENTS.md` should carry the compact lifecycle rule;
-`PROJECT_RULES.md` should carry technical standards, commands, runtime, and QA
-paths. Treat planning and execution as native phases; domain skills own real
+shape. Generated project `AGENTS.md` carries the compact lifecycle rule plus
+technical standards, commands, runtime, and QA paths; there is no second root
+rules file. Treat planning and execution as native phases; domain skills own real
 artifacts and algorithms rather than inheriting generic skill wrappers.
 
 ## Source Ownership

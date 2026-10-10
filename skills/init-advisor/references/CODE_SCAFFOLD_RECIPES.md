@@ -42,7 +42,7 @@ pnpm dlx convex@latest dev
 
 ## Optional Quality Tooling Slots
 
-Record adopted commands in `PROJECT_RULES.md`; install only when the operator
+Record adopted commands in the Validation section of `AGENTS.md`; install only when the operator
 or selected stack setup explicitly includes those tools.
 
 - JavaScript / TypeScript: ESLint or Oxlint, TypeScript checks, jscpd,
@@ -59,7 +59,7 @@ or selected stack setup explicitly includes those tools.
 - Run stack commands only when `include_code_scaffold == true`.
 - Stop for interactive setup, credentials, billing, deploys, cloud project
   creation, or other external side effects.
-- Record canonical app-only and QA/evidence run commands in `PROJECT_RULES.md`,
-  `docs/bootstrap-brief.md`, and the relevant `qa/` cookbook page.
+- Record canonical app-only and QA/evidence run commands in `AGENTS.md` (Build & Run),
+  `docs/bootstrap-brief.md`, and the Agent QA section of `AGENTS.md`.
 - Route behavior-preserving cleanup to `refactoring`; route risk-reduction work
   to `hardening`.

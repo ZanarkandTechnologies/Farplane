@@ -13,7 +13,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNTIME_DIR = str((ROOT / "bin" / "runtime").resolve())
+RUNTIME_DIR = str((ROOT / "runtimes" / "codex").resolve())
 if RUNTIME_DIR not in sys.path:
     sys.path.insert(0, RUNTIME_DIR)
 
@@ -26,8 +26,7 @@ class NotifyTests(unittest.TestCase):
             codex_home = Path(tmp)
             bin_dir = codex_home / "bin"
             bin_dir.mkdir()
-            (bin_dir / "notify.py").symlink_to(ROOT / "bin" / "notify.py")
-            (bin_dir / "_compat.py").symlink_to(ROOT / "bin" / "_compat.py")
+            (bin_dir / "notify.py").symlink_to(ROOT / "runtimes" / "codex" / "notify.py")
             (codex_home / ".farplane-notify-disabled").write_text("disabled\n", encoding="utf-8")
 
             result = subprocess.run(

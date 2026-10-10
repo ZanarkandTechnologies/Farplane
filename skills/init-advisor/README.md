@@ -46,15 +46,14 @@ created during init, select the stack scaffold before running commands.
 
 That also writes `farplane/README.md`, `farplane/manifest.json`, `farplane/harness.yaml`,
 `farplane/metrics.yaml`, `farplane/automations/`, `farplane/bindings.yaml`,
-`.agents/skills/README.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `qa/README.md`,
-`qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
+`.agents/skills/README.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
 `scripts/pre_push_check.sh`, review docs, and review-agent helper scripts as
 opt-in samples. The recommended default is to keep the large-file scan, fill in
 lint/typecheck/test/build commands, run advisory Codex SDK diff review during
 pre-push, and activate only `pre-push` unless the repo wants an extra
 pre-commit gate. The other required follow-through is to fill
-`PROJECT_RULES.md` and `qa/` with the authoritative launch path agents should
+`AGENTS.md` (Build & Run and Agent QA) with the authoritative launch path agents should
 use for ordinary app work versus QA. It also creates exactly three ordinary
 foundation tickets at `tickets/TASK-0001` through
 `tickets/TASK-0003`. They use normal dependencies to enforce customer -> value
@@ -144,7 +143,6 @@ touch ARCHITECTURE.md docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/features/R
 
 Then copy in:
 
-- `PROJECT_RULES.md`
 - `AGENTS.md`
 - `ARCHITECTURE.md`
 - `farplane/README.md`
@@ -156,7 +154,6 @@ Then copy in:
 - `.agents/skills/README.md`
 - `farplane/pm.json`
 - `docs/TASTE.md`
-- `qa/`
 - `tickets/templates/ticket.md`
 
 Use the versioned, field-preserving migration for an existing project:
@@ -290,9 +287,7 @@ Those can come after one clean ticket run.
 - [ ] `docs/bootstrap-brief.md` captures Codex SDK diff-review policy and code-review skill linkage
 - [ ] `docs/bootstrap-brief.md` captures canonical app/QA run paths plus required services and port/env assumptions
 - [ ] `docs/bootstrap-brief.md` captures agent-experience/testability decisions
-- [ ] `PROJECT_RULES.md` exists
-- [ ] `PROJECT_RULES.md` names the authoritative app-only and QA/evidence launch commands
-- [ ] `AGENTS.md` exists
+- [ ] `AGENTS.md` exists and names the authoritative app-only and QA/evidence launch commands
 - [ ] `ARCHITECTURE.md` exists
 - [ ] `docs/features/README.md` exists as the feature-spec home
 - [ ] `docs/systems/README.md` exists as the cross-feature system grouping home
@@ -307,14 +302,13 @@ Those can come after one clean ticket run.
 - [ ] `farplane/pm.json` exists when the UI should fold chat and automation thread IDs into one visual project PM
 - [ ] Live automation activation, when requested, is handled by
       `automation-advisor` and appends PM-visible thread IDs to `farplane/pm.json`
-- [ ] owner-named `.farplane/reports/`, `.farplane/<skill-name>/reports/`, `.farplane/entities/`, `.farplane/wiki/`, `.farplane/views.yaml`, `.farplane/metrics/daily/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local state; `views.yaml` starts as `views: {}` and generated Wiki/search/JSON projections exist after the first `farplane wiki rebuild`
+- [ ] owner-named `.farplane/README.md` and `.farplane/views.yaml` exist as ignored local state (other `.farplane/` folders appear when their writers first run); `views.yaml` starts as `views: {}` and generated Wiki/search/JSON projections exist after the first `farplane wiki rebuild`
 - [ ] framework migrations that change Wiki/entity schemas pass `farplane wiki doctor` and `farplane wiki rebuild --no-write --json` before regeneration, and generated schema versions match the current changelog
 - [ ] primitive metrics and `.farplane/project/ui/latest.json` were regenerated after canonical project-file migration
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
 - [ ] `docs/prd.md`, `docs/features/`, and `docs/MEMORY.md` exist
-- [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist
 - [ ] `docs/code_review.md`, `docs/review-agent.md`, and review helper scripts exist
-- [ ] one QA cookbook page records the evidence-capture launch path and expected targets
+- [ ] the `AGENTS.md` Agent QA section records the evidence-capture launch path and expected targets
 - [ ] `docs/features/README.md` exists
 - [ ] `tickets/` structure exists
 - [ ] `tickets/archive/` exists for completed tickets

@@ -124,14 +124,14 @@ class SkillFileLineGateTests(unittest.TestCase):
         self.assertEqual("skill-length", report.call_args.args[1])
 
     def test_hook_config_routes_apply_patch_aliases_to_gate(self) -> None:
-        config = json.loads((ROOT / "hooks.json").read_text(encoding="utf-8"))
+        config = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8"))
         groups = config["hooks"]["PostToolUse"]
         commands = [hook["command"] for group in groups for hook in group["hooks"]]
         self.assertTrue(any("skill_file_line_gate.py" in command for command in commands))
         self.assertTrue(any("apply_patch" in group.get("matcher", "") for group in groups))
 
     def test_pre_commit_backstop_is_strict_and_skill_scoped(self) -> None:
-        with (ROOT / "rules/git-review-gates.toml").open("rb") as handle:
+        with (ROOT / "config/git-review-gates.toml").open("rb") as handle:
             config = tomllib.load(handle)
         argv = config["checks"]["skill_file_line_count"]["argv"]
         self.assertIn("--strict", argv)

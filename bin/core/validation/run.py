@@ -23,7 +23,7 @@ def validate_ticket(
     if not ticket.is_file():
         raise ValueError(f"ticket does not exist: {ticket}")
     text = ticket.read_text(encoding="utf-8")
-    check_ids = select_checks(phase, boundary, text, root / "rules" / "validation.toml")
+    check_ids = select_checks(phase, boundary, text, root / "config" / "validation.toml")
     context = ValidationContext(root=root.resolve(), ticket=ticket, phase=phase, boundary=boundary)
     receipt = ValidationReceipt(
         schema_version=1,

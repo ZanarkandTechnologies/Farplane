@@ -22,7 +22,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_CONFIG = ROOT / "rules" / "template-version-watch.toml"
+DEFAULT_CONFIG = ROOT / "config" / "template-version-watch.toml"
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
 METADATA_KEY_RE = re.compile(
     r"(?im)^\s*(?:[#/;*-]+\s*)?(?:<!--\s*)?(template_id|template_name|template_version|version)\s*:\s*[\"']?([^\"'\n>-]+)"
@@ -288,7 +288,7 @@ def parse_args() -> argparse.Namespace:
         "--config",
         type=Path,
         default=None,
-        help="Template watch config. Defaults to rules/template-version-watch.toml.",
+        help="Template watch config. Defaults to config/template-version-watch.toml.",
     )
     return parser.parse_args()
 
@@ -296,7 +296,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     root = args.root.resolve()
-    config_path = args.config.resolve() if args.config else root / "rules" / "template-version-watch.toml"
+    config_path = args.config.resolve() if args.config else root / "config" / "template-version-watch.toml"
     config = load_watch_config(config_path)
     errors = validate_all(root, config) if args.all else validate_staged(root, config)
     if errors:

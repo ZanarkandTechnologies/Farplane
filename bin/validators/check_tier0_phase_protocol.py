@@ -39,7 +39,7 @@ def checklist_body(text: str) -> str:
 def live_text_files() -> list[Path]:
     roots = [
         ROOT / "AGENTS.md",
-        ROOT / "templates",
+        ROOT / "runtimes",
         ROOT / "docs",
         ROOT / "skills",
         ROOT / "agents",
