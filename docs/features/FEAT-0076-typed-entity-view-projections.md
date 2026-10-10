@@ -24,7 +24,6 @@ surfaces:
   - docs/farplane-framework/entity-markdown-authoring.md
   - skills/init-advisor/scripts/bootstrap.sh
 source_refs:
-  - tickets/archive/TASK-0402/ticket.md
   - docs/farplane-framework/entities.md
 external_refs: []
 evidence_refs:

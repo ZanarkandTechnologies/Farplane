@@ -13,7 +13,6 @@ refs:
   - docs/skills/README.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
-  - tickets/archive/TASK-0228/ticket.md
   - skills/best-of-worlds/references/metric-discovery.md
   - skills/metric-advisor/SKILL.md
   - skills/metric-advisor/evals/evals.json
@@ -31,14 +30,12 @@ surfaces:
   - bin/core/farplane_project_snapshot.py
   - bin/validators/check_farplane_project_files.py
 source_refs:
-  - tickets/archive/TASK-0228/ticket.md
   - skills/best-of-worlds/references/metric-discovery.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 external_refs: []
 evidence_refs:
   - skills/metric-advisor/SKILL.md
   - skills/metric-advisor/evals/evals.json
-  - tickets/archive/TASK-0228/ticket.md
 known_limits: Advisory metric-card authoring still depends on truthful refreshers and observations. Core projects equal calendar windows but does not infer missing daily facts; refreshers must emit zero or a source gap when absence is meaningful.
 metrics:
   - metric_card_traceability_pass
@@ -148,7 +145,6 @@ Owner surfaces:
 
 Source context:
 
-- `tickets/archive/TASK-0228/ticket.md`
 - `skills/best-of-worlds/references/metric-discovery.md`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
@@ -156,7 +152,6 @@ Evidence:
 
 - `skills/metric-advisor/SKILL.md`
 - `skills/metric-advisor/evals/evals.json`
-- `tickets/archive/TASK-0228/ticket.md`
 
 ## End-To-End Contract
 

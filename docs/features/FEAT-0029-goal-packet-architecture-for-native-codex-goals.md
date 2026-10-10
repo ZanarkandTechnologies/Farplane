@@ -18,7 +18,6 @@ refs:
   - README.md
   - https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex
   - docs/HISTORY.md
-  - tickets/archive/TASK-0193/ticket.md
 feature_id: FEAT-0029
 system_id: SYS-0003
 category: planning
@@ -38,7 +37,6 @@ external_refs:
   - https://developers.openai.com/codex/use-cases/follow-goals
 evidence_refs:
   - docs/HISTORY.md
-  - tickets/archive/TASK-0193/ticket.md
 known_limits: Superseded by the clearer Goal Advisor feature handle. Goal Packet files remain implementation surfaces, but the feature UX is Goal Advisor execution.
 metrics:
   - goal_packet_reconstructability
@@ -146,7 +144,6 @@ External context:
 Evidence:
 
 - `docs/HISTORY.md`
-- `tickets/archive/TASK-0193/ticket.md`
 
 ## Proof And Quality
 

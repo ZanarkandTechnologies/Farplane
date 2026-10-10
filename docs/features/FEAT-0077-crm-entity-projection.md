@@ -23,13 +23,11 @@ surfaces:
   - docs/farplane-framework/entities.md
   - docs/farplane-framework/entity-markdown-authoring.md
 source_refs:
-  - tickets/archive/TASK-0399/ticket.md
   - docs/features/FEAT-0069-taste-loop-human-feedback-optimization.md
 external_refs: []
 evidence_refs:
   - bin/tests/test_farplane_wiki.py
   - bin/tests/test_farplane_entities.py
-  - tickets/archive/TASK-0399/ticket.md
 known_limits: "CRM is a generated funnel-bearing entity projection, not a campaign queue, outreach runtime, activity database, or authority to write customer data."
 metrics: []
 last_verified: 2026-08-02

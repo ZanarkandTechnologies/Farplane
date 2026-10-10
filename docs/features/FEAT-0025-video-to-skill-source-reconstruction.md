@@ -13,7 +13,6 @@ refs:
   - skills/media-ingest
   - skills/video-understanding
   - SRC-0008
-  - tickets/archive/TASK-0158/ticket.md
   - docs/HISTORY.md
 feature_id: FEAT-0025
 system_id: SYS-0008
@@ -25,13 +24,11 @@ surfaces:
   - skills/video-understanding
 source_refs:
   - SRC-0008
-  - tickets/archive/TASK-0158/ticket.md
 external_refs:
   - https://www.instagram.com/p/DYijhcetmBP/
 evidence_refs:
   - skills/media-ingest/SKILL.md
   - skills/video-understanding/SKILL.md
-  - tickets/archive/TASK-0158/ticket.md
   - docs/HISTORY.md
 known_limits: Retired as a generic skill/source workflow rather than a Farplane product feature. Keep current behavior in source-ingestion and media skills.
 metrics:
@@ -122,7 +119,6 @@ Owner surfaces:
 Source context:
 
 - `SRC-0008`
-- `tickets/archive/TASK-0158/ticket.md`
 
 External context:
 
@@ -132,7 +128,6 @@ Evidence:
 
 - `skills/media-ingest/SKILL.md`
 - `skills/video-understanding/SKILL.md`
-- `tickets/archive/TASK-0158/ticket.md`
 - `docs/HISTORY.md`
 
 ## Proof And Quality

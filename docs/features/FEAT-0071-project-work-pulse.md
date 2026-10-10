@@ -27,16 +27,12 @@ surfaces:
   - skills/plan-next-wave/SKILL.md
 source_refs:
   - docs/prd.md
-  - tickets/archive/TASK-0318/ticket.md
 external_refs: []
 evidence_refs:
   - skills/pulse-update/evals/evals.json
   - skills/pulse-update/scripts/test_list_pulse_board.py
   - skills/pulse-update/scripts/test_materialize_skill_call.py
   - skills/plan-next-wave/evals/evals.json
-  - tickets/archive/TASK-0358/ticket.md
-  - tickets/archive/TASK-0318/artifacts/qa/work-pulse-proof.md
-  - tickets/archive/TASK-0319/artifacts/qa/integrated-qa.md
 known_limits: "Low-watermark refill and due_at ordering are covered by focused tests and evals; longer real scheduled-run monitoring remains future evidence."
 metrics:
   - work_pulse_dispatch_correctness

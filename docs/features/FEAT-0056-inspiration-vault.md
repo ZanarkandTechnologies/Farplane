@@ -24,7 +24,6 @@ surfaces:
   - skills/harness-scout/SKILL.md
 source_refs:
   - docs/systems/content-production.md
-  - tickets/archive/TASK-0339/ticket.md
 external_refs: []
 evidence_refs:
   - skills/ingest-content/SKILL.md

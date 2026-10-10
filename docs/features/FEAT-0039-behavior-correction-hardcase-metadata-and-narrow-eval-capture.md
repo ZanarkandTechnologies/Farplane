@@ -37,7 +37,6 @@ evidence_refs:
   - skills/optimize-harness/SKILL.md
   - skills/eval/SKILL.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
-  - tickets/archive/TASK-0228/ticket.md
   - docs/HISTORY.md
 known_limits: Skill comparisons now project Agent Skills manifests through Promptfoo; project suites and isolated behavior traces remain on the existing runner until migration evidence justifies retirement.
 metrics:
@@ -168,7 +167,6 @@ Evidence:
 - `skills/optimize-harness/SKILL.md`
 - `skills/eval/SKILL.md`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
-- `tickets/archive/TASK-0228/ticket.md`
 - `docs/HISTORY.md`
 
 ## Proof And Quality

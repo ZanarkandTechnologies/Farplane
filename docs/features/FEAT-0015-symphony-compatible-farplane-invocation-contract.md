@@ -10,7 +10,6 @@ tags:
   - retired
 refs:
   - docs/HISTORY.md
-  - tickets/archive/TASK-0107/ticket.md
   - tickets/archive/TASK-0414/ticket.md
 feature_id: FEAT-0015
 system_id: SYS-0004
@@ -23,7 +22,6 @@ source_refs:
 external_refs:
   - Symphony Service Specification draft v1
 evidence_refs:
-  - tickets/archive/TASK-0107/ticket.md
   - tickets/archive/TASK-0414/ticket.md
 known_limits: Historical record only; the workflow, skill, command family, runtime records, board adapter, and compute selector were removed.
 metrics: []

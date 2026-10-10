@@ -28,8 +28,7 @@ source_refs:
   - docs/systems/self-improvement-learning.md
   - docs/prd.md
 external_refs: []
-evidence_refs:
-  - tickets/archive/TASK-0326/artifacts/metadata-field-audit.md
+evidence_refs: []
 known_limits: "Retired as a standalone controller; human-feedback experiments now use normal ticket Goal Packets and the shared Work Pulse."
 metrics: []
 last_verified: 2026-07-11

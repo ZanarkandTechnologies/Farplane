@@ -30,7 +30,6 @@ surfaces:
   - docs/farplane-framework/entities.md
   - docs/farplane-framework/entity-markdown-authoring.md
 source_refs:
-  - tickets/TASK-0438/ticket.md
   - docs/features/FEAT-0075-entity-markdown-and-wiki-graph-projection.md
 external_refs:
   - https://github.com/ZanarkandTechnologies/Farplane/issues/13
@@ -39,7 +38,6 @@ external_refs:
 evidence_refs:
   - bin/tests/test_farplane_wiki.py
   - bin/tests/test_farplane_entities.py
-  - tickets/TASK-0438/artifacts/
 known_limits: "Resolution is project-local and lexical; FTS5/trigram results remain candidates requiring article and source context, and ambiguous identities never auto-merge."
 metrics: []
 last_verified: 2026-08-19

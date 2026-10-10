@@ -15,7 +15,6 @@ refs:
   - tickets/templates/goal-loop/program.md
   - tickets/templates/goal-loop/hypothesis-tree.json
   - docs/systems/self-improvement-learning.md
-  - tickets/archive/TASK-0196/ticket.md
   - skills/goal-advisor/SKILL.md
   - docs/HISTORY.md
 feature_id: FEAT-0032
@@ -32,14 +31,12 @@ source_refs:
   - skills/goal-advisor
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/systems/self-improvement-learning.md
-  - tickets/archive/TASK-0196/ticket.md
 external_refs:
   - https://developers.openai.com/codex/use-cases/follow-goals
 evidence_refs:
   - skills/goal-advisor/SKILL.md
   - skills/goal-advisor/evals/evals.json
   - docs/HISTORY.md
-  - tickets/archive/TASK-0196/ticket.md
 known_limits: Goal Advisor compiles and routes visible execution loops; it does not implement a daemon, hidden scheduler, Codex Cloud launcher, Symphony runner, or automatic Goal manager.
 metrics: []
 last_verified: 2026-08-01
@@ -163,7 +160,6 @@ Source context:
 - `skills/goal-advisor`
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `docs/systems/self-improvement-learning.md`
-- `tickets/archive/TASK-0196/ticket.md`
 
 External context:
 
@@ -174,7 +170,6 @@ Evidence:
 - `skills/goal-advisor/SKILL.md`
 - `skills/goal-advisor/evals/evals.json`
 - `docs/HISTORY.md`
-- `tickets/archive/TASK-0196/ticket.md`
 
 ## Proof And Quality
 

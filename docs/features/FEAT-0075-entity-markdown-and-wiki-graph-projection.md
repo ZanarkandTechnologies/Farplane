@@ -25,16 +25,12 @@ surfaces:
   - docs/farplane-framework/entities.md
   - docs/farplane-framework/entity-markdown-authoring.md
   - skills/manage-wiki/SKILL.md
-source_refs:
-  - tickets/TASK-0438/ticket.md
-  - tickets/archive/TASK-0395/ticket.md
-  - tickets/archive/TASK-0399/ticket.md
+source_refs: []
 external_refs:
   - https://github.com/ZanarkandTechnologies/Farplane/issues/13
 evidence_refs:
   - bin/tests/test_farplane_wiki.py
   - bin/tests/test_farplane_entities.py
-  - tickets/archive/TASK-0399/ticket.md
 known_limits: "The Wiki graph projection and identity resolver are project-local and paragraph-backed; cross-project identity, cloud sync, graph-database queries, inferred predicates, and automatic ambiguous merges remain separate concerns."
 metrics: []
 last_verified: 2026-08-19

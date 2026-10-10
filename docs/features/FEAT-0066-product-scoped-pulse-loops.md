@@ -11,7 +11,6 @@ tags:
 refs:
   - docs/prd.md
   - docs/features/FEAT-0071-project-work-pulse.md
-  - tickets/archive/TASK-0318/ticket.md
 feature_id: FEAT-0066
 system_id: SYS-0003
 category: planning
@@ -21,10 +20,8 @@ surfaces:
   - docs/features/FEAT-0071-project-work-pulse.md
 source_refs:
   - docs/prd.md
-  - tickets/archive/TASK-0318/ticket.md
 external_refs: []
-evidence_refs:
-  - tickets/archive/TASK-0318/artifacts/review/plan-review.md
+evidence_refs: []
 known_limits: "Retired historical design only; TASK-0321 removed its project files and active readers."
 metrics:
   - product_loop_ticket_relevance
@@ -69,8 +66,6 @@ The retired feature:
 ## Evidence
 
 - Current standard: `docs/prd.md`
-- Migration rationale: `tickets/archive/TASK-0318/ticket.md`
-- Implementation ticket: `tickets/archive/TASK-0318/ticket.md`
 - Successor: `docs/features/FEAT-0071-project-work-pulse.md`
 
 ## Change History

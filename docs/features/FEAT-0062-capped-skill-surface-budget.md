@@ -27,13 +27,11 @@ surfaces:
   - skills/skill-maintenance/scripts/minimize_skill_surface.py
   - skills/skill-maintenance/scripts/check_skills.py
 source_refs:
-  - tickets/archive/TASK-0221/ticket.md
   - skills/consolidate/SKILL.md
   - skills/skill-maintenance/SKILL.md
 external_refs: []
 evidence_refs:
   - bin/validators/test_check_skill_surface_budget.py
-  - tickets/archive/TASK-0221/ticket.md
 known_limits: Opt-in scanner only. Existing skills are not globally capped, and over-budget skill consolidation remains a skill-maintenance refinement decision rather than an automatic rewrite.
 metrics:
   - skill_surface_budget_pass
@@ -146,7 +144,6 @@ Supporting surfaces:
 
 - `docs/skills/system.md`
 - `docs/skills/templates/SKILL_TEMPLATE.md`
-- `tickets/archive/TASK-0221/ticket.md`
 
 ## Proof And Quality
 

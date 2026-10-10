@@ -12,7 +12,6 @@ refs:
   - bin/core/farplane_adoption.py
   - bin/tests/test_farplane_adoption.py
   - docs/features/registry.jsonl
-  - tickets/archive/TASK-0216/ticket.md
 feature_id: FEAT-0061
 system_id: SYS-0009
 category: proof
@@ -21,8 +20,7 @@ surfaces:
   - bin/core/farplane_adoption.py
   - bin/tests/test_farplane_adoption.py
   - docs/features/registry.jsonl
-source_refs:
-  - tickets/archive/TASK-0216/ticket.md
+source_refs: []
 external_refs: []
 evidence_refs:
   - bin/tests/test_farplane_adoption.py
@@ -124,7 +122,6 @@ CLI entrypoint:
 
 Source context:
 
-- `tickets/archive/TASK-0216/ticket.md`
 
 Evidence:
 
