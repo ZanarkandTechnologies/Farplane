@@ -7,6 +7,7 @@ import argparse
 import os
 import subprocess
 import sys
+import tempfile
 import tomllib
 from dataclasses import dataclass
 from fnmatch import fnmatchcase
@@ -45,6 +46,72 @@ def run_command(args: list[str], *, root: Path = ROOT) -> subprocess.CompletedPr
 
 def run_streaming(args: list[str], *, root: Path = ROOT) -> int:
     return subprocess.run(args, cwd=root, check=False).returncode
+
+
+SNAPSHOT_ENV = "FARPLANE_GIT_GATE_SNAPSHOT"
+# Git exports these to hooks; inside the snapshot they would point back at the
+# shared checkout's repository and index.
+_REPO_ENV = ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY",
+             "GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_COMMON_DIR", "GIT_PREFIX")
+
+
+def snapshot_env() -> dict[str, str]:
+    return {key: value for key, value in os.environ.items() if key not in _REPO_ENV}
+
+
+def build_snapshot(stage: str, dest: Path, *, base: str, root: Path = ROOT) -> Path:
+    """Materialize the tree this gate judges, so checks never see other threads' work.
+
+    pre_commit judges the staged index and pre_push judges HEAD. Ignored local
+    state (.farplane/, archives) is linked in; untracked and unstaged files in
+    the shared checkout are left out. The snapshot repository shares the real
+    object store and refs, so git-based checks diff exactly as they would at root.
+    """
+    def git(args: list[str], *, cwd: Path = root, env: dict[str, str] | None = None) -> str:
+        result = subprocess.run(["git", *args], cwd=cwd, env=env, text=True,
+                                capture_output=True, check=False)
+        if result.returncode != 0:
+            raise SystemExit(f"git gate snapshot: git {' '.join(args)} failed: {result.stderr.strip()}")
+        return result.stdout.strip()
+
+    tree = git(["write-tree"]) if stage == "pre_commit" else git(["rev-parse", "HEAD^{tree}"])
+    head = git(["rev-parse", "HEAD"])
+    objects = git(["rev-parse", "--git-path", "objects"])
+    archive = subprocess.run(["git", "archive", tree], cwd=root, capture_output=True, check=False)
+    if archive.returncode != 0:
+        raise SystemExit(f"git gate snapshot: git archive failed: {archive.stderr.decode().strip()}")
+    subprocess.run(["tar", "-x", "-C", str(dest)], input=archive.stdout, check=True)
+
+    env = snapshot_env()
+    git(["init", "-q"], cwd=dest, env=env)
+    (dest / ".git" / "objects" / "info" / "alternates").write_text(
+        str((root / objects).resolve()) + "\n", encoding="utf-8")
+    git(["symbolic-ref", "HEAD", "refs/heads/gate"], cwd=dest, env=env)
+    git(["update-ref", "refs/heads/gate", head], cwd=dest, env=env)
+    base_ref = subprocess.run(["git", "rev-parse", "--symbolic-full-name", base], cwd=root,
+                              text=True, capture_output=True, check=False).stdout.strip()
+    base_sha = subprocess.run(["git", "rev-parse", "--verify", "--quiet", f"{base}^{{commit}}"],
+                              cwd=root, text=True, capture_output=True, check=False).stdout.strip()
+    if base_ref.startswith("refs/") and base_sha:
+        git(["update-ref", base_ref, base_sha], cwd=dest, env=env)
+    git(["read-tree", tree], cwd=dest, env=env)
+
+    ignored = subprocess.run(
+        ["git", "ls-files", "--others", "--ignored", "--exclude-standard", "--directory", "-z"],
+        cwd=root, capture_output=True, check=True).stdout.decode().split("\0")
+    excludes = []
+    for entry in filter(None, ignored):
+        relative = entry.rstrip("/")
+        target = dest / relative
+        if target.exists() or target.is_symlink():
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.symlink_to(root / relative)
+        excludes.append("/" + relative)
+    with (dest / ".git" / "info" / "exclude").open("a", encoding="utf-8") as handle:
+        handle.write("\n".join(excludes) + "\n")
+    git(["update-index", "-q", "--refresh"], cwd=dest, env=env)
+    return dest
 
 
 def git_lines(args: list[str]) -> list[str]:
@@ -227,8 +294,24 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def run_in_snapshot(args: argparse.Namespace) -> int:
+    """Judge the target tree with that tree's own gate code and config."""
+    with tempfile.TemporaryDirectory(prefix="farplane-git-gate-") as workdir:
+        stage = stage_config(load_config(Path(args.config)), args.stage)
+        snapshot = build_snapshot(args.stage, Path(workdir), base=args.base or str(stage.get("base") or "main"))
+        argv = [sys.executable, str(snapshot / "bin" / "validators" / "run_git_gate.py"), "--stage", args.stage]
+        if args.base:
+            argv += ["--base", args.base]
+        print(f"farplane git gate: judging the {'staged index' if args.stage == 'pre_commit' else 'HEAD'} "
+              "snapshot; untracked and unstaged files are excluded", flush=True)
+        env = {**snapshot_env(), SNAPSHOT_ENV: "1"}
+        return subprocess.run(argv, cwd=snapshot, env=env, check=False).returncode
+
+
 def main() -> int:
     args = parse_args()
+    if not args.dry_run and not os.environ.get(SNAPSHOT_ENV):
+        return run_in_snapshot(args)
     config = load_config(Path(args.config))
     stage = stage_config(config, args.stage)
     base = args.base or str(stage.get("base") or "main")

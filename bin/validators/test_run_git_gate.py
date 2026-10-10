@@ -2,10 +2,17 @@
 
 from __future__ import annotations
 
+import os
+from pathlib import Path
+import subprocess
+import tempfile
 import unittest
+from unittest.mock import patch
 
 from bin.core.lint.registry import build_registry
-from bin.validators.run_git_gate import DEFAULT_CONFIG, load_config, select_checks, stage_config
+from bin.validators.run_git_gate import (
+    DEFAULT_CONFIG, build_snapshot, load_config, select_checks, stage_config,
+)
 
 
 class LintGitGateTests(unittest.TestCase):
@@ -43,6 +50,72 @@ class LintGitGateTests(unittest.TestCase):
         self.assertNotIn("--strict", argv)
         self.assertIn("--max-lines", argv)
         self.assertIn("200", argv)
+
+
+
+def git(repo: Path, *args: str) -> str:
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    return subprocess.run(["git", *args], cwd=repo, env=env, text=True, capture_output=True,
+                          check=True).stdout.strip()
+
+
+class SnapshotTests(unittest.TestCase):
+    """The gate judges only what is committed or pushed, never other threads' files."""
+
+    def setUp(self) -> None:
+        self.temp = tempfile.TemporaryDirectory()
+        self.repo = Path(self.temp.name) / "repo"
+        self.repo.mkdir()
+        git(self.repo, "init", "-q", "-b", "main")
+        (self.repo / ".gitignore").write_text("local/\n")
+        (self.repo / "a.md").write_text("committed\n")
+        git(self.repo, "add", ".")
+        git(self.repo, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "base")
+        (self.repo / "local").mkdir()
+        (self.repo / "local" / "state.txt").write_text("ignored local state\n")
+        (self.repo / "a.md").write_text("staged\n")
+        git(self.repo, "add", "a.md")
+        (self.repo / "a.md").write_text("unstaged other-thread edit\n")
+        (self.repo / "wip.md").write_text("---\nbroken: [\n")
+
+    def tearDown(self) -> None:
+        self.temp.cleanup()
+
+    def snapshot(self, stage: str) -> Path:
+        dest = Path(self.temp.name) / stage
+        dest.mkdir()
+        with patch.dict(os.environ, {}, clear=False):
+            for key in [k for k in os.environ if k.startswith("GIT_")]:
+                os.environ.pop(key)
+            return build_snapshot(stage, dest, base="main", root=self.repo)
+
+    def test_pre_commit_judges_the_staged_index_only(self) -> None:
+        snap = self.snapshot("pre_commit")
+        self.assertEqual((snap / "a.md").read_text(), "staged\n")
+        self.assertFalse((snap / "wip.md").exists())
+        self.assertEqual(git(snap, "diff", "--cached", "--name-only"), "a.md")
+        self.assertEqual(git(snap, "status", "--porcelain", "--untracked-files=all"), "M  a.md")
+
+    def test_pre_push_judges_head_and_links_ignored_state(self) -> None:
+        snap = self.snapshot("pre_push")
+        self.assertEqual((snap / "a.md").read_text(), "committed\n")
+        self.assertFalse((snap / "wip.md").exists())
+        self.assertTrue((snap / "local").is_symlink())
+        self.assertEqual((snap / "local" / "state.txt").read_text(), "ignored local state\n")
+        self.assertEqual(git(snap, "status", "--porcelain", "--untracked-files=all"), "")
+        self.assertEqual(git(snap, "rev-parse", "HEAD"), git(self.repo, "rev-parse", "HEAD"))
+
+    def test_hook_index_override_selects_the_commit_tree(self) -> None:
+        alt = Path(self.temp.name) / "alt.index"
+        env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+        subprocess.run(["git", "read-tree", "HEAD"], cwd=self.repo, check=True,
+                       env={**env, "GIT_INDEX_FILE": str(alt)})
+        dest = Path(self.temp.name) / "hook"
+        dest.mkdir()
+        with patch.dict(os.environ, {"GIT_INDEX_FILE": str(alt)}):
+            snap = build_snapshot("pre_commit", dest, base="main", root=self.repo)
+        self.assertEqual((snap / "a.md").read_text(), "committed\n")
+        self.assertEqual(git(snap, "diff", "--cached", "--name-only"), "")
 
 
 if __name__ == "__main__":
