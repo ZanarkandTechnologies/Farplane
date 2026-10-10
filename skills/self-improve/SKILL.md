@@ -1,7 +1,6 @@
 ---
 name: self-improve
 description: "Optimize one existing skill through a Goal-backed harden-then-refine loop over a frozen eval suite."
-tier: 3
 department: operations
 source: local
 template_uses:

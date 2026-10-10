@@ -2,7 +2,6 @@
 name: remotion-render
 version: 1.0.0
 description: "Turn existing React/Remotion video code into rendered MP4 output through inference.sh belt when code-to-video export is needed."
-tier: 3
 department: marketing
 source: local
 capability:

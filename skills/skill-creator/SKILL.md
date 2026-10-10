@@ -1,7 +1,6 @@
 ---
 name: skill-creator
 description: "Turn a new reusable workflow or capability idea into its first Farplane skill package with Golden Workflow Nodes, calibration, and proof."
-tier: 3
 department: operations
 source: local
 template_uses:
@@ -135,7 +134,7 @@ behavior_proof: concrete positive example or eval row, never book recall
 
 ## Reference Map
 
-- [skill system](../../docs/skills/system.md) — metadata, tiers, registry, and
+- [skill system](../../docs/skills/system.md) — metadata, desks, registry, and
   todo-link contracts; read for every structural update.
 - [skill best practices](../../docs/skills/best-practices.md) — placement,
   repeatability, examples, and review; read the relevant anchored section.
@@ -148,8 +147,8 @@ behavior_proof: concrete positive example or eval row, never book recall
   first load, references, scripts, prompts, and assets is unclear.
 - [output patterns](references/output-patterns.md) — load when a template,
   example, validator, or structured output needs calibration.
-- [tier-3 pipeline model](references/tier3-pipeline-model.md) — load only for a
-  complex Tier 3 pipeline.
+- [domain pipeline model](references/tier3-pipeline-model.md) — load only for a
+  complex domain or desk skill pipeline.
 
 ## Output
 

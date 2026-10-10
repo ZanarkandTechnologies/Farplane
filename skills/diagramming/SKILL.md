@@ -1,7 +1,6 @@
 ---
 name: diagramming
 description: "Turn plans, tickets, architecture notes, and code explanations into compact diagrams selected by the reader's approval question."
-tier: 2
 source: local
 capability:
   kind: shortcut

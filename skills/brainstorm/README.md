@@ -10,7 +10,7 @@ skill.
 
 - `SKILL.md`: main brainstorm workflow
 - `AGENTS.md`: maintenance rules
-- `SKILL.md` Todo List: Tier 2 intake checklist
+- `SKILL.md` Todo List: intake checklist
 - `references/spine-and-ensemble.md`: first-principles spine, optional depth
   lanes, and ensemble mechanics
 - `ensemble.yaml`: complete brainstorm-owned persona prompts

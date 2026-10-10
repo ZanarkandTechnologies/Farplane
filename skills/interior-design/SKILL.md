@@ -2,7 +2,6 @@
 name: interior-design
 version: 0.1.0
 description: "Turn an existing room, office, or navigable interior plus activities and taste into an evidence-backed composition brief, blockout, and operator review gate."
-tier: 3
 department: operations
 source: local
 template_uses:
@@ -97,7 +96,7 @@ interior_design_phase(task, bound_inputs, state)
 
 ## Phase Boundary
 
-Follow Tier 0 phases inline. Use `review` for independent judgment of a
+Follow native phases inline. Use `review` for independent judgment of a
 material brief or proof bundle. Use `visual-design` only after the spatial
 composition is accepted and UI or presentation styling remains. Do not call a
 phase-like skill recursively at the same scope.

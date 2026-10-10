@@ -2,7 +2,6 @@
 name: social-content
 version: 1.0.0
 description: "Turn social campaign goals into carousels, LinkedIn posts, calendars, hooks, captions, thumbnails, or cross-platform content plans."
-tier: 3
 department: marketing
 source: local
 template_uses:

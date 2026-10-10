@@ -29,7 +29,6 @@ class QuickValidateCapabilityTests(unittest.TestCase):
                 Path(tmp),
                 """name: x-thread
 description: Create a review-ready X thread draft.
-tier: 3
 source: local
 department: marketing
 capability:
@@ -48,7 +47,6 @@ capability:
                 Path(tmp),
                 """name: x-thread
 description: Create a review-ready X thread draft.
-tier: 3
 source: local
 department: marketing
 portfolio: domain

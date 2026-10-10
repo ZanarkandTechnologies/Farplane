@@ -1,7 +1,6 @@
 ---
 name: lean-check
 description: "Turn a suspected overbuilt change or plan into a first-sufficient-rung verdict, evidence, and smallest safe next action."
-tier: 2
 source: local
 capability:
   kind: shortcut

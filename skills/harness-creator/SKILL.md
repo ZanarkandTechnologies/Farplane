@@ -1,7 +1,6 @@
 ---
 name: harness-creator
 description: "Turn a high-level project or business idea into a Farplane charter, metric objectives, capability handoffs, and executable starter tickets."
-tier: 3
 department: operations
 source: local
 template_uses:

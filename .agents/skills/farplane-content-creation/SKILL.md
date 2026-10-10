@@ -1,7 +1,6 @@
 ---
 name: farplane-content-creation
 description: "Turn Farplane evidence or content intent into a human-approved skeleton, an optimized exemplar, and controlled distribution variants."
-tier: 3
 source: local
 group: capability
 template_uses:

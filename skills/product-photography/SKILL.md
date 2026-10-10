@@ -2,7 +2,6 @@
 name: product-photography
 version: 1.0.0
 description: "Turn product-image needs into packshots, lifestyle photos, detail shots, marketplace assets, cutouts, mockups, or product-page visuals."
-tier: 3
 department: marketing
 source: local
 methods:

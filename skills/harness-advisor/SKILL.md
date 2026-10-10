@@ -1,7 +1,6 @@
 ---
 name: harness-advisor
 description: "Turn a Farplane improvement idea into a recommended owner surface across policy, templates, skills, agents, hooks, tickets, docs, or validators."
-tier: 2
 source: local
 template_uses:
   skill-template: "0.2.0"
@@ -24,8 +23,8 @@ Load `docs/fundamentals/harness-algebra.md` when the decision needs the
 operational optimization model: loss terms, levers, budget, ensembles, proof
 signals, accept/hold/rollback rules, or research framing.
 
-This is a Tier 2 workflow surface. It may use Tier 1 primitives directly, then
-hand implementation to a Tier 3 skill such as `skill-maintenance`, `impl-plan`,
+This is a shared workflow interface. It may use core primitives directly, then
+hand implementation to an owning skill such as `skill-maintenance`, `impl-plan`,
 `goal-advisor`, `qa`, `demo`, or another Farplane application skill.
 
 ## Skill Signature
@@ -89,7 +88,7 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
      `Done / Proof`, and context-drift/self-review risk to reviewer subagent.
    - [ ] Define accept, hold, rollback, or follow-up conditions for material
      harness deltas.
-- [ ] 7. Hand implementation to the relevant Tier 3 workflow, ticket, or
+- [ ] 7. Hand implementation to the relevant owning workflow, ticket, or
    visible artifact instead of doing hidden stateful work in chat.
    - [ ] Use `optimize-harness` when the user
      wants the full diagnose-place-prove-change-review loop owned end to end.

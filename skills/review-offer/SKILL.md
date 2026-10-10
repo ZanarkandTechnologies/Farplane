@@ -1,7 +1,6 @@
 ---
 name: review-offer
 description: "Review a current offer against ten value, market, pricing, delivery, and risk-reversal criteria, then recommend one evidence-backed improvement with a Before/After target."
-tier: 3
 source: local
 department: sales
 template_uses:

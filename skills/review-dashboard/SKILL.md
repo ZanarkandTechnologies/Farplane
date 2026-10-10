@@ -1,7 +1,6 @@
 ---
 name: review-dashboard
 description: "Review a dashboard screen, or a whole app's dashboards, against ten clarity and consistency criteria and the closest real products, then return a keep, fix, merge or cut verdict with Before/After changes."
-tier: 3
 source: local
 department: operations
 template_uses:

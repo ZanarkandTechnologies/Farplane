@@ -26,7 +26,6 @@ class SkillContract:
     name: str
     path: str
     description: str
-    tier: int | None
     department: str
     source: str
     reads: list[str]
@@ -166,7 +165,6 @@ def parse_skill_contract(path: Path, repo_root: Path) -> SkillContract:
         name=name,
         path=path.relative_to(repo_root).as_posix(),
         description=str(frontmatter.get("description", "")),
-        tier=frontmatter.get("tier") if isinstance(frontmatter.get("tier"), int) else None,
         department=str(frontmatter.get("department", "")),
         source=str(frontmatter.get("source", "local")),
         reads=extract_call_values(signature, "reads"),
@@ -408,7 +406,6 @@ def build_graph(
                 path=contract.path,
                 tags=["skill", contract.department] if contract.department else ["skill"],
                 description=contract.description,
-                tier=contract.tier,
                 source=contract.source,
             ),
         )

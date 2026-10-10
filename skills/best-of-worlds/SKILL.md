@@ -2,7 +2,6 @@
 name: best-of-worlds
 version: 0.1.0
 description: "Turn multiple projects, repos, tools, or sources into scored feature takeaways and an adapted workflow or implementation plan."
-tier: 2
 source: local
 allowed-tools: Read, Glob, Grep
 ---

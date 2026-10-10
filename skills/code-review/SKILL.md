@@ -1,7 +1,6 @@
 ---
 name: code-review
 description: "Turn local diffs and branch context into maintainability, modularity, and code-smell findings before pushing agent-written code."
-tier: 2
 source: local
 template_uses:
   skill-template: "0.2.0"

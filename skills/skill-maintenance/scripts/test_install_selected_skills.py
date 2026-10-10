@@ -32,7 +32,6 @@ def write_skill(
                 "---",
                 f"name: {name}",
                 f"description: {description}",
-                "tier: 2",
                 f"source: {source}",
                 "---",
                 "",

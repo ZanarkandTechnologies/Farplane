@@ -1,7 +1,6 @@
 ---
 name: impl-plan
 description: "Turn one selected software or product request into a repository-grounded, context-resolved Change Plan, test strategy, and proof contract."
-tier: 3
 source: local
 template_uses:
   skill-template: "0.3.0"

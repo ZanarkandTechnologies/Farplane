@@ -1,7 +1,6 @@
 ---
 name: pulse-update
 description: "Run one bounded multi-phase Work Pulse: maintain state, service due reviews, dispatch executable tickets, refill low ready supply, and write one receipt."
-tier: 3
 department: operations
 source: local
 template_uses:

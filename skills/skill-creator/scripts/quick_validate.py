@@ -58,7 +58,6 @@ def validate_skill(skill_path):
         'license',
         'allowed-tools',
         'metadata',
-        'tier',
         'source',
         'department',
         'methods',

@@ -92,13 +92,13 @@ UI route or CLI projection
 | Template rollout | `docs/templates/registry.jsonl` plus consumer `template_uses` fields | `skill-template-intelligence.json` fields `template_rollout` and `template_rollout_summary` | `python3 skills/skill-maintenance/scripts/generate_template_intelligence.py` | Show high-impact template adoption across skills and projects. |
 | Skill rollout CLI | Skill registry plus template intelligence artifact | `farplane skills rollout scan --json` | `python3 bin/farplane.py skills rollout scan --json` | Stable UI-facing payload for skill/template rollout without reading graph internals directly. |
 | Harness health projection | Skill graph/docs, skill rollout intelligence, registry, and local eval runs | `.farplane/state/harness-health.json` and `.farplane/metrics/observations/harness_health/YYYY-MM-DD.json` | `python3 bin/farplane.py harness health compile --project-root . --date YYYY-MM-DD` | Give planners and UI one versioned local bundle plus actionable priority-skill and source-integrity readings without promoting weighted health scores into objectives. |
-| Skill graph | `docs/skills/registry.jsonl` plus `.farplane/events/*.jsonl` skill telemetry | `.farplane/generated/graphs/skill-graph.json` and `skill-docs.json` | `python3 skills/skill-maintenance/scripts/generate_skill_graph.py` | Visualize skill nodes, skill docs, observed skill heat, Markdown links, todo-chain edges, and Tier 3 chain edges. |
+| Skill graph | `docs/skills/registry.jsonl` plus `.farplane/events/*.jsonl` skill telemetry | `.farplane/generated/graphs/skill-graph.json` and `skill-docs.json` | `python3 skills/skill-maintenance/scripts/generate_skill_graph.py` | Visualize skill nodes, skill docs, observed skill heat, Markdown links, todo-chain edges, and common-chain edges. |
 | Harness reference graph | Repo Markdown links and literal local paths | `.farplane/generated/graphs/harness-graph.json` and doc audit report | `python3 skills/skill-maintenance/scripts/generate_harness_graph.py` | Audit local references, backlink cleanup, unresolved docs paths, and navigation sprawl. |
 | Lifecycle graph | Skill signatures, hooks, curated framework files, automations, reports, tickets, and runtime surfaces | `.farplane/generated/graphs/farplane-lifecycle-graph.json` | `python3 skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py` | Provide semantic framework maps and finite-state projections for UI and agent context. |
 | Graph projection dispatcher | Shared GraphIR and projection profiles | selected generated graph JSON/JS | `python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection <name>` | Route graph generation through one shared model with named projections. |
 | Eval system | `skills/*/evals/evals.json`, eval templates, and eval examples | local eval runs and eval reports | `python3 skills/eval/scripts/run_evals.py` | Test skills, prompts, and harness behavior with repeatable tasks and judges. |
 | Doc tracker | active docs, registries, local links, and canonical entrypoints | doc-ref validation and generated doc audit report | `python3 bin/validators/check_doc_refs.py` | Keep local references, canonical doc links, and registry refs from rotting. |
-| Skill OS checks | skill frontmatter, todo list contracts, capability fixtures, plugin sync, installed-skill import | validators, generated registries, install previews, plugin packages | `python3 skills/skill-maintenance/scripts/check_skills.py --write` | Maintain skill structure, first-load todo tiers, metadata, plugins, and installed-copy hygiene. |
+| Skill OS checks | skill frontmatter, todo list contracts, capability fixtures, plugin sync, installed-skill import | validators, generated registries, install previews, plugin packages | `python3 skills/skill-maintenance/scripts/check_skills.py --write` | Maintain skill structure, first-load todo lists, metadata, plugins, and installed-copy hygiene. |
 
 ## Rollout Layers
 
@@ -256,7 +256,6 @@ python3 bin/farplane.py harness health compile --project-root .
 # Skill registry and skill contract upkeep
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 python3 bin/validators/sync_skill_registry.py --check
-python3 bin/validators/check_skill_todo_tiers.py
 python3 bin/validators/check_skill_capabilities.py validate
 
 # Template registry and template metadata upkeep

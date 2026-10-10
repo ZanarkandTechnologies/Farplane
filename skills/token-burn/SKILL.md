@@ -1,7 +1,6 @@
 ---
 name: token-burn
 description: "Turn leftover weekly Claude plan usage near reset into parallel revive, triage, and backlog work with local-only commits and one dated report."
-tier: 3
 department: operations
 source: local
 template_uses:

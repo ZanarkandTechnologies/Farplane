@@ -1,7 +1,6 @@
 ---
 name: implementation-research
 description: "Turn a feature question and local codebase into sourced external implementation patterns, a verified local delta, and an implementation handoff."
-tier: 2
 source: local
 template_uses:
   skill-template: "0.6.2"

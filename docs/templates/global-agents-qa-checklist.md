@@ -135,8 +135,8 @@ present. Farplane project `AGENTS.md` carries the exact `FEAT-0060` path.
 
 `After:` Global keeps the skill-use protocol: read `SKILL.md`, bind signatures,
 load relevant references, apply Todo List Rule/Assert guardrails, and seed
-visible todos from the active skill. Farplane project docs own tier taxonomy
-and inventories.
+visible todos from the active skill. Farplane project docs own the specialist-desk
+Capability Map and inventories.
 
 `Decision:` `summarize_global` plus `move_to_project`.
 

@@ -2,7 +2,6 @@
 name: commit
 version: 0.5.0
 description: "Turn a requested worktree change into one isolated commit and, when asked to push, publish it straight to main."
-tier: 2
 source: local
 capability:
   kind: shortcut

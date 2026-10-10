@@ -1,7 +1,6 @@
 ---
 name: worker-artifact-review-request
 description: "Turn a ticket artifact into an initial or due Telegram review request, then write worker-free review state."
-tier: 2
 source: local
 capability:
   kind: integration

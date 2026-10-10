@@ -1,7 +1,6 @@
 ---
 name: agency-opportunity-research
 description: "Turn an industry, company, person, or call premise into a sourced agency opportunity case and solution-shaping handoff when deciding whom to approach and what to offer."
-tier: 3
 department: intelligence
 source: local
 template_uses:

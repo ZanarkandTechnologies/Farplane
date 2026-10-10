@@ -27,7 +27,6 @@ class LifecycleGraphTests(unittest.TestCase):
                 """---
 name: sample-skill
 description: "Sample"
-tier: 3
 department: harness
 source: local
 ---

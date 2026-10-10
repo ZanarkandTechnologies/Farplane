@@ -1,7 +1,6 @@
 ---
 name: progress-update
 description: "Turn one Farplane project's frozen daily context, commercial configuration, metrics, and prior memory into grounded memory and existing-task action JSON."
-tier: 3
 source: local
 template_uses:
   skill-template: "0.6.2"

@@ -2,7 +2,6 @@
 name: reference-grounding
 version: 0.2.0
 description: "Turn claims, plans, or implementation choices into compact evidence notes with the right local, current-web, official, peer, or provided sources."
-tier: 1
 source: local
 template_uses:
   skill-template: "0.1.0"
@@ -16,7 +15,7 @@ allowed-tools: Read, Glob, Grep, web_search, documentation-searcher
 
 ## Context
 
-`reference-grounding` is a Tier 1 primitive for compact evidence. It should
+`reference-grounding` is a core primitive for compact evidence. It should
 ground one claim or decision, then hand the result back to the caller rather
 than expanding into a full research pass.
 

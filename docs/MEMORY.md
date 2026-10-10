@@ -203,8 +203,9 @@ MEM-0133, MEM-0134, MEM-0145, MEM-0146, MEM-0150.
 - Material implementation plans expose compact `architecture_signatures` before
   per-change detail. Per-change `signature_or_type_impact` is for local deltas;
   reviewer lanes judge material plan readiness through canonical review rubrics.
-- Numeric skill tiers are leverage classes, not lifecycle phases. Tier 0
-  planning and execution are inline/native capabilities; call artifact or proof
+- Skill tiers are retired (2026-10-10): the Capability Map's specialist desks
+  say which skills are entrypoints. Phase-protocol planning and execution are
+  inline/native capabilities; call artifact or proof
   skills such as `impl-plan`, `review`, and `eval` only when the phase needs its
   own artifact, budget, handoff, independent judgment, or proof surface.
 - Skill registries are generated from skill frontmatter and filesystem facts.

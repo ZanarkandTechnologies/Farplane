@@ -1,7 +1,6 @@
 ---
 name: leverage-advisor
 description: "Turn a capability, evidence, and optional lever catalog into a ranked compounding roadmap, next wave, and first proof step."
-tier: 2
 source: local
 template_uses:
   skill-template: "0.2.0"

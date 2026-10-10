@@ -1,7 +1,7 @@
 # Init Advisor Phase Boundary
 
 
-This skill follows Tier 0 phases inline. Use compact grounding before
+This skill follows native phases inline. Use compact grounding before
 finalizing project archetype, static charter, capability workflows, or metric objectives; use deeper
 research only when stack commands, framework conventions, or market assumptions
 may be stale. PRD authoring is downstream of the three-ticket business

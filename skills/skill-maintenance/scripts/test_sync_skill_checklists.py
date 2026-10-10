@@ -23,7 +23,6 @@ def write_skill(
                 "---",
                 f"name: {name}",
                 "description: Test skill.",
-                "tier: 2",
                 f"source: {source}",
                 "---",
                 "",

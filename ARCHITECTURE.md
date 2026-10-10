@@ -87,8 +87,8 @@ flowchart LR
   end
 
   subgraph Skills["Skill Layer"]
-    primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>direct Todo List"]:::callout
-    interfaces["Tier 2 interfaces<br/>brainstorm<br/>*-research skills<br/>harness-advisor"]:::callout
+    primitives["core primitives<br/>advise<br/>reference-grounding<br/>review<br/>direct Todo List"]:::callout
+    interfaces["shared workflow interfaces<br/>brainstorm<br/>*-research skills<br/>harness-advisor"]:::callout
     intake["brainstorm<br/>direct clarification<br/>prd<br/>deep-system-design<br/>visual-design"]:::skill
     readiness["agent-testability-plan<br/>Run Hints"]:::callout
     research["doc-advisor<br/>feed-scout<br/>harness-scout<br/>*-research skills<br/>best-of-worlds<br/>self-improve"]:::skill
@@ -132,7 +132,7 @@ flowchart LR
   specs --> featureRegistry
   techniques --> featureRegistry
   doctrine -. placement decisions .-> intake
-  globalAgents -. tiered skill contract .-> primitives
+  globalAgents -. skill-loading reflex .-> primitives
   primitives -. base checks .-> interfaces
   interfaces -. domain binding .-> intake
   interfaces -. evidence workflow .-> research
@@ -314,11 +314,11 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
   the project's `AGENTS.md` Agent QA section (plus one docs page per long flow,
   made when the first one exists), not in ticket prose or transient chat.
 - Review scoring belongs in `skills/review/*`.
-- Runtime machinery belongs in `bin/`, `hooks.json`, and runtime feature specs.
+- Runtime machinery belongs in `bin/`, `hooks/hooks.json`, and runtime feature specs.
 - Reusable workflow detail belongs in `skills/*`.
-- Skill tier leverage classes and first-load loading rules belong in
-  `docs/skills/README.md`, the generated skill registry, and direct `SKILL.md`
-  checklist links. The global template carries only the always-loaded
+- Specialist desks belong in `config/skill-workflows.toml` `[specialists]`;
+  first-load loading rules belong in `docs/skills/README.md`, the generated
+  skill registry, and direct `SKILL.md` checklist links. The global template carries only the always-loaded
   skill-loading reflex.
 
 ## Read Order

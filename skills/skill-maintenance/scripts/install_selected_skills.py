@@ -54,7 +54,7 @@ class Skill:
     path: Path
     description: str
     source: str
-    tier: str
+    department: str
 
 
 @dataclass(frozen=True)
@@ -67,7 +67,7 @@ class InstallResult:
 
 
 INSTALLER_METADATA_RE = re.compile(
-    r"^(?P<key>name|description|tier|source):\s*(?P<value>.+?)\s*$"
+    r"^(?P<key>name|description|department|source):\s*(?P<value>.+?)\s*$"
 )
 
 
@@ -95,7 +95,7 @@ def parse_installer_metadata(skill_file: Path) -> dict[str, str]:
             value = value[1:-1].replace("''", "'")
         metadata[match.group("key")] = value
 
-    missing = [key for key in ("name", "description", "tier", "source") if not metadata.get(key)]
+    missing = [key for key in ("name", "description", "source") if not metadata.get(key)]
     if missing:
         raise ValueError(f"{skill_file}: missing installer metadata: {', '.join(missing)}")
     return metadata
@@ -119,7 +119,7 @@ def discover_skills(skills_dir: Path) -> list[Skill]:
                 path=skill_dir,
                 description=meta["description"],
                 source=meta["source"],
-                tier=meta["tier"],
+                department=meta.get("department", ""),
             )
         )
     return skills
@@ -136,7 +136,7 @@ def filter_skills(skills: Sequence[Skill], query: str | None) -> list[Skill]:
     matches: list[Skill] = []
     for skill in skills:
         haystack = " ".join(
-            [skill.name, skill.description, skill.source, skill.tier]
+            [skill.name, skill.description, skill.source, skill.department]
         ).casefold()
         if all(term in haystack for term in terms):
             matches.append(skill)
@@ -352,7 +352,7 @@ def skill_row(skill: Skill) -> dict[str, str]:
         "name": skill.name,
         "description": skill.description,
         "source": skill.source,
-        "tier": skill.tier,
+        "department": skill.department,
         "path": str(skill.path),
     }
 
@@ -361,13 +361,13 @@ def render_table(skills: Sequence[Skill]) -> str:
     if not skills:
         return "No matching skills."
 
-    lines = [f"{'NAME':28} {'TIER':6} {'SOURCE':9} DESCRIPTION"]
+    lines = [f"{'NAME':28} {'DEPT':12} {'SOURCE':9} DESCRIPTION"]
     for skill in skills:
         description = skill.description.replace("\n", " ")
         if len(description) > 92:
             description = description[:89].rstrip() + "..."
         lines.append(
-            f"{skill.name:28} {skill.tier[:6]:6} {skill.source[:9]:9} {description}"
+            f"{skill.name:28} {skill.department[:12]:12} {skill.source[:9]:9} {description}"
         )
     return "\n".join(lines)
 

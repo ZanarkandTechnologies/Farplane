@@ -2,7 +2,6 @@
 name: web-design-guidelines
 version: 1.0.0
 description: "Turn UI code or site review requests into Web Interface Guidelines findings for accessibility, UX, and best-practice compliance."
-tier: 2
 source: local
 capability:
   kind: integration

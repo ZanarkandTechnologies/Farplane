@@ -81,7 +81,7 @@ deserve hardening, refinement, merging, watching, or retirement review first.
 - Separates raw skill signals from maintenance recommendations.
 - Uses direct heat, composition heat, maintenance burden, and uniqueness as the
   durable signal set.
-- Separates tier classification from maintenance priority.
+- Separates specialist-desk membership from maintenance priority.
 - Highlights first-load bloat, overlap, stale checklists, missing evals, and
   source gaps without pretending they are direct usage.
 - Feeds skill-maintenance planning and consolidation decisions.
@@ -97,8 +97,8 @@ deserve hardening, refinement, merging, watching, or retirement review first.
 
 ## Operating Contract
 
-Skill signals are a recommendation contract, not a skill tier or quality
-grade.
+Skill signals are a recommendation contract, not a desk assignment or
+quality grade.
 
 - Reports expose the raw signal values before any recommendation.
 - Direct heat means observed invocation or usage evidence.

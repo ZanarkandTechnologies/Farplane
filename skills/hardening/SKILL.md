@@ -2,7 +2,6 @@
 name: hardening
 version: 0.1.0
 description: "Turn working software into lower-risk software with threat, failure, abuse, and resilience proof."
-tier: 2
 source: local
 template_uses:
   skill-template: "0.3.2"

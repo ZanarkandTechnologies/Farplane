@@ -1,7 +1,6 @@
 ---
 name: recap-task
 description: "Turn a paused Codex task and its durable records into a source-linked recap that supports a safe reply, decision, or handoff."
-tier: 3
 department: operations
 source: local
 capability:

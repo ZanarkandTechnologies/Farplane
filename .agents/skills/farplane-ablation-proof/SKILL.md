@@ -1,7 +1,6 @@
 ---
 name: farplane-ablation-proof
 description: "Turn a Farplane trust claim into an ablation proof report when proving whether a feature or workflow actually matters."
-tier: 3
 source: local
 group: capability
 template_uses:

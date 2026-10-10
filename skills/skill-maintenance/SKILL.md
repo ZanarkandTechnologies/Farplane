@@ -1,7 +1,6 @@
 ---
 name: skill-maintenance
 description: "Turn skill behavior deltas, lesson hardening, or skill compaction into owner-local skill edits, eval/gotcha updates, registry sync, behavior proof, and review."
-tier: 3
 department: operations
 source: local
 template_uses:
@@ -138,7 +137,7 @@ source upgrades, automation presets, and review handoff templates.
 
 ## Reference Map
 
-- [skill system](../../docs/skills/system.md) — metadata, tiers, templates,
+- [skill system](../../docs/skills/system.md) — metadata, desks, templates,
   registry, and todo contracts; read for structural changes.
 - [skill best practices](../../docs/skills/best-practices.md) — first-load
   placement, examples, repeatability, and review.

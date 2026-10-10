@@ -1,7 +1,6 @@
 ---
 name: unslop
 description: "Rewrite supplied prose so it sounds clear, specific, and human while preserving its meaning, facts, tone, and precise technical terms."
-tier: 2
 source: local
 capability:
   kind: shortcut

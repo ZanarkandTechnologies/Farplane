@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.6.3"
+template_version: "0.6.4"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -16,7 +16,6 @@ surface_fields:
 ---
 name: {skill_name}
 description: "[TODO: Verb input/context into output/artifact when call-condition; <=220 chars.]"
-tier: [TODO: 1 | 2 | 3]
 source: local
 # Optional static projection. Choose exactly one kind; variants remain normal
 # invocation inputs rather than their own skills or capabilities.
@@ -31,9 +30,11 @@ template_uses:
   skill-template: "0.6.2"
 # Add only after the skill fits 10 top-level todos and 5 evals.
 # skill-surface-budget: "0.1.0"
-# Tier 3 only: back-office | sales | deals | marketing | operations |
-# intelligence | customer. See rules/skill-departments.toml.
-department: [TODO: canonical department required for Tier 3]
+# Required when the skill sits on a specialist desk in the Capability Map
+# (skill-workflows.toml [specialists]), and must match the desk's department;
+# omit it for an internal helper. One of: back-office | sales | deals |
+# marketing | operations | intelligence | customer.
+department: [TODO: the desk's department, or delete for a helper]
 allowed-tools: {tools}
 ---
 

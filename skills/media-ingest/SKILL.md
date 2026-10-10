@@ -1,7 +1,6 @@
 ---
 name: media-ingest
 description: "Turn URLs or local audio, video, or social media into metadata, transcript status, representative frames, retention notes, and handoff paths."
-tier: 2
 source: local
 capability:
   kind: integration
@@ -75,7 +74,7 @@ phase_contract(source, operator_note?, bundle_owner?)
 
 ## Phase Boundary
 
-Run Tier 0 phases inline for ordinary ingests. Compare source privacy, retention,
+Run native phases inline for ordinary ingests. Compare source privacy, retention,
 or visual-only sufficiency tradeoffs inline and recommend one. Hand video
 interpretation to `video-understanding`; do not make
 storyboard or reimplementation claims inside media-ingest.

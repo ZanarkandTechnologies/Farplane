@@ -1,7 +1,6 @@
 ---
 name: problem-framing
 description: "Turn a complaint or feature request into a clear problem frame, realistic constraints, product boundary, and next owner before MVP or ticket work."
-tier: 2
 source: local
 capability:
   kind: shortcut

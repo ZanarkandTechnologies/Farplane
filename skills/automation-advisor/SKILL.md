@@ -1,7 +1,6 @@
 ---
 name: automation-advisor
 description: "Design or revise Farplane Codex automations using one Markdown file per scheduled workflow."
-tier: 3
 department: operations
 source: local
 template_uses:

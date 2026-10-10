@@ -96,14 +96,14 @@ ignored runtime data from `.farplane/generated/graphs/`.
 
 The graph treats `skill_links` as solid Markdown-reference edges,
 `todo_skill_refs` as ordered todo-chain edges, and `common_chains.after` as
-dashed chain edges. Nodes are color-coded by tier, sized by observed skill heat
+dashed chain edges. Nodes are color-coded as on a specialist desk or a helper, sized by observed skill heat
 when telemetry exists, and marked when the skill is upstream-owned external
 source. Clicking a node opens the skill detail panel with parsed frontmatter,
 raw YAML frontmatter, rendered `SKILL.md` Markdown, heat counters, and outgoing
 links.
 
 Skill heat defaults are configured at generation time through environment
-variables, usually from `config.toml.example`:
+variables, usually from `runtimes/codex/config.toml.example`:
 
 - `FARPLANE_SKILL_HEAT_WINDOW_DAYS`: main ranking window, default `30`.
 - `FARPLANE_SKILL_HEAT_RECENT_DAYS`: secondary recent counter, default `7`.

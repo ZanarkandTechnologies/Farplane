@@ -1,7 +1,6 @@
 ---
 name: codebase-analysis
 description: "Turn local codebase questions into file maps, implementation explanations, and reusable pattern findings."
-tier: 2
 source: local
 ---
 

@@ -48,8 +48,6 @@ CHECKLIST_RE = re.compile(
     re.MULTILINE | re.DOTALL,
 )
 ALLOWED_COMMON_CHAIN_KEYS = {"after"}
-TIER1_PRIMITIVES = {"advise", "reference-grounding", "prototyping"}
-PROTOCOL_WRAPPERS = {"review"}
 ALLOWED_SOURCES = {"local", "external"}
 DESCRIPTION_MAX_CHARS = 220
 SURFACE_FIELDS = {"skill_ui"}
@@ -206,11 +204,11 @@ def collect_skill_links(skill_dir: Path, skill_name: str) -> list[str]:
     )
 
 
-def normalize_common_chains(value: Any, path: Path, tier: int) -> dict[str, list[str]]:
+def normalize_common_chains(value: Any, path: Path, department: Any) -> dict[str, list[str]]:
     if value in (None, ""):
         return {}
-    if tier != 3:
-        raise RegistryError(f"{path}: common_chains is only allowed on tier 3 skills")
+    if department in (None, ""):
+        raise RegistryError(f"{path}: common_chains is only allowed on skills with a department")
     if not isinstance(value, dict):
         raise RegistryError(f"{path}: common_chains must be a mapping")
 
@@ -264,32 +262,6 @@ def attach_todo_skill_refs(repo_root: Path, rows: list[dict[str, Any]]) -> None:
             row["todo_skill_refs"] = refs
 
 
-def validate_todos_hierarchy(repo_root: Path, rows: list[dict[str, Any]]) -> None:
-    tier_by_name = {row["name"]: row["tier"] for row in rows}
-    for row in rows:
-        if row["tier"] != 3 or not row["has_checklist"]:
-            continue
-
-        skill_dir = repo_root / "skills" / row["name"]
-        checklist_links = collect_checklist_links(skill_dir, row["name"])
-        direct_tier1_links = [
-            link
-            for link in checklist_links
-            if skill_ref_name(link) not in PROTOCOL_WRAPPERS
-            and (
-                tier_by_name.get(skill_ref_name(link)) == 1
-                or skill_ref_name(link) in TIER1_PRIMITIVES
-            )
-        ]
-        if direct_tier1_links:
-            refs = ", ".join(sorted(direct_tier1_links))
-            source_path = skill_dir / "SKILL.md"
-            raise RegistryError(
-                f"{source_path}: tier 3 todo list must link tier 2 surfaces instead of "
-                f"direct tier 1 primitives: {refs}"
-            )
-
-
 def build_registry(repo_root: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     skill_paths = sorted((repo_root / "skills").glob("*/SKILL.md"))
@@ -305,6 +277,11 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         skill_dir = skill_path.parent
         try:
             metadata = parse_skill_frontmatter(skill_path)
+            if "tier" in metadata:
+                raise RegistryError(
+                    f"{skill_path}: tier is retired; the Capability Map's specialist desks "
+                    "(skill-workflows.toml [specialists]) decide a skill's role and department"
+                )
             metadata = normalize_skill_frontmatter(metadata, skill_path)
         except FrontmatterError as exc:
             raise RegistryError(str(exc)) from exc
@@ -320,9 +297,6 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if name != skill_dir.name:
             raise RegistryError(f"{skill_path}: name must match directory {skill_dir.name!r}")
 
-        tier = metadata.get("tier")
-        if tier not in (1, 2, 3):
-            raise RegistryError(f"{skill_path}: tier must be 1, 2, or 3")
         source = metadata.get("source")
         if source not in ALLOWED_SOURCES:
             allowed = ", ".join(sorted(ALLOWED_SOURCES))
@@ -335,23 +309,20 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
                 f"{skill_path}: description is {len(description)} chars; "
                 f"keep it at or below {DESCRIPTION_MAX_CHARS} chars"
             )
+        # A department is optional, but canonical when given, and a skill on a specialist desk sits in its
+        # desk's department: the Capability Map's desks, not tiers, say what a skill is for.
         department = metadata.get("department")
-        if tier == 3 and (
+        if department not in (None, "") and (
             not isinstance(department, str) or department.strip() not in SKILL_DEPARTMENTS
         ):
             allowed = ", ".join(SKILL_DEPARTMENTS)
-            raise RegistryError(
-                f"{skill_path}: tier 3 department must be one of the canonical departments: {allowed}"
-            )
-        if tier != 3 and department not in (None, ""):
-            raise RegistryError(f"{skill_path}: department is only allowed on tier 3 skills")
+            raise RegistryError(f"{skill_path}: department must be one of the canonical departments: {allowed}")
         specialist = desk_by_skill.get(str(name))
         if specialist:
             desk = specialists[specialist]
-            if tier != 3 or desk["department"] != department:
+            if desk["department"] != department:
                 raise RegistryError(
-                    f"{skill_path}: specialist {specialist!r} requires a Tier 3 skill in "
-                    f"department {desk['department']!r}"
+                    f"{skill_path}: specialist {specialist!r} requires department {desk['department']!r}"
                 )
         if metadata.get("feature_refs") not in (None, "", []):
             raise RegistryError(
@@ -363,17 +334,16 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         has_checklist = bool(checklist_source_text(skill_dir))
         row: dict[str, Any] = {
             "name": name,
-            "tier": tier,
             "source": source,
             "path": str(skill_path.relative_to(repo_root)),
             "description": description,
             "has_checklist": has_checklist,
             "skill_links": collect_skill_links(skill_dir, name),
         }
-        if tier == 3:
+        if department not in (None, ""):
             row["department"] = department
-            if specialist:
-                row["specialist"] = specialist
+        if specialist:
+            row["specialist"] = specialist
         methods = normalize_method_contracts(metadata.get("methods"), name, skill_path)
         if methods:
             row["methods"] = methods
@@ -385,7 +355,7 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if capability:
             row["capability"] = capability
 
-        common_chains = normalize_common_chains(metadata.get("common_chains"), skill_path, tier)
+        common_chains = normalize_common_chains(metadata.get("common_chains"), skill_path, department)
         if common_chains:
             row["common_chains"] = common_chains
 
@@ -426,7 +396,6 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
     except SkillCompositionError as exc:
         raise RegistryError(str(exc)) from exc
     validate_common_chain_refs(rows)
-    validate_todos_hierarchy(repo_root, rows)
     return rows
 
 

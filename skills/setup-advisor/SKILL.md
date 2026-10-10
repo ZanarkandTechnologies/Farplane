@@ -2,7 +2,6 @@
 name: setup-advisor
 version: 0.1.0
 description: "Turn a project and desired external services into an operated setup, a human-gate wizard when needed, and a verified setup receipt."
-tier: 3
 department: operations
 source: local
 template_uses:

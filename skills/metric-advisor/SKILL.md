@@ -2,7 +2,6 @@
 name: metric-advisor
 version: 0.1.1
 description: "Turn objectives and evidence into honest metric cards, experiment expectations, guard metrics, anti-metrics, and route hints."
-tier: 1
 source: local
 template_uses:
   skill-template: "0.3.2"

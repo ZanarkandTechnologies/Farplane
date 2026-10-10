@@ -2,7 +2,6 @@
 name: prototyping
 version: 0.1.0
 description: "Turn an unproven pattern into the smallest representative proof before expanding scope, automation, volume, or implementation depth."
-tier: 1
 source: local
 template_uses:
   skill-template: "0.1.0"
@@ -15,7 +14,7 @@ allowed-tools: Read, Glob, Grep
 
 ## Context
 
-`prototyping` is a Tier 1 primitive for scale-risk control. It should hand a
+`prototyping` is a core primitive for scale-risk control. It should hand a
 prototype decision back to the owning planning, research, execution, or review
 workflow instead of becoming that workflow.
 
@@ -72,8 +71,9 @@ supports it.
   permissions, automations, or architecture.
 - **Batch edits:** transform `1-3` representative files before running a
   command over the whole tree.
-- **Skill maintenance:** update a small mix of Tier 1, Tier 2, and complex
-  Tier 3 skills before rewriting the full registry.
+- **Skill maintenance:** update a small mix of core primitives, shared
+  workflow interfaces, and complex desk skills before rewriting the full
+  registry.
 - **Research:** inspect a few representative sources or skills before expanding
   to the full source set.
 - **Agent behavior:** run a small behavior probe before claiming general agent,
@@ -118,7 +118,7 @@ Use the `Prototype Note` fields above as the default output template.
 - Do not generalize from one example unless the next sample step is named.
 - Do not hide prototype shortcuts inside production contracts.
 - Do not turn this primitive into a full research, planning, or execution
-  workflow; hand back to the owning Tier 2 or domain skill after the prototype
+  workflow; hand back to the owning workflow interface or domain skill after the prototype
   decision is clear.
 
 ## Gotchas

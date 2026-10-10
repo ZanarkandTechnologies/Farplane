@@ -58,7 +58,6 @@ class GenerateSkillGraphTests(unittest.TestCase):
         rows = [
             {
                 "name": "weekly-workflow",
-                "tier": 3,
                 "source": "local",
                 "department": "harness",
                 "path": "skills/weekly-workflow/SKILL.md",
@@ -69,7 +68,6 @@ class GenerateSkillGraphTests(unittest.TestCase):
             },
             {
                 "name": "horizon-advisor",
-                "tier": 3,
                 "source": "local",
                 "department": "harness",
                 "path": "skills/horizon-advisor/SKILL.md",
@@ -79,7 +77,6 @@ class GenerateSkillGraphTests(unittest.TestCase):
             },
             {
                 "name": "goal-advisor",
-                "tier": 3,
                 "source": "local",
                 "department": "harness",
                 "path": "skills/goal-advisor/SKILL.md",
@@ -111,7 +108,6 @@ class GenerateSkillGraphTests(unittest.TestCase):
         rows = [
             {
                 "name": "meta-ads",
-                "tier": 3,
                 "source": "local",
                 "department": "marketing",
                 "capability": {"kind": "integration", "consumes": ["ad-draft"]},
@@ -122,7 +118,6 @@ class GenerateSkillGraphTests(unittest.TestCase):
             },
             {
                 "name": "advise",
-                "tier": 1,
                 "source": "local",
                 "path": "skills/advise/SKILL.md",
                 "description": "Give advice.",
@@ -232,7 +227,6 @@ class GenerateSkillGraphTests(unittest.TestCase):
         rows = [
             {
                 "name": "hot-caller",
-                "tier": 2,
                 "source": "local",
                 "department": "harness",
                 "path": "skills/hot-caller/SKILL.md",
@@ -244,7 +238,6 @@ class GenerateSkillGraphTests(unittest.TestCase):
             },
             {
                 "name": "target-skill",
-                "tier": 3,
                 "source": "local",
                 "department": "harness",
                 "path": "skills/target-skill/SKILL.md",
@@ -285,18 +278,17 @@ class GenerateSkillGraphTests(unittest.TestCase):
     def test_unique_orchestrator_without_heat_is_kept(self) -> None:
         rows = [
             {
-                "name": "tier-one-primitive",
-                "tier": 1,
+                "name": "desk-primary",
+                "specialist": "reporter",
                 "source": "local",
                 "department": "harness",
-                "path": "skills/tier-one-primitive/SKILL.md",
+                "path": "skills/desk-primary/SKILL.md",
                 "description": "Primitive skill.",
                 "has_checklist": True,
                 "skill_links": [],
             },
             {
                 "name": "orchestrator",
-                "tier": 3,
                 "source": "local",
                 "department": "harness",
                 "path": "skills/orchestrator/SKILL.md",
@@ -312,7 +304,7 @@ class GenerateSkillGraphTests(unittest.TestCase):
             for node in graph["nodes"]
         }
 
-        self.assertEqual(recommendations["tier-one-primitive"], "keep")
+        self.assertEqual(recommendations["desk-primary"], "keep")
         self.assertEqual(recommendations["orchestrator"], "keep")
 
 
@@ -336,17 +328,17 @@ class CapabilityProjectionTests(unittest.TestCase):
 
     def rows(self) -> list[dict]:
         return [
-            {"name": "content-impl-plan", "tier": 3, "department": "marketing", "_desk": "content-producer",
+            {"name": "content-impl-plan", "department": "marketing", "_desk": "content-producer",
              "description": "Plan content.", "capability": {"kind": "artifact", "produces": ["content-brief"], "consumes": []}},
-            {"name": "x-thread", "tier": 3, "department": "marketing", "_desk": "social-manager",
+            {"name": "x-thread", "department": "marketing", "_desk": "social-manager",
              "description": "Create a review-ready X thread.",
              "capability": {"kind": "artifact", "consumes": ["content-brief"], "produces": ["x-thread-draft"]}},
-            {"name": "x-account", "tier": 3, "department": "marketing", "_desk": "social-manager",
+            {"name": "x-account", "department": "marketing", "_desk": "social-manager",
              "description": "Operate X account boundaries.",
              "capability": {"kind": "integration", "consumes": ["x-thread-draft"]}},
-            {"name": "social-content", "tier": 3, "department": "marketing", "_desk": "social-manager",
+            {"name": "social-content", "department": "marketing", "_desk": "social-manager",
              "description": "Plan social content."},
-            {"name": "storyboard", "tier": 3, "department": "marketing", "description": "Plan a storyboard."},
+            {"name": "storyboard", "department": "marketing", "description": "Plan a storyboard."},
         ]
 
     def test_groups_skill_variants_into_specialist_desks(self) -> None:

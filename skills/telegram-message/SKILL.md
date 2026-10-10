@@ -1,7 +1,6 @@
 ---
 name: telegram-message
 description: "Turn short feedback, automation, blocker, or artifact-review updates into Telegram notifications that Kenji can understand and answer from Telegram."
-tier: 1
 source: local
 capability:
   kind: integration

@@ -1,7 +1,6 @@
 ---
 name: farplane-market-learning
 description: "Turn a Farplane adoption question into decision-oriented market-learning evidence."
-tier: 3
 source: local
 group: capability
 template_uses:

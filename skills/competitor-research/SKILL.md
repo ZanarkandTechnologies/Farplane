@@ -1,7 +1,6 @@
 ---
 name: competitor-research
 description: "Turn a market or product question into sourced competitor evidence, review themes, differentiated gaps, and a recommended opportunity."
-tier: 2
 source: local
 template_uses:
   skill-template: "0.6.2"

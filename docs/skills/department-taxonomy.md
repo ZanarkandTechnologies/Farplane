@@ -9,9 +9,9 @@ source_of_truth: [config/skill-departments.toml, config/skill-workflows.toml]
 
 # Skill department taxonomy
 
-`department` is the single operating-department membership required on every Tier 3
-skill. It is not a technical implementation tag and it does not imply that one
-skill invokes another.
+`department` is a skill's single operating-department membership: required on a
+skill that sits on a specialist desk, optional on an internal helper. It is not a
+technical implementation tag and it does not imply that one skill invokes another.
 
 | ID | Label | Owns in the constellation |
 | --- | --- | --- |
@@ -28,7 +28,7 @@ skill variants that one office employee offers (for example `reporter` holds
 `progress-update`, `report-gen`, `recap-task`, and `dogfood-review`).
 `config/skill-workflows.toml` `[specialists]` owns each desk's label, department,
 deliverable, primary skill (its default verb), and member `skills`. A member
-must be a Tier 3 skill in the desk's department and sits at only one desk; the
+must be in the desk's department and sits at only one desk; the
 registry projects it as the row's `specialist`. Skill files stay unchanged, so
 oversized skills are never grown by desk membership.
 Skills without a specialist are internal: planners dispatch them as needed and
@@ -48,9 +48,9 @@ typed artifact-family IDs, not literal filenames; methods stay outside this
 projection and their technical interface schema is owned by [`system.md`](system.md).
 
 ```text
-department -> explicit department membership for every Tier 3 skill
+department -> explicit department membership for every desk skill
 [specialists] -> desk label, deliverable, primary skill, and member skills
-member -> Tier 3 skill in the desk's department, at one desk only
+member -> skill in the desk's department, at one desk only
 member capability[kind=integration] -> system facility beside the desk
 produces ∩ consumes across members -> directed artifact-flow edge
 ```

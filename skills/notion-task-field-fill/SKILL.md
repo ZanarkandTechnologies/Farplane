@@ -1,7 +1,6 @@
 ---
 name: notion-task-field-fill
 description: "Turn incomplete Notion Tasks into field proposals, safe high-confidence patches, and Telegram review requests."
-tier: 3
 department: back-office
 source: local
 capability:
@@ -70,7 +69,7 @@ fails:
 
 ## Phase Boundary
 
-This skill follows Tier 0 phases inline. Call `review` only when changing this
+This skill follows native phases inline. Call `review` only when changing this
 skill, adding a live-write path, or judging a material proof bundle. Do not call
 a separate Notion wrapper skill at runtime; the private Notion doc plus `ntn`
 are the dependency boundary.

@@ -1,7 +1,6 @@
 ---
 name: hatch-pet
 description: Turn a person image, public profile, concept, or brand cue into a researched, validated, packaged Codex pet and animated 8x9 spritesheet.
-tier: 3
 department: marketing
 source: local
 template_uses:

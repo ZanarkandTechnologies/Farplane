@@ -1,6 +1,6 @@
 # social-content
 
-Tier 3 skill for cross-platform, carousel, and LinkedIn social content.
+Social-manager desk skill for cross-platform, carousel, and LinkedIn social content.
 
 ## Methods
 

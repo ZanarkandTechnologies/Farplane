@@ -40,7 +40,7 @@ PipelineHandoff :=
   prototype gates.
 - `spec-to-ticket` creates a PoC/proof ticket before full production tickets
   only when a prototype gate names a real uncertainty.
-- Tier 3 domain skills consume the selected directions and handoff packets.
+- Domain skills consume the selected directions and handoff packets.
   They do not re-run the whole project discovery loop.
 - Do not turn every field into a decision ceremony. Compare material choices
   inline; use profile defaults when the choice is obvious or low impact.

@@ -1,7 +1,6 @@
 ---
 name: farplane-productization
 description: "Turn an accepted Farplane experiment or proof into durable harness behavior."
-tier: 3
 source: local
 group: capability
 template_uses:

@@ -1,7 +1,6 @@
 ---
 name: bookmark-recovery
 description: "Turn frozen personal-save source caches into one deduped, prioritized recovery inbox when scheduled capture needs a safe review artifact."
-tier: 3
 department: intelligence
 source: local
 capability:

@@ -1,7 +1,6 @@
 ---
 name: intelligest
 description: "Intelligest a URL, video, image, file, or note into a durable Content Intelligence dossier, recent comparable takes, and guarded enrichment receipts."
-tier: 3
 department: intelligence
 source: local
 capability:

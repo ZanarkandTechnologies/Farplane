@@ -140,8 +140,6 @@ def build_registry() -> LintRegistry:
             ),
             _check("skill_registry", frozenset({"skills"}), skill_paths, "bin/validators/sync_skill_registry.py", "--check"),
             _check("skill_contract", frozenset({"skills"}), skill_paths, "bin/validators/check_skill_frontmatter.py", "--root", "."),
-            _check("skill_todo_tiers", frozenset({"skills"}), skill_paths, "bin/validators/check_skill_todo_tiers.py", "--allow-peer-tier3"),
-            _check("skill_phase_protocol", frozenset({"skills"}), skill_paths, "bin/validators/check_tier0_phase_protocol.py"),
             _check("skill_surface_budget", frozenset({"skills"}), skill_paths, "bin/validators/check_skill_surface_budget.py", "--root", "."),
             _check("skill_capabilities", frozenset({"skills"}), skill_paths, "bin/validators/check_skill_capabilities.py", "validate"),
             _check("skill_method_references", frozenset({"skills"}), skill_paths, "skills/skill-maintenance/scripts/check_skills.py", "--method-reference-contract"),

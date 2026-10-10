@@ -64,7 +64,7 @@ content ticket through `content-impl-plan` and execute/render through
   `AGENTS.md` too; a project has one root rules file.
 - Keep project-specific profile, lifecycle route, prototype gates, and handoff
   choices in `docs/bootstrap-brief.md`.
-- Keep the detailed lifecycle theory here until multiple higher-tier skills
+- Keep the detailed lifecycle theory here until multiple domain skills
   actively need a public `project-pipeline` skill.
 - Keep generic planning and execution in native lifecycle phases while domain
   skills own the real artifacts and algorithms.

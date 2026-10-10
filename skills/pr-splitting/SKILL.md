@@ -1,7 +1,6 @@
 ---
 name: pr-splitting
 description: "Turn a finished branch into smaller non-stacked pull requests when feature seams or layers can be separated."
-tier: 3
 department: operations
 source: local
 allowed-tools: Read, Glob, Grep, Bash

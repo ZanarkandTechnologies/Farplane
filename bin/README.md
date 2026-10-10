@@ -78,19 +78,13 @@ or removing a `farplane` command.
   into the linked Farplane-UI module checkout
 - `core/*` - implementation modules for the global CLI, ticket lifecycle,
   mining, telemetry status, and adoption helpers
-- `runtime/*` - implementation modules for Codex hooks, user-turn capture,
-  notification, and runtime telemetry
-- `tests/*` - Core-owned tests for `bin/core`, `bin/runtime`, and public
+- `tests/*` - Core-owned tests for `bin/core`, the hooks, and public
   command wrappers
 - `validators/check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
 - `validators/check_doc_refs.py` - local reference validator for active docs and registries;
   use `--all` for broader cleanup audits across tickets, experiments, and tests
 - `validators/sync_skill_registry.py` - deterministic generated-registry check
   for `docs/skills/registry.jsonl`
-- `validators/check_skill_todo_tiers.py` - first-load skill todo dependency
-  validator
-- `validators/check_tier0_phase_protocol.py` - Tier 0 phase-protocol migration
-  guard
 - `validators/check_skill_capabilities.py` - skill capability fixture validator
 - `validators/check_template_version_metadata.py` - staged metadata and
   version-bump guard for template files listed in

@@ -379,35 +379,21 @@ Reference Map
 Output
 ```
 
-Skill tier system:
+Capability Map:
 
 ```text
-Tier 0 = native phase protocol, inherited by every skill invocation
-Tier 1 = highest-compounding primitives such as advise, consolidate, grounding, prototyping
-Tier 2 = medium-compounding workflow interfaces such as plan, research, review, eval
-Tier 3 = narrow-compounding domain/application skills such as goal-advisor or optimize-harness
+specialist_desk = label + department + deliverable + primary_skill + member_skills
+desk_member(skill) -> entrypoint, registry row carries specialist + department
+off_desk(skill)    -> internal helper that planners dispatch
 ```
 
-Numeric tiers primarily classify where upgrades compound. The first-load todo
-rules below are the loading contract derived from that classification, not the
-entire meaning of the tier.
+`config/skill-workflows.toml` `[specialists]` owns the desks. Core primitives
+such as advise, consolidate, reference-grounding, and prototyping are shared
+skills many workflows call, so improving them compounds widely.
 
-```text
-tier(skill) -> compound_leverage_class
-todo_link_rules(skill) -> first_load_loading_boundary
-upgrade_priority(skill, evidence) -> rollout_order
-```
-
-Tiered first-load rule:
-
-```text
-Tier3.todo -> Tier2 or peer Tier3
-Tier2.todo -> Tier1 or local references
-Tier1.todo -> direct primitive procedure
-```
-
-Tier 0 phases are not skill links. They are the native lifecycle that can stay
-inline or become separate artifacts when needed.
+Native phases are not skill links. They are the lifecycle every skill
+invocation inherits, and each can stay inline or become a separate artifact
+when needed.
 
 Skill frontmatter makes the package discoverable:
 
@@ -464,12 +450,12 @@ SkillEval(skill, task_cases, judge)
   -> score + verdict + evidence
 ```
 
-Skill evals compound from lower numeric tiers:
+Skill evals compound from shared primitives upward:
 
 ```text
-improve(Tier1 primitive)
-  -> improves Tier2 workflows that call it
-  -> improves Tier3 domain skills that depend on those workflows
+improve(core primitive)
+  -> improves shared workflow interfaces that call it
+  -> improves desk skills that depend on those workflows
   -> improves e2e workflows that compose the domain skills
 ```
 
@@ -479,13 +465,13 @@ Default optimization direction:
 primitive behavior -> workflow skill -> domain skill -> e2e workflow
 ```
 
-Climb upward only when the lower numeric tier contract is already sharp and the
+Climb upward only when the lower-level contract is already sharp and the
 remaining failure is genuinely compositional.
 
 Use skill engineering when behavior should repeat across tasks. Use a ticket or
 one-off prompt when the workflow is local, unstable, or not worth packaging.
 
-Do not create a fourth skill tier for composed workflows. E2E behavior is a
+Do not create a separate skill for composed workflows. E2E behavior is a
 projection over existing mini-harnesses:
 
 ```text
@@ -508,13 +494,13 @@ Mark the chain where it will be used:
 - e2e eval reference points for testable composition.
 - lifecycle graph curated edges for framework-critical UI visibility.
 
-The proof question is not "is there a tier 4 skill?" It is "does the composed
+The proof question is not "is there a composite skill?" It is "does the composed
 workflow preserve context isolation, state writeback, proof, and owner
 boundaries across every key step?"
 
 ## 5. Phase And Budget Engineering
 
-Every serious skill invocation inherits the Tier 0 phase protocol:
+Every serious skill invocation inherits the native phase protocol:
 
 ```text
 phase_protocol(task, state)

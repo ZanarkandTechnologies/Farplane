@@ -2,7 +2,6 @@
 name: runtime-debugging
 version: 0.1.0
 description: "Turn reproducible runtime failures into instrumentation, evidence, root cause, fixes, and proof."
-tier: 2
 source: local
 template_uses:
   skill-template: "0.6.2"

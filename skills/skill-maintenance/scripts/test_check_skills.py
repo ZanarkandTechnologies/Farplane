@@ -16,7 +16,6 @@ def write_registry(repo: Path, name: str, *, version: str = "0.1.0") -> None:
         "name": name,
         "path": f"skills/{name}/SKILL.md",
         "source": "local",
-        "tier": 2,
         "skill_template_version": version,
     }
     (registry_dir / "registry.jsonl").write_text(json.dumps(row) + "\n", encoding="utf-8")
@@ -40,7 +39,6 @@ def write_skill_template(repo: Path, version: str = "0.6.2") -> None:
 VALID_SKILL = """---
 name: example
 description: Test skill.
-tier: 2
 source: local
 skill_template_version: "0.1.0"
 ---

@@ -1,7 +1,6 @@
 ---
 name: optimize-with-human
 description: "Route an optimization goal through Goal Advisor with human feedback as the metric and Telegram-first review requests."
-tier: 2
 source: local
 version: 0.1.0
 template_uses:

@@ -1,7 +1,6 @@
 ---
 name: outreach-impl-plan
 description: "Turn an outreach idea, strategy, and candidate evidence into an approval-ready campaign ticket with waves, advisor actions, CRM proposal, gates, and proof."
-tier: 3
 department: sales
 source: local
 template_uses:

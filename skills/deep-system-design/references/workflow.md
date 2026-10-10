@@ -1,7 +1,6 @@
 ---
 name: deep-system-design
 description: "Turn underspecified architecture intent into entities, APIs, storage, execution boundaries, retries, and design choices."
-tier: 2
 source: local
 argument-hint: "[--quick|--standard|--deep] [--customer-first|--data-first] <system, feature, service, or architecture idea>"
 allowed-tools: Read, Glob, Grep

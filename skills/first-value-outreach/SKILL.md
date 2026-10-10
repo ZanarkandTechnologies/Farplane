@@ -1,7 +1,6 @@
 ---
 name: first-value-outreach
 description: "Turn one researched person and traceable professional signal into a bounded useful contribution and correction-first unsent outreach packet when earning the first conversation."
-tier: 3
 department: sales
 source: local
 template_uses:

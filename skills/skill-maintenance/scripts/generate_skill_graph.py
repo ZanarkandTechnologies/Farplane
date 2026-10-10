@@ -288,7 +288,7 @@ def uniqueness_signal(row: dict[str, Any], composition_heat: dict[str, Any]) -> 
         if ref
     }
     return {
-        "tier": row.get("tier"),
+        "specialist": row.get("specialist", ""),
         "source": row.get("source", "local"),
         "department": row.get("department", ""),
         "method_count": len(methods) if isinstance(methods, list) else 0,
@@ -309,7 +309,7 @@ def maintenance_recommendation(
     incoming_refs = int(composition_heat.get("incoming_ref_count") or 0)
     burden_status = str(maintenance_burden.get("status") or "low")
     is_unique = (
-        uniqueness.get("tier") == 1
+        bool(uniqueness.get("specialist"))
         or int(uniqueness.get("method_count") or 0) > 0
         or int(uniqueness.get("outgoing_ref_count") or 0) >= 3
         or bool(uniqueness.get("has_skill_ui"))
@@ -409,7 +409,7 @@ def build_graph(
             id=row["name"],
             label=row["name"],
             attributes={
-                "tier": row.get("tier"),
+                "specialist": row.get("specialist", ""),
                 "source": row.get("source", "local"),
                 "department": row.get("department", ""),
                 "capability": row.get("capability", {}),
@@ -440,13 +440,13 @@ def build_graph(
         for row in rows
     ]
 
-    nodes.sort(key=lambda node: (int(node.get("tier") or 9), node["label"]))
+    nodes.sort(key=lambda node: (str(node.get("department") or "~"), node["label"]))
     edges.sort(key=lambda edge: (edge["source"], edge["target"], edge["type"], edge["label"]))
 
     counts = {
         "nodes": len(nodes),
         "edges": len(edges),
-        "tiers": {},
+        "departments": {},
         "sources": {},
         "capabilities": {},
         "edge_types": edge_counts(edges),
@@ -454,8 +454,8 @@ def build_graph(
         "skill_heat_event_types": (skill_heat_config or skill_heat_config_from_env()).get("event_types"),
     }
     for node in nodes:
-        tier = str(node.get("tier", "unknown"))
-        counts["tiers"][tier] = counts["tiers"].get(tier, 0) + 1
+        department = str(node.get("department") or "none")
+        counts["departments"][department] = counts["departments"].get(department, 0) + 1
         source = str(node.get("source", "unknown"))
         counts["sources"][source] = counts["sources"].get(source, 0) + 1
         capability = node.get("capability")

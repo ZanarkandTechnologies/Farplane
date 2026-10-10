@@ -2,7 +2,6 @@
 name: ai-image-advisor
 version: 1.0.0
 description: "Turn AI image create/edit/upscale/cutout requests into provider route, prompt/input packet, spend gate, and saved image asset bundle."
-tier: 3
 department: marketing
 source: local
 template_uses:

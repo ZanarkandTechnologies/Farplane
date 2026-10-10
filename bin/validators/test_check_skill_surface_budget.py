@@ -31,7 +31,6 @@ def write_skill(
                 "---",
                 f"name: {name}",
                 "description: Test skill.",
-                "tier: 1",
                 "source: local",
                 "template_uses:",
                 '  skill-template: "0.1.0"',

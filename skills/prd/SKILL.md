@@ -2,7 +2,6 @@
 name: prd
 version: 1.0.0
 description: "Turn product intent into a Phase-1 Farplane PRD with requirements, scope, and handoff shape."
-tier: 3
 department: operations
 source: local
 common_chains:

@@ -1,7 +1,6 @@
 ---
 name: code-audit
 description: "Turn a codebase, PRD, and architecture context into a ranked audit plan, improvement tickets, and routed refactoring or hardening follow-ups."
-tier: 3
 source: local
 department: operations
 template_uses:
@@ -57,7 +56,7 @@ CodeAuditBudget = {
 
 ## Phase Boundary
 
-This skill follows Tier 0 phases inline. Call `impl-plan`, `refactoring`,
+This skill follows native phases inline. Call `impl-plan`, `refactoring`,
 `hardening`, `proof-advisor`, or `review` only when the child scope
 is a specific ticket, module, proof question, or evidence bundle smaller than
 the whole audit.

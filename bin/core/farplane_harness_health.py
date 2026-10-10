@@ -14,6 +14,7 @@ from typing import Any
 
 from farplane_metric_schema import metric_observation, write_metric_batch
 from farplane_skill_rollout import SkillRolloutError, resolve_skill_rollout_stats
+from skill_departments import desk_primary_skills
 
 
 SCHEMA = "farplane_harness_health"
@@ -146,6 +147,7 @@ def build_skill_rows(
         if isinstance(row, dict)
     }
     result: list[dict[str, Any]] = []
+    desk_primaries = desk_primary_skills(standard_root)  # they lead the priority cohort
 
     for node in nodes:
         skill_id = str(node.get("id") or "")
@@ -244,7 +246,7 @@ def build_skill_rows(
                 "skillId": skill_id,
                 "path": skill_path,
                 "source": str(node.get("source") or ""),
-                "tier": node.get("tier"),
+                "deskPrimary": skill_id in desk_primaries,
                 "score": clamp_score(sum(row["score"] for row in signals) / len(signals)),
                 "signals": signals,
                 "gaps": [
@@ -456,16 +458,12 @@ def gap_statuses(skill: dict[str, Any]) -> dict[str, str]:
 
 
 def build_metric_readings(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    skills = [
-        row
-        for row in payload.get("skillHealth", {}).get("skills", [])
-        if isinstance(row, dict)
-    ]
+    skills = [row for row in payload.get("skillHealth", {}).get("skills", []) if isinstance(row, dict)]
     local_skills = [row for row in skills if str(row.get("source") or "") != "external"]
     priority_skills = [
         row
         for row in local_skills
-        if row.get("tier") == 1
+        if row.get("deskPrimary")
         or numeric((row.get("evidence") or {}).get("invocationCount30d")) > 0
     ]
     per_skill: list[dict[str, Any]] = []
@@ -488,7 +486,7 @@ def build_metric_readings(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
         per_skill.append({"skill_id": skill_id, "gaps": gaps})
 
     source_gaps = [str(gap) for gap in payload.get("sourceGaps", []) if gap]
-    tier1_ids = sorted(str(row.get("skillId") or "") for row in local_skills if row.get("tier") == 1)
+    primary_ids = sorted(str(row.get("skillId") or "") for row in local_skills if row.get("deskPrimary"))
     directly_used_ids = sorted(
         str(row.get("skillId") or "")
         for row in local_skills
@@ -496,7 +494,7 @@ def build_metric_readings(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
     )
     priority_payload = {
         "provider": "mechanical",
-        "cohort_rule": "local Tier 1 skills or local skills with observed 30-day direct usage",
+        "cohort_rule": "local specialist-desk primary skills or local skills with observed 30-day direct usage",
         "priority_skill_count": len(priority_skills),
         "priority_skill_ids": sorted(str(row.get("skillId") or "") for row in priority_skills),
         "unhealthy_skill_ids": sorted(unhealthy_ids),
@@ -506,14 +504,14 @@ def build_metric_readings(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
         "per_skill": sorted(per_skill, key=lambda row: row["skill_id"]),
         "cohort_context": {
             "local_skill_count": len(local_skills),
-            "tier1_skill_count": len(tier1_ids),
-            "tier1_skill_ids": tier1_ids,
+            "desk_primary_skill_count": len(primary_ids),
+            "desk_primary_skill_ids": primary_ids,
             "directly_used_skill_count": len(directly_used_ids),
             "directly_used_skill_ids": directly_used_ids,
         },
         "minimum_meaningful_delta": "one priority skill becomes fully healthy without source or cohort guards regressing",
         "anti_metrics": [
-            "changing tier or source only to escape the priority cohort",
+            "changing desk membership or source only to escape the priority cohort",
             "removing eval requirements to erase a gap",
             "adding meaningless feature refs to inflate a score",
             "retiring or splitting skills only to reduce the count",

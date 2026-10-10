@@ -1,7 +1,6 @@
 ---
 name: review-model
 description: "Review a current business model against ten offer-sequence and monetization criteria, then recommend one evidence-backed next improvement with a Before/After target."
-tier: 3
 source: local
 department: sales
 template_uses:

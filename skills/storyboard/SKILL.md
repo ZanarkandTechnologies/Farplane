@@ -1,7 +1,6 @@
 ---
 name: storyboard
 description: "Turn a content implementation plan, idea, ICP, proof, or offer into script, beats, and storyboard scenes for production handoff."
-tier: 3
 department: marketing
 source: local
 template_uses:

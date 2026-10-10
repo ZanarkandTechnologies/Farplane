@@ -1,7 +1,6 @@
 ---
 name: farplane-experiment-report
 description: "Turn a Farplane harness hypothesis into an experiment report and next action when measuring a feature, skill, or workflow change."
-tier: 3
 source: local
 group: capability
 template_uses:

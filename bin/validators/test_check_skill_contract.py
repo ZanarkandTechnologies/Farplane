@@ -23,7 +23,6 @@ def write_skill(root: Path) -> Path:
         """---
 name: advisor
 description: A test skill.
-tier: 1
 source: local
 ---
 

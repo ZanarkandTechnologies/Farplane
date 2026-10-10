@@ -1,7 +1,6 @@
 ---
 name: proposal-pricing
 description: "Use whenever a proposal is requested from customer call notes; calculate one price from people/time, consequence cost, or direct money impact and return a concise draft."
-tier: 3
 department: deals
 source: local
 template_uses:

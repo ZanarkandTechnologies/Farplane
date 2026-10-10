@@ -1,7 +1,6 @@
 ---
 name: vercel-react-best-practices
 description: "Turn React or Next.js code work into Vercel performance-guideline checks for components, pages, and data fetching."
-tier: 3
 department: operations
 source: external
 capability:

@@ -2,7 +2,6 @@
 name: refactoring
 version: 0.1.0
 description: "Turn working code into simpler behavior-preserving structure with smell metrics, tests, and reviewable proof."
-tier: 2
 source: local
 template_uses:
   skill-template: "0.3.2"

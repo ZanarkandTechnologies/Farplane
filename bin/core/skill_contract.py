@@ -183,7 +183,6 @@ class SkillFrontmatter(StrictContract):
 
     name: CapabilityId
     description: NonEmptyText
-    tier: Literal[1, 2, 3]
     source: Literal["local", "external"]
     department: CapabilityId | None = None
     capability: CapabilityContract | None = None

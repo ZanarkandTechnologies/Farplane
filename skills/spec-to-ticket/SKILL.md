@@ -2,7 +2,6 @@
 name: spec-to-ticket
 version: 1.5.0
 description: "Turn one SLC spec slice into filesystem tickets with compact summaries, agent contracts, and evidence requirements."
-tier: 3
 department: operations
 source: local
 common_chains:
@@ -54,7 +53,7 @@ common_chains:
 
 Use this as the second session in the Farplane workflow.
 
-`spec-to-ticket` is a Tier 3 Farplane coding-pipeline skill. It specializes the
+`spec-to-ticket` is a product-planner desk skill in the Farplane coding pipeline. It specializes the
 native planning phase for turning code-oriented specs into proofable tickets.
 
 <!--

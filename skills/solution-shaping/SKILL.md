@@ -1,7 +1,6 @@
 ---
 name: solution-shaping
 description: "Turn a reported problem or outreach target into a realistic solution brief, proof model, and PRD or ticket handoff for agency-style product work."
-tier: 3
 department: deals
 source: local
 template_uses:

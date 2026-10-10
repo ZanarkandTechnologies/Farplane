@@ -1,7 +1,6 @@
 ---
 name: asset-advisor
 description: "Turn a storyboard, reference video, Tasty Pack, or source material into a production-ready asset inventory and recreation plan."
-tier: 3
 department: marketing
 source: local
 template_uses:

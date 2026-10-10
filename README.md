@@ -144,9 +144,9 @@ flowchart LR
   end
 
   subgraph skills["Structured Skill Layer"]
-    tier1["Tier 1 primitives"]:::core
-    tier2["Tier 2 workflow interfaces"]:::core
-    tier3["Tier 3 domain skills"]:::core
+    primitives["core primitives"]:::core
+    interfaces["shared workflow interfaces"]:::core
+    desks["specialist desks"]:::core
   end
 
   subgraph evolve["Evolve-First Layer"]
@@ -218,16 +218,15 @@ flowchart LR
 | `agents/` | Bounded specialist role configs. |
 | `assets/` | Repo-level media and generated assets. |
 | `bin/` | Hooks, runtime helpers, validator wrappers, launchers, and sync scripts. |
-| `bin/validators/` | Testable repo-wide validators for docs, harness invariants, skills, tiers, and registries. |
+| `bin/validators/` | Testable repo-wide validators for docs, harness invariants, skills, and registries. |
 | `docs/` | Systems, feature specs, generated registries, history, memory, and durable research. |
 | `docs/systems/` | Authored public system docs plus generated system registry. |
 | `docs/features/` | Authored first-class feature specs plus generated feature registry output. |
 | `docs/fundamentals/` | Harness theory, doctrine, and cross-surface best practices. |
 | `.farplane/` | Ignored project-local runtime, generated, event, and product state. |
-| `qa/` | QA cookbook, browser proof paths, and reusable test-entry guidance. |
-| `rules/` | Machine-readable local rule files. Durable best-practice docs live under `docs/features/`. |
+| `config/` | Farplane's own settings: skill groups and profiles, validation and git-gate checks, template registry. |
 | `skills/` | Farplane skill packages, references, scripts, and templates. |
-| `templates/` | Install-time global Codex templates and config scaffolding. |
+| `templates/` | The install-time global `AGENTS.md` shared by both runtimes. |
 | `tickets/` | Active task board, ticket template, artifacts, compact locators for new closed GitHub issues, and readable legacy local archives. |
 
 ## Start Here

@@ -2,7 +2,6 @@
 name: brainstorm
 version: 0.2.0
 description: "Turn early ambiguous intent into option space, first-principles contrast, and candidate directions before requirements are committed."
-tier: 2
 source: local
 capability:
   kind: shortcut

@@ -1,7 +1,6 @@
 ---
 name: consolidate
 description: "Compress artifacts into their minimal owner-correct form while preserving required behavior, evidence, IDs, decisions, and future actionability."
-tier: 1
 source: local
 template_uses:
   skill-template: "0.4.4"

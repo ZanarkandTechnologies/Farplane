@@ -1,7 +1,6 @@
 ---
 name: demo
 description: "Turn passing feature QA into a concise Before/After/Example MP4 that leads the GitHub closeout, with evidence and independent review."
-tier: 3
 department: operations
 source: local
 template_uses:

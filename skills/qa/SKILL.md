@@ -1,7 +1,6 @@
 ---
 name: qa
 description: "Turn one selected ticket into proof artifacts, reconciled Done and QA Strategy obligations, and a structured QA result for Goal/ticket completion."
-tier: 3
 department: operations
 source: local
 template_uses:
@@ -57,7 +56,7 @@ qa_phase(ticket, bound_inputs, current_state)
    + ticket_writeback + learning_decision
 ```
 
-Follow Tier 0 phases inline: ground the claim, choose the cheapest faithful
+Follow native phases inline: ground the claim, choose the cheapest faithful
 proof path, capture and reconcile evidence, apply guardrails, obtain required
 independent judgment, then write back the validated receipt.
 

@@ -209,7 +209,7 @@ metrics:
   priority_skill_health_gap_count:
     refresh_ref: harness_health
     label: Priority skill health gaps
-    description: Count of local Tier 1 or directly used skills with a template, eval-coverage, or QA-checklist gap; each unhealthy skill counts once.
+    description: Count of local specialist-desk primary or directly used skills with a template, eval-coverage, or QA-checklist gap; each unhealthy skill counts once.
     pinned: true
     type: stock
     unit: skills

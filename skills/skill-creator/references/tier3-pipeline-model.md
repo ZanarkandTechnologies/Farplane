@@ -1,12 +1,12 @@
-# Tier 3 Pipeline Model
+# Domain Pipeline Model
 
-Use this when creating or refactoring a complex Tier 3 domain skill. The goal
+Use this when creating or refactoring a complex domain or desk skill. The goal
 is faster scanning, not mathematical ceremony.
 
 ## Core Algebra
 
 ```text
-Tier3Pipeline := Model + MethodRegistry + TodoRecipe + Templates + Proof
+DomainPipeline := Model + MethodRegistry + TodoRecipe + Templates + Proof
 
 Project := Brief + ComponentMatrix + MethodSet + Constraints + ExecutionPackets + ProofPlan
 
@@ -35,7 +35,7 @@ Do not add `README.md` files to skill packages just to restate the model.
 
 ## When To Use
 
-Use this model when a Tier 3 skill:
+Use this model when a domain or desk skill:
 
 - has a planning phase and execution phase
 - decomposes work into sections, scenes, slides, campaign assets, screens, or

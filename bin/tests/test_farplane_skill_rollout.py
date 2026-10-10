@@ -36,8 +36,8 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
             write_jsonl(
                 registry,
                 [
-                    {"name": "alpha", "tier": 1, "source": "local"},
-                    {"name": "beta", "tier": 3, "source": "external"},
+                    {"name": "alpha", "department": "operations", "specialist": "reporter", "source": "local"},
+                    {"name": "beta", "source": "external"},
                 ],
             )
             write_json(
@@ -55,7 +55,6 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
                             "skill_id": "alpha",
                             "path": "skills/alpha/SKILL.md",
                             "source": "local",
-                            "tier": 1,
                             "template_version": "0.3.2",
                             "status": "current",
                             "eval": "evals/evals.json",
@@ -66,7 +65,6 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
                             "skill_id": "beta",
                             "path": "skills/beta/SKILL.md",
                             "source": "external",
-                            "tier": 3,
                             "template_version": "missing",
                             "status": "external",
                             "eval": "",
@@ -77,7 +75,6 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
                             "skill_id": "gamma",
                             "path": "skills/gamma/SKILL.md",
                             "source": "local",
-                            "tier": 2,
                             "template_version": "0.2.0",
                             "status": "stale",
                             "eval": "",
@@ -134,7 +131,7 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
         self.assertEqual(result["counts"]["withEval"], 1)
         self.assertEqual(result["counts"]["withSkillUi"], 1)
         self.assertEqual(result["counts"]["templateDriftItems"], 1)
-        self.assertEqual(result["registryCounts"]["byTier"], {"1": 1, "3": 1})
+        self.assertEqual(result["registryCounts"]["byDepartment"], {"operations": 1, "": 1})
         self.assertEqual(result["skills"][0]["skillId"], "alpha")
         self.assertEqual(result["templateRollout"][1]["consumerId"], "gamma")
 

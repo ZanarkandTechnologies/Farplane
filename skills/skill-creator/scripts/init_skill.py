@@ -18,11 +18,10 @@ from pathlib import Path
 FALLBACK_SKILL_TEMPLATE = """---
 name: {skill_name}
 description: "[TODO: Verb input/context into output/artifact when call-condition; <=220 chars.]"
-tier: [TODO: 1 | 2 | 3]
 source: local
 template_uses:
   skill-template: "0.4.4"
-department: [TODO: required for Tier 3]
+department: [TODO: the desk's department, or delete for a helper]
 allowed-tools: {tools}
 ---
 

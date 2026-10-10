@@ -93,10 +93,18 @@ def specialist_by_skill(specialists: dict[str, dict[str, object]]) -> dict[str, 
     return {skill: specialist_id for specialist_id, entry in specialists.items() for skill in entry["skills"]}
 
 
+def desk_primary_skills(repo_root: Path) -> set[str]:
+    """Each Capability Map desk's primary skill (its default verb); none for a project without desks."""
+    try:
+        return {str(desk["primary"]) for desk in load_skill_specialists(repo_root).values()}
+    except (CapabilityAdmissionConfigError, DepartmentTaxonomyError):
+        return set()
+
+
 def validate_specialist_membership(
     rows: list[dict[str, object]], specialists: dict[str, dict[str, object]]
 ) -> list[str]:
-    """Return errors for desk members that are missing, not Tier 3, or in another department."""
+    """Return errors for desk members that are missing or in another department."""
     rows_by_name = {str(row.get("name")): row for row in rows}
     errors: list[str] = []
     for specialist_id, entry in specialists.items():
@@ -104,8 +112,6 @@ def validate_specialist_membership(
             row = rows_by_name.get(skill)
             if row is None:
                 errors.append(f"specialist {specialist_id!r} lists unknown skill {skill!r}")
-            elif row.get("tier") != 3:
-                errors.append(f"specialist {specialist_id!r} member {skill!r} must be Tier 3")
             elif row.get("department") != entry["department"]:
                 errors.append(
                     f"{skill}: department {row.get('department')!r} differs from specialist "

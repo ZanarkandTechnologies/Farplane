@@ -1,7 +1,6 @@
 ---
 name: recap-idea
 description: "Turn a product discussion into the visual model that best exposes misunderstandings before requirements, design, or implementation begins."
-tier: 2
 source: local
 capability:
   kind: shortcut

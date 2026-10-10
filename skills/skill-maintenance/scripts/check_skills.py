@@ -86,7 +86,7 @@ def registry_summary() -> dict[str, object]:
     ]
     return {
         "rows": len(rows),
-        "tiers": dict(sorted(Counter(row["tier"] for row in rows).items())),
+        "departments": dict(sorted(Counter(row.get("department") or "none" for row in rows).items())),
         "sources": dict(sorted(Counter(row["source"] for row in rows).items())),
         "checklists": dict(
             sorted(
@@ -108,7 +108,7 @@ def registry_summary() -> dict[str, object]:
         "missing_skill_template_version": [
             {
                 "name": row["name"],
-                "tier": row["tier"],
+                "department": row.get("department", ""),
                 "source": row["source"],
             }
             for row in rows
@@ -117,7 +117,7 @@ def registry_summary() -> dict[str, object]:
         "missing_checklists": [
             {
                 "name": row["name"],
-                "tier": row["tier"],
+                "department": row.get("department", ""),
                 "source": row["source"],
                 "upstream_url": row.get("upstream_url"),
             }
@@ -452,16 +452,6 @@ def main() -> int:
         help="regenerate docs/skills/registry.jsonl before checking it",
     )
     parser.add_argument(
-        "--strict-tier3",
-        action="store_true",
-        help="disallow peer Tier 3 todo links; default allows intentional Tier 3 handoffs",
-    )
-    parser.add_argument(
-        "--capture-hardcase",
-        action="store_true",
-        help="write a deduplicated hardcase seed on tier violations; validation stays pure by default",
-    )
-    parser.add_argument(
         "--template-version",
         help="report skills missing or differing from this current skill template version",
     )
@@ -503,7 +493,7 @@ def main() -> int:
 
         # The pure repository contracts have one route: the lint registry.
         # This skill-maintenance command only adds explicit writers, optional
-        # strict/hardcase behavior, rollout reporting, and compile smoke tests.
+        # rollout reporting, and compile smoke tests.
         run(["python3", "bin/farplane.py", "lint", "skills"])
 
         freshness_errors = current_template_owner_errors()
@@ -512,14 +502,6 @@ def main() -> int:
             for error in freshness_errors:
                 print(f"- {error}")
             return 1
-
-        if args.strict_tier3 or args.capture_hardcase:
-            tier_command = ["python3", "bin/validators/check_skill_todo_tiers.py"]
-            if not args.strict_tier3:
-                tier_command.append("--allow-peer-tier3")
-            if args.capture_hardcase:
-                tier_command.append("--hardcase-on-failure")
-            run(tier_command)
 
         run(
             [
@@ -535,8 +517,6 @@ def main() -> int:
                 "bin/validators/sync_template_registry.py",
                 "bin/validators/template_usage.py",
                 "bin/validators/check_doc_refs.py",
-                "bin/validators/check_skill_todo_tiers.py",
-                "bin/validators/check_tier0_phase_protocol.py",
                 "bin/validators/check_skill_surface_budget.py",
                 "bin/validators/check_skill_capabilities.py",
                 "bin/validators/check_eval_contract.py",

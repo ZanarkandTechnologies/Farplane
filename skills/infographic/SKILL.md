@@ -2,7 +2,6 @@
 name: infographic
 version: 0.1.0
 description: "Turn an explanation, dataset, product flow, or argument into a clear infographic brief, layout spec, and production-ready visual asset plan."
-tier: 3
 department: marketing
 source: local
 skill_template_version: "0.3.6"
@@ -67,7 +66,7 @@ InfographicPacket = {
 
 ## Phase Boundary
 
-Run Tier 0 phases inline for normal one-off infographics. Use `social-content`
+Run native phases inline for normal one-off infographics. Use `social-content`
 when the infographic is a carousel or platform campaign, the data-visualization
 reference when chart correctness is the core task, `impl-plan` when the output must be a web UI
 or deterministic HTML/SVG renderer, and `visual-qa` when the final rendered

@@ -1,7 +1,6 @@
 ---
 name: visual-reasoning
 description: "Turn a spatially difficult image question into a checkpointed visual workspace, verified annotations, and an evidence-grounded answer."
-tier: 3
 department: intelligence
 source: local
 template_uses:

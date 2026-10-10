@@ -1,7 +1,6 @@
 ---
 name: content-impl-plan
 description: "Compile content intent into a canonical ticket's action graph, dependencies, gates, and proof for a real deliverable."
-tier: 3
 department: marketing
 source: local
 capability:

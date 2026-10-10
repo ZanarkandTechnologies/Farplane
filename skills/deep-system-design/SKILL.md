@@ -1,7 +1,6 @@
 ---
 name: deep-system-design
 description: "Turn underspecified architecture intent into an implementation-ready System Design Brief."
-tier: 2
 source: local
 argument-hint: "[--quick|--standard|--deep] [--customer-first|--data-first] <system, feature, service, or architecture idea>"
 allowed-tools: Read, Glob, Grep

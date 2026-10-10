@@ -10,7 +10,7 @@ into a second place to maintain skill truth.
   links.
   Flow or graph views should derive visual prominence from observed skill heat,
   structural todo-chain edges from explicit Todo List skill refs, and stable
-  Tier 3 adjacency from `common_chains` instead of maintained as a second
+  adjacency hints from `common_chains` instead of maintained as a second
   hand-authored registry.
 - [`composition.md`](composition.md) is the shared contract for a skill's sole
   output, action ownership, handoffs, and lean domain todos.
@@ -122,7 +122,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Resume a delayed Codex task with its full working context | `recap-task` | It reconstructs one task from its ticket, Goal Packet, evidence, scoped worktree state, and available thread context, preserving decisions, failed attempts, Before/After deltas, conflicts, and the safest next reply. | You only need a short summary of one supplied document or a project-wide memory refresh. |
 | Decide and craft native Goal mode | `goal-advisor` | It compiles listed files, trigger mode, budget, metric, and proof into active Goal, heartbeat, batch, feedback loop, rollout, skill-improvement loop, or direct work, and can emit the final native `/goal` prompt. | The task is tiny and deterministic; work directly without Goal mode. |
 | Optimize with human feedback | `optimize-with-human` | It routes an optimization loop through `goal-advisor` with `human_feedback` as the metric, then creates a focused `feedback.json` contract and optional Telegram handoff so the operator can label, score, rank, or approve artifacts. | The task needs one-off feedback rather than an optimization loop; use chat, `review`, or `telegram-message` directly. |
-| Harden or refine skills, or maintain skill metadata | `skill-maintenance` | It owns `harden_skill` for turning fresh lessons, troubles, ticket progress findings, interval reports, and proof failures into evals, gotchas, blockers, or tickets; `refine_skill` for consolidating older evals/gotchas and shortening skills; plus bulk upkeep, tier checks, source ownership, and registry regeneration. | The task is broader harness placement; start with `harness-advisor`. Use `self-improve` only for measured variant/search loops. |
+| Harden or refine skills, or maintain skill metadata | `skill-maintenance` | It owns `harden_skill` for turning fresh lessons, troubles, ticket progress findings, interval reports, and proof failures into evals, gotchas, blockers, or tickets; `refine_skill` for consolidating older evals/gotchas and shortening skills; plus bulk upkeep, source ownership, and registry regeneration. | The task is broader harness placement; start with `harness-advisor`. Use `self-improve` only for measured variant/search loops. |
 
 Agent testing stack:
 
@@ -145,7 +145,6 @@ Keep frontmatter small.
 
 Manual fields:
 
-- `tier`: required, numeric `1`, `2`, or `3`
 - `description`: required one-sentence functional routing definition, 220
   characters or less. Prefer
   `Verb input/context into output/artifact when call-condition`; move trigger
@@ -158,7 +157,8 @@ Manual fields:
   been onboarded yet
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding
-- `department`: required for Tier 3 only; one canonical operating department from
+- `department`: required on a skill that sits on a specialist desk (it must match
+  the desk's department); optional on a helper. One canonical operating department from
   [`config/skill-departments.toml`](../../config/skill-departments.toml)
 - `capability`: optional static projection into the Capability Map and Office:
   `artifact` declares exactly one output family in `produces` and optional
@@ -177,7 +177,7 @@ Manual fields:
   `id`, `class` (`artifact`, `integration`, or `internal`), and one `output`.
   They are technical Skill Library interfaces, not Capability Map or Office
   nodes.
-- `common_chains`: optional Tier 3 one-way adjacency hints
+- `common_chains`: optional one-way adjacency hints, on a skill with a department
 - `upstream_url`: optional for `source: external`
 - `template_uses.skill-surface-budget`: optional opt-in marker for
   `FEAT-0062` capped skill surfaces; subscribed skills must fit 10 top-level
@@ -201,7 +201,6 @@ Generated fields:
 Use `common_chains` only for local forward handoffs:
 
 ```yaml
-tier: 3
 department: operations
 common_chains:
   after: ["goal-advisor"]
@@ -232,8 +231,6 @@ python3 bin/farplane.py skills sync       # refresh registry and graph projectio
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 python3 bin/validators/sync_skill_registry.py --write
 python3 bin/validators/sync_skill_registry.py --check
-python3 bin/validators/check_skill_todo_tiers.py
-python3 bin/validators/check_skill_todo_tiers.py --allow-peer-tier3
 python3 bin/validators/check_skill_capabilities.py validate
 python3 skills/skill-maintenance/scripts/generate_skill_graph.py
 python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.2.0
@@ -251,12 +248,10 @@ fail missing or non-current skills.
 
 ## First-Load Todo Link Contract
 
-Numeric tiers are compound leverage classes: lower numeric tiers are upgraded
-first because improvements there propagate through more workflows. Tiered
-loading is the separate first-load todo-link contract derived from those
-classes. Tier 0 phase steps are not skill links; they are inherited from
-`runtimes/AGENTS.md` and may be written as `## Phase Contract` in a
-skill when useful.
+Skill tiers are retired: which skills are entrypoints comes from the Capability
+Map's specialist desks (see [`system.md`](system.md)). First-load todo links are
+authoring guidance, not a lint rule. Phase-protocol steps are not skill links;
+they are inherited from `runtimes/AGENTS.md`.
 
 When ranking which skill to improve next, use
 [`docs/features/FEAT-0064-skill-signals.md`](../features/FEAT-0064-skill-signals.md).
@@ -264,38 +259,28 @@ It exposes direct heat, composition heat, maintenance burden, uniqueness, and a
 maintenance recommendation. Do not confuse those signals with skill-local eval
 scores.
 
-- Tier 3 first-load todos link the relevant specialized Tier 2 research skill, plus peer
-  Tier 3 execution skills when a domain handoff needs one.
-- Tier 3 first-load todos do not link Tier 1 primitives such as `advise`,
-  `consolidate`, `reference-grounding`, or `prototyping` directly unless the
-  skill owns that primitive step as part of its first-load contract.
+- Domain todos link the relevant specialized research skill, plus peer domain
+  skills when a handoff needs one.
+- Domain todos do not link core primitives such as `advise`, `consolidate`,
+  `reference-grounding`, or `prototyping` directly unless the skill owns that
+  primitive step as part of its first-load contract.
 - Native Codex phases own generic planning and execution. Artifact-producing
   domain skills such as `impl-plan`, `spec-to-ticket`, and `goal-advisor` own
   their specialized plans, tickets, and work programs.
 - `review` is a callable TAS wrapper over docs-owned rubrics in
   `docs/review/rubrics/*`.
-- `bin/validators/sync_skill_registry.py --check` fails when a Tier 3 todo list direct-links
-  a Tier 1 primitive.
-- `bin/validators/check_skill_todo_tiers.py` audits every first-load todo edge against the
-  one-level loading boundary. Use `--allow-peer-tier3` while Tier 3 application
-  handoffs such as content skill -> media execution skill remain intentional.
-- `bin/validators/check_skill_todo_tiers.py --hardcase-on-failure` should capture
-  a deduplicated sanitized eval case, or a `.farplane/evals/` follow-up seed,
-  when the validator catches a clear skill todo tier violation. Durable hard
-  cases should be runnable eval rows, not standalone
-  legacy experiment backlog files.
 
-## Tier 3 Pipeline Shape
+## Domain Pipeline Shape
 
 For the system-wide function model, use
 [`docs/fundamentals/harness-algebra.md`](../fundamentals/harness-algebra.md). This section is
-only the skill-specific shorthand for complex Tier 3 pipelines.
+only the skill-specific shorthand for complex domain pipelines.
 
-Complex Tier 3 skills may use a compact algebraic model when they decompose
+Complex domain skills may use a compact algebraic model when they decompose
 work into components and choose methods per component:
 
 ```text
-Tier3Pipeline := Model + MethodRegistry + TodoRecipe + Templates + Proof
+DomainPipeline := Model + MethodRegistry + TodoRecipe + Templates + Proof
 ```
 
 Keep the first-load workflow in `SKILL.md`. Put longer domain notation in
@@ -329,7 +314,7 @@ rerun install only after adding or removing a skill.
 
 When a useful skill is created first in a live runtime home, move the real
 folder into `skills/<name>/`, rerun install to replace it with a link, review
-the `description`, `tier`, and `source` frontmatter, then run
+the `description`, `source` and (for a desk skill) `department` frontmatter, then run
 `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
 
 ## Skill Self-Healing
@@ -346,11 +331,11 @@ surfaces instead of creating hidden repair work. The canonical contract lives in
 - installed or external skill bodies are not edited unless the operator
   explicitly requests that exact external edit
 
-Project-type exploration belongs upstream of Tier 3 execution skills. Use
+Project-type exploration belongs upstream of domain execution skills. Use
 `skills/init-advisor/references/project-profiles.md` to seed
 `docs/bootstrap-brief.md`, direct clarification, `prd`, and `spec-to-ticket` with
-component sets, advice axes, prototype gates, and pipeline handoffs. Tier 3
-domain skills should consume selected directions and execution packets instead
+component sets, advice axes, prototype gates, and pipeline handoffs. Domain
+skills should consume selected directions and execution packets instead
 of rediscovering the whole project profile during implementation.
 
 Project lifecycle is currently an `init-advisor` reference, not a public
@@ -382,7 +367,7 @@ Use `source` to decide where wrapper logic belongs:
 
 ## Maintenance Skill
 
-Use `skills/skill-maintenance/` for bulk tier, source, todo, registry, and
+Use `skills/skill-maintenance/` for bulk source, todo, registry, and
 consolidation work. Keep this module's docs as the registry contract; keep the
 step-by-step maintenance workflow in that skill.
 

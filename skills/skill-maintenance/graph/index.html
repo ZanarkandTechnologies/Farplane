@@ -231,19 +231,14 @@
 
           <div class="space-y-3 px-3">
             <label class="flex cursor-pointer items-center gap-3">
-              <input class="tier-filter form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" data-tier="1" type="checkbox" checked />
-              <span class="h-3 w-3 bg-accent-red"></span>
-              <span class="font-data-mono text-[13px] text-primary">Tier 1 [CORE]</span>
-            </label>
-            <label class="flex cursor-pointer items-center gap-3">
-              <input class="tier-filter form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" data-tier="2" type="checkbox" checked />
+              <input class="kind-filter form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" data-kind="desk" type="checkbox" checked />
               <span class="h-3 w-3 bg-accent-blue"></span>
-              <span class="font-data-mono text-[13px] text-primary">Tier 2 [FLOW]</span>
+              <span class="font-data-mono text-[13px] text-primary">On a desk [DESK]</span>
             </label>
             <label class="flex cursor-pointer items-center gap-3">
-              <input class="tier-filter form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" data-tier="3" type="checkbox" checked />
+              <input class="kind-filter form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" data-kind="helper" type="checkbox" checked />
               <span class="h-3 w-3 bg-outline"></span>
-              <span class="font-data-mono text-[13px] text-primary">Tier 3 [APP]</span>
+              <span class="font-data-mono text-[13px] text-primary">Helper [HELPER]</span>
             </label>
           </div>
 
@@ -349,8 +344,10 @@
       const heatList = document.querySelector("#heat-list");
       const visibleStatus = document.querySelector("#visible-status");
       const selectedClass = "selected";
-      const tierColors = { 1: "#E11D48", 2: "#2563EB", 3: "#76777b" };
-      const tierLabels = { 1: "CORE", 2: "FLOW", 3: "APP" };
+      // A skill on a specialist desk in the Capability Map is an entrypoint; one on no desk is a helper.
+      const kindOf = (node) => (node.specialist ? "desk" : "helper");
+      const kindColors = { desk: "#2563EB", helper: "#76777b" };
+      const kindLabels = { desk: "DESK", helper: "HELPER" };
       const heatConfig = graph.counts?.skill_heat_config || { window_days: 30, recent_days: 7, default_top_n: 25 };
       let selectedNode = null;
       let simulation;
@@ -382,7 +379,7 @@
           departmentFilter.appendChild(option);
         }
 
-        for (const input of document.querySelectorAll(".tier-filter")) input.addEventListener("input", render);
+        for (const input of document.querySelectorAll(".kind-filter")) input.addEventListener("input", render);
         for (const input of [search, departmentFilter, externalFilter, chainFilter, refFilter, heatFilter]) input.addEventListener("input", render);
         document.querySelector("#zoom-in").addEventListener("click", () => graphSvg.transition().call(zoom.scaleBy, 1.2));
         document.querySelector("#zoom-out").addEventListener("click", () => graphSvg.transition().call(zoom.scaleBy, 0.82));
@@ -393,8 +390,8 @@
         render();
       }
 
-      function activeTiers() {
-        return new Set([...document.querySelectorAll(".tier-filter:checked")].map((input) => Number(input.dataset.tier)));
+      function activeKinds() {
+        return new Set([...document.querySelectorAll(".kind-filter:checked")].map((input) => input.dataset.kind));
       }
 
       function setHeatOptions() {
@@ -432,7 +429,7 @@
       }
 
       function filtered() {
-        const tiers = activeTiers();
+        const kinds = activeKinds();
         const query = search.value.trim().toLowerCase();
         const group = departmentFilter.value;
         const includeExternal = externalFilter.checked;
@@ -440,7 +437,7 @@
         const hotIds = hotNodeIds(heatLimit);
         const nodes = graph.nodes
           .filter((node) => !hotIds || hotIds.has(node.id))
-          .filter((node) => tiers.has(Number(node.tier)))
+          .filter((node) => kinds.has(kindOf(node)))
           .filter((node) => includeExternal || node.source !== "external")
           .filter((node) => !group || node.department === group)
           .filter((node) => {
@@ -551,25 +548,25 @@
           });
         nodeSelection.select(".node-orbit")
           .attr("r", (node) => node.radius)
-          .attr("stroke", (node) => tierColors[node.tier] || "#76777b");
+          .attr("stroke", (node) => kindColors[kindOf(node)]);
         nodeSelection.select(".node-hit")
           .attr("r", (node) => node.radius + 18);
         nodeSelection.select(".node-core")
           .attr("r", (node) => Math.max(5, node.radius * 0.36))
-          .attr("fill", (node) => node.source === "external" ? "#000000" : tierColors[node.tier] || "#76777b");
+          .attr("fill", (node) => node.source === "external" ? "#000000" : kindColors[kindOf(node)]);
         nodeSelection.select(".node-label")
           .text((node) => shortLabel(node.id))
           .attr("y", (node) => -node.radius - 8);
         nodeSelection.select(".node-caption")
-          .text((node) => tierLabels[node.tier] || "SKILL")
+          .text((node) => kindLabels[kindOf(node)])
           .attr("y", (node) => node.radius + 4);
 
         simulation?.stop();
         simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(edges).id((node) => node.id).distance((edge) => edge.type.endsWith("-chain") ? 170 : 108).strength(0.18))
-          .force("charge", d3.forceManyBody().strength((node) => node.tier === 1 ? -560 : node.tier === 2 ? -360 : -260))
+          .force("charge", d3.forceManyBody().strength((node) => kindOf(node) === "desk" ? -360 : -260))
           .force("center", d3.forceCenter(width / 2, height / 2))
-          .force("x", d3.forceX((node) => tierX(node, width)).strength(0.025))
+          .force("x", d3.forceX((node) => kindX(node, width)).strength(0.025))
           .force("y", d3.forceY(height / 2).strength(0.035))
           .force("collide", d3.forceCollide((node) => node.radius + 18))
           .alpha(0.95)
@@ -588,14 +585,12 @@
       function radiusFor(node, degree) {
         const methodBonus = node.methods?.length ? 5 : 0;
         const heatBonus = Math.min(14, Math.sqrt(heatCount(node)) * 4);
-        const tierBase = node.tier === 1 ? 22 : node.tier === 2 ? 17 : 14;
-        return tierBase + methodBonus + heatBonus + Math.min(9, degree * 0.85);
+        const kindBase = kindOf(node) === "desk" ? 17 : 14;
+        return kindBase + methodBonus + heatBonus + Math.min(9, degree * 0.85);
       }
 
-      function tierX(node, width) {
-        if (node.tier === 1) return width * 0.5;
-        if (node.tier === 2) return width * 0.38;
-        return width * 0.62;
+      function kindX(node, width) {
+        return kindOf(node) === "desk" ? width * 0.42 : width * 0.6;
       }
 
       function shortLabel(name) {
@@ -648,17 +643,17 @@
           <div class="mb-6">
             <div class="mb-2 flex items-start justify-between gap-3">
               <h3 class="font-headline text-[20px] font-semibold text-primary">${escapeHtml(node.id)}</h3>
-              <div class="flex items-center gap-1 bg-${node.tier === 1 ? "accent-red" : node.tier === 2 ? "accent-blue" : "outline"} px-2 py-1 text-white">
+              <div class="flex items-center gap-1 bg-${kindOf(node) === "desk" ? "accent-blue" : "outline"} px-2 py-1 text-white">
                 <span class="h-1.5 w-1.5 rounded-full bg-surface"></span>
-                <span class="font-data-mono text-[10px] font-bold tracking-[0.08em]">${tierLabels[node.tier] || "SKILL"}</span>
+                <span class="font-data-mono text-[10px] font-bold tracking-[0.08em]">${kindLabels[kindOf(node)]}</span>
               </div>
             </div>
             <div class="break-all font-data-mono text-[12px] text-outline">ID: ${escapeHtml(node.path)}</div>
           </div>
           <div class="mb-6 grid grid-cols-2 gap-px border border-outline-variant bg-outline-variant">
             <div class="bg-surface p-3">
-              <div class="mb-1 font-data-mono text-[10px] font-bold tracking-[0.08em] text-outline">TIER</div>
-              <div class="font-headline text-[32px] font-bold text-primary">${node.tier}<span class="text-[16px] text-outline">/3</span></div>
+              <div class="mb-1 font-data-mono text-[10px] font-bold tracking-[0.08em] text-outline">DESK</div>
+              <div class="font-headline text-[20px] font-bold text-primary">${escapeHtml(node.specialist || "helper")}</div>
             </div>
             <div class="bg-surface p-3">
               <div class="mb-1 font-data-mono text-[10px] font-bold tracking-[0.08em] text-outline">HEAT_${heatConfig.window_days || 30}D</div>

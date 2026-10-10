@@ -1,7 +1,6 @@
 ---
 name: feasible-roadmap
 description: "Turn a goal, current state, constraints, and horizon into a feasible phased roadmap, milestones, risks, and immediate next move."
-tier: 2
 source: local
 capability:
   kind: shortcut

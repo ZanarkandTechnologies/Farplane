@@ -1,7 +1,6 @@
 ---
 name: learn-from-video
 description: "Turn a tutorial video into a source-grounded reconstruction eval, tested candidate artifact, and placement-aware skill-change handoff."
-tier: 3
 department: intelligence
 source: local
 template_uses:

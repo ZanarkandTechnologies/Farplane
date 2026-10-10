@@ -7,7 +7,7 @@ context for every skill invocation. Apply it to `skill-creator` and
 representative pass proves the shape.
 
 Keep this file focused on skill authoring and review quality. Do not redefine
-tier, source, template-version, or feature-tracking policy here; link
+desk, source, template-version, or feature-tracking policy here; link
 `docs/skills/system.md` for stable skill-system rules.
 
 ## Load Policy
@@ -110,7 +110,7 @@ reference so it is loaded only after selection.
   `## Output`. Every extra section must change normal execution, routing,
   proof, or maintenance.
 - Put a short `## Context` section near the top of `SKILL.md` before the todo
-  list when the skill depends on tier, ownership, source, or surrounding
+  list when the skill depends on its desk, ownership, source, or surrounding
   system shape.
 - Put a compact `## Skill Signature` after `## Context`. Treat it as type
   linting: name required files or data, caller-controlled parameters, the work
@@ -120,7 +120,7 @@ reference so it is loaded only after selection.
 - Treat the signature as a parameter contract. If the user invokes a skill
   without required inputs, the agent should resolve those inputs from files,
   state, setup workflows, or one narrow blocking question before execution.
-- Tier 0 owns phase behavior and recursion rules. Do not add `## Phase
+- Native phases own phase behavior and recursion rules. Do not add `## Phase
   Contract` or `## Phase Boundary` to a skill. Put a real downstream call where
   it is used in the Todo List or a precisely loaded reference.
 - Do not define a shared budget type or persona router. A skill that genuinely
@@ -196,7 +196,7 @@ Put content in `docs/*` when it is a shared standard, stable system contract, or
 cross-skill policy:
 
 - Rules used by multiple skills, templates, reviewers, validators, or agents.
-- Concepts that need one canonical owner, such as tiering, file lifecycle,
+- Concepts that need one canonical owner, such as desk membership, file lifecycle,
   finish gates, skill structure, or harness algebra.
 - Decisions that should not drift across multiple skill-local references.
 
@@ -378,7 +378,7 @@ whether to add a short example, or choosing between two equivalent output
 shapes.
 
 Use `advise ensemble=max` before editing when the decision changes a shared
-standard, affects Tier 1 primitives, meta skills, `skill-creator`,
+standard, affects core primitives, meta skills, `skill-creator`,
 `skill-maintenance`, `eval`, reviewer rubrics, templates, cross-skill policy,
 or any rule likely to compound across many downstream workflows.
 
@@ -464,7 +464,7 @@ the review depth:
   routing, proof, references, or first-load behavior.
 - Use `advise` for recent skills that already match the current template and
   need a normal placement decision.
-- Default to `advise ensemble=max` for structural changes to Tier 1 primitives,
+- Default to `advise ensemble=max` for structural changes to core primitives,
   meta skills, `skill-creator`, `skill-maintenance`, `eval`, cross-skill
   standards, or any skill whose behavior compounds across many downstream
   workflows.

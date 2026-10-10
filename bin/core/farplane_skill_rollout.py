@@ -54,7 +54,8 @@ def normalized_skill_row(row: dict[str, Any]) -> dict[str, Any]:
         "skillId": str(row.get("skill_id") or row.get("name") or ""),
         "path": str(row.get("path") or ""),
         "source": str(row.get("source") or ""),
-        "tier": row.get("tier"),
+        "department": row.get("department"),
+        "specialist": row.get("specialist"),
         "templateVersion": str(row.get("template_version") or row.get("skill_template_version") or ""),
         "status": str(row.get("status") or ""),
         "eval": str(row.get("eval") or ""),
@@ -142,7 +143,7 @@ def resolve_skill_rollout_stats(
         "counts": build_counts(skill_rows=raw_skill_rows, template_rows=raw_template_rows),
         "registryCounts": {
             "skills": len(registry_rows),
-            "byTier": count_by(registry_rows, "tier"),
+            "byDepartment": count_by(registry_rows, "department"),
             "bySource": count_by(registry_rows, "source"),
         },
         "rolloutSummary": normalize_rollout_summary(

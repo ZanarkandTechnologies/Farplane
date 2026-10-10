@@ -1,7 +1,6 @@
 ---
 name: manage-wiki
 description: "Turn sourced facts or page deltas into resolved canonical Wiki articles, entity links, and validated local search and graph projections."
-tier: 3
 source: local
 capability:
   kind: integration

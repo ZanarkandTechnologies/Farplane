@@ -2,7 +2,6 @@
 name: apify
 version: 1.0.0
 description: "Turn social, video, profile, or place targets into normalized external data through Apify MCP actors when scraping is required."
-tier: 2
 source: local
 capability:
   kind: integration

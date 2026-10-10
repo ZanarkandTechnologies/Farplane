@@ -1,7 +1,6 @@
 ---
 name: report-gen
 description: "Turn a complete frozen week of Farplane Project Memory and coverage evidence into grounded project reviews, a company rollup, and next-week memory JSON."
-tier: 3
 source: local
 template_uses:
   skill-template: "0.6.2"

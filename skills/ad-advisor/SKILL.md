@@ -1,7 +1,6 @@
 ---
 name: ad-advisor
 description: "Turn an advertising goal, offer, audience, and platform binding into a reviewed campaign config, CLI plan, and spend-gated handoff."
-tier: 3
 department: marketing
 source: local
 template_uses:

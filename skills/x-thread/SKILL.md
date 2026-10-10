@@ -1,7 +1,6 @@
 ---
 name: x-thread
 description: "Turn a content brief and supporting evidence into a review-ready X thread draft with a concrete tweet sequence and explicit publishing boundary."
-tier: 3
 department: marketing
 source: local
 capability:

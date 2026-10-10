@@ -1,7 +1,6 @@
 ---
 name: ml-autoresearch
 description: "Optimize a measurable ML system through bounded Goal-backed experiments selected from roadmap and progress evidence."
-tier: 3
 department: operations
 source: local
 template_uses:

@@ -2,7 +2,6 @@
 name: video-understanding
 version: 0.1.0
 description: "Turn transcripts and representative media frames into storyboard evidence, workflow reconstruction, extracted todos, and proof requirements."
-tier: 2
 source: local
 allowed-tools: Read, Glob, Grep, Bash
 ---

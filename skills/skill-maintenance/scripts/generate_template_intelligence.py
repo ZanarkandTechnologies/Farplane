@@ -348,7 +348,7 @@ def rollout_rows(skill_rows: list[dict[str, Any]], current_version: str) -> list
                 "skill_id": row.get("name", ""),
                 "path": row.get("path", ""),
                 "source": source,
-                "tier": row.get("tier"),
+                "department": row.get("department", ""),
                 "template_version": version,
                 "eval": row.get("eval", ""),
                 "skill_ui": row.get("skill_ui", ""),

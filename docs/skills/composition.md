@@ -60,7 +60,7 @@ The normal leaf shape is:
 4. apply the domain-specific gate;
 5. return the output, evidence, and next owner.
 
-Tier 0 planning/execution/review/writeback and the standard applicable-QA
+Phase-protocol planning/execution/review/writeback and the standard applicable-QA
 routine are inherited. Do not repeat them in a leaf todo. Keep provider maps,
 rare recipes, and long examples in references that load only after the branch
 is selected.

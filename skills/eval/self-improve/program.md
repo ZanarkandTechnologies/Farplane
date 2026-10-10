@@ -19,7 +19,7 @@ Make the `eval` skill reliably produce realistic, modular, clean-room evals that
 test one visible behavior at a time and improve through Goal-backed
 human-feedback loops.
 Current pivot: use the eval-improvement loop to clarify the broader skill-system
-model where Tier 0 is the universal phase protocol, skills are callable mini
+model where native phases are the universal protocol, skills are callable mini
 harnesses with signatures, and review is a protocol/rubric surface rather than
 the owner of all review workflow.
 
@@ -80,7 +80,7 @@ goal_human_feedback_eval_loop(idea, candidate_eval_batch, proof, kenji_feedback)
   edge cases, and degradation guardrails.
 - Define the eval-writing quality function before expanding cases.
 - Treat skills as mini harnesses with task, state, proof, and escalation
-  contracts; Tier 0 is a phase protocol, not a skill tier.
+  contracts; native phases are a protocol, not skills.
 - Backpropagate missing skill-signature inputs before execution.
 
 ## Rejected Ideas

@@ -66,7 +66,7 @@ run teaches something new.
 Use these inputs to find evals worth writing:
 
 - a user correction or repeated miss;
-- a Tier 1, meta, or `eval` skill change;
+- a core primitive, meta, or `eval` skill change;
 - a behavior that silently degrades without syntax errors;
 - a workflow boundary that agents often confuse;
 - a deterministic validator that cannot cover the behavior;
@@ -77,7 +77,7 @@ Use these inputs to find evals worth writing:
 Return a needs-deliberation route for explicit operator invocation or run an
 independent council pass for high-impact eval design when:
 
-- the target is Tier 1, meta, `eval`, or cross-skill;
+- the target is a core primitive, meta, `eval`, or cross-skill;
 - several plausible evals compete for limited budget;
 - the failure modes need breadth across operator value, engineering risk,
   evidence quality, and systems fit.

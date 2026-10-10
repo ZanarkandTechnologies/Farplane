@@ -1,8 +1,8 @@
 # Farplane Skill System
 
 This is the canonical contract for Farplane skills. Use it before creating,
-maintaining, or validating skills so the tier model, source ownership, registry
-fields, and todo-link rules stay in one place.
+maintaining, or validating skills so the Capability Map model, source ownership,
+registry fields, and todo-link rules stay in one place.
 
 ## Ownership
 
@@ -59,11 +59,11 @@ secret source; runtime environment and Doppler remain the credential boundary.
 Provider-specific remediation belongs in a conditional reference, while
 `SKILL.md` routes agents to the checker.
 
-## Tier Model
+## Phase Protocol
 
-Tier 0 is the universal phase protocol, not a skill tier and not a frontmatter
-value. It describes the lifecycle every material skill invocation should pass
-through at the right level of ceremony:
+The phase protocol is universal: it is not a skill and not a frontmatter value.
+It describes the lifecycle every material skill invocation should pass through
+at the right level of ceremony:
 
 ```text
 phase_protocol(task, skill_signature?, state?)
@@ -77,9 +77,9 @@ phase_protocol(task, skill_signature?, state?)
 ```
 
 Codex native planning and execution modes already own much of this runtime
-behavior. Farplane uses Tier 0 to describe the expected phase shape in
-`runtimes/AGENTS.md`, skill templates, tickets, and reviewer handoffs.
-Do not create `tier: 0` skills for phases such as plan, execute, or review.
+behavior. Farplane uses the phase protocol to describe the expected phase shape
+in `runtimes/AGENTS.md`, skill templates, tickets, and reviewer handoffs.
+Do not create skills for phases such as plan, execute, or review.
 Phases are inherited by skills; they are not lower-level skill dependencies.
 
 ## Composition Contract
@@ -95,7 +95,7 @@ specialist artifacts it schedules.
 The default skill spine is `Context`, `Skill Signature`, `Todo List`, `Gotchas`,
 and `Output`. Add templates, references, QA, evals, or golden fixtures only
 when their admission rule changes normal use. Leaf `## Todo List` sections
-describe domain work only. Tier 0 lifecycle,
+describe domain work only. The phase-protocol lifecycle,
 generic local-QA procedure, ticket writeback, and broad review routing are
 inherited system behavior, so repeating them in every leaf is duplication. Keep
 one real domain branch and provider-specific instructions behind conditional
@@ -105,16 +105,24 @@ must survive, handle a meaningful branch or gate when needed, then self-audit
 and return. Exceed it only for a separately owned artifact or an independent
 branch.
 
-Numeric skill tiers are compound leverage classes. A lower numeric tier means
-that improvements to the skill tend to propagate through more downstream
-workflows, so those packages should be kept sharper and upgraded earlier. The
-same tier metadata also informs first-load todo-link rules, but the link rules
-are the loading contract; the tier itself is the skill's compounding upgrade
-class.
+## Capability Map
+
+What a skill is for comes from the Capability Map, not from a class on the skill.
+`config/skill-workflows.toml` `[specialists]` defines specialist desks: each has
+a label, a department, a deliverable, a `primary` skill (the desk's default
+verb), and its member skills. A skill on a desk is an entrypoint: running it
+says what a thread or worker is doing, and the registry projects the desk as
+the skill's `specialist`. A skill on no desk is an internal helper that planners
+and other skills dispatch; the map omits it. See
+[`department-taxonomy.md`](department-taxonomy.md) for desks and map topology.
+
+Skill tiers (numeric compound-leverage classes, Tier 0 to 3) are retired: the
+registry rejects a `tier` field. Upgrade priority comes from evidence instead:
+harness health keeps each desk's primary skill and every skill used in the last
+30 days in its priority cohort, and the signals below rank improvement targets.
 
 ```text
-tier(skill) -> compound_leverage_class
-todo_link_rules(skill) -> first_load_loading_boundary
+desk(skill) -> specialist | helper
 upgrade_priority(skill, evidence) -> rollout_order
 ```
 
@@ -122,11 +130,11 @@ When a loop must rank skills as improvement targets, use the signal contract in
 `docs/features/FEAT-0064-skill-signals.md`: direct heat, composition
 heat, maintenance burden, and uniqueness. The output is a maintenance
 recommendation such as `keep`, `harden`, `refine`, `merge`, `watch`, or
-`retire_review`, not a skill tier, eval score, or skill quality grade.
+`retire_review`, not an eval score or skill quality grade.
 
 ## Phase Ownership And Recursion
 
-Every skill invocation may perform Tier 0 phases inline. A skill should call a
+Every skill invocation may perform the phase protocol's phases inline. A skill should call a
 phase-like skill such as `review` or `eval` only when that phase needs
 its own durable artifact, independent judgment, explicit budget, handoff, or
 proof surface.
@@ -179,9 +187,8 @@ resolve_skill_params(skill_signature, user_request, state)
   -> bound_inputs | setup_workflow | blocking_question
 ```
 
-Tier 1 skills are highest-compounding primitives. They are core moves or small
-provider contracts that multiple higher-tier workflows need as base obligations.
-Farplane's current core behavior primitives are:
+Core primitives are small moves or provider contracts that many workflows need
+as base obligations. Farplane's current core behavior primitives are:
 
 - `advise`: choose among real options and name the recommendation.
 - `consolidate`: compress artifacts into their minimal owner-correct form while
@@ -189,35 +196,27 @@ Farplane's current core behavior primitives are:
 - `reference-grounding`: ground claims, plans, and recommendations in evidence.
 - `prototyping`: prove a pattern at the smallest honest scale before expanding.
 
-Create a new Tier 1 primitive only when multiple Tier 2 interfaces need that
-move as a base dependency. Small provider primitives, such as notification
-senders, may also be Tier 1 when they are intentionally reused by multiple
-higher-tier workflows and have a narrow, stable contract.
+Create a new core primitive only when several shared workflow interfaces need
+that move as a base dependency. Small provider primitives, such as notification
+senders, qualify when they are intentionally reused by several workflows and
+have a narrow, stable contract.
 
-Tier 2 skills are medium-compounding workflow interfaces. They turn primitive
-obligations into reusable protocol surfaces such as:
+Shared workflow interfaces turn primitive obligations into reusable protocol
+surfaces such as:
 
 - `brainstorm`
 - the relevant specialized research skill
 - `harness-advisor`
 
-Common reusable work that many Tier 3 skills need should usually start as a
-Tier 2 interface or method, not a new Tier 1 primitive.
+Common reusable work that many domain skills need should usually start as a
+shared interface or method, not a new core primitive.
 
-Tier 3 skills are application or domain skills. They have the narrowest normal
-compounding radius and implement Tier 2 interfaces for a concrete workflow,
-domain, package, or artifact type. Examples include coding pipeline skills,
-frontend/media/document skills, and meta skills such as `skill-creator` and
-`skill-maintenance`.
-
-Meta skills are not Tier 0. They are skills whose domain is the harness or skill
-system itself. Represent them with a normal numeric `tier` and the canonical
-operating department they primarily serve. Use Tier 0 only for universal
-lifecycle phases.
-
-Do not create `tier: 4` to describe an end-to-end workflow. Numeric tiers are
-compounding upgrade classes, not call-stack depth. Model e2e workflows as
-composition artifacts owned by the orchestrating surface:
+Domain skills implement those interfaces for a concrete workflow, domain,
+package, or artifact type: coding pipeline skills, frontend/media/document
+skills, and meta skills such as `skill-creator` and `skill-maintenance`, whose
+domain is the harness itself. The ones a person would ask for by name sit on a
+specialist desk. Do not create a skill to describe an end-to-end workflow; model
+e2e workflows as composition artifacts owned by the orchestrating surface:
 
 ```text
 workflow_chain(owner_skill, scenario)
@@ -232,7 +231,8 @@ Use these surfaces to make a chain visible:
 - generated todo-chain edges from every skill's `## Todo List` when it contains
   first-seen explicit skill references in order: Markdown `SKILL.md` links,
   backticked `skill-name` refs, or `$skill-name` refs. Plain prose is ignored.
-- `common_chains` in skill frontmatter for stable Tier 3 adjacency hints.
+- `common_chains` in skill frontmatter for stable adjacency hints between
+  domain skills.
 - domain actions in `## Todo List` for normal downstream calls.
 - workflow reference files under `skills/<owner>/references/` when one
   orchestrator owns a conditional multi-skill procedure.
@@ -242,7 +242,7 @@ Use these surfaces to make a chain visible:
 
 An e2e eval should mark every required skill in the chain as a key workflow
 step in its reference points. This tests composition without turning chained
-skills into a new skill tier.
+skills into a new skill.
 
 Boundary examples:
 
@@ -251,33 +251,27 @@ Boundary examples:
   `goal-advisor` remain callable because they return domain-owned tickets,
   programs, or proof-bearing plans.
 - `review` is better understood as a review protocol and rubric/TAS contract.
-  Keep the callable Tier 2 wrapper while it is useful; rubric bodies live in
+  Keep the callable wrapper while it is useful; rubric bodies live in
   `docs/review/rubrics/*` and reviewer agents can read those docs directly.
 
 ## Todo-Link Rules
 
-First-load todo links should follow the loading boundary derived from the tier
-model. This preserves progressive disclosure and avoids making every domain
-skill import every primitive directly:
+First-load todo links preserve progressive disclosure: link what the skill
+actually hands work to, not every primitive it might touch.
 
-- Tier 2 first-load todos may link Tier 1 primitives.
-- Tier 3 first-load todos should usually link Tier 2 surfaces such as
-  the relevant specialized research skill and domain workflow interfaces when those are real invocable
-  contracts.
-- Tier 3 first-load todos may link peer Tier 3 skills when the domain flow has
-  an intentional handoff.
-- Tier 3 first-load todos should not direct-link Tier 1 primitives such as
-  `advise`, `consolidate`, `reference-grounding`, or `prototyping` unless the
-  skill owns that primitive step as part of its first-load contract.
-- Tier 0 phase steps do not need skill links or skill-local phase sections.
+- Link a shared interface (the relevant specialized research skill, a domain
+  workflow interface) when it is a real invocable contract the step needs.
+- Link a peer domain skill when the flow has an intentional handoff.
+- Link a core primitive (`advise`, `consolidate`, `reference-grounding`,
+  `prototyping`) only when the skill owns that step in its first-load contract;
+  otherwise let the interface carry it.
+- Phase-protocol steps do not need skill links or skill-local phase sections.
   Put a real domain action in the todo instead of linking to a generic phase
   wrapper for inherited lifecycle behavior.
 - `review` is a protocol exception: skills may link to the review wrapper when
-  material evidence needs TAS judgment, regardless of normal one-level tier
-  dependency direction.
+  material evidence needs TAS judgment.
 
-Use `bin/validators/check_skill_todo_tiers.py --allow-peer-tier3` to audit the current
-intentional first-load loading contract.
+These are authoring guidance; no lint check enforces them.
 
 ## Frontmatter Contract
 
@@ -297,7 +291,6 @@ put that context in the skill body, a reference, or the upstream source.
 Manual fields:
 
 - `name`: required stable skill ID and directory name.
-- `tier`: required, numeric `1`, `2`, or `3`.
 - `description`: required one-sentence functional routing definition of 220
   characters or less. Prefer
   `Verb input/context into output/artifact when call-condition`.
@@ -311,9 +304,11 @@ Manual fields:
 - `version`: optional skill-local semantic version.
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding.
-- `group`: required for Tier 3 only; one canonical operating department from
-  [`config/skill-departments.toml`](../../config/skill-departments.toml). The
-  graph uses it as explicit department membership, not as a workflow edge.
+- `department`: required on a skill that sits on a specialist desk, where it
+  must match the desk's department; optional otherwise. One canonical operating
+  department from [`config/skill-departments.toml`](../../config/skill-departments.toml).
+  The graph uses it as explicit department membership, not as a workflow edge.
+  (`tier` is retired and rejected.)
 - `capability`: optional static projection for a package that is ready to be
   shown in the Capability Map and Office. It has exactly one of three typed
   shapes: an `artifact` declares one `produces` artifact ID and zero or more
@@ -333,7 +328,7 @@ Manual fields:
   interfaces; they do not create Capability Map or Office nodes. See
   [`department-taxonomy.md`](department-taxonomy.md) for map selection and
   link semantics.
-- `common_chains`: optional one-way Tier 3 adjacency hints.
+- `common_chains`: optional one-way adjacency hints on a skill with a department.
 - `upstream_url`: optional for `source: external`.
 - `argument-hint`: optional Codex invocation hint.
 - `planner_contract`: optional required-argument contract for a planner skill.
@@ -475,13 +470,13 @@ skill-maintenance check validates declared method references.
 
 ## Rollout Policy
 
-Roll out skill-system standards from the most compound surfaces first. This is
-the operational meaning of the numeric tiers:
+Roll out skill-system standards from the most compound surfaces first:
 
-1. Meta skills and Tier 1 primitives stay current by default.
-2. Core Tier 2 interfaces are updated when standards change.
-3. Tier 3 skills are updated on contact, by cluster, or when repeated failure
-   evidence shows the old shape is hurting execution.
+1. Meta skills, core primitives and each specialist desk's primary skill stay
+   current by default.
+2. Shared workflow interfaces are updated when standards change.
+3. Other domain skills are updated on contact, by cluster, or when repeated
+   failure evidence shows the old shape is hurting execution.
 4. Broad migration requires a representative sample before a full batch.
 5. Missing `skill_template_version` means not onboarded yet, not invalid.
 

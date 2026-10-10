@@ -9,7 +9,7 @@
 
 ## Boundaries
 
-- Keep this as a Tier 1 primitive, not a research router.
+- Keep this as a core primitive, not a research router.
 - Use it for compact evidence checks before advice, brainstorming, planning,
   execution, and review claims.
 - Escalate broader comparison, gap, docs, code-pattern, competitor, or

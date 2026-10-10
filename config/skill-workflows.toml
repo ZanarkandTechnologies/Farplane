@@ -2,8 +2,8 @@
 #
 # A specialist is one desk in the office that groups skill variants. Each desk
 # owns its display label, department, deliverable, primary skill (its default
-# verb), and member `skills`. A member must be a Tier 3 skill in the desk's
-# department and may sit at only one desk. Skills at no desk are internal:
+# verb), and member `skills`. A member must be in the desk's department and may
+# sit at only one desk. Skills at no desk are internal:
 # planners dispatch them, and the map omits them.
 
 

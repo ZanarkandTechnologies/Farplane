@@ -2,7 +2,6 @@
 name: landing-page
 version: 1.2.0
 description: "Turn a one-page marketing or launch request into an approved offer, story, section, asset, motion, and proof specification for implementation planning."
-tier: 3
 department: marketing
 source: local
 allowed-tools: Read, Grep, Glob, Bash

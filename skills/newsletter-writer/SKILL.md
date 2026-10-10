@@ -1,7 +1,6 @@
 ---
 name: newsletter-writer
 description: "Turn verified source material and voice examples into a ready-to-review recurring newsletter issue or sustainable newsletter blueprint."
-tier: 3
 department: marketing
 source: local
 template_uses:

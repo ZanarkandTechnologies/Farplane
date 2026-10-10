@@ -1,7 +1,6 @@
 ---
 name: plan-next-wave
 description: "Select and bind the strongest configured project-skill calls without writing tickets."
-tier: 3
 department: operations
 source: local
 template_uses:

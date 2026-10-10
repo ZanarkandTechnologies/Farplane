@@ -2,7 +2,6 @@
 name: init-advisor
 version: 3.1.0
 description: "Turn a new-project intake into a Farplane substrate, readiness audit, optional code scaffold, and harness-creator handoff."
-tier: 3
 department: operations
 source: local
 ---
@@ -61,7 +60,7 @@ fails: creates only code scaffolding with no Farplane project config; treats PRD
 
 ## Phase Boundary
 
-This skill follows Tier 0 phases inline. Use compact grounding before
+This skill follows native phases inline. Use compact grounding before
 finalizing project archetype, static charter, capability workflows, or metric objectives; use deeper
 research only when stack commands, framework conventions, or market assumptions
 may be stale. PRD authoring is downstream of the three-ticket business

@@ -21,7 +21,6 @@ def write_skill(
     repo: Path,
     name: str,
     *,
-    tier: int = 2,
     department: str | None = None,
     template_version: str | None = None,
     feature_refs: list[str] | None = None,
@@ -52,7 +51,6 @@ def write_skill(
                 "---",
                 f"name: {name}",
                 "description: Test skill.",
-                f"tier: {tier}",
                 f"department: {department}" if department else "",
                 "source: local",
                 capability or "",
@@ -339,6 +337,25 @@ capability:
             ):
                 sync_skill_registry.build_registry(repo)
 
+    def test_rejects_the_retired_tier_field(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "writer")
+            path = repo / "skills" / "writer" / "SKILL.md"
+            path.write_text(path.read_text().replace("source: local", "source: local\ntier: 3"))
+            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "tier is retired"):
+                sync_skill_registry.build_registry(repo)
+
+    def test_department_is_optional_off_a_desk(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "helper")
+            write_skill(repo, "writer", department="operations")
+            rows = {row["name"]: row for row in sync_skill_registry.build_registry(repo)}
+            self.assertNotIn("department", rows["helper"])
+            self.assertEqual(rows["writer"]["department"], "operations")
+            self.assertNotIn("tier", rows["writer"])
+
     def test_projects_specialist_from_the_desk_table(self) -> None:
         desks = (
             '[specialists.reporter]\nlabel = "Reporter"\ndepartment = "operations"\n'
@@ -348,8 +365,8 @@ capability:
             repo = Path(tmp)
             (repo / "config").mkdir()
             (repo / "config" / "skill-workflows.toml").write_text(desks)
-            write_skill(repo, "recap-task", tier=3, department="operations")
-            write_skill(repo, "writer", tier=3, department="operations")
+            write_skill(repo, "recap-task", department="operations")
+            write_skill(repo, "writer", department="operations")
             rows = {row["name"]: row for row in sync_skill_registry.build_registry(repo)}
             self.assertEqual(rows["recap-task"]["specialist"], "reporter")
             self.assertNotIn("specialist", rows["writer"])
@@ -357,7 +374,7 @@ capability:
             repo = Path(tmp)
             (repo / "config").mkdir()
             (repo / "config" / "skill-workflows.toml").write_text(desks)
-            write_skill(repo, "recap-task", tier=3, department="marketing")
+            write_skill(repo, "recap-task", department="marketing")
             with self.assertRaisesRegex(sync_skill_registry.RegistryError, "specialist 'reporter' requires"):
                 sync_skill_registry.build_registry(repo)
 
@@ -368,7 +385,6 @@ capability:
             write_skill(
                 repo,
                 "writer",
-                tier=3,
                 department="operations",
                 common_chain_after=["unslop"],
             )
@@ -417,7 +433,6 @@ capability:
             write_skill(
                 repo,
                 "unslop",
-                tier=3,
                 department="operations",
                 capability="capability:\n  kind: shortcut",
                 common_chain_after=["writer"],

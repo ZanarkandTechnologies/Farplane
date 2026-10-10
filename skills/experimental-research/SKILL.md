@@ -1,7 +1,6 @@
 ---
 name: experimental-research
 description: "Turn a technical research question into traced papers, researchers, code, and ranked experiments with reproducibility and learning-value evidence."
-tier: 2
 source: local
 template_uses:
   skill-template: "0.6.2"

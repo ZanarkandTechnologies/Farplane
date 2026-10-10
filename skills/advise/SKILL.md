@@ -1,7 +1,6 @@
 ---
 name: advise
 description: "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice."
-tier: 1
 source: local
 capability:
   kind: shortcut
@@ -15,7 +14,7 @@ template_uses:
 
 ## Context
 
-`advise` is a Tier 1 primitive. Use it only when the active workflow needs a
+`advise` is a core primitive. Use it only when the active workflow needs a
 judgment call among real options; direct execution requests should stay with
 the owning skill or caller.
 
@@ -41,7 +40,7 @@ fails: neutral_menu; fake_options; automatic_ensemble; hidden_evidence_gap
   for material advice.
 - [ ] 2. State the real decision and the criteria that matter.
 - [ ] 3. Check evidence needs; use supplied/local grounding when needed, or name
-  the evidence gap instead of doing higher-tier research inside this skill.
+  the evidence gap instead of doing a full research pass inside this skill.
 - [ ] 4. Compare exactly 3 viable options with concrete pros and cons when three
   realistic options exist.
 - [ ] 5. Recommend one option clearly, name the accepted tradeoff, and state the

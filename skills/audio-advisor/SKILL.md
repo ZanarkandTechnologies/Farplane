@@ -1,7 +1,6 @@
 ---
 name: audio-advisor
 description: "Plan audio, discover SFX candidates, generate approved assets, verify files, and hand off voice, music, Foley, dubbing, and mixes."
-tier: 3
 department: marketing
 source: local
 template_uses:

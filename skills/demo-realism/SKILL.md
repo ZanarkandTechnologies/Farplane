@@ -1,7 +1,6 @@
 ---
 name: demo-realism
 description: "Turn a fake-feeling MVP or prototype into realistic workflows, demo data, and a presentation-readiness rubric."
-tier: 3
 department: operations
 source: local
 ---

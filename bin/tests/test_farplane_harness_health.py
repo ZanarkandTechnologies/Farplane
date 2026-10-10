@@ -35,7 +35,6 @@ def write_fixture(root: Path) -> None:
                     "id": "alpha",
                     "path": "skills/alpha/SKILL.md",
                     "source": "local",
-                    "tier": 2,
                     "description": "Alpha workflow",
                     "methods": [],
                     "heat": {
@@ -75,7 +74,6 @@ def write_fixture(root: Path) -> None:
                     "skill_id": "alpha",
                     "path": "skills/alpha/SKILL.md",
                     "source": "local",
-                    "tier": 2,
                     "status": "current",
                     "template_version": "1.0.0",
                     "eval": "evals/evals.json",
@@ -92,7 +90,7 @@ def write_fixture(root: Path) -> None:
     )
     registry = root / "docs" / "skills" / "registry.jsonl"
     registry.parent.mkdir(parents=True, exist_ok=True)
-    registry.write_text(json.dumps({"name": "alpha", "source": "local", "tier": 2}) + "\n", encoding="utf-8")
+    registry.write_text(json.dumps({"name": "alpha", "source": "local"}) + "\n", encoding="utf-8")
     write_json(
         root / "skills" / "alpha" / "evals" / "evals.json",
         {"skill_name": "alpha", "evals": [{"id": f"alpha-{index}"} for index in range(5)]},
@@ -165,9 +163,9 @@ class HarnessHealthTests(unittest.TestCase):
     def test_priority_cohort_counts_each_unhealthy_skill_once(self) -> None:
         skills = [
             {
-                "skillId": "tier-one",
+                "skillId": "desk-primary",
                 "source": "local",
-                "tier": 1,
+                "deskPrimary": True,
                 "evidence": {"invocationCount30d": 0},
                 "gaps": [
                     {"id": "template_age", "status": "risk"},
@@ -177,7 +175,6 @@ class HarnessHealthTests(unittest.TestCase):
             {
                 "skillId": "used",
                 "source": "local",
-                "tier": 3,
                 "evidence": {"invocationCount30d": 2},
                 "gaps": [
                     {"id": "template_age", "status": "good"},
@@ -187,14 +184,12 @@ class HarnessHealthTests(unittest.TestCase):
             {
                 "skillId": "inactive",
                 "source": "local",
-                "tier": 3,
                 "evidence": {"invocationCount30d": 0},
                 "gaps": [],
             },
             {
                 "skillId": "external",
                 "source": "external",
-                "tier": 1,
                 "evidence": {"invocationCount30d": 5},
                 "gaps": [],
             },
@@ -205,7 +200,7 @@ class HarnessHealthTests(unittest.TestCase):
         reading = readings["priority_skill_health_gap_count"]
 
         self.assertEqual(reading["value"], 1)
-        self.assertEqual(reading["payload"]["priority_skill_ids"], ["tier-one", "used"])
+        self.assertEqual(reading["payload"]["priority_skill_ids"], ["desk-primary", "used"])
         self.assertEqual(reading["payload"]["template_gap_count"], 1)
         self.assertEqual(reading["payload"]["eval_gap_count"], 1)
         self.assertEqual(len(reading["payload"]["anti_metrics"]), 4)

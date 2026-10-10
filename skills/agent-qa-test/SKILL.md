@@ -1,7 +1,6 @@
 ---
 name: agent-qa-test
 description: "Turn an app, skill, prompt, or workflow claim into adversarial QA cases, tester evidence, critique, and rerun guidance."
-tier: 2
 source: local
 methods:
   - id: agent-qa-test:prompt

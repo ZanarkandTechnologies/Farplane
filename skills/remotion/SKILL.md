@@ -1,7 +1,6 @@
 ---
 name: remotion
 description: "Turn storyboarded assets into Remotion/React compositions, stitched timelines, captions, audio placement, and local render proof."
-tier: 3
 department: marketing
 source: local
 template_uses:

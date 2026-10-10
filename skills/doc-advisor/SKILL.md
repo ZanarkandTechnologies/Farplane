@@ -1,7 +1,6 @@
 ---
 name: doc-advisor
 description: "Turn ticket, plan, or durable doc changes into a docs strategy or grounded doc update with doc-quality checks."
-tier: 2
 source: local
 template_uses:
   skill-template: "0.3.6"
@@ -58,7 +57,7 @@ fails: stale or ungrounded docs; duplicate source-of-truth; wrong feature/system
 
 ## Phase Boundary
 
-This skill follows Tier 0 phases inline. Call `review` only when the doc is
+This skill follows native phases inline. Call `review` only when the doc is
 canonical, public, cross-surface, policy-bearing, or a completion claim that
 needs independent judgment; name `documentation-quality` as the review family
 when asking for a TAS verdict. When placement or feature-vs-system

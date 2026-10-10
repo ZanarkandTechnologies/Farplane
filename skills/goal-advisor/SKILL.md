@@ -1,7 +1,6 @@
 ---
 name: goal-advisor
 description: "Turn an ambitious request into Goal architecture, ticket-backed loop state, and a native Codex /goal prompt when warranted."
-tier: 3
 department: operations
 source: local
 version: 0.2.0

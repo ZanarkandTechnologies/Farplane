@@ -1,7 +1,6 @@
 ---
 name: eval
 description: "Turn agent, prompt, or skill behavior into local eval tasks, boolean or tier judges, run artifacts, and verdicts."
-tier: 3
 department: operations
 source: local
 template_uses:
@@ -104,7 +103,7 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
         points in evals. Use [self-improve](../self-improve/SKILL.md) only for
         measured variant search with an owning ticket.
 - [ ] 5. Finish with independent proof.
-  - [ ] Reapply the first-load Todo List guardrails and the owning validators. For Tier 1, meta,
+  - [ ] Reapply the first-load Todo List guardrails and the owning validators. For core primitive, meta,
         `eval`, cross-skill, or precedent-setting changes, record the
         the high-stakes design decision and use an independent reviewer.
   - [ ] Do not claim task or review-rate improvement without run artifacts or a
@@ -119,7 +118,7 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
 - Load [core lifecycle](references/core-lifecycle.md) before claiming coverage
   for the bounded Farplane lifecycle suite.
 - Load [skill structure cases](references/eval-skill-structure-cases.md) for
-  Tier 1, meta, `eval`, or cross-skill structure coverage.
+  core primitive, meta, `eval`, or cross-skill structure coverage.
 - Load [automation prompt](references/automation-prompt.md) only when installing
   or updating the weekly consolidation automation.
 - The weekly drain's reference workflow uses the shared
