@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import json
-import os
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
 import yaml
 
@@ -329,7 +327,7 @@ metric_bindings:
 
         self.assertFalse([error for error in errors if "metrics.yaml" in error])
 
-    def test_stale_project_snapshot_fails(self) -> None:
+    def test_stale_local_snapshot_is_not_a_contract_error(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             farplane = root / "farplane"
@@ -344,25 +342,7 @@ metric_bindings:
 
             errors = validate(root)
 
-        self.assertIn(".farplane/project/ui/latest.json is stale for farplane/metrics.yaml; regenerate project snapshot.", errors)
-
-    def test_gate_snapshot_skips_local_cache_freshness(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            farplane = root / "farplane"
-            farplane.mkdir()
-            write_framework_manifest(farplane)
-            write_required_project_files(root)
-            snapshot = root / ".farplane" / "project" / "ui" / "latest.json"
-            snapshot.write_text(
-                json.dumps({"sources": [{"path": "farplane/metrics.yaml", "hash": "sha256:not-current"}]}),
-                encoding="utf-8",
-            )
-
-            with patch.dict(os.environ, {"FARPLANE_GIT_GATE_SNAPSHOT": "1"}):
-                errors = validate(root)
-
-        self.assertFalse([error for error in errors if "is stale" in error])
+        self.assertFalse([error for error in errors if "latest.json" in error])
 
     def test_missing_ignored_paths_pass_and_wrong_type_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

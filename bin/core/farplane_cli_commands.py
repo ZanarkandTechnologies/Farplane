@@ -430,7 +430,10 @@ def run_doctor(args: argparse.Namespace) -> int:
         project_root=CORE_ROOT,
         process_env=dict(os.environ),
     )
-    issues = [*hook_report["issues"], *ui_issues, *config_report["issues"]]
+    from farplane_snapshot_freshness import snapshot_freshness_issues
+
+    snapshot_issues = snapshot_freshness_issues(CORE_ROOT)
+    issues = [*hook_report["issues"], *ui_issues, *config_report["issues"], *snapshot_issues]
     payload = {
         "ok": not issues,
         "summary": "Core install, hooks, and UI link look healthy" if not issues else "Farplane doctor found issues",
@@ -445,6 +448,7 @@ def run_doctor(args: argparse.Namespace) -> int:
             *hook_report.get("hints", []),
             *config_report.get("hints", []),
             *(["run `farplane ui link /path/to/Farplane-UI`"] if ui_issues else []),
+            *(["run `farplane project snapshot`"] if snapshot_issues else []),
         ],
     }
     print_payload(payload, args.json)

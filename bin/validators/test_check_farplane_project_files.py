@@ -984,31 +984,6 @@ def test_a_metric_needs_only_its_name_and_how_to_read_it(tmp_path: Path) -> None
 
     assert not [error for error in errors if "metrics.yaml" in error]
 
-def test_stale_project_snapshot_fails(tmp_path: Path) -> None:
-    farplane = tmp_path / "farplane"
-    farplane.mkdir()
-    write_framework_manifest(farplane)
-    write_required_project_files(tmp_path)
-    snapshot = tmp_path / ".farplane" / "project" / "ui" / "latest.json"
-    snapshot.write_text(
-        json.dumps(
-            {
-                "sources": [
-                    {
-                        "path": "farplane/metrics.yaml",
-                        "hash": "sha256:not-current",
-                    }
-                ]
-            }
-        ),
-        encoding="utf-8",
-    )
-
-    errors = validate(tmp_path)
-
-    assert ".farplane/project/ui/latest.json is stale for farplane/metrics.yaml; regenerate project snapshot." in errors
-
-
 def test_missing_pm_manifest_passes(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()

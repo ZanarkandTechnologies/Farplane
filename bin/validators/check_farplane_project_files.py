@@ -5,11 +5,9 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import subprocess
 import sys
-import hashlib
 from pathlib import Path
 
 import yaml
@@ -675,37 +673,6 @@ def validate_metric_observation_files(root: Path, metrics: dict[str, dict]) -> l
     return errors
 
 
-def sha256_file(path: Path) -> str | None:
-    if not path.exists() or not path.is_file():
-        return None
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(65536), b""):
-            digest.update(chunk)
-    return "sha256:" + digest.hexdigest()
-
-
-def validate_snapshot_freshness(root: Path, snapshot_path: Path) -> list[str]:
-    if os.environ.get("FARPLANE_GIT_GATE_SNAPSHOT") or not snapshot_path.exists():
-        return []
-    try:
-        snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
-        return [f"{snapshot_path.relative_to(root)} must be valid JSON: {exc.msg}."]
-    sources = snapshot.get("sources") if isinstance(snapshot, dict) else None
-    if not isinstance(sources, list):
-        return [f"{snapshot_path.relative_to(root)} sources must be a list when snapshot exists."]
-    errors: list[str] = []
-    for source in sources:
-        if not isinstance(source, dict) or not source.get("path") or not source.get("hash"):
-            continue
-        path = root / str(source["path"])
-        current_hash = sha256_file(path)
-        if current_hash and current_hash != source.get("hash"):
-            errors.append(f"{snapshot_path.relative_to(root)} is stale for {source['path']}; regenerate project snapshot.")
-    return errors
-
-
 def validate_cross_file_contract(root: Path) -> list[str]:
     goals_file = root / "farplane" / "goals.yaml"
     harness_file = root / "farplane" / "harness.yaml"
@@ -780,7 +747,6 @@ def validate_cross_file_contract(root: Path) -> list[str]:
             f"{', '.join(selected_markdown_metrics)}."
         )
 
-    errors.extend(validate_snapshot_freshness(root, root / ".farplane" / "project" / "ui" / "latest.json"))
     return errors
 
 
