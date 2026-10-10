@@ -140,11 +140,11 @@ not replace the Intelligence Receipt.
         Intelligence job before long extraction. Preserve `queued`,
         `analyzing`, `ready`, `failed`, or `needs_review` honestly.
 - [ ] 2. Extract the narrowest sufficient evidence.
-  - [ ] Run `farplane run -- summarize "$source" --extract` first on any URL or
-        file, social links too, before yt-dlp, agent-reach, Apify, a browser, or a
-        blocked verdict (bare `summarize` on `doppler_not_configured`). A login-wall
-        page with exit 0 is a failed extraction: fetch it via `media-ingest`, run
-        `summarize <file> --extract --timestamps`, else block the claim.
+  - [ ] Run `python3 skills/media-ingest/scripts/extract_source.py "$source"`
+        first on any URL or file, social links too, before agent-reach, Apify, a
+        browser, or a blocked verdict. It runs summarize, treats a login wall as a
+        failed extraction, downloads with yt-dlp and transcribes the file with
+        summarize, so no step is skipped; only its `blocked:` exit blocks the claim.
   - [ ] Call `media-ingest` only when text is insufficient or the requested
         claim depends on frames, audio, image detail, or timeline evidence.
 - [ ] 3. Produce the dossier and recent comparable takes.
