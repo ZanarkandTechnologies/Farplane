@@ -151,11 +151,11 @@ verified closed issue
 -> exact local packet deletion
 ```
 
-The normal closeout starts in `$close-ticket`, which invokes `farplane ticket
-finalize TASK-XXXX` with any selected media paths. Core renders the concise
+The legacy filesystem closeout runs `farplane ticket finalize TASK-XXXX` with
+any selected media paths. Core renders the concise
 `Before`, `After`, `Example`, `Key decisions`, and `Proof`, then creates or
 resumes the ticket-marked issue in `integrations.github.repo`. If media is
-missing, the command leaves the issue open and returns its URL; the skill
+missing, the command leaves the issue open and returns its URL; the agent
 uploads only those marked files through the authenticated browser composer and
 reruns the same command.
 

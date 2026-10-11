@@ -97,7 +97,7 @@ flowchart LR
     goalSkill["goal-advisor<br/>native Goal"]:::callout
     execSkill["goal-advisor<br/>native Codex task checkout"]:::callout
     assetSkill["ai-image-advisor<br/>ai-video-advisor<br/>remotion-render"]:::skill
-    closeSkill["demo -> close-ticket<br/>video-first GitHub issue<br/>commit<br/>pr-splitting"]:::callout
+    closeSkill["demo -> proof comment<br/>issue closed<br/>commit<br/>pr-splitting"]:::callout
   end
 
   subgraph Board["Ticket + QA Surfaces"]

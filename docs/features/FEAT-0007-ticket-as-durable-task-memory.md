@@ -13,7 +13,6 @@ refs:
   - tickets/templates/ticket.md
   - skills/impl-plan
   - skills/spec-to-ticket
-  - skills/close-ticket
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - docs/features/README.md
   - "docs/MEMORY.md#MEM-0058"
@@ -28,7 +27,6 @@ surfaces:
   - tickets/templates/ticket.md
   - skills/impl-plan
   - skills/spec-to-ticket
-  - skills/close-ticket
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
 source_refs:
   - docs/features/README.md
@@ -133,8 +131,10 @@ A durable ticket is a small program for the next agent, not a generic task note.
   prose, Mermaid, media, and link-only reference categories through the shared
   Markdown accountant, while raw lines remain the context gate.
 - `Links` points to evidence, artifacts, related specs, sidecars, and handoffs.
-- `$close-ticket` invokes Core with the ticket ID and selected media paths, and
-  owns only authenticated browser upload of missing marked attachments.
+- On the GitHub Issues route, the close rule in `tickets/README.md` closes the
+  same issue with one proof comment. On the legacy filesystem route, the agent
+  runs Core with the ticket ID and selected media paths and uploads only missing
+  marked attachments through the authenticated browser.
 - `farplane ticket finalize TASK-XXXX` owns remote publication and the local
   terminal transaction: render, create or resume the marked issue, verify its
   media markers, close it, update metadata, mine the still-local packet,
@@ -190,7 +190,6 @@ Owner surfaces:
 - `tickets/templates/ticket.md`
 - `skills/impl-plan`
 - `skills/spec-to-ticket`
-- `skills/close-ticket`
 - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 
 Source context:

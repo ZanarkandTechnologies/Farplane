@@ -34,8 +34,8 @@ registry companions, and public guidance.
 
 For material ticket planning, return a compact `Docs Strategy` decision:
 `update_docs` with target docs and validation, or `no_docs` with a concrete
-reason. Do not model routine ticket closure as a field; closing tickets remains
-the lifecycle invariant owned by `close-ticket`.
+reason. Do not model routine ticket closure as a field; closing follows the
+close rule in `tickets/README.md`.
 
 Ground source claims through [reference-grounding](../reference-grounding/SKILL.md)
 when they depend on local canonical files, official behavior, current facts, peer

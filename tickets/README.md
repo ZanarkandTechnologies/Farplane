@@ -30,9 +30,12 @@ procedures below for this project and any project with a GitHub repository.
   prompts, and proof in repository files when useful. Link committed paths or
   attach snapshots when teammates need them from the issue. Local paths alone
   are not shared artifacts. Do not push a repository without authorization.
-- `$close-ticket` records verified results and closes the **same issue**. Do not
-  create a second closeout issue, invoke `farplane ticket finalize`, or delete
-  the local supporting files.
+- Close an issue in the run that finishes it. Check every `Done / Proof` item
+  against the commits on `main`, post one proof comment (what changed, commit
+  hashes, checks run, and the demo video or screenshots for UI work), then
+  `gh issue close <n> --reason completed`. A follow-up that is not being done
+  now gets the `backlog` label. Do not create a second closeout issue, invoke
+  `farplane ticket finalize`, or delete the local supporting files.
 - Resume the existing Codex task from the full issue body plus recent comments.
   Open older threads or attachments only for a named evidence gap. Preserve the
   existing proof, review and approval requirements.
@@ -105,8 +108,8 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
    `awaiting_review` or `waiting_signal`
 4. on a non-ticket blocker, clear the claim, set `blocked`, and record details
    in `progress.md`
-5. after implementation, proof, review, and durable docs, use `$close-ticket`
-   to run `farplane ticket finalize TASK-XXXX` with any selected media paths
+5. after implementation, proof, review, and durable docs, run
+   `farplane ticket finalize TASK-XXXX` with any selected media paths
 6. Core renders the glanceable `Before`, `After`, `Example`, `Key decisions`,
    and compact `Proof`, then creates or resumes one marked issue in the
    configured GitHub repository

@@ -23,8 +23,8 @@ needs it before a ticket, skill, or owner document can take over.
   the Goal Packet and native Goal prompt; native Goal executes the accepted scope
   unless required inputs, an approval gate, or destructive/external side effects
   block. Keep issue body and metadata current. Material completion requires its
-  `Done / Proof`, QA/reviewer receipts, and `$close-ticket` updating the same
-  GitHub issue without starting a run. Compare ticket, program, and progress at material
+  `Done / Proof`, QA/reviewer receipts, and a proof comment closing the same
+  GitHub issue (the close rule in `tickets/README.md`). Compare ticket, program, and progress at material
   continuations; use drift review when self-approval risk is high. Ticket
   lifecycle and thread mechanics stay in `tickets/README.md`.
 - Every implementation ticket needs a compact Contract Diagram. UI tickets also

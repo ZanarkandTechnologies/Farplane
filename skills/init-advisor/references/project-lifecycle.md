@@ -33,7 +33,7 @@ TicketBreakdown := spec-to-ticket
 PlanTicket<CodingTicket> := impl-plan
 ExecuteTicket<CodingTicket> := goal-advisor
 VerifyTicket := qa | visual-qa | review | domain proof skill
-CloseTicket<CodingTicket> := close-ticket
+CloseTicket<CodingTicket> := proof comment + issue close (tickets/README.md)
 ```
 
 Domain project profiles may bind the same lifecycle to different ticket

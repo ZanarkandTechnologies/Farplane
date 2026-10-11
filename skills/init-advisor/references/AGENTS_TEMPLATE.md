@@ -201,8 +201,8 @@ slice, proof/falsification, tradeoffs, and non-goals.
   the approved shared utility surface instead of copying it again.
 - Update ticket status, phase, blockers, and spawned follow-ups in the ticket
   file as work progresses. When a ticket is complete and its writeback is done,
-  use `$close-ticket`, which runs `farplane ticket finalize TASK-XXXX` with one
-  `--media <path>` per selected file. Core creates or resumes, verifies, and
+  run `farplane ticket finalize TASK-XXXX` with one `--media <path>` per
+  selected file. Core creates or resumes, verifies, and
   closes the configured-repository issue before mining and cleanup; do not
   create the issue or move the packet into `tickets/archive/` manually.
 - Route a repeated failure to the smallest owner: a skill, eval, validator,

@@ -58,7 +58,7 @@ execution can become autonomous inside that scope.
 | Execute | native Codex Goal | changed files, progress entries, command evidence | ticket `Done` and `QA Strategy` satisfied |
 | Prove | `qa`, `visual-qa`, `agent-qa-test`, tests, or scripts | artifacts under `tickets/TASK-XXXX/artifacts/` | proof route matches ticket claim |
 | Review | native `reviewer` lane / `review` rubrics | review receipt linked from ticket and progress | required TAS gates pass |
-| Close | `close-ticket` or coordinating lane | status, links, docs/memory writeback, residual risk | no required proof or review missing |
+| Close | coordinating lane (close rule in `tickets/README.md`) | proof comment, links, docs/memory writeback, residual risk | no required proof or review missing |
 
 ## How The Ticket Fills Up
 
@@ -239,7 +239,7 @@ boundary:
   according to the ticket's `QA Strategy`.
 - `review` defines TAS semantics and rubric families; the native `reviewer`
   lane supplies independent judgment and writes or returns receipts.
-- `skill-maintenance`, `doc-advisor`, `manage-wiki`, and `close-ticket` handle
+- `skill-maintenance`, `doc-advisor`, and `manage-wiki` handle
   owner-correct durable writeback after proof exists: reusable operational
   procedures become skills, project knowledge becomes project docs, and sourced
   entities become Wiki articles.

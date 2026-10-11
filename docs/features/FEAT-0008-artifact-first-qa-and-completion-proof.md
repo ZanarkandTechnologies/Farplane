@@ -13,7 +13,6 @@ refs:
   - tickets/templates/ticket.md
   - skills/qa
   - skills/review
-  - skills/close-ticket
   - docs/review/rubrics
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
   - "docs/MEMORY.md#MEM-0048"
@@ -29,7 +28,6 @@ surfaces:
   - tickets/templates/ticket.md
   - skills/qa
   - skills/review
-  - skills/close-ticket
   - docs/review/rubrics
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
 source_refs:
@@ -120,8 +118,8 @@ Proof scales with risk, blast radius, and user-facing impact.
   feature tickets require the passing independently reviewed `$demo` MP4 as
   the first marked browser comment; explicitly selected screenshots may follow.
 - Core renders and creates or resumes the marked issue, then verifies its body
-  and every expected media comment before closing it. `$close-ticket` owns only
-  authenticated browser upload of missing selected media. Core requires a real
+  and every expected media comment before closing it. The agent only uploads
+  missing selected media through the authenticated browser. Core requires a real
   GitHub user-attachment URL in every selected-media comment,
   mines while the local evidence still exists, writes the compact locator, and
   only then deletes the ticket packet.
@@ -174,7 +172,6 @@ Owner surfaces:
 - `tickets/templates/ticket.md`
 - `skills/qa`
 - `skills/review`
-- `skills/close-ticket`
 - `docs/review/rubrics`
 - `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
 

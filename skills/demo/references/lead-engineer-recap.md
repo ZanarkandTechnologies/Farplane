@@ -105,8 +105,8 @@ Keep `result.json` compatible with Farplane validators:
 - MP4 media checks pass and independent review reaches TAS-A.
 - The recap can refresh context without requiring the viewer to open the
   ticket, while artifact links remain available for deeper inspection.
-- For material feature work, the reviewed MP4 is ready to become the first
-  selected `$close-ticket` media comment.
+- For material feature work, the reviewed MP4 is ready to lead the issue's
+  closing proof comment.
 
 ## Bad Output
 

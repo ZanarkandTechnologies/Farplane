@@ -80,7 +80,7 @@ Done so far:
 
 Still open:
 
-- `ticket` and `tickets` work on the legacy `tickets/` files, but the `close-ticket`, `impl-plan`,
+- `ticket` and `tickets` work on the legacy `tickets/` files, but the `impl-plan`,
   `goal-advisor`, `dogfood-review` and `pulse-update` skills still name them; retiring them means moving
   those skills to GitHub Issues first (its own issue).
 - `notify` and `reports` have no live caller but are documented operator tools; ask before removing.

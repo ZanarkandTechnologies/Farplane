@@ -112,9 +112,9 @@ coordinating Codex QA lane.
 
 | Route | Skills and owners |
 | --- | --- |
-| Connector/API/CLI first | [`feed-scout`](../../feed-scout/SKILL.md), [`media-ingest`](../../media-ingest/SKILL.md), [`ingest-content`](../../ingest-content/SKILL.md), [`close-ticket`](../../close-ticket/SKILL.md) |
+| Connector/API/CLI first | [`feed-scout`](../../feed-scout/SKILL.md), [`media-ingest`](../../media-ingest/SKILL.md), [`ingest-content`](../../ingest-content/SKILL.md) |
 | Codex in-app Browser | [`qa`](../../qa/SKILL.md), [`visual-qa`](../../visual-qa/SKILL.md), [`proof-advisor`](../../proof-advisor/SKILL.md), [`impl-plan`](../../impl-plan/SKILL.md), [`functional-ui`](../../functional-ui/SKILL.md), [`visual-design`](../../visual-design/SKILL.md), [`landing-page`](../../landing-page/SKILL.md), [`customer-research`](../../customer-research/SKILL.md), [`ingest-content`](../../ingest-content/SKILL.md), [`prd`](../../prd/SKILL.md), [`optimize-harness`](../../optimize-harness/SKILL.md), [`convex`](../../convex/SKILL.md), [`feed-scout`](../../feed-scout/SKILL.md), [`social-content`](../../social-content/SKILL.md) |
-| `@Chrome` | [`close-ticket`](../../close-ticket/SKILL.md); [`feed-scout`](../../feed-scout/SKILL.md) only for explicitly authorized logged-in inspection |
+| `@Chrome` | [`feed-scout`](../../feed-scout/SKILL.md) only for explicitly authorized logged-in inspection |
 | Playwright | [`proof-advisor`](../../proof-advisor/SKILL.md), [`qa`](../../qa/SKILL.md), [`visual-qa`](../../visual-qa/SKILL.md), [`landing-page`](../../landing-page/SKILL.md), [`impl-plan`](../../impl-plan/SKILL.md), [`convex`](../../convex/SKILL.md) |
 | Remotion Chromium | [`remotion`](../../remotion/SKILL.md), [`remotion-render`](../../remotion-render/SKILL.md) |
 

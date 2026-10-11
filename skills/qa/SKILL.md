@@ -8,7 +8,7 @@ template_uses:
   skill-surface-budget: "0.1.0"
   skill-eval-task: "0.2.0"
 common_chains:
-  after: ["demo", "close-ticket"]
+  after: ["demo"]
 ---
 
 # QA

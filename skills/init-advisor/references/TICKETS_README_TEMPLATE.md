@@ -42,8 +42,8 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
    `awaiting_review` or `waiting_signal`
 4. on a non-ticket blocker, clear the claim, set `blocked`, and record details
    in `progress.md`
-5. after implementation, proof, review, and durable docs, use `$close-ticket`
-   to run `farplane ticket finalize TASK-XXXX` with any selected media paths
+5. after implementation, proof, review, and durable docs, run
+   `farplane ticket finalize TASK-XXXX` with any selected media paths
 6. Core renders the glanceable `Before`, `After`, `Example`, `Key decisions`,
    and compact `Proof`, then creates or resumes one marked issue in the
    configured GitHub repository
