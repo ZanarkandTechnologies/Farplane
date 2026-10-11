@@ -57,11 +57,13 @@ These cover transcript selection (including a sparse 200 MiB rollout), nudge
 bounds, length-gate interaction, and the entrypoint's credential scope/failure
 behavior without requiring a live provider.
 
-Run the five-case live classifier check through the same configured provider:
+Run the seven-case live classifier check through the same configured provider:
 
 ```bash
 farplane run -- python3 hooks/continuation/sanity_check.py
 ```
 
-The sanitized cases cover two premature stops and three legitimate stops. The
+The sanitized cases cover three premature stops (including asking to confirm an
+in-cap, regenerable delete) and four legitimate stops (including deleting the
+only copy of data). The
 command exits nonzero if any score crosses the 0.5 boundary in the wrong direction.
