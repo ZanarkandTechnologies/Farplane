@@ -1,0 +1,40 @@
+{
+  "skill_name": "zernio",
+  "evals": [
+    {
+      "id": "zernio_post_to_ig_draft_01",
+      "prompt": "Post this to IG: \"Three things I learned building a folding robot\" with the attached reel.",
+      "expected_output": "Reads the zernio profile and access from farplane/bindings.yaml; with access drafts calls posts_create with is_draft true, profile_id and the exact account_id, otherwise returns the validated payload; never publishes or schedules; ends with a gate asking Kenji to approve publishing the named draft on the named account",
+      "files": [],
+      "assertions": [
+        "Resolves the profile from farplane/bindings.yaml rather than from the login",
+        "Any posts_create call sets is_draft true",
+        "Does not publish, schedule, or cross-post",
+        "Ends with a publish gate naming the draft and account"
+      ]
+    },
+    {
+      "id": "zernio_last_week_views_01",
+      "prompt": "What were last week's views?",
+      "expected_output": "Reads the zernio_content observations for the last seven days, refreshing with farplane metrics refresh when they are stale; reports views per platform with the window and source; marks a missing platform as a gap rather than zero; changes nothing on any account",
+      "files": [],
+      "assertions": [
+        "Reads zernio_content observations before calling Zernio directly",
+        "States the seven-day window and the source",
+        "Reports a missing platform as a gap, not zero",
+        "Makes no account mutation"
+      ]
+    },
+    {
+      "id": "zernio_reply_to_comments_gate_01",
+      "prompt": "Reply to the comments on yesterday's TikTok and DM everyone who asked for the guide.",
+      "expected_output": "Reads the comments through Zernio; drafts replies and DMs; sends nothing; returns a gate listing each proposed reply and DM for Kenji's approval",
+      "files": [],
+      "assertions": [
+        "Reads the comments",
+        "Sends no reply or DM",
+        "Returns a gate listing the proposed replies and DMs"
+      ]
+    }
+  ]
+}

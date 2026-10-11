@@ -6,13 +6,30 @@ Answer before watching: what in this video is new from this creator?
 
 - One Wiki page per creator: `.farplane/entities/<creator-id>.md`, `kind: person` with `roles: [creator]`,
   at the company Wiki root (nearest ancestor whose `.farplane/entities/` holds pages).
-- `## Claims` and `## Stories` hold one atomic line each, ending in a
-  `[video@m:ss](https://youtu.be/<id>?t=<seconds>)` evidence link.
-- After analysis, append every `NEW` or `EXTENDS` point as its own line through
-  `manage-wiki` (standing apply intent) and add the video to `## Videos covered`.
+- The page follows the creator page template
+  (`docs/farplane-framework/entity-templates/creator.md`): a 3–5 sentence lede, then
+  `## Claims` and `## Stories` under its fixed `### ` themes (plus at most two
+  niche claim themes), each with a one-line summary.
+  Every line is one idea ending in its `[video@m:ss](https://youtu.be/<id>?t=<seconds>)`
+  citations; more citations means he repeats it.
+- The page is a cache of the creator's top ideas, not a log: at most 100 claims
+  and 50 stories. The bridge evicts the least-cited lines (ties keep the newest),
+  and full per-video detail stays in each video's dossier. Novelty is judged
+  against these top ideas: one-offs rarely recur, and a returning one is only
+  re-added, the cheap error.
+- The page is a Wikipedia article, never an append-only log. After analysis,
+  each point worth remembering goes exactly one way: the page already has it
+  (said the same or better) → that line gains this video's citation; it adds a
+  specific (number, step, case) → the line is rewritten and keeps every
+  citation; it is genuinely new → a new line under its theme. A line is the creator's own
+  durable claim or a real story from their life or business. Skits, jokes,
+  other speakers' lines, scene descriptions, viewer comments and event
+  logistics never become lines; a sketch video usually changes nothing.
+  Add the video to `## Videos covered`.
 - When the caller owns writes (the YouTube bridge), do not edit the page: return
-  `creatorMemory` {creatorId, creatorName, newShare, restated, additions[type, text,
-  timestamp]} and the caller appends and syncs.
+  `creatorMemory` {creatorId, creatorName, newShare, links[line, timestamp],
+  extends[line, rewritten, timestamp], additions[type, text, timestamp]}, copying
+  page lines exactly; the caller merges and syncs.
 
 ## Classification
 
@@ -44,3 +61,17 @@ Topic overlap ("both about content") is never `RESTATED`.
   "entertainment makes you a media business that sells eyeballs to advertisers".
   Once that claim had its own line, the new video's "media companies chase views,
   businesses chase buyers" correctly became `EXTENDS`. Keep memory lines atomic.
+
+## Skill level-up (the second check)
+
+- Pick the closest Farplane skill to what the video teaches (the same targets as
+  Intel's skill level-ups). Read its SKILL.md and references before judging.
+- Return only what the skill lacks, each as one diff line (a step, rule or
+  example), with the story or example behind it and its timestamp. Return
+  `none` when the skill already covers the video, so it adds nothing to watch.
+- The call: neither check finds anything new → skip; a level-up → read the diff,
+  or watch when it is a demo or craft you have to see; only creator novelty →
+  read his new ideas.
+- Proposals are shown, never applied: accepted lines go through
+  `skill-maintenance`.
+

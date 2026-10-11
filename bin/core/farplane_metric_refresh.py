@@ -178,16 +178,6 @@ def select_content_metric_targets(
         for row in rows
         if isinstance(row.get("external_id"), str) and row.get("external_id")
     ]
-    if platform == "instagram":
-        fetch_command = f"python3 skills/instagram-account/scripts/fetch_metrics.py --date {date} " + " ".join(
-            f"--media-id {content_id}" for content_id in external_ids
-        )
-    elif platform == "x":
-        fetch_command = f"python3 skills/x-account/scripts/fetch_metrics.py --date {date} " + " ".join(
-            f"--tweet-id {content_id}" for content_id in external_ids
-        )
-    else:
-        fetch_command = ""
     return {
         "status": "available" if external_ids else "source_gap",
         "external_ids": external_ids,
@@ -198,7 +188,6 @@ def select_content_metric_targets(
             "window_days": window_days,
             "since_date": since.isoformat(),
             "until_date": until.isoformat(),
-            "fetch_command": fetch_command,
             "gaps": [] if external_ids else ["no_posted_content_targets_for_window"],
         },
     }

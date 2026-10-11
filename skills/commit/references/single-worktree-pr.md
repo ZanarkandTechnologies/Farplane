@@ -1,4 +1,4 @@
-# Single-Worktree PR Publication
+# PR Publication
 
 Use this route only when project policy keeps one shared checkout on local
 `main` and the operator explicitly requests a pull request.
@@ -6,9 +6,8 @@ Use this route only when project policy keeps one shared checkout on local
 ## Preconditions
 
 - The checkout is on `main`; do not create or switch a local branch.
-- One writer owns Git state. Other tasks are read-only until publication and
-  merge synchronization finish.
-- The requested change is already an isolated verified commit.
+- The change is committed with the commit skill; other threads' included work
+  is labelled in the commit body and the PR description.
 - `origin/main..HEAD` contains only the commit range intended for this PR. If a
   prior PR is still present in that range, stop instead of stacking work.
 - The temporary remote branch does not already own unrelated history.

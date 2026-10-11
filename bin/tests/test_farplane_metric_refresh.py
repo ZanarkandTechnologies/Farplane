@@ -388,7 +388,6 @@ updated_at: 2026-07-02T10:30:00Z
 
         self.assertEqual(packet["status"], "available")
         self.assertEqual(packet["external_ids"], ["fresh"])
-        self.assertIn("--media-id fresh", packet["payload"]["fetch_command"])
 
     def test_select_content_metric_targets_reports_missing_ledger_gap(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

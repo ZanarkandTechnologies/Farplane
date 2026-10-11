@@ -71,6 +71,7 @@ IntelligenceReceipt {
   extraction: CLI extraction receipt + media-ingest receipt | skipped | blocked
   dossier: summary + key points + claims/entities + recommendation
   creatorMemory: { creatorId, newShare, points: NEW | RESTATED(memory line) | EXTENDS(added) } | not_run
+  skillLevelUp: { skill, adds: [{ line, story, timestamp }] } | none(skill covers it) | not_run
   relatedCoverage: ComparableTake[]
   news: NewsReport[] | null
   wiki: { intent: preview | apply
@@ -103,9 +104,12 @@ replaces the 2–14 day, distinct-creator, source-identity gates, and web pages 
 substitute for existing-video coverage. If the query or evidence is unavailable,
 return an empty `relatedCoverage` receipt with the limitation, never broad tags.
 
-Pre-watch novelty compares a creator's source with that creator's Wiki page, not
-with recent news; read [pre-watch novelty](references/pre-watch-novelty.md) for
-classification, transport mapping, and memory rules.
+Every creator video gets two checks, and a video that passes neither is not
+worth watching: **creator novelty** against that creator's Wiki page (not recent
+news), and a **skill level-up** against the closest Farplane skill, returned as
+the lines it would add with the story and timestamp behind each, or `none` when
+the skill already covers it. Read [pre-watch novelty](references/pre-watch-novelty.md)
+for classification, transport mapping, and memory rules.
 
 News is nullable enrichment. A News report requires a current public
 development, an exact event day when asserted, concrete source-backed claims,
@@ -167,6 +171,9 @@ not replace the Intelligence Receipt.
         validation, and expected—not executed—sync/projection refs.
   - [ ] Creator memory is standing apply intent: append each `NEW`/`EXTENDS`
         claim or story as its own linked line via `manage-wiki`.
+  - [ ] Skill level-up: read the closest skill's SKILL.md and references, then
+        propose only what it lacks as diff lines with story and timestamp, or
+        `none`. Proposals never edit the skill; `skill-maintenance` applies them.
   - [ ] Call `ingest-content` only for explicit like/save/reuse intent; otherwise
         record `skipped_no_reuse_intent`.
 - [ ] 5. Finalize and return the Intelligence Receipt.

@@ -4,10 +4,10 @@
     {
       "id": "ad_advisor_meta_cli_dry_run_gate_01",
       "prompt": "Set up Meta ads for our onboarding workflow offer. Use the CLI if that's the current path. Budget can be small, just get it running.",
-      "expected_output": "Uses ad-advisor for paid campaign configuration rather than social-content or instagram-account; Checks current official Meta Ads CLI or Marketing API behavior before exact CLI guidance; Requires account binding, credential readiness, payment/business permissions, and budget cap; Defaults to dry-run or paused/draft campaign setup; Produces an interpretable test matrix instead of changing audience, creative, offer, and landing page all at once; Names primary hypothesis, isolated variable, measurement method, and predeclared kill or scale rule; Blocks live launch or active spend without explicit approval naming account, budget, creative, landing page, and launch window; Routes copy/creative to social-content and metrics ambiguity to metric-advisor",
+      "expected_output": "Uses ad-advisor for paid campaign configuration rather than social-content or zernio; Checks current official Meta Ads CLI or Marketing API behavior before exact CLI guidance; Requires account binding, credential readiness, payment/business permissions, and budget cap; Defaults to dry-run or paused/draft campaign setup; Produces an interpretable test matrix instead of changing audience, creative, offer, and landing page all at once; Names primary hypothesis, isolated variable, measurement method, and predeclared kill or scale rule; Blocks live launch or active spend without explicit approval naming account, budget, creative, landing page, and launch window; Routes copy/creative to social-content and metrics ambiguity to metric-advisor",
       "files": [],
       "assertions": [
-        "Uses ad-advisor for paid campaign configuration rather than social-content or instagram-account",
+        "Uses ad-advisor for paid campaign configuration rather than social-content or zernio",
         "Checks current official Meta Ads CLI or Marketing API behavior before exact CLI guidance",
         "Requires account binding, credential readiness, payment/business permissions, and budget cap",
         "Defaults to dry-run or paused/draft campaign setup",

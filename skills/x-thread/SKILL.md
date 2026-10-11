@@ -20,7 +20,7 @@ allowed-tools: Read, Glob, Grep, Write
 Use this skill when the requested artifact is an X post, thread, quote-post,
 or reply-chain draft. It owns the reader promise and reviewable tweet sequence.
 It does not own account credentials, posting, scheduling, or performance
-claims; route an explicitly approved final draft to [X Account](../x-account/SKILL.md).
+claims; route an explicitly approved final draft to [Zernio](../zernio/SKILL.md).
 
 ## Skill Signature
 

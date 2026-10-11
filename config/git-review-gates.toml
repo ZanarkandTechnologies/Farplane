@@ -1,7 +1,8 @@
 [pre_commit]
-# Fast, staged-only checks. Keep this cheap enough that normal commits still feel
-# local and predictable.
-mode = "block"
+# Fast, staged-only checks. Commits take every change in the shared checkout,
+# including other threads' unfinished work, so quality checks warn and the
+# commit body names them; only the large-file guard blocks (see skills/commit).
+mode = "warn"
 checks = [
   "staged_diff_check",
   "ticket_closure_gate",
@@ -55,8 +56,9 @@ checks = ["skill_file_line_count"]
 
 [pre_push]
 # Branch-level checks. This is where cross-commit drift, duplicated patterns,
-# stale docs, and heavyweight review belong.
-mode = "block"
+# stale docs, and heavyweight review belong. They warn for the same reason as
+# pre_commit; the secret and private-data scan lives in skills/commit/references/push-main.md.
+mode = "warn"
 base = "origin/main"
 checks = [
   "branch_diff_check",
@@ -98,6 +100,9 @@ globs = [
   "skills/skill-maintenance/scripts/test_generate_skill_graph.py",
 ]
 checks = ["skill_projection"]
+
+[checks.large_file_guard]
+mode = "block"
 
 [large_file_guard]
 max_bytes = 1048576
@@ -148,7 +153,6 @@ argv = ["python3", "bin/validators/check_ticket_closure_gate.py"]
 
 [checks.ticket_terminal_hygiene]
 argv = ["python3", "bin/validators/check_ticket_closure_gate.py", "--terminal-hygiene"]
-mode = "warn"
 
 [checks.source_line_growth_staged]
 argv = ["python3", "bin/validators/check_source_line_growth.py", "--mode", "staged", "--max-lines", "500", "--glob", "bin/**/*.py"]

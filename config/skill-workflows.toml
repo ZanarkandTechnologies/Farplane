@@ -96,7 +96,7 @@ label = "Social Manager"
 department = "marketing"
 deliverable = "an approval-ready social post"
 primary = "x-thread"
-skills = ["x-thread", "instagram-account", "social-content", "x-account"]
+skills = ["x-thread", "social-content", "zernio"]
 
 [specialists.copywriter]
 label = "Copywriter"

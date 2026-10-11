@@ -84,5 +84,6 @@ Still open:
   `goal-advisor`, `dogfood-review` and `pulse-update` skills still name them; retiring them means moving
   those skills to GitHub Issues first (its own issue).
 - `notify` and `reports` have no live caller but are documented operator tools; ask before removing.
-- `content add` defaults `--project-root` to the Farplane checkout, not the current folder (the
-  `x-account` and `instagram-account` skills rely on that); decide with the content ledger's owner.
+- `content add` defaults `--project-root` to the Farplane checkout, not the current folder; decide with the
+  content ledger's owner (its old callers, the `x-account` and `instagram-account` skills, are retired for
+  the `zernio` skill).

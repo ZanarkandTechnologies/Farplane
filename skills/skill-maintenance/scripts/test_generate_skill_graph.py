@@ -396,7 +396,7 @@ class CapabilityProjectionTests(unittest.TestCase):
             set(departments),
         )
         self.assertIn(
-            ("specialist:social-manager", "skill:x-account", "artifact-flow"),
+            ("specialist:social-manager", "skill:zernio", "artifact-flow"),
             {(edge["source"], edge["target"], edge["type"]) for edge in graph["edges"]},
         )
 

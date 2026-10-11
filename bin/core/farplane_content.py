@@ -206,16 +206,6 @@ def external_ids(rows: list[dict[str, Any]]) -> list[str]:
     return ids
 
 
-def fetch_command(platform: str, ids: list[str], date: str) -> str:
-    if not ids:
-        return ""
-    if platform == "instagram":
-        return f"python3 skills/instagram-account/scripts/fetch_metrics.py --date {date} " + " ".join(f"--media-id {content_id}" for content_id in ids)
-    if platform == "x":
-        return f"python3 skills/x-account/scripts/fetch_metrics.py --date {date} " + " ".join(f"--tweet-id {content_id}" for content_id in ids)
-    return ""
-
-
 def select_metric_targets(
     project_root: Path,
     platform: str,
@@ -250,7 +240,6 @@ def select_metric_targets(
             "window_days": window_days,
             "since_date": since.isoformat(),
             "until_date": until.isoformat(),
-            "fetch_command": fetch_command(platform, ids, date),
             "gaps": [] if ids else ["no_posted_content_targets_for_window"],
         },
     }

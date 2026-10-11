@@ -1,6 +1,6 @@
 interface:
   display_name: "Commit"
-  short_description: "Commit an already staged Git boundary"
-  default_prompt: "Use $commit to create one verified local commit from the already staged changes."
+  short_description: "Commit everything on main, labelled by owner"
+  default_prompt: "Use $commit to commit everything changed on main, labelling other threads' work."
 policy:
   allow_implicit_invocation: true

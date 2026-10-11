@@ -5,7 +5,7 @@
 [profiles]
 advertising-specialist = ["ad-advisor", "ad-impl-plan", "meta-ads"]
 asset-generator = ["ai-image-advisor", "ai-video-advisor", "asset-advisor", "audio-advisor", "avatar-advisor", "editing-advisor", "hatch-pet", "meshy-3d-generation", "product-photography", "reel-collage", "remotion", "remotion-render"]
-content-specialist = ["content-impl-plan", "copywriting-advisor", "infographic", "ingest-content", "instagram-account", "newsletter-writer", "seo-content-advisor", "social-content", "storyboard", "x-account", "x-thread"]
+content-specialist = ["content-impl-plan", "copywriting-advisor", "infographic", "ingest-content", "newsletter-writer", "seo-content-advisor", "social-content", "storyboard", "x-thread", "zernio"]
 convex-builder = ["convex"]
 deep-researcher = ["apify", "best-of-worlds", "feed-scout", "intelligest", "learn-from-video", "media-ingest", "video-understanding", "visual-reasoning"]
 documentation-maintainer = ["manage-wiki"]

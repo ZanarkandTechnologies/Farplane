@@ -135,7 +135,11 @@ def document_contract_name(path: Path, root: Path) -> str:
         return "feature"
     if relative.startswith("docs/systems/") and path.name not in {"README.md", "registry.md"}:
         return "system"
-    if relative.startswith("docs/skills/templates/") or relative == "docs/templates/HUMAN_REPORT_TEMPLATE.md":
+    if (
+        relative.startswith("docs/skills/templates/")
+        or relative.startswith("docs/farplane-framework/entity-templates/")
+        or relative == "docs/templates/HUMAN_REPORT_TEMPLATE.md"
+    ):
         return "template"
     return "generated" if "generated" in relative.split("/") or path.name == "registry.md" else "narrative"
 

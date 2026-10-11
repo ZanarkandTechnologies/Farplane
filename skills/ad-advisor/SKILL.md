@@ -39,8 +39,7 @@ gates:
   primary_hypothesis_named; measurement_method_named; policy_risks_labeled;
   creative_and_landing_page_ready; no_secret_echo; dry_run_before_mutation
 routes:
-  social-content | landing-page | metric-advisor | x-account |
-  instagram-account | review
+  social-content | landing-page | metric-advisor | zernio | review
 fails:
   launching spend without approval; hiding account IDs or budget assumptions;
   treating ad copy as approved creative; copying secrets into artifacts;
@@ -165,9 +164,8 @@ Next owner:
   landing-page fit is the blocker.
 - [metric-advisor](../metric-advisor/SKILL.md) - use for success
   metrics, guard metrics, anti-metrics, and measurement routes.
-- [x-account](../x-account/SKILL.md) and
-  [instagram-account](../instagram-account/SKILL.md) - use for
-  owned organic publishing or account metrics, not paid campaign launch.
+- [zernio](../zernio/SKILL.md) - use for owned organic posting drafts or
+  account metrics, not paid campaign launch.
 
 ## Output
 

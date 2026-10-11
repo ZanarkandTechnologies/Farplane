@@ -84,7 +84,7 @@ Context-file rules:
 - Expand each new save before judging it: the author's full thread, the quoted post,
   author replies that carry the promised resource ("repo below"), and linked X
   Articles, blogs, and repos. Write them to `x.expanded.json`; teasers alone are not evidence.
-- Snapshot each new X post with `skills/x-account/scripts/snapshot_posts.py` into
+- Snapshot each new X post with `skills/bookmark-recovery/scripts/snapshot_posts.py` into
   `shots/<post-id>.png` beside the caches; a failed snapshot is recorded, never blocking.
 - Store provider records without credential material. Do not leave raw responses,
   transcripts, scratch files, or temporary programs beside the final caches.

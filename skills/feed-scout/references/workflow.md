@@ -131,12 +131,12 @@ official or public routes are not enough.
 | Website/docs/blog | Web search for configured queries, direct URL read, Jina/readability, direct `farplane run -- summarize "$source" --extract` when extraction is needed | Codex browser if blocked or JS-heavy | Keep to configured entity URLs and queries. |
 | RSS/Atom/Substack/newsletter feeds | RSS/feedparser, direct feed URL, direct CLI extraction for selected links | Codex browser/manual export | Prefer feeds over scraping pages. |
 | YouTube channel/video | `yt-dlp`, channel RSS when available, direct CLI extraction for selected videos | Codex browser for blocked/age-gated pages | Daily run should collect metadata; extract only high-signal videos. |
-| X/Twitter public or competitor posts | Public web/search snippets and configured URLs first | Codex Chrome with explicit approval; Apify only if approved | Do not use `x-account` for competitor scraping. `x-account` is for Farplane-owned account operations/metrics. |
-| Instagram public or competitor posts | Official pages/search snippets first | Codex Chrome with explicit approval; Apify only if approved | Do not use `instagram-account` for competitor scraping. It is for Farplane-owned account operations/metrics. |
+| X/Twitter public or competitor posts | Public web/search snippets and configured URLs first | Codex Chrome with explicit approval; Apify only if approved | Do not use `zernio` for competitor scraping. It is for Farplane-owned accounts only. |
+| Instagram public or competitor posts | Official pages/search snippets first | Codex Chrome with explicit approval; Apify only if approved | Do not use `zernio` for competitor scraping. It is for Farplane-owned accounts only. |
 | Reddit discussions | Public web/search restricted to Reddit and configured queries | Codex Chrome/manual read for full thread; Apify only if approved | Capture thread URL, title, date, and representative signal. |
 | LinkedIn/company/person pages | Public web/search and Jina when readable | Codex Chrome with explicit approval | Treat as logged-in/sensitive; avoid broad automation. |
 | Trustpilot/review sites | Web/search restricted to review domain and configured entity names | Codex browser/manual read | No dedicated scraper by default. |
-| Farplane-owned X/Instagram metrics | `x-account` / `instagram-account` skills | Manual export normalization | Only for owned accounts and official API/export boundaries. |
+| Farplane-owned social metrics | `zernio_content` observations via the `zernio` skill | Zernio dashboard | Only for accounts connected to the project's Zernio profile. |
 | Unknown/new platform | Public search/direct URL read | Ask for explicit route approval before logged-in or paid scraping | Do not invent new background dependencies. |
 
 Every normalized item should carry source evidence such as URL, command/tool

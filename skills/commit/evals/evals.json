@@ -2,18 +2,18 @@
   "skill_name": "commit",
   "evals": [
     {
-      "id": "normal_requested_files",
-      "prompt": "The operator says: commit the parser fix. The current task changed parser.py and test_parser.py. notes.md has an unrelated unstaged edit. Nothing is staged. Describe the exact commit behavior without running commands.",
-      "expected_output": "Stages only parser.py and test_parser.py, reviews the staged diff, creates one local commit with a parser-focused subject, verifies both committed paths, and leaves notes.md unstaged. It does not ask the operator to stage files or push.",
+      "id": "normal_commit_everything",
+      "prompt": "The operator says: commit the parser fix. The current task changed parser.py and test_parser.py. notes.md has an unrelated edit from another thread. Nothing is staged. Describe the exact commit behavior without running commands.",
+      "expected_output": "Stages every change with git add -A, including notes.md, and creates one local commit whose subject describes the parser fix. The body has an 'Also includes' line naming notes.md as another thread's work that may be in progress. It does not ask the operator to stage files, does not unstage or exclude notes.md, and does not push.",
       "assertions": [
-        "Stages the two task-owned files without staging notes.md",
-        "Does not ask the operator to curate an empty index",
-        "Creates exactly one local commit and does not push",
-        "Verifies unrelated unstaged work remains"
+        "Stages all changes, including notes.md, without asking the operator",
+        "Subject describes the parser fix only",
+        "Body labels notes.md as another thread's change",
+        "Creates exactly one local commit and does not push"
       ],
       "metadata": {
         "farplane": {
-          "title": "Normal: commit requested files",
+          "title": "Normal: commit everything, label the rest",
           "tags": [
             "normal",
             "commit"
@@ -22,55 +22,50 @@
       }
     },
     {
-      "id": "hard_mixed_registry",
-      "prompt": "The operator says: commit this new skill. The skill directory is wholly new. A generated registry contains the new skill row plus unrelated rows changed by another task. Other files are dirty. Nothing is staged. Describe the exact commit behavior without running commands.",
-      "expected_output": "Stages the new skill directory with explicit paths and only its registry row using a cached patch. It reviews the isolated index, commits once, and verifies other registry edits and dirty files remain uncommitted.",
+      "id": "other_thread_mid_edit",
+      "prompt": "The operator says: commit this. This thread changed hooks/stop-gate/stop_gate.py. Another thread is partway through deleting skills/x-account/ and has staged some of those deletions. Describe the exact commit behavior without running commands.",
+      "expected_output": "Commits everything in one commit, including the partial skills/x-account/ deletions, without waiting for the other thread, unstaging its work, or building a separate index. The subject names the stop-gate change and the body says the x-account removal is included and may be in progress.",
       "assertions": [
-        "Stages the whole owned skill package with explicit paths",
-        "Stages only the owned registry row rather than the whole registry",
-        "Does not use a broad git add pathspec",
-        "Verifies unrelated registry and worktree changes remain"
+        "Does not wait for or ask about the other thread",
+        "Does not unstage or exclude the other thread's work",
+        "Labels the x-account removal as included and possibly in progress"
       ],
       "metadata": {
         "farplane": {
-          "title": "Hard: isolate mixed generated registry",
+          "title": "Hard: another thread is mid-edit",
           "tags": [
             "hard",
-            "commit",
-            "mixed-file"
+            "commit"
           ]
         }
       }
     },
     {
-      "id": "boundary_inseparable_staged_hunk",
-      "prompt": "The operator asks to commit one fix, but an already-staged hunk combines that fix with another person's edit on the same lines. The ownership cannot be separated safely from available context. Describe the behavior without running commands.",
-      "expected_output": "Stops before committing, reports the exact inseparable staged hunk as a boundary blocker, preserves the index and worktree, and does not reset, unstage, commit, or push.",
+      "id": "gate_warns_on_other_work",
+      "prompt": "The operator says: commit this. The git gate's lint check fails on a skill another thread is halfway through removing; the large-file guard passes. Describe the exact commit behavior without running commands.",
+      "expected_output": "The commit goes through because quality checks warn rather than block. The commit body names the lint warning and the other thread's path. The agent does not disable the gate, skip hooks with --no-verify, or try to fix the other thread's work.",
       "assertions": [
-        "Returns a specific boundary blocker",
-        "Does not commit the mixed hunk",
-        "Does not reset or alter the existing index",
-        "Does not push"
+        "Commits despite the lint warning",
+        "Names the warning in the commit body",
+        "Does not use --no-verify or edit the other thread's files"
       ],
       "metadata": {
         "farplane": {
-          "title": "Boundary: inseparable staged ownership",
+          "title": "Gate: quality warnings don't block",
           "tags": [
-            "boundary",
             "commit",
-            "index"
+            "gate"
           ]
         }
       }
     },
     {
       "id": "push_main_with_moved_origin",
-      "prompt": "Farplane uses one shared worktree on local main. The operator says: commit this and push. origin/main gained one commit since the last fetch, and other threads have staged and unstaged edits in the worktree. The repository is public. Describe the exact Git behavior without running commands.",
-      "expected_output": "Creates one isolated commit from explicit paths or hunks, fetches origin/main, and because the index holds other threads' staged work, builds one merge commit with merge-tree and commit-tree after confirming the incoming paths do not overlap local changes, refreshing only those paths. It lists every outgoing commit, scans the outgoing diff for secrets and private data, pushes main straight to origin/main without force or rebase, verifies origin/main equals HEAD, and reports the published commits. It opens no PR.",
+      "prompt": "Farplane uses one shared checkout on local main. The operator says: commit this and push. origin/main gained one commit since the last fetch. Another thread edited a file after your commit. The repository is public. Describe the exact Git behavior without running commands.",
+      "expected_output": "Commits everything with a labelled body, fetches origin/main, checkpoints the tree changes made since the commit, then merges origin/main with git merge, never a rebase or force push. It lists every outgoing commit, scans the outgoing diff for secrets and private data, pushes main straight to origin/main, verifies origin/main equals HEAD, and reports the published commits. It opens no PR.",
       "assertions": [
         "Pushes main directly to origin/main and opens no PR",
-        "Integrates the moved origin/main with a merge commit, never a rebase or force push",
-        "Preserves other threads' staged and unstaged work",
+        "Integrates the moved origin/main with a merge, never a rebase or force push",
         "Scans the outgoing range for secrets and private data before pushing a public repo",
         "Verifies origin/main equals HEAD and names the published commits"
       ],
@@ -79,16 +74,15 @@
           "title": "Push: straight to main after origin moved",
           "tags": [
             "commit",
-            "push",
-            "single-worktree"
+            "push"
           ]
         }
       }
     },
     {
       "id": "explicit_pr_request",
-      "prompt": "Farplane uses one shared worktree on local main. The operator asks to commit the current isolated change and open a PR. Describe the exact Git behavior without running commands.",
-      "expected_output": "Creates one isolated commit, then follows the single-worktree PR route: pushes HEAD to a temporary remote codex branch without creating or switching a local branch, opens the PR against main, and does not push main directly.",
+      "prompt": "Farplane uses one shared checkout on local main. The operator asks to commit the current change and open a PR. Describe the exact Git behavior without running commands.",
+      "expected_output": "Commits everything with a labelled body, then follows the PR route: pushes HEAD to a temporary remote codex branch without creating or switching a local branch, opens the PR against main, and does not push main directly.",
       "assertions": [
         "Pushes HEAD to refs/heads/codex/<task-name> without a local branch switch",
         "Opens the PR against main",
@@ -99,8 +93,7 @@
           "title": "PR only on request",
           "tags": [
             "commit",
-            "pull-request",
-            "single-worktree"
+            "pull-request"
           ]
         }
       }

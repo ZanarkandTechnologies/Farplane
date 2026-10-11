@@ -229,7 +229,8 @@ delegate(context_ref, claim, bounded_output, proof_target) -> owned_result
 ### Operate the workspace safely
 
 - Stay in the selected checkout; do not create or switch worktrees unless
-  requested or assigned. Coordinate a single-writer boundary. Inspect before
+  requested or assigned. Other threads may write there too: commit their
+  changes with yours and label them rather than waiting. Inspect before
   editing; search with `rg`; batch independent reads; run narrow checks before
   broad checks; sample before bulk work; prefer existing scripts and structured
   tools over fragile manipulation.

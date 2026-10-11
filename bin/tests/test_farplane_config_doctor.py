@@ -175,6 +175,46 @@ class FarplaneConfigDoctorTests(unittest.TestCase):
         )
         self.assertNotIn("real-looking-secret-value", json.dumps(payload))
 
+    def test_secret_scan_ignores_identifiers_that_only_name_secrets(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            (project_root / "names.py").write_text(
+                "\n".join(
+                    [
+                        'TOKEN_HEADER = "x-farplane-telemetry-token"',
+                        "CREATE VIRTUAL TABLE t USING fts5(value, tokenize='trigram')",
+                        'OPENROUTER_API_KEY_ENV = "OPENROUTER_API_KEY"',
+                        'TOKEN_KEY = "META_ADS_ACCESS_TOKEN"',
+                        'TOKEN_URL = "https://api.x.com/2/oauth2/token"',
+                        'ACCESS_TOKEN = "META_ADS_ACCESS_TOKEN"',
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            (project_root / "leaks.py").write_text(
+                "\n".join(
+                    [
+                        'NOTION_TOKEN = "ntn_4f9a8b7c6d5e"',
+                        'apiKey: "sk-live-abc123"',
+                        'client_secret = "AKIAIOSFODNN7EXAMPLE"',
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            candidates = farplane_config_doctor.scan_secret_literals(project_root)
+
+        self.assertEqual(
+            candidates,
+            [
+                {"path": "leaks.py", "line": 1, "key": "NOTION_TOKEN"},
+                {"path": "leaks.py", "line": 2, "key": "apiKey"},
+                {"path": "leaks.py", "line": 3, "key": "client_secret"},
+            ],
+        )
+
     def test_reports_invalid_private_toml_without_echoing_content(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

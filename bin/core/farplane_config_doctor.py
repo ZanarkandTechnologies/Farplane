@@ -24,15 +24,22 @@ CONFIG_DOCTOR_SECRET_KEYS = (
     "MESHY_API_KEY",
 )
 DOPPLER_COMMAND = ["doppler"]
+# The secret word must end a whole identifier: NOTION_TOKEN and apiKey hold
+# secrets; TOKEN_URL, *_API_KEY_ENV and tokenize only name or describe them.
 SECRET_ASSIGNMENT_RE = re.compile(
     r"""(?ix)
-    (?P<key>[A-Z0-9_]*(?:API[_-]?KEY|TOKEN|SECRET|PASSWORD)[A-Z0-9_]*)
+    (?<![A-Z0-9_-])
+    (?P<key>[A-Z0-9_-]*(?:API[_-]?KEY|TOKEN|SECRET|PASSWORD))
+    (?![A-Z0-9_-])
     \s*[:=]\s*
     (?P<quote>["'])
     (?P<value>[^"']+)
     (?P=quote)
     """
 )
+# A value shaped like an env var name (META_ADS_ACCESS_TOKEN) references a
+# secret rather than holding one; an underscore keeps AKIA-style IDs flagged.
+ENV_VAR_NAME_RE = re.compile(r"^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+$")
 SECRET_SCAN_SUFFIXES = {".env", ".json", ".md", ".py", ".sh", ".toml", ".yaml", ".yml"}
 PRIVATE_SECRET_FIELD_RE = re.compile(
     r"(?:^|_)(?:api_?key|token|secret|password|private_?key|auth_?header)(?:$|_)",
@@ -287,7 +294,11 @@ def scan_secret_literals(project_root: Path) -> list[dict[str, Any]]:
             continue
         for lineno, line in enumerate(text.splitlines(), start=1):
             match = SECRET_ASSIGNMENT_RE.search(line)
-            if not match or looks_like_placeholder(match.group("value")):
+            if (
+                not match
+                or looks_like_placeholder(match.group("value"))
+                or ENV_VAR_NAME_RE.match(match.group("value"))
+            ):
                 continue
             candidates.append({"path": str(rel), "line": lineno, "key": match.group("key")})
     return candidates[:50]

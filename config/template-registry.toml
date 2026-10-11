@@ -13,4 +13,5 @@ paths = [
   "skills/harness-creator/templates/project-harness.md",
   "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
   "docs/templates/HUMAN_REPORT_TEMPLATE.md",
+  "docs/farplane-framework/entity-templates/creator.md",
 ]

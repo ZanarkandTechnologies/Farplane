@@ -30,7 +30,7 @@ class RenderSkillProfilesTests(unittest.TestCase):
             result = renderer.render_profiles(ROOT, output)
 
             self.assertEqual(result["profile_count"], 12)
-            self.assertEqual(result["managed_skill_count"], 64)
+            self.assertEqual(result["managed_skill_count"], 63)
             all_skills = enabled_skills(output / "base.config.toml")
             self.assertEqual(all_skills, renderer.registry_skill_names(ROOT))
             self.assertIn("intelligest", all_skills)

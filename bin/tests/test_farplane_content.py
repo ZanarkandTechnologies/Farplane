@@ -303,7 +303,6 @@ class FarplaneContentTests(unittest.TestCase):
         payload = json.loads(selected.stdout)
         self.assertEqual(payload["status"], "available")
         self.assertEqual(payload["external_ids"], ["fresh"])
-        self.assertIn("--tweet-id fresh", payload["payload"]["fetch_command"])
 
     def test_content_validate_reports_invalid_persisted_rows(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
