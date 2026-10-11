@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -20,6 +21,10 @@ def find_repo_root(start: Path) -> Path:
 
 
 REPO_ROOT = find_repo_root(Path(__file__).resolve())
+# Like bin/farplane: run under the repo .venv, which holds requirements.txt.
+VENV_PYTHON = REPO_ROOT / ".venv/bin/python"
+if VENV_PYTHON.exists() and Path(sys.prefix).resolve() != (REPO_ROOT / ".venv").resolve():
+    os.execv(str(VENV_PYTHON), [str(VENV_PYTHON), str(Path(__file__).resolve()), *sys.argv[1:]])
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
@@ -75,6 +80,8 @@ def current_template_owner_errors() -> list[str]:
 
 def run(command: list[str]) -> None:
     print("+ " + " ".join(command))
+    if command[0] == "python3":
+        command = [sys.executable, *command[1:]]
     subprocess.run(command, cwd=REPO_ROOT, check=True)
 
 

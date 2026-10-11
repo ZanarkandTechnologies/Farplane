@@ -188,8 +188,12 @@ def check_mode(config: dict[str, Any], stage: dict[str, Any], check_name: str) -
 
 def configured_argv(config: dict[str, Any], check_name: str, *, base: str) -> list[str]:
     check = check_table(config, check_name)
-    argv = as_string_list(check.get("argv"), label=f"{check_name}.argv")
-    return format_argv(argv, base=base)
+    argv = format_argv(as_string_list(check.get("argv"), label=f"{check_name}.argv"), base=base)
+    # Python checks run under the gate's own interpreter, which the hook picks
+    # (the repo .venv when present), not whatever `python3` is first on PATH.
+    if argv and argv[0] == "python3":
+        argv = [sys.executable, *argv[1:]]
+    return argv
 
 
 def skip_env(config: dict[str, Any], check_name: str) -> str | None:

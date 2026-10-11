@@ -5,13 +5,14 @@ from __future__ import annotations
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
 
 from bin.core.lint.registry import build_registry
 from bin.validators.run_git_gate import (
-    DEFAULT_CONFIG, build_snapshot, load_config, select_checks, stage_config,
+    DEFAULT_CONFIG, build_snapshot, configured_argv, load_config, select_checks, stage_config,
 )
 
 
@@ -25,6 +26,10 @@ class LintGitGateTests(unittest.TestCase):
             with self.subTest(stage=stage_name):
                 checks = select_checks(stage_config(self.config, stage_name), ["docs/features/FEAT-0039.md"])
                 self.assertIn(check_id, checks)
+
+    def test_python_checks_run_under_the_gate_interpreter(self) -> None:
+        argv = configured_argv(self.config, "lint_changed", base="main")
+        self.assertEqual(argv[0], sys.executable)
 
     def test_registry_selects_feature_project_skill_eval_and_ticket_contracts(self) -> None:
         registry = build_registry()
