@@ -3,8 +3,9 @@
 ## Visual Direction
 
 1. Confirm the functional basis.
-2. When the operator named references, palette, or fonts, get a yes on the
-   steal table before styling.
+2. Record reference traits with exact values as `adopt | adapt | reject`
+   constraints; when the operator named references, palette, or fonts, this is
+   the steal table and needs their yes before styling.
 3. Classify product vs brand register.
 4. Write the scene sentence.
 5. Find the visual concept and pass the concept test.
@@ -13,8 +14,7 @@
 8. Define typography, color, spacing, radius/elevation, media, and motion vocabulary.
 9. Run the render, critique, and refine loop from `SKILL.md`; an independent
    reviewer or the operator gives the `pass`.
-10. Record reference traits as `adopt | adapt | reject` constraints.
-11. Hand accepted visual context to `impl-plan`, with the rendered mock as reference evidence; `design.md` stays the baseline.
+10. Hand accepted visual context to `impl-plan`, with the rendered mock as reference evidence; `design.md` stays the baseline.
 
 ## Visual Polish
 

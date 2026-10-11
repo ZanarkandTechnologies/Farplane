@@ -5,11 +5,12 @@ the rendered screen at its real viewport, never a description of it.
 
 ## Who Scores
 
-- The author may score a draft, labelled `self-check`. A `self-check` can
-  return `revise` or `rethink`, never `pass`.
-- `pass` comes only from a `farplane:reviewer` subagent or the operator. Give
-  the reviewer the screenshot, the steal table, and one screenshot per
-  operator-named reference; do not give it the author's scores.
+- The author may score a draft, labelled `self-check`. A `self-check`
+  returns `revise`, `rethink`, or `ready for review`, never `pass`.
+- `pass` comes only from the operator or an independent reviewer run as
+  `SKILL.md` describes. Give the reviewer the screenshot, the steal table, and
+  one screenshot per operator-named reference; do not give it the author's
+  scores.
 
 ## Quick Score
 
@@ -26,7 +27,7 @@ Score each 0-4:
 | Concept | Does one idea from the product's world carry through type, color, and media at the register's loudness? N/A for polish with `none recorded`. |
 | Focus & simplicity | Is the focal action unmistakable, with nonessential layers removed or deferred? |
 | Anti-slop | Does it avoid AI tells? 4 = no tells; 0 = someone would instantly say an AI made it. |
-| Reference fidelity | Is every steal-table trait visible in the render at its stated value, beside its reference screenshot? 4 = all; any operator palette or font swapped = 0. N/A only when the operator named no references. |
+| Reference fidelity | Is every steal-table trait visible in the render at its stated value, beside its reference screenshot? 4 = all; any operator palette or font swapped without approval = 0. N/A only when the operator named no references. |
 
 ## Reference Check
 
@@ -35,13 +36,13 @@ reference screenshot and the render side by side:
 
 | Reference | Trait and value | Visible in render? | Evidence |
 | --- | --- | --- | --- |
-| e.g. Faction.ai | bronze `#A48B69` accent on links and rules | yes / no / changed | crop path |
+| e.g. Faction.ai | bronze `#A48B69` accent on links and rules | visible / missing / changed | crop path |
 
-A row marked `no` or `changed` without operator approval blocks `pass`.
+A row marked `missing` or `changed` without operator approval blocks `pass`.
 
 ## Output
 
-- `Verdict:` pass, revise, or rethink.
+- `Verdict:` pass, revise, rethink, or `ready for review` (self-check only).
 - `Top issues:` severity-ranked.
 - `Keep:` what is working.
 - `Fix next:` one best immediate improvement.
@@ -50,6 +51,8 @@ A row marked `no` or `changed` without operator approval blocks `pass`.
 
 - Score N/A where a dimension cannot apply (Concept on polish, Responsiveness
   for a single-viewport surface) and say why.
+- `ready for review`: a `self-check` that would meet `pass`; send it to the
+  independent reviewer.
 - `pass`: from an independent reviewer or the operator; every scored
   dimension is 3 or more, and Anti-slop, Hierarchy, and Reference fidelity
   (when scored) are 4.

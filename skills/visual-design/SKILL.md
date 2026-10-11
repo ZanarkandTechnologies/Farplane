@@ -27,13 +27,13 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
   a concrete reference, anti-reference, or a bolder-versus-safer tradeoff.
   Do not run a separate stateful taste-interview workflow.
 - [ ] Record a compact visual evidence receipt: source/reference, observed
-  trait, `adopt | adapt | reject`, and the resulting visual constraint.
+  trait with its exact value (hex, font and weight, size, layout move),
+  `adopt | adapt | reject`, and where it shows on the screen.
 - [ ] **Reference fidelity.** When the operator names references or states a
-  palette or fonts, write a **steal table** before any styling: reference ->
-  traits adopted with exact values (hex, font and weight, size, layout move) ->
-  where each shows on the screen. Show it to the operator and wait for a yes.
-  Operator-stated palette and fonts beat any tasty pack, concept, or
-  direction; a conflict is a question to the operator, never a silent swap.
+  palette or fonts, that receipt is the **steal table**: write it before any
+  styling, show it to the operator, and wait for a yes. Operator-stated
+  palette and fonts beat any tasty pack, concept, or direction; a conflict is
+  a question to the operator, never a silent swap.
 - [ ] Use the native planning phase to choose the visual register and accepted
   tradeoff before specifying style.
 - [ ] Name a **visual concept** drawn from the product's own world (a place,
@@ -56,9 +56,12 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
   browser available, label the critique `unrendered`.
 - [ ] **Independent critique before promotion.** The author's own score is a
   `self-check`, never a `pass`. Before a mock is promoted, accepted, or handed
-  off as ready, get the verdict from a `farplane:reviewer` subagent (given the
-  screenshot, steal table, and reference screenshots) or from the operator;
-  the reviewer checks every steal-table trait side by side with its reference.
+  off as ready, get the verdict from the operator or from a reviewer subagent
+  (`farplane:reviewer` in Claude, `agents/reviewer.toml` in Codex) run through
+  [review](../review/SKILL.md) with rubric families `ui-quality` and
+  `user-intent-satisfaction`, the design brief as `context_ref`, the
+  screenshot, steal table, and one screenshot per reference. The reviewer
+  checks every steal-table trait side by side with its reference.
 - [ ] Write or update a durable design brief when the surface is substantial or
   delegated.
 - [ ] Hand the accepted visual brief to [impl-plan](../impl-plan/SKILL.md) for
@@ -154,8 +157,8 @@ Return a concise visual brief with:
   action, elements removed or deferred, and deliberate `no`
 - `Taste dials` with 1-10 numeric values
 - `Visual system`
-- `Visual evidence receipt`
-- `Steal table` and operator approval, when references were named
+- `Visual evidence receipt` (the steal table, with operator approval, when
+  references were named)
 - `Render receipt`: rendered key-screen path, viewport, critique scores,
   reviewer (subagent or operator, never only the author), per-trait reference
   check, and refine passes used

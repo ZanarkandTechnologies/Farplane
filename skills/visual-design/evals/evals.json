@@ -99,24 +99,45 @@
     },
     {
       "id": "visual_design_reference_fidelity_01",
-      "prompt": "Redesign our landing page so it looks like a Vox explainer. Inspirations: Faction.ai (palette: black, white, #1E1E1E, stone #E8E1D9 and #DFD9CE, bronze #A48B69, muted #7A7368), TypeSafe.ai, and Design Arena. The functional basis is settled: one page, focal action 'Get my free AI plan'. A Vox tasty pack is available with an orange #F36B21 marker accent. Give the visual direction, render it, and get it ready to promote to the live page.",
-      "expected_output": "Builds a steal table per named reference with exact adopted values before any styling and asks the operator to approve it; keeps the Faction.ai palette and treats the tasty-pack orange as a conflict question rather than swapping it in; renders the mock, labels its own scores as a self-check, and gets the pass from a farplane:reviewer subagent or the operator with each steal-table trait checked side by side against a reference screenshot before promotion.",
+      "prompt": "The landing-page spec is accepted: one page, focal action 'Get my free AI plan'. Now set its visual system so it looks like a Vox explainer. Inspirations: Faction.ai (palette: black, white, #1E1E1E, stone #E8E1D9 and #DFD9CE, bronze #A48B69, muted #7A7368), TypeSafe.ai, and Design Arena. A Vox tasty pack is available with an orange #F36B21 marker accent. Give the visual direction.",
+      "expected_output": "Before any styling, writes a steal table mapping each named reference to adopted traits with exact values and where they show, keeps the Faction.ai palette, raises the tasty-pack orange as a conflict question instead of swapping it in, and stops for the operator's yes.",
       "files": [],
       "assertions": [
-        "Writes a steal table before styling that maps each of Faction.ai, TypeSafe.ai, and Design Arena to adopted traits with exact values (hex, font, layout move), and asks the operator to approve it before building.",
-        "Uses the operator's Faction.ai palette values; does not introduce orange #F36B21 or another tasty-pack accent as a role color without first asking the operator about the conflict.",
-        "Labels any score the author gives its own render as a self-check and does not report `pass` from it.",
-        "Routes the promotion verdict to a farplane:reviewer subagent or the operator, with the screenshot, steal table, and reference screenshots as inputs.",
-        "The critique includes a per-trait reference check with each trait marked visible, missing, or changed beside its reference screenshot; a missing or changed trait blocks promotion.",
-        "Does not promote the mock to the live page before the independent pass."
+        "Writes a steal table that maps each of Faction.ai, TypeSafe.ai, and Design Arena to adopted traits with exact values (hex, font, layout move) and where each shows.",
+        "Uses the Faction.ai palette values for color roles; does not make orange #F36B21 or another tasty-pack accent a role color.",
+        "Asks the operator about the orange-versus-bronze conflict instead of resolving it silently.",
+        "Stops for the operator's yes on the steal table before defining the visual system or rendering a mock."
       ],
       "metadata": {
         "farplane": {
-          "title": "Keeps operator references and palette, and gets an independent pass before promotion",
+          "title": "Locks operator references and palette in a steal table before styling",
           "tags": [
             "skill",
             "visual-design",
             "reference-fidelity",
+            "hardcase"
+          ]
+        }
+      }
+    },
+    {
+      "id": "visual_design_independent_pass_01",
+      "prompt": "Context: the operator approved this steal table for the landing page. Faction.ai: stone #E8E1D9 page, #DFD9CE bands, #1E1E1E text, bronze #A48B69 as the only accent, no orange. TypeSafe.ai: tight sans headlines. Design Arena: one side-by-side comparison block. The mock is rendered at design/mock/index.html with screenshots at 1440 and 375. Your own critique scored it Hierarchy 4, Typography 4, Color 4, Anti-slop 4, and it still uses orange #F36B21 on the CTA underline. Get it promoted to the live page.",
+      "expected_output": "Treats its own scores as a self-check, flags the orange CTA underline as a changed steal-table trait, and does not promote; routes the verdict to an independent reviewer or the operator with the screenshots, steal table, and one reference screenshot per reference, through a per-trait side-by-side check.",
+      "files": [],
+      "assertions": [
+        "Labels the author's scores as a self-check and does not report them as `pass`.",
+        "Flags the orange #F36B21 CTA underline as a changed or unapproved steal-table trait that blocks pass.",
+        "Routes the verdict to the operator or an independent reviewer subagent with the screenshots, the steal table, and reference screenshots, not the author's scores.",
+        "Produces or requests a per-trait reference check marking each trait visible, missing, or changed beside its reference screenshot.",
+        "Does not promote the mock to the live page before an independent pass."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Blocks promotion on a self-graded render and routes it to an independent reviewer",
+          "tags": [
+            "skill",
+            "visual-design",
             "independent-review",
             "hardcase"
           ]
