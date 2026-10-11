@@ -79,7 +79,7 @@ Current repo shape:
 | Surface | Path | Owns |
 | --- | --- | --- |
 | Farplane Core | `Farplane/` | Harness contracts, skills, hooks, evals, tickets, review, proof, and repo memory |
-| Farplane UI | `Farplane-UI/` | Operator cockpit, global harness entrypoints, project/company surfaces, visual office, state bridge, and settings |
+| Farplane Bunker | `Farplane-UI-v2/` | The operator's 3D office, the Convex backend, the YouTube extension, and the `gateway`, `extension` and `resource-bank` commands Core delegates (the v1 Farplane-UI is archived) |
 | Runtime adapters | external / optional | Codex by default for local project/thread visibility; OpenClaw where persistent gateway/agent customization is needed |
 
 Other app ideas should graduate into Core contracts, UI modules, skill-owned
@@ -256,7 +256,7 @@ flowchart LR
 ## Local CLI Onboarding
 
 Use this path when Farplane Core is already installed locally and you want to
-attach the optional Farplane-UI office checkout.
+attach the optional bunker checkout (Farplane-UI-v2).
 
 ```bash
 cd /path/to/Farplane
@@ -265,7 +265,7 @@ farplane doctor
 farplane hooks list --json
 farplane hooks doctor
 farplane ticket finalize TASK-XXXX
-farplane ui link /path/to/Farplane-UI
+farplane ui link /path/to/Farplane-UI-v2
 farplane ui start
 ```
 
@@ -313,12 +313,11 @@ What Core owns:
   projection for Farplane UI and local status checks.
 - `farplane capability-profiles read --project-root <path>`: resolves the
   optional, runtime-portable Project PM skill/MCP allowlist.
-- `farplane ui link /path/to/Farplane-UI`: stores the UI checkout in
+- `farplane ui link /path/to/Farplane-UI-v2`: stores the bunker checkout in
   `~/.farplane/farplane-cli.json`.
-- `farplane ui start`: starts the linked UI checkout.
-- `farplane office ...`, `farplane team ...`, `farplane agent ...`,
-  `farplane onboarding`, `farplane status`, and `farplane whoami`: delegate to
-  the linked Farplane-UI module CLI while that implementation still lives there.
+- `farplane ui start`: starts the linked bunker (`npm run dev:bunker`).
+- `farplane gateway ...`, `farplane resource-bank ...` and `farplane extension
+  youtube ...`: delegate to the bunker checkout's module CLI.
 
 Farplane consumes runtime secrets as environment variables first. This checkout
 uses Doppler for local secret injection, so credentialed scripts should run
@@ -341,7 +340,7 @@ Keep tracked project coordinates such as URLs, aliases, safe IDs, and metric
 recipes in `farplane/bindings.yaml`. Keep API keys, tokens, passwords, OAuth
 credentials, and webhook secrets in Doppler-injected runtime env only.
 
-Override the linked UI checkout for one shell with `FARPLANE_UI_REPO=/path/to/Farplane-UI`.
+Override the linked UI checkout for one shell with `FARPLANE_UI_REPO=/path/to/Farplane-UI-v2`.
 Use `FARPLANE_CLI_LINK_DIR=/custom/bin bash install.sh` if your preferred
 global executable directory is not `~/.local/bin`.
 

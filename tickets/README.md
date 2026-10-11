@@ -40,8 +40,8 @@ procedures below for this project and any project with a GitHub repository.
   agents or runs. Their only task write is `gh issue comment` on an existing
   issue through Progress Updater's existing-issue action allowlist.
 
-**Where confidential work goes.** Farplane, Farplane-UI and farplane-bunker are
-public repositories: their issues and comments carry engineering facts only, never
+**Where confidential work goes.** Farplane is a public repository and farplane-bunker is private but
+written as if public (Farplane-UI is archived): their issues and comments carry engineering facts only, never
 client names, money, prices, strategy or personal details. Client and business work
 goes in private repositories' issues instead: the business's own private repo
 and each client deployment's own private repo. Strategy docs, metrics, prices and targets stay in `~/.farplane`,

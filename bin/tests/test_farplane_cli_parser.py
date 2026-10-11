@@ -43,11 +43,11 @@ class FarplaneCliParserTests(unittest.TestCase):
 
     def test_extension_youtube_resolves_ui_and_uses_doppler_runner(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            ui_repo = Path(tmp) / "Farplane-UI"
+            ui_repo = Path(tmp) / "Farplane-UI-v2"
             (ui_repo / "cli").mkdir(parents=True)
             (ui_repo / "cli" / "farplane-cli.ts").write_text("// test fixture\n", encoding="utf-8")
             (ui_repo / "package.json").write_text(
-                json.dumps({"scripts": {"shell": "tsx cli/farplane-cli.ts", "ui": "vite"}}),
+                json.dumps({"scripts": {"shell": "tsx cli/farplane-cli.ts", "dev:bunker": "vite"}}),
                 encoding="utf-8",
             )
             config = CliConfig(

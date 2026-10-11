@@ -25,7 +25,7 @@ social link, screenshot, or raw idea they like and wants it saved as reusable
 inspiration. The optional `note` can be anything from "I want to make a video
 like this" to "I like the image used in the first few seconds." The default
 backing store is the Farplane UI Resource Bank module at
-`/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/convex/modules/resourceBank`.
+`/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI-v2/convex/modules/resourceBank`.
 
 This skill is a Codex-native router pipeline, not a browser extension, app
 agent, or autonomous posting loop. It should reuse subskills for each phase:
@@ -333,7 +333,7 @@ saved record; downstream production skills own making new assets from records.
    - [ ] After the primary Resource Bank asset row exists, upload a real
      representative thumbnail/contact sheet/frame image from
      [media-ingest](../media-ingest/SKILL.md) or
-     [video-understanding](../video-understanding/SKILL.md) with the Farplane-UI
+     [video-understanding](../video-understanding/SKILL.md) with the bunker's
      `resource-bank:upload-thumbnail` script; use `assetRole: "thumbnail"`,
      `assetKind: "image"`, and `parentAssetId` set to the primary source asset.
    - [ ] If no visual thumbnail/contact sheet/frame image was extracted, skip
@@ -472,7 +472,7 @@ facets: outputTypes=["reel"], audiences=["founders"], industries=["ai"], custome
 analysisMarkdown: "## Breakdown\n...\n\n## Why It Works\n...\n\n## Reuse Notes\n..."
 tickets: [{ instruction: "Repurpose the first-three-seconds identity reveal from <source URL or asset ID> into a founder-facing AI office reel.", firstOperation: "content-impl-plan" }]
 verification: createTastyPack({ timeframe: "past_week", audience: "founders" }) returns the capture with source, optional transcript, analysis.markdown plus operatorNote, selected elements, tags/facets on source, and meta pinned/operator-note counts plus warnings.
-derived_preview: if media-ingest produced `/tmp/contact_sheet.jpg`, run `npm --prefix "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI" run resource-bank:upload-thumbnail -- --job-id <jobId> --parent-asset-id <assetId> --file /tmp/contact_sheet.jpg --title "Contact sheet: <source title>" --source-url <sourceUrl> --canonical-url <canonicalUrl> --tag contact-sheet --tag frame-backed --json`; record returned assetId/storageId and verify previewAsset.storageUrl when available.
+derived_preview: if media-ingest produced `/tmp/contact_sheet.jpg`, run `npm --prefix "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI-v2" run resource-bank:upload-thumbnail -- --job-id <jobId> --parent-asset-id <assetId> --file /tmp/contact_sheet.jpg --title "Contact sheet: <source title>" --source-url <sourceUrl> --canonical-url <canonicalUrl> --tag contact-sheet --tag frame-backed --json`; record returned assetId/storageId and verify previewAsset.storageUrl when available.
 ```
 
 ## Gotchas

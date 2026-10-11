@@ -34,7 +34,7 @@ Farplane Core pairs with Farplane UI:
 | Surface | Path | Owns |
 | --- | --- | --- |
 | Farplane Core | `Farplane/` | Harness contracts, framework files, skills, hooks, evals, templates, tickets, review, proof, graph/projection payloads, and repo memory |
-| Farplane UI | `../Farplane-UI/` | Operator cockpit, global harness modules, project/company views, visual office entrypoints, state bridge, and settings |
+| Farplane Bunker | `../Farplane-UI-v2/` | The operator's 3D office, the Convex backend, the YouTube extension, and the module CLI Core delegates `gateway`, `extension` and `resource-bank` to (the v1 Farplane-UI is archived) |
 | Runtime adapters | external / optional | Codex by default for local project/thread visibility; OpenClaw when persistent gateway/agent customization is needed |
 
 The UI scope split is part of the architecture contract:

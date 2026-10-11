@@ -75,7 +75,7 @@ or removing a `farplane` command.
 - `validators/check_harness_invariants.py` - narrow validator for high-value root/runtime/ticket-boundary invariants
 - `farplane` / `farplane.py` - Core-owned global CLI for install, hooks,
   doctor checks, UI linking/start, skill rollout projections, and delegation
-  into the linked Farplane-UI module checkout
+  into the linked bunker checkout (Farplane-UI-v2)
 - `core/*` - implementation modules for the global CLI, ticket lifecycle,
   mining, telemetry status, and adoption helpers
 - `tests/*` - Core-owned tests for `bin/core`, the hooks, and public

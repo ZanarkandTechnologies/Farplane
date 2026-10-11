@@ -447,7 +447,7 @@ def run_doctor(args: argparse.Namespace) -> int:
         "hints": [
             *hook_report.get("hints", []),
             *config_report.get("hints", []),
-            *(["run `farplane ui link /path/to/Farplane-UI`"] if ui_issues else []),
+            *(["run `farplane ui link /path/to/Farplane-UI-v2`"] if ui_issues else []),
             *(["run `farplane project snapshot`"] if snapshot_issues else []),
         ],
     }

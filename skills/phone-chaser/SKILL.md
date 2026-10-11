@@ -44,7 +44,7 @@ gates: explicit_user_call_intent_or_policy_receipt; allowed_recipient; no_secret
        scoped_review_callback_when_used; livekit_cli_available; dispatch_created_or_blocker_recorded
 routes: phone-chaser -> telegram-message only when phone call is blocked and a
         Telegram fallback was explicitly useful; spoken review response ->
-        Farplane-UI Telegram gateway review relay when a review_id capability
+        bunker Telegram gateway review relay when a review_id capability
         was minted for exactly one source thread and review cycle
 fails: accidental repeated calls; unapproved external call; secret exposure;
        local-only path masquerading as phone proof; app-server credentials or
@@ -170,7 +170,7 @@ cloudflared tunnel --url http://127.0.0.1:8789
   and name them clearly in the message.
 - A review queue or stale ticket is not a policy receipt. Calls require the
   exact configured per-review escalation threshold and cap.
-- Review webhook callbacks belong to the Farplane-UI gateway. The phone runtime
+- Review webhook callbacks belong to the bunker's Telegram gateway. The phone runtime
   gets only the review-specific capability and relay URL; it does not get
   Codex app-server credentials or permission to choose a thread.
 

@@ -1,4 +1,4 @@
-"""Farplane's client for Farplane-UI's Convex deployment: metric readings in, telemetry events out.
+"""Farplane's client for the bunker's Convex deployment (Farplane-UI-v2/convex): metric readings in, telemetry events out.
 
 - Site routes (POST + JSON, `x-farplane-telemetry-token`) on FARPLANE_CONVEX_SITE_URL: `/metrics/readings`,
   `/metrics/latest`, `/metrics/history`.
@@ -140,7 +140,7 @@ def to_ms(value: Any) -> int | None:
 
 
 def project_slug(name: str) -> str:
-    """The company.json slug Farplane-UI matches floors by: lower-case, non-alphanumerics hyphenated."""
+    """The company.json slug the bunker matches floors by: lower-case, non-alphanumerics hyphenated."""
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 

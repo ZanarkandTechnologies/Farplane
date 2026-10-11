@@ -34,10 +34,7 @@ TEMPLATE_PATH = Path("docs/skills/templates/SKILL_TEMPLATE.md")
 DEFAULT_OUT = Path(generated_graph_path("skill-template-intelligence.json"))
 DEFAULT_JS_OUT = Path(generated_graph_path("skill-template-intelligence.js"))
 DEFAULT_ARCHIVE_DIR = Path(".farplane/skill-template-snapshots")
-PROJECT_ROOTS = (
-    Path("."),
-    Path("../Farplane-UI"),
-)
+PROJECT_ROOTS = (Path("."),)
 
 
 @dataclass(frozen=True)

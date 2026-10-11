@@ -11,7 +11,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-DEFAULT_FARPLANE_UI_ROOT = Path("/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI")
+DEFAULT_FARPLANE_UI_ROOT = Path("/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI-v2")
 
 
 def read_message(args: argparse.Namespace) -> str:
@@ -80,7 +80,7 @@ def gateway_send(args: argparse.Namespace, message: str) -> int:
     command = [
         "npm",
         "run",
-        "cli",
+        "shell",
         "--",
         "gateway",
         "telegram",

@@ -25,7 +25,6 @@ Read:
 - this week's plan: the newest `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/.farplane/company-os/daily/context/<run>/_operator-plan.md` (the Plan Week copy Morning fetches)
 - recent git activity and concise project documentation in:
   - `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`
-  - `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI`
   - `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI-v2`
   - registered active project paths from company.json, only when needed
 

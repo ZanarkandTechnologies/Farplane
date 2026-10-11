@@ -19,16 +19,9 @@ DEFAULT_FARPLANE_HOME = Path.home() / ".farplane"
 CONFIG_PATH = DEFAULT_FARPLANE_HOME / "farplane-cli.json"
 UI_ENV = "FARPLANE_UI_REPO"
 DELEGATED_COMMANDS = {
-    "agent",
     "gateway",
-    "onboarding",
-    "office",
     "resource-bank",
-    "status",
-    "team",
-    "whoami",
 }
-OLD_CONVEX_SITE_URL = "https://agreeable-finch-230.convex.site"
 PREVIOUS_NOTIFY_FLAG = "--previous-notify"
 RUNTIME_NOTIFY_DISABLED_FILE = ".farplane-notify-disabled"
 MANAGED_HOOK_DIRS = (

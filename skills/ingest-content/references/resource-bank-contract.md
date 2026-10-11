@@ -5,9 +5,9 @@
 Use the Farplane UI Resource Bank module as the backing store unless the
 operator supplies another vault:
 
-- `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/convex/modules/resourceBank/AGENTS.md`
-- `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/convex/modules/resourceBank/schema.ts`
-- `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/convex/modules/resourceBank/validators.ts`
+- `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI-v2/convex/modules/resourceBank/AGENTS.md`
+- `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI-v2/convex/modules/resourceBank/schema.ts`
+- `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI-v2/convex/modules/resourceBank/validators.ts`
 
 ## Active Contract
 
@@ -237,10 +237,10 @@ storage IDs, or preview URLs beside the element capsules.
 
 When `media-ingest` or `video-understanding` produces a representative
 thumbnail, contact sheet, or selected frame image, upload it after the primary
-Resource Bank asset row exists. Use the Farplane-UI helper as the write edge:
+Resource Bank asset row exists. Use the bunker's helper as the write edge:
 
 ```bash
-npm --prefix "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI" run resource-bank:upload-thumbnail -- \
+npm --prefix "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI-v2" run resource-bank:upload-thumbnail -- \
   --job-id <resourceBankIngestionJobs id> \
   --parent-asset-id <primary resourceBankAssets id> \
   --file /path/to/contact_sheet.jpg \

@@ -70,12 +70,13 @@ Done so far:
   --timezone` default to this machine's date and timezone; `capability-profiles` and `content` accept
   `--json` (they always print JSON); a `CliError` prints `{"ok": false, "error": …}` under `--json`; a group
   run without its subcommand prints that group's help; the `delegate` command, the unreachable
-  `resource-bank` parser entry (it is still delegated to Farplane-UI before parsing) and the duplicate
+  `resource-bank` parser entry (it is still delegated to the bunker checkout before parsing) and the duplicate
   `capability-profiles resolve` are gone.
 
 **Kept, because running software calls them** (the audit's evidence): `adoption scan`, `skills rollout scan`,
 `capability-profiles read/write/snapshot` and `mining` (Farplane-UI's server), `hooks list/install`
-(Farplane-UI's install script), `extension youtube` (shown to the operator by Farplane-UI).
+(Farplane-UI's install script), `extension youtube` (now delegated to the bunker). Farplane-UI was archived on
+2026-10-11 (farplane-bunker#1), so the server and install-script callers are gone: re-audit those commands.
 
 Still open:
 
@@ -85,5 +86,3 @@ Still open:
 - `notify` and `reports` have no live caller but are documented operator tools; ask before removing.
 - `content add` defaults `--project-root` to the Farplane checkout, not the current folder (the
   `x-account` and `instagram-account` skills rely on that); decide with the content ledger's owner.
-- Farplane-UI's file-change hook calls a `mining handle-file-change` subcommand that doesn't exist (the
-  hook isn't wired anywhere); a Farplane-UI fix.

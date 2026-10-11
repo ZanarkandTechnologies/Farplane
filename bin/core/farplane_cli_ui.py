@@ -32,8 +32,8 @@ def validate_ui_repo(path: Path) -> list[str]:
             scripts = package.get("scripts") if isinstance(package, dict) else None
             if not isinstance(scripts, dict) or "shell" not in scripts:
                 issues.append("ui_repo_missing_script:shell")
-            if not isinstance(scripts, dict) or "ui" not in scripts:
-                issues.append("ui_repo_missing_script:ui")
+            if not isinstance(scripts, dict) or "dev:bunker" not in scripts:
+                issues.append("ui_repo_missing_script:dev:bunker")
     return issues
 
 
@@ -41,7 +41,7 @@ def discover_ui_repo(config: CliConfig) -> tuple[Path | None, list[str]]:
     candidates: list[tuple[str, Path]] = []
     if config.ui_repo_path:
         candidates.append(("configured", config.ui_repo_path))
-    candidates.append(("sibling", CORE_ROOT.parent / "Farplane-UI"))
+    candidates.append(("sibling", CORE_ROOT.parent / "Farplane-UI-v2"))
 
     seen: set[Path] = set()
     for source, candidate in candidates:
@@ -54,7 +54,7 @@ def discover_ui_repo(config: CliConfig) -> tuple[Path | None, list[str]]:
             return resolved, []
         if source == "configured":
             return resolved, issues
-    return None, ["ui_repo_not_linked:run `farplane ui link /path/to/Farplane-UI`"]
+    return None, ["ui_repo_not_linked:run `farplane ui link /path/to/Farplane-UI-v2`"]
 
 
 def run_notify_status(args: argparse.Namespace) -> int:
@@ -105,12 +105,12 @@ def run_ui_start(args: argparse.Namespace) -> int:
                 "ok": False,
                 "summary": "UI repo is not linked",
                 "issues": issues,
-                "hints": ["run `farplane ui link /path/to/Farplane-UI`"],
+                "hints": ["run `farplane ui link /path/to/Farplane-UI-v2`"],
             },
             args.json,
         )
         return 1
-    command = ["npm", "run", "ui", "--", *passthrough_args(args.extra)]
+    command = ["npm", "run", "dev:bunker", "--", *passthrough_args(args.extra)]
     return run_process(command, ui_repo, args.dry_run)
 
 
@@ -129,7 +129,7 @@ def delegate_to_ui(
                 "ok": False,
                 "summary": f"cannot delegate `{command_name}` without a linked UI repo",
                 "issues": issues,
-                "hints": ["run `farplane ui link /path/to/Farplane-UI`"],
+                "hints": ["run `farplane ui link /path/to/Farplane-UI-v2`"],
             },
             False,
         )
@@ -141,9 +141,9 @@ def delegate_to_ui(
 
 
 def run_extension_youtube(args: argparse.Namespace) -> int:
-    """Delegate a supported YouTube extension action to Farplane-UI.
+    """Delegate a supported YouTube extension action to the bunker checkout.
 
-    Runtime lifecycle is deliberately owned by the UI checkout.  Core only
+    Runtime lifecycle is deliberately owned by the bunker checkout.  Core only
     resolves that checkout and applies its project-scoped Doppler contract.
     """
 

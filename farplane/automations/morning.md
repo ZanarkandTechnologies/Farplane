@@ -58,7 +58,7 @@ footer.
 
 Runtime notes (they don't change the records' rules):
 - A skill written `$name` in a record is the Claude skill `name` (e.g. `progress-update`, `manage-wiki`); invoke it with the Skill tool.
-- Tasks are GitHub Issues of each project's own repo; use the `gh` CLI. The only write allowed is a `gh issue comment` on an existing issue, through Progress Updater's allowlist. Public repos (Farplane, Farplane-UI, farplane-bunker) get engineering facts only. Multica is archived.
+- Tasks are GitHub Issues of each project's own repo; use the `gh` CLI. The only write allowed is a `gh issue comment` on an existing issue, through Progress Updater's allowlist. The public repo (Farplane) and the bunker repo (farplane-bunker, private but written as if public) get engineering facts only; Farplane-UI is archived. Multica is archived.
 - Read Notion (the Plan Week and Life Plan adapter, and call notes) through the Notion connector, read-only.
 - Credentialed commands go through `farplane run -- <command>`; never print secrets.
 - Wiki: anything that is leverage for Kenji's life, career included. It stays local, in the local-only memory repo (`~/.farplane/memory`), never in a pushable repo. No health details.

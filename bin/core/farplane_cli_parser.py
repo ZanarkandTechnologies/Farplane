@@ -144,19 +144,19 @@ def build_parser() -> argparse.ArgumentParser:
     notify_disable.add_argument("--json", action="store_true")
     notify_disable.set_defaults(func=run_notify_disable)
 
-    ui = sub.add_parser("ui", help="Link or start the Farplane-UI checkout.")
+    ui = sub.add_parser("ui", help="Link or start the bunker checkout (Farplane-UI-v2).")
     ui_sub = ui.add_subparsers(dest="ui_command")
-    ui_link = ui_sub.add_parser("link", help="Store the Farplane-UI checkout path.")
+    ui_link = ui_sub.add_parser("link", help="Store the bunker checkout path.")
     ui_link.add_argument("path")
     ui_link.add_argument("--json", action="store_true")
     ui_link.set_defaults(func=run_ui_link)
-    ui_start = ui_sub.add_parser("start", help="Start the linked Farplane-UI dev server.")
+    ui_start = ui_sub.add_parser("start", help="Start the linked bunker (npm run dev:bunker).")
     ui_start.add_argument("--dry-run", action="store_true")
     ui_start.add_argument("--json", action="store_true")
     ui_start.add_argument("extra", nargs=argparse.REMAINDER)
     ui_start.set_defaults(func=run_ui_start)
 
-    extension = sub.add_parser("extension", help="Delegate supported local extensions to Farplane-UI.")
+    extension = sub.add_parser("extension", help="Delegate supported local extensions to the bunker checkout.")
     extension_sub = extension.add_subparsers(dest="extension_name")
     extension_youtube = extension_sub.add_parser(
         "youtube",
@@ -164,7 +164,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     extension_youtube.add_argument("extension_action", choices=("start", "status", "doctor", "stop"))
     extension_youtube.add_argument("--dry-run", action="store_true")
-    extension_youtube.add_argument("--json", action="store_true", help="Request JSON from Farplane-UI.")
+    extension_youtube.add_argument("--json", action="store_true", help="Request JSON from the bunker checkout.")
     extension_youtube.set_defaults(func=run_extension_youtube)
 
     adoption = sub.add_parser("adoption", help="Inspect Farplane adoption across local project manifests.")

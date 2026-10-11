@@ -24,7 +24,7 @@ Execution boundary:
 - Write only Farplane's own metric files under each Project's `.farplane/` (what the commands
   and refreshers below write). Never write GitHub, Notion, Whop, or any provider.
 - Never spend. A metric whose source would cost money stays a gap.
-- The only other writes go to Farplane-UI's Convex, all inside step 2's `farplane metrics refresh`: the
+- The only other writes go to the bunker's Convex, all inside step 2's `farplane metrics refresh`: the
   metric readings, cash, and the tests' version totals.
 
 ## Steps
