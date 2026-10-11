@@ -150,9 +150,9 @@ For a material request with no selected ticket, create or request the canonical
     assertion. Make QA compare captures and behavior against its IDs and
     assertions; a link alone is not proof.
 - [ ] 6. Prove the run can go unattended.
-  - [ ] Fill the ticket's `Autonomy Preflight` from probes actually run, per
-    [autonomy preflight](references/autonomy-preflight.md); `approval_ready`
-    requires `Needs you before AFK` empty or explicitly accepted.
+  - [ ] Fill `Autonomy Preflight` per [autonomy preflight](references/autonomy-preflight.md):
+    seven labeled lines (in the handoff too); `auth`, `secrets`, `dev server`,
+    `browser` rows with results; `approval: pending` until `Needs you` clears.
 - [ ] 7. Keep presentation proportional.
   - [ ] Keep the required Contract Diagram compact and type-appropriate. Create
     `diagrams.md` only when multiple detailed architecture views or independent

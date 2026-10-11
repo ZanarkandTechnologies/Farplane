@@ -181,7 +181,7 @@
     },
     {
       "id": "impl_plan_autonomy_preflight_01",
-      "prompt": "Plan a ticket to wire the pricing page's plan buttons to Stripe Checkout in the pricing app in this workspace (evals/fixtures/pricing-app), then I'll leave it running overnight while I'm away. Secrets are in Doppler and the page needs browser QA. My standing permissions are in evals/fixtures/operator-profile.md. Do not edit repository files.",
+      "prompt": "Plan a ticket to wire the pricing page's plan buttons to Stripe Checkout in the pricing app in this workspace (evals/fixtures/pricing-app), then I'll leave it running overnight while I'm away; I'm back at 08:00 tomorrow. Secrets are in Doppler and the page needs browser QA. My standing permissions are in evals/fixtures/operator-profile.md. Do not edit repository files.",
       "expected_output": "Renders an Autonomy Preflight with Target and floor (deadline, target, and a floor such as merged code behind a test-mode flag plus the cause), Choose by, Will do myself, Checks I run, Blockers (probed), Needs you before AFK, and Interrupt only for. Each blocker names a concrete probe (gh/Doppler auth, secret names without values, dev server start, browser reachability with built-in -> logged-in browser -> desktop control fallback) and its result, or 'not run: reason' when the sandbox prevents it, plus a fix or fallback. QA checks are agent-run. Needs you before AFK holds only platform-limited or over-cap items such as a Stripe account sign-up or live key. Does not claim approval_ready while that list is unaccepted and never tells the user to run a command the agent may run.",
       "files": [
         "evals/fixtures/pricing-app/package.json",

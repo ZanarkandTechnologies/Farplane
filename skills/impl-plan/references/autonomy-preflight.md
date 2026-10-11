@@ -19,9 +19,10 @@ Fill the section from probes actually run:
 
 ## Render All Seven Lines
 
-Render the seven lines even when probes cannot run: `Target and floor`,
-`Choose by`, `Will do myself`, `Checks I run`, `Blockers (probed)`,
-`Needs you before AFK`, and `Interrupt only for`.
+Render exactly these seven labeled lines even when probes cannot run:
+`Target and floor`, `Choose by`, `Will do myself`, `Checks I run`,
+`Blockers (probed)`, `Needs you before AFK`, and `Interrupt only for`. When the
+ticket cannot be written, render the same seven lines in the visible handoff.
 
 - `Target and floor` names the deadline, the target, and the floor: the
   smallest result worth returning to if the target slips. The ticket's Done
@@ -31,6 +32,11 @@ Render the seven lines even when probes cannot run: `Target and floor`,
   times cost of what could break). Below the cap, waiting to save a few
   dollars loses.
 
+- `Blockers (probed)` always includes an `auth` row (`gh auth status`, the
+  secret manager's login check), a `secrets` row naming each required secret
+  and whether it is present (names only), a `dev server` row with its bounded start
+  command, and a `browser` row listing built-in browser -> logged-in browser ->
+  desktop control, each with its result or "not run: reason".
 - Under `Blockers (probed)`, write one sub-bullet per dependency, never one
   combined line: `dependency -> probe command -> result or "not run: reason"
   -> fix or fallback`. The browser fallback is built-in browser -> logged-in
@@ -48,6 +54,9 @@ Render the seven lines even when probes cannot run: `Target and floor`,
 
 Read standing permissions and the spend cap from the operator profile; never
 copy the cap or credentials into the ticket. `Needs you before AFK` holds only
-platform-limited or over-cap items; never ask to confirm an action standing
-permissions already allow. `approval_ready` requires that list empty
-or explicitly accepted.
+platform-limited or over-cap items: logins, account creation, CAPTCHAs, OAuth
+grants, and over-cap spend. Plan approval and config the agent can find are
+never `Needs you` items; never ask to confirm an action standing permissions
+already allow. Call the plan `approval_ready` only when that list is empty and
+no blocker is unresolved, or the operator accepted them in this conversation;
+otherwise label it `approval: pending` and name what is open.
