@@ -28,6 +28,12 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
   Do not run a separate stateful taste-interview workflow.
 - [ ] Record a compact visual evidence receipt: source/reference, observed
   trait, `adopt | adapt | reject`, and the resulting visual constraint.
+- [ ] **Reference fidelity.** When the operator names references or states a
+  palette or fonts, write a **steal table** before any styling: reference ->
+  traits adopted with exact values (hex, font and weight, size, layout move) ->
+  where each shows on the screen. Show it to the operator and wait for a yes.
+  Operator-stated palette and fonts beat any tasty pack, concept, or
+  direction; a conflict is a question to the operator, never a silent swap.
 - [ ] Use the native planning phase to choose the visual register and accepted
   tradeoff before specifying style.
 - [ ] Name a **visual concept** drawn from the product's own world (a place,
@@ -48,6 +54,11 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
   and realistic content, and score it with `critique-audit.md`. Refine at most
   twice; then hand off with `verdict: revise` and the open issue. With no
   browser available, label the critique `unrendered`.
+- [ ] **Independent critique before promotion.** The author's own score is a
+  `self-check`, never a `pass`. Before a mock is promoted, accepted, or handed
+  off as ready, get the verdict from a `farplane:reviewer` subagent (given the
+  screenshot, steal table, and reference screenshots) or from the operator;
+  the reviewer checks every steal-table trait side by side with its reference.
 - [ ] Write or update a durable design brief when the surface is substantial or
   delegated.
 - [ ] Hand the accepted visual brief to [impl-plan](../impl-plan/SKILL.md) for
@@ -75,15 +86,16 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 
 1. **Confirm functional basis.** Identify the user, primary action, states, and interaction model. If missing, route to `functional-ui`.
 2. **Run the Steve Jobs Focus & Simplicity Pass.** State the user-facing benefit, visual focal action, elements to remove or defer, and deliberate `no`; do not remove functional requirements, accessibility, or necessary state.
-3. **Classify register.** Product UI serves repeated work; brand UI creates memory and desire. Choose the register before taste decisions.
-4. **Write a scene sentence.** Name who uses the surface, where, under what ambient light, and in what mood. Let that force dark/light, density, and contrast.
-5. **Find the visual concept.** One idea from the product's world that typography, layout, color, illustration, and motion can all borrow from. In the brand register it drives the whole surface; in the product register it stays quiet (accent, icons, empty and loading states, one signature moment) and never costs scanability. For polish, name the existing concept or `none recorded`. See `references/concept-and-directions.md`.
-6. **Diverge, then commit.** For a new direction, sketch three directions that differ in concept, not just palette. Compare them and keep one; record the losers as `reject` with a reason.
-7. **Choose numeric taste dials.** Set visual density, design variance, motion intensity, color commitment, and materiality on a 1-10 scale with one-line rationale for each.
-8. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary, each traceable to the concept.
-9. **Render, critique, refine.** Run the render loop from the Todo List: static HTML mock, in-app Browser screenshot at the target viewport, `critique-audit.md` score, at most two refine passes.
-10. **Write a durable design brief when the work is substantial.** For a new app surface, redesign, multi-screen UI, or delegated implementation, create or update a ticket/spec-local `DESIGN_BRIEF.md` or equivalent ticket section before build handoff.
-11. **Hand off to planning.** Produce concrete constraints that `impl-plan` incorporates into the ticket `design.md` baseline; link the rendered mock from it as reference evidence, not a second baseline.
+3. **Lock reference fidelity.** When the operator named references, palette, or fonts, get a yes on the steal table first. Concept, directions, dials, and visual system then work inside those values.
+4. **Classify register.** Product UI serves repeated work; brand UI creates memory and desire. Choose the register before taste decisions.
+5. **Write a scene sentence.** Name who uses the surface, where, under what ambient light, and in what mood. Let that force dark/light, density, and contrast.
+6. **Find the visual concept.** One idea from the product's world that typography, layout, color, illustration, and motion can all borrow from. In the brand register it drives the whole surface; in the product register it stays quiet (accent, icons, empty and loading states, one signature moment) and never costs scanability. For polish, name the existing concept or `none recorded`. See `references/concept-and-directions.md`.
+7. **Diverge, then commit.** For a new direction, sketch three directions that differ in concept, not just palette. Compare them and keep one; record the losers as `reject` with a reason.
+8. **Choose numeric taste dials.** Set visual density, design variance, motion intensity, color commitment, and materiality on a 1-10 scale with one-line rationale for each.
+9. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary, each traceable to the concept.
+10. **Render, critique, refine.** Run the render loop from the Todo List: static HTML mock, in-app Browser screenshot at the target viewport, `critique-audit.md` score, at most two refine passes. Only an independent reviewer or the operator can return `pass`; with operator references, the critique includes a side-by-side shot of each reference.
+11. **Write a durable design brief when the work is substantial.** For a new app surface, redesign, multi-screen UI, or delegated implementation, create or update a ticket/spec-local `DESIGN_BRIEF.md` or equivalent ticket section before build handoff.
+12. **Hand off to planning.** Produce concrete constraints that `impl-plan` incorporates into the ticket `design.md` baseline; link the rendered mock from it as reference evidence, not a second baseline.
 
 ## Decision Branches
 
@@ -94,10 +106,13 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 | Brand/marketing surface | more committed color, image-led composition, stronger typography |
 | Creative/portfolio | higher variance and motion, still readable and responsive |
 | Existing design system or accepted board | preserve tokens and components; skip the three directions and keep the existing concept; improve hierarchy and rhythm before inventing new style |
+| Operator-named references, palette, or fonts | approved steal table first; directions vary concept inside the stated values; a tasty pack fills only what the operator left open |
 
 ## Top Gotchas
 
 - Do not use visual polish to hide weak functionality.
+- Do not swap an operator's palette or font for a tasty-pack accent, the
+  concept, or your own taste. Ask. Do not promote a mock on your own score.
 - Do not commit to the first direction, and do not pass off three palette swaps
   of one layout as three directions.
 - Do not accept an adjective ("clean", "modern", "premium") as a concept.
@@ -140,8 +155,10 @@ Return a concise visual brief with:
 - `Taste dials` with 1-10 numeric values
 - `Visual system`
 - `Visual evidence receipt`
-- `Render receipt`: rendered key-screen path, viewport, critique scores, and
-  refine passes used
+- `Steal table` and operator approval, when references were named
+- `Render receipt`: rendered key-screen path, viewport, critique scores,
+  reviewer (subagent or operator, never only the author), per-trait reference
+  check, and refine passes used
 - `Design brief path` when one was created or updated
 - `Anti-slop constraints`
 - `Implementation handoff`

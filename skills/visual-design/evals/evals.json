@@ -96,6 +96,32 @@
           ]
         }
       }
+    },
+    {
+      "id": "visual_design_reference_fidelity_01",
+      "prompt": "Redesign our landing page so it looks like a Vox explainer. Inspirations: Faction.ai (palette: black, white, #1E1E1E, stone #E8E1D9 and #DFD9CE, bronze #A48B69, muted #7A7368), TypeSafe.ai, and Design Arena. The functional basis is settled: one page, focal action 'Get my free AI plan'. A Vox tasty pack is available with an orange #F36B21 marker accent. Give the visual direction, render it, and get it ready to promote to the live page.",
+      "expected_output": "Builds a steal table per named reference with exact adopted values before any styling and asks the operator to approve it; keeps the Faction.ai palette and treats the tasty-pack orange as a conflict question rather than swapping it in; renders the mock, labels its own scores as a self-check, and gets the pass from a farplane:reviewer subagent or the operator with each steal-table trait checked side by side against a reference screenshot before promotion.",
+      "files": [],
+      "assertions": [
+        "Writes a steal table before styling that maps each of Faction.ai, TypeSafe.ai, and Design Arena to adopted traits with exact values (hex, font, layout move), and asks the operator to approve it before building.",
+        "Uses the operator's Faction.ai palette values; does not introduce orange #F36B21 or another tasty-pack accent as a role color without first asking the operator about the conflict.",
+        "Labels any score the author gives its own render as a self-check and does not report `pass` from it.",
+        "Routes the promotion verdict to a farplane:reviewer subagent or the operator, with the screenshot, steal table, and reference screenshots as inputs.",
+        "The critique includes a per-trait reference check with each trait marked visible, missing, or changed beside its reference screenshot; a missing or changed trait blocks promotion.",
+        "Does not promote the mock to the live page before the independent pass."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Keeps operator references and palette, and gets an independent pass before promotion",
+          "tags": [
+            "skill",
+            "visual-design",
+            "reference-fidelity",
+            "independent-review",
+            "hardcase"
+          ]
+        }
+      }
     }
   ]
 }
