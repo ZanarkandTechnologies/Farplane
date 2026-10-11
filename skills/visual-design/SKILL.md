@@ -59,8 +59,9 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
   off as ready, get the verdict from the operator or from a reviewer subagent
   (`farplane:reviewer` in Claude, `agents/reviewer.toml` in Codex) run through
   [review](../review/SKILL.md) with rubric families `ui-quality` and
-  `user-intent-satisfaction`, the design brief as `context_ref`, the
-  screenshot, steal table, and one screenshot per reference. The reviewer
+  `user-intent-satisfaction`, the design brief (or the ticket plus steal
+  table when no brief exists) as `context_ref`, the screenshot, steal table,
+  and one screenshot per reference. The reviewer
   checks every steal-table trait side by side with its reference.
 - [ ] Write or update a durable design brief when the surface is substantial or
   delegated.
