@@ -172,7 +172,8 @@ def validate_requested_paths(project_root: Path, requested: list[str]) -> set[st
         )
         if resolved.parent != entity_root or resolved.suffix != ".md":
             raise WikiError(f"wiki_sync_path_outside_entity_root:{raw}")
-        relative_paths.add(resolved.relative_to(resolved_root).as_posix())
+        # The entity root may be a symlink into the operator's memory repo.
+        relative_paths.add((ENTITY_ROOT / resolved.name).as_posix())
     return relative_paths
 
 

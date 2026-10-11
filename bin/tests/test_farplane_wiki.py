@@ -203,6 +203,26 @@ class FarplaneWikiTests(unittest.TestCase):
         self.assertEqual(cached_names, [("alpha", "Alpha Labs"), ("gamma", "Gamma")])
         self.assertEqual(second["changed_pages"], [".farplane/entities/gamma.md"])
 
+    def test_sync_path_follows_a_symlinked_entity_root(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "project"
+            store = Path(tmp) / "memory"
+            write_entity(store, "alpha", "Alpha")
+            root.joinpath(".farplane").mkdir(parents=True)
+            root.joinpath(".farplane/entities").symlink_to(store / ".farplane/entities")
+            rebuild(root)
+            alpha = root / ".farplane/entities/alpha.md"
+            alpha.write_text(
+                alpha.read_text(encoding="utf-8").replace("name: Alpha", "name: Alpha Labs"),
+                encoding="utf-8",
+            )
+
+            result = sync(root, [str(alpha)])
+            cached_names = database_rows(root, "SELECT entity_id, name FROM pages")
+
+        self.assertEqual(result["changed_pages"], [".farplane/entities/alpha.md"])
+        self.assertEqual(cached_names, [("alpha", "Alpha Labs")])
+
     def test_invalid_rebuild_is_fail_closed_for_database_and_json(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
