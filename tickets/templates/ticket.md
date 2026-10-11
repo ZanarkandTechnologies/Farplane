@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.4.0"
+template_version: "0.5.0"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -113,6 +113,8 @@ code. -->
 - [ ] User-visible or system outcome is satisfied.
 - [ ] Required checks pass with evidence links.
 - [ ] No declared guard regresses.
+- [ ] Bottom line held: the Autonomy Preflight floor was reached by its
+  deadline, and nothing crossed the interrupt line.
 
 ## QA Strategy
 
@@ -134,6 +136,11 @@ branch needs them; use tickets/README.md for their compact contracts. -->
 so the run can go unattended. Standing permissions and the spend cap come from
 the operator's private profile; never copy the cap or credentials here. -->
 
+- Target and floor: the outcome by its deadline, and the minimum the operator
+  returns to if the target slips (for example, a saved checkpoint plus the
+  cause and next step).
+- Choose by: expected value in money: the goal reached sooner, operator hours
+  included, minus spend and expected loss.
 - Will do myself: every command, browser step, check, and allowed spend the run
   needs without asking.
 - Checks I run: each QA Strategy check, run by the agent, with its evidence path.
@@ -142,7 +149,8 @@ the operator's private profile; never copy the cap or credentials here. -->
 - Needs you before AFK: only what the agent may not do (passwords, account
   creation, CAPTCHAs, OAuth grants, spend over the cap); empty when none.
 - Interrupt only for: reputational harm, financial harm over the cap, or
-  irreversible loss of the operator's data.
+  irreversible loss of the operator's data (anything with no other copy;
+  checkpoints, caches, and build artifacts are regenerable).
 
 ## State
 

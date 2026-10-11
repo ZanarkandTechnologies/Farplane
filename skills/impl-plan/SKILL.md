@@ -8,7 +8,7 @@ template_uses:
 department: operations
 common_chains:
   after: ["goal-advisor"]
-allowed-tools: Read, Glob, Grep
+allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # Impl Plan

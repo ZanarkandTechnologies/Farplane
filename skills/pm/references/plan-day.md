@@ -30,7 +30,8 @@ plan_day(Life Plan + Plan Week + carryover + today's capacity) -> negotiated Tod
    Run new ideas through the Life Plan triage first (fit, speed to cash,
    ownership, compounding, effort) and answer kill, park, or test.
 6. **Commit.** Restate the final list in order. Only after the operator accepts,
-   write it to the `Today` section of Plan Week and read it back.
+   write it to the `Today` section of Plan Week and read it back. Then rewrite
+   the operator profile's `Now` list as in [plan-week](plan-week.md).
 
 ## Rules
 

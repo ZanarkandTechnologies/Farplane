@@ -10,29 +10,44 @@ Fill the section from probes actually run:
 
 - CLI auth: `gh auth status`, `farplane doctor`, `farplane run -- true`.
 - Required secret names are present. Never print or request their values.
+- Storage: free disk or volume space against the run's expected outputs
+  (checkpoints, logs, media), so a long run cannot fail on save.
 - A bounded dev server start: run it in the background, wait for the port with
   a timeout, then stop it.
 - Each site the run touches, reached in the built-in browser, else the
   logged-in browser, else desktop control.
 
-## Render All Five Lines
+## Render All Seven Lines
 
-Render the five lines even when probes cannot run: `Will do myself`,
-`Checks I run`, `Blockers (probed)`, `Needs you before AFK`, and
-`Interrupt only for`.
+Render the seven lines even when probes cannot run: `Target and floor`,
+`Choose by`, `Will do myself`, `Checks I run`, `Blockers (probed)`,
+`Needs you before AFK`, and `Interrupt only for`.
+
+- `Target and floor` names the deadline, the target, and the floor: the
+  smallest result worth returning to if the target slips. The ticket's Done
+  checks the floor, so a run never ends below it while a route remains.
+- `Choose by` is fixed: expected value in money. Count the goal reached
+  sooner, operator hours included, minus spend and expected loss (likelihood
+  times cost of what could break). Below the cap, waiting to save a few
+  dollars loses.
 
 - Under `Blockers (probed)`, write one sub-bullet per dependency, never one
   combined line: `dependency -> probe command -> result or "not run: reason"
   -> fix or fallback`. The browser fallback is built-in browser -> logged-in
-  browser -> desktop control. Fix a blocker now when allowed.
+  browser -> desktop control; the browser row names each rung tried with its
+  result. Fix a blocker now when allowed. A blocker the agent can clear itself
+  (dependency install, server start, test-mode config) goes under `Will do
+  myself`, not `Needs you before AFK`.
 - List every QA check as one the agent runs itself.
 - `Interrupt only for` is fixed: reputational harm, spend over the cap, or
-  irreversible loss of the operator's data. A missing login or tool is a
+  irreversible loss of the operator's data, meaning anything with no other
+  copy; checkpoints, caches, and build artifacts are regenerable. A missing login or tool is a
   blocker to clear before AFK, not an interrupt.
 
 ## Permissions And Approval
 
 Read standing permissions and the spend cap from the operator profile; never
 copy the cap or credentials into the ticket. `Needs you before AFK` holds only
-platform-limited or over-cap items. `approval_ready` requires that list empty
+platform-limited or over-cap items; never ask to confirm an action standing
+permissions already allow. `approval_ready` requires that list empty
 or explicitly accepted.

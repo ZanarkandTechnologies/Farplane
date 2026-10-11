@@ -79,8 +79,9 @@ makes one relevant.
   helper modules only when the runner remains the single public entrypoint.
 - Browser/user-visible proof uses the project QA lane and ticket proof policy:
   use in-app Browser for public or unauthenticated browsing, reproducible browser
-  extraction, and normal QA; use Chrome or Computer Use only when existing
-  authenticated state (cookies, extensions, or native-app state) is required;
+  extraction, and normal QA; use Chrome or Computer Use when existing
+  authenticated state (cookies, extensions, or native-app state) is required
+  or the in-app Browser is blocked;
   use Playwright only for requested regression coverage or an existing suite.
 - Architecture owns the complete system map. The README routes readers to it;
   do not maintain two independent canonical diagrams.

@@ -59,3 +59,7 @@ plan_week(Life Plan + last Plan Week + goals + leverage ranking) -> negotiated w
 - Price and cashflow items name a buyer and a number, or are marked door-openers.
 - Unknown capacity and income targets stay unknown.
 - Update the Life Plan in the same turn if the week changes direction.
+- After saving, rewrite the `Now` section of `~/.farplane/USER.md`: at most 5
+  live goals or problems, highest value first, each with deadline, target,
+  floor, and a path or link to its owner. Replace finished or dropped items;
+  never append. Read it back.
