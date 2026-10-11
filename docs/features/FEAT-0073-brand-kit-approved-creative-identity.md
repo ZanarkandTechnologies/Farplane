@@ -123,7 +123,7 @@ Related feature:
 
 Implementation evidence:
 
-- `/Users/kenjipcx/Zanarkand Technologies/archive/Farplane-UI/tickets/TASK-0068/ticket.md`
+- Farplane-UI's local `TASK-0068` ticket (gitignored, and no longer on disk when Farplane-UI was archived on 2026-10-11)
 
 ## Proof And Quality
 

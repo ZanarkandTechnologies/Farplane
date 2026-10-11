@@ -61,7 +61,7 @@ content_production(idea, brand_kit?, tasty_pack?)
 
 Content Production is the system boundary for creative reuse after source material has been captured. It distinguishes candidate inspiration from approved identity, composes them for a specific idea, routes selected elements through existing production advisors, and preserves proof that the final artifact used the selected elements rather than only their names.
 
-The owning implementation evidence for this system split is `/Users/kenjipcx/Zanarkand Technologies/archive/Farplane-UI/tickets/TASK-0068/ticket.md`.
+The owning implementation evidence for this system split is Farplane-UI's local `TASK-0068` ticket (gitignored, and no longer on disk when Farplane-UI was archived on 2026-10-11).
 
 ## Feature Docs
 
