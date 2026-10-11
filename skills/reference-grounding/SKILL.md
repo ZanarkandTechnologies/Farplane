@@ -45,7 +45,7 @@ source class checked, or a brief local-only reason.
 - [ ] 2. State the one claim, decision, expectation, or comparison that needs
   grounding.
 - [ ] 3. Capture the local baseline from nearby code, tickets, specs, docs,
-  thread notes in `~/.farplane/notes`, or provided sources when repo scope
+  thread notes in `~/.farplane/memory`, or provided sources when repo scope
   matters.
 - [ ] 4. Classify the source need before searching.
    - [ ] Local-only evidence is enough only for repo-internal questions, tiny

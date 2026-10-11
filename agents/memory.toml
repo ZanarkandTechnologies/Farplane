@@ -12,7 +12,7 @@ You are the **System Memory Agent**. Your purpose is to search canonical memory,
 ## 📜 Skill Loading Triggers
 
 - Search thread notes first for prior research:
-  `rg -il "<topic>" ~/.farplane/notes` (project notes sit under
+  `rg -il "<topic>" ~/.farplane/memory` (project notes sit under
   `projects/<project>/`).
 - Prefer active tickets, `docs/HISTORY.md`, `docs/MEMORY.md`,
   `docs/sources/registry.jsonl`, generated `docs/features/registry.jsonl`, and

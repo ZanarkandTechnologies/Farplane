@@ -23,7 +23,9 @@ Execution boundary:
 - Work under the Farplane workspace.
 - Read only the newest complete Daily Collect run; never fetch providers here.
 - Write only Wiki pages under the company Wiki root through `$manage-wiki`, then
-  run `farplane wiki sync`. Never write Notion or Git.
+  run `farplane wiki sync` and commit them in the local-only memory repo
+  (`~/.farplane/memory`, where the Wiki root's `.farplane/entities` points).
+  Never write Notion or any other Git repo, and never push.
 - Task record: GitHub Issues of each project's repo (tickets/README.md); this job never writes them.
 
 ## 1. Load the collected calls
@@ -53,10 +55,18 @@ Execution boundary:
   leave out health details and anything said in confidence.
 - Add or update `funnel` only for people or companies in an active deal.
 
-## 3. Close the run
+## 3. Commit each call
 
-- Run one `farplane wiki sync --project-root <wiki root>` with every changed path.
-- Return changed pages, each mention's resolution outcome, ambiguities left for
+- After each call's `$manage-wiki` apply, run
+  `farplane wiki sync --project-root <wiki root>` with that call's changed paths.
+- When sync reports 0 issues and pages changed, commit once:
+  `git -C ~/.farplane/memory add entities && git -C ~/.farplane/memory commit -m "call: <YYYY-MM-DD> <call title>"`,
+  with the call note link in the commit body. Commit nothing for a no-op call
+  or when sync reports issues; report those in the receipt.
+
+## 4. Close the run
+
+- Return each call's commit hash, changed pages, each mention's resolution outcome, ambiguities left for
   the operator, and sync diagnostics.
 
 Config source:

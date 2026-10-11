@@ -67,7 +67,9 @@ wiki(source_ref, publication_intent = preview, project_context?)
 - Owner spec: `docs/systems/wiki.md`
 - Feature count: `4`
 - Canonical source: `.farplane/entities/<id>.md` and optional
-  `.farplane/views.yaml`
+  `.farplane/views.yaml`. The operator workspace's `.farplane/entities` is a
+  symlink into the local-only memory repo (`~/.farplane/memory/entities/`), so
+  page history lives in git; see [Thread Notes](../farplane-framework/notes.md)
 - General mutation workflow: `manage-wiki`
 - Generated search state: `.farplane/wiki/wiki.sqlite`
 

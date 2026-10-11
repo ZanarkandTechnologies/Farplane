@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.6
+template_version: 0.3.7
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -176,7 +176,7 @@ goal = ticket + program + progress + artifacts
 - Start with the highest available source that can answer the question. Prefer
   semantic connectors, APIs, and documentation tools before UI operation. Use
   a specialist evidence workflow only for a named artifact or unresolved gap.
-- Share research between threads as notes in `~/.farplane/notes/`, a local-only
+- Share research between threads as notes in `~/.farplane/memory/`, a local-only
   git repo: one Markdown file per finding, named `YYYY-MM-DD-<slug>.md` with
   `title` and `summary` front matter, under `projects/<project>/` when scoped
   to one project. Before researching, `rg` that folder; when a thread finds

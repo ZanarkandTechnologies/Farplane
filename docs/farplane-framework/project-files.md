@@ -295,7 +295,7 @@ projection is stale, run `farplane wiki rebuild` from its owners rather than
 hand-editing it.
 
 Thread notes are not project files. A project's notes live in
-`~/.farplane/notes/projects/<project>/`, inside the one local-only notes git
+`~/.farplane/memory/projects/<project>/`, inside the one local-only memory git
 repo, so no pushable checkout ever holds them. See [Thread Notes](notes.md).
 
 The ignored `.farplane/` boundary normally owns generated/runtime state, with

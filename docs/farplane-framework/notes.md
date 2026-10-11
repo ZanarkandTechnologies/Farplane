@@ -3,7 +3,7 @@ title: "Thread Notes"
 status: active
 owner: farplane-framework
 created_at: 2026-10-06
-updated_at: 2026-10-06
+updated_at: 2026-10-11
 tags:
   - farplane
   - notes
@@ -18,15 +18,21 @@ refs:
 # Thread Notes
 
 Notes let one thread hand its research to another without redoing the work.
-They are plain Markdown in one local-only git repo, found with `rg`. There is
-no index, schema, database, or projection.
+They are plain Markdown in the operator's one local-only memory repo, found
+with `rg`. Notes have no index, schema, database, or projection. The same repo
+holds the operator's Wiki pages, so a processed call and the research it
+touches share one history.
 
 ```text
-~/.farplane/notes/                  local git repo, no remote, pre-push guard
+~/.farplane/memory/                 local git repo, no remote, pre-push guard
   README.md
-  2026-10-06-<slug>.md              useful to any project
+  2026-10-06-<slug>.md              note useful to any project
   projects/<project>/2026-10-06-<slug>.md
+  entities/<id>.md                  Wiki pages (generated *.json ignored)
 ```
+
+The workspace's `.farplane/entities` is a symlink to `entities/`, so
+`manage-wiki` and `farplane wiki` keep using the workspace as project root.
 
 ## When To Use Notes
 
@@ -44,9 +50,11 @@ no index, schema, database, or projection.
   one-line `summary` in front matter. Put the finding first, then sources.
 - Project-scoped notes go under `projects/<project>/`, where `<project>` is the
   project folder name. Everything else goes at the top level.
-- Before researching, search the notes: `rg -il "<topic>" ~/.farplane/notes`.
+- Before researching, search the notes: `rg -il "<topic>" ~/.farplane/memory`.
 - After writing or changing a note, commit it in the notes repo:
-  `git -C ~/.farplane/notes add -A && git -C ~/.farplane/notes commit -m "note: <slug>"`.
+  `git -C ~/.farplane/memory add -A && git -C ~/.farplane/memory commit -m "note: <slug>"`.
+  Wiki changes commit as `entity: <what>`; a processed call commits once as
+  `call: <date> <title>`.
 - Correct a wrong note in place; git keeps the old version.
 - Never add a remote. Notes may hold client names, strategy, and private
   research, so they stay on this machine. The repo sits outside every

@@ -507,20 +507,21 @@ install_rendered_skill_profiles() {
   done
 }
 
-# Thread notes: one local-only git repo (docs/farplane-framework/notes.md).
-ensure_notes_repo() {
-  local notes_dir="${FARPLANE_NOTES_DIR:-$HOME/.farplane/notes}"
-  if [ ! -d "$notes_dir/.git" ]; then
-    mkdir -p "$notes_dir/projects"
-    git -C "$notes_dir" init -q -b main
-    echo "Created local notes repo at $notes_dir"
+# Memory repo: thread notes and Wiki pages, local-only (docs/farplane-framework/notes.md).
+ensure_memory_repo() {
+  local memory_dir="${FARPLANE_MEMORY_DIR:-$HOME/.farplane/memory}"
+  if [ ! -d "$memory_dir/.git" ]; then
+    mkdir -p "$memory_dir/projects" "$memory_dir/entities"
+    printf '.obsidian/workspace*.json\n.DS_Store\nentities/*.json\n' > "$memory_dir/.gitignore"
+    git -C "$memory_dir" init -q -b main
+    echo "Created local memory repo at $memory_dir"
   fi
-  printf '#!/bin/sh\necho "notes repo is local-only: push blocked" >&2\nexit 1\n' > "$notes_dir/.git/hooks/pre-push"
-  chmod +x "$notes_dir/.git/hooks/pre-push"
+  printf '#!/bin/sh\necho "memory repo is local-only: push blocked" >&2\nexit 1\n' > "$memory_dir/.git/hooks/pre-push"
+  chmod +x "$memory_dir/.git/hooks/pre-push"
 }
 
 trap cleanup_profile_render EXIT
-ensure_notes_repo
+ensure_memory_repo
 
 if [ "$RUNTIME" = "claude" ]; then
   install_claude_runtime farplane

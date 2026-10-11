@@ -49,7 +49,8 @@ the lookup index.
 
 Entity Markdown must be directly inside `.farplane/entities/`; nested type
 folders are invalid. The filename stem must equal `id`, so an entity is always
-found at `.farplane/entities/<id>.md`. The `kind` frontmatter field owns
+found at `.farplane/entities/<id>.md`. The folder may be a symlink into the
+local-only memory repo, as in the operator workspace. The `kind` frontmatter field owns
 classification. Every entity requires `id`, `kind`, and `name`. IDs use
 lowercase letters, digits, hyphens, or underscores.
 
