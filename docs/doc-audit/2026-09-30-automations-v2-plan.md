@@ -47,6 +47,7 @@ Farplane itself.
 | Report Gen | mancave + floors | `report-gen.md` | `$report-gen` | claude · `farplane-report-gen` | Mon 05:45 |
 | Burn Before Reset | harness | `token-burn.md` | `$token-burn` | claude · `burn-before-reset` | daily 20:00 |
 | Profile Refresh | mancave | `profile-refresh.md` | none | claude · `farplane-profile-refresh` | Mon 06:30 |
+| Thread Sweep | harness | `thread-sweep.md` | none | claude · `farplane-thread-sweep` | daily 14:36 (07:36 London) |
 
 ### Steps: `farplane/automations/steps/`, called by a job, never scheduled alone
 
