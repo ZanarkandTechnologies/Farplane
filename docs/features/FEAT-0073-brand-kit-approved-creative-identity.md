@@ -123,7 +123,7 @@ Related feature:
 
 Implementation evidence:
 
-- `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/tickets/TASK-0068/ticket.md`
+- `/Users/kenjipcx/Zanarkand Technologies/archive/Farplane-UI/tickets/TASK-0068/ticket.md`
 
 ## Proof And Quality
 
