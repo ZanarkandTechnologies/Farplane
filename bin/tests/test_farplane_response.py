@@ -244,7 +244,8 @@ class ResponseCliTests(unittest.TestCase):
     def test_conflicting_inputs_exit_two(self) -> None:
         result = self.run_cli("missing.md", "--stdin", "--json")
         self.assertEqual(result.returncode, 2)
-        self.assertIn("choose either", result.stderr)
+        # Under --json a CLI error is a JSON object on stdout (see docs/farplane-framework/cli.md).
+        self.assertIn("choose either", json.loads(result.stdout)["error"])
 
     def test_nonpositive_limits_exit_two(self) -> None:
         result = self.run_cli("--stdin", "--max-words", "0", stdin="worked")

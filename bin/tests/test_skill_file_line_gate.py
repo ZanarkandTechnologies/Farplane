@@ -130,11 +130,12 @@ class SkillFileLineGateTests(unittest.TestCase):
         self.assertTrue(any("skill_file_line_gate.py" in command for command in commands))
         self.assertTrue(any("apply_patch" in group.get("matcher", "") for group in groups))
 
-    def test_pre_commit_backstop_is_strict_and_skill_scoped(self) -> None:
+    def test_pre_commit_backstop_is_skill_scoped(self) -> None:
+        # Not --strict: an oversized legacy SKILL.md may be edited as long as it does not grow.
         with (ROOT / "config/git-review-gates.toml").open("rb") as handle:
             config = tomllib.load(handle)
         argv = config["checks"]["skill_file_line_count"]["argv"]
-        self.assertIn("--strict", argv)
+        self.assertNotIn("--strict", argv)
         self.assertEqual("200", argv[argv.index("--max-lines") + 1])
         self.assertEqual("skills/**/SKILL.md", argv[argv.index("--glob") + 1])
 
