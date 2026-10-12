@@ -1,7 +1,7 @@
 ---
 name: ai-image-advisor
 version: 1.0.0
-description: "Turn AI image create/edit/upscale/cutout requests into provider route, prompt/input packet, spend gate, and saved image asset bundle."
+description: "Turn AI image create/edit/upscale/cutout requests into provider route, prompt/input packet, spend gate, and saved image asset bundle; owns every edit of an existing image (Ideogram 4.5), even via treg or imagegen."
 department: marketing
 source: local
 template_uses:

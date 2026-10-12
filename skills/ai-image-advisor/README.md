@@ -4,7 +4,7 @@ Category-level inference.sh skill for generating, editing, upscaling, and proces
 
 ## Purpose
 
-Keep one active ai-image-advisor skill with the upstream umbrella model map in `SKILL.md` and provider-specific detail in references. Use built-in `imagegen` for normal Codex-native bitmap generation/editing.
+Keep one active ai-image-advisor skill with the upstream umbrella model map in `SKILL.md` and provider-specific detail in references. Use built-in `imagegen` for normal Codex-native bitmap generation; edits always run here (Ideogram 4.5 Precise Edit).
 
 ## Entry Point
 

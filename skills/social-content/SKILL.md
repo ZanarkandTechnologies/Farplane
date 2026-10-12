@@ -103,8 +103,8 @@ campaign expectations materially affect the output.
   - [ ] Route script, beats, and scene maps through
   [storyboard](../storyboard/SKILL.md); route asset decomposition through
   [asset-advisor](../asset-advisor/SKILL.md).
-  - [ ] Route still visuals through `imagegen` or
-  [ai-image-advisor](../ai-image-advisor/SKILL.md); route video through
+  - [ ] Route new stills through `imagegen` or, for every edit,
+  [ai-image-advisor](../ai-image-advisor/SKILL.md) (Ideogram 4.5); route video through
   [ai-video-advisor](../ai-video-advisor/SKILL.md) or
   [remotion](../remotion/SKILL.md); route precise HTML assets
   or campaign pages through [impl-plan](../impl-plan/SKILL.md).

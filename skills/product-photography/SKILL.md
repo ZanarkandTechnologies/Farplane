@@ -54,7 +54,7 @@ Use this checklist whenever `product-photography` is active.
 - [ ] Load the shared [image/social production workflow](../ai-image-advisor/references/domain-production.md).
 - [ ] Load upstream product or AI product photography references only when
   shot conventions, marketplace constraints, or model patterns matter.
-- [ ] Use `imagegen` for normal Codex-native bitmap generation or editing.
+- [ ] Use `imagegen` for normal bitmap generation; send every edit of an existing photo to `ai-image-advisor` (Ideogram 4.5).
 - [ ] Use [ai-image-advisor](../ai-image-advisor/SKILL.md) for named
   inference.sh image models, background removal, upscaling, CLI repeatability,
   or structured result bundles.
@@ -93,7 +93,7 @@ packet, and proof rules.
 2. Load [upstream product photography](references/upstream-product-photography.md) for shot types, e-commerce requirements, angles, backgrounds, and marketplace constraints.
 3. Load [upstream AI product photography](references/upstream-ai-product-photography.md) for model examples, commercial styles, and generation workflows.
 4. Decide the shot set before generation: hero, packshot, lifestyle, scale, detail, in-use, variation, cutout, or upscale.
-5. Use `imagegen` for normal bitmap generation/editing, or `ai-image-advisor` when the user needs inference.sh models, background removal, upscaling, CLI repeatability, or named model control.
+5. Use `imagegen` for normal bitmap generation, `ai-image-advisor` for every edit (Ideogram 4.5), or `ai-image-advisor` when the user needs inference.sh models, background removal, upscaling, CLI repeatability, or named model control.
 
 Use the shared production workflow for prompt/input/result bundles, async batches, frontend/product-page QA, and upstream-reference safety.
 

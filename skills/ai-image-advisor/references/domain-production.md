@@ -13,7 +13,8 @@ and `social-content` methods.
 
 | Need | Route |
 | --- | --- |
-| Normal still image generation or editing | [imagegen](/Users/kenjipcx/.codex/skills/.system/imagegen/SKILL.md) first |
+| Editing an existing image (any change, mask, text fix, reference-guided) | [ai-image-advisor](../SKILL.md) Editing Default: Ideogram 4.5 Precise Edit |
+| Normal still image generation (no source image) | [imagegen](/Users/kenjipcx/.codex/skills/.system/imagegen/SKILL.md) first |
 | Named inference.sh image model, CLI batch, cutout, upscale | [ai-image-advisor](../SKILL.md) |
 | Product hero shot, packshot, e-commerce image, lifestyle product photo | [product-photography](../../product-photography/SKILL.md) |
 | General cross-platform social campaign asset | [social-content:cross-platform](../../social-content/SKILL.md) |

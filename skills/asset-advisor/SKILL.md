@@ -205,8 +205,8 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
   - [ ] Note rights, likeness, brand, source quality, duration, aspect ratio,
     visual continuity, audio continuity, and platform-specific constraints.
 - [ ] 4. Choose owner routes.
-  - [ ] Route still image creation or editing to `ai-image-advisor` or
-    `imagegen` when the chosen result is `inspired_generation` or
+  - [ ] Route still image editing to `ai-image-advisor` (Ideogram 4.5), and
+    creation to it or `imagegen`, when the chosen result is `inspired_generation` or
     `original_generation`, or when the brief explicitly requires generation.
     Pass the complete inspiration or original-generation packet and request
     raster/project media outputs rather than custom SVG animation assets. Every

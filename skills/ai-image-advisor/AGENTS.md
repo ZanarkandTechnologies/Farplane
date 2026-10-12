@@ -8,7 +8,7 @@ Treat copied upstream references as read-only usage docs. Do not run upstream `n
 
 Do not turn each upstream image model into a public active Farplane skill. Route through `ai-image-advisor`, then load the specific reference.
 
-Keep the built-in `imagegen` skill as the default for normal Codex-native bitmap generation/editing when inference.sh is not needed.
+Keep the built-in `imagegen` skill as the default for normal Codex-native bitmap generation when inference.sh is not needed. Every edit of an existing image routes here, to the Ideogram 4.5 Editing Default in `SKILL.md`.
 
 Route artifact-level social/photo requests through `product-photography` or the
 appropriate `social-content:*` method before choosing image models.
