@@ -142,6 +142,9 @@ an execution preflight concern because Farplane also has legitimate project
 workspace fixtures; type lint rejects malformed or escaping paths but never
 pretends a copied runtime workspace is part of the authored JSON schema. Use
 `metadata.farplane.workspace_fixture` for a clean fixture directory,
+`metadata.farplane.workspace_setup` for a script (run with the case id) that
+builds state a copied fixture cannot hold, such as a git repo whose `.git` the
+runner makes writable,
 `feature_id` to bind a case to one registered feature document, and
 `extensions` only for experimental JSON that has no active consumer.
 

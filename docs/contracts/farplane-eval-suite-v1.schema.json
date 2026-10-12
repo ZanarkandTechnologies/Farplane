@@ -150,6 +150,18 @@
           ],
           "default": null,
           "title": "Workspace Fixture"
+        },
+        "workspace_setup": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workspace Setup"
         }
       },
       "title": "FarplaneEvalMetadata",

@@ -32,6 +32,7 @@ class FarplaneEvalMetadata(StrictEvalModel):
     notes: str | None = None
     tags: list[str] = Field(default_factory=list)
     workspace_fixture: str | None = None
+    workspace_setup: str | None = None
     feature_id: str | None = Field(default=None, pattern=FEATURE_ID_RE.pattern)
     extensions: dict[str, JsonValue] = Field(default_factory=dict)
 
@@ -44,14 +45,14 @@ class FarplaneEvalMetadata(StrictEvalModel):
             raise ValueError("list values must not contain duplicates")
         return values
 
-    @field_validator("workspace_fixture")
+    @field_validator("workspace_fixture", "workspace_setup")
     @classmethod
     def validate_workspace_fixture(cls, value: str | None) -> str | None:
         if value is None:
             return None
         candidate = Path(value)
         if candidate.is_absolute() or ".." in candidate.parts:
-            raise ValueError("workspace_fixture must stay relative to the skill root")
+            raise ValueError("workspace paths must stay relative to the skill root")
         return candidate.as_posix()
 
 

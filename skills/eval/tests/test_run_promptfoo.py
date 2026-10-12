@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -164,6 +165,36 @@ class PromptfooAdapterTests(unittest.TestCase):
             self.assertNotEqual((candidate / "brief.txt").read_text(), (baseline / "brief.txt").read_text())
 
         self.assertEqual(source_before, runner.snapshot_tree(SKILL_ROOT))
+
+    def test_workspace_setup_builds_a_committable_repo(self) -> None:
+        manifest = runner.load_manifest(EVAL_FILE)
+        case = json.loads(json.dumps(manifest["evals"][0]))
+        case["metadata"] = {"farplane": {"workspace_setup": "setup.py"}}
+        with tempfile.TemporaryDirectory() as temp:
+            skill_root = Path(temp) / "skill"
+            shutil.copytree(SKILL_ROOT, skill_root)
+            (skill_root / "setup.py").write_text(
+                "import subprocess, sys\n"
+                "subprocess.run(['git', 'init', '-q'], check=True)\n"
+                "open('case.txt', 'w').write(sys.argv[1])\n",
+                encoding="utf-8",
+            )
+            workspaces = {label: Path(temp) / label for label in ("candidate", "baseline", "grader")}
+            fixtures = [
+                runner.materialize_workspace(skill_root=skill_root, case=case, destination=workspaces[label],
+                                             installed_skill=None, skill_name=manifest["skill_name"])
+                for label in ("candidate", "baseline")
+            ]
+            config = runner.build_promptfoo_config(
+                skill_name=manifest["skill_name"], case=case, profile=runner.load_profile(PROFILE_FILE),
+                candidate_dir=workspaces["candidate"], baseline_dir=workspaces["baseline"], grader_dir=workspaces["grader"],
+            )
+
+            self.assertEqual(fixtures[0], fixtures[1])
+            self.assertEqual((workspaces["candidate"] / "case.txt").read_text(), case["id"])
+            for provider in config["providers"]:
+                git_dir = (workspaces[provider["label"]] / ".git").resolve()
+                self.assertEqual(provider["config"]["additional_directories"], [str(git_dir)])
 
     def test_provider_configs_have_parity_except_working_dir_and_label(self) -> None:
         manifest = runner.load_manifest(EVAL_FILE)

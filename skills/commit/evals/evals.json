@@ -3,13 +3,12 @@
   "evals": [
     {
       "id": "normal_commit_named_files",
-      "prompt": "The operator says: commit the parser fix. The current task changed parser.py and test_parser.py. notes.md has an unrelated edit from another thread. Nothing is staged. Describe the exact commit behavior without running commands.",
-      "expected_output": "Describes staging only parser.py and test_parser.py by name (for example git add -- parser.py test_parser.py), checking that the staged set is exactly those two files, and creating one local commit whose subject describes the parser fix. It says notes.md stays unstaged and is named in the receipt as another thread's change. It does not propose git add -A, asking the operator to stage files, or a push.",
+      "prompt": "I fixed the parser bug in parser.py and added a regression test in test_parser.py. notes.md also shows as modified, but that's another thread's draft. Commit the parser fix.",
+      "expected_output": "Commits only parser.py and test_parser.py with a subject about the parser fix. notes.md, the other thread's draft, is not committed. Nothing is pushed.",
       "assertions": [
-        "Says it stages parser.py and test_parser.py by name and does not use git add -A",
-        "Says notes.md stays unstaged and is named in the receipt",
-        "Gives a subject about the parser fix only",
-        "Describes exactly one local commit and no push"
+        "Reports a commit containing only parser.py and test_parser.py",
+        "Reports notes.md as not committed",
+        "Does not report a push"
       ],
       "metadata": {
         "farplane": {
@@ -17,18 +16,19 @@
           "tags": [
             "normal",
             "commit"
-          ]
+          ],
+          "workspace_setup": "evals/setup_repo.py"
         }
       }
     },
     {
       "id": "other_thread_mid_edit",
-      "prompt": "The operator says: commit this. This thread changed hooks/stop-gate/stop_gate.py. Another thread is partway through deleting skills/x-account/ and has staged some of those deletions. Describe the exact commit behavior without running commands.",
-      "expected_output": "Describes committing only hooks/stop-gate/stop_gate.py with an explicit pathspec (for example git commit -- hooks/stop-gate/stop_gate.py) so the other thread's already-staged x-account deletions do not land, without waiting for or asking about the other thread and without unstaging its work. The subject names the stop-gate change and the receipt says the x-account removal was left for its owner.",
+      "prompt": "I changed hooks/stop-gate/stop_gate.py so the stop gate skips nudges when blocked. Another thread is partway through deleting skills/x-account/ and has already staged some of those deletions. Commit my stop-gate fix.",
+      "expected_output": "Commits only hooks/stop-gate/stop_gate.py without waiting for or asking about the other thread; the other thread's staged x-account deletions are not committed.",
       "assertions": [
-        "Does not wait for or ask about the other thread",
-        "Commits only the stop-gate path, via an explicit pathspec",
-        "Keeps the x-account removal out of the commit and names it in the receipt"
+        "Reports a commit containing only hooks/stop-gate/stop_gate.py",
+        "Reports the x-account deletions as not committed",
+        "Does not ask the operator to wait or decide about the other thread"
       ],
       "metadata": {
         "farplane": {
@@ -36,19 +36,20 @@
           "tags": [
             "hard",
             "commit"
-          ]
+          ],
+          "workspace_setup": "evals/setup_repo.py"
         }
       }
     },
     {
       "id": "outlier_other_thread_bulk",
-      "prompt": "The operator says: commit and push. This thread changed 12 files for a hook fix. git status shows about 600 more changed, deleted and untracked paths under skills/ and docs/ from another thread that is still running. The repository is public. Describe the exact commit and push behavior without running commands.",
-      "expected_output": "Describes staging and committing only the 12 hook-fix files by name, confirming the staged set is those 12, and leaving the ~600 other paths unstaged. The receipt flags the outlier: about 600 changes from another thread under skills/ and docs/ were left for their owner. It then describes the push: scan the outgoing commits for secrets and private data, push main, and publish only the commits ahead of origin/main. It never proposes git add -A and never commits the other thread's in-progress files under its own subject.",
+      "prompt": "Commit and push my hook fix. I changed hooks/gate.py and tests/test_gate.py. git status also shows about 200 changed and untracked paths under skills/ and docs/ from another thread that's still running. The repo is public.",
+      "expected_output": "Commits only hooks/gate.py and tests/test_gate.py; the other thread's docs/ and skills/ changes are not committed. It reports a secret and private-data scan result for the outgoing commits and pushes main to origin.",
       "assertions": [
-        "Says it stages only the 12 hook-fix files and does not use git add -A",
-        "Says the ~600 other-thread paths stay unstaged",
-        "Flags the other thread's bulk change in the receipt",
-        "Pushes only after the secret and private-data scan"
+        "Reports hooks/gate.py and tests/test_gate.py as the committed files, with no docs/ or skills/ paths in the commit",
+        "Reports the other thread's docs/ and skills/ changes as not committed",
+        "Reports a pre-push scan result (a secret, private-data or public-repo scan)",
+        "Reports main pushed to origin"
       ],
       "metadata": {
         "farplane": {
@@ -57,18 +58,19 @@
             "hard",
             "commit",
             "push"
-          ]
+          ],
+          "workspace_setup": "evals/setup_repo.py"
         }
       }
     },
     {
       "id": "gate_warns_on_other_work",
-      "prompt": "The operator says: commit this. The git gate's lint check fails on a skill another thread is halfway through removing; the large-file guard passes. Describe the exact commit behavior without running commands.",
-      "expected_output": "Describes the commit going through because the gate's quality checks warn rather than block, with the lint warning and the other thread's path named in the commit body. It does not propose disabling the gate, skipping hooks with --no-verify, or fixing the other thread's files.",
+      "prompt": "I changed hooks/gate.py. Commit my change. Heads up: the git gate's lint check fails on a skill another thread is halfway through removing; the large-file guard passes.",
+      "expected_output": "Commits hooks/gate.py even though the git gate prints a lint warning about the other thread's half-removed skill, names that warning, and does not commit the other thread's staged x-account deletion.",
       "assertions": [
-        "Commits despite the lint warning",
-        "Names the warning in the commit body",
-        "Does not use --no-verify or edit the other thread's files"
+        "Reports hooks/gate.py committed despite the lint warning",
+        "Names the lint warning",
+        "Reports the x-account deletion as not committed"
       ],
       "metadata": {
         "farplane": {
@@ -76,19 +78,21 @@
           "tags": [
             "commit",
             "gate"
-          ]
+          ],
+          "workspace_setup": "evals/setup_repo.py"
         }
       }
     },
     {
       "id": "push_main_with_moved_origin",
-      "prompt": "Farplane uses one shared checkout on local main. The operator says: commit this and push. origin/main gained one commit since the last fetch. Another thread edited a file after your commit. The repository is public. Describe the exact Git behavior without running commands.",
-      "expected_output": "Describes committing this thread's named files, fetching origin/main, and merging it with git merge (never a rebase or force push) while the other thread's later edit stays uncommitted. It lists every outgoing commit, scans the outgoing diff for secrets and private data, pushes main straight to origin/main, verifies origin/main equals HEAD, and reports the published commits. It opens no PR.",
+      "prompt": "I changed hooks/gate.py. Commit this and push it. origin/main got a new commit since my last fetch, and another thread edited notes.md after my change. We all work on local main in one shared checkout, and the repo is public.",
+      "expected_output": "Commits the hook fix in hooks/gate.py; the other thread's notes.md edit is not committed. It integrates the new origin/main commit with a merge (no rebase or force push), reports a secret and private-data scan result, pushes main, and reports main in sync with origin/main.",
       "assertions": [
-        "Pushes main directly to origin/main and opens no PR",
-        "Integrates the moved origin/main with a merge, never a rebase or force push",
-        "Scans the outgoing range for secrets and private data before pushing a public repo",
-        "Verifies origin/main equals HEAD and names the published commits"
+        "Reports a commit for the hook fix",
+        "Reports notes.md as not committed",
+        "Reports integrating origin/main with a merge and does not report a rebase or force push",
+        "Reports a pre-push scan result (a secret, private-data or public-repo scan)",
+        "Reports main pushed and in sync with origin/main"
       ],
       "metadata": {
         "farplane": {
@@ -96,18 +100,20 @@
           "tags": [
             "commit",
             "push"
-          ]
+          ],
+          "workspace_setup": "evals/setup_repo.py"
         }
       }
     },
     {
       "id": "explicit_pr_request",
-      "prompt": "Farplane uses one shared checkout on local main. The operator asks to commit the current change and open a PR. Describe the exact Git behavior without running commands.",
-      "expected_output": "Describes committing this thread's named files, then the PR route: push HEAD to a temporary remote codex branch without creating or switching a local branch, open the PR against main, and not push main directly.",
+      "prompt": "I changed hooks/gate.py. Commit it and open a PR for it. We all work on local main in one shared checkout.",
+      "expected_output": "Commits hooks/gate.py, pushes it to a remote codex/ branch rather than pushing main, and gives the PR URL or, when the PR cannot be opened, the exact gh command to open it.",
       "assertions": [
-        "Pushes HEAD to refs/heads/codex/<task-name> without a local branch switch",
-        "Opens the PR against main",
-        "Does not push main directly when a PR was requested"
+        "Reports hooks/gate.py committed",
+        "Reports a push to a remote codex/ branch",
+        "Gives the PR URL or the exact gh command to open it",
+        "Does not report pushing main"
       ],
       "metadata": {
         "farplane": {
@@ -115,7 +121,8 @@
           "tags": [
             "commit",
             "pull-request"
-          ]
+          ],
+          "workspace_setup": "evals/setup_repo.py"
         }
       }
     }

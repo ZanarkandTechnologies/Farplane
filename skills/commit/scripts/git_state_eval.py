@@ -47,8 +47,8 @@ SCENARIOS = [
     ),
     Scenario(
         id="staged_deletes_from_other_thread",
-        prompt="I changed hooks/stop_gate.py so the stop gate skips nudges when blocked. Commit it.",
-        mine={"hooks/stop_gate.py": "def gate(blocked):\n    return None if blocked else 'nudge'\n"},
+        prompt="I changed hooks/stop-gate/stop_gate.py so the stop gate skips nudges when blocked. Commit it.",
+        mine={"hooks/stop-gate/stop_gate.py": "def gate(blocked):\n    return None if blocked else 'nudge'\n"},
         other_staged_deletes=["skills/x-account/SKILL.md", "skills/x-account/README.md"],
     ),
     Scenario(
@@ -65,7 +65,7 @@ BASE_FILES = {
     "parser.py": "def parse(text):\n    return text.split(',')\n",
     "test_parser.py": "",
     "notes.md": "# Notes\n",
-    "hooks/stop_gate.py": "def gate(blocked):\n    return 'nudge'\n",
+    "hooks/stop-gate/stop_gate.py": "def gate(blocked):\n    return 'nudge'\n",
     "hooks/gate.py": "def allow(event):\n    return True\n",
     "tests/test_gate.py": "",
     "skills/x-account/SKILL.md": "# x-account\n",
@@ -85,9 +85,8 @@ def write(repo: Path, files: dict[str, str]) -> None:
         path.write_text(text, encoding="utf-8")
 
 
-def build_repo(root: Path, scenario: Scenario, skill_dir: Path) -> tuple[Path, str]:
-    repo = root / "repo"
-    repo.mkdir()
+def prepare_repo(repo: Path, scenario: Scenario) -> str:
+    """Build the scenario's repo in `repo` (base commit plus both threads' changes); return the base SHA."""
     git(repo, "init", "-q", "-b", "main")
     git(repo, "config", "user.email", "eval@example.com")
     git(repo, "config", "user.name", "Eval")
@@ -100,9 +99,16 @@ def build_repo(root: Path, scenario: Scenario, skill_dir: Path) -> tuple[Path, s
     write(repo, scenario.other_untracked)
     if scenario.other_staged_deletes:
         git(repo, "rm", "-q", "--", *scenario.other_staged_deletes)
-    shutil.copytree(skill_dir, repo / ".agents" / "skills" / "commit")
     with (repo / ".git" / "info" / "exclude").open("a", encoding="utf-8") as handle:
         handle.write(".agents/\n")
+    return base
+
+
+def build_repo(root: Path, scenario: Scenario, skill_dir: Path) -> tuple[Path, str]:
+    repo = root / "repo"
+    repo.mkdir()
+    base = prepare_repo(repo, scenario)
+    shutil.copytree(skill_dir, repo / ".agents" / "skills" / "commit")
     return repo, base
 
 

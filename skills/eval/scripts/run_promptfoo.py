@@ -174,6 +174,13 @@ def materialize_workspace(
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target)
 
+    setup_value = farplane.get("workspace_setup") if isinstance(farplane, dict) else None
+    if setup_value is not None:
+        # A setup script builds state a copied fixture cannot hold, such as a git repo.
+        setup = resolve_under(skill_root, setup_value, label="workspace_setup")
+        subprocess.run([sys.executable, str(setup), case["id"]], cwd=destination, check=True,
+                       capture_output=True, text=True)
+
     fixture_snapshot = snapshot_tree(destination, ignore_runtime=True)
     if installed_skill is not None:
         _copy_skill(installed_skill, destination / ".agents" / "skills" / skill_name)
@@ -205,6 +212,9 @@ def build_promptfoo_config(
     for label, working_dir in (("candidate", candidate_dir), ("baseline", baseline_dir)):
         config = copy.deepcopy(profile["config"])
         config["working_dir"] = str(working_dir.resolve())
+        if (working_dir / ".git").is_dir():
+            # workspace-write keeps .git read-only; a set-up repo must be committable.
+            config["additional_directories"] = [str((working_dir / ".git").resolve())]
         providers.append({"id": profile["provider"], "label": label, "config": config})
     grader_config = copy.deepcopy(profile["config"])
     grader_config.update(

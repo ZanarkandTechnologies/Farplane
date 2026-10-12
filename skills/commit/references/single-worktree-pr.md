@@ -23,7 +23,9 @@ gh pr create --base main --head codex/<task-name> --title "<title>" --body-file 
 
 The push creates or updates only the remote PR branch. It does not change the
 local branch, worktree, or index. Verify the PR head SHA and file list after
-creation.
+creation. When `gh pr create` cannot run (no GitHub remote, no `gh`
+auth, no network), report the PR as not opened with the exact `gh pr create`
+command, filled in, that would open it.
 
 ## Merge And Synchronize
 

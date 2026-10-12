@@ -1,6 +1,6 @@
 ---
 name: commit
-version: 0.7.0
+version: 0.7.1
 description: "Use for \"commit this\", \"push it\" or \"watch this PR\": one labelled commit on main, a push straight to main when asked, or a bounded watch on an open PR."
 department: delivery
 source: local
@@ -60,6 +60,9 @@ returns: commit SHA, subject, this thread's paths, labelled shared files, other 
   Rule: `git add -- <path>...` for this thread's paths (deletions included),
   then check `git diff --cached --name-only` lists exactly that set before
   committing with a compact `type(scope): lower-case imperative summary`.
+  When the index already holds another thread's staged paths, leave them
+  staged and commit with a pathspec, `git commit -- <this thread's paths>`, so
+  only this thread's paths land.
   When a staged file also carries another thread's edit, add a body line
   `Also includes (other threads, may be in progress): <file>: <what>`. When the
   gate prints warnings, name them in the body too. Never amend, rebase, or
@@ -110,6 +113,9 @@ returns: commit SHA, subject, this thread's paths, labelled shared files, other 
 
 ## Output
 
+Always end with this receipt; `this_thread` lists every path in the commit,
+and `left_unstaged` names what other threads' work stayed out.
+
 ```yaml
 status: committed | blocker
 subject: <commit subject when committed>
@@ -118,6 +124,7 @@ this_thread: [<path>]
 shared_files: [<path: other thread's edit included>]
 left_unstaged: <count> paths from other threads (<top folders>)
 gate_warnings: [<check name>]
-push: not_requested | main | remote_branch_created
-pr: not_requested | <url>
+push: not_requested | main (merged origin/main: yes | no) | remote_branch_created
+scan: not_pushed | clean | <hits that stopped the push>
+pr: not_requested | <url> | not_opened: <exact gh command to open it>
 ```
