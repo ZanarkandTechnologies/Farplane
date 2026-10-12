@@ -13,7 +13,7 @@ refs:
   - docs/skills/advisors.md
   - docs/skills/system.md
   - docs/skills/templates/SKILL_TEMPLATE.md
-  - skills/skill-maintenance/SKILL.md
+  - skills/harness/SKILL.md
 system_record_json: |
   {
     "id": "SYS-0006",
@@ -33,7 +33,7 @@ system_record_json: |
       "docs/skills/advisors.md",
       "docs/skills/system.md",
       "docs/skills/templates/SKILL_TEMPLATE.md",
-      "skills/skill-maintenance/SKILL.md"
+      "skills/harness/SKILL.md"
     ],
     "last_verified": "2026-08-24"
   }
@@ -108,7 +108,7 @@ flowchart LR
   skill["skills/*/SKILL.md<br/>frontmatter + Todo List"]:::keep
   templates["skill template<br/>Todo List + eval discovery"]:::keep
   system["SYS-0006 Skill System<br/>desks, packaging, budgets"]:::changed
-  maintenance["skill-maintenance<br/>registry + graph checks"]:::changed
+  maintenance["harness<br/>registry + graph checks"]:::changed
   registry["docs/skills/registry.jsonl<br/>template intelligence"]:::added
   features["FEAT-0022 / 0030 / 0057 / 0062 / 0064"]:::keep
 
@@ -126,7 +126,7 @@ The Skill System owns reusable workflow packaging, specialist-desk membership, f
 - `docs/skills/advisors.md`
 - `docs/skills/system.md`
 - `docs/skills/templates/SKILL_TEMPLATE.md`
-- `skills/skill-maintenance/SKILL.md`
+- `skills/harness/SKILL.md`
 
 ## Proof And Maintenance
 

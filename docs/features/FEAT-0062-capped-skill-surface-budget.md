@@ -13,8 +13,8 @@ refs:
   - docs/skills/system.md
   - docs/skills/templates/SKILL_TEMPLATE.md
   - bin/validators/check_skill_surface_budget.py
-  - skills/skill-maintenance/scripts/minimize_skill_surface.py
-  - skills/skill-maintenance/scripts/check_skills.py
+  - skills/harness/scripts/minimize_skill_surface.py
+  - skills/harness/scripts/check_skills.py
 feature_id: FEAT-0062
 system_id: SYS-0006
 category: skills
@@ -24,15 +24,15 @@ surfaces:
   - docs/skills/system.md
   - docs/skills/templates/SKILL_TEMPLATE.md
   - bin/validators/check_skill_surface_budget.py
-  - skills/skill-maintenance/scripts/minimize_skill_surface.py
-  - skills/skill-maintenance/scripts/check_skills.py
+  - skills/harness/scripts/minimize_skill_surface.py
+  - skills/harness/scripts/check_skills.py
 source_refs:
   - skills/doc-advisor/references/consolidate.md
-  - skills/skill-maintenance/SKILL.md
+  - skills/harness/SKILL.md
 external_refs: []
 evidence_refs:
   - bin/validators/test_check_skill_surface_budget.py
-known_limits: Opt-in scanner only. Existing skills are not globally capped, and over-budget skill consolidation remains a skill-maintenance refinement decision rather than an automatic rewrite.
+known_limits: Opt-in scanner only. Existing skills are not globally capped, and over-budget skill consolidation remains a harness refinement decision rather than an automatic rewrite.
 metrics:
   - skill_surface_budget_pass
   - capped_skill_subscription_count
@@ -76,7 +76,7 @@ agents apply every item.
   todos and `evals/evals.json` rows.
 - Skips unsubscribed skills without warnings so rollout can happen gradually.
 - Reports exact minimizer commands for over-budget subscribed skills.
-- Uses `skill-maintenance.refine_skill` and `doc_advisor(mode = consolidate, ..., structure =
+- Uses `harness maintain refine_skill` and `doc_advisor(mode = consolidate, ..., structure =
   skill)` for value-preserving compaction before enrolling over-budget skills.
 - Starts new skills from a compact four-section core and admits signatures,
   phase boundaries, budgets, templates, references, QA, and evals only when
@@ -102,7 +102,7 @@ The validator is deterministic. It counts only top-level numbered skill todos
 and skill-local eval rows. It does not judge item quality or rewrite files.
 
 When a subscribed skill is over budget, the maintainer runs the minimizer
-worksheet and then applies `skill-maintenance.refine_skill` before keeping the
+worksheet and then applies `harness maintain refine_skill` before keeping the
 subscription.
 
 ## Feature Flow
@@ -137,8 +137,8 @@ Gray is scanned skill input, amber is budget policy and validator behavior, and 
 Owner surfaces:
 
 - `bin/validators/check_skill_surface_budget.py`
-- `skills/skill-maintenance/scripts/minimize_skill_surface.py`
-- `skills/skill-maintenance/scripts/check_skills.py`
+- `skills/harness/scripts/minimize_skill_surface.py`
+- `skills/harness/scripts/check_skills.py`
 
 Supporting surfaces:
 
@@ -151,7 +151,7 @@ Required checks:
 
 - `python3 -m unittest bin/validators/test_check_skill_surface_budget.py`
 - `python3 bin/validators/check_skill_surface_budget.py`
-- `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+- `python3 skills/harness/scripts/check_skills.py --write`
 
 Acceptance signals:
 
@@ -167,14 +167,14 @@ Acceptance signals:
   scanner call from `check_skills.py`.
 - Compatibility notes: raw `feature_refs` are not skill frontmatter; use
   `template_uses` for this structural adoption marker.
-- Maintenance owner: `skill-maintenance`.
+- Maintenance owner: `harness` maintain mode.
 
 ## Limits And Non-Goals
 
 - This feature does not auto-rewrite skills.
 - This feature does not globally enforce all existing skills.
 - This feature does not prove the selected top items are semantically best;
-  that judgment stays with `skill-maintenance.refine_skill`, `doc-advisor` consolidate mode, and
+  that judgment stays with `harness maintain refine_skill`, `doc-advisor` consolidate mode, and
   review.
 
 ## Alternatives Considered

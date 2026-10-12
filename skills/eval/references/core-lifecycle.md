@@ -18,8 +18,8 @@ claiming behavior success.
 | Bootstrap and objectives | `setup-advisor`, `goal-advisor` (metric card) |
 | Execution compilation and recurring work | `goal-advisor`, `automation-advisor` |
 | Work supply and operating review | `pm`, `report-gen`, `feed-scout` |
-| Skill self-improvement | `eval`, `self-improve` |
-| Review and completion | `telegram-message`, `impl-plan`, `qa`, `review` |
+| Skill self-improvement | `eval`, `harness` optimize mode |
+| Review and completion | `notify`, `impl-plan`, `qa`, `review` |
 
 ```text
 core_lifecycle_eval_readiness(skill_set)

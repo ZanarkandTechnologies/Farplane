@@ -32,14 +32,14 @@ Still pointing at the old flow:
 |---|---|---|
 | `bin/core/farplane_telemetry_status.py` + test | 327 + 173 | test-only |
 | `bin/core/farplane_reward_migration.py` + test | 181 + 113 | finished one-off migration, test-only |
-| `skills/skill-maintenance/scripts/sync_skill_plugins.py` + test | 524 | never installed; symlink installs replace it. Also drop FEAT-0030, `bin/README.md:186-188`, git-review-gates entries |
-| `skills/skill-creator/scripts/package_skill.py` | 109 | plugin packaging, docs-only refs |
+| `skills/harness/scripts/sync_skill_plugins.py` + test | 524 | never installed; symlink installs replace it. Also drop FEAT-0030, `bin/README.md:186-188`, git-review-gates entries |
+| `skills/harness/scripts/package_skill.py` | 109 | plugin packaging, docs-only refs |
 | `skills/notion-task-field-fill/scripts/notion_pinned_read_check.py` + test + `tests/notion-task-field-fill/pinned_tasks_read_check.json` | 274 | no skill/automation caller |
 | `skills/content-impl-plan/scripts/verify_scene_direction.py` + test | 186 | retired video-production leftover |
 | `skills/eval/scripts/migrate_skill_evals.py` + test | 163 | finished one-off migration |
 | `skills/qa/scripts/validate_eval_run.py` + test | 99 | test-only |
 | `skills/apify/scripts/helper.py` | 14 | unfilled skill-creator stub |
-| `skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py` | 11 | wrapper shim |
+| `skills/harness/scripts/generate_farplane_lifecycle_graph.py` | 11 | wrapper shim |
 | `hooks/shared_checkout_guard.py` + README/docs lines | 12 | unregistered no-op shim |
 | `blockers.md` | — | empty batch-era log; blockers live in Multica |
 | 12 retired FEAT specs (0014, 0015, 0025, 0029, 0031, 0042, 0043, 0054, 0057, 0065, 0066, 0069) | ~57K | registry marks retired; docs/AGENTS.md says delete |

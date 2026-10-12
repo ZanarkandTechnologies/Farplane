@@ -44,11 +44,11 @@ class CheckDocRefsTest(unittest.TestCase):
 # Fixture
 
 - [Guide](docs/fundamentals/prompt-engineering.md)
-- See `skills/harness-advisor/SKILL.md`.
+- See `skills/harness/SKILL.md`.
 """,
             )
             write_file(root / "docs/fundamentals/prompt-engineering.md", "# Prompt\n")
-            write_file(root / "skills/harness-advisor/SKILL.md", "# Skill\n")
+            write_file(root / "skills/harness/SKILL.md", "# Skill\n")
             init_git(root)
 
             result = self.run_validator(root)

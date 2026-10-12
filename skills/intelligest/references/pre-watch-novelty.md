@@ -73,9 +73,9 @@ Topic overlap ("both about content") is never `RESTATED`.
   or watch when it is a demo or craft you have to see; only creator novelty →
   read his new ideas.
 - Proposals are shown, never applied: accepted lines go through
-  `skill-maintenance`. When the target skill has an eval, the applied change
+  `harness` maintain mode. When the target skill has an eval, the applied change
   reruns the same frozen eval; never change the rubric to make it pass.
 - A tutorial the operator wants learned end to end ("learn this from the
   video") is still one level-up: the method's steps become diff lines against
-  the closest skill, or a `skill-creator` handoff when no skill is close.
+  the closest skill, or a `harness` create mode handoff when no skill is close.
 

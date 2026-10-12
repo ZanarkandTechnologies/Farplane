@@ -23,15 +23,15 @@ into a second place to maintain skill truth.
 - [`department-taxonomy.md`](department-taxonomy.md) is the Capability Map
   reference: declared department membership, workflow-root selection, and
   artifact-only map containment.
-- `skills/skill-maintenance/graph/` contains the tracked local visualization
+- `skills/harness/graph/` contains the tracked local visualization
   shell. Its generated skill, document, harness, and lifecycle data lives under
   ignored `.farplane/generated/graphs/`, preventing routine refreshes from
-  creating repository diffs. The UI is owned by `skill-maintenance` for now so
+  creating repository diffs. The UI is owned by `harness` maintain mode for now so
   `docs/skills/` stays an index plus registry surface.
 - If the graph expands beyond skills into repo-wide Markdown or JSON backlinks,
   keep the generator as a maintenance/reporting utility until a dedicated
-  harness map surface has a real consumer. `skill-maintenance` should keep
-  owning registry correctness and generated audits, while `harness-advisor`
+  harness map surface has a real consumer. `harness` maintain mode should keep
+  owning registry correctness and generated audits, while `harness` place mode
   consumes the broader map for placement decisions instead of owning the
   generator or UI.
 - Skill-applicable harness capabilities are authored in
@@ -72,7 +72,7 @@ Default ownership:
   scripts, and any early UI binding metadata.
 - Farplane UI owns product navigation, shared components, global project/thread
   context, and polished routes once the surface graduates.
-- `skill-maintenance` owns generated skill inventory and registry correctness.
+- `harness` maintain mode owns generated skill inventory and registry correctness.
 - A future harness map surface may own cross-skill or repo-wide UI discovery
   when skill, docs, JSON, and backlink maps become product features.
 
@@ -96,9 +96,9 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | --- | --- | --- | --- |
 | Choose among real options and name a recommendation, or sequence a roadmap | `advise` | It starts from first principles, frames 3 viable choices, names one recommendation, and states the accepted tradeoff; `mode: roadmap` sequences phases whose first proof is a completed loop. | The user already gave a direct execution request. |
 | Make a high-stakes or complex recommendation with independent critique | `advise ensemble=auto|max` | It adds three context-selected or all owner-local independent personas, then synthesizes a recommendation with visible dissent and an explicit next owner. | The decision is simple, reversible, already grounded, or only needs concise advice. |
-| Compress an artifact, registry, memory file, or docs tree without losing required value | `doc-advisor` consolidate mode | It inventories units, finds the owning contract, scores value versus duplication and staleness, preserves exact source rows when required, routes knowledge to its retrieval owner, rebuilds minimally, and runs a loss check. | You only need a reader-facing summary; use the native or CLI summarization path. You need domain-specific skill-package edits; route the final patch through `skill-maintenance`. |
+| Compress an artifact, registry, memory file, or docs tree without losing required value | `doc-advisor` consolidate mode | It inventories units, finds the owning contract, scores value versus duplication and staleness, preserves exact source rows when required, routes knowledge to its retrieval owner, rebuilds minimally, and runs a loss check. | You only need a reader-facing summary; use the native or CLI summarization path. You need domain-specific skill-package edits; route the final patch through `harness` maintain mode. |
 | Write or revise durable docs so they are clear, consistent, and human-usable | `doc-advisor` | It owns doc-quality checks: reader contract, term consistency, duplicate definitions, stale sections, examples, links, and agent-facing commentary cleanup. | You only need compact evidence or official-doc lookup; state `Grounding:` inline. |
-| Choose an honest metric, provider, guard metric, or no-metric rationale; define `metrics.yaml` objectives and guards | `goal-advisor` metric card (`references/metrics.md`) | It turns objectives, eval results, tickets, Goal loops, and proof evidence into a compact metric card with direction, anti-metrics, measurement method, and route hint, plus explicit `metrics.yaml` objective/guard deltas before execution is selected. | You need to execute the loop; use the owning caller such as `optimize-harness`, `self-improve`, `impl-plan`, or `review`. |
+| Choose an honest metric, provider, guard metric, or no-metric rationale; define `metrics.yaml` objectives and guards | `goal-advisor` metric card (`references/metrics.md`) | It turns objectives, eval results, tickets, Goal loops, and proof evidence into a compact metric card with direction, anti-metrics, measurement method, and route hint, plus explicit `metrics.yaml` objective/guard deltas before execution is selected. | You need to execute the loop; use the owning caller such as `harness`, `harness` optimize mode, `impl-plan`, or `review`. |
 | "Research X", "how do others do this", "who are the competitors", "find the paper" | `research` | One branch (market, code, papers, synthesis) qualifies candidates at the source and returns a ranked evidence note. | One claim needs grounding (state `Grounding:` inline), or the target is one person or account (`prospect`). |
 | Add independent perspectives to a skill that owns an ensemble | `ensemble=auto|max` on that skill | `auto` selects exactly three relevant diverse personas from the skill's `ensemble.yaml`; `max` runs all of them and preserves dissent in synthesis. | The direct path is enough, or the skill does not declare an ensemble file. |
 | Watch an existing PR until review agents and checks pass | `commit` PR watch | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing the task's assigned checkout and reviewer-agent review. | You only need one explicit material review (`review`). |
@@ -108,12 +108,12 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Debug, clean up, review a diff, harden, or audit code | `code-health` | One pass picks one mode (debug, clean, review, harden, audit), applies the lean gate (first sufficient build rung), changes the smallest thing, and returns proof plus residual risk; review mode returns the `patch_correct` JSON used by pre-push reviewers. | The work needs a TAS verdict, completion receipt, or evidence-bundle judgment; use `review`. You only need to locate or explain code; use the `explore` agent. |
 | Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It applies docs-owned rubric families through a callable TAS wrapper and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
 | Prove a user-visible or operated workflow | `qa` (functional, visual, or adversarial mode) | QA owns operated evidence, screenshots, browser/media behavior, case coverage, and proof bundles that review can later judge. | The claim is purely judgment-heavy, deterministic, or behavioral-regression oriented; use `review`, a validator, or `eval`. |
-| Decide where a Farplane harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
-| Fix a harness behavior end to end | `optimize-harness` | It orchestrates gap diagnosis, placement, eval/proof, optional metric experiment, implementation routing, and review without absorbing the lower-level skill jobs. | You only need a placement recommendation; use `harness-advisor` directly. |
-| Route extracted durable knowledge | `skill-maintenance` + `doc-advisor` + `manage-wiki` | Send reusable operational procedures to skills, project knowledge and articles to their owning project docs, and sourced entities to canonical Wiki articles. | The input is still raw or unbounded; first bind a source/evidence window and produce explicit deltas. |
+| Decide where a Farplane harness improvement belongs | `harness` place mode | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
+| Fix a harness behavior end to end | `harness` | It orchestrates gap diagnosis, placement, eval/proof, optional metric experiment, implementation routing, and review without absorbing the lower-level skill jobs. | You only need a placement recommendation; use `harness` place mode directly. |
+| Route extracted durable knowledge | `harness` maintain mode + `doc-advisor` + `manage-wiki` | Send reusable operational procedures to skills, project knowledge and articles to their owning project docs, and sourced entities to canonical Wiki articles. | The input is still raw or unbounded; first bind a source/evidence window and produce explicit deltas. |
 | Frame an idea or request and play it back before building | `frame` | It splits the requested artifact from the real problem, widens options only when unclear (with `ensemble=auto|max` on request), recommends the smallest boundary from manual service to platform, and plays it back as the view that matches the operator's verification question with one to three correction questions. | You need evidence-backed history from a paused task; read the task's GitHub issue and its latest progress comment. You are choosing among options that are already real; use `advise`. |
 | Decide and craft native Goal mode | `goal-advisor` | It compiles listed files, trigger mode, budget, metric, and proof into active Goal, heartbeat, batch, feedback loop (human feedback as the metric via its human-feedback preset), rollout, skill-improvement loop, or direct work, and can emit the final native `/goal` prompt. | The task is tiny and deterministic; work directly without Goal mode. |
-| Harden or refine skills, or maintain skill metadata | `skill-maintenance` | It owns `harden_skill` for turning fresh lessons, troubles, ticket progress findings, interval reports, and proof failures into evals, gotchas, blockers, or tickets; `refine_skill` for consolidating older evals/gotchas and shortening skills; plus bulk upkeep, source ownership, and registry regeneration. | The task is broader harness placement; start with `harness-advisor`. Use `self-improve` only for measured variant/search loops. |
+| Harden or refine skills, or maintain skill metadata | `harness` maintain mode | It owns `harden_skill` for turning fresh lessons, troubles, ticket progress findings, interval reports, and proof failures into evals, gotchas, blockers, or tickets; `refine_skill` for consolidating older evals/gotchas and shortening skills; plus bulk upkeep, source ownership, and registry regeneration. | The task is broader harness placement; start with `harness` place mode. Use `harness` optimize mode only for measured variant/search loops. |
 
 Agent testing stack:
 
@@ -204,7 +204,7 @@ template_uses:
   skill-surface-budget: "0.1.0"
 ```
 
-If a skill is over budget, run `skill-maintenance.refine_skill` with
+If a skill is over budget, run `harness maintain refine_skill` with
 `doc_advisor(mode = consolidate, ..., structure = skill)` before enrolling it.
 
 Do not add `before`; reverse lookups should be derived by tooling.
@@ -219,15 +219,15 @@ so intended skill calls appear there as explicit refs in the right order.
 ```bash
 python3 bin/farplane.py lint skills      # read-only skill/package contracts
 python3 bin/farplane.py skills sync       # refresh registry and graph projections, then lint
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 python3 bin/validators/sync_skill_registry.py --write
 python3 bin/validators/sync_skill_registry.py --check
 python3 bin/validators/check_skill_capabilities.py validate
-python3 skills/skill-maintenance/scripts/generate_skill_graph.py
-python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.2.0
+python3 skills/harness/scripts/generate_skill_graph.py
+python3 skills/harness/scripts/check_skills.py --template-version 0.2.0
 ```
 
-Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
+Run `python3 skills/harness/scripts/check_skills.py --write` after
 editing skill frontmatter, `SKILL.md` Markdown links, or first-load todo lists.
 Use the lower-level commands when debugging one specific failure.
 Use `--template-version <version>` as a non-failing rollout report for skill
@@ -293,7 +293,7 @@ Repo source packages keep first-load todo truth in `SKILL.md`:
   content into the marker-delimited `## Todo List` in `SKILL.md`, then delete
   the sidecar.
 
-`install.sh` and `skills/skill-maintenance/scripts/install_selected_skills.py` render installed skill
+`install.sh` and `skills/harness/scripts/install_selected_skills.py` render installed skill
 packages instead of symlinking skill directories directly. Installed packages
 copy the source `SKILL.md` first-load contract as-is and do not embed or copy
 skill-local `todos.md` sidecars.
@@ -306,7 +306,7 @@ rerun install only after adding or removing a skill.
 When a useful skill is created first in a live runtime home, move the real
 folder into `skills/<name>/`, rerun install to replace it with a link, review
 the `description`, `source` and (for a desk skill) `department` frontmatter, then run
-`python3 skills/skill-maintenance/scripts/check_skills.py --write`.
+`python3 skills/harness/scripts/check_skills.py --write`.
 
 ## Skill Self-Healing
 
@@ -358,7 +358,7 @@ Use `source` to decide where wrapper logic belongs:
 
 ## Maintenance Skill
 
-Use `skills/skill-maintenance/` for bulk source, todo, registry, and
+Use `skills/harness/` for bulk source, todo, registry, and
 consolidation work. Keep this module's docs as the registry contract; keep the
 step-by-step maintenance workflow in that skill.
 
@@ -367,11 +367,11 @@ When skill standards or optional skill capabilities change, update
 [`docs/features/registry.jsonl`](../features/registry.jsonl) as the supported
 feature catalog. Skill template versions carry structural `FEAT-####` handles;
 skill packages carry only the optional skill UI field while eval presence is
-derived from the canonical path. `skill-maintenance` should report stale or missing adoption from template
+derived from the canonical path. `harness` maintain mode should report stale or missing adoption from template
 version rollout, generated skill inventory, local surface fields, and feature
 rows rather than requiring long per-skill migration histories.
 
-Use `skills/harness-advisor/` before skill maintenance when the question is
+Use `harness` place mode before maintain mode when the question is
 broader than skills: it compares root policy, global templates, feature docs,
 skills, subagents, hooks/scripts, ticket contracts, validators, and registry
 metadata before recommending the owning surface.

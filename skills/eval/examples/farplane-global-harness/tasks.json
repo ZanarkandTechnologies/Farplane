@@ -73,7 +73,7 @@
       "Uses advice-style framing for each decision rather than collapsing everything into one generic recommendation",
       "Compares realistic options for each decision and recommends one path for each",
       "Grounds harness-placement decisions in local ownership surfaces before recommending",
-      "Recommends checklist rendering in global only for the always-loaded invocation reflex, with detailed checklist format staying in skill docs or skill-maintenance surfaces",
+      "Recommends checklist rendering in global only for the always-loaded invocation reflex, with detailed checklist format staying in skill docs or harness surfaces",
       "Recommends local eval runner first for harness-native workflow behavior and Promptfoo later for matrix comparison",
       "Recommends tester or QA lane ownership for meaningful QA instead of main-agent self-approval",
       "Implements only safe reversible parts or clearly names the blocker for unsafe/destructive parts"
@@ -251,7 +251,7 @@
   {
     "id": "global_skill_todo_rendering_01",
     "title": "Render recursive skill todo progress at the right granularity",
-    "query": "Use eval, harness-advisor, and advise to decide where an agent checklist rule belongs, then implement it if safe.",
+    "query": "Use eval, harness, and advise to decide where an agent checklist rule belongs, then implement it if safe.",
     "reference_points": [
       "Loads the named skills before using them",
       "Shows a compact active checklist for the current skill",
@@ -404,27 +404,27 @@
       "Reads or calls out the need to read the target skill package before designing changes",
       "Defines a small binary eval boundary with realistic cases and pass/fail assertions",
       "Requires a baseline run or baseline score before mutating the target skill",
-      "Names durable self-improve artifacts such as an owning ticket's `program.md` and `progress.md`, canonical eval cases, and generated run evidence",
+      "Names durable harness artifacts such as an owning ticket's `program.md` and `progress.md`, canonical eval cases, and generated run evidence",
       "Separates human rubric dimensions from mechanical assertions instead of using subjective scores as the only metric",
       "States that live hook or skill-health monitoring should wait until offline evals exist and catch a real failure",
       "Keeps the next action concrete and artifact-first without asking for broad permission"
     ],
     "tags": [
       "skill",
-      "self-improve",
+      "harness",
       "eval-boundary",
       "baseline"
     ],
-    "notes": "Stage 1 Farplane eval rollout case for self-improve: baseline and binary assertions must exist before any target skill mutation or live hook health work."
+    "notes": "Stage 1 Farplane eval rollout case for harness: baseline and binary assertions must exist before any target skill mutation or live hook health work."
   },
   {
     "id": "global_validator_regression_capture_01",
     "title": "Capture validator-detected skill contract violations as regressions",
-    "query": "A skill-maintenance check fails because a Tier 2 skill todo list direct-links a peer Tier 2 skill. Fix the checklist and make sure this kind of miss becomes future eval material.",
+    "query": "A harness check fails because a Tier 2 skill todo list direct-links a peer Tier 2 skill. Fix the checklist and make sure this kind of miss becomes future eval material.",
     "reference_points": [
       "Recognizes the tier-check failure as a clear skill todo contract violation",
       "Fixes or proposes the checklist routing through the correct owning tier surface instead of only suppressing the validator",
-      "Reruns the skill-maintenance validation after the fix",
+      "Reruns the harness validation after the fix",
       "Captures or verifies a sanitized runnable regression for the validator-detected violation when the expected behavior is testable",
       "Explains that a difficult reusable case is a normal runnable regression, not a separate backlog",
       "Proposes or adds a narrow regression eval when the pattern is high priority or repeatable",
@@ -432,7 +432,7 @@
     ],
     "tags": [
       "system-prompt",
-      "skill-maintenance",
+      "harness",
       "regression",
       "validator"
     ],

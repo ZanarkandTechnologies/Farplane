@@ -1,0 +1,405 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import unittest
+from contextlib import redirect_stdout
+from io import StringIO
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import install_selected_skills as installer
+
+
+def write_skill(
+    root: Path,
+    name: str,
+    description: str,
+    source: str = "local",
+    checklist: str | None = "- [ ] Follow the checklist.",
+    todos: str | None = None,
+) -> None:
+    skill_dir = root / "skills" / name
+    skill_dir.mkdir(parents=True)
+    (skill_dir / "SKILL.md").write_text(
+        "\n".join(
+            [
+                "---",
+                f"name: {name}",
+                f"description: {description}",
+                f"source: {source}",
+                "---",
+                "",
+                "Body.",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    if checklist is not None:
+        skill_file = skill_dir / "SKILL.md"
+        skill_file.write_text(
+            skill_file.read_text(encoding="utf-8")
+            + "\n<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->\n"
+            + "## Todo List\n\n"
+            + checklist
+            + "\n<!-- END FARPLANE_IMPORTANT_CHECKLIST -->\n",
+            encoding="utf-8",
+        )
+    if todos is not None:
+        (skill_dir / "todos.md").write_text(todos + "\n", encoding="utf-8")
+    (skill_dir / "references").mkdir()
+    (skill_dir / "references" / "note.md").write_text("Reference.\n", encoding="utf-8")
+
+
+class InstallSelectedSkillsTests(unittest.TestCase):
+    def test_cli_lists_skills_without_site_packages(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            write_skill(repo, "review", "Run quality checks.")
+
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    "-S",
+                    str(Path(installer.__file__)),
+                    "--repo",
+                    str(repo),
+                    "--list",
+                    "--json",
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+                env={**os.environ, "PYTHONNOUSERSITE": "1"},
+            )
+
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertEqual(json.loads(completed.stdout)[0]["name"], "review")
+
+    def test_discover_and_search_skills(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "review", "Run quality checks.")
+            write_skill(repo, "visual-qa", "Inspect browser screenshots.")
+
+            skills = installer.discover_skills(repo / "skills")
+            self.assertEqual([skill.name for skill in skills], ["review", "visual-qa"])
+
+            matches = installer.filter_skills(skills, "browser")
+            self.assertEqual([skill.name for skill in matches], ["visual-qa"])
+
+    def test_installs_only_selected_skills_as_linked_packages(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.", checklist="- [ ] Read proof.")
+            write_skill(repo, "visual-qa", "Inspect browser screenshots.")
+
+            result = installer.install_skills(repo, target, ["review"], False, False)
+
+            self.assertEqual(result.installed, ["review"])
+            installed = target / "skills" / "review"
+            self.assertTrue(installed.is_dir())
+            self.assertTrue(installed.is_symlink())
+            skill_text = (installed / "SKILL.md").read_text(encoding="utf-8")
+            self.assertIn("## Todo List", skill_text)
+            self.assertIn("- [ ] Read proof.", skill_text)
+            self.assertFalse((installed / "todos.md").exists())
+            self.assertTrue((installed / "references" / "note.md").exists())
+            self.assertFalse((target / "skills" / "visual-qa").exists())
+
+    def test_install_does_not_publish_test_fixture_skills(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            fixture = (
+                repo
+                / "skills"
+                / "review"
+                / "tests"
+                / "fixtures"
+                / "bad-skill"
+                / "SKILL.md"
+            )
+            fixture.parent.mkdir(parents=True)
+            fixture.write_text(
+                "---\nname: bad-skill\ndescription: Fixture.\n---\n",
+                encoding="utf-8",
+            )
+
+            installer.install_skills(repo, target, ["review"], False, False)
+
+            self.assertTrue((target / "skills" / "review" / "SKILL.md").exists())
+            self.assertFalse((target / "skills" / "review" / "tests").exists())
+
+    def test_reinstall_removes_stale_test_fixture_skills(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            installed_fixture = (
+                target
+                / "skills"
+                / "review"
+                / "tests"
+                / "fixtures"
+                / "bad-skill"
+                / "SKILL.md"
+            )
+            installed_fixture.parent.mkdir(parents=True)
+            (target / "skills" / "review" / "SKILL.md").write_text(
+                (repo / "skills" / "review" / "SKILL.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (target / "skills" / "review" / "references").mkdir()
+            (target / "skills" / "review" / "references" / "note.md").write_text(
+                "Reference.\n",
+                encoding="utf-8",
+            )
+            installed_fixture.write_text(
+                "---\nname: bad-skill\ndescription: Fixture.\n---\n",
+                encoding="utf-8",
+            )
+
+            result = installer.install_skills(repo, target, ["review"], False, False)
+
+            self.assertEqual(result.installed, ["review"])
+            self.assertFalse((target / "skills" / "review" / "tests").exists())
+
+    def test_install_without_checklist_keeps_skill_body(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.", checklist=None)
+
+            installer.install_skills(repo, target, ["review"], False, False)
+
+            skill_text = (target / "skills" / "review" / "SKILL.md").read_text(
+                encoding="utf-8"
+            )
+            self.assertNotIn("## Todo List", skill_text)
+            self.assertFalse((target / "skills" / "review" / "todos.md").exists())
+
+    def test_install_ignores_stale_todos_sidecar(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(
+                repo,
+                "review",
+                "Run quality checks.",
+                checklist="- [ ] Direct proof.",
+                todos="- [ ] Stale sidecar proof.",
+            )
+
+            installer.install_skills(repo, target, ["review"], False, False)
+
+            skill_text = (target / "skills" / "review" / "SKILL.md").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("- [ ] Direct proof.", skill_text)
+            self.assertNotIn("- [ ] Stale sidecar proof.", skill_text)
+
+    def test_reinstall_skips_existing_matching_rendered_package(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+
+            installer.install_skills(repo, target, ["review"], False, False)
+            result = installer.install_skills(repo, target, ["review"], False, False)
+
+            self.assertEqual(result.installed, [])
+            self.assertEqual(result.skipped, ["review"])
+
+    def test_source_edits_are_live_without_reinstall(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            reference = repo / "skills" / "review" / "references" / "note.md"
+
+            installer.install_skills(repo, target, ["review"], False, False)
+            reference.write_text("Changed reference.\n", encoding="utf-8")
+            installed = target / "skills" / "review" / "references" / "note.md"
+
+            self.assertEqual(installed.read_text(encoding="utf-8"), "Changed reference.\n")
+            result = installer.install_skills(repo, target, ["review"], False, False)
+            self.assertEqual(result.skipped, ["review"])
+
+    def test_fixture_skill_packages_are_copied_without_tests(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            fixture = repo / "skills" / "review" / "tests" / "fixtures" / "bad" / "SKILL.md"
+            fixture.parent.mkdir(parents=True)
+            fixture.write_text("---\nname: bad\ndescription: Fixture.\n---\n", encoding="utf-8")
+
+            installer.install_skills(repo, target, ["review"], False, False)
+            installed = target / "skills" / "review"
+
+            self.assertFalse(installed.is_symlink())
+            self.assertFalse((installed / "tests").exists())
+            self.assertEqual(installer.install_skills(repo, target, ["review"], False, False).skipped, ["review"])
+
+    def test_prune_only_removes_repo_managed_skills(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            write_skill(repo, "visual-qa", "Inspect browser screenshots.")
+            external = Path(tmp) / "external"
+            write_skill(external, "outside", "External skill.")
+
+            installer.install_skills(repo, target, ["review", "visual-qa"], False, False)
+            outside_dest = target / "skills" / "outside"
+            outside_dest.symlink_to(external / "skills" / "outside")
+
+            result = installer.install_skills(repo, target, ["review"], True, False)
+
+            self.assertEqual(result.pruned, ["visual-qa"])
+            self.assertFalse((target / "skills" / "visual-qa").exists())
+            self.assertTrue(outside_dest.exists())
+
+    def test_prune_removes_retired_rendered_skill_name(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            retired_names = installer.RETIRED_SKILL_NAMES
+            for name in retired_names:
+                retired = target / "skills" / name
+                retired.mkdir(parents=True)
+                (retired / "SKILL.md").write_text(
+                    "retired installed copy\n", encoding="utf-8"
+                )
+
+            result = installer.install_skills(repo, target, ["review"], True, False)
+
+            self.assertEqual(set(result.pruned), retired_names)
+            for name in retired_names:
+                self.assertFalse((target / "skills" / name).exists())
+
+    def test_retired_skill_catalog_covers_source_and_live_retirements(self) -> None:
+        self.assertEqual(
+            installer.RETIRED_SKILL_NAMES,
+            {
+                "agent-behavior-test",
+                "bash-efficiency",
+                "budget-advisor",
+                "commit-message",
+                "data-viz",
+                "deep-interview",
+                "deep-ui-design",
+                "delegate-frontend",
+                "deliberative-advice",
+                "execute",
+                "external-patterns",
+                "farplane-invocation",
+                "find-skills",
+                "frontend-craft",
+                "frontend-design",
+                "horizon-advisor",
+                "image-generation",
+                "ingest-world-data",
+                "knowledge-tidier",
+                "plan",
+                "pr-runtime",
+                "react-flow",
+                "reshape-feasible",
+                "skill-maintenance",
+                "skill-registry-ui",
+                "summarize",
+                "testing",
+                "ticket-opportunity-generator",
+                "update-memory",
+                "update-strategy",
+                "video-generation",
+                "video-production",
+            },
+        )
+
+    def test_prune_preserves_external_symlink_with_retired_name(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            external = Path(tmp) / "external"
+            write_skill(repo, "review", "Run quality checks.")
+            write_skill(external, "image-generation", "External image skill.")
+            external_dest = target / "skills" / "image-generation"
+            external_dest.parent.mkdir(parents=True)
+            external_dest.symlink_to(external / "skills" / "image-generation")
+
+            result = installer.install_skills(repo, target, ["review"], True, False)
+
+            self.assertNotIn("image-generation", result.pruned)
+            self.assertTrue(external_dest.is_symlink())
+            self.assertEqual(
+                external_dest.resolve(),
+                (external / "skills" / "image-generation").resolve(),
+            )
+
+    def test_dry_run_does_not_create_target(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+
+            result = installer.install_skills(repo, target, ["review"], False, True)
+
+            self.assertTrue(result.dry_run)
+            self.assertEqual(result.installed, ["review"])
+            self.assertFalse(target.exists())
+
+    def test_main_all_installs_every_skill(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            write_skill(repo, "visual-qa", "Inspect browser screenshots.")
+
+            output = StringIO()
+            with redirect_stdout(output):
+                code = installer.main(
+                    ["--repo", str(repo), "--target", str(target), "--all", "--json"]
+                )
+
+            self.assertEqual(code, 0)
+            payload = json.loads(output.getvalue())
+            self.assertEqual(payload["installed"], ["review", "visual-qa"])
+            self.assertTrue((target / "skills" / "review" / "SKILL.md").exists())
+            self.assertTrue((target / "skills" / "visual-qa" / "SKILL.md").exists())
+
+    def test_main_json_search(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            write_skill(repo, "review", "Run quality checks.")
+            output = StringIO()
+
+            with redirect_stdout(output):
+                code = installer.main(["--repo", str(repo), "--search", "quality", "--json"])
+
+            self.assertEqual(code, 0)
+            payload = json.loads(output.getvalue())
+            self.assertEqual(payload[0]["name"], "review")
+
+    def test_unknown_skill_exits_cleanly(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            write_skill(repo, "review", "Run quality checks.")
+
+            with self.assertRaises(SystemExit) as raised:
+                installer.main(["--repo", str(repo), "--skills", "missing"])
+
+            self.assertIn("Unknown skill", str(raised.exception))
+
+
+if __name__ == "__main__":
+    unittest.main()

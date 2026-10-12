@@ -48,7 +48,7 @@ planning:
   - farplane-market-learning
   - farplane-ablation-proof
   - farplane-productization
-  - self-improve
+  - harness
 areas:
   framework_delivery:
     description: User-facing Farplane framework capabilities, reliability, installation, proof surfaces,
@@ -127,7 +127,7 @@ areas:
       evidence_bar: A causal before/after eval or reproduced production-path run proving a durable preventive
         mechanism, with rollback or rejection criteria.
     skill_refs:
-    - self-improve
+    - harness
     metric_refs:
     - metric_id: accepted_harness_improvements
     - metric_id: auto_completion_rate

@@ -1,7 +1,7 @@
 ---
 title: Harness Algebra
 status: active
-owner: harness-advisor
+owner: harness
 created_at: 2026-06-09
 updated_at: 2026-08-01
 refs:
@@ -11,7 +11,7 @@ refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/skills/README.md
   - runtimes/AGENTS.md
-  - skills/optimize-harness/SKILL.md
+  - skills/harness/SKILL.md
   - skills/goal-advisor/SKILL.md
 ---
 
@@ -565,7 +565,7 @@ Budgeted skills include:
 | `advise` | option count, local ensemble persona lanes, synthesis |
 | `review`, `qa` | rubric depth, evidence depth, reviewer/QA lanes |
 | `eval`, `eval-onboarding` | case count, fixture depth, judge strictness, heldout coverage |
-| `optimize-harness`, `self-improve` | candidate count, iteration count, metric budget, rollback gate |
+| `harness` optimize mode | candidate count, iteration count, metric budget, rollback gate |
 | `goal-advisor` | execution scope, proof rows, QA/review gates |
 
 Budget is not a standalone lever. It modulates the other levers:
@@ -838,7 +838,7 @@ Ownership:
 eval owns:
   evals/evals.json, example cases, reference_points, run artifacts
 
-skill-maintenance owns:
+harness owns:
   first-load todo shape, skill audit writeback, and guardrail placement
 
 qa adversarial mode or reviewer owns:
@@ -857,7 +857,7 @@ Sync rule:
 after_update(evals/evals.json):
   for each new_or_changed reference_point:
     if reusable_runtime_guardrail(reference_point):
-      update owning skill Todo List assertion or conditional reference through skill-maintenance
+      update owning skill Todo List assertion or conditional reference through harness
     if deterministic_invariant(reference_point):
       consider validator or hook fixture
     if judgment_heavy(reference_point):
@@ -1072,7 +1072,7 @@ ObservedFailure -> LossTerm -> HarnessLever
                 -> Intervention -> Evidence -> AcceptRule
 ```
 
-Farplane's applied operator is `optimize-harness`:
+Farplane's applied operator is `harness`:
 
 ```text
 optimize_harness(observed_behavior, expected_behavior?, metric?, evidence?)
@@ -1122,7 +1122,7 @@ Loss map:
 | Agent self-approves material work. | Subagent or review gate | Reviewer-lane proof. |
 | Agent misses repeated lessons. | Learning sidecar, drain, memory, or skill update | Retrieval/drain test. |
 | Deterministic invariant keeps breaking. | Validator or hook | Validator or fixture. |
-| Skill changes regress workflows. | Skill eval or skill-maintenance | Heldout skill/workflow eval. |
+| Skill changes regress workflows. | Skill eval or harness | Heldout skill/workflow eval. |
 | Goal loops drift or become prompt-only. | Goal Packet or drift review | Drift review over ticket/program/progress. |
 
 Escalate scope only when:
@@ -1143,11 +1143,11 @@ direct_patch(gap, lever, owner, proof)
   -> Delta H + verification
 ```
 
-Use `self-improve` or an experiment when there is a real search space:
+Use `harness` optimize mode or an experiment when there is a real search space:
 
 ```text
 self_improve(target_surface, metric, baseline, candidates)
   -> best_candidate | no_improvement | blocked
 ```
 
-Do not use `self-improve` for ordinary implementation or doc cleanup.
+Do not use `harness` optimize mode for ordinary implementation or doc cleanup.

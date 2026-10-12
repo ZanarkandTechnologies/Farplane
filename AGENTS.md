@@ -62,7 +62,7 @@ makes one relevant.
 ## Local boundaries
 
 - Before proposing a new Farplane policy, skill, agent, hook, validator, or
-  template, use `harness-advisor` to select the smallest owner surface. Root
+  template, use `harness` place mode to select the smallest owner surface. Root
   prompt text is the last lever, not the default.
 - Before changing this file or `runtimes/AGENTS.md`, apply
   `docs/templates/global-agents-qa-checklist.md`. Preserve a concrete
@@ -146,7 +146,7 @@ writes or reads it (usually a skill), not a new top-level folder.
 - Checks: `python3 bin/validators/check_farplane_project_files.py`,
   `python3 bin/validators/check_harness_invariants.py`,
   `python3 bin/validators/check_doc_refs.py`, and
-  `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
+  `python3 skills/harness/scripts/check_skills.py --write`.
   Push mechanics live in `skills/commit/references/push-main.md`; PR mechanics,
   for requested PRs only, in `skills/commit/references/single-worktree-pr.md`.
 

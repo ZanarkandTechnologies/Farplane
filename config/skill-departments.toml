@@ -4,10 +4,7 @@
 [departments]
 leadership = "Leadership"
 delivery = "Delivery"
-"back-office" = "Back Office"
 sales = "Sales"
-deals = "Deals"
 marketing = "Marketing"
 operations = "Operations"
 intelligence = "Intelligence"
-customer = "Customer"

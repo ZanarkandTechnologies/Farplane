@@ -22,7 +22,7 @@ The registry is deliberately focused on high-leverage surfaces:
 - `runtimes/AGENTS.md`
 - `docs/skills/templates/SKILL_TEMPLATE.md`
 - `docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md`
-- `skills/skill-creator/references/EVAL_TASK_TEMPLATE.json`
+- `skills/harness/references/EVAL_TASK_TEMPLATE.json`
 - `tickets/templates/ticket.md`
 - `tickets/templates/goal-loop/program.md`
 - `skills/setup-advisor/templates/project-harness.md`

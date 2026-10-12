@@ -1,7 +1,7 @@
 ---
 title: Harness Engineering Doctrine
 status: active
-owner: harness-advisor
+owner: harness
 created_at: 2026-04-24
 updated_at: 2026-06-13
 refs:

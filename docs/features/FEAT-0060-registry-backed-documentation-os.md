@@ -205,7 +205,7 @@ Required checks:
 - `python3 docs/features/validate_features.py`
 - `python3 bin/validators/check_doc_refs.py`
 - `python3 bin/validators/check_doc_parity.py`
-- `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+- `python3 skills/harness/scripts/check_skills.py --write`
 
 Acceptance signals:
 

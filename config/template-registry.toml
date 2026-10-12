@@ -6,7 +6,7 @@ paths = [
   "docs/skills/templates/SKILL_TEMPLATE.md",
   "docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
   "docs/skills/templates/GOLDEN_EXAMPLE.md",
-  "skills/skill-creator/references/EVAL_TASK_TEMPLATE.json",
+  "skills/harness/references/EVAL_TASK_TEMPLATE.json",
   "tickets/templates/ticket.md",
   "tickets/templates/goal-loop/program.md",
   "tickets/templates/goal-loop/progress.md",

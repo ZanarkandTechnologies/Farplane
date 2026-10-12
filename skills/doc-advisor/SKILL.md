@@ -19,7 +19,7 @@ guidance), and for consolidating any artifact into its smallest owner-correct
 form without losing behaviour, evidence, IDs or decisions. Documentation
 architecture lore lives in [Documentation OS](../../docs/systems/documentation-os.md);
 this skill owns the executable workflow. It does not edit skill packages
-(`skill-maintenance`), Wiki entities (`manage-wiki`), or code (`code-health`).
+(`harness` maintain mode), Wiki entities (`manage-wiki`), or code (`code-health`).
 
 ## Skill Signature
 
@@ -125,7 +125,7 @@ returns: strategy or updated doc, checks run, loss check, review route, remainin
 - Compacting an exact log into a summary without the archive gate, or keeping a
   true fact in memory when another surface retrieves it better.
 - Self-approving a material skill compaction; route it through
-  `skill-maintenance` and an independent reviewer.
+  `harness` maintain mode and an independent reviewer.
 
 ## Reference Map
 

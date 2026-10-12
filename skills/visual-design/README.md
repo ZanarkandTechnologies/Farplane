@@ -23,4 +23,4 @@ Define frontend look, taste, hierarchy, and visual-system direction once the fun
 
 - Confirm the skill routes broken workflows back to `prd` workflow mode.
 - Confirm the output gives implementation-ready visual constraints.
-- Run `python3 skills/skill-creator/scripts/quick_validate.py skills/visual-design`.
+- Run `python3 skills/harness/scripts/quick_validate.py skills/visual-design`.

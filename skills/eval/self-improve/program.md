@@ -9,7 +9,7 @@ metric: human_feedback_plus_eval_pass
 # Legacy Self-Improve Program: eval
 
 This file preserves pre-Goal experiment notes. It is inert historical material:
-the active `self-improve` workflow does not read, write, parse, migrate, or use
+the active `harness` optimize mode workflow does not read, write, parse, migrate, or use
 it as lifecycle state. New eval-skill optimization uses an owning ticket's
 ordinary Goal Packet.
 
@@ -62,7 +62,7 @@ goal_human_feedback_eval_loop(idea, candidate_eval_batch, proof, kenji_feedback)
 | 2026-06-11 | program-loop | Add persistent memory for ideas, tests, feedback requests, and Kenji responses. | Created this historical program file. | superseded | Goal state now belongs to the owning ticket packet. |
 | 2026-06-11 | rubric-first | Define a good-eval-writing rubric before adding more eval-for-eval cases. | Added `references/eval-writing-rubric.md` and linked it from `SKILL.md`. | pending | The eval skill needs a quality function before it can choose high-ROI cases. |
 | 2026-06-12 | core-self-improvement-batch | Add first eval coverage for core self-improvement skills. | Added skill-local evals and one project-level workflow canary. | pending | Split skill behavior quality from project-level workflow enforcement. |
-| 2026-06-12 | skill-maintenance-fixtures | Make skill-maintenance evals realistic without mutating the real skill tree. | Added sandbox fixtures and revised queries. | pending | Mutation-capable evals need concrete bad skills in isolated fixtures. |
+| 2026-06-12 | skill-maintenance-fixtures | Make harness evals realistic without mutating the real skill tree. | Added sandbox fixtures and revised queries. | pending | Mutation-capable evals need concrete bad skills in isolated fixtures. |
 
 ## Feedback Log
 

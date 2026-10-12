@@ -65,7 +65,7 @@ Next owner: copywriting for the three angles
 | 2 | goal-advisor | accepted plan | loop policy in the issue body | conditional: multi-day run | Goal approval | issue body `## Goal program` |
 | 3 | copywriting | thesis, Brand Kit | three angle drafts after final pass | no claim beyond proof | creative-planning approval | linked copy file |
 | 4 | ai-image | approved copy | three statics plus one review sheet | no generation before its quote | generation-spend approval | asset folder link |
-| 5 | telegram-message | review sheet | one approve / revise / reject photo request | packet phone-readable | review request only | delivery receipt |
+| 5 | notify | review sheet | one approve / revise / reject photo request | packet phone-readable | review request only | delivery receipt |
 | 6 | ads launch | final creative, account, event | redacted dry run, then paused objects | no write route or `ads_management` | paused-setup approval | setup receipt comment |
 | 7 | Operator | setup receipt | launch record | needs named launch approval | launch approval | launch comment |
 | 8 | ads report | bound account, window | factual read-only report | no `ads_read` blocks the read only | none | dated report comment |

@@ -209,6 +209,6 @@ slice, proof/falsification, tradeoffs, and non-goals.
   canonical doc, or ticket artifact. Promote only a durable project invariant
   to `docs/MEMORY.md`.
 - During weekly skill hardening, inspect relevant ticket evidence and
-  owner-local evals, then route actionable findings to `skill-maintenance`,
+  owner-local evals, then route actionable findings to `harness` maintain mode,
   `eval`, the owning optimizer workflow, or a ticket. Cap optimizer follow-ups
   per weekly run to avoid thread or ticket floods.

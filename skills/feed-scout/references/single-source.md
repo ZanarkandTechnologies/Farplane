@@ -51,7 +51,7 @@ scout_source(source, decision_goal?) -> source run + SRC-* record + decision mat
   it and stop.
 - Partial local behaviour: `hybrid`; check the market with `research` first.
 - Missing behaviour: score credibility, fit, cost, risk, and benchmarkability;
-  use `harness-advisor` when ownership is unclear.
+  use `harness` place mode when ownership is unclear.
 - One unverified claim: `needs-benchmark` or `defer`, never a speculative
   candidate.
 - A video that teaches a workflow: run `intelligest`; its skill level-up
@@ -63,6 +63,6 @@ scout_source(source, decision_goal?) -> source run + SRC-* record + decision mat
   still wrong, incomplete, or too vague to act on.
 - Numeric scores are judgment aids: always carry confidence and anti-metrics.
 - Never let a scout pass mutate a live skill; accepted skill changes go
-  through `skill-maintenance`.
+  through `harness` maintain mode.
 - Do not list tools as skill dependencies, and do not start cron or background
   runners from a scout pass.

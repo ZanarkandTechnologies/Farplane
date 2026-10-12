@@ -74,7 +74,7 @@ refs:
   - `python3 bin/validators/check_farplane_project_files.py`
   - `python3 bin/validators/check_harness_invariants.py`
   - `python3 bin/validators/check_doc_refs.py`
-  - `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+  - `python3 skills/harness/scripts/check_skills.py --write`
 - Optional heavy local checks: ticket metadata checks, skill graph generation,
   eval runs, and browser proof when a ticket requires them.
 - Hook policy: hooks are visible optional scaffolding, not auto-enabled.

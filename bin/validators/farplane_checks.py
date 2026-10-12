@@ -261,7 +261,7 @@ def build_registry() -> CheckRegistry:
         CheckSpec("ticket.reward", ticket_reward_check),
         CheckSpec("ticket.completion-evidence", completion_evidence_check),
         CheckSpec("ticket.visual-companion", visual_companion_check),
-        CheckSpec("skills.check", command_check("skills.check", ("python3", "skills/skill-maintenance/scripts/check_skills.py"))),
+        CheckSpec("skills.check", command_check("skills.check", ("python3", "skills/harness/scripts/check_skills.py"))),
         CheckSpec("docs.refs", command_check("docs.refs", ("python3", "bin/validators/check_doc_refs.py"))),
         CheckSpec("docs.contracts", command_check("docs.contracts", ("python3", "bin/validators/check_doc_parity.py"))),
         CheckSpec("docs.features", command_check("docs.features", ("python3", "docs/features/validate_features.py"))),

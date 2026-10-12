@@ -78,7 +78,7 @@ requires promotion to history, a spec, or another canonical owner instead.
    threshold result. Route high-importance duplicates to their existing owner
    instead of keeping a second copy.
 4. Rebuild the minimal owner-correct artifact. Preserve passing live knowledge
-   and source refs; route reusable procedures to `skill-maintenance`, project
+   and source refs; route reusable procedures to `harness` maintain mode, project
    knowledge and doc-quality work to the owning project files,
    sourced entity deltas to `manage-wiki`, and material canonical changes to
    `review`. Return the standard frame and, for knowledge targets, the Tidy
@@ -151,7 +151,7 @@ Use a candidate table when more than a few knowledge units are present:
 - Do not keep a true fact in memory when another surface is its better retrieval
   owner, and do not promote ticket-local proof into project memory.
 - Do not compact exact logs into summaries without the archive/source gate.
-- For material skill edits, route the patch through `skill-maintenance` and an
+- For material skill edits, route the patch through `harness` maintain mode and an
   independent reviewer rather than self-approving it.
 
 ## Output

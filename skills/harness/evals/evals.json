@@ -1,0 +1,468 @@
+{
+  "skill_name": "harness",
+  "evals": [
+    {
+      "id": "skill_creator_book_grounding_branch_01",
+      "prompt": "I want to improve a reusable planning skill using online book-summary videos, articles, blogs, and author interviews for a popular business book. Find the key takeaway workflows and shape the skill update.",
+      "expected_output": "Loads or explicitly follows the book-to-skill extraction branch instead of drafting from generic memory; Searches or plans to search for workflow-bearing summary sources such as videos, articles, blogs, app summaries, notes, and author interviews; Labels source type, confidence, and convergence across summary sources instead of trusting one summary uncritically; Avoids producing a chapter-by-chapter or full-book substitute summary; Converts key takeaways into workflow candidates with trigger, inputs, steps, decision points, stop condition, output, and proof; Compares workflow candidates against the existing target skill before deciding SKILL.md, reference, evals/evals.json, validator, new skill, reject, or defer placement; Names at least one behavior proof such as a positive example or eval row that tests the skill behavior rather than recall of the book",
+      "files": [],
+      "assertions": [
+        "Loads or explicitly follows the book-to-skill extraction branch instead of drafting from generic memory",
+        "Searches or plans to search for workflow-bearing summary sources such as videos, articles, blogs, app summaries, notes, and author interviews",
+        "Labels source type, confidence, and convergence across summary sources instead of trusting one summary uncritically",
+        "Avoids producing a chapter-by-chapter or full-book substitute summary",
+        "Converts key takeaways into workflow candidates with trigger, inputs, steps, decision points, stop condition, output, and proof",
+        "Compares workflow candidates against the existing target skill before deciding SKILL.md, reference, evals/evals.json, validator, new skill, reject, or defer placement",
+        "Names at least one behavior proof such as a positive example or eval row that tests the skill behavior rather than recall of the book"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill Creator turns online book summaries into workflow candidates",
+          "tags": [
+            "skill",
+            "harness",
+            "create",
+            "book-grounding",
+            "source-synthesis",
+            "copyright-safe"
+          ],
+          "notes": "Protects the source-safe book-summary-to-skill workflow: online summaries are mined for actionable workflows, then transformed into skill behavior rather than recreated as book notes. Carried from skill-creator."
+        }
+      }
+    },
+    {
+      "id": "skill_creator_new_skill_eval_run_and_self_improve_01",
+      "prompt": "Create a reusable artifact-writing skill for producing investor update memos. It should be good enough to use, and if it keeps improving from real outputs we can tune it later.",
+      "expected_output": "Creates the skill only if the trigger and reusable workflow are stable; Enables evals for the new behavior-sensitive skill; Creates representative eval cases before claiming it is done; Runs evals and records pass, fail, or deferred proof; Uses failures as blockers or fixes and reruns the smallest failing case; For continued optimization, routes through harness optimize mode with an owning ticket and Goal Packet or records no_self_improve_reason",
+      "files": [],
+      "assertions": [
+        "Creates the skill only if the trigger and reusable workflow are stable",
+        "Enables evals for the new behavior-sensitive skill",
+        "Creates representative eval cases for the skill before claiming it is done",
+        "Runs the evals and records the pass, fail, or deferred-proof result",
+        "Uses failed evals as blockers or fixes and reruns the smallest failing case before readiness",
+        "For continued optimization, routes through harness optimize mode with an owning ticket and ticket Goal Packet, or records no_self_improve_reason"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill Creator runs evals before new skill readiness",
+          "tags": [
+            "skill",
+            "harness",
+            "create",
+            "evals",
+            "artifact-skills"
+          ],
+          "notes": "Protects the new-skill lifecycle: behavior-sensitive skills need evals before done, while ongoing optimization uses the target skill's program and progress files. Carried from skill-creator."
+        }
+      }
+    },
+    {
+      "id": "skill_creator_delegates_eval_execution_01",
+      "prompt": "Draft a new reusable skill for reviewing operational incident reports, prove that it works, and package it when ready.",
+      "expected_output": "Creates realistic canonical eval cases, delegates their execution and grading to eval, compares the draft with no-skill or prior behavior, repairs failures before readiness, and keeps viewer or benchmark implementation out of harness create mode.",
+      "files": [],
+      "assertions": [
+        "Creates realistic cases in the target skill's evals/evals.json",
+        "Calls eval for clean execution and evidence-backed grading rather than self-grading",
+        "Uses a no-skill or previous-skill baseline when claiming skill value",
+        "Treats failed cases as blockers or repairs before packaging",
+        "Does not place runner, benchmark, or viewer implementation inside harness create mode"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill Creator delegates proof to Eval",
+          "tags": [
+            "skill",
+            "harness",
+            "create",
+            "eval",
+            "ownership"
+          ],
+          "notes": "Protects the creation-to-eval handoff after adopting the Agent Skills iteration model. Carried from skill-creator."
+        }
+      }
+    },
+    {
+      "id": "skill_maintenance_signature_rollout_01",
+      "prompt": "Use the bad skill fixture at skills/harness/tests/fixtures/bad-skill-repo. The bad-signature-rollout skill claims template 0.2.0 but has a bad first-load shape. Plan how harness maintain mode should repair this in a sandbox before applying the pattern broadly.",
+      "expected_output": "Requires a temp sandbox or isolated checkout before mutating fixture files; Identifies this as a broad skill-system migration; Prototypes on a representative sample before bulk rollout; Checks the current skill template and target skill structure before marking template version; Plans registry sync and validation after edits; Records audit or proof notes for material skill changes",
+      "files": [],
+      "assertions": [
+        "Requires a temp sandbox or isolated checkout before mutating fixture files",
+        "Identifies this as a broad skill-system migration",
+        "Prototypes on a representative sample before bulk rollout",
+        "Checks the current skill template and target skill structure before marking template version",
+        "Plans registry sync and validation after edits",
+        "Records audit or proof notes for material skill changes"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill maintenance prototypes broad signature rollout",
+          "tags": [
+            "skill",
+            "harness",
+            "maintain",
+            "rollout"
+          ],
+          "notes": "Protects against bulk skill edits without representative proof. Carried from skill-maintenance."
+        }
+      }
+    },
+    {
+      "id": "skill_maintenance_registry_sync_01",
+      "prompt": "In a sandbox copy of skills/harness/tests/fixtures/bad-skill-repo, assume we shortened bad skill descriptions and changed frontmatter. What does harness maintain mode need to do before saying the fixture repair is done?",
+      "expected_output": "Keeps repair and validation inside the sandbox copy rather than the real skill tree; Runs or names the standard skill-system validation command; Regenerates docs/skills/registry.jsonl rather than hand-editing it; Checks frontmatter description shape and template version promises; Reports any missing checklist or template-version findings honestly; Does not claim completion until validation passes or the blocker is named",
+      "files": [],
+      "assertions": [
+        "Keeps repair and validation inside the sandbox copy rather than the real skill tree",
+        "Runs or names the standard skill-system validation command",
+        "Regenerates docs/skills/registry.jsonl rather than hand-editing it",
+        "Checks frontmatter description shape and template version promises",
+        "Reports any missing checklist or template-version findings honestly",
+        "Does not claim completion until validation passes or the blocker is named"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill maintenance syncs registry after edits",
+          "tags": [
+            "skill",
+            "harness",
+            "maintain",
+            "registry"
+          ],
+          "notes": "Tests the mechanical proof path after skill metadata edits. Carried from skill-maintenance."
+        }
+      }
+    },
+    {
+      "id": "skill_maintenance_source_owner_01",
+      "prompt": "Use the installed-copy-only fixture in skills/harness/tests/fixtures/bad-skill-repo. Pretend the installed copy has behavior I want. Can we just patch ~/.codex/skills and call the repair done?",
+      "expected_output": "Rejects installed live skill files as the reusable source of truth unless explicitly asked for that edit; Routes source changes to the repo-owned skill package or import preview path; Uses dry-run import or explicit overwrite only when replacing repo source is intentional; Plans reinstall or live-copy inspection only after source edits are accepted; Avoids losing local/source ownership boundaries; Uses the fixture or sandbox as the eval target instead of mutating a real installed skill",
+      "files": [],
+      "assertions": [
+        "Rejects installed live skill files as the reusable source of truth unless explicitly asked for that edit",
+        "Routes source changes to the repo-owned skill package or import preview path",
+        "Uses dry-run import or explicit overwrite only when replacing repo source is intentional",
+        "Plans reinstall or live-copy inspection only after source edits are accepted",
+        "Avoids losing local/source ownership boundaries",
+        "Uses the fixture or sandbox as the eval target instead of mutating a real installed skill"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill maintenance preserves source ownership",
+          "tags": [
+            "skill",
+            "harness",
+            "maintain",
+            "source-ownership"
+          ],
+          "notes": "Protects against editing ~/.codex/skills as the durable source of truth. Carried from skill-maintenance."
+        }
+      }
+    },
+    {
+      "id": "skill_maintenance_behavior_eval_comparison_01",
+      "prompt": "Tighten an existing skill's decision rules because it sometimes chooses the wrong workflow. Make the maintenance change safely and show why it should be accepted.",
+      "expected_output": "Captures the current behavior as a baseline, applies the bounded skill change, runs the same canonical suite through eval, compares candidate and baseline evidence, and accepts, holds, or rolls back from the measured result.",
+      "files": [],
+      "assertions": [
+        "Captures a baseline before the behavior-affecting edit",
+        "Runs the same canonical eval suite against candidate and baseline through eval",
+        "Uses evidence-backed comparison rather than self-certifying the wording change",
+        "Records an accept, hold, or rollback decision",
+        "Uses eval_skip_reason only for mechanical-only changes with a deterministic replacement check"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill Maintenance compares behavior through Eval",
+          "tags": [
+            "skill",
+            "harness",
+            "maintain",
+            "eval",
+            "baseline",
+            "promotion"
+          ],
+          "notes": "Protects the maintenance-to-eval handoff for behavior-sensitive skill changes. Carried from skill-maintenance."
+        }
+      }
+    },
+    {
+      "id": "skill_maintenance_plain_core_01",
+      "prompt": "A small deterministic skill has Context, a five-step Todo List, Gotchas, and Output. Its Skill Signature is an exhaustive state-machine catalog, and it also has Phase Boundary, SkillBudget, unused Templates, and an unused Reference Map. What stays, what goes, and how do we confirm nothing important was lost?",
+      "expected_output": "Keeps Context, a simplified signature naming required files/data, caller-controlled parameters, work, writes, and returned output, plus the domain Todo List, Gotchas, and Output; Deletes Phase Boundary, SkillBudget, unused Templates, and the unused Reference Map; Preserves any real trigger, input, proof, output, or reference-load contract in its owning core section; Runs the loss check and skill validation instead of treating line reduction as proof",
+      "files": [],
+      "assertions": [
+        "Keeps Context, a simplified input/work/output Skill Signature, the domain Todo List, Gotchas, and Output",
+        "Deletes Phase Boundary, SkillBudget, unused Templates, and the unused Reference Map",
+        "Preserves any real trigger, input, proof, output, or reference-load contract in its owning core section",
+        "Runs the loss check and skill validation instead of treating line reduction as proof"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill Maintenance removes unused optional modules",
+          "tags": [
+            "skill",
+            "harness",
+            "maintain",
+            "plain-language",
+            "template"
+          ],
+          "notes": "Protects the compact skill-template core and behavior-preservation gate. Carried from skill-maintenance."
+        }
+      }
+    },
+    {
+      "id": "self_improve_requires_metric_and_goal_packet_01",
+      "prompt": "Make the AGI Toy Shop planning skill smarter. Keep trying instruction changes until it is reliably good, then make the prompt as small as you can.",
+      "expected_output": "Defines an honest performance target and frozen eval boundary before mutation; Requires an owning ticket and ordinary Goal Packet; Uses native Goal as the continuation engine; Orders hardening before shortening; Returns the baseline and packet-compilation next action",
+      "files": [],
+      "assertions": [
+        "Defines a measurable performance target and frozen eval boundary before mutating the target",
+        "Requires an owning ticket with ticket.md, program.md, hypothesis-tree.json, and progress.md rather than target-local loop state",
+        "Uses native Goal as the sole continuation engine",
+        "Makes passing required behavior lexicographically prior to reducing instruction length",
+        "Returns a concrete baseline and Goal-packet next action"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Self-improve compiles a metric-bound Goal",
+          "tags": [
+            "skill",
+            "harness",
+            "optimize",
+            "goal-packet"
+          ],
+          "notes": "Protects the corrected ownership and objective order. Carried from self-improve."
+        }
+      }
+    },
+    {
+      "id": "self_improve_baseline_and_harden_transition_01",
+      "prompt": "The approved toy-safety self-improvement packet has a frozen ten-case suite, a recorded 8/10 baseline, passing safety guards, harden limits of six rounds with patience two, and refine limits of six rounds with patience two. The next bounded edit tests the hypothesis that an explicit sibling-access escalation closes both misses; the complete suite scores 10/10 with every guard passing and writes evidence run toy-safety-17. Show the decision, durable writeback, and following turn.",
+      "expected_output": "Runs a baseline before editing; Freezes the complete suite; Makes one bounded hardening change per turn and retains only improvements that pass guards; Enters refinement only after the full target passes; Records each turn in ticket progress",
+      "files": [],
+      "assertions": [
+        "Runs and records the baseline before target mutation",
+        "Keeps the complete eval suite frozen across the Goal",
+        "Makes one bounded hardening edit followed by the complete eval per turn",
+        "Enters refinement only after the performance target and every guard pass",
+        "Appends hypothesis, measurements, evidence, and retain or reject decision to ticket progress.md"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Self-improve hardens before refining",
+          "tags": [
+            "skill",
+            "harness",
+            "optimize",
+            "hardening"
+          ],
+          "notes": "Positive critical-path trace. Carried from self-improve."
+        }
+      }
+    },
+    {
+      "id": "self_improve_not_generic_impl_01",
+      "prompt": "The AGI Toy Shop eval skill has a broken Markdown link to its rubric. Please self-improve it.",
+      "expected_output": "Recognizes an obvious direct maintenance fix; Routes to the minimal edit or harness maintain mode; Names deterministic verification; Avoids a Goal optimization packet; Preserves harness optimize mode for measured multi-turn search",
+      "files": [],
+      "assertions": [
+        "Recognizes the broken link as an obvious direct maintenance fix",
+        "Routes to the minimal edit or harness maintain mode",
+        "Names deterministic verification",
+        "Avoids candidate search and Goal optimization scaffolding",
+        "Preserves harness optimize mode for measured multi-turn optimization"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Self-improve routes direct repairs away",
+          "tags": [
+            "skill",
+            "harness",
+            "optimize",
+            "routing"
+          ],
+          "notes": "Prevents generic implementation routing. Carried from self-improve."
+        }
+      }
+    },
+    {
+      "id": "self_improve_adversarial_case_invalidates_frozen_goal_01",
+      "prompt": "Halfway through the optimization, a red-team worker found a realistic failure missing from the current cases. Add it now and continue from the current scores.",
+      "expected_output": "Refuses to mutate the frozen suite; Requires separate tester evidence review before Eval acceptance; Prevents tester self-approval; Stops and regenerates the Goal Packet after an accepted case; Takes a fresh baseline before new comparisons",
+      "files": [],
+      "assertions": [
+        "Does not add the case during the frozen Goal comparison",
+        "Requires an adversarial tester and a distinct evidence reviewer before Eval acceptance",
+        "Does not let the tester approve or insert its own case",
+        "Stops and regenerates the Goal Packet when an accepted case changes the suite",
+        "Records a fresh baseline before comparing candidates on the expanded suite"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Adversarial findings force a fresh frozen Goal",
+          "tags": [
+            "skill",
+            "harness",
+            "optimize",
+            "adversarial"
+          ],
+          "notes": "Proves the red-team ownership and freeze boundary. Carried from self-improve."
+        }
+      }
+    },
+    {
+      "id": "self_improve_refinement_rejects_regression_01",
+      "prompt": "The toy-release planner finally passes every required case. I removed a third of the instructions, and most spot checks still look fine. Decide whether to ship it and state exactly what the run records after verification.",
+      "expected_output": "Rejects spot checks and behavior-for-length tradeoffs; Runs the complete frozen suite; Retains the shorter candidate only with zero performance loss and all guards; Restores the prior shortest passing candidate on regression; Records evidence",
+      "files": [],
+      "assertions": [
+        "Does not trade required behavior or guards for shorter instructions",
+        "Evaluates the shorter candidate against the complete unchanged frozen suite",
+        "Requires performance at or above the hardened floor and every guard to pass",
+        "Restores the prior shortest passing candidate when the shorter version regresses",
+        "Records refinement evidence and the retain or reject decision"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Refinement rejects shorter regressions",
+          "tags": [
+            "skill",
+            "harness",
+            "optimize",
+            "refinement"
+          ],
+          "notes": "Negative control for performance-preserving compression. Carried from self-improve."
+        }
+      }
+    },
+    {
+      "id": "optimize_harness_full_loop_01",
+      "prompt": "Farplane keeps accepting chat-only strategy dumps for AGI Toy Shop process changes. I expected it to create a durable artifact first and prove the behavior. Fix the harness.",
+      "expected_output": "Normalizes observed and expected behavior before changing anything; Diagnoses the miss in the owning workflow; Runs or names harness place mode to choose the primary owner and rejected surfaces; Creates or updates a proof surface such as an eval, validator, or review path; Chooses direct change versus harness optimize mode based on whether a metric/search loop is needed; Ends with review, validation, or a blocked report instead of claiming improvement from prose",
+      "files": [],
+      "assertions": [
+        "Normalizes observed and expected behavior before changing anything",
+        "Diagnoses the miss in the owning workflow",
+        "Runs or names harness place mode to choose the primary owner and rejected surfaces",
+        "Creates or updates a proof surface such as an eval, validator, or review path",
+        "Chooses direct change versus harness optimize mode based on whether a metric/search loop is needed",
+        "Ends with review, validation, or a blocked report instead of claiming improvement from prose"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Optimize harness runs diagnose-place-prove-change-review",
+          "tags": [
+            "skill",
+            "harness",
+            "place",
+            "full-loop"
+          ],
+          "notes": "Skill-local canary for the high-level harness improvement workflow owned by harness. Carried from optimize-harness."
+        }
+      }
+    },
+    {
+      "id": "optimize_harness_no_vague_taste_01",
+      "prompt": "Make AGI Toy Shop's agent harness feel more elegant and higher ROI. I don't have a specific failure; just improve it.",
+      "expected_output": "Does not start mutating the harness from vague taste language; Asks for or derives a concrete observed behavior, expected behavior, metric, or evidence need; Marks unknown expected behavior when it cannot be inferred safely; Names a safe partial path such as gap clarification, prototype, or human-feedback review; Avoids creating evals or skill changes before the target behavior is testable",
+      "files": [],
+      "assertions": [
+        "Does not start mutating the harness from vague taste language",
+        "Asks for or derives a concrete observed behavior, expected behavior, metric, or evidence need",
+        "Marks unknown expected behavior when it cannot be inferred safely",
+        "Names a safe partial path such as gap clarification, prototype, or human-feedback review",
+        "Avoids creating evals or skill changes before the target behavior is testable"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Optimize harness refuses vague taste optimization",
+          "tags": [
+            "skill",
+            "harness",
+            "place",
+            "clarification"
+          ],
+          "notes": "Protects the top-level optimizer from turning vague preferences into ungrounded harness edits. Carried from optimize-harness."
+        }
+      }
+    },
+    {
+      "id": "harness_advisor_skill_vs_agents_01",
+      "prompt": "AGI Toy Shop agents keep forgetting to write durable artifacts before chat summaries. Should we put a new rule in global AGENTS.md, create a reusable skill, or add a hook?",
+      "expected_output": "States the concrete harness failure before choosing a surface; Compares global policy, skill contract, and hook or validator as distinct owner options; Recommends the smallest durable owner that fixes the failure without bloating root policy; Names rejected surfaces and why they should not own the change now; Names a proof path such as eval, review, validator, or ticket Done / Proof contract",
+      "files": [],
+      "assertions": [
+        "States the concrete harness failure before choosing a surface",
+        "Compares global policy, skill contract, and hook or validator as distinct owner options",
+        "Recommends the smallest durable owner that fixes the failure without bloating root policy",
+        "Names rejected surfaces and why they should not own the change now",
+        "Names a proof path such as eval, review, validator, or ticket Done / Proof contract"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Harness advisor avoids root prompt bloat",
+          "tags": [
+            "skill",
+            "harness",
+            "place",
+            "placement"
+          ],
+          "notes": "Tests placement discipline for behavior that could be over-promoted into global policy. Carried from harness-advisor."
+        }
+      }
+    },
+    {
+      "id": "harness_advisor_eval_vs_hook_01",
+      "prompt": "Can we add a hook that blocks any AGI Toy Shop improvement response unless it picked the highest-ROI eval cases?",
+      "expected_output": "Identifies highest-ROI eval selection as judgment-heavy rather than deterministic; Rejects a hook or validator as the primary owner when the rule cannot be checked mechanically; Routes the behavior toward eval, review, rubric, or skill guidance as appropriate; Names any deterministic subset that could still belong in a validator; Provides a proof or review path for the judgment-heavy behavior",
+      "files": [],
+      "assertions": [
+        "Identifies highest-ROI eval selection as judgment-heavy rather than deterministic",
+        "Rejects a hook or validator as the primary owner when the rule cannot be checked mechanically",
+        "Routes the behavior toward eval, review, rubric, or skill guidance as appropriate",
+        "Names any deterministic subset that could still belong in a validator",
+        "Provides a proof or review path for the judgment-heavy behavior"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Harness advisor routes judgment-heavy behavior away from hooks",
+          "tags": [
+            "skill",
+            "harness",
+            "place",
+            "eval-vs-hook"
+          ],
+          "notes": "Protects against converting fuzzy judgment into brittle hook policy. Carried from harness-advisor."
+        }
+      }
+    },
+    {
+      "id": "harness_advisor_registry_check_01",
+      "prompt": "Let's add a new AGI Toy Shop skill that chooses where harness improvements belong.",
+      "expected_output": "Checks or names the need to check existing skill and feature registries before proposing a new skill; Identifies likely existing owners such as the harness place, optimize, or maintain modes; Recommends editing or extending an existing owner when it fits; Only proposes a new owner if the gap remains after registry grounding; Names next proof or ticket owner for the placement decision",
+      "files": [],
+      "assertions": [
+        "Checks or names the need to check existing skill and feature registries before proposing a new skill",
+        "Identifies likely existing owners such as the harness place, optimize, or maintain modes",
+        "Recommends editing or extending an existing owner when it fits",
+        "Only proposes a new owner if the gap remains after registry grounding",
+        "Names next proof or ticket owner for the placement decision"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Harness advisor checks registries before new owners",
+          "tags": [
+            "skill",
+            "harness",
+            "place",
+            "registry-dedupe"
+          ],
+          "notes": "Tests the registry-dedupe gate before creating new harness surfaces. Carried from harness-advisor."
+        }
+      }
+    }
+  ]
+}

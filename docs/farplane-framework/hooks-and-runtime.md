@@ -315,7 +315,7 @@ worktrees so `~/.codex` cannot be repointed at an ephemeral task checkout.
   program final checkpoint.
 
 The skill-file gate may trigger the repair loop but never rewrites the file.
-`skill-maintenance` owns source-preserving, responsibility-based compaction and
+`harness` maintain mode owns source-preserving, responsibility-based compaction and
 review; default-path behavior cannot be hidden merely to meet the envelope.
 
 ## Graph Tags

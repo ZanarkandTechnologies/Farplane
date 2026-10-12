@@ -4,7 +4,7 @@ Load when a Goal, heartbeat, eval recovery, ticket proof, or strategy objective
 needs an honest measurement contract before work continues, or when a caller
 asks "what should we measure". It returns a card; it does not run the loop.
 The caller keeps ownership: `goal-advisor` compiles the card into `program.md`,
-`optimize-harness` coordinates recovery, `self-improve` compares variants,
+`harness` coordinates recovery, `harness` optimize mode compares variants,
 `impl-plan` owns ticket Done / Proof wording, and `review` judges evidence. It
 may write the project's `farplane/metrics.yaml` definition delta and
 `farplane/harness.yaml` selection delta only when explicitly asked.
@@ -46,7 +46,7 @@ none            no honest metric; use judgment questions and write "none mechani
    evaluator bugs, or baseline mismatch are credible. Omit it for deterministic
    work and ordinary status reporting, and say: `The expectation block applies
    only to causal, comparative, or uncertainty-reducing work.`
-6. Route direct repair when owner and fix are clear; `self-improve` only when
+6. Route direct repair when owner and fix are clear; `harness` optimize mode only when
    candidate search and a baseline are needed; material causal surprise to
    `eval:experiment`; a delayed ticket Reward miss with no causal
    experiment back to its owning ticket, preserving the check-in's
@@ -88,7 +88,7 @@ anti-metrics inflating reference points, hiding expected behaviour in queries,
 broad prompt bloat; delta at least one C -> B/A with no A regressing; method
 rerun the same subset and compare `summary.json`; expectation C count falls by
 one or more within the next equal-budget run, surprise trigger an implausible
-all-A jump; route `optimize-harness` direct repair first.
+all-A jump; route `harness` direct repair first.
 
 Judgment-heavy: "make plans easier to approve" has no command, so provider
 `review` or `human_feedback`; primary reviewer pass or operator approval with

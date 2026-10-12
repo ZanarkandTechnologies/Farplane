@@ -37,7 +37,7 @@ The existing runner continues to own project suites and behavior traces.
 | Project-suite/behavior-trace runner behavior | `run_evals.py` plus tests and templates | Promptfoo adapter |
 | Codex eval session/hook/notify isolation | `run_evals.py` mandatory argument tail | Optional Codex profiles |
 | Deterministic structural invariant | Validator, lint, or unit test | LLM eval |
-| Judgment-heavy placement or prioritization | `harness-advisor`, `review`, or eval rubric | Hook |
+| Judgment-heavy placement or prioritization | `harness` place mode, `review`, or eval rubric | Hook |
 
 ## AGI Toy Shop Fixture Policy
 
@@ -157,4 +157,4 @@ pretends a copied runtime workspace is part of the authored JSON schema. Use
   unless a current machine consumer requires them.
 - If the change is structural and deterministic, add a validator or unit test.
 - If the change is about which surface owns the fix, route through
-  `harness-advisor`.
+  `harness` place mode.

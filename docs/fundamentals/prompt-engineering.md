@@ -12,7 +12,7 @@ tags:
 refs:
   - AGENTS.md
   - docs/review/rubrics/prompt-quality.md
-  - skills/harness-advisor/SKILL.md
+  - skills/harness/SKILL.md
   - https://developers.openai.com/api/docs/guides/prompt-engineering
   - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
 ---

@@ -7,5 +7,5 @@ Primary entrypoint: `SKILL.md`.
 Validation:
 
 ```bash
-python3 ../skill-maintenance/scripts/check_skills.py --write
+python3 ../harness/scripts/check_skills.py --write
 ```

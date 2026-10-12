@@ -2,19 +2,19 @@
   "skill_name": "automation-advisor",
   "evals": [
     {
-      "id": "automation_advisor_one_heartbeat_01",
-      "prompt": "Configure Farplane V1 automations for a heartbeat, Feed Scout, Daily, Weekly, and self-improvement.",
-      "expected_output": "Creates at most one heartbeat; Keeps Feed Scout and Company OS Daily/Weekly as cron jobs; Keeps every job in farplane/automations/ and the steps it calls in farplane/automations/steps/; Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller",
+      "id": "automation_advisor_cron_only_01",
+      "prompt": "Configure Farplane automations for Feed Scout, Daily, Weekly, token burn, and a self-improvement pass, plus a heartbeat that keeps everything moving.",
+      "expected_output": "Uses one cron record per job, refuses to add a heartbeat or dispatch loop, keeps steps under farplane/automations/steps/, and adds no hidden scheduler.",
       "files": [],
       "assertions": [
-        "Creates at most one heartbeat",
-        "Keeps Feed Scout and Company OS Daily/Weekly as cron jobs",
+        "Creates no heartbeat and explains that Work Pulse was retired",
+        "Keeps Feed Scout, token burn, and Company OS Daily/Weekly as cron jobs",
         "Keeps every job in farplane/automations/ and the steps it calls in farplane/automations/steps/",
         "Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller"
       ],
       "metadata": {
         "farplane": {
-          "title": "Configure one heartbeat and bounded scheduled sources",
+          "title": "Configure cron-only scheduled sources with no heartbeat",
           "tags": [
             "automation-advisor",
             "v1",
@@ -24,20 +24,20 @@
       }
     },
     {
-      "id": "automation_advisor_reuses_live_pulse_01",
-      "prompt": "The desired config calls the heartbeat farplane-work-pulse, but the live task already uses farplane-ticket-update on the correct thread. Activate the new config.",
-      "expected_output": "Inspects the existing live automation before mutation; Updates or deliberately renames the existing heartbeat rather than creating a duplicate; Keeps exactly one active heartbeat; Aligns tracked config source identity and live prompt; Preserves the existing target thread unless a migration is explicitly required",
+      "id": "automation_advisor_reuses_live_task_01",
+      "prompt": "The desired record calls the morning job farplane-morning-brief, but the live Claude scheduled task is already farplane-morning on the correct workspace. Activate the new config.",
+      "expected_output": "Inspects the live task first, updates or deliberately renames it instead of duplicating, aligns runtime_task and prompt, and keeps the target workspace.",
       "files": [],
       "assertions": [
-        "Inspects the existing live automation before mutation",
-        "Updates or deliberately renames the existing heartbeat rather than creating a duplicate",
-        "Keeps exactly one active heartbeat",
-        "Aligns tracked config source identity and live prompt",
-        "Preserves the existing target thread unless a migration is explicitly required"
+        "Inspects the existing live task before mutation",
+        "Updates or deliberately renames the existing task rather than creating a duplicate",
+        "Keeps one live task per record",
+        "Aligns tracked runtime_task identity and the live prompt",
+        "Preserves the existing target workspace unless a migration is explicitly required"
       ],
       "metadata": {
         "farplane": {
-          "title": "Update the existing live heartbeat instead of duplicating it",
+          "title": "Update the existing live task instead of duplicating it",
           "tags": [
             "automation-advisor",
             "live-activation",
@@ -48,19 +48,19 @@
     },
     {
       "id": "automation_advisor_model_boundary_01",
-      "prompt": "Use Sol with medium reasoning for this existing heartbeat task.",
-      "expected_output": "Checks whether model selection belongs to the heartbeat automation or its target thread; Uses the supported model identifier and medium reasoning setting; Does not invent unsupported automations/ fields; Updates the live task or sends a model-overridden continuation when that is the supported boundary; Verifies the next beat rather than claiming the setting changed from tracked config alone",
+      "prompt": "Use Sol with medium reasoning for this existing scheduled task.",
+      "expected_output": "Checks whether model selection belongs to the scheduled task or its target thread; Uses the supported model identifier and medium reasoning setting; Does not invent unsupported automations/ fields; Updates the live task or sends a model-overridden continuation when that is the supported boundary; Verifies the next run rather than claiming the setting changed from tracked config alone",
       "files": [],
       "assertions": [
-        "Checks whether model selection belongs to the heartbeat automation or its target thread",
+        "Checks whether model selection belongs to the scheduled task or its target thread",
         "Uses the supported model identifier and medium reasoning setting",
         "Does not invent unsupported automations/ fields",
         "Updates the live task or sends a model-overridden continuation when that is the supported boundary",
-        "Verifies the next beat rather than claiming the setting changed from tracked config alone"
+        "Verifies the next run rather than claiming the setting changed from tracked config alone"
       ],
       "metadata": {
         "farplane": {
-          "title": "Apply a heartbeat model at the correct live boundary",
+          "title": "Apply a scheduled-task model at the correct live boundary",
           "tags": [
             "automation-advisor",
             "model",
@@ -72,7 +72,7 @@
     {
       "id": "automation_advisor_company_os_boundary_01",
       "prompt": "Replace the existing Daily and Weekly Interval bindings with the Zanarkand-style Company OS flow. Multica remains dashboard-only and the skills must be file-in/file-out. Do not create another scheduled job.",
-      "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Calls report-gen daily once per eligible Project and report-gen weekly once over the complete frozen set; Makes the automation own provider access, caching, rendering, existing-issue effects, and readback; Gives each skill local files and exactly one JSON output with no provider access; Forbids task admission, strategy invention, broad knowledge promotion, Multica execution, and external side effects; Preserves the existing heartbeat",
+      "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Calls report-gen daily once per eligible Project and report-gen weekly once over the complete frozen set; Makes the automation own provider access, caching, rendering, existing-issue effects, and readback; Gives each skill local files and exactly one JSON output with no provider access; Forbids task admission, strategy invention, broad knowledge promotion, Multica execution, and external side effects",
       "files": [
         "farplane/automations/"
       ],
@@ -82,8 +82,7 @@
         "Makes the automation own provider access, caching, rendering, effects, and readback",
         "Keeps both skills file-in-file-out with one exact JSON output",
         "Limits actions to authorized existing issues",
-        "Forbids task admission, strategy invention, broad promotion, and Multica execution",
-        "Preserves the existing heartbeat"
+        "Forbids task admission, strategy invention, broad promotion, and Multica execution"
       ],
       "metadata": {
         "farplane": {

@@ -9,7 +9,7 @@ tags:
   - harness-map
   - skill-maintenance
 refs:
-  - skills/skill-maintenance/scripts/generate_harness_graph.py
+  - skills/harness/scripts/generate_harness_graph.py
   - .farplane/generated/graphs/harness-graph.json
 ---
 

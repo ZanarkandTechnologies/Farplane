@@ -29,7 +29,7 @@ farplane_productization(accepted_result, owner_surface, ticket?, proof_refs?, au
   -> rollout_plan + shipped_delta_or_goal_handoff + proof
 state: reads(accepted report, farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, owner surface, tickets); writes(ticket, bounded owner-surface delta, ticket proof)
 gates: canonical_icp_bound; owner_surface_named; evidence_refs_present; scoped_ticket_or_goal; proof_before_done
-routes: root skill `harness-advisor` | root skill `impl-plan` | root skill `goal-advisor` | root skill `review`
+routes: root skill `harness` place mode | root skill `impl-plan` | root skill `goal-advisor` | root skill `review`
 fails: ships broad refactor without accepted evidence; changes charter silently; completes without proof
 ```
 
@@ -38,7 +38,7 @@ fails: ships broad refactor without accepted evidence; changes charter silently;
 
 - [ ] 1. Read the accepted result and name its proof refs.
 - [ ] Read ticket-owned `audience_context` first; otherwise resolve the selected area's ICP and configured Feed Scout Brief. Preserve the accepted result's named baseline and decision delta rather than broadening from a trend label. Purely internal rollout may use local proof evidence instead of external Scout Brief.
-- [ ] 2. Confirm the smallest durable owner surface; use `harness-advisor` when unclear.
+- [ ] 2. Confirm the smallest durable owner surface; use `harness` place mode when unclear.
 - [ ] 3. Bind an existing ticket or create one only for material execution.
 - [ ] 4. Implement only the accepted bounded delta.
 - [ ] 5. Run the narrowest validator, eval, QA, and review that proves rollout.

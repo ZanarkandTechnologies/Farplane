@@ -153,7 +153,7 @@ An approved Brand Kit is identity and policy truth. A reference pack is
 optional inspiration, never a licence to copy its source.
 
 When a reviewable creative or campaign packet exists, an internal
-`telegram-message` row can send one phone-readable approve / revise / reject
+`notify` row can send one phone-readable approve / revise / reject
 request with a PNG or JPEG review image. The notification is not approval of
 production, setup, launch, or spend.
 

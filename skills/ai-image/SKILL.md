@@ -1,6 +1,6 @@
 ---
 name: ai-image
-description: "Use for \"make an image\", \"edit this image\", \"product shot\" or \"make an infographic\": provider route, prompt, spend quote and a saved, inspected image asset, including every edit of an existing image."
+description: "Use for \"make an image\", \"edit this image\", \"product shot\" or \"make an infographic\": routed, quoted, inspected image assets; owns every image create or edit, even through imagegen or treg."
 source: local
 department: marketing
 template_uses:

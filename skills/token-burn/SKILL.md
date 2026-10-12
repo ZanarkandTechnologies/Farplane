@@ -1,6 +1,6 @@
 ---
 name: token-burn
-description: "Turn leftover weekly Claude plan usage near reset into parallel revive, triage, and backlog work with local-only commits and one dated report."
+description: "Use for \"burn my leftover tokens\", \"use up my weekly usage\" or \"run token burn\": parallel revive, triage and backlog jobs before the weekly reset, local-only commits, one dated report."
 department: operations
 source: local
 template_uses:
@@ -61,8 +61,8 @@ Backlog lines use `- [ ] path:<absolute repo path> — <problem>`.
   repo path with open lines, at most 4, in file order. A lane is eligible only
   if the path exists, is a git checkout, and `git status --porcelain` is empty;
   otherwise record it as `needs owner: <reason>` and never clone or clean it.
-  A repo with an active Pulse worker claim (see `tickets/README.md`) is also
-  `needs owner`.
+  A repo with an active `claimed_by` ticket claim (see `tickets/README.md`) is
+  also `needs owner`.
   Write the report skeleton now (readings, binding window, planned jobs);
   if today's report exists, use `<date>-2.md`, `-3`, and so on.
 

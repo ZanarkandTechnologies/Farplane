@@ -162,9 +162,9 @@ are not authoritative runtime ownership surfaces.
 Use the existing helpers directly, but prefer output modes that keep routine
 success quiet and make failure output the thing that stands out.
 
-- `python3 skills/skill-maintenance/scripts/install_selected_skills.py --search frontend`
+- `python3 skills/harness/scripts/install_selected_skills.py --search frontend`
   Use to discover shareable skills without rendering the full Farplane config.
-- `python3 skills/skill-maintenance/scripts/install_selected_skills.py --skills review,qa visual mode --dry-run`
+- `python3 skills/harness/scripts/install_selected_skills.py --skills review,qa visual mode --dry-run`
   Use to preview selected skill symlinks into `~/.codex/skills`.
 - `python3 skills/commit/scripts/pr_review_watch.py classify --repo <repo> --pr <number> --json`
   Compatibility command for the `commit` PR watch skill-owned classifier.
@@ -174,7 +174,7 @@ success quiet and make failure output the thing that stands out.
   minimization.
 - `python3 bin/validators/sync_skill_registry.py --check`
   Use after skill metadata changes when debugging the broader
-  `skills/skill-maintenance/scripts/check_skills.py --write` path.
+  `skills/harness/scripts/check_skills.py --write` path.
 - `python3 bin/farplane.py adoption scan --project-root . --json`
   Use to inspect a project's Farplane manifest pins, local skill presence,
   feature/template adoption, and drift against the global Farplane standard.

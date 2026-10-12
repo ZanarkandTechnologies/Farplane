@@ -15,8 +15,8 @@ refs:
   - docs/farplane-framework/hooks-and-runtime.md
   - docs/features/FEAT-0065-pulse-and-interval-automation.md
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
-  - skills/skill-maintenance/scripts/farplane_lifecycle_graph.py
-  - skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py
+  - skills/harness/scripts/farplane_lifecycle_graph.py
+  - skills/harness/scripts/generate_farplane_lifecycle_graph.py
   - .farplane/generated/graphs/farplane-lifecycle-graph.json
 ---
 
@@ -124,7 +124,7 @@ how concrete framework files are consumed. Use `--full`, `--include-gates`,
 detail.
 
 Projection profiles live in
-`skills/skill-maintenance/scripts/graph_projection_config.py`. Keep them as
+`skills/harness/scripts/graph_projection_config.py`. Keep them as
 small named Python configs until a non-Python consumer needs an external
 JSON/YAML config file. This keeps profile behavior typed, testable, and close
 to the generator code while the model is still settling.

@@ -53,7 +53,7 @@ As of 2026-10-12 (after the #41 unit merges), that is 5 named advisor packages p
 
 | Need | Advisor | Produces |
 | --- | --- | --- |
-| Decide where a Farplane behavior or capability belongs | [`harness-advisor`](../../skills/harness-advisor/SKILL.md) | Owner-surface recommendation across policy, skills, agents, hooks, tickets, docs, and validators |
+| Decide where a Farplane behavior or capability belongs | [`harness`](../../skills/harness/SKILL.md) | Owner-surface recommendation across policy, skills, agents, hooks, tickets, docs, and validators |
 | Compile material work into the right execution loop | [`goal-advisor`](../../skills/goal-advisor/SKILL.md) | Goal architecture, ticket-backed state, and native Goal prompt when warranted |
 | Initialize or migrate a project into Farplane | [`setup-advisor`](../../skills/setup-advisor/SKILL.md) | Substrate/readiness audit, optional scaffold, and harness handoff |
 | Define project-owned recurring Codex work | [`automation-advisor`](../../skills/automation-advisor/SKILL.md) | Automation configuration using Pulse and Interval workflows |

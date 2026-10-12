@@ -166,7 +166,7 @@ When any target field is low confidence or blocked by contradictory evidence:
 1. Add the field to the proposal with `status: "needs_kenji"`.
 2. Write a short message file using
    [hygiene Telegram template](../templates/hygiene-telegram.md).
-3. Send the message with the installed `telegram-message` skill/script when
+3. Send the message with the installed `notify` skill/script when
    Telegram is configured.
 4. If Telegram is not configured, keep the message file in the run artifact and
    report the fallback path.

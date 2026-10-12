@@ -75,8 +75,8 @@ ProjectPortfolio :=
 
 For skill-improvement work, native Goal mode is the durable loop runner. Draft
 the Goal so it reads the target skill package plus any `self-improve/` context,
-optimizes toward `program.md`, uses `self-improve` only for eval, memory, or
-prompt scaffolding, and uses `skill-maintenance` for accepted writeback into
+optimizes toward `program.md`, uses `harness` optimize mode only for eval, memory, or
+prompt scaffolding, and uses `harness` maintain mode for accepted writeback into
 `SKILL.md`, references, or plugin/source copies.
 
 ## Question Policy

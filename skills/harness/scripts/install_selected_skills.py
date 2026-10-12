@@ -1,0 +1,461 @@
+#!/usr/bin/env python3
+"""Search and install selected Farplane skills into a Codex home."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import shutil
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Sequence
+
+
+RETIRED_SKILL_NAMES = {
+    "agent-behavior-test",
+    "bash-efficiency",
+    "budget-advisor",
+    "commit-message",
+    "data-viz",
+    "deep-interview",
+    "deep-ui-design",
+    "delegate-frontend",
+    "deliberative-advice",
+    "execute",
+    "external-patterns",
+    "farplane-invocation",
+    "find-skills",
+    "frontend-craft",
+    "frontend-design",
+    "horizon-advisor",
+    "image-generation",
+    "ingest-world-data",
+    "knowledge-tidier",
+    "plan",
+    "pr-runtime",
+    "react-flow",
+    "reshape-feasible",
+    "skill-maintenance",
+    "skill-registry-ui",
+    "summarize",
+    "testing",
+    "ticket-opportunity-generator",
+    "update-memory",
+    "update-strategy",
+    "video-production",
+    "video-generation",
+}
+
+
+@dataclass(frozen=True)
+class Skill:
+    name: str
+    path: Path
+    description: str
+    source: str
+    department: str
+
+
+@dataclass(frozen=True)
+class InstallResult:
+    installed: list[str]
+    skipped: list[str]
+    pruned: list[str]
+    backup_root: str
+    dry_run: bool
+
+
+INSTALLER_METADATA_RE = re.compile(
+    r"^(?P<key>name|description|department|source):\s*(?P<value>.+?)\s*$"
+)
+
+
+def parse_installer_metadata(skill_file: Path) -> dict[str, str]:
+    """Read the four installer fields without importing the lint-only YAML stack."""
+
+    lines = skill_file.read_text(encoding="utf-8").splitlines()
+    if not lines or lines[0] != "---":
+        raise ValueError(f"{skill_file}: missing YAML frontmatter")
+
+    metadata: dict[str, str] = {}
+    for line in lines[1:]:
+        if line == "---":
+            break
+        match = INSTALLER_METADATA_RE.match(line)
+        if not match:
+            continue
+        value = match.group("value")
+        if value.startswith('"') and value.endswith('"'):
+            try:
+                value = str(json.loads(value))
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"{skill_file}: invalid quoted {match.group('key')} value") from exc
+        elif value.startswith("'") and value.endswith("'"):
+            value = value[1:-1].replace("''", "'")
+        metadata[match.group("key")] = value
+
+    missing = [key for key in ("name", "description", "source") if not metadata.get(key)]
+    if missing:
+        raise ValueError(f"{skill_file}: missing installer metadata: {', '.join(missing)}")
+    return metadata
+
+
+def discover_skills(skills_dir: Path) -> list[Skill]:
+    if not skills_dir.exists():
+        raise FileNotFoundError(f"Skills directory does not exist: {skills_dir}")
+
+    skills: list[Skill] = []
+    for skill_dir in sorted(skills_dir.iterdir()):
+        if not skill_dir.is_dir() or skill_dir.name == ".system":
+            continue
+        skill_file = skill_dir / "SKILL.md"
+        if not skill_file.exists():
+            continue
+        meta = parse_installer_metadata(skill_file)
+        skills.append(
+            Skill(
+                name=meta["name"],
+                path=skill_dir,
+                description=meta["description"],
+                source=meta["source"],
+                department=meta.get("department", ""),
+            )
+        )
+    return skills
+
+
+def filter_skills(skills: Sequence[Skill], query: str | None) -> list[Skill]:
+    if not query:
+        return list(skills)
+
+    terms = [term.casefold() for term in query.split() if term.strip()]
+    if not terms:
+        return list(skills)
+
+    matches: list[Skill] = []
+    for skill in skills:
+        haystack = " ".join(
+            [skill.name, skill.description, skill.source, skill.department]
+        ).casefold()
+        if all(term in haystack for term in terms):
+            matches.append(skill)
+    return matches
+
+
+def parse_skill_names(raw: str | None, repeated: Sequence[str] | None) -> list[str]:
+    values: list[str] = []
+    if raw:
+        values.extend(raw.split(","))
+    if repeated:
+        for item in repeated:
+            values.extend(item.split(","))
+    names = [value.strip() for value in values if value.strip()]
+    return sorted(dict.fromkeys(names))
+
+
+def is_relative_to(path: Path, root: Path) -> bool:
+    try:
+        path.resolve().relative_to(root.resolve())
+    except ValueError:
+        return False
+    return True
+
+
+def backup_existing(dest: Path, backup_root: Path, dry_run: bool) -> None:
+    relative = dest.relative_to(dest.parents[1])
+    backup_dest = backup_root / relative
+    if dry_run:
+        return
+    backup_dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(dest), str(backup_dest))
+
+
+def render_skill_markdown(skill_md: str) -> str:
+    """Return installed SKILL.md text exactly as the source first-load contract."""
+    return skill_md.rstrip() + "\n"
+
+
+def should_install_package_path(relative_path: Path) -> bool:
+    if relative_path.parts[:1] == ("tests",):
+        return False
+    if relative_path.name == "todos.md":
+        return False
+    return True
+
+
+def package_files(root: Path) -> dict[Path, Path]:
+    return {
+        path.relative_to(root): path
+        for path in root.rglob("*")
+        if (path.is_file() or path.is_symlink())
+        and should_install_package_path(path.relative_to(root))
+    }
+
+
+def has_uninstallable_package_files(root: Path) -> bool:
+    return any(
+        (path.is_file() or path.is_symlink())
+        and not should_install_package_path(path.relative_to(root))
+        for path in root.rglob("*")
+    )
+
+
+def files_match(source: Path, installed: Path) -> bool:
+    if source.is_symlink() or installed.is_symlink():
+        return installed.is_symlink() and source.is_symlink() and (
+            installed.readlink() == source.readlink()
+        )
+    return source.read_bytes() == installed.read_bytes()
+
+
+def rendered_skill_matches(src: Path, dest: Path) -> bool:
+    if not dest.is_dir() or dest.is_symlink():
+        return False
+    if has_uninstallable_package_files(dest):
+        return False
+
+    source_files = package_files(src)
+    installed_files = package_files(dest)
+    if set(source_files) != set(installed_files):
+        return False
+
+    source_skill = src / "SKILL.md"
+    rendered_skill = render_skill_markdown(source_skill.read_text(encoding="utf-8"))
+    installed_skill = dest / "SKILL.md"
+    if not installed_skill.exists():
+        return False
+    if installed_skill.read_text(encoding="utf-8") != rendered_skill:
+        return False
+
+    for relative_path, source_path in source_files.items():
+        if relative_path == Path("SKILL.md"):
+            continue
+        if not files_match(source_path, installed_files[relative_path]):
+            return False
+    return True
+
+
+def has_nested_fixture_skills(src: Path) -> bool:
+    """Codex discovers SKILL.md recursively, so linked packages must not carry fixtures."""
+    return any(
+        path.name == "SKILL.md" and not should_install_package_path(path.relative_to(src))
+        for path in src.rglob("SKILL.md")
+    )
+
+
+def copy_skill_package(src: Path, dest: Path) -> None:
+    shutil.copytree(
+        src,
+        dest,
+        symlinks=True,
+        ignore=lambda _directory, names: {
+            name for name in names if name in {"todos.md", "tests"}
+        },
+    )
+
+
+def link_skill_package(src: Path, dest: Path, backup_root: Path, dry_run: bool) -> str:
+    """Install a skill as a directory symlink so source edits are live in every runtime.
+
+    Codex ignores symlinked SKILL.md files but follows symlinked skill
+    directories. Packages whose tests/ hold fixture SKILL.md files are copied
+    instead, so Codex does not list those fixtures as real skills.
+    """
+    copy = has_nested_fixture_skills(src)
+    if copy and rendered_skill_matches(src, dest):
+        return "skipped"
+    if not copy and dest.is_symlink() and dest.readlink() == src.absolute():
+        return "skipped"
+
+    if dest.exists() or dest.is_symlink():
+        backup_existing(dest, backup_root, dry_run)
+
+    if dry_run:
+        return "installed"
+
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if copy:
+        copy_skill_package(src, dest)
+    else:
+        dest.symlink_to(src.absolute(), target_is_directory=True)
+    return "installed"
+
+
+def install_skills(
+    repo: Path,
+    target: Path,
+    names: Sequence[str],
+    prune: bool,
+    dry_run: bool,
+) -> InstallResult:
+    skills = {skill.name: skill for skill in discover_skills(repo / "skills")}
+    missing = [name for name in names if name not in skills]
+    if missing:
+        known = ", ".join(sorted(skills))
+        raise ValueError(f"Unknown skill(s): {', '.join(missing)}\nKnown skills: {known}")
+
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    backup_root = target / ".install-backups" / stamp
+    skills_target = target / "skills"
+    selected = set(names)
+    installed: list[str] = []
+    skipped: list[str] = []
+    pruned: list[str] = []
+
+    for name in names:
+        result = link_skill_package(
+            skills[name].path, skills_target / name, backup_root, dry_run
+        )
+        if result == "installed":
+            installed.append(name)
+        else:
+            skipped.append(name)
+
+    if prune and skills_target.exists():
+        repo_skills = repo / "skills"
+        for dest in sorted(skills_target.iterdir()):
+            if dest.name in selected:
+                continue
+            if dest.is_symlink():
+                try:
+                    resolved = dest.resolve(strict=True)
+                except FileNotFoundError:
+                    resolved = dest.resolve(strict=False)
+                if not is_relative_to(resolved, repo_skills):
+                    continue
+            if dest.name in RETIRED_SKILL_NAMES:
+                backup_existing(dest, backup_root, dry_run)
+                pruned.append(dest.name)
+                continue
+            if dest.is_symlink():
+                backup_existing(dest, backup_root, dry_run)
+                pruned.append(dest.name)
+                continue
+
+            skill = skills.get(dest.name)
+            if skill and rendered_skill_matches(skill.path, dest):
+                backup_existing(dest, backup_root, dry_run)
+                pruned.append(dest.name)
+
+    return InstallResult(
+        installed=installed,
+        skipped=skipped,
+        pruned=pruned,
+        backup_root=str(backup_root),
+        dry_run=dry_run,
+    )
+
+
+def skill_row(skill: Skill) -> dict[str, str]:
+    return {
+        "name": skill.name,
+        "description": skill.description,
+        "source": skill.source,
+        "department": skill.department,
+        "path": str(skill.path),
+    }
+
+
+def render_table(skills: Sequence[Skill]) -> str:
+    if not skills:
+        return "No matching skills."
+
+    lines = [f"{'NAME':28} {'DEPT':12} {'SOURCE':9} DESCRIPTION"]
+    for skill in skills:
+        description = skill.description.replace("\n", " ")
+        if len(description) > 92:
+            description = description[:89].rstrip() + "..."
+        lines.append(
+            f"{skill.name:28} {skill.department[:12]:12} {skill.source[:9]:9} {description}"
+        )
+    return "\n".join(lines)
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Search and install selected Farplane skills."
+    )
+    parser.add_argument(
+        "--repo",
+        type=Path,
+        default=Path(__file__).resolve().parents[3],
+        help="Farplane repo root. Defaults to this script's repo.",
+    )
+    parser.add_argument(
+        "--target",
+        type=Path,
+        default=Path.home() / ".codex",
+        help="Codex home to install into. Defaults to ~/.codex.",
+    )
+    parser.add_argument("--list", action="store_true", help="List available skills.")
+    parser.add_argument("--search", help="Search skill names and descriptions.")
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Install every discoverable skill from the repo.",
+    )
+    parser.add_argument("--skills", help="Comma-separated skill names to install.")
+    parser.add_argument(
+        "--skill",
+        action="append",
+        help="Skill name to install. Can be repeated or comma-separated.",
+    )
+    parser.add_argument(
+        "--prune",
+        action="store_true",
+        help="Remove unselected symlinks that point into this repo's skills directory.",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print what would happen without changing files.",
+    )
+    parser.add_argument("--json", action="store_true", help="Print JSON output.")
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    repo = args.repo.resolve()
+    target = args.target.expanduser().resolve()
+    names = parse_skill_names(args.skills, args.skill)
+
+    if args.list or args.search:
+        try:
+            matches = filter_skills(discover_skills(repo / "skills"), args.search)
+        except FileNotFoundError as exc:
+            raise SystemExit(str(exc)) from exc
+        if args.json:
+            print(json.dumps([skill_row(skill) for skill in matches], indent=2))
+        else:
+            print(render_table(matches))
+        return 0
+
+    if args.all:
+        try:
+            names = [skill.name for skill in discover_skills(repo / "skills")]
+        except FileNotFoundError as exc:
+            raise SystemExit(str(exc)) from exc
+
+    if not names:
+        raise SystemExit("No skills selected. Use --list, --search, or --skills name1,name2.")
+
+    try:
+        result = install_skills(repo, target, names, args.prune, args.dry_run)
+    except (FileNotFoundError, ValueError) as exc:
+        raise SystemExit(str(exc)) from exc
+    if args.json:
+        print(json.dumps(asdict(result), indent=2))
+    else:
+        prefix = "dry-run " if result.dry_run else ""
+        print(f"{prefix}installed: {', '.join(result.installed) or 'none'}")
+        print(f"{prefix}already linked: {', '.join(result.skipped) or 'none'}")
+        print(f"{prefix}pruned: {', '.join(result.pruned) or 'none'}")
+        print(f"backups: {result.backup_root}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

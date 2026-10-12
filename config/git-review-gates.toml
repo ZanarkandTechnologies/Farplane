@@ -31,8 +31,8 @@ globs = [
   "bin/validators/test_run_git_gate.py",
   "bin/tests/test_sync_skill_registry.py",
   "bin/tests/test_farplane_frontmatter_validation.py",
-  "skills/skill-creator/scripts/quick_validate.py",
-  "skills/skill-creator/scripts/test_quick_validate.py",
+  "skills/harness/scripts/quick_validate.py",
+  "skills/harness/scripts/test_quick_validate.py",
   "config/skill-departments.toml",
   "config/skill-workflows.toml",
   "docs/skills/system.md",
@@ -45,8 +45,8 @@ checks = ["lint_contract_tests"]
 
 [[pre_commit.path_check]]
 globs = [
-  "skills/skill-maintenance/scripts/generate_skill_graph.py",
-  "skills/skill-maintenance/scripts/test_generate_skill_graph.py",
+  "skills/harness/scripts/generate_skill_graph.py",
+  "skills/harness/scripts/test_generate_skill_graph.py",
 ]
 checks = ["skill_projection"]
 
@@ -84,8 +84,8 @@ globs = [
   "bin/validators/test_run_git_gate.py",
   "bin/tests/test_sync_skill_registry.py",
   "bin/tests/test_farplane_frontmatter_validation.py",
-  "skills/skill-creator/scripts/quick_validate.py",
-  "skills/skill-creator/scripts/test_quick_validate.py",
+  "skills/harness/scripts/quick_validate.py",
+  "skills/harness/scripts/test_quick_validate.py",
   "config/skill-departments.toml",
   "config/skill-workflows.toml",
   "docs/skills/system.md",
@@ -96,8 +96,8 @@ checks = ["lint_contract_tests"]
 
 [[pre_push.path_check]]
 globs = [
-  "skills/skill-maintenance/scripts/generate_skill_graph.py",
-  "skills/skill-maintenance/scripts/test_generate_skill_graph.py",
+  "skills/harness/scripts/generate_skill_graph.py",
+  "skills/harness/scripts/test_generate_skill_graph.py",
 ]
 checks = ["skill_projection"]
 
@@ -137,7 +137,7 @@ argv = [
   "bin.validators.test_check_doc_frontmatter",
   "bin.validators.test_run_git_gate",
   "bin.tests.test_farplane_frontmatter_validation",
-  "skills.skill-creator.scripts.test_quick_validate",
+  "skills.harness.scripts.test_quick_validate",
 ]
 
 [checks.skill_projection]
@@ -145,7 +145,7 @@ argv = [
   "python3",
   "-m",
   "unittest",
-  "skills.skill-maintenance.scripts.test_generate_skill_graph",
+  "skills.harness.scripts.test_generate_skill_graph",
 ]
 
 [checks.ticket_closure_gate]

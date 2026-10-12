@@ -7,7 +7,7 @@ code-rendered or inline visuals when generated or real media was expected.
 ## Metric
 - Primary: `skill_eval_pass_rate`
 - Verify: `python3 skills/landing-page/scripts/test_asset_evidence_lint.py`
-- Guard: `python3 skills/landing-page/scripts/test_landing_spec_lint.py && python3 skills/skill-creator/scripts/quick_validate.py skills/landing-page`
+- Guard: `python3 skills/landing-page/scripts/test_landing_spec_lint.py && python3 skills/harness/scripts/quick_validate.py skills/landing-page`
 
 ## Scope
 - Editable:

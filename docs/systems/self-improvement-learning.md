@@ -18,7 +18,7 @@ refs:
   - skills/goal-advisor/references/metrics.md
   - skills/goal-advisor/references/loop-presets.md
   - skills/goal-advisor/references/ml-program-preset.md
-  - skills/self-improve/SKILL.md
+  - skills/harness/SKILL.md
 system_record_json: |
   {
     "id": "SYS-0007",
@@ -28,7 +28,7 @@ system_record_json: |
     "owner_spec": "docs/systems/self-improvement-learning.md",
     "primary_feature_ref": "FEAT-0063",
     "feature_refs": ["FEAT-0063", "FEAT-0069", "FEAT-0070"],
-    "refs": ["skills/eval/SKILL.md", "skills/goal-advisor/SKILL.md", "skills/goal-advisor/references/choose-next.md", "skills/goal-advisor/references/metrics.md", "skills/goal-advisor/references/loop-presets.md", "skills/goal-advisor/references/ml-program-preset.md", "skills/self-improve/SKILL.md"],
+    "refs": ["skills/eval/SKILL.md", "skills/goal-advisor/SKILL.md", "skills/goal-advisor/references/choose-next.md", "skills/goal-advisor/references/metrics.md", "skills/goal-advisor/references/loop-presets.md", "skills/goal-advisor/references/ml-program-preset.md", "skills/harness/SKILL.md"],
     "last_verified": "2026-10-12"
   }
 ---
@@ -223,7 +223,7 @@ flowchart LR
 - The `goal-advisor` metric card helps when the honest performance target or
   guard is unclear.
 - `qa` adversarial mode proposes adversarial evidence but cannot approve its own case.
-- `skill-maintenance` owns accepted skill writeback and bounded source upgrades.
+- `harness` maintain mode owns accepted skill writeback and bounded source upgrades.
 - The `goal-advisor` ML autoresearch preset owns ML mutable-surface execution,
   receipts, and final candidate verification under a frozen evaluator.
 - Delayed real-world outcomes belong to the product experiment able to observe
@@ -237,9 +237,9 @@ flowchart LR
 
 ## Proof And Maintenance
 
-- Skill validation: `python3 skills/skill-creator/scripts/quick_validate.py skills/self-improve skills/goal-advisor`.
+- Skill validation: `python3 skills/harness/scripts/quick_validate.py skills/harness skills/goal-advisor`.
 - Eval JSON and query-spoiler validation through the existing Eval tooling.
-- Skill-system validation: `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
+- Skill-system validation: `python3 skills/harness/scripts/check_skills.py --write`.
 - Behavior proof: harden transition, harden exhaustion, regression rejection,
   and refinement convergence through Agent QA plus separate evidence review.
 

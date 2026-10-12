@@ -4,7 +4,7 @@
 - **Entrypoint:** `skill_invocation.py` (five-second timeout).
 - **Purpose:** Record each real skill invocation as one `skill_invoked` row on
   the bunker Convex hook stream `skill-invocation-listener`. Skill heat
-  (`skills/skill-maintenance/scripts/generate_skill_graph.py`) counts only
+  (`skills/harness/scripts/generate_skill_graph.py`) counts only
   these rows.
 
 ## What counts

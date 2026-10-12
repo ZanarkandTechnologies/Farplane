@@ -252,6 +252,6 @@ mechanically implied node directly. Change one bounded part of the skill, run th
 update the tree, append the observation, evidence, learning, decision, and next
 action, then request drift review when required. Promote
 only durable accepted rules. Use Goal mode as the durable loop runner,
-`self-improve` only for eval/memory/prompt scaffolding, and `skill-maintenance`
+`harness` optimize mode only for eval/memory/prompt scaffolding, and `harness` maintain mode
 for accepted writeback.
 ```

@@ -28,21 +28,21 @@ Rules:
   first-load todo lists stay visible in installed `SKILL.md`. Skill-local
   `todos.md` sidecars are unsupported and must not be copied, embedded, or used
   as registry input. Update
-  `skills/skill-maintenance/scripts/test_install_selected_skills.py` when changing
+  `skills/harness/scripts/test_install_selected_skills.py` when changing
   this contract.
-- Use `skills/skill-maintenance/` for bulk skill source/todo/registry upkeep
+- Use `skills/harness/` for bulk skill source/todo/registry upkeep
   instead of expanding global prompt rules.
-- Use `skills/harness-advisor/` first when the operator is deciding where a
+- Use `skills/harness/` place mode first when the operator is deciding where a
   Farplane improvement belongs across root policy, global templates, feature docs,
   skills, subagents, hooks/scripts, ticket contracts, validators, or registries.
-- Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
+- Run `python3 skills/harness/scripts/check_skills.py --write` after
   skill frontmatter, Markdown links, or first-load todo changes.
 - Run `python3 bin/validators/check_skill_frontmatter.py --report` when
   reviewing capability contracts; unresolved inputs are allowed only for truly
   external or not-yet-admitted artifact families.
 - When `docs/skills/templates/SKILL_TEMPLATE.md` changes, treat it as a
   template release candidate: run
-  `python3 skills/skill-maintenance/scripts/check_skills.py --write` so
+  `python3 skills/harness/scripts/check_skills.py --write` so
   `.farplane/generated/graphs/skill-template-intelligence.json` refreshes
   with the template metadata. Do not hand-edit generated template intelligence
   files.

@@ -74,7 +74,7 @@ returns: report and feed refs, Scout Brief receipt, candidates and verdicts, gap
   first; a login wall is a failed extraction). Preserve canonical identity,
   the extraction receipt, quote limits, and claim grounding; record a source
   gap instead of inventing content. Route reusable workflows to
-  [skill-creator](../skill-creator/SKILL.md), eligible harness techniques to
+  [harness create mode](../harness/SKILL.md), eligible harness techniques to
   single-source mode, workflow-teaching videos to
   [intelligest](../intelligest/SKILL.md), and convergent patterns to
   [research](../research/SKILL.md) synthesis.
@@ -122,7 +122,7 @@ returns: report and feed refs, Scout Brief receipt, candidates and verdicts, gap
 - A successful CLI exit is not source truth; numeric scores carry confidence
   and anti-metrics.
 - Single-source mode never edits a skill; accepted skill changes go through
-  `skill-maintenance`.
+  `harness` maintain mode.
 
 ## Output
 

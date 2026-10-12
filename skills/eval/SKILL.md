@@ -101,8 +101,8 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
   - [ ] Fix the skill, fixture, checklist, profile, or runner owner; never make
         a failing case pass by teaching the answer in its prompt.
   - [ ] Send reusable runtime prevention from assertions through
-        [skill-maintenance](../skill-maintenance/SKILL.md); keep rare benchmark
-        points in evals. Use [self-improve](../self-improve/SKILL.md) only for
+        [harness maintain mode](../harness/SKILL.md); keep rare benchmark
+        points in evals. Use [harness optimize mode](../harness/SKILL.md) only for
         measured variant search with an owning ticket.
 - [ ] 5. Finish with independent proof.
   - [ ] Reapply the Todo List guardrails and owning validators. For core, meta, `eval`,

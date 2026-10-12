@@ -110,14 +110,14 @@ See [docs/farplane-framework/project-files.md](../docs/farplane-framework/projec
 
 ## Official Automation Presets
 
-- `Work Pulse`: the only heartbeat; reconciles, dispatches, handles due
-  check-ins, and refills an empty BAU board.
+Every preset is a `cron` record; there is no heartbeat (Work Pulse was
+retired). `automation-advisor` owns the record shape.
+
 - `Feed Scout`: separate source report and bounded opportunity-ticket job.
 - Root `Daily/Weekly Company OS`: one office-wide portfolio review pair;
   managed projects do not duplicate these records.
-- `Dogfood Improvement`: portfolio learning and bounded experiment packets;
-  Work Pulse executes the selected tickets.
+- `Burn Before Reset`: runs `token-burn` near the weekly usage reset.
 - `Monthly Registry Consolidation`: optional report-only pass over registry
   truth, duplicate rows, owner drift, and generated-output freshness.
-- Human-feedback improvements are ordinary Dogfood-created Goal Packets;
-  Work Pulse executes them and ticket review state waits without a worker.
+- Human-feedback improvements are ordinary Goal Packets compiled by
+  `goal-advisor`; ticket review state waits without a worker.

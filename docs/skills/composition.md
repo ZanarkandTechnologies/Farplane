@@ -1,13 +1,13 @@
 ---
 title: Skill Composition Contract
 status: active
-owner: skill-maintenance
+owner: harness
 created_at: 2026-08-07
 updated_at: 2026-08-07
 refs:
   - docs/skills/system.md
   - docs/skills/templates/SKILL_TEMPLATE.md
-  - skills/skill-maintenance/SKILL.md
+  - skills/harness/SKILL.md
 ---
 
 # Skill Composition Contract

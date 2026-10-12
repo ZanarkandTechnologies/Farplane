@@ -3,7 +3,7 @@
 Load when Kenji's judgment is the fastest honest quality signal for an
 optimization loop (content, skills, creative artifacts, offers, demos, UI,
 taste) before a benchmark or market test exists. One-off approval goes to chat,
-`review`, or `telegram-message`; correctness goes to QA. The [metric card](metrics.md)
+`review`, or `notify`; correctness goes to QA. The [metric card](metrics.md)
 already lists `human_feedback` as a signal class; this file owns only the loop
 protocol.
 
@@ -88,6 +88,6 @@ promotion decision.
 ```
 
 Use `score: null` for qualitative feedback. The request (`feedback-request.md`
-under the ticket artifacts, also sent via `telegram-message`) carries: target,
+under the ticket artifacts, also sent via `notify`) carries: target,
 objective, worker thread, artifact refs, proposal summary, one question, the
 `feedback.json` path, and this schema.

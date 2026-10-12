@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.6.5"
+template_version: "0.6.6"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -32,8 +32,8 @@ template_uses:
 # skill-surface-budget: "0.1.0"
 # Required when the skill sits on a specialist desk in the Capability Map
 # (skill-workflows.toml [specialists]), and must match the desk's department;
-# omit it for an internal helper. One of: back-office | sales | deals |
-# marketing | operations | intelligence | customer.
+# omit it for an internal helper. One of: leadership | intelligence |
+# marketing | sales | delivery | operations.
 department: [TODO: the desk's department, or delete for a helper]
 allowed-tools: {tools}
 ---
@@ -97,7 +97,7 @@ fields—the signature and assertions carry those obligations.]
   and `max` selects all without changing the skill's output contract.
 - `examples/golden/*`: add when a useful example is too large to sit beside its
   rule. Keep short examples inline.
-Follow docs/skills/best-practices.md and skill-maintenance for their exact
+Follow docs/skills/best-practices.md and harness for their exact
 contracts instead of copying setup instructions into every new skill.
 -->
 

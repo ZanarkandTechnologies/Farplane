@@ -71,8 +71,8 @@
    `converged`, `single-source`, `conflicting`, or `weak` before proposing a
    skill delta.
 11. Route each summary-source item by output type:
-   - reusable skill behavior -> `skill-creator` with
-     `skills/skill-creator/references/book-to-skill.md`
+   - reusable skill behavior -> `harness` create mode with
+     `skills/harness/references/book-to-skill.md`
    - broader harness technique -> [single-source mode](single-source.md)
    - repeated pattern across several items -> `research` (synthesis)
    - generic motivation or weak recap -> ledger only
@@ -98,7 +98,7 @@
     ledgers, or dated trend sections.
 17. Validate Scout Brief with `scripts/validate_scout_brief.py` and record an update
     receipt before listing candidates.
-18. Update the ingestion ledger with scout, skill-creator handoff, or proposal
+18. Update the ingestion ledger with scout, harness handoff, or proposal
     links. Only sources configured at run start may nominate sources. Resolve
     each nominee against configured source coordinates, canonical keys, the
     ingestion ledger, and the proposal ledger; merge repeat evidence into one

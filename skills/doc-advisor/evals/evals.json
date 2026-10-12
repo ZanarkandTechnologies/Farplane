@@ -124,7 +124,7 @@
     {
       "id": "doc_advisor_consolidate_preserves_template_value_01",
       "prompt": "We have a bloated skill SKILL.md with repeated rationale, a required Todo List, a Skill Signature, and a few rare examples. Use consolidate to make it shorter.",
-      "expected_output": "Finds or names the owning skill template before rewriting; Slices the skill into sections or units before deciding actions; Preserves required first-load behavior such as trigger, signature, todo path, gates, proof, and output; Classifies units as keep, merge, rewrite, move, delete, promote, demote, or defer; Moves rare examples or branch-specific detail only when reference routing remains explicit; Runs or requires a loss check rather than claiming shorter is better; Routes material skill edits to skill-maintenance checks or review instead of self-approving",
+      "expected_output": "Finds or names the owning skill template before rewriting; Slices the skill into sections or units before deciding actions; Preserves required first-load behavior such as trigger, signature, todo path, gates, proof, and output; Classifies units as keep, merge, rewrite, move, delete, promote, demote, or defer; Moves rare examples or branch-specific detail only when reference routing remains explicit; Runs or requires a loss check rather than claiming shorter is better; Routes material skill edits to harness checks or review instead of self-approving",
       "files": [],
       "assertions": [
         "Finds or names the owning skill template before rewriting",
@@ -133,7 +133,7 @@
         "Classifies units as keep, merge, rewrite, move, delete, promote, demote, or defer",
         "Moves rare examples or branch-specific detail only when reference routing remains explicit",
         "Runs or requires a loss check rather than claiming shorter is better",
-        "Routes material skill edits to skill-maintenance checks or review instead of self-approving"
+        "Routes material skill edits to harness checks or review instead of self-approving"
       ],
       "metadata": {
         "farplane": {

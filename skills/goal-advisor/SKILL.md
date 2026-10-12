@@ -56,7 +56,7 @@ gates:
   budget_and_stops_named; drift_and_logging_named; proof_route_named;
   packet_context_budget_pass; material_packet_approved
 routes:
-  impl-plan | telegram-message | qa | review | direct-answer
+  impl-plan | notify | qa | review | direct-answer
 fails:
   hidden_loop; prompt_only_material_goal; full_progress_first_load;
   duplicated_ticket_policy; self_certified_material_proof; stale_packet;

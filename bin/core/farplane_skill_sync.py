@@ -14,7 +14,7 @@ def run_sync_skills(args: argparse.Namespace) -> int:
     """Refresh skill projections, then prove their complete read-only contract."""
 
     root = Path(args.root).expanduser().resolve()
-    graph_script = root / "skills" / "skill-maintenance" / "scripts" / "generate_graph_projection.py"
+    graph_script = root / "skills" / "harness" / "scripts" / "generate_graph_projection.py"
     commands = (
         (
             "skill_registry",

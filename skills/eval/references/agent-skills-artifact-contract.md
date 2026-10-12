@@ -45,6 +45,6 @@ lost. Farplane UI Eval OS is the only browser renderer.
 - Owning ticket `program.md`: instantiated harden/refine policy, metrics,
   budgets, and stop conditions.
 - Owning ticket `progress.md`: append-only hypotheses, results, and run links.
-- `skill-creator`: initial draft and canonical case seeding, then eval handoff.
-- `skill-maintenance`: accepted writeback, then matched regression rerun.
+- `harness` create mode: initial draft and canonical case seeding, then eval handoff.
+- `harness` maintain mode: accepted writeback, then matched regression rerun.
 - Farplane UI Eval OS: history, health, comparison, drilldown, and visualization.

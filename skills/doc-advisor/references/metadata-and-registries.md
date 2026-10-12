@@ -48,7 +48,7 @@ input_packet:
    generated JSONL and registry Markdown are outputs.
 3. **Run the right generator.**
    - Feature/system metadata: `python3 docs/features/validate_features.py --write`
-   - Skill metadata or links: `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+   - Skill metadata or links: `python3 skills/harness/scripts/check_skills.py --write`
    - General doc refs: `python3 bin/validators/check_doc_refs.py`
 4. **Report generated output.** Summaries should name source docs changed and
    validators run, not pretend generated rows were hand-authored.

@@ -114,7 +114,7 @@ coordinating Codex QA lane.
 | Route | Skills and owners |
 | --- | --- |
 | Connector/API/CLI first | [`feed-scout`](../../feed-scout/SKILL.md), [`intelligest`](../../intelligest/SKILL.md) |
-| Codex in-app Browser | [`qa`](../../qa/SKILL.md), [`eval`](../../eval/SKILL.md), [`impl-plan`](../../impl-plan/SKILL.md), [`visual-design`](../../visual-design/SKILL.md), [`landing-page`](../../landing-page/SKILL.md), [`prospect`](../../prospect/SKILL.md), [`prd`](../../prd/SKILL.md), [`optimize-harness`](../../optimize-harness/SKILL.md), [`feed-scout`](../../feed-scout/SKILL.md), [`social-content`](../../social-content/SKILL.md) |
+| Codex in-app Browser | [`qa`](../../qa/SKILL.md), [`eval`](../../eval/SKILL.md), [`impl-plan`](../../impl-plan/SKILL.md), [`visual-design`](../../visual-design/SKILL.md), [`landing-page`](../../landing-page/SKILL.md), [`prospect`](../../prospect/SKILL.md), [`prd`](../../prd/SKILL.md), [`harness`](../../harness/SKILL.md), [`feed-scout`](../../feed-scout/SKILL.md), [`social-content`](../../social-content/SKILL.md) |
 | `@Chrome` | [`feed-scout`](../../feed-scout/SKILL.md) only for explicitly authorized logged-in inspection |
 | Playwright | [`qa`](../../qa/SKILL.md), [`landing-page`](../../landing-page/SKILL.md), [`impl-plan`](../../impl-plan/SKILL.md) |
 | HyperFrames renderer | external `hyperframes` skill (`/hyperframes`), fed by [`storyboard`](../../storyboard/SKILL.md) |

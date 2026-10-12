@@ -39,4 +39,4 @@ This module owns Farplane's reusable eval boundary:
 
 - `python3 skills/eval/tests/test_run_evals.py`
 - `python3 skills/eval/tests/test_run_promptfoo.py`
-- `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+- `python3 skills/harness/scripts/check_skills.py --write`

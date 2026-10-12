@@ -20,7 +20,7 @@ refs:
   - docs/templates/registry.jsonl
   - docs/skills/README.md
   - docs/templates/README.md
-  - skills/skill-maintenance/graph/README.md
+  - skills/harness/graph/README.md
   - bin/README.md
 ---
 
@@ -54,10 +54,10 @@ same interpretation in each generator, CLI command, or UI route.
 | --- | --- | --- |
 | `bin/validators/template_usage.py` | Parse and validate `template_uses`, including the canonical consumer declaration shape. | Template registry checks, skill registry sync, template intelligence, project adoption CLI. |
 | `bin/validators/sync_skill_registry.py` | Convert `skills/*/SKILL.md` frontmatter, todo links, and Markdown links into `docs/skills/registry.jsonl`. | Skill graph, skill template rollout, skill OS checks, skill rollout CLI. |
-| `skills/skill-maintenance/scripts/generate_template_intelligence.py` | Compute skill template rollout and high-impact template rollout. | `skill-template-intelligence.json`, graph viewer, `farplane skills rollout scan`. |
-| `skills/skill-maintenance/scripts/graph_ir.py` | Shared graph node/edge/bundle structs, JSON/JS writers, comparison, and endpoint validation. | Skill graph, harness reference graph, lifecycle graph. |
-| `skills/skill-maintenance/scripts/graph_projection_config.py` | Named graph projection profiles and output targets. | Graph dispatcher, compatibility graph wrappers, Farplane UI graph routes. |
-| `skills/skill-maintenance/scripts/graph_projection.py` | Generic graph filtering, projection writing, and stale-output checks. | Projection dispatcher and graph tests. |
+| `skills/harness/scripts/generate_template_intelligence.py` | Compute skill template rollout and high-impact template rollout. | `skill-template-intelligence.json`, graph viewer, `farplane skills rollout scan`. |
+| `skills/harness/scripts/graph_ir.py` | Shared graph node/edge/bundle structs, JSON/JS writers, comparison, and endpoint validation. | Skill graph, harness reference graph, lifecycle graph. |
+| `skills/harness/scripts/graph_projection_config.py` | Named graph projection profiles and output targets. | Graph dispatcher, compatibility graph wrappers, Farplane UI graph routes. |
+| `skills/harness/scripts/graph_projection.py` | Generic graph filtering, projection writing, and stale-output checks. | Projection dispatcher and graph tests. |
 | `bin/core/farplane_adoption.py` | Project manifest adoption and feature/template drift resolution. | `farplane adoption scan`, Farplane UI project rollout views. |
 | `bin/core/farplane_skill_rollout.py` | Read-only UI-facing normalization over generated skill/template rollout intelligence. | `farplane skills rollout scan`, Farplane UI skill rollout views. |
 | `bin/core/farplane_harness_health.py` | Compile transparent skill, rollout, latest-eval health, and actionable priority-skill/source-gap readings from generated artifacts and local eval runs. | `farplane harness health compile`, local planners, Farplane UI health views. |
@@ -88,17 +88,17 @@ UI route or CLI projection
 | Metric refresh plan | `farplane/metrics.yaml` refreshers plus current observations | agent-owned refresh groups and flat observations | `python3 bin/core/farplane_metric_refresh.py refresh-plan --metrics-file farplane/metrics.yaml --date YYYY-MM-DD --metric-id <id>` | Deduplicate prompt/provider acquisition by refresher ID; the calling workflow executes prompts, while Core remains deterministic. |
 | Project snapshot | canonical project files plus primitive metric outputs | `.farplane/project/ui/latest.json` | `python3 bin/farplane.py project snapshot --project-root . --json` | Give Farplane UI and Company OS one read-only project/company payload without making the snapshot a source of truth. |
 | Skill registry | `skills/*/SKILL.md` front matter, direct todo lists, and Markdown links | `docs/skills/registry.jsonl` | `python3 bin/validators/sync_skill_registry.py --write` | Inventory skills without hand-maintaining a second registry. |
-| Skill template rollout | `docs/skills/registry.jsonl` plus `docs/skills/templates/SKILL_TEMPLATE.md` metadata | `.farplane/generated/graphs/skill-template-intelligence.json` fields `rollout` and `rollout_summary` | `python3 skills/skill-maintenance/scripts/generate_template_intelligence.py` | Show which skills are current, stale, missing, or external for the current skill template. |
-| Template rollout | `docs/templates/registry.jsonl` plus consumer `template_uses` fields | `skill-template-intelligence.json` fields `template_rollout` and `template_rollout_summary` | `python3 skills/skill-maintenance/scripts/generate_template_intelligence.py` | Show high-impact template adoption across skills and projects. |
+| Skill template rollout | `docs/skills/registry.jsonl` plus `docs/skills/templates/SKILL_TEMPLATE.md` metadata | `.farplane/generated/graphs/skill-template-intelligence.json` fields `rollout` and `rollout_summary` | `python3 skills/harness/scripts/generate_template_intelligence.py` | Show which skills are current, stale, missing, or external for the current skill template. |
+| Template rollout | `docs/templates/registry.jsonl` plus consumer `template_uses` fields | `skill-template-intelligence.json` fields `template_rollout` and `template_rollout_summary` | `python3 skills/harness/scripts/generate_template_intelligence.py` | Show high-impact template adoption across skills and projects. |
 | Skill rollout CLI | Skill registry plus template intelligence artifact | `farplane skills rollout scan --json` | `python3 bin/farplane.py skills rollout scan --json` | Stable UI-facing payload for skill/template rollout without reading graph internals directly. |
 | Harness health projection | Skill graph/docs, skill rollout intelligence, registry, and local eval runs | `.farplane/state/harness-health.json` and `.farplane/metrics/observations/harness_health/YYYY-MM-DD.json` | `python3 bin/farplane.py harness health compile --project-root . --date YYYY-MM-DD` | Give planners and UI one versioned local bundle plus actionable priority-skill and source-integrity readings without promoting weighted health scores into objectives. |
-| Skill graph | `docs/skills/registry.jsonl` plus Convex `skill-invocation-listener` rows (`skill_invoked`, `skill_requested`) | `.farplane/generated/graphs/skill-graph.json` and `skill-docs.json` | `python3 skills/skill-maintenance/scripts/generate_skill_graph.py` | Visualize skill nodes, skill docs, observed skill heat, Markdown links, todo-chain edges, and common-chain edges. |
-| Harness reference graph | Repo Markdown links and literal local paths | `.farplane/generated/graphs/harness-graph.json` and doc audit report | `python3 skills/skill-maintenance/scripts/generate_harness_graph.py` | Audit local references, backlink cleanup, unresolved docs paths, and navigation sprawl. |
-| Lifecycle graph | Skill signatures, hooks, curated framework files, automations, reports, tickets, and runtime surfaces | `.farplane/generated/graphs/farplane-lifecycle-graph.json` | `python3 skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py` | Provide semantic framework maps and finite-state projections for UI and agent context. |
-| Graph projection dispatcher | Shared GraphIR and projection profiles | selected generated graph JSON/JS | `python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection <name>` | Route graph generation through one shared model with named projections. |
+| Skill graph | `docs/skills/registry.jsonl` plus Convex `skill-invocation-listener` rows (`skill_invoked`, `skill_requested`) | `.farplane/generated/graphs/skill-graph.json` and `skill-docs.json` | `python3 skills/harness/scripts/generate_skill_graph.py` | Visualize skill nodes, skill docs, observed skill heat, Markdown links, todo-chain edges, and common-chain edges. |
+| Harness reference graph | Repo Markdown links and literal local paths | `.farplane/generated/graphs/harness-graph.json` and doc audit report | `python3 skills/harness/scripts/generate_harness_graph.py` | Audit local references, backlink cleanup, unresolved docs paths, and navigation sprawl. |
+| Lifecycle graph | Skill signatures, hooks, curated framework files, automations, reports, tickets, and runtime surfaces | `.farplane/generated/graphs/farplane-lifecycle-graph.json` | `python3 skills/harness/scripts/generate_farplane_lifecycle_graph.py` | Provide semantic framework maps and finite-state projections for UI and agent context. |
+| Graph projection dispatcher | Shared GraphIR and projection profiles | selected generated graph JSON/JS | `python3 skills/harness/scripts/generate_graph_projection.py --projection <name>` | Route graph generation through one shared model with named projections. |
 | Eval system | `skills/*/evals/evals.json`, eval templates, and eval examples | local eval runs and eval reports | `python3 skills/eval/scripts/run_evals.py` | Test skills, prompts, and harness behavior with repeatable tasks and judges. |
 | Doc tracker | active docs, registries, local links, and canonical entrypoints | doc-ref validation and generated doc audit report | `python3 bin/validators/check_doc_refs.py` | Keep local references, canonical doc links, and registry refs from rotting. |
-| Skill OS checks | skill frontmatter, todo list contracts, capability fixtures, plugin sync, installed-skill import | validators, generated registries, install previews, plugin packages | `python3 skills/skill-maintenance/scripts/check_skills.py --write` | Maintain skill structure, first-load todo lists, metadata, plugins, and installed-copy hygiene. |
+| Skill OS checks | skill frontmatter, todo list contracts, capability fixtures, plugin sync, installed-skill import | validators, generated registries, install previews, plugin packages | `python3 skills/harness/scripts/check_skills.py --write` | Maintain skill structure, first-load todo lists, metadata, plugins, and installed-copy hygiene. |
 
 ## Rollout Layers
 
@@ -222,20 +222,20 @@ projections.
 Use the dispatcher when you want the shared projection path:
 
 ```bash
-python3 skills/skill-maintenance/scripts/generate_graph_projection.py --list
-python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection skill-registry
-python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection harness-reference
-python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-framework-core
-python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-lifecycle-core
-python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-lifecycle-full
+python3 skills/harness/scripts/generate_graph_projection.py --list
+python3 skills/harness/scripts/generate_graph_projection.py --projection skill-registry
+python3 skills/harness/scripts/generate_graph_projection.py --projection harness-reference
+python3 skills/harness/scripts/generate_graph_projection.py --projection farplane-framework-core
+python3 skills/harness/scripts/generate_graph_projection.py --projection farplane-lifecycle-core
+python3 skills/harness/scripts/generate_graph_projection.py --projection farplane-lifecycle-full
 ```
 
 Use compatibility commands when working on one graph family:
 
 ```bash
-python3 skills/skill-maintenance/scripts/generate_skill_graph.py
-python3 skills/skill-maintenance/scripts/generate_harness_graph.py
-python3 skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py
+python3 skills/harness/scripts/generate_skill_graph.py
+python3 skills/harness/scripts/generate_harness_graph.py
+python3 skills/harness/scripts/generate_farplane_lifecycle_graph.py
 ```
 
 ## Maintenance Command Set
@@ -254,7 +254,7 @@ python3 bin/farplane.py skills rollout scan --json
 python3 bin/farplane.py harness health compile --project-root .
 
 # Skill registry and skill contract upkeep
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 python3 bin/validators/sync_skill_registry.py --check
 python3 bin/validators/check_skill_capabilities.py validate
 
@@ -263,10 +263,10 @@ python3 bin/validators/sync_template_registry.py --check
 python3 bin/validators/check_template_version_metadata.py --all
 
 # Graphs
-python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection skill-registry
-python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection harness-reference
-python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-framework-core
-python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-lifecycle-core
+python3 skills/harness/scripts/generate_graph_projection.py --projection skill-registry
+python3 skills/harness/scripts/generate_graph_projection.py --projection harness-reference
+python3 skills/harness/scripts/generate_graph_projection.py --projection farplane-framework-core
+python3 skills/harness/scripts/generate_graph_projection.py --projection farplane-lifecycle-core
 
 # Docs and references
 python3 bin/validators/check_doc_refs.py
@@ -282,7 +282,7 @@ python3 tickets/scripts/check_ticket_metadata.py
 - Generated graph files are projections.
 - CLI scan commands are stable read-only payloads for humans and UI.
 - Skills own workflow semantics, proof expectations, and skill-local surfaces.
-- `skill-maintenance` owns generated skill inventory, graph generation, template
+- `harness` maintain mode owns generated skill inventory, graph generation, template
   intelligence, and skill-system upkeep.
 - Farplane UI owns rendering, navigation, shared state, and product-grade views.
 - Project `farplane/manifest.json` owns project adoption state.

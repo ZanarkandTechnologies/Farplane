@@ -9,9 +9,8 @@ tags:
   - feature
   - sys-0005
 refs:
-  - skills/harness-advisor
+  - skills/harness
   - skills/goal-advisor/references/metrics.md
-  - skills/optimize-harness
   - skills/eval
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/HISTORY.md
@@ -21,9 +20,8 @@ system_id: SYS-0005
 category: proof
 public: true
 surfaces:
-  - skills/harness-advisor
+  - skills/harness
   - skills/goal-advisor/references/metrics.md
-  - skills/optimize-harness
   - skills/eval
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 source_refs:
@@ -32,9 +30,8 @@ source_refs:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 external_refs: []
 evidence_refs:
-  - skills/harness-advisor/SKILL.md
+  - skills/harness/SKILL.md
   - skills/goal-advisor/references/metrics.md
-  - skills/optimize-harness/SKILL.md
   - skills/eval/SKILL.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/HISTORY.md
@@ -81,7 +78,7 @@ owner, patch the smallest durable surface, and prove it with a representative ca
 ## What It Does
 
 - Compares expected versus observed behavior in the owning workflow.
-- Uses harness-advisor to choose the owner surface for a fix.
+- Uses harness to choose the owner surface for a fix.
 - Captures difficult, reusable failures as runnable eval cases with input,
   assertions, observed failure, owner, tags, proof artifacts, and promotion status.
 - Keeps each skill's Agent Skills `evals/evals.json` as the authored suite,
@@ -127,7 +124,7 @@ flowchart TD
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   trigger["Trigger<br/>miss, correction, or behavior gap"]:::keep
-  owner["Owner surface<br/>harness-advisor, goal-advisor metric card<br/>optimize-harness, eval"]:::changed
+  owner["Owner surface<br/>harness, goal-advisor metric card<br/>eval"]:::changed
   readers["Files and fields read<br/>gap evidence, owner surface<br/>metric card, eval query<br/>ticket context"]:::keep
   capture["Narrow capture<br/>runnable regression case<br/>testable expectation and proof path"]:::changed
   artifact["Created artifact/evidence<br/>candidate seed, eval task,<br/>or repair ticket"]:::added
@@ -148,9 +145,9 @@ Legend:
 
 Owner surfaces:
 
-- `skills/harness-advisor`
+- `skills/harness`
 - `skills/goal-advisor/references/metrics.md`
-- `skills/optimize-harness`
+- `skills/harness`
 - `skills/eval`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
@@ -162,9 +159,9 @@ Source context:
 
 Evidence:
 
-- `skills/harness-advisor/SKILL.md`
+- `skills/harness/SKILL.md`
 - `skills/goal-advisor/references/metrics.md`
-- `skills/optimize-harness/SKILL.md`
+- `skills/harness/SKILL.md`
 - `skills/eval/SKILL.md`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 - `docs/HISTORY.md`
@@ -196,7 +193,7 @@ Acceptance signals:
 - This feature does not auto-apply broad harness migrations without proof.
 - The Promptfoo path proves skill-local Codex comparison; it does not yet
   replace project suites, behavior traces, or arbitrary file-content grading.
-- Known limit: Correction is skill-and-artifact driven. Legacy standalone difficult-case artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through the goal-advisor metric card before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
+- Known limit: Correction is skill-and-artifact driven. Legacy standalone difficult-case artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through the goal-advisor metric card before harness. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
 - Native-subagent-only reports do not claim CLI JSON-event parity; route them
   through Agent QA.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.

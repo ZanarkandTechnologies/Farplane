@@ -153,13 +153,13 @@
     {
       "id": "feed_scout_book_summary_workflow_route_01",
       "prompt": "Run a dry pass over configured book-summary sources. Several new items contain exercises and reusable workflows. What happens before candidate handoff?",
-      "expected_output": "Keeps the run explicit and bounded with no daemon, unapproved spend, or external write; Normalizes and dedupes items before extraction; Uses summarize and extracts triggers, inputs, steps, decisions, exercises, outputs, and proof ideas rather than generic recaps; Routes reusable skill behavior to skill-creator, broader techniques to single-source mode, converged patterns to research synthesis, and weak recaps to ledger-only status; Writes the dated report before applying source, dedupe, proof, authority, and cap gates",
+      "expected_output": "Keeps the run explicit and bounded with no daemon, unapproved spend, or external write; Normalizes and dedupes items before extraction; Uses summarize and extracts triggers, inputs, steps, decisions, exercises, outputs, and proof ideas rather than generic recaps; Routes reusable skill behavior to harness, broader techniques to single-source mode, converged patterns to research synthesis, and weak recaps to ledger-only status; Writes the dated report before applying source, dedupe, proof, authority, and cap gates",
       "files": [],
       "assertions": [
         "Keeps the run explicit and bounded with no daemon, unapproved spend, or external write",
         "Normalizes and dedupes items before extraction",
         "Uses summarize and extracts triggers, inputs, steps, decisions, exercises, outputs, and proof ideas rather than generic recaps",
-        "Routes reusable skill behavior to skill-creator, broader techniques to single-source mode, converged patterns to research synthesis, and weak recaps to ledger-only status",
+        "Routes reusable skill behavior to harness, broader techniques to single-source mode, converged patterns to research synthesis, and weak recaps to ledger-only status",
         "Writes the dated report before applying source, dedupe, proof, authority, and cap gates"
       ],
       "metadata": {

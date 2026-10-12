@@ -49,13 +49,6 @@ deliverable = "daily Project memory or a weekly report"
 primary = "report-gen"
 skills = ["report-gen"]
 
-[specialists.phone-chaser]
-label = "Phone Chaser"
-department = "back-office"
-deliverable = "a reminder call"
-primary = "phone-chaser"
-skills = ["phone-chaser"]
-
 [specialists.prospector]
 label = "Prospector"
 department = "sales"
@@ -255,9 +248,30 @@ skills = ["automation-advisor"]
 [specialists.harness-engineer]
 label = "Harness Engineer"
 department = "operations"
-deliverable = "an improved skill or harness"
-primary = "skill-creator"
-skills = ["skill-creator", "optimize-harness", "self-improve", "skill-maintenance"]
+deliverable = "a new, fixed, optimized or placed skill or harness rule"
+primary = "harness"
+skills = ["harness"]
+
+[specialists.eval-engineer]
+label = "Eval Engineer"
+department = "operations"
+deliverable = "eval rows, judges, and a proof verdict"
+primary = "eval"
+skills = ["eval"]
+
+[specialists.dispatcher]
+label = "Dispatcher"
+department = "operations"
+deliverable = "a delivered Telegram message or reminder call"
+primary = "notify"
+skills = ["notify"]
+
+[specialists.usage-manager]
+label = "Usage Manager"
+department = "operations"
+deliverable = "a token-burn run report with local commits"
+primary = "token-burn"
+skills = ["token-burn"]
 
 [specialists.setup-technician]
 label = "Setup Technician"

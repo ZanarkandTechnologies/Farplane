@@ -141,19 +141,19 @@ flowchart TD
 - `docs/features/FEAT-0078-harness-graphir-projections.md`
 - `docs/farplane-framework/graph-contract.md`
 - `docs/farplane-framework/harness-maintenance.md`
-- `skills/skill-maintenance/graph/README.md`
-- `skills/skill-maintenance/scripts/graph_ir.py`
-- `skills/skill-maintenance/scripts/graph_projection.py`
-- `skills/skill-maintenance/scripts/graph_projection_config.py`
-- `skills/skill-maintenance/scripts/generate_skill_graph.py`
-- `skills/skill-maintenance/scripts/generate_harness_graph.py`
-- `skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py`
+- `skills/harness/graph/README.md`
+- `skills/harness/scripts/graph_ir.py`
+- `skills/harness/scripts/graph_projection.py`
+- `skills/harness/scripts/graph_projection_config.py`
+- `skills/harness/scripts/generate_skill_graph.py`
+- `skills/harness/scripts/generate_harness_graph.py`
+- `skills/harness/scripts/generate_farplane_lifecycle_graph.py`
 
 ## Proof And Maintenance
 
-- `python3 skills/skill-maintenance/scripts/test_generate_skill_graph.py`
-- `python3 skills/skill-maintenance/scripts/test_generate_harness_graph.py`
-- `python3 skills/skill-maintenance/scripts/test_generate_farplane_lifecycle_graph.py`
+- `python3 skills/harness/scripts/test_generate_skill_graph.py`
+- `python3 skills/harness/scripts/test_generate_harness_graph.py`
+- `python3 skills/harness/scripts/test_generate_farplane_lifecycle_graph.py`
 - `python3 docs/features/validate_features.py`
 - `python3 bin/validators/check_doc_refs.py`
 - Update this system when GraphIR primitives, projection profiles, harness edge

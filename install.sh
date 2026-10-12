@@ -179,7 +179,7 @@ if [ "$SKILLS_ONLY" -eq 1 ]; then
   if [ "${#SKILL_INSTALL_ARGS[@]}" -eq 0 ]; then
     SKILL_INSTALL_ARGS+=("--list")
   fi
-  python3 "$REPO_DIR/skills/skill-maintenance/scripts/install_selected_skills.py" \
+  python3 "$REPO_DIR/skills/harness/scripts/install_selected_skills.py" \
     --repo "$REPO_DIR" \
     --target "$TARGET_DIR" \
     "${SKILL_INSTALL_ARGS[@]}"
@@ -194,7 +194,7 @@ install_claude_runtime() {
   for hook_name in "${INSTALL_HOOK_DIRS[@]}"; do
     link_path "$REPO_DIR/hooks/$hook_name" "$TARGET_DIR/$1/hooks/$hook_name"
   done
-  python3 "$REPO_DIR/skills/skill-maintenance/scripts/install_selected_skills.py" \
+  python3 "$REPO_DIR/skills/harness/scripts/install_selected_skills.py" \
     --repo "$REPO_DIR" \
     --target "$TARGET_DIR" \
     --all \
@@ -230,7 +230,8 @@ if marker in text:
 else:
     candidate_text = text
 
-header_re = re.compile(r"^\[([^\]]+)\]\s*$")
+# `[[array]]` headers open their own block too, so lines after one never ride on the table before it.
+header_re = re.compile(r"^\[\[?([^\]]+)\]\]?\s*$")
 preserve_exact = {"desktop", "hooks.state"}
 preserve_prefixes = ("plugins.", "projects.", "hooks.state.", "marketplaces.")
 
@@ -498,7 +499,7 @@ cleanup_profile_render() {
 
 render_skill_profiles() {
   PROFILE_RENDER_DIR="$(mktemp -d "${TMPDIR:-/tmp}/farplane-skill-profiles.XXXXXX")"
-  python3 "$REPO_DIR/skills/skill-maintenance/scripts/render_skill_profiles.py" \
+  python3 "$REPO_DIR/skills/harness/scripts/render_skill_profiles.py" \
     --repo "$REPO_DIR" \
     --output-dir "$PROFILE_RENDER_DIR"
 }
@@ -602,7 +603,7 @@ done
 
 install_rendered_skill_profiles
 
-python3 "$REPO_DIR/skills/skill-maintenance/scripts/install_selected_skills.py" \
+python3 "$REPO_DIR/skills/harness/scripts/install_selected_skills.py" \
   --repo "$REPO_DIR" \
   --target "$TARGET_DIR" \
   --all \

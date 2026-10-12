@@ -135,7 +135,7 @@ time-bounded development or discussion, never sources sharing a broad subject
   Creator memory is standing apply intent: each `NEW`/`EXTENDS` claim or story
   becomes its own linked line. Skill level-up reads the closest skill's
   SKILL.md and references and proposes only what it lacks as diff lines with
-  story and timestamp, or `none`; `skill-maintenance` applies accepted lines.
+  story and timestamp, or `none`; `harness` maintain mode applies accepted lines.
   Load the [Resource Bank branch](references/resource-bank/branch.md) only for
   explicit like/save/reuse intent, sending only the selected elements;
   otherwise record `skipped_no_reuse_intent`.

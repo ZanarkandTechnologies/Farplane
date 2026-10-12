@@ -88,10 +88,10 @@ flowchart LR
 
   subgraph Skills["Skill Layer"]
     primitives["core primitives<br/>advise<br/>review<br/>direct Todo List"]:::callout
-    interfaces["shared workflow interfaces<br/>frame<br/>research<br/>harness-advisor"]:::callout
+    interfaces["shared workflow interfaces<br/>frame<br/>research<br/>harness"]:::callout
     intake["frame<br/>direct clarification<br/>prd<br/>visual-design"]:::skill
     readiness["impl-plan agent testability<br/>Run Hints"]:::callout
-    research["doc-advisor<br/>feed-scout<br/>research<br/>self-improve"]:::skill
+    research["doc-advisor<br/>feed-scout<br/>research"]:::skill
     ticketSkill["impl-plan"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     goalSkill["goal-advisor<br/>native Goal"]:::callout

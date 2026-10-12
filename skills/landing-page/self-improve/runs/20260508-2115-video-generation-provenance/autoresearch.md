@@ -9,7 +9,7 @@ assembled with `ffmpeg` as true generated video.
 
 - Primary: `skill_eval_pass_rate`
 - Verify: `python3 skills/landing-page/scripts/test_asset_evidence_lint.py`
-- Guard: `python3 skills/landing-page/scripts/test_landing_spec_lint.py && python3 skills/skill-creator/scripts/quick_validate.py skills/landing-page`
+- Guard: `python3 skills/landing-page/scripts/test_landing_spec_lint.py && python3 skills/harness/scripts/quick_validate.py skills/landing-page`
 
 ## Scope
 

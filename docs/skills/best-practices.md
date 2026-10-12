@@ -2,8 +2,8 @@
 
 Use this as the shared standard for creating, reviewing, and maintaining
 Farplane skills. This is an authoring and maintenance standard, not runtime
-context for every skill invocation. Apply it to `skill-creator` and
-`skill-maintenance` first; roll it out to other skills only after a
+context for every skill invocation. Apply it to `harness` create mode and
+`harness` maintain mode first; roll it out to other skills only after a
 representative pass proves the shape.
 
 Keep this file focused on skill authoring and review quality. Do not redefine
@@ -386,8 +386,8 @@ whether to add a short example, or choosing between two equivalent output
 shapes.
 
 Use `advise ensemble=max` before editing when the decision changes a shared
-standard, affects core primitives, meta skills, `skill-creator`,
-`skill-maintenance`, `eval`, reviewer rubrics, templates, cross-skill policy,
+standard, affects core primitives, meta skills, `harness` create mode,
+`harness` maintain mode, `eval`, reviewer rubrics, templates, cross-skill policy,
 or any rule likely to compound across many downstream workflows.
 
 Use `research` before advice when the recommendation depends on external facts,
@@ -473,7 +473,7 @@ the review depth:
 - Use `advise` for recent skills that already match the current template and
   need a normal placement decision.
 - Default to `advise ensemble=max` for structural changes to core primitives,
-  meta skills, `skill-creator`, `skill-maintenance`, `eval`, cross-skill
+  meta skills, `harness` create mode, `harness` maintain mode, `eval`, cross-skill
   standards, or any skill whose behavior compounds across many downstream
   workflows.
 - Also use `advise ensemble=max` when the skill is old, far from the current
@@ -512,7 +512,7 @@ choice or when the final claim depends on measured behavior.
   otherwise stay implicit.
 - Paths inside a skill are relative to that skill package by default. Use
   `scripts/foo.py` for nearby helper scripts, `references/foo.md` for nearby
-  references, and sibling paths such as `../skill-maintenance/scripts/foo.py`
+  references, and sibling paths such as `../harness/scripts/foo.py`
   when calling another skill package. Use repo-root paths only when the command
   truly must be run from the repository root.
 - References own conditional detail: onboarding, examples, templates, long

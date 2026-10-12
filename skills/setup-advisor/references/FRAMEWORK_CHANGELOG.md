@@ -725,7 +725,7 @@ python3 bin/validators/check_farplane_project_files.py --root .
 python3 -m unittest bin.tests.test_farplane_project_snapshot bin.tests.test_farplane_primitive_metrics
 python3 skills/pulse-update/scripts/test_list_pulse_board.py
 python3 docs/features/validate_features.py
-python3 skills/skill-maintenance/scripts/check_skills.py
+python3 skills/harness/scripts/check_skills.py
 python3 bin/validators/check_doc_refs.py
 ```
 
@@ -843,7 +843,7 @@ Proof commands:
 python3 -m unittest bin.tests.test_farplane_project_snapshot bin.validators.test_check_farplane_project_files
 python3 bin/validators/check_farplane_project_files.py --root .
 python3 bin/validators/check_doc_refs.py
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 ```
 
 ## 1.6.12
@@ -918,7 +918,7 @@ Proof commands:
 python3 -m unittest bin.tests.test_farplane_project_snapshot
 python3 bin/farplane.py project snapshot --project-root . --date 2026-07-02 --json
 python3 bin/validators/check_farplane_project_files.py --root .
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 ```
 
 ## 1.6.10
@@ -963,7 +963,7 @@ Proof commands:
 python3 -m unittest bin.tests.test_farplane_project_snapshot
 python3 bin/farplane.py project snapshot --project-root . --date 2026-07-02 --json
 python3 bin/validators/check_farplane_project_files.py --root .
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 ```
 
 ## 1.6.9
@@ -998,7 +998,7 @@ Proof commands:
 python3 -m unittest bin.tests.test_farplane_project_snapshot
 python3 bin/farplane.py project snapshot --project-root . --date 2026-07-01 --json
 python3 bin/validators/check_farplane_project_files.py --root .
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 ```
 
 ## 1.6.8
@@ -1039,7 +1039,7 @@ Proof commands:
 python3 -m unittest bin.tests.test_farplane_project_snapshot
 python3 bin/farplane.py project snapshot --project-root . --date 2026-07-01 --json
 python3 bin/validators/check_farplane_project_files.py --root .
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 ```
 
 ## 1.6.7
@@ -1081,7 +1081,7 @@ Proof commands:
 python3 -m unittest bin.tests.test_farplane_project_snapshot
 python3 bin/farplane.py project snapshot --project-root . --date 2026-07-01 --json
 python3 bin/validators/check_farplane_project_files.py --root .
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 ```
 
 ## 1.6.6
@@ -1115,7 +1115,7 @@ Proof commands:
 ```bash
 bash -n skills/setup-advisor/scripts/bootstrap.sh
 python3 bin/validators/check_farplane_project_files.py --root .
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 ```
 
 ## 1.6.4
@@ -1164,7 +1164,7 @@ Proof commands:
 ```bash
 rg -n "docs/specs|specs/README" AGENTS.md PROJECT_RULES.md ARCHITECTURE.md farplane docs templates tickets qa .agents
 bash -n skills/setup-advisor/scripts/bootstrap.sh
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 ```
 
 ## 1.6.3

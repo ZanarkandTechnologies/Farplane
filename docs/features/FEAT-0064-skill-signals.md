@@ -14,8 +14,8 @@ refs:
   - farplane/automations/
   - docs/skills/registry.jsonl
   - docs/farplane-framework/lifecycle.md
-  - skills/skill-maintenance/graph/README.md
-  - skills/skill-maintenance/SKILL.md
+  - skills/harness/graph/README.md
+  - skills/harness/SKILL.md
 feature_id: FEAT-0064
 system_id: SYS-0006
 category: skills
@@ -28,10 +28,10 @@ surfaces:
 source_refs:
   - docs/farplane-framework/lifecycle.md
   - docs/skills/system.md
-  - skills/skill-maintenance/graph/README.md
+  - skills/harness/graph/README.md
 external_refs: []
 evidence_refs:
-  - skills/skill-maintenance/SKILL.md
+  - skills/harness/SKILL.md
 known_limits: Official signal contract only; the current implementation is consumed by skill maintenance and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
 metrics:
   - skill_signal_contract_traceability_pass
@@ -80,9 +80,9 @@ deserve hardening, refinement, merging, watching, or retirement review first.
 - Separates specialist-desk membership from maintenance priority.
 - Highlights first-load bloat, overlap, stale checklists, missing evals, and
   source gaps without pretending they are direct usage.
-- Feeds skill-maintenance planning and consolidation decisions.
+- Feeds harness planning and consolidation decisions.
 - Helps decide when a skill should be split, merged, promoted, or retired.
-- Feeds self-improve candidate selection while keeping human feedback in the
+- Feeds harness candidate selection while keeping human feedback in the
   experiment ticket that produced it.
 
 ## User Stories
@@ -106,7 +106,7 @@ quality grade.
   surface, or user-facing capability.
 - Recommendations use `keep`, `harden`, `refine`, `merge`, `watch`, or
   `retire_review`; destructive edits still require owner-specific review.
-- Skill maintenance and self-improve use these signals to choose which capability
+- Skill maintenance and harness use these signals to choose which capability
   skill or workflow deserves a bounded experiment. Human-feedback outcomes
   become maintenance evidence only when recorded with a comparable scenario
   and artifact refs.
@@ -136,7 +136,7 @@ flowchart LR
   registry["docs/skills/registry.jsonl<br/>graph refs"]:::keep
   heat["graph heat<br/>direct + composition"]:::changed
   burden["maintenance burden<br/>bloat, stale QA, missing evals"]:::changed
-  taste["self-improve input decisions<br/>skill + ticket context"]:::changed
+  taste["harness input decisions<br/>skill + ticket context"]:::changed
   decision["keep / harden / refine<br/>merge / watch / retire_review"]:::added
   retire["retire_review candidate"]:::retired
 
@@ -164,11 +164,11 @@ Source context:
 
 - `docs/farplane-framework/lifecycle.md`
 - `docs/skills/system.md`
-- `skills/skill-maintenance/graph/README.md`
+- `skills/harness/graph/README.md`
 
 Evidence:
 
-- `skills/skill-maintenance/SKILL.md`
+- `skills/harness/SKILL.md`
 
 ## Proof And Quality
 
@@ -194,7 +194,7 @@ Acceptance signals:
 
 - This feature does not auto-rewrite skills.
 - This feature does not make every skill high priority because it is useful once.
-- This feature does not replace skill-maintenance review.
+- This feature does not replace harness review.
 - Known limit: Official signal and recommendation contract only; the current
   implementation is consumed by skill maintenance and generated graph data. No
   standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation
@@ -225,4 +225,4 @@ Acceptance signals:
 - 2026-07-11: Removed the retired product-registry input; skill signals now
   feed capability-skill selection and upkeep directly.
 - 2026-10-12: Dropped the Dogfood review consumer and its refs when #41
-  deleted that skill; skill maintenance and self-improve consume the signals.
+  deleted that skill; skill maintenance and harness consume the signals.

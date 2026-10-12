@@ -1,7 +1,7 @@
 ---
 title: Skill department taxonomy
 status: active
-owner: skills/skill-maintenance
+owner: skills/harness
 created_at: 2026-08-13
 updated_at: 2026-10-12
 source_of_truth: [config/skill-departments.toml, config/skill-workflows.toml]
@@ -9,21 +9,19 @@ source_of_truth: [config/skill-departments.toml, config/skill-workflows.toml]
 
 # Skill department taxonomy
 
-`department` is a skill's single operating-department membership: required on a
-skill that sits on a specialist desk, optional on an internal helper. It is not a
-technical implementation tag and it does not imply that one skill invokes another.
+Farplane has six business units. `department` is a skill's single
+operating-department membership: required on a skill that sits on a specialist
+desk, optional on an internal helper. It is not a technical implementation tag
+and it does not imply that one skill invokes another.
 
 | ID | Label | Owns in the constellation |
 | --- | --- | --- |
 | `leadership` | Leadership | advice, framing, planning, business review, goals, and reports |
 | `delivery` | Delivery | product specs, UI and visual design, implementation tickets, code health, QA, review, commits, docs, diagrams, and project or client setup |
-| `back-office` | Back Office | finance, internal records, people, office administration |
 | `sales` | Sales | prospects, approaches, offers, and proposals |
-| `deals` | Deals | replies, calls, solution shaping, and closing |
 | `marketing` | Marketing | content, brand, creative, distribution, and channels |
 | `operations` | Operations | the internal machine: skills, evals, automations, messages, and usage |
 | `intelligence` | Intelligence | companies, people, markets, research, and learning |
-| `customer` | Customer | support, success, and community |
 
 The Capability Map is organized by **specialist desks**. A specialist groups
 skill variants that one office employee offers (for example the Delivery

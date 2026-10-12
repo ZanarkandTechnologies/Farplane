@@ -131,7 +131,7 @@ history.
 - `superseded_by`: `false`, one `FEAT-*`, or a list of successor feature IDs
   when this feature's active contract has moved to a clearer capability.
 - `track`: optional `false` or a compact review checklist consumed by review
-  workflows such as `review` or `self-improve`. Use it to name what to read, the rubric
+  workflows such as `review` or `harness` optimize mode. Use it to name what to read, the rubric
   to apply, allowed decisions, and the interval-summary output. Keep procedural
   logic, tool branching, and broad workflow instructions in the owning skill,
   not in feature frontmatter. Retired or superseded features must use

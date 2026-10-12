@@ -56,7 +56,7 @@ the expected deterministic routes and receipts.
 
 ## Registry and integration
 
-`python3 skills/skill-maintenance/scripts/check_skills.py --write` generated and
+`python3 skills/harness/scripts/check_skills.py --write` generated and
 validated a 124-row skill registry, passed todo-tier and Tier-0 checks, and
 included `visual-reasoning`. The aggregate command exits nonzero only for two
 pre-existing out-of-scope surface-budget findings:

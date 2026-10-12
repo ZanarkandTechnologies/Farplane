@@ -12,9 +12,8 @@ registry fields, and todo-link rules stay in one place.
 - `docs/skills/README.md` owns human skill selection and registry commands.
 - `docs/skills/best-practices.md` owns skill authoring and maintenance quality,
   not runtime context for every skill invocation.
-- `skills/skill-creator/` owns creating or updating one reusable skill package.
-- `skills/skill-maintenance/` owns bulk upkeep, validation, generated registry
-  sync, and rollout audits.
+- `skills/harness/` owns creating or updating one reusable skill package,
+  bulk upkeep, validation, generated registry sync, and rollout audits.
 - `bin/core/skill_contract.py` owns typed skill frontmatter and optional
   package-local ensemble parsing; `check_skill_frontmatter.py` validates both.
 - feature pages in `docs/features/` own skill-applicable harness feature docs
@@ -207,14 +206,14 @@ surfaces such as:
 
 - `frame`
 - `research` (market, code, papers, synthesis)
-- `harness-advisor`
+- `harness` place mode
 
 Common reusable work that many domain skills need should usually start as a
 shared interface or method, not a new core primitive.
 
 Domain skills implement those interfaces for a concrete workflow, domain,
 package, or artifact type: coding pipeline skills, frontend/media/document
-skills, and meta skills such as `skill-creator` and `skill-maintenance`, whose
+skills, and meta skills such as `harness` create mode and `harness` maintain mode, whose
 domain is the harness itself. The ones a person would ask for by name sit on a
 specialist desk. Do not create a skill to describe an end-to-end workflow; model
 e2e workflows as composition artifacts owned by the orchestrating surface:
@@ -381,7 +380,7 @@ This marker is backed by `FEAT-0062` and checked by
 `bin/validators/check_skill_surface_budget.py`. Subscribed skills must fit the
 default `10 / 5` budget: 10 top-level `SKILL.md` todos and 5 skill-local eval
 tasks. Before adding item N+1,
-run `skill-maintenance.refine_skill` with
+run `harness maintain refine_skill` with
 `doc_advisor(mode = consolidate, target = edited_skill, structure = skill)` and keep, merge, move,
 or delete units by value rather than appending by default.
 
@@ -436,10 +435,10 @@ template spine and todo-list shape for that version.
 Template source edits are release events. When
 `docs/skills/templates/SKILL_TEMPLATE.md` changes, refresh the
 generated release metadata and archive snapshots through the normal
-skill-maintenance write path:
+harness write path:
 
 ```bash
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 ```
 
 That command regenerates the skill registry and the template intelligence
@@ -451,7 +450,7 @@ archive snapshots.
 Use:
 
 ```bash
-python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.2.0
+python3 skills/harness/scripts/check_skills.py --template-version 0.2.0
 ```
 
 Add `--require-template-version` only when the rollout is intentionally ready to
@@ -467,7 +466,7 @@ template_uses:
 ```
 
 Then follow `docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md`. The standard
-skill-maintenance check validates declared method references.
+harness check validates declared method references.
 
 ## Rollout Policy
 
@@ -481,7 +480,7 @@ Roll out skill-system standards from the most compound surfaces first:
 4. Broad migration requires a representative sample before a full batch.
 5. Missing `skill_template_version` means not onboarded yet, not invalid.
 
-Use `skill-maintenance` for rollout audits and `docs/skills/best-practices.md`
+Use `harness` maintain mode for rollout audits and `docs/skills/best-practices.md`
 for the concrete on-contact upgrade checklist.
 
 ## Skill Signatures
@@ -548,7 +547,7 @@ an optional skill UI surface path. Use `skill_template_version` for structural
 template onboarding.
 
 Do not store long applied-migration histories in skill frontmatter. If a
-migration needs rollout tracking, let `skill-maintenance` compare the generated
+migration needs rollout tracking, let `harness` maintain mode compare the generated
 skill inventory, template version report, local surface fields, template
 metadata, and relevant feature docs.
 

@@ -38,7 +38,7 @@ Shape one-page, marketing, launch, portfolio, and cinematic frontend surfaces be
 - Confirm cinematic/scroll requests do not duplicate GSAP API details.
 - Confirm the skill returns `LANDING_SPEC.md` and never implements, renders, or
   deploys the page.
-- Run `python3 skills/skill-creator/scripts/quick_validate.py skills/landing-page`.
+- Run `python3 skills/harness/scripts/quick_validate.py skills/landing-page`.
 - Run `python3 skills/landing-page/scripts/test_landing_spec_lint.py`.
 - Run `python3 skills/landing-page/scripts/test_asset_evidence_lint.py`.
 - Run `node --check skills/landing-page/scripts/section_quality_qa.cjs`.

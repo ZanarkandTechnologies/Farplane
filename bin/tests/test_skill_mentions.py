@@ -17,10 +17,10 @@ from user_turn import extract_control_surfaces
 
 class SkillMentionTests(unittest.TestCase):
     def test_control_surfaces_and_registered_mentions_are_unique(self) -> None:
-        text = "First $impl-plan TASK-0160, then $qa and $demo. Please do not double count $qa."
+        text = "First $impl-plan TASK-0160, then $qa, $frame and $demo. Please do not double count $qa."
 
-        self.assertEqual(extract_control_surfaces(text), ["impl-plan", "qa", "demo"])
-        self.assertEqual(extract_skill_mentions(text), ["impl-plan", "qa"])
+        self.assertEqual(extract_control_surfaces(text), ["impl-plan", "qa", "frame", "demo"])
+        self.assertEqual(extract_skill_mentions(text), ["impl-plan", "qa", "frame"])
 
     def test_control_surfaces_accept_linked_syntax_but_stay_narrow(self) -> None:
         text = (

@@ -1,6 +1,6 @@
 ---
 name: automation-advisor
-description: "Design or revise Farplane Codex automations using one Markdown file per scheduled workflow."
+description: "Use for \"schedule this\", \"set up an automation\", \"run this every morning\" or \"fix this cron job\": one Markdown job record per routine, its runtime task, and activation proof."
 department: operations
 source: local
 template_uses:
@@ -13,9 +13,11 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill to create, revise, or audit Farplane Codex automations. A
-project defines at most one heartbeat. Company OS Daily and Weekly, Feed Scout,
-and maintenance are separate `cron` records.
+Use this skill to create, revise, or audit Farplane automations (Claude
+scheduled tasks or Codex automations). Every scheduled job is its own `cron`
+record: Company OS Daily and Weekly, Feed Scout, token burn, and maintenance.
+Work Pulse, the former heartbeat, was deleted; do not add a heartbeat or
+dispatch loop.
 
 Every live job lives in its owning workspace's `farplane/automations/*.md`, one
 file per routine, schema `farplane_project_automation`, tagged with the
@@ -23,7 +25,7 @@ file per routine, schema `farplane_project_automation`, tagged with the
 job calls live in `farplane/automations/steps/` and are never scheduled alone.
 Start new jobs from this skill's `templates/`. YAML front matter owns id, name,
 kind, status, target, and schedule; the body is the exact prompt. Runtime IDs, logs, and mutable
-memory stay in the Codex automation store or ignored `.farplane/` state. Do not
+memory stay in the runtime's task store or ignored `.farplane/` state. Do not
 add a compiler, scheduler thread, or second manifest.
 
 An automation prompt calls one owning skill. The automation owns integration
@@ -50,11 +52,11 @@ state: reads(active feature/spec, farplane/automations/?, current prompts,
              target skill, templates, first-load Todo List guardrails);
        writes(farplane/automations/ job records and steps/)
 gates: loop_choice; cadence; one_owning_skill; full_parseable_record;
-  file_in_file_out_boundary; side_effect_gates; one_heartbeat;
+  file_in_file_out_boundary; side_effect_gates; cron_only;
   no_hidden_scheduler
 routes: report-gen | feed-scout | goal-advisor | review
 fails: logs in tracked config; provider access inside pm skills; generated
-  prompt fragments; second heartbeat; active Daily/Weekly interval binding;
+  prompt fragments; a heartbeat or dispatch loop; active Daily/Weekly interval binding;
   ticket creation or execution from Company OS reviews
 ```
 
@@ -62,7 +64,7 @@ fails: logs in tracked config; provider access inside pm skills; generated
 ## Todo List
 
 - [ ] 1. Classify the recurring job.
-  - [ ] Keep at most one heartbeat per project.
+  - [ ] Make every job a `cron` record; never add a heartbeat.
   - [ ] Use Company OS Daily/Weekly for project memory and money-linked review.
   - [ ] Use cron for every report, source, self-improvement, or maintenance pass.
 - [ ] 2. Bind current project surfaces.
@@ -98,10 +100,10 @@ fails: logs in tracked config; provider access inside pm skills; generated
 - [ ] 5. Activate when the accepted task includes live integration.
   - [ ] Inspect live Codex automations and update matching records instead of
         creating duplicates. Follow [live activation](references/live-activation.md).
-  - [ ] Preserve IDs, cadence, target, model, reasoning, status, and any
-        heartbeat unless the accepted change explicitly alters one.
+  - [ ] Preserve IDs, cadence, target, model, reasoning, and status unless
+        the accepted change explicitly alters one.
 - [ ] 6. Validate and review.
-  - [ ] Parse YAML front matter and use the body as the prompt; verify required fields, at most one heartbeat,
+  - [ ] Parse YAML front matter and use the body as the prompt; verify required fields, `kind: cron`,
         Company OS prompt/skill parity, and no active Interval binding.
   - [ ] Verify Daily has one local skill call per eligible Project and Weekly
         has one call over a complete frozen set.
@@ -139,5 +141,5 @@ skills_provider_writes: 0
 automation_renders_and_applies: yes
 existing_issue_actions_only: yes
 multica_execution: none
-heartbeat_count: 0 | 1
+heartbeat_count: 0
 ```

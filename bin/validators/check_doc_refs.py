@@ -41,7 +41,7 @@ SKIP_FILE_PREFIXES = (
     "bin/tests/",
     "docs/doc-audit/",
     "node_modules/",
-    "skills/skill-maintenance/graph/",
+    "skills/harness/graph/",
     "tests/",
     "tickets/",
     "tickets/archive/",

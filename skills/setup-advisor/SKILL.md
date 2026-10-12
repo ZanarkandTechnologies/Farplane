@@ -94,7 +94,7 @@ returns: per-surface status + evidence + human gates + readiness gaps + next own
   collect revenue. Client and business issues go to private repos only. Use
   [goal-advisor handoff](templates/goal-advisor-handoff.md) once a ticket,
   metric provider, stop rule and proof boundary are known; route owner
-  placement to `harness-advisor`, new workflows to `skill-creator`.
+  placement to `harness` place mode, new workflows to `harness` create mode.
 
   Assert:
   - Each access, setup or approval blocker is its own unblock issue.

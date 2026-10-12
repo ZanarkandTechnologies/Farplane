@@ -239,7 +239,7 @@ boundary:
   according to the ticket's `QA Strategy`.
 - `review` defines TAS semantics and rubric families; the native `reviewer`
   lane supplies independent judgment and writes or returns receipts.
-- `skill-maintenance`, `doc-advisor`, and `manage-wiki` handle
+- `harness` maintain mode, `doc-advisor`, and `manage-wiki` handle
   owner-correct durable writeback after proof exists: reusable operational
   procedures become skills, project knowledge becomes project docs, and sourced
   entities become Wiki articles.

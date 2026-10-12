@@ -23,5 +23,5 @@ state surfaces, drift policy, and continuation instructions stay coherent.
 ## Test
 
 ```bash
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 skills/harness/scripts/check_skills.py --write
 ```

@@ -36,7 +36,7 @@ straight to `main` and has no PR to watch.
 - No merge, deploy, force push or invented provider command unless the
   surrounding workflow authorises it. Pushing fixes to the PR branch follows the
   operator's request.
-- Notifications are terminal-state only and best effort (`telegram-message`
+- Notifications are terminal-state only and best effort (`notify`
   when the pipeline asks for it).
 - Unit proof uses fixtures:
   `python3 -m unittest skills/commit/scripts/test_pr_review_watch.py`.

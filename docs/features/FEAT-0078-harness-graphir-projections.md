@@ -1,7 +1,7 @@
 ---
 title: "Harness GraphIR projections"
 status: implemented
-owner: skill-maintenance
+owner: harness
 created_at: 2026-07-31
 updated_at: 2026-07-31
 tags:
@@ -12,28 +12,28 @@ tags:
 refs:
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/harness-maintenance.md
-  - skills/skill-maintenance/graph/README.md
+  - skills/harness/graph/README.md
 feature_id: FEAT-0078
 system_id: SYS-0013
 category: projections
 public: true
 surfaces:
-  - skills/skill-maintenance/scripts/graph_ir.py
-  - skills/skill-maintenance/scripts/graph_projection.py
-  - skills/skill-maintenance/scripts/graph_projection_config.py
-  - skills/skill-maintenance/scripts/generate_skill_graph.py
-  - skills/skill-maintenance/scripts/generate_harness_graph.py
-  - skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py
-  - skills/skill-maintenance/graph/README.md
+  - skills/harness/scripts/graph_ir.py
+  - skills/harness/scripts/graph_projection.py
+  - skills/harness/scripts/graph_projection_config.py
+  - skills/harness/scripts/generate_skill_graph.py
+  - skills/harness/scripts/generate_harness_graph.py
+  - skills/harness/scripts/generate_farplane_lifecycle_graph.py
+  - skills/harness/graph/README.md
   - docs/farplane-framework/graph-contract.md
 source_refs:
   - docs/farplane-framework/harness-maintenance.md
   - farplane/manifest.json
 external_refs: []
 evidence_refs:
-  - skills/skill-maintenance/scripts/test_generate_skill_graph.py
-  - skills/skill-maintenance/scripts/test_generate_harness_graph.py
-  - skills/skill-maintenance/scripts/test_generate_farplane_lifecycle_graph.py
+  - skills/harness/scripts/test_generate_skill_graph.py
+  - skills/harness/scripts/test_generate_harness_graph.py
+  - skills/harness/scripts/test_generate_farplane_lifecycle_graph.py
 known_limits: "GraphIR is an inspection, navigation, and UI projection toolkit over repository declarations and references; it is not the canonical entity store, an execution scheduler, or proof that a parsed reference is a runtime dependency."
 metrics:
   - skill_composition_heat
@@ -154,15 +154,15 @@ flowchart TD
 ## Surfaces
 
 - Owner surfaces:
-  - `skills/skill-maintenance/scripts/graph_ir.py`
-  - `skills/skill-maintenance/scripts/graph_projection.py`
-  - `skills/skill-maintenance/scripts/graph_projection_config.py`
+  - `skills/harness/scripts/graph_ir.py`
+  - `skills/harness/scripts/graph_projection.py`
+  - `skills/harness/scripts/graph_projection_config.py`
 - Builders:
-  - `skills/skill-maintenance/scripts/generate_skill_graph.py`
-  - `skills/skill-maintenance/scripts/generate_harness_graph.py`
-  - `skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py`
+  - `skills/harness/scripts/generate_skill_graph.py`
+  - `skills/harness/scripts/generate_harness_graph.py`
+  - `skills/harness/scripts/generate_farplane_lifecycle_graph.py`
 - Human contracts:
-  - `skills/skill-maintenance/graph/README.md`
+  - `skills/harness/graph/README.md`
   - `docs/farplane-framework/graph-contract.md`
   - `docs/farplane-framework/harness-maintenance.md`
 - Generated surfaces:
@@ -173,10 +173,10 @@ flowchart TD
 
 ## Proof And Quality
 
-- `python3 skills/skill-maintenance/scripts/test_generate_skill_graph.py`
-- `python3 skills/skill-maintenance/scripts/test_generate_harness_graph.py`
-- `python3 skills/skill-maintenance/scripts/test_generate_farplane_lifecycle_graph.py`
-- `python3 skills/skill-maintenance/scripts/generate_graph_projection.py --list`
+- `python3 skills/harness/scripts/test_generate_skill_graph.py`
+- `python3 skills/harness/scripts/test_generate_harness_graph.py`
+- `python3 skills/harness/scripts/test_generate_farplane_lifecycle_graph.py`
+- `python3 skills/harness/scripts/generate_graph_projection.py --list`
 - Tests cover ordered todo edges, heat and composition signals, reference-scan
   exclusions, lifecycle extraction, projection filtering, manifest selection,
   finite-state shapes, and generated-output freshness.

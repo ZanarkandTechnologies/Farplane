@@ -43,6 +43,6 @@ unchanged wait states.
 - The watcher should use adaptive backoff for repeated unchanged wait states
   and honor provider timing hints before local defaults.
 - The watcher may send Telegram notifications for terminal states when the
-  installed environment supports the `telegram-message` skill.
+  installed environment supports the `notify` skill.
 - The watcher must not push, merge, deploy, change billing/spend, or invent new
   review provider commands without an explicit workflow authorization.

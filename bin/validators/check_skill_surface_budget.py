@@ -142,7 +142,7 @@ def minimizer_command(violation: BudgetViolation) -> str:
         "eval_tasks": "eval",
     }.get(violation.surface, violation.surface)
     return (
-        "python3 skills/skill-maintenance/scripts/minimize_skill_surface.py "
+        "python3 skills/harness/scripts/minimize_skill_surface.py "
         f"skills/{violation.skill} --surface {surface_arg} --limit {violation.limit}"
     )
 
