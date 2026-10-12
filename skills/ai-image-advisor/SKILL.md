@@ -93,7 +93,7 @@ These defaults come from the upstream inference.sh skill snapshot at `c5ad36c`. 
 
 | Use Case | Default | Why |
 | --- | --- | --- |
-| Image editing and multi-reference edits (default) | `bytedance/seedream-4-5` | Operator's pick for editing: keeps identity and layout, takes 1-14 reference images, 2K-4K output |
+| Image editing and multi-reference edits (default) | `bytedance/seedream-4-5` | Operator's pick for editing: keeps identity and pose; belt takes one source, treg/Replicate 1-14 references |
 | Highest-quality general generation | `openai/gpt-image-2` | Strong text-to-image, mask inpainting, references, and product/marketing outputs; edit fallback |
 | Fast Google-native image generation/editing | `google/gemini-3-1-flash-image-preview` | Current Nano Banana 2 path, multi-image input, high-res, Google grounding |
 | Professional text-heavy posters/banners | `alibaba/qwen-image-2-pro` | Text rendering and semantic adherence are the point of the model |
@@ -104,14 +104,14 @@ These defaults come from the upstream inference.sh skill snapshot at `c5ad36c`. 
 
 ## Editing Default
 
-Seedream 4.5 is the default for every edit (one change, background swap, restyle, combined references, character consistency). Put the source image first in `image_input`, then references; say in the prompt what must stay unchanged.
+Seedream 4.5 is the default for every edit (one change, background swap, restyle, character consistency). Say in the prompt what must stay unchanged, and name props too: it keeps face, pose and clothing but may re-dress the set.
 
-| Route | Call | Credential state |
+| Route | Input | Credential state |
 | --- | --- | --- |
-| treg (preferred) | `treg call replicate.x.bytedance-seedream-4-5 --method POST --data '{"input":{"prompt":"...","image_input":["<source>","<ref>"],"size":"2K","aspect_ratio":"match_input_image"}}'` | BYOK only: needs the team's Replicate key registered in treg (`my_tools` lists it once it is). Async; copy `output` before Replicate deletes it. |
-| belt | `belt app run bytedance/seedream-4-5 --input input.json --save result.json` | Needs `belt login`; confirm the schema with `belt app get` first. |
+| belt (single source, preferred) | `belt app run bytedance/seedream-4-5 --input input.json --save result.json` with `{"prompt","image":"source.png","size":"2K"}`; one `image` only, about $0.04 | Logged in; output URL is `output.image`. |
+| treg (multi-reference) | `replicate.x.bytedance-seedream-4-5` with `input.image_input` of 1-14 images, source first | BYOK only: needs the team's Replicate key in treg (`my_tools`). Copy `output` before Replicate deletes it. |
 
-If neither route has a credential, say so and fall back: `openai/gpt-image-2` or treg `piapi.image-gen.gpt-image-2-5` for masks and exact text, `reapi.image-gen.gemini-3-pro-image` for cheap multi-image edits. Name the fallback in `notes.md`.
+If a route lacks its credential, say so and fall back: `openai/gpt-image-2` or treg `piapi.image-gen.gpt-image-2-5` for masks, exact text or multi-reference, `reapi.image-gen.gemini-3-pro-image` for cheap multi-image edits. Name the fallback in `notes.md`.
 
 ## Model Map
 
