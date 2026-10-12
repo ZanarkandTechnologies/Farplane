@@ -37,7 +37,7 @@ Use this as the ordered checklist whenever `ai-image-advisor` is active.
 - [ ] For Instagram/LinkedIn/X carousel or multi-slide post, use `social-content:carousel`.
 - [ ] For Twitter/X threads or posts, use [x-thread](../x-thread/SKILL.md).
 - [ ] For shared production routing from a domain skill, load `references/domain-production.md`.
-- [ ] For `image-edit`, `inpainting`-style changes, or `multi-reference` work, default to Seedream 4.5 (see Editing Default) before `imagegen` or GPT-Image; fall back only when Seedream cannot run or the edit needs exact text rendering or a mask.
+- [ ] For `image-edit`, `inpainting`, or `multi-reference` work, default to Ideogram 4.5 Precise Edit (see Editing Default) before `imagegen` or GPT-Image; fall back only when its key is missing.
 - [ ] If the user only needs normal Codex-native bitmap generation (not an edit) and did not ask for inference.sh, `belt`, a named model, CLI repeatability, or a model comparison, use `imagegen` instead.
 - [ ] For CLI setup, app discovery, schemas, samples, or generic inference.sh help, load `references/tools/infsh-cli.md`.
 - [ ] For vague/general AI image requests or model selection, use the best-current defaults and model map in `SKILL.md` first.
@@ -93,7 +93,7 @@ These defaults come from the upstream inference.sh skill snapshot at `c5ad36c`. 
 
 | Use Case | Default | Why |
 | --- | --- | --- |
-| Image editing and multi-reference edits (default) | `bytedance/seedream-4-5` | Operator's pick for editing: keeps identity and pose; belt takes one source, treg/Replicate 1-14 references |
+| Image editing, masks, reference-guided edits (default) | Ideogram API `ideogram-4-5` precise edit | Operator's pick: exact-size output, unchanged pixels copied, up to 4 references |
 | Highest-quality general generation | `openai/gpt-image-2` | Strong text-to-image, mask inpainting, references, and product/marketing outputs; edit fallback |
 | Fast Google-native image generation/editing | `google/gemini-3-1-flash-image-preview` | Current Nano Banana 2 path, multi-image input, high-res, Google grounding |
 | Professional text-heavy posters/banners | `alibaba/qwen-image-2-pro` | Text rendering and semantic adherence are the point of the model |
@@ -104,14 +104,14 @@ These defaults come from the upstream inference.sh skill snapshot at `c5ad36c`. 
 
 ## Editing Default
 
-Seedream 4.5 is the default for every edit (one change, background swap, restyle, character consistency). Say in the prompt what must stay unchanged, and name props too: it keeps face, pose and clothing but may re-dress the set.
+Ideogram 4.5 Precise Edit is the default for every edit (one change, background swap, restyle, text fix, character consistency). It returns the source's exact size and copies unchanged pixels from it, so repeated edits do not drift. Say in the prompt what must stay unchanged.
 
 | Route | Input | Credential state |
 | --- | --- | --- |
-| belt (single source, preferred) | `belt app run bytedance/seedream-4-5 --input input.json --save result.json` with `{"prompt","image":"source.png","size":"2K"}`; one `image` only, about $0.04 | Logged in; output URL is `output.image`. |
-| treg (multi-reference) | `replicate.x.bytedance-seedream-4-5` with `input.image_input` of 1-14 images, source first | BYOK only: needs the team's Replicate key in treg (`my_tools`). Copy `output` before Replicate deletes it. |
+| Ideogram API (default) | `farplane run -- curl -X POST https://api.ideogram.ai/v2/image/precise-edit/ideogram-4-5 -H "Api-Key: $IDEOGRAM_API_KEY" -F image=@source.png -F prompt="..." -F quality=medium`; optional `reference_images` (max 4, 3 with a mask), `mask` (black = edit). Add `?dry_run=true` for a price quote. | Needs `IDEOGRAM_API_KEY` in Doppler. Not on belt or treg yet. |
+| Seedream 4.5 via belt (fallback) | `belt app run bytedance/seedream-4-5 --input input.json` with `{"prompt","image":"source.png","size":"2K"}`; one source, about $0.04 | Logged in. May re-dress the set; name props that must stay. |
 
-If a route lacks its credential, say so and fall back: `openai/gpt-image-2` or treg `piapi.image-gen.gpt-image-2-5` for masks, exact text or multi-reference, `reapi.image-gen.gemini-3-pro-image` for cheap multi-image edits. Name the fallback in `notes.md`.
+Without the Ideogram key, say so and use Seedream; use `openai/gpt-image-2` or treg `piapi.image-gen.gpt-image-2-5` for multi-reference. Name the route used in `notes.md`.
 
 ## Model Map
 
@@ -129,7 +129,8 @@ Browse live apps with `belt app list --category image`.
 | Gemini 3.1 Flash | `google/gemini-3-1-flash-image-preview` | Nano Banana 2, fast Google image generation |
 | Gemini 2.5 Flash | `google/gemini-2-5-flash-image` | Fast Google model |
 | Grok Imagine | `xai/grok-imagine-image` | xAI image generation, multiple aspects |
-| Seedream 4.5 | `bytedance/seedream-4-5` | Default editor; multi-reference edits, 2K-4K cinematic quality |
+| Ideogram 4.5 | Ideogram API `/v2/image/precise-edit/ideogram-4-5` | Default editor; masks, references, text edits |
+| Seedream 4.5 | `bytedance/seedream-4-5` | Edit fallback; 2K-4K cinematic quality |
 | Seedream 4.0 | `bytedance/seedream-4-0` | High quality 2K-4K |
 | Seedream 3.0 | `bytedance/seedream-3-0-t2i` | Accurate text rendering |
 | Reve | `falai/reve` | Natural language editing, text rendering |
