@@ -92,8 +92,9 @@ makes one relevant.
   worktrees. Native subagents share the checkout and require a single-writer
   boundary.
 - The normal Farplane shared checkout is `main` only. Do not create or switch
-  local branches. Threads write concurrently; a commit takes every change and
-  labels other threads' work in its body (`skills/commit`). Publishing means
+  local branches. Threads write concurrently; a commit stages only this
+  thread's named files, never `git add -A`, and labels another thread's edit
+  inside a shared file (`skills/commit`). Publishing means
   pushing `main` straight to `origin/main`; open a `codex/*` PR only when the
   operator asks for one.
 - Credentialed commands run through `farplane run -- <command>` or

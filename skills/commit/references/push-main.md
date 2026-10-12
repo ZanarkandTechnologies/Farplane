@@ -7,8 +7,8 @@ The default publish route: push the shared checkout's `main` straight to
 ## Preconditions
 
 - The checkout is on `main`; do not create or switch a local branch.
-- The change is committed with the commit skill: everything staged, other
-  threads' work labelled in the body.
+- The change is committed with the commit skill: this thread's named paths
+  staged, other threads' changes left unstaged.
 
 ## Integrate
 
@@ -21,11 +21,12 @@ When `origin/main` has commits that local `main` lacks, merge them; never rebase
 or force-push.
 
 ```bash
-git add -A && git commit -m "chore: checkpoint other threads' work before merge"   # only if the tree changed since your commit
 git merge --no-edit origin/main
 ```
 
-On a merge conflict, stop and report the conflicting paths.
+Other threads' unstaged edits stay in the tree; do not commit them to clear
+the way. When the merge refuses because incoming commits touch a file with
+uncommitted edits, or on a merge conflict, stop and report those paths.
 
 ## Check the outgoing range
 
