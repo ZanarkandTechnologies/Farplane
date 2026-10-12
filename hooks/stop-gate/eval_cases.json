@@ -96,7 +96,8 @@
     "files_changed": true,
     "expected_shape": "completed_change",
     "expected_fixes": [
-      "cold_read"
+      "cold_read",
+      "unanswered"
     ]
   },
   {
@@ -240,7 +241,8 @@
     "files_changed": false,
     "expected_shape": "simple_answer",
     "expected_fixes": [
-      "conclusion_first"
+      "conclusion_first",
+      "cold_read"
     ]
   },
   {
@@ -259,7 +261,9 @@
     "expected_shape": "completed_change",
     "expected_fixes": [
       "cold_read",
-      "video_proof"
+      "unanswered",
+      "video_proof",
+      "absolute_paths"
     ]
   },
   {
@@ -303,7 +307,8 @@
     "proposed_final": "Fixed the off-by-one in chunk_seq after the v2 ws flush regression; flush is idempotent now and p95 is back under budget on fixture B. Rechecked the dedupe path too.",
     "expected_shape": "simple_answer",
     "expected_fixes": [
-      "cold_read"
+      "cold_read",
+      "unanswered"
     ]
   },
   {
@@ -323,5 +328,43 @@
     "expected_fixes": [
       "video_proof"
     ]
+  },
+  {
+    "id": "waiting-one-liner",
+    "files_changed": false,
+    "expected_shape": "progress",
+    "expected_fixes": [
+      "unanswered"
+    ],
+    "latest_user_request": "why didnt we map the genie world tasks into our house render, doesnt have to be accurate but that was what i was hoping, the ai can do last mile deployment and adapt to a new house with the same tasks",
+    "proposed_final": "The simulator finished (results and video written at 22:39); the runner is fetching them."
+  },
+  {
+    "id": "waiting-on-workers",
+    "files_changed": false,
+    "expected_shape": "progress",
+    "expected_fixes": [
+      "unanswered"
+    ],
+    "latest_user_request": "i cant click and read into their markdown, and when their body is written in that graph syntax we should be able to render that as a graph right?",
+    "proposed_final": "I'm waiting on the last two fixers. Those panels are their files right now, so if I edited them too, our changes could overwrite each other. Running the full test suite now would mostly test their half-finished edits. I'll be notified when each one finishes, then I'll check their work live, run all tests and both typechecks, and report back."
+  },
+  {
+    "id": "waiting-but-answers",
+    "files_changed": false,
+    "expected_shape": "progress",
+    "expected_fixes": [],
+    "latest_user_request": "can the people pages render graph syntax as a graph?",
+    "proposed_final": "**Yes: a page whose body is graph syntax will render as a graph once the two panel fixes land, in about 10 minutes.** Today it shows as plain text.\n\nI'm waiting on those two fixes because they edit the same panel files; I'll test the graph view live when they finish."
+  },
+  {
+    "id": "relative-links",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": [
+      "absolute_paths"
+    ],
+    "latest_user_request": "Fix the blank-record export bug.",
+    "proposed_final": "**Worked. Blank records are now skipped and valid rows export.**\n\n> **Before:** A blank first record stopped the export.\n>\n> **After:** Blank records are skipped.\n>\n> **Example:** `[blank, Alice]` exports Alice.\n\n- **Verified:** `test_export` blank-first, blank-middle and all-blank cases pass.\n- **Changed:** [exporter.py](src/export/exporter.py) and `tests/test_export.py`."
   }
 ]

@@ -5,6 +5,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 for directory in (ROOT / "hooks/shared", ROOT / "hooks/continuation", ROOT / "bin/core"):
@@ -58,6 +59,9 @@ class ContinuationTests(unittest.TestCase):
         self.env = {"FARPLANE_CONFIG_DISABLE": "1"}
         self.rows = user("Implement and test it.") + [message("assistant", "Implemented. I'll test next.")]
         self.client = Client()
+        log = patch.object(gate, "append_decision", lambda row: None)
+        log.start()
+        self.addCleanup(log.stop)
 
     def tearDown(self):
         self.temp.cleanup()

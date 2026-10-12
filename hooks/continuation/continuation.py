@@ -6,12 +6,14 @@ our exact feedback in hook-authored rows, never quotations by the assistant.
 """
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 import json
 import math
 from pathlib import Path
 import re
 import sys
-from typing import Mapping
+import time
+from typing import Callable, Mapping
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "hooks" / "response-length"))
 
@@ -20,7 +22,9 @@ from final_response_gate import (
     configured_max_prose_words, gate_response, legacy_gate_response,
 )
 from skill_suggestion import HttpDecisionClient, MODEL_ENV, _provider_config, ENDPOINT_ENV
+import reader_check
 import response_format
+from hook_delivery import append_decision
 
 MAX_HEAD_BYTES = 1024 * 1024
 MAX_TAIL_BYTES = 8 * 1024 * 1024
@@ -29,6 +33,8 @@ MAX_BYTES = MAX_TAIL_BYTES
 MAX_MESSAGES = 20
 MAX_TEXT = 2400
 MAX_NUDGES = 3
+# Format may nudge again only after new tool work, up to this many times a turn.
+MAX_FORMAT_NUDGES = 3
 LEGACY_NUDGE_V1 = (
     "[farplane-continuation:v1] Continue useful unfinished work within the user's "
     "existing request, including requests carried forward from earlier turns. "
@@ -214,6 +220,18 @@ def edits_files(row: Mapping[str, object]) -> bool:
             and response_format.is_edit_tool(item.get("name")))
 
 
+def calls_tool(row: Mapping[str, object]) -> bool:
+    """True for any Claude tool_use or Codex tool call: real work, not a rewrite."""
+    message = row.get("message")
+    if row.get("type") == "assistant" and isinstance(message, dict):
+        content = message.get("content")
+        return isinstance(content, list) and any(
+            isinstance(part, dict) and part.get("type") == "tool_use" for part in content)
+    item = row.get("payload")
+    return (row.get("type") == "response_item" and isinstance(item, dict)
+            and item.get("type") in {"function_call", "custom_tool_call", "local_shell_call"})
+
+
 def read_dialogue(path: str, final: str, *, max_words: int = 500,
                   max_lines: int = 50) -> dict[str, object] | None:
     source = Path(path)
@@ -225,6 +243,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
     nudges = 0
     format_nudges = 0
     proof_nudges = 0
+    work_since_format = False
     files_changed = False
     length_feedback = False
     previous_assistant = ""
@@ -233,6 +252,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         if not isinstance(row, dict):
             return None
         files_changed = files_changed or edits_files(row)
+        work_since_format = work_since_format or calls_tool(row)
         if row.get("type") in {"user", "assistant"} and "message" in row:
             entry = claude_entry(row)
             if entry is None:
@@ -247,11 +267,14 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
                 nudges = 0
                 format_nudges = 0
                 proof_nudges = 0
+                work_since_format = False
                 files_changed = False
                 length_feedback = False
             elif role == "hook":
-                format_nudges += response_format.TAG in text
-                proof_nudges += response_format.TAG in text and response_format.names_proof(text)
+                if response_format.TAG in text:
+                    format_nudges += 1
+                    proof_nudges += response_format.names_proof(text)
+                    work_since_format = False
                 if TAG_PATTERN.search(text):
                     if not any(nudge in text for nudge in KNOWN_NUDGES):
                         return None
@@ -285,6 +308,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
             nudges = 0
             format_nudges = 0
             proof_nudges = 0
+            work_since_format = False
             files_changed = False
             length_feedback = False
             previous_assistant = ""
@@ -304,6 +328,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         if role == "user" and not kinds and response_format.TAG in text:
             format_nudges += 1
             proof_nudges += response_format.names_proof(text)
+            work_since_format = False
             role = "hook"
         elif role == "user" and not kinds and TAG_PATTERN.search(text):
             if text.strip() not in KNOWN_NUDGES:
@@ -338,6 +363,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         "own_nudges_this_user_turn": nudges,
         "format_nudges_this_user_turn": format_nudges,
         "proof_nudges_this_user_turn": proof_nudges,
+        "work_since_format_nudge": work_since_format,
         "files_changed": files_changed,
         "recognized_length_feedback_this_user_turn": length_feedback,
         "source_truncated": rollout_truncated or len(messages) > MAX_MESSAGES or any(
@@ -346,85 +372,134 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
     }
 
 
-def allow_stop(status: str) -> None:
+def allow_stop(status: str, trace: dict[str, object] | None = None) -> None:
+    if trace is not None:
+        trace["status"] = status
     print(json.dumps({"hook": "continuation", "status": status}), file=sys.stderr)
     return None
 
 
-def evaluate_stop(payload: Mapping[str, object], *, environ: Mapping[str, str],
-                  client: object | None = None,
-                  checks: frozenset[str] = frozenset({"continuation"})) -> dict[str, str] | None:
-    """One Jev request answers continuation and, when enabled, response format.
+Reader = Callable[[str, str], "dict[str, bool] | None"]
 
-    Continuation wins; format nudges at most once per real user turn.
+
+def evaluate_stop(payload: Mapping[str, object], *, environ: Mapping[str, str],
+                  client: object | None = None, reader: Reader | None = None,
+                  checks: frozenset[str] = frozenset({"continuation"})) -> dict[str, str] | None:
+    """One Jev request answers continuation and format; Haiku reads the answer alongside.
+
+    Continuation wins. Every decision is appended to the local decision log.
     """
+    trace: dict[str, object] = {"started": time.monotonic()}
+    result = _evaluate(payload, environ, client, reader, checks, trace)
+    final = payload.get("last_assistant_message")
+    append_decision({
+        "runtime_cwd": Path(str(payload.get("cwd") or ".")).name,
+        "session": str(payload.get("session_id") or "")[:12],
+        "status": trace.get("status", "nudge" if result else "allow"),
+        "words": len(final.split()) if isinstance(final, str) else 0,
+        "ms": round((time.monotonic() - float(trace.pop("started"))) * 1000),
+        **{key: value for key, value in trace.items() if key != "status"},
+    })
+    return result
+
+
+def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client: object | None,
+              reader: Reader | None, checks: frozenset[str],
+              trace: dict[str, object]) -> dict[str, str] | None:
     if payload.get("hook_event_name") != "Stop":
+        trace["status"] = "not_stop"
         return None
     final, path = payload.get("last_assistant_message"), payload.get("transcript_path")
     if not isinstance(final, str) or not final.strip() or not isinstance(path, str):
-        return allow_stop("missing_context")
+        return allow_stop("missing_context", trace)
     if gate_response(dict(payload), configured_max_prose_words(dict(environ)),
                      configured_max_prose_lines(dict(environ))):
-        return allow_stop("deferred_response_length")
+        return allow_stop("deferred_response_length", trace)
     try:
         state = read_dialogue(path, final,
             max_words=configured_max_prose_words(dict(environ)),
             max_lines=configured_max_prose_lines(dict(environ)))
         if state is None:
-            return allow_stop("ambiguous_transcript")
+            return allow_stop("ambiguous_transcript", trace)
+        format_count = int(state["format_nudges_this_user_turn"])
+        trace.update(continuation_nudges=state["own_nudges_this_user_turn"],
+                     format_nudges=format_count, files_changed=state["files_changed"])
         if (payload.get("stop_hook_active") and state["own_nudges_this_user_turn"] == 0
-                and not state["format_nudges_this_user_turn"]
+                and not format_count
                 and not state["recognized_length_feedback_this_user_turn"]):
-            return allow_stop("unknown_previous_hook")
+            return allow_stop("unknown_previous_hook", trace)
         ask_nudge = ("continuation" in checks
                      and state["own_nudges_this_user_turn"] < MAX_NUDGES)
-        # Proof has its own once-per-turn nudge beside the general format nudge.
-        proof_only = bool(state["format_nudges_this_user_turn"])
-        ask_format = "format" in checks and not (
-            proof_only and state["proof_nudges_this_user_turn"])
+        # A format nudge is spent until new tool work happens; proof keeps its own.
+        full_format = format_count == 0 or (
+            bool(state["work_since_format_nudge"]) and format_count < MAX_FORMAT_NUDGES)
+        proof_only = (not full_format and not state["proof_nudges_this_user_turn"]
+                      and format_count < MAX_FORMAT_NUDGES)
+        ask_format = "format" in checks and (full_format or proof_only)
         if not ask_nudge and not ask_format:
-            return allow_stop("nudge_cap")
+            return allow_stop("nudge_cap", trace)
         config = _provider_config(environ)
         if config is None:
-            return allow_stop("unconfigured_provider")
+            return allow_stop("unconfigured_provider", trace)
         if client is None:
             key = environ.get(config["api_key_env"], "").strip()
             if not key:
-                return allow_stop("unconfigured_credentials")
+                return allow_stop("unconfigured_credentials", trace)
             client = HttpDecisionClient(api_key=key, provider=config["provider"],
                 endpoint=environ.get(ENDPOINT_ENV) or config["endpoint"], timeout=2.5)
-        # Also remove exact configured provider keys, even if their format is unknown.
-        encoded = json.dumps(state)
-        for key_name in ("OPENROUTER_API_KEY", "FEATHERLESS_API_KEY"):
-            secret = environ.get(key_name, "")
-            if secret:
-                encoded = encoded.replace(json.dumps(secret)[1:-1], "[REDACTED PROVIDER KEY]")
-        state = json.loads(encoded)
+        state = json.loads(without_provider_keys(json.dumps(state), environ))
         questions: dict[str, object] = {}
         if ask_nudge:
             questions["nudge"] = {"type": "noul", "instructions": QUESTION}
         if ask_format:
             questions.update(response_format.questions())
-        result = client.system_one(state=state, questions=questions,
-            model=environ.get(MODEL_ENV) or config["model"])
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            facts_future = None
+            if ask_format and full_format:
+                if reader is None:
+                    def reader(request: str, answer: str) -> dict[str, bool] | None:
+                        return reader_check.judge(request, answer, environ=environ)
+                # The full answer, redacted but not cut: the middle is where readers get lost.
+                facts_future = pool.submit(reader, str(state["latest_user_request"]),
+                                           json.loads(without_provider_keys(json.dumps(redact(final)), environ)))
+            result = client.system_one(state=state, questions=questions,
+                model=environ.get(MODEL_ENV) or config["model"])
+            facts = facts_future.result() if facts_future else None
         answers = result["answers"]
+        if facts_future:
+            trace["reader"] = facts if facts else "unavailable"
         if ask_nudge:
             value = answers["nudge"]["noul"]
             if isinstance(value, bool) or not isinstance(value, (float, int)):
-                return allow_stop("invalid_decision")
+                return allow_stop("invalid_decision", trace)
             if not math.isfinite(value) or not 0 <= value <= 1:
-                return allow_stop("invalid_decision")
+                return allow_stop("invalid_decision", trace)
+            trace["nudge_score"] = value
             if value >= 0.5:
+                trace["status"] = "continuation_nudge"
                 print(json.dumps({"hook": "continuation", "status": "nudge"}), file=sys.stderr)
                 return {"decision": "block", "reason": NUDGE}
         if ask_format:
             shape, gaps = response_format.select_gaps(
                 answers, files_changed=bool(state["files_changed"]), final=final,
-                proof_only=proof_only)
+                reader_gaps=reader_check.gaps(facts), proof_only=proof_only)
+            trace.update(shape=shape, gaps=gaps, scores={
+                key.removeprefix("gap::"): value.get("noul") for key, value in answers.items()
+                if (key.startswith("gap::") or key == "visible_feature") and isinstance(value, dict)})
             if gaps:
+                trace["status"] = "format_nudge"
                 print(json.dumps({"hook": "response-format", "status": "nudge",
                                   "shape": shape, "gaps": gaps}), file=sys.stderr)
                 return {"decision": "block", "reason": response_format.feedback(gaps)}
     except Exception:
-        return allow_stop("unavailable")
-    return allow_stop("allow")
+        return allow_stop("unavailable", trace)
+    return allow_stop("allow", trace)
+
+
+def without_provider_keys(encoded: str, environ: Mapping[str, str]) -> str:
+    """Remove exact configured provider keys from JSON text, even if their format is unknown."""
+    for key_name in ("OPENROUTER_API_KEY", "FEATHERLESS_API_KEY"):
+        secret = environ.get(key_name, "")
+        if secret:
+            encoded = encoded.replace(json.dumps(secret)[1:-1], "[REDACTED PROVIDER KEY]")
+    return encoded

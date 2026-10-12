@@ -9,7 +9,7 @@
 | --- | --- | --- | --- |
 | 1 | Length | Deterministic ([`farplane_response.py`](../../bin/core/farplane_response.py)) | Prose is over the word or line limit |
 | 2 | Continuation | Jev `nudge` score ([`continuation.py`](../continuation/continuation.py)) | Score ≥ 0.5 and fewer than three continuation nudges this user turn |
-| 3 | Response format | Jev `shape` choice, `gap::<section>` and `visible_feature` scores ([`response_format.py`](../shared/response_format.py)) | A gap of the chosen shape or `cold_read` scores ≥ 0.6, a new feature has no video, or a completed change that edited files cites nothing |
+| 3 | Response format | Jev `shape`, `gap::<section>` and `visible_feature` scores, the Haiku reader check ([`reader_check.py`](../shared/reader_check.py)), and fixed rules ([`response_format.py`](../shared/response_format.py)) | The reader says the answer misses the user, a gap of the chosen shape scores ≥ 0.6, a file is named by a relative path, a new feature has no video, or a completed change that edited files cites nothing |
 
 Continuation and format share one Jev request. Format nudges at most once per
 real user turn and names at most two additions. Format still runs after the
@@ -23,12 +23,23 @@ blocked, decision needed, progress), then scores only that shape's missing
 sections. A plan is never asked for `Verified:`, and an explanation is never
 asked for Before/After.
 
-Every shape is also scored for `cold_read`: would someone who saw only the
-user's latest message be lost, because the answer narrates the latest fix
-instead of where the request stands, or uses terms coined during the work? A
-template-perfect delta report ("reach strip fixed, 6 of 7 agree") fails it;
-the nudge asks for the overall state in plain words, what works, what does not,
-and the one thing the user must do.
+Every shape also gets the reader check. Claude Haiku 5.5 (OpenRouter,
+`FARPLANE_READER_MODEL`) reads the user's latest message and the whole answer,
+not the 2,400-character cut Jev sees, and returns three facts. Fixed rules
+turn them into at most one gap:
+
+- `answers_latest` false → `unanswered`: "answer what you can now, then say
+  what you are waiting for". This catches turns that end on a one-line status
+  such as "The simulator finished; the runner is fetching them."
+- `process_narration` true and `status_first` false → `cold_read`: lead with
+  the overall state in plain words.
+
+The reader runs beside the Jev request with a 2.5-second timeout. A timeout,
+missing key or bad reply skips it and logs `"reader": "unavailable"`.
+
+Every shape also gets one deterministic check: a relative file link or a
+backticked relative path with an extension (`docs/plan.md`) gets
+`absolute_paths`. `./run.sh` and `../x` read as commands and pass.
 
 Proof is deterministic once Jev has said whether the turn added a new feature
 or multi-step workflow a person would watch (`visible_feature` ≥ 0.6: a screen,
@@ -46,11 +57,11 @@ code that changes how bunker workers behave counts.
   one nudge to cite its proof or state `Unverified:` and why.
 
 Edits are Claude `Edit`/`Write`/`MultiEdit`/`NotebookEdit` or Codex
-`apply_patch` calls this user turn. Cold-read and shape gaps share one format
-nudge per real user turn, naming at most two additions. Proof has its own: when
-an earlier format nudge this turn did not ask for proof, the gate asks once more
-for the proof or video only, so a Goal/Track/Progress nudge cannot use up the
-video check.
+`apply_patch` calls this user turn. A format nudge names at most two additions.
+After one, the gate asks again only when new tool work has happened since (a
+plain rewrite does not count), up to three format nudges a user turn. Proof
+keeps its own nudge: when no earlier format nudge asked for proof, the gate
+asks once more for the proof or video only.
 
 Short `Verified:`, `Unverified:`, `Limit:` and `Grounding:` lines (at most 30
 words) are outside the length budget, so adding proof does not re-trigger the
@@ -67,6 +78,15 @@ unknown names are ignored. Provider settings and credential scope are shared wit
 continuation: missing credentials, provider errors and unknown transcript
 provenance allow the stop silently.
 
+Every decision, allows included, is appended to
+`~/.farplane/state/stop-gate/decisions.jsonl` (metadata only: status, shape,
+gaps, scores, reader facts, word count, milliseconds; never answer text). It
+rotates at 5 MB. Read it to see what the gate let through:
+
+```sh
+jq -c '{at,status,gaps,reader,ms}' ~/.farplane/state/stop-gate/decisions.jsonl | tail
+```
+
 ## Checks
 
 ```sh
@@ -75,5 +95,5 @@ farplane run -- python3 hooks/stop-gate/sanity_check.py
 ```
 
 The live check runs [`eval_cases.json`](eval_cases.json) through the configured
-provider. It passes only with zero format nudges on clean answers and at least 80%
-of known gaps caught.
+provider and the reader model. It passes only with zero format nudges on clean
+answers and at least 80% of known gaps caught.

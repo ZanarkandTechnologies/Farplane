@@ -10,6 +10,8 @@ hooks that use them:
   judge continuation (`user-turn`, `stop-gate`, `continuation`).
 - `response_format.py` — the final-answer format checks (`stop-gate`,
   `continuation`).
+- `reader_check.py` — Claude Haiku reads the whole final answer as the user
+  would (`stop-gate`, through `continuation`).
 
 Code used by one hook lives in that hook's folder. Code the `farplane` CLI also
 uses lives in `bin/core/` (for example `user_turn.py`, `skill_registry.py`).

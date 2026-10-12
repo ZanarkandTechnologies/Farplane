@@ -54,21 +54,30 @@ def hook(text):
             "message": {"role": "user", "content": "Stop hook feedback:\n" + text}}
 
 
+def facts(answers=True, status_first=True, narration=False):
+    return lambda request, final: {"answers_latest": answers, "status_first": status_first,
+                                   "process_narration": narration}
+
+
 class StopGateTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.path = Path(self.temp.name) / "transcript.jsonl"
         self.env = {"FARPLANE_CONFIG_DISABLE": "1"}
+        self.logged = []
+        log = patch.object(continuation, "append_decision", self.logged.append)
+        log.start()
+        self.addCleanup(log.stop)
 
     def tearDown(self):
         self.temp.cleanup()
 
-    def evaluate(self, rows, final, client, *, active=False, checks=ALL):
+    def evaluate(self, rows, final, client, *, active=False, checks=ALL, reader=None):
         self.path.write_text("\n".join(json.dumps(row) for row in rows))
         return continuation.evaluate_stop(
             {"hook_event_name": "Stop", "transcript_path": str(self.path),
              "last_assistant_message": final, "stop_hook_active": active},
-            environ=self.env, client=client, checks=checks)
+            environ=self.env, client=client, checks=checks, reader=reader)
 
     def test_uncited_completed_change_with_edits_gets_one_proof_nudge(self):
         client = Client()
@@ -102,12 +111,56 @@ class StopGateTests(unittest.TestCase):
         rows = [human("Bump the timeout."), edit_call()]
         self.assertIsNone(self.evaluate(rows, "Done. Verified: config test passes.", Client(feature=0.2)))
 
-    def test_cold_read_applies_to_every_shape(self):
+    def test_reader_gaps_apply_to_every_shape(self):
         for shape in response_format.SHAPES:
             with self.subTest(shape=shape):
+                result = self.evaluate([human("Can graph syntax render?")], "Waiting on the fixers.",
+                                       Client(shape=shape), reader=facts(answers=False))
+                self.assertIn("Answer what the user's latest message asked", result["reason"])
                 result = self.evaluate([human("Status?")], "Reach strip fixed; 6/7 agree.",
-                                       Client(shape=shape, gaps={"cold_read": 0.8}))
+                                       Client(shape=shape), reader=facts(status_first=False, narration=True))
                 self.assertIn("overall state in plain words", result["reason"])
+
+    def test_process_with_status_first_passes_the_reader(self):
+        self.assertIsNone(self.evaluate([human("Status?")], "Works. I then tuned X.", Client(shape="simple_answer"),
+                                        reader=facts(narration=True)))
+
+    def test_reader_sees_the_whole_answer_and_failure_allows(self):
+        seen = []
+        final = "Start. " + "middlemiddlemiddlemiddle " * 200 + "End."  # 5,000+ chars, under 500 words
+        self.evaluate([human("Explain.")], final, Client(shape="simple_answer"),
+                      reader=lambda request, answer: seen.append(answer))
+        self.assertEqual(seen, [final])
+        self.assertEqual(self.logged[-1]["reader"], "unavailable")
+        self.assertEqual(self.logged[-1]["status"], "allow")
+
+    def test_relative_file_paths_get_an_absolute_path_nudge(self):
+        for final in ("See [plan](docs/plan.md).", "Edited `hooks/stop-gate/README.md:12`."):
+            with self.subTest(final=final):
+                result = self.evaluate([human("Where?")], final, Client(shape="simple_answer"))
+                self.assertIn("absolute path", result["reason"])
+        for final in ("See [plan](/Users/me/docs/plan.md).", "See [PR](https://x.test/1).",
+                      "Use `a/b` or `README.md`.", "Open `~/notes/a.md`.", "Run `./bin/start.sh`."):
+            with self.subTest(final=final):
+                self.assertIsNone(self.evaluate([human("Where?")], final, Client(shape="simple_answer")))
+
+    def test_new_tool_work_earns_a_fresh_format_nudge(self):
+        rows = [human("Fix it."), edit_call(), assistant("Done."),
+                hook(response_format.feedback(["conclusion_first"]))]
+        client = Client(shape="simple_answer", gaps={"conclusion_first": 0.9})
+        self.assertIsNone(self.evaluate(rows, "Rewritten.", client, active=True))
+        rows += [edit_call("Bash"), assistant("More work.")]
+        result = self.evaluate(rows, "Done after more work.", client, active=True)
+        self.assertIn("Lead with the conclusion", result["reason"])
+        self.assertEqual(self.logged[-1]["status"], "format_nudge")
+
+    def test_format_nudges_stop_at_the_turn_ceiling(self):
+        rows = [human("Fix it.")]
+        for _ in range(continuation.MAX_FORMAT_NUDGES):
+            rows += [edit_call("Bash"), assistant("Done."), hook(response_format.feedback(["proof"]))]
+        rows += [edit_call("Bash")]
+        client = Client(shape="simple_answer", gaps={"conclusion_first": 0.9})
+        self.assertIsNone(self.evaluate(rows, "Done.", client, active=True))
 
     def test_no_edits_means_no_proof_nudge(self):
         self.assertIsNone(self.evaluate([human("Fix it."), edit_call("Read")], "Done.", Client()))
@@ -132,10 +185,11 @@ class StopGateTests(unittest.TestCase):
     def test_spent_format_nudge_still_leaves_one_proof_nudge(self):
         rows = [human("Give desks a role."), edit_call(), assistant("Done."),
                 hook(response_format.feedback(["progress_ledger"]))]
-        client = Client(feature=0.9, gaps={"cold_read": 0.9})
-        result = self.evaluate(rows, "Done. Verified: tests pass.", client, active=True)
+        client = Client(feature=0.9)
+        result = self.evaluate(rows, "Done. Verified: tests pass.", client, active=True,
+                               reader=facts(answers=False))
         self.assertIn("Record the new feature working", result["reason"])
-        self.assertNotIn("overall state", result["reason"])
+        self.assertNotIn("latest message asked", result["reason"])
         rows += [assistant("Done. Verified: tests pass."), hook(result["reason"])]
         self.assertIsNone(self.evaluate(rows, "Done again.", Client(feature=0.9), active=True))
 
@@ -207,7 +261,6 @@ class CatalogTests(unittest.TestCase):
             with self.subTest(shape=name):
                 self.assertIn(spec["template"], headings)
                 self.assertTrue(set(spec["gaps"]) <= set(response_format.GAPS))
-        self.assertTrue(set(response_format.UNIVERSAL_GAPS) <= set(response_format.GAPS))
 
     def test_eval_cases_use_known_shapes_and_gaps(self):
         cases = json.loads((ROOT / "hooks/stop-gate/eval_cases.json").read_text())

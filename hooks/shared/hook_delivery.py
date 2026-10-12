@@ -51,6 +51,28 @@ def record_status(event: str, status: str, *, reason: str | None = None,
                 pass
 
 
+DECISION_LOG_MAX_BYTES = 5 * 1024 * 1024
+
+
+def append_decision(row: dict[str, object]) -> None:
+    """Append one metadata-only Stop gate decision (no answer text) to the local log.
+
+    The log shows what the gate allowed, not only what it blocked. It rotates once
+    at 5 MB, keeping one previous file.
+    """
+    try:
+        directory = farplane_home() / "state" / "stop-gate"
+        directory.mkdir(parents=True, exist_ok=True)
+        log = directory / "decisions.jsonl"
+        if log.exists() and log.stat().st_size > DECISION_LOG_MAX_BYTES:
+            os.replace(log, directory / "decisions.1.jsonl")
+        with log.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps({"at": datetime.now(timezone.utc).isoformat(), **row},
+                                    default=str) + "\n")
+    except OSError:
+        print("farplane: stop-gate decision log write failed", file=sys.stderr)
+
+
 def validate_event(event: dict[str, object], argv: list[str] | None = None) -> bool:
     parser = argparse.ArgumentParser(description="Send classified Farplane lifecycle telemetry")
     parser.add_argument("--expect-event", choices=EVENTS)

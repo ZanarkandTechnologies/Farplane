@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run sanitized final answers through the configured Jev response-format check.
+"""Run sanitized final answers through the Jev format check and the Haiku reader check.
 
 Passes when no clean answer is nudged and most answers with a known gap are.
 """
@@ -14,6 +14,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "hooks" / "shared"))
 
+import reader_check  # noqa: E402
 from response_format import questions, select_gaps  # noqa: E402
 from skill_suggestion import (  # noqa: E402
     ENDPOINT_ENV, MODEL_ENV, HttpDecisionClient, _provider_config,
@@ -50,14 +51,16 @@ def main() -> int:
                  "proposed_final": final, "files_changed": case["files_changed"]}
         result = client.system_one(state=state, questions=questions(),
                                    model=environ.get(MODEL_ENV) or config["model"])
+        facts = reader_check.judge(str(case["latest_user_request"]), final,
+                                   environ=environ, timeout=15)
         shape, gaps = select_gaps(result["answers"], files_changed=bool(case["files_changed"]),
-                                  final=final)
+                                  final=final, reader_gaps=reader_check.gaps(facts))
         expected = list(case["expected_fixes"])  # type: ignore[arg-type]
         scores = {key.removeprefix("gap::"): answer.get("noul")
                   for key, answer in result["answers"].items()
                   if key.startswith("gap::") or key == "visible_feature"}
         return {"id": case["id"], "shape": shape, "expected_shape": case["expected_shape"],
-                "scores": scores,
+                "scores": scores, "reader": facts,
                 "gaps": gaps, "expected": expected,
                 "false_nudge": bool(gaps) and not expected,
                 "caught": bool(expected) and bool(set(gaps) & set(expected))}

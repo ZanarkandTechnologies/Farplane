@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.10
+template_version: 0.3.11
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -263,6 +263,8 @@ final = decision + reason + proof + next_blocking_condition
 - Write plainly and concretely. Use short paragraphs under descriptive headings,
   bullets for parallel points, and numbered lists for ordered steps. Keep one
   main point per bullet with its conditions beside it.
+- Use only names the user already used; say what any other name, file, id, or
+  tool is in a few words, or drop it.
 - Use a table when three or more routes share comparable dimensions and the
   reader must distinguish entry points, conditions, or outcomes. Keep prose for
   a single rule and avoid long paragraphs inside cells.
