@@ -4,12 +4,12 @@
     {
       "id": "normal_commit_named_files",
       "prompt": "The operator says: commit the parser fix. The current task changed parser.py and test_parser.py. notes.md has an unrelated edit from another thread. Nothing is staged. Describe the exact commit behavior without running commands.",
-      "expected_output": "Stages only parser.py and test_parser.py by name (git add -- parser.py test_parser.py), checks the staged set is exactly those two files, and creates one local commit whose subject describes the parser fix. notes.md stays unstaged and is named in the receipt as another thread's change left for its owner. It never runs git add -A, does not ask the operator to stage files, and does not push.",
+      "expected_output": "Describes staging only parser.py and test_parser.py by name (for example git add -- parser.py test_parser.py), checking that the staged set is exactly those two files, and creating one local commit whose subject describes the parser fix. It says notes.md stays unstaged and is named in the receipt as another thread's change. It does not propose git add -A, asking the operator to stage files, or a push.",
       "assertions": [
-        "Stages parser.py and test_parser.py by name, never git add -A",
-        "Leaves notes.md unstaged and names it in the receipt",
-        "Subject describes the parser fix only",
-        "Creates exactly one local commit and does not push"
+        "Says it stages parser.py and test_parser.py by name and does not use git add -A",
+        "Says notes.md stays unstaged and is named in the receipt",
+        "Gives a subject about the parser fix only",
+        "Describes exactly one local commit and no push"
       ],
       "metadata": {
         "farplane": {
@@ -24,11 +24,11 @@
     {
       "id": "other_thread_mid_edit",
       "prompt": "The operator says: commit this. This thread changed hooks/stop-gate/stop_gate.py. Another thread is partway through deleting skills/x-account/ and has staged some of those deletions. Describe the exact commit behavior without running commands.",
-      "expected_output": "Commits only hooks/stop-gate/stop_gate.py, without waiting for the other thread or asking about it. If some skills/x-account/ deletions are already staged by the other thread, it unstages nothing of that thread's work in the tree but commits with an explicit pathspec (git commit -- hooks/stop-gate/stop_gate.py) so only the stop-gate file lands. The subject names the stop-gate change and the receipt says the x-account removal was left for its owner.",
+      "expected_output": "Describes committing only hooks/stop-gate/stop_gate.py with an explicit pathspec (for example git commit -- hooks/stop-gate/stop_gate.py) so the other thread's already-staged x-account deletions do not land, without waiting for or asking about the other thread and without unstaging its work. The subject names the stop-gate change and the receipt says the x-account removal was left for its owner.",
       "assertions": [
         "Does not wait for or ask about the other thread",
         "Commits only the stop-gate path, via an explicit pathspec",
-        "Leaves the x-account removal out of the commit and names it in the receipt"
+        "Keeps the x-account removal out of the commit and names it in the receipt"
       ],
       "metadata": {
         "farplane": {
@@ -43,10 +43,10 @@
     {
       "id": "outlier_other_thread_bulk",
       "prompt": "The operator says: commit and push. This thread changed 12 files for a hook fix. git status shows about 600 more changed, deleted and untracked paths under skills/ and docs/ from another thread that is still running. The repository is public. Describe the exact commit and push behavior without running commands.",
-      "expected_output": "Stages and commits only the 12 hook-fix files by name, confirms the staged set is those 12, and leaves the ~600 other paths unstaged. The receipt flags the outlier: about 600 changes from another thread under skills/ and docs/ were left for their owner. It then pushes main, publishing only the commits ahead of origin/main, after the secret and private-data scan. It never runs git add -A and never publishes the other thread's in-progress files under its own subject.",
+      "expected_output": "Describes staging and committing only the 12 hook-fix files by name, confirming the staged set is those 12, and leaving the ~600 other paths unstaged. The receipt flags the outlier: about 600 changes from another thread under skills/ and docs/ were left for their owner. It then describes the push: scan the outgoing commits for secrets and private data, push main, and publish only the commits ahead of origin/main. It never proposes git add -A and never commits the other thread's in-progress files under its own subject.",
       "assertions": [
-        "Stages only the 12 hook-fix files, never git add -A",
-        "Leaves the ~600 other-thread paths unstaged",
+        "Says it stages only the 12 hook-fix files and does not use git add -A",
+        "Says the ~600 other-thread paths stay unstaged",
         "Flags the other thread's bulk change in the receipt",
         "Pushes only after the secret and private-data scan"
       ],
@@ -64,7 +64,7 @@
     {
       "id": "gate_warns_on_other_work",
       "prompt": "The operator says: commit this. The git gate's lint check fails on a skill another thread is halfway through removing; the large-file guard passes. Describe the exact commit behavior without running commands.",
-      "expected_output": "The commit goes through because quality checks warn rather than block. The commit body names the lint warning and the other thread's path. The agent does not disable the gate, skip hooks with --no-verify, or try to fix the other thread's work.",
+      "expected_output": "Describes the commit going through because the gate's quality checks warn rather than block, with the lint warning and the other thread's path named in the commit body. It does not propose disabling the gate, skipping hooks with --no-verify, or fixing the other thread's files.",
       "assertions": [
         "Commits despite the lint warning",
         "Names the warning in the commit body",
@@ -83,7 +83,7 @@
     {
       "id": "push_main_with_moved_origin",
       "prompt": "Farplane uses one shared checkout on local main. The operator says: commit this and push. origin/main gained one commit since the last fetch. Another thread edited a file after your commit. The repository is public. Describe the exact Git behavior without running commands.",
-      "expected_output": "Commits this thread's named files, fetches origin/main, then merges origin/main with git merge (leaving the other thread's later edit uncommitted), never a rebase or force push. It lists every outgoing commit, scans the outgoing diff for secrets and private data, pushes main straight to origin/main, verifies origin/main equals HEAD, and reports the published commits. It opens no PR.",
+      "expected_output": "Describes committing this thread's named files, fetching origin/main, and merging it with git merge (never a rebase or force push) while the other thread's later edit stays uncommitted. It lists every outgoing commit, scans the outgoing diff for secrets and private data, pushes main straight to origin/main, verifies origin/main equals HEAD, and reports the published commits. It opens no PR.",
       "assertions": [
         "Pushes main directly to origin/main and opens no PR",
         "Integrates the moved origin/main with a merge, never a rebase or force push",
@@ -103,7 +103,7 @@
     {
       "id": "explicit_pr_request",
       "prompt": "Farplane uses one shared checkout on local main. The operator asks to commit the current change and open a PR. Describe the exact Git behavior without running commands.",
-      "expected_output": "Commits this thread's named files, then follows the PR route: pushes HEAD to a temporary remote codex branch without creating or switching a local branch, opens the PR against main, and does not push main directly.",
+      "expected_output": "Describes committing this thread's named files, then the PR route: push HEAD to a temporary remote codex branch without creating or switching a local branch, open the PR against main, and not push main directly.",
       "assertions": [
         "Pushes HEAD to refs/heads/codex/<task-name> without a local branch switch",
         "Opens the PR against main",
