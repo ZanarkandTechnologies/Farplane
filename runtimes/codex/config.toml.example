@@ -32,14 +32,12 @@ FARPLANE_CONSOLE_KEY = "__FARPLANE_CONSOLE_KEY__"
 # Optional hook telemetry endpoint. Prefer runtime env or Farplane UI-managed
 # fallback/cache values; install.sh renders them here as Codex adapter config.
 # FARPLANE_TELEMETRY_HOOKS_URL = "https://your-backend.example.com/telemetry/hooks"
-# Skill graph heat controls. The generated skill graph reads local
-# `.farplane/events/*.jsonl` and uses these values to decide its default hot
-# skill window and top-N view.
+# Skill graph heat controls. The generated skill graph counts `skill_invoked`
+# rows (hooks/skill-invocation) from the bunker Convex and uses these values to
+# decide its default hot skill window and top-N view.
 FARPLANE_SKILL_HEAT_WINDOW_DAYS = "30"
 FARPLANE_SKILL_HEAT_RECENT_DAYS = "7"
 FARPLANE_SKILL_HEAT_TOP_N = "25"
-# Comma-separated event types counted as skill heat.
-FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,skill_requested"
 # Optional JEV entry-skill suggestion on UserPromptSubmit. This sends the
 # current prompt plus bounded skill descriptions/excerpts to the selected
 # provider. Store provider credentials in Doppler and inject them at runtime.

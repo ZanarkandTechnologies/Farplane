@@ -41,7 +41,8 @@ owns entrypoint usage, configuration, failure behavior, and focused checks:
 [continuation](../../hooks/continuation/README.md),
 [response length](../../hooks/response-length/README.md),
 [lifecycle telemetry](../../hooks/lifecycle-telemetry/README.md),
-[skill length](../../hooks/skill-length/README.md), and
+[skill length](../../hooks/skill-length/README.md),
+[skill invocation](../../hooks/skill-invocation/README.md), and
 [user turn](../../hooks/user-turn/README.md).
 `farplane hooks install` links these complete folders. Temporary installed-only
 migration links keep old flat command paths usable by active Codex sessions with

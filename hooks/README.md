@@ -11,6 +11,7 @@ explain behavior without maintaining duplicate registration snippets.
 | [response-length](response-length/README.md) | Stop (via stop-gate) | Deterministic final-answer prose limits |
 | [lifecycle-telemetry](lifecycle-telemetry/README.md) | UserPromptSubmit, Stop, SubagentStart, SubagentStop | Classified lifecycle observations |
 | [skill-length](skill-length/README.md) | PostToolUse | Repair feedback for oversized edited skills |
+| [skill-invocation](skill-invocation/README.md) | PostToolUse | Records real skill invocations for skill heat |
 | [user-turn](user-turn/README.md) | UserPromptSubmit | User-intent capture and optional skill suggestion |
 
 ## Install and inspect

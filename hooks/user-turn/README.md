@@ -18,7 +18,10 @@ checks its installed target. The installer links this entire folder under
 
 The adapter delegates persistence and classification to
 [`bin/core/user_turn.py`](../../bin/core/user_turn.py), which the `farplane` CLI also uses;
-`runtime_telemetry.py` here sends the intent event. Internal injected
+`runtime_telemetry.py` here sends the intent event. Each skill the prompt names
+goes to the skill stream as `skill_requested` (`hooks/shared/skill_events.py`,
+see [skill invocation](../skill-invocation/README.md)); skill heat keeps it
+apart from real invocations. Internal injected
 prompts, empty/invalid input, other events, and requests without a resolved project
 are ignored. It does not mark tickets complete or invoke suggested skills.
 

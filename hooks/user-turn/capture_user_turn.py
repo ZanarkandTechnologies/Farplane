@@ -8,6 +8,7 @@ Normalization and persistence rules live in
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -17,6 +18,7 @@ for directory in (ROOT / "hooks" / "user-turn", ROOT / "hooks" / "shared", ROOT 
         sys.path.insert(0, str(directory))
 
 from runtime_telemetry import emit_hook_telemetry
+from skill_events import post_skill_event, skill_event_row
 from skill_suggestion import suggest_entry_skill, suggestion_context
 from user_turn import (
     append_conversation_user_turn,
@@ -134,23 +136,18 @@ def main() -> int:
             },
         )
     for skill in skill_mentions:
-        registry_record = skill_registry.records[skill.lower()]
-        emit_hook_telemetry(
-            event_type="skill_requested",
-            hook_event_name="UserPromptSubmit",
-            payload=payload,
-            project_root=project_root,
-            extra={
-                "source": "user_explicit_request",
-                "producer": "capture_user_turn.py",
-                "status": "requested",
-                "summary": f"requested ${skill}",
-                "skill_name": skill,
-                "registry_source": "docs/skills/registry.jsonl",
-                "registry_path": str(skill_registry.path),
-                "registry_skill_source": registry_record.get("source", ""),
-                "registry_skill_path": registry_record.get("path", ""),
-            },
+        # Prompt mentions are requests, not invocations; skill heat keeps them as a separate count.
+        post_skill_event(
+            skill_event_row(
+                kind="skill_requested",
+                skill=skill,
+                session_id=str(payload.get("session_id") or "").strip(),
+                anchor=str(payload.get("turn_id") or "").strip(),
+                turn_id=str(payload.get("turn_id") or "").strip(),
+                cwd=str(project_root),
+                source="prompt_mention",
+                runtime=os.getenv("FARPLANE_AGENT_RUNTIME", "codex").strip() or "codex",
+            )
         )
     if suggested_skill:
         registry_record = skill_registry.records.get(suggested_skill.lower(), {})

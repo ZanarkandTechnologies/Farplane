@@ -43,7 +43,7 @@ def generate_skill_projection(args: argparse.Namespace) -> tuple[dict, dict | No
     registry_path = repo_root / args.registry
     rows = generator.load_registry(registry_path)
     skill_heat_config = generator.skill_heat_config_from_env()
-    skill_heat = generator.load_skill_heat(repo_root, {row["name"] for row in rows}, config=skill_heat_config)
+    skill_heat = generator.load_skill_heat({row["name"] for row in rows}, config=skill_heat_config)
     graph = generator.build_graph(rows, skill_heat=skill_heat, skill_heat_config=skill_heat_config)
     docs = generator.build_docs(rows)
     return graph, docs

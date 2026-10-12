@@ -108,8 +108,13 @@ variables, usually from `runtimes/codex/config.toml.example`:
 - `FARPLANE_SKILL_HEAT_WINDOW_DAYS`: main ranking window, default `30`.
 - `FARPLANE_SKILL_HEAT_RECENT_DAYS`: secondary recent counter, default `7`.
 - `FARPLANE_SKILL_HEAT_TOP_N`: default hot-skills filter, default `25`.
-- `FARPLANE_SKILL_HEAT_EVENT_TYPES`: comma-separated telemetry event types to
-  count as skill heat.
+
+Heat counts only real invocations: `skill_invoked` rows that
+[hooks/skill-invocation](../../../hooks/skill-invocation/README.md) posts to the
+bunker Convex (`hookName: skill-invocation-listener`), read through
+`listHookTelemetryEvents` for the last 90 days. Prompt mentions arrive on the
+same stream as `skill_requested` and show only as `requested_count_*`. Without
+Convex settings (`CONVEX_URL`) heat is zero and generation prints the gap.
 
 The harness graph is currently a data/report surface rather than a rendered UI
 view. It detects local Markdown links and literal repo paths, resolves them to

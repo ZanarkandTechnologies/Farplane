@@ -30,6 +30,17 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "^(Skill|Bash)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.codex/hooks/skill-invocation/skill_invocation.py\"",
+            "statusMessage": "Skill telemetry — records a real skill invocation (observation only)",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "Stop": [

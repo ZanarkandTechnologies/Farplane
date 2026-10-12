@@ -413,7 +413,6 @@
         return (
           Number(signals.direct_heat?.invocation_count_window || 0)
           + Number(signals.direct_heat?.distinct_threads_window || 0)
-          + Number(signals.direct_heat?.distinct_tickets_window || 0)
           + Number(signals.composition_heat?.window_referrer_invocations || 0)
         );
       }
@@ -669,9 +668,9 @@
                 ${row("Checklist", node.has_checklist ? "present" : "missing")}
                 ${row("Methods", String(methods.length))}
                 ${row(`Invocations ${node.heat?.recent_days || heatConfig.recent_days || 7}d`, String(node.heat?.invocation_count_recent ?? 0))}
-                ${row("Invocations all", String(node.heat?.invocation_count_all || 0))}
+                ${row(`Invocations ${node.heat?.all_days || 90}d`, String(node.heat?.invocation_count_all || 0))}
                 ${row(`Threads ${node.heat?.window_days || heatConfig.window_days || 30}d`, String(node.heat?.distinct_threads_window ?? 0))}
-                ${row(`Tickets ${node.heat?.window_days || heatConfig.window_days || 30}d`, String(node.heat?.distinct_tickets_window ?? 0))}
+                ${row(`Requested ${node.heat?.window_days || heatConfig.window_days || 30}d`, String(node.heat?.requested_count_window ?? 0))}
                 ${row("Last invoked", node.heat?.last_invoked_at || "none")}
               </tbody>
             </table>

@@ -156,6 +156,7 @@ INSTALL_HOOK_DIRS=(
   stop-gate
   lifecycle-telemetry
   skill-length
+  skill-invocation
   user-turn
   shared
 )

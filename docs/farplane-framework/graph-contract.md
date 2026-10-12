@@ -99,9 +99,11 @@ The first generator version intentionally parses a small, stable surface:
   records first-seen explicit skill references in order: Markdown `SKILL.md`
   links, backticked `skill-name` refs, or `$skill-name` refs. It does not read
   plain prose or Reference Map prose as execution order.
-- `.farplane/events/*.jsonl` skill telemetry for observed skill heat. Graph
-  prominence is generated from behavior instead of a hand-maintained workflow
-  marker.
+- `skill_invoked` rows on the bunker Convex `skill-invocation-listener` hook
+  stream ([skill invocation hook](../../hooks/skill-invocation/README.md)) for
+  observed skill heat; `skill_requested` prompt mentions stay a separate count.
+  Graph prominence is generated from behavior instead of a hand-maintained
+  workflow marker.
 - `## Skill Signature` blocks for `state: reads(...)`, `writes(...)`,
   `gates:`, and `routes:`.
 - `hooks.json` for Codex hook events and command hook targets.

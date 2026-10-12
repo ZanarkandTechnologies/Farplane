@@ -33,8 +33,14 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
             events.append(dict(kwargs))
             return True
 
+        def capture_skill_row(row: dict[str, object]) -> bool:
+            events.append({"event_type": dict(row["payload"])["eventType"], "row": row})
+            return True
+
         with patch.object(sys, "stdin", io.StringIO(json.dumps(payload))):
-            with patch.object(capture_user_turn, "emit_hook_telemetry", side_effect=capture_event):
+            with patch.object(capture_user_turn, "emit_hook_telemetry", side_effect=capture_event), patch.object(
+                capture_user_turn, "post_skill_event", side_effect=capture_skill_row
+            ):
                 self.assertEqual(capture_user_turn.main(), 0)
         return events
 
@@ -64,13 +70,14 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
         requested = next(event for event in events if event["event_type"] == "skill_requested")
         self.assertEqual(turn_start["extra"]["counts"]["skill_mention_count"], 1)
         self.assertEqual(turn_start["extra"]["registry_status"], "loaded")
-        self.assertEqual(requested["extra"]["source"], "user_explicit_request")
-        self.assertEqual(requested["extra"]["status"], "requested")
-        self.assertEqual(requested["extra"]["producer"], "capture_user_turn.py")
-        self.assertEqual(requested["extra"]["registry_skill_source"], "local")
-        self.assertEqual(requested["extra"]["registry_skill_path"], "skills/code-health/SKILL.md")
+        row = requested["row"]
+        self.assertEqual(row["hookName"], "skill-invocation-listener")
+        self.assertEqual(row["hookType"], "UserPromptSubmit")
+        self.assertEqual(row["payload"]["skillId"], "code-health")
+        self.assertEqual(row["payload"]["source"], "prompt_mention")
+        self.assertEqual(row["eventKey"], "skill-invocation-listener:skill_requested:session-1:turn-1::code-health")
 
-    def test_written_skill_event_has_requested_source_and_status(self) -> None:
+    def test_requested_skill_posts_to_the_skill_stream_not_runtime_rows(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             (project_root / ".farplane").mkdir()
@@ -106,20 +113,19 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
                 posted.append(json.loads(req.data))  # type: ignore[attr-defined]
                 return Accepted()
 
-            env = {"FARPLANE_TELEMETRY_API_URL": "https://example-site.convex.site/ingest", "FARPLANE_TELEMETRY_TOKEN": "test-token"}
+            env = {"FARPLANE_CONVEX_SITE_URL": "https://example-site.convex.site", "FARPLANE_TELEMETRY_TOKEN": "test-token"}
             with patch.object(sys, "stdin", io.StringIO(json.dumps(payload))):
                 with patch.dict(os.environ, env, clear=False), patch("urllib.request.urlopen", side_effect=fake_urlopen):
                     self.assertEqual(capture_user_turn.main(), 0)
             local_events = list((project_root / ".farplane").glob("events/*.jsonl"))
 
         self.assertEqual(local_events, [])
-        requested = next(row for row in posted if row["activityType"] == "skill_requested")
-        detail = json.loads(str(requested["detail"]))
-        self.assertEqual(requested["source"], "user_explicit_request")
-        self.assertEqual(requested["skillId"], "code-health")
-        self.assertEqual(detail["status"], "requested")
-        self.assertEqual(detail["metadata"]["producer"], "capture_user_turn.py")
-        self.assertEqual(detail["metadata"]["registry_source"], "docs/skills/registry.jsonl")
+        self.assertFalse([row for row in posted if row.get("activityType") == "skill_requested"])
+        requested = next(row for row in posted if row.get("hookName") == "skill-invocation-listener")
+        self.assertEqual(requested["hookType"], "UserPromptSubmit")
+        self.assertEqual(requested["payload"]["eventType"], "skill_requested")
+        self.assertEqual(requested["payload"]["skillId"], "code-health")
+        self.assertNotIn("plugin", requested["payload"])
 
     def test_missing_registry_is_observable_and_control_detection_survives(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

@@ -132,86 +132,55 @@ class GenerateSkillGraphTests(unittest.TestCase):
         self.assertEqual(node["capability"], {"kind": "integration", "consumes": ["ad-draft"]})
         self.assertEqual(graph["counts"]["capabilities"], {"core": 1, "integration": 1})
 
-    def test_skill_heat_counts_distinct_invocations_from_events(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            repo = Path(tmp)
-            event_dir = repo / ".farplane" / "events"
-            event_dir.mkdir(parents=True)
-            (event_dir / "2026-06-24.jsonl").write_text(
-                "\n".join(
-                    [
-                        json.dumps(
-                            {
-                                "event_id": "evt-1",
-                                "event_type": "skill_requested",
-                                "skill_name": "goal-advisor",
-                                "session_id": "sess-1",
-                                "turn_id": "turn-1",
-                                "timestamp": "2026-06-24T00:00:00Z",
-                            }
-                        ),
-                        json.dumps(
-                            {
-                                "event_id": "evt-2",
-                                "event_type": "control_surface_detected",
-                                "skill_name": "goal-advisor",
-                                "session_id": "sess-1",
-                                "turn_id": "turn-1",
-                                "timestamp": "2026-06-24T00:00:01Z",
-                            }
-                        ),
-                        json.dumps(
-                            {
-                                "event_id": "evt-3",
-                                "event_type": "skill_requested",
-                                "skill_name": "impl-plan",
-                                "session_id": "sess-2",
-                                "ticket_id": "TASK-1",
-                                "timestamp": "2026-06-20T00:00:00Z",
-                            }
-                        ),
-                        json.dumps(
-                            {
-                                "event_id": "evt-4",
-                                "event_type": "turn_start",
-                                "skill_name": "impl-plan",
-                                "session_id": "sess-2",
-                                "ticket_id": "TASK-1",
-                                "timestamp": "2026-06-20T00:00:01Z",
-                            }
-                        ),
-                    ]
-                )
-                + "\n",
-                encoding="utf-8",
-            )
+    def test_skill_heat_counts_invocations_and_keeps_requests_apart(self) -> None:
+        def row(kind: str, skill: str, day: int, session: str, turn: str, **payload: str) -> dict:
+            at = datetime(2026, 10, day, tzinfo=UTC).timestamp() * 1000
+            return {
+                "hookName": "skill-invocation-listener",
+                "hookType": "PostToolUse" if kind == "skill_invoked" else "UserPromptSubmit",
+                "sessionId": session,
+                "eventAt": at,
+                "payload": {"eventType": kind, "skillId": skill, "turnId": turn, **payload},
+            }
 
-            heat = generate_skill_graph.load_skill_heat(
-                repo,
-                {"goal-advisor", "impl-plan"},
-                now=datetime(2026, 6, 24, tzinfo=UTC),
-            )
+        rows = [
+            row("skill_invoked", "commit", 12, "s1", "t1", source="skill_tool"),
+            row("skill_invoked", "commit", 12, "s1", "t1", source="skill_tool"),  # replayed payload
+            row("skill_invoked", "commit", 1, "s2", "t9", plugin="farplane", source="skill_read"),
+            row("skill_invoked", "skill-creator", 12, "s1", "t2", plugin="anthropic-skills"),
+            row("skill_requested", "advise", 12, "s1", "t3", source="prompt_mention"),
+            row("skill_invoked", "advise", 1, "s3", "t4"),
+            {"hookName": "skill-invocation-listener", "payload": {"eventType": "skill_invoked", "skillId": "advise"}},
+        ]
 
-        self.assertEqual(heat["goal-advisor"]["observed_event_count_all"], 2)
-        self.assertEqual(heat["goal-advisor"]["invocation_count_window"], 1)
-        self.assertEqual(heat["goal-advisor"]["distinct_threads_window"], 1)
-        self.assertEqual(heat["impl-plan"]["observed_event_count_all"], 1)
-        self.assertEqual(heat["impl-plan"]["invocation_count_window"], 1)
-        self.assertEqual(heat["impl-plan"]["distinct_tickets_window"], 1)
+        heat = generate_skill_graph.skill_heat_from_rows(
+            rows,
+            {"commit", "advise", "skill-creator"},
+            now=datetime(2026, 10, 12, 12, tzinfo=UTC),
+            config={"window_days": 30, "recent_days": 7},
+        )
+
+        self.assertEqual(heat["commit"]["invocation_count_window"], 2)
+        self.assertEqual(heat["commit"]["invocation_count_recent"], 1)
+        self.assertEqual(heat["commit"]["distinct_threads_window"], 2)
+        self.assertEqual(heat["commit"]["last_invoked_at"], "2026-10-12T00:00:00Z")
+        self.assertEqual(heat["skill-creator"]["invocation_count_window"], 0)
+        self.assertEqual(heat["advise"]["invocation_count_window"], 1)
+        self.assertEqual(heat["advise"]["invocation_count_recent"], 0)
+        self.assertEqual(heat["advise"]["requested_count_recent"], 1)
 
     def test_skill_heat_config_reads_env_vars(self) -> None:
         with EnvPatch(
             FARPLANE_SKILL_HEAT_WINDOW_DAYS="14",
             FARPLANE_SKILL_HEAT_RECENT_DAYS="3",
             FARPLANE_SKILL_HEAT_TOP_N="12",
-            FARPLANE_SKILL_HEAT_EVENT_TYPES="skill_requested,hook_result",
         ):
             config = generate_skill_graph.skill_heat_config_from_env()
 
         self.assertEqual(config["window_days"], 14)
         self.assertEqual(config["recent_days"], 3)
         self.assertEqual(config["default_top_n"], 12)
-        self.assertEqual(config["event_types"], ["hook_result", "skill_requested"])
+        self.assertIn("skill-invocation-listener", config["source"])
 
     def test_recent_window_is_capped_to_main_window(self) -> None:
         with EnvPatch(
@@ -252,14 +221,14 @@ class GenerateSkillGraphTests(unittest.TestCase):
                 "invocation_count_window": 4,
                 "invocation_count_recent": 1,
                 "distinct_threads_window": 2,
-                "distinct_tickets_window": 1,
+                "requested_count_window": 1,
                 "last_invoked_at": "2026-06-24T00:00:00Z",
             },
             "target-skill": {
                 "invocation_count_window": 0,
                 "invocation_count_recent": 0,
                 "distinct_threads_window": 0,
-                "distinct_tickets_window": 0,
+                "requested_count_window": 0,
                 "last_invoked_at": "",
             },
         }

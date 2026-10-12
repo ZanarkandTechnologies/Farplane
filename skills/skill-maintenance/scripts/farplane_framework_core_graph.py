@@ -194,7 +194,7 @@ def skill_heat(repo_root: Path, names: set[str]) -> dict[str, dict[str, Any]]:
     if not registry.exists() or not names:
         return {}
     config = generate_skill_graph.skill_heat_config_from_env()
-    return generate_skill_graph.load_skill_heat(repo_root, names, config=config)
+    return generate_skill_graph.load_skill_heat(names, config=config)
 
 
 def read_source_text(repo_root: Path, node: dict[str, Any]) -> str:

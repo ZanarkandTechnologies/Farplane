@@ -26,11 +26,12 @@ from bin.core.skill_departments import (
 )
 from bin.core.skill_contract import parse_markdown_frontmatter_document
 
-SKILL_HEAT_EVENT_TYPES = {
-    "control_surface_detected",
-    "hook_result",
-    "skill_requested",
-}
+# Skill heat reads the bunker Convex rows the skill-invocation hook and the user-turn hook post:
+# `skill_invoked` (a skill actually loaded) and `skill_requested` (a prompt named it), never mentions as use.
+SKILL_EVENT_HOOK = "skill-invocation-listener"
+SKILL_HEAT_SOURCE = f"convex:modules/hookTelemetry/queries:listHookTelemetryEvents(hookName={SKILL_EVENT_HOOK})"
+SKILL_HEAT_ALL_DAYS = 90  # the deployment's longest hook-row read window
+SKILL_HEAT_ROW_LIMIT = 5000
 DEFAULT_SKILL_HEAT_WINDOW_DAYS = 30
 DEFAULT_SKILL_HEAT_RECENT_DAYS = 7
 DEFAULT_SKILL_HEAT_TOP_N = 25
@@ -47,16 +48,10 @@ def configured_positive_int(env_name: str, default: int) -> int:
     return value if value > 0 else default
 
 
-def configured_skill_heat_event_types() -> set[str]:
-    raw = os.environ.get("FARPLANE_SKILL_HEAT_EVENT_TYPES", "").strip()
-    if not raw:
-        return set(SKILL_HEAT_EVENT_TYPES)
-    configured = {item.strip() for item in raw.replace("\n", ",").split(",") if item.strip()}
-    return configured or set(SKILL_HEAT_EVENT_TYPES)
-
-
 def skill_heat_config_from_env() -> dict[str, Any]:
-    window_days = configured_positive_int("FARPLANE_SKILL_HEAT_WINDOW_DAYS", DEFAULT_SKILL_HEAT_WINDOW_DAYS)
+    window_days = min(
+        configured_positive_int("FARPLANE_SKILL_HEAT_WINDOW_DAYS", DEFAULT_SKILL_HEAT_WINDOW_DAYS), SKILL_HEAT_ALL_DAYS
+    )
     recent_days = configured_positive_int("FARPLANE_SKILL_HEAT_RECENT_DAYS", DEFAULT_SKILL_HEAT_RECENT_DAYS)
     if recent_days > window_days:
         recent_days = window_days
@@ -64,7 +59,8 @@ def skill_heat_config_from_env() -> dict[str, Any]:
         "window_days": window_days,
         "recent_days": recent_days,
         "default_top_n": configured_positive_int("FARPLANE_SKILL_HEAT_TOP_N", DEFAULT_SKILL_HEAT_TOP_N),
-        "event_types": sorted(configured_skill_heat_event_types()),
+        "all_days": SKILL_HEAT_ALL_DAYS,
+        "source": SKILL_HEAT_SOURCE,
     }
 
 
@@ -84,115 +80,98 @@ def skill_ref_name(ref: str) -> str:
     return base.split(":", 1)[0]
 
 
-def parse_event_timestamp(value: object) -> datetime | None:
-    if not isinstance(value, str) or not value.strip():
-        return None
-    try:
-        parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
-    except ValueError:
-        return None
-    if parsed.tzinfo is None:
-        return parsed.replace(tzinfo=UTC)
-    return parsed.astimezone(UTC)
+def empty_skill_heat(window_days: int, recent_days: int) -> dict[str, Any]:
+    return {
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "requested_count_recent": 0,
+        "requested_count_window": 0,
+        "distinct_threads_window": 0,
+        "last_invoked_at": "",
+        "window_days": window_days,
+        "recent_days": recent_days,
+        "all_days": SKILL_HEAT_ALL_DAYS,
+    }
 
 
-def event_invocation_key(event: dict[str, Any]) -> tuple[str, ...]:
-    skill_name = str(event.get("skill_name") or "")
-    session_id = str(event.get("session_id") or "")
-    turn_id = str(event.get("turn_id") or "")
-    ticket_id = str(event.get("ticket_id") or "")
-    event_id = str(event.get("event_id") or "")
-    anchor = turn_id or ticket_id or event_id
-    return (skill_name, session_id, anchor)
-
-
-def load_skill_heat(
-    repo_root: Path,
+def skill_heat_from_rows(
+    rows: list[dict[str, Any]],
     skill_names: set[str],
     now: datetime | None = None,
     config: dict[str, Any] | None = None,
 ) -> dict[str, dict[str, Any]]:
-    event_dir = repo_root / ".farplane" / "events"
+    """Heat per skill from `skill-invocation-listener` hook rows; only `skill_invoked` is use."""
     heat_config = config or skill_heat_config_from_env()
     window_days = int(heat_config.get("window_days") or DEFAULT_SKILL_HEAT_WINDOW_DAYS)
     recent_days = int(heat_config.get("recent_days") or DEFAULT_SKILL_HEAT_RECENT_DAYS)
-    counted_event_types = set(heat_config.get("event_types") or SKILL_HEAT_EVENT_TYPES)
-    heat: dict[str, dict[str, Any]] = {
-        name: {
-            "invocation_count_all": 0,
-            "invocation_count_recent": 0,
-            "invocation_count_window": 0,
-            "observed_event_count_all": 0,
-            "distinct_threads_window": 0,
-            "distinct_tickets_window": 0,
-            "last_invoked_at": "",
-            "window_days": window_days,
-            "recent_days": recent_days,
-        }
-        for name in skill_names
-    }
-    if not event_dir.exists():
-        return heat
-
-    records: list[tuple[datetime, dict[str, Any]]] = []
-    for path in sorted(event_dir.glob("*.jsonl")):
-        if not path.is_file() or path.name == "failed-sync.jsonl":
-            continue
-        for line in path.read_text(encoding="utf-8").splitlines():
-            if not line.strip():
-                continue
-            try:
-                event = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            if not isinstance(event, dict):
-                continue
-            skill_name = str(event.get("skill_name") or "")
-            event_type = str(event.get("event_type") or "")
-            if skill_name not in skill_names or event_type not in counted_event_types:
-                continue
-            timestamp = parse_event_timestamp(event.get("timestamp"))
-            if timestamp is None:
-                continue
-            records.append((timestamp, event))
-
+    heat = {name: empty_skill_heat(window_days, recent_days) for name in skill_names}
     clock = now.astimezone(UTC) if now else datetime.now(UTC)
-    recent_window = clock - timedelta(days=recent_days)
-    main_window = clock - timedelta(days=window_days)
-    seen_all: set[tuple[str, ...]] = set()
-    seen_recent: set[tuple[str, ...]] = set()
-    seen_window: set[tuple[str, ...]] = set()
-    threads_window: dict[str, set[str]] = defaultdict(set)
-    tickets_window: dict[str, set[str]] = defaultdict(set)
-
-    for timestamp, event in records:
-        skill_name = str(event.get("skill_name") or "")
-        item = heat[skill_name]
-        item["observed_event_count_all"] += 1
-        if not item["last_invoked_at"] or timestamp.isoformat() > str(item["last_invoked_at"]):
-            item["last_invoked_at"] = timestamp.isoformat().replace("+00:00", "Z")
-
-        key = event_invocation_key(event)
-        if key not in seen_all:
-            seen_all.add(key)
-            item["invocation_count_all"] += 1
-        if timestamp >= recent_window and key not in seen_recent:
-            seen_recent.add(key)
-            item["invocation_count_recent"] += 1
-        if timestamp >= main_window and key not in seen_window:
-            seen_window.add(key)
-            item["invocation_count_window"] += 1
-            session_id = str(event.get("session_id") or "")
-            ticket_id = str(event.get("ticket_id") or "")
-            if session_id:
-                threads_window[skill_name].add(session_id)
-            if ticket_id:
-                tickets_window[skill_name].add(ticket_id)
-
-    for skill_name, item in heat.items():
-        item["distinct_threads_window"] = len(threads_window.get(skill_name, set()))
-        item["distinct_tickets_window"] = len(tickets_window.get(skill_name, set()))
+    windows = {
+        "all": clock - timedelta(days=SKILL_HEAT_ALL_DAYS),
+        "window": clock - timedelta(days=window_days),
+        "recent": clock - timedelta(days=recent_days),
+    }
+    seen: set[tuple[str, ...]] = set()
+    threads: dict[str, set[str]] = defaultdict(set)
+    for row in rows:
+        payload = row.get("payload") if isinstance(row.get("payload"), dict) else {}
+        kind = str(payload.get("eventType") or "")
+        skill = str(payload.get("skillId") or "")
+        # A plugin's same-named skill (e.g. `anthropic-skills:skill-creator`) is not the Farplane skill.
+        if skill not in skill_names or str(payload.get("plugin") or "farplane") != "farplane":
+            continue
+        if kind not in {"skill_invoked", "skill_requested"} or not isinstance(row.get("eventAt"), (int, float)):
+            continue
+        at = datetime.fromtimestamp(float(row["eventAt"]) / 1000, tz=UTC)
+        session = str(row.get("sessionId") or "")
+        anchor = str(payload.get("turnId") or row.get("eventKey") or row.get("_id") or row["eventAt"])
+        if (kind, skill, session, anchor) in seen:
+            continue
+        seen.add((kind, skill, session, anchor))
+        item = heat[skill]
+        if kind == "skill_requested":
+            item["requested_count_window"] += int(at >= windows["window"])
+            item["requested_count_recent"] += int(at >= windows["recent"])
+            continue
+        item["invocation_count_all"] += int(at >= windows["all"])
+        item["invocation_count_window"] += int(at >= windows["window"])
+        item["invocation_count_recent"] += int(at >= windows["recent"])
+        if at >= windows["window"] and session:
+            threads[skill].add(session)
+        stamp = at.isoformat().replace("+00:00", "Z")
+        if stamp > item["last_invoked_at"]:
+            item["last_invoked_at"] = stamp
+    for skill, sessions in threads.items():
+        heat[skill]["distinct_threads_window"] = len(sessions)
     return heat
+
+
+def fetch_skill_event_rows() -> tuple[list[dict[str, Any]], str]:
+    """The last 90 days of skill rows from Convex, and a gap note when they are missing or capped."""
+    from bin.core.farplane_convex import ConvexUnavailable, convex_query
+
+    try:
+        rows = convex_query(
+            "modules/hookTelemetry/queries:listHookTelemetryEvents",
+            {"hookName": SKILL_EVENT_HOOK, "rangeDays": SKILL_HEAT_ALL_DAYS, "limit": SKILL_HEAT_ROW_LIMIT},
+        )
+    except ConvexUnavailable as exc:
+        return [], f"telemetry_unavailable: {exc}"
+    rows = [row for row in rows or [] if isinstance(row, dict)]
+    gap = f"telemetry_truncated: capped at {SKILL_HEAT_ROW_LIMIT} rows" if len(rows) >= SKILL_HEAT_ROW_LIMIT else ""
+    return rows, gap
+
+
+def load_skill_heat(
+    skill_names: set[str],
+    now: datetime | None = None,
+    config: dict[str, Any] | None = None,
+) -> dict[str, dict[str, Any]]:
+    rows, gap = fetch_skill_event_rows()
+    if gap:
+        print(f"farplane: skill heat {gap}", file=sys.stderr)
+    return skill_heat_from_rows(rows, skill_names, now=now, config=config)
 
 
 def direct_heat_signal(heat: dict[str, Any]) -> dict[str, Any]:
@@ -200,7 +179,7 @@ def direct_heat_signal(heat: dict[str, Any]) -> dict[str, Any]:
         "invocation_count_window": int(heat.get("invocation_count_window") or 0),
         "invocation_count_recent": int(heat.get("invocation_count_recent") or 0),
         "distinct_threads_window": int(heat.get("distinct_threads_window") or 0),
-        "distinct_tickets_window": int(heat.get("distinct_tickets_window") or 0),
+        "requested_count_window": int(heat.get("requested_count_window") or 0),
         "last_invoked_at": str(heat.get("last_invoked_at") or ""),
     }
 
@@ -451,7 +430,6 @@ def build_graph(
         "capabilities": {},
         "edge_types": edge_counts(edges),
         "skill_heat_config": skill_heat_config or skill_heat_config_from_env(),
-        "skill_heat_event_types": (skill_heat_config or skill_heat_config_from_env()).get("event_types"),
     }
     for node in nodes:
         department = str(node.get("department") or "none")
@@ -711,7 +689,7 @@ def main() -> int:
     rows = load_registry(registry_path)
     repo_root = find_repo_root(registry_path.resolve())
     skill_heat_config = skill_heat_config_from_env()
-    skill_heat = load_skill_heat(repo_root, {row["name"] for row in rows}, config=skill_heat_config)
+    skill_heat = load_skill_heat({row["name"] for row in rows}, config=skill_heat_config)
     graph = build_graph(rows, skill_heat=skill_heat, skill_heat_config=skill_heat_config)
     docs = build_docs(rows)
     write_graph(graph, Path(args.out), Path(args.js_out) if args.js_out else None)
