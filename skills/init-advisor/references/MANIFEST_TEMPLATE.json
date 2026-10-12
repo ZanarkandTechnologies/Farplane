@@ -63,7 +63,7 @@
       ".githooks/pre-push",
       "bin/validators/run_git_gate.py",
       "config/git-review-gates.toml",
-      "skills/code-review/SKILL.md",
+      "skills/code-health/SKILL.md",
       "skills/review/SKILL.md"
     ],
     "ignored": []

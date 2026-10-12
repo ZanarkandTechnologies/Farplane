@@ -54,10 +54,12 @@ Record a context decision only when it changes scope, a change unit, proof, or
 readiness. Include its evidence, exact gap, resolver/result when used, and plan
 integration. Do not enumerate irrelevant facets.
 
-After context resolution and before finalizing the Change Plan, call
-`lean-check` once. Use its first sufficient rung, evidence, and smallest action
-to constrain the plan; include those details only where they change scope, a
-change unit, or QA. Do not add a ticket section or restate the ladder.
+After context resolution and before finalizing the Change Plan, apply the
+`code-health` lean gate once. Use its first sufficient rung, evidence, and
+smallest action to constrain the plan; include those details only where they
+change scope, a change unit, or QA. Do not add a ticket section or restate the
+ladder. Put a `code-health` review (or clean) pass after the build in
+`QA Strategy`.
 
 ## Plan Construction
 

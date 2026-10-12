@@ -18,7 +18,7 @@ brief or MVP boundary they can review. The input may be a complaint, outreach
 target, sales note, client context, or problem report.
 
 This skill composes framing, grounding, solution-boundary selection, proof, and
-handoff. It performs the framing step inline before proposing a solution.
+handoff. It reads the problem frame from `frame` instead of re-deriving it.
 
 ## Skill Signature
 
@@ -42,7 +42,7 @@ fails: sends a feature pitch without problem proof; invents client facts;
 ## Phase Boundary
 
 Keep the full solution synthesis inline unless a child phase needs separate
-evidence. Produce the problem frame inline, use the relevant specialized research skill for user or
+evidence. Read the problem frame from `frame`, use the relevant specialized research skill for user or
 best-practice grounding, `demo-realism` when the MVP needs believable operating
 examples, `prd` for product scope, and `impl-plan` or `goal-advisor` only after
 the solution boundary is accepted. For material operational or demo-bound
@@ -58,9 +58,10 @@ checklist into a queue of tiny review tasks.
         existing problem frame, or accepted product direction.
   - [ ] Label facts as `supplied`, `observed`, `researched`, `inferred`, or
         `unknown`.
-- [ ] 2. Produce or read the problem frame.
-  - [ ] When the problem frame does not already exist, establish the actor,
-        job, stakes, constraints, evidence status, and boundary options inline.
+- [ ] 2. Read the problem frame from `frame`.
+  - [ ] When no frame exists yet, run `frame` in `diagnose` mode first and
+        use its actor, job, stakes, classed constraints, and boundary ladder
+        rather than re-deriving them here.
   - [ ] Do not proceed to MVP selection while the frame lacks actor, job,
         stakes, constraints, or boundary options.
 - [ ] 3. Ground the opportunity enough for an honest solution.

@@ -58,7 +58,7 @@ covering:
 
 ## Do Not Use When
 
-- architecture is still vague; settle it with `brainstorm` or `prd` first
+- architecture is still vague; settle it with `frame` or `prd` first
 - the request is already a concrete file/symbol implementation task
 - the work is only a per-ticket execution plan with no broader agent-UX or
   testability question
@@ -234,7 +234,7 @@ Keep the brief compact and directly reusable.
   rather than re-deriving it from scratch.
 - `$ralph` should stop before selecting risky tickets whose readiness fields do
   not name required inputs, permissions, compute, QA surfaces, and human gates.
-- `qa-tester`, `visual-qa`, and `runtime-debugging` should treat the resulting
+- `qa-tester`, `visual-qa`, and `code-health` debug should treat the resulting
   surfaces as expected proof/testability aids, not last-minute inventions.
 
 ## References

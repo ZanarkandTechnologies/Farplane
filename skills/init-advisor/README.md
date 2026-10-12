@@ -93,7 +93,7 @@ setup, credentials, billing, deploys, and destructive actions.
 After the business foundation closes, follow the planning funnel:
 
 ```text
-brainstorm -> direct clarification -> metric-advisor -> goal-advisor
+frame -> direct clarification -> metric-advisor -> goal-advisor
 prd -> spec-to-ticket -> impl-plan -> goal-advisor
 ```
 
@@ -225,8 +225,8 @@ Then add package scripts:
 ```
 
 The local diff reviewer reads the installed
-`~/.codex/skills/code-review/SKILL.md` contract when the Farplane install script
-has linked the skill package. Material review should route through Farplane
+`~/.codex/skills/code-health/references/review.md` contract when the Farplane
+install script has linked the skill package. Material review should route through Farplane
 reviewer agents and the `review` skill.
 
 ### 2. Do not ticketize the whole backlog
@@ -243,7 +243,7 @@ Do not migrate every old issue into ticket files at once.
 
 For an existing repo:
 
-- use `brainstorm` if you still need options
+- use `frame` if you still need options
 - use direct bootstrap clarification if stack, topology, or quality-gate shape
   is still unclear
 - ask focused clarification questions if the first feature slice is unclear
@@ -284,7 +284,7 @@ Those can come after one clean ticket run.
 - [ ] V1 migrations removed product controllers/registries and detached review/evidence stores after migrating active readers
 - [ ] `docs/bootstrap-brief.md` exists and captures stack/topology/gate decisions
 - [ ] `docs/bootstrap-brief.md` captures local-gate, heavy-check, and CI/deploy-gate decisions
-- [ ] `docs/bootstrap-brief.md` captures Codex SDK diff-review policy and code-review skill linkage
+- [ ] `docs/bootstrap-brief.md` captures Codex SDK diff-review policy and code-health skill linkage
 - [ ] `docs/bootstrap-brief.md` captures canonical app/QA run paths plus required services and port/env assumptions
 - [ ] `docs/bootstrap-brief.md` captures agent-experience/testability decisions
 - [ ] `AGENTS.md` exists and names the authoritative app-only and QA/evidence launch commands

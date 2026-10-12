@@ -40,10 +40,10 @@ chmod +x .githooks/pre-commit
 - The `pre-push` hook runs the local Codex SDK diff reviewer by default when
   configured. Use `FARPLANE_SKIP_AGENT_REVIEW=1` to skip it or
   `STRICT_AGENT_REVIEW=1` to make it blocking.
-- The local diff reviewer should read the installed Farplane `code-review`
-  skill from `~/.codex/skills/code-review/SKILL.md` when available. Run the
-  Farplane install script to keep skills and review rubrics linked into
-  `~/.codex`.
+- The local diff reviewer should read the installed Farplane `code-health`
+  review contract from `~/.codex/skills/code-health/references/review.md` when
+  available. Run the Farplane install script to keep skills and review rubrics
+  linked into `~/.codex`.
 - Use Farplane reviewer agents for material review instead of external
   pre-push review CLIs.
 - Utility-sharing warnings should stay advisory by default. Put the real shared

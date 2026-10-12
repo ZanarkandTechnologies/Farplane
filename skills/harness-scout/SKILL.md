@@ -45,8 +45,8 @@ harness_scout(source, project_context, decision_goal?, output_root?)
   transcripts, secrets, PII, and bulky extracts out of tracked canonical docs.
 - [ ] Extract concrete feature/workflow/guardrail candidates; search systems,
   feature registries, docs, skills, memory, lessons, troubles, and tickets for
-  local matches. Use [codebase-analysis](../codebase-analysis/SKILL.md) only
-  when docs/registry search cannot settle behavior.
+  local matches. Use the [explore agent](../../agents/explore.toml) only when
+  docs/registry search cannot settle behavior.
 - [ ] Route claims narrowly: [best-of-worlds](../best-of-worlds/SKILL.md) for
   multi-source normalization and convergence, and
   [implementation-research](../implementation-research/SKILL.md) for repository

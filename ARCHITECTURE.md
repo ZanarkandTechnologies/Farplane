@@ -88,8 +88,8 @@ flowchart LR
 
   subgraph Skills["Skill Layer"]
     primitives["core primitives<br/>advise<br/>reference-grounding<br/>review<br/>direct Todo List"]:::callout
-    interfaces["shared workflow interfaces<br/>brainstorm<br/>*-research skills<br/>harness-advisor"]:::callout
-    intake["brainstorm<br/>direct clarification<br/>prd<br/>visual-design"]:::skill
+    interfaces["shared workflow interfaces<br/>frame<br/>*-research skills<br/>harness-advisor"]:::callout
+    intake["frame<br/>direct clarification<br/>prd<br/>visual-design"]:::skill
     readiness["agent-testability-plan<br/>Run Hints"]:::callout
     research["doc-advisor<br/>feed-scout<br/>harness-scout<br/>*-research skills<br/>best-of-worlds<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
@@ -115,7 +115,7 @@ flowchart LR
 
   subgraph Proof["Proof + Review"]
     qa["qa-tester<br/>proof-advisor<br/>visual-qa<br/>Codex Browser"]:::quality
-    review["review<br/>reviewer agent<br/>lean-check + unslop"]:::callout
+    review["review<br/>reviewer agent<br/>code-health + unslop"]:::callout
   stop["Stop hook<br/>telemetry only"]:::quality
   end
 

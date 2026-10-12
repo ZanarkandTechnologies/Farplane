@@ -9,7 +9,7 @@ updated: YYYY-MM-DD
 
 Use this guide for automated and human review. The local pre-push Codex
 reviewer is a maintainability-first branch reviewer. It should load the
-reusable `~/.codex/skills/code-review/SKILL.md` contract plus this
+reusable `~/.codex/skills/code-health/references/review.md` contract plus this
 project-specific overlay. It does not replace the canonical Farplane reviewer
 lane installed at `~/.codex/agents/reviewer.toml` or the TAS review contract in
 `~/.codex/skills/review/SKILL.md`.

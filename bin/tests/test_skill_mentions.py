@@ -24,11 +24,11 @@ class SkillMentionTests(unittest.TestCase):
 
     def test_control_surfaces_accept_linked_syntax_but_stay_narrow(self) -> None:
         text = (
-            "Run [$brainstorm](/tmp/brainstorm/SKILL.md), $QA, and "
+            "Run [$frame](/tmp/frame/SKILL.md), $QA, and "
             "[$unslop](/tmp/unslop/SKILL.md), not /tmp/$qa or foo.$demo."
         )
 
-        self.assertEqual(extract_control_surfaces(text), ["brainstorm", "qa"])
+        self.assertEqual(extract_control_surfaces(text), ["frame", "qa"])
 
     def test_registered_names_are_recognized(self) -> None:
         registry = load_skill_registry(ROOT)
@@ -44,18 +44,18 @@ class SkillMentionTests(unittest.TestCase):
             registry_path = project_root / "docs" / "skills" / "registry.jsonl"
             registry_path.parent.mkdir(parents=True)
             registry_path.write_text(
-                json.dumps({"name": "lean-check", "source": "local"}) + "\n",
+                json.dumps({"name": "code-health", "source": "local"}) + "\n",
                 encoding="utf-8",
             )
             registry = load_skill_registry(project_root)
             mentions = extract_skill_mentions(
-                "$LEAN-CHECK [$lean-check](/skills/lean-check/SKILL.md) "
-                "$lean-check-extra x$lean-check /tmp/$lean-check foo.$lean-check "
-                "[$lean-check](/skills/lean-check/README.md) $unknown",
+                "$CODE-HEALTH [$code-health](/skills/code-health/SKILL.md) "
+                "$code-health-extra x$code-health /tmp/$code-health foo.$code-health "
+                "[$code-health](/skills/code-health/README.md) $unknown",
                 registry=registry,
             )
 
-        self.assertEqual(mentions, ["lean-check"])
+        self.assertEqual(mentions, ["code-health"])
 
     def test_invalid_or_missing_registry_rejects_mentions(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

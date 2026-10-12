@@ -8,7 +8,7 @@ Use it to:
 - read the ticket `QA Strategy` block for declared rubric gates and metric
   claims, and `Done` for completion conditions
 - choose the right rubric families for the ticket
-- use `lean-check` for suspected implementation bloat and `unslop` for prose
+- use the `code-health` lean gate for suspected implementation bloat and `unslop` for prose
   that needs simplification
 - locate the correct family reference files
 - assign one TAS to each family from modular binary checks

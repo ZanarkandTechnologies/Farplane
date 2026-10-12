@@ -249,7 +249,7 @@ flowchart LR
 - Goal loop contract: [docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md)
 - QA guide: [skills/qa/references/guide.md](skills/qa/references/guide.md)
 - Review scoring: [skills/review/README.md](skills/review/README.md)
-- Maintainability code review: [skills/code-review/README.md](skills/code-review/README.md)
+- Code health (debug, clean, review, harden, audit): [skills/code-health/SKILL.md](skills/code-health/SKILL.md)
 - Active queue: GitHub Issues in each project's own repo (`tickets/README.md`).
 - Task policy and legacy records: [tickets](tickets)
 

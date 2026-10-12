@@ -16,7 +16,7 @@ template_uses:
 
 Use this when the operator explicitly asks to unslop, humanize, simplify, or
 remove AI-sounding prose. It edits writing, not code architecture. Use
-`lean-check` when the question is whether code, a dependency, an abstraction,
+`code-health` when the question is whether code, a dependency, an abstraction,
 or a feature needs to exist.
 
 Preserve the supplied meaning, facts, certainty, intended tone, Markdown, code,

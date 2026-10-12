@@ -15,7 +15,7 @@ surface_fields:
 
 ---
 name: {skill_name}
-description: "[TODO: Verb input/context into output/artifact when call-condition; <=220 chars.]"
+description: "[TODO: Use for \"<operator phrase>\", \"<operator phrase>\": <what it does and returns>; 2-4 phrases, <=220 chars.]"
 source: local
 # Optional static projection. Choose exactly one kind; variants remain normal
 # invocation inputs rather than their own skills or capabilities.

@@ -137,8 +137,8 @@ async function readOptional(path: string): Promise<string> {
 
 function defaultCodeReviewSkillPath(): string {
   if (process.env.CODEX_REVIEW_SKILL_FILE) return process.env.CODEX_REVIEW_SKILL_FILE;
-  if (process.env.CODEX_HOME) return join(process.env.CODEX_HOME, "skills", "code-review", "SKILL.md");
-  return join(homedir(), ".codex", "skills", "code-review", "SKILL.md");
+  if (process.env.CODEX_HOME) return join(process.env.CODEX_HOME, "skills", "code-health", "references", "review.md");
+  return join(homedir(), ".codex", "skills", "code-health", "references", "review.md");
 }
 
 function defaultReactGuidePath(): string {
@@ -159,19 +159,19 @@ async function main() {
 
   const prompt = [
     "You are acting as a read-only pre-push diff reviewer for this project.",
-    "Follow the Farplane code-review skill contract for lightweight local diff review.",
+    "Follow the review-mode contract of the Farplane code-health skill for lightweight local diff review.",
     "Use the project review guide as the repo-specific overlay.",
     "Prioritize branch-level maintainability, modularity, consolidation, file placement, documentation, and React guideline drift before ordinary task correctness.",
     "This is not a material TAS verdict. If TAS review is needed, say to route through the canonical Farplane reviewer lane.",
     "",
-    "## Farplane Code Review Skill Contract",
-    codeReviewSkill || "No installed code-review skill found. Run the Farplane install script to link ~/.codex/skills/code-review/SKILL.md.",
+    "## Farplane Code Health Review Contract",
+    codeReviewSkill || "No installed code-health skill found. Run the Farplane install script to link ~/.codex/skills/code-health/.",
     "",
     "## React / Frontend Guideline Contract",
     reactGuide || "No installed vercel-react-best-practices skill found. Ignore this section unless frontend rules are supplied by project docs.",
     "",
     "## Project Review Guide Overlay",
-    reviewGuide || "No docs/code_review.md found. Use the code-review skill defaults.",
+    reviewGuide || "No docs/code_review.md found. Use the code-health review-mode defaults.",
     "",
     "## Review Context",
     context,

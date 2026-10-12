@@ -204,7 +204,7 @@ have a narrow, stable contract.
 Shared workflow interfaces turn primitive obligations into reusable protocol
 surfaces such as:
 
-- `brainstorm`
+- `frame`
 - the relevant specialized research skill
 - `harness-advisor`
 
@@ -293,8 +293,8 @@ Manual fields:
 - `name`: required stable skill ID and directory name.
 - `description`: required one-sentence functional routing definition of 220
   characters or less. Prefer
-  `Verb input/context into output/artifact when call-condition`.
-  Include the input and output when they are not obvious. Keep trigger
+  `Use for "<phrase>", "<phrase>": <what it does and returns>` with 2-4
+  operator phrases (see `best-practices.md#first-load-shape`). Keep long phrase
   catalogs, examples, model/provider maps, routing policy, and detailed caveats
   in the skill body or references.
 - `source`: required, `local` or `external`.

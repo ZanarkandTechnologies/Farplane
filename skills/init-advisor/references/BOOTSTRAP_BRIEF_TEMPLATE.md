@@ -86,9 +86,9 @@ finalizing the scaffold.
 - Preferred hook stages:
 - Codex SDK pre-push diff reviewer policy:
 - Codex SDK reviewer strictness:
-- Farplane install / code-review skill linked:
+- Farplane install / code-health skill linked:
 - Canonical TAS reviewer route:
-- Simplification policy (`lean-check` for implementation; operator-invoked prose cleanup shortcut when requested):
+- Simplification policy (`code-health` lean gate for implementation; operator-invoked prose cleanup shortcut when requested):
 - Separate CI / deployment gate:
 - TypeScript typecheck policy:
 

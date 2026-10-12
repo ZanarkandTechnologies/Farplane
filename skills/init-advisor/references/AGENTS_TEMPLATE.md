@@ -37,7 +37,7 @@ conventions live here, not in a second root rules file.
     analysis dashboard `[SonarQube / Qlty / n/a]`;
   - SAST `[cmd]`, dependency audit `[cmd]`, secret scan `[cmd]`, config
     validation `[cmd]`, resilience/failure tests `[cmd]`.
-  The `refactoring` and `hardening` skills read these slots.
+  The `code-health` skill's clean and harden modes read these slots.
 
 ## Where Files Go
 
@@ -119,10 +119,10 @@ Work flows through:
   modules.
 - When code grows custom behavior, state, or variants, extract the owning
   feature/module instead of growing one oversized file.
-- Maintainability: use the `refactoring` skill for behavior-preserving cleanup
+- Maintainability: use `code-health` clean mode for behavior-preserving cleanup
   after features; optimize changed or high-churn code first and keep behavior
   proof as the hard gate.
-- Hardening: use the `hardening` skill after major features for a risk map,
+- Hardening: use `code-health` harden mode after major features for a risk map,
   mitigations, adversarial proof, and a residual-risk note.
 
 ## UI Baseline

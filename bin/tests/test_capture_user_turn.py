@@ -46,9 +46,9 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
             registry_path.write_text(
                 json.dumps(
                     {
-                        "name": "lean-check",
+                        "name": "code-health",
                         "source": "local",
-                        "path": "skills/lean-check/SKILL.md",
+                        "path": "skills/code-health/SKILL.md",
                     }
                 )
                 + "\n",
@@ -57,7 +57,7 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
 
             events = self.run_hook(
                 project_root,
-                "Use [$lean-check](/skills/lean-check/SKILL.md) then $unknown.",
+                "Use [$code-health](/skills/code-health/SKILL.md) then $unknown.",
             )
 
         turn_start = next(event for event in events if event["event_type"] == "turn_start")
@@ -68,7 +68,7 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
         self.assertEqual(requested["extra"]["status"], "requested")
         self.assertEqual(requested["extra"]["producer"], "capture_user_turn.py")
         self.assertEqual(requested["extra"]["registry_skill_source"], "local")
-        self.assertEqual(requested["extra"]["registry_skill_path"], "skills/lean-check/SKILL.md")
+        self.assertEqual(requested["extra"]["registry_skill_path"], "skills/code-health/SKILL.md")
 
     def test_written_skill_event_has_requested_source_and_status(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -77,7 +77,7 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
             registry_path = project_root / "docs" / "skills" / "registry.jsonl"
             registry_path.parent.mkdir(parents=True)
             registry_path.write_text(
-                json.dumps({"name": "lean-check", "source": "local"}) + "\n",
+                json.dumps({"name": "code-health", "source": "local"}) + "\n",
                 encoding="utf-8",
             )
             payload = {
@@ -85,7 +85,7 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
                 "session_id": "session-1",
                 "turn_id": "turn-1",
                 "cwd": str(project_root),
-                "prompt": "$lean-check",
+                "prompt": "$code-health",
             }
 
             posted: list[dict[str, object]] = []
@@ -116,7 +116,7 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
         requested = next(row for row in posted if row["activityType"] == "skill_requested")
         detail = json.loads(str(requested["detail"]))
         self.assertEqual(requested["source"], "user_explicit_request")
-        self.assertEqual(requested["skillId"], "lean-check")
+        self.assertEqual(requested["skillId"], "code-health")
         self.assertEqual(detail["status"], "requested")
         self.assertEqual(detail["metadata"]["producer"], "capture_user_turn.py")
         self.assertEqual(detail["metadata"]["registry_source"], "docs/skills/registry.jsonl")

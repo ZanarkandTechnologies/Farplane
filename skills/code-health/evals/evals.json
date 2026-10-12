@@ -1,0 +1,272 @@
+{
+  "skill_name": "code-health",
+  "evals": [
+    {
+      "id": "code_health_debug_local_control_first_01",
+      "prompt": "After an install, one skill out of 120 is missing from the agent's skill list while all its neighbours show up. Someone suspects the platform caps skills at 119. Debug it.",
+      "expected_output": "Selects debug mode; Walks effective config, installed package, the item's metadata and consumer visibility before any platform hypothesis; Compares the missing skill against a working neighbour; Does not treat the 119 count as evidence of a platform cap before the local path is exhausted; Proves the fix by rerunning the same listing repro",
+      "files": [],
+      "assertions": [
+        "Selects debug mode",
+        "Walks effective config, installed package, the item's metadata and consumer visibility before any platform hypothesis",
+        "Compares the missing skill against a working neighbour",
+        "Does not treat the 119 count as evidence of a platform cap before the local path is exhausted",
+        "Proves the fix by rerunning the same listing repro"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Debug walks the local control path before a platform hypothesis",
+          "tags": [
+            "code-health",
+            "debug",
+            "local-control-first"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_debug_flaky_bar_01",
+      "prompt": "A checkout test fails about one run in five. The agent added a 500 ms sleep and it passed three times. Is it fixed?",
+      "expected_output": "Says no: three passes do not prove a flaky fix; Looks for the ordering, await, idempotency or shared-state cause instead of a sleep; Requires 20 consecutive passing runs on the fixed path",
+      "files": [],
+      "assertions": [
+        "Says no: three passes do not prove a flaky fix",
+        "Looks for the ordering, await, idempotency or shared-state cause instead of a sleep",
+        "Requires 20 consecutive passing runs on the fixed path"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Flaky fix needs a cause and 20 consecutive passes",
+          "tags": [
+            "code-health",
+            "debug",
+            "flaky"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_clean_rejects_feature_mix_01",
+      "prompt": "While refactoring a messy API module, the agent notices the API response shape is annoying. Should it change the response while it is cleaning up?",
+      "expected_output": "Selects clean mode and preserves behaviour unless an API migration is explicitly in scope; Requires public contract and caller proof before changing response shape; Treats the behavior change as a separate feature/API decision or ticket; Keeps the refactor focused on structure, tests, duplication, and maintainability",
+      "files": [],
+      "assertions": [
+        "Selects clean mode and preserves behaviour unless an API migration is explicitly in scope",
+        "Requires public contract and caller proof before changing response shape",
+        "Treats the behavior change as a separate feature/API decision or ticket",
+        "Keeps the refactor focused on structure, tests, duplication, and maintainability"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Clean mode rejects unapproved behaviour changes",
+          "tags": [
+            "code-health",
+            "clean",
+            "behavior-preservation"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_clean_churn_target_01",
+      "prompt": "We just shipped a feature. The changed files include one 220-line TypeScript handler with nested branching, weak tests, and duplicated validation. Clean it up.",
+      "expected_output": "Selects clean mode; Locks behaviour with existing or characterisation tests before restructuring; Targets the changed, churned handler rather than whole-repo smell scores; Rejects splitting code only to reduce line counts; Reports the smell delta, the proof command and residual risk",
+      "files": [],
+      "assertions": [
+        "Selects clean mode",
+        "Locks behaviour with existing or characterisation tests before restructuring",
+        "Targets the changed, churned handler rather than whole-repo smell scores",
+        "Rejects splitting code only to reduce line counts",
+        "Reports the smell delta, the proof command and residual risk"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Clean mode targets churned code with behaviour locked",
+          "tags": [
+            "code-health",
+            "clean",
+            "maintainability"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_review_branch_consolidation_01",
+      "prompt": "Before I push: commit 1 adds formatDuration() in ui/src/panels/timer.ts, commit 3 adds a near-identical durationLabel() in ui/src/hooks/useSession.ts, and all checks pass. Review the branch.",
+      "expected_output": "Selects review mode and reads the whole branch before individual hunks; Flags the duplicated helper across commits as a branch-level consolidation finding with a concrete move or extract plan; Returns the patch_correct JSON contract with ranked findings; Does not treat passing checks alone as patch_correct true when a blocking maintainability finding remains; Does not claim a TAS verdict",
+      "files": [],
+      "assertions": [
+        "Selects review mode and reads the whole branch before individual hunks",
+        "Flags the duplicated helper across commits as a branch-level consolidation finding with a concrete move or extract plan",
+        "Returns the patch_correct JSON contract with ranked findings",
+        "Does not treat passing checks alone as patch_correct true when a blocking maintainability finding remains",
+        "Does not claim a TAS verdict"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Review mode catches cross-commit duplication",
+          "tags": [
+            "code-health",
+            "review",
+            "branch-consolidation"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_harden_blocks_untested_mitigation_01",
+      "prompt": "An agent added a rate limiter and says the feature is hardened, but there is no test, config check, or failure probe. Is that enough?",
+      "expected_output": "Says no: hardening requires proof or an explicit residual-risk note.; Asks for an adversarial test, static check, integration test, or review evidence appropriate to the mitigation.; Checks that the rate limiter does not break intended behavior.; Reports residual risk if proof cannot be run.",
+      "files": [],
+      "assertions": [
+        "Says no: hardening requires proof or an explicit residual-risk note.",
+        "Asks for an adversarial test, static check, integration test, or review evidence appropriate to the mitigation.",
+        "Checks that the rate limiter does not break intended behavior.",
+        "Reports residual risk if proof cannot be run."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Harden mode rejects untested mitigation claims",
+          "tags": [
+            "code-health",
+            "harden",
+            "residual-risk"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_audit_new_model_rewrite_temptation_01",
+      "prompt": "A new frontier model just came out. I want to see if it can upgrade this whole repo. Audit the codebase and tell me what to improve first.",
+      "expected_output": "Selects audit mode instead of starting broad implementation; Binds PRD, architecture docs, project rules, tests, configs, dependency files, and ticket history when available; Inventories product-critical workflows, entry points, modules, data boundaries, dependencies, auth/secrets/config, tests, docs, and scripts; Ranks components by operator value, centrality, blast radius, churn, complexity, security exposure, dependency risk, test weakness, and evidence confidence; Audits architecture before individual modules; Classifies findings with routes such as clean, harden, debug, proof-advisor, document, delete, split-ticket, or no-action; Creates or proposes coherent tickets with scope, proof, residual risk, and next action; Rejects a whole-repo rewrite or style-only modernization plan",
+      "files": [],
+      "assertions": [
+        "Selects audit mode instead of starting broad implementation",
+        "Binds PRD, architecture docs, project rules, tests, configs, dependency files, and ticket history when available",
+        "Inventories product-critical workflows, entry points, modules, data boundaries, dependencies, auth/secrets/config, tests, docs, and scripts",
+        "Ranks components by operator value, centrality, blast radius, churn, complexity, security exposure, dependency risk, test weakness, and evidence confidence",
+        "Audits architecture before individual modules",
+        "Classifies findings with routes such as clean, harden, debug, proof-advisor, document, delete, split-ticket, or no-action",
+        "Creates or proposes coherent tickets with scope, proof, residual risk, and next action",
+        "Rejects a whole-repo rewrite or style-only modernization plan"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Turns new-model upgrade temptation into ranked audit tickets",
+          "tags": [
+            "code-health",
+            "audit",
+            "audit-planning",
+            "anti-rewrite"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_audit_architecture_before_modules_01",
+      "prompt": "This repo has a PRD and an architecture doc, but I mostly want you to find files that look messy and create cleanup tickets.",
+      "expected_output": "Uses the PRD and architecture doc before ranking files by messiness; Checks ownership boundaries, dependency direction, public contracts, state flow, side effects, observability, recovery, and test strategy; Treats messy files as candidates only after component importance and architecture impact are understood; Routes behavior-preserving cleanup to clean mode and risk mitigation to harden mode; Does not create cleanup tickets for low-value style churn",
+      "files": [],
+      "assertions": [
+        "Uses the PRD and architecture doc before ranking files by messiness",
+        "Checks ownership boundaries, dependency direction, public contracts, state flow, side effects, observability, recovery, and test strategy",
+        "Treats messy files as candidates only after component importance and architecture impact are understood",
+        "Routes behavior-preserving cleanup to clean mode and risk mitigation to harden mode",
+        "Does not create cleanup tickets for low-value style churn"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Architecture pass precedes local module cleanup",
+          "tags": [
+            "code-health",
+            "audit",
+            "architecture-first"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_audit_low_confidence_evidence_gap_01",
+      "prompt": "Look at a codebase you only know from a short README and produce the hardening/refactor plan.",
+      "expected_output": "Labels missing PRD, architecture, tests, configs, dependencies, and code evidence instead of pretending confidence; Creates a smoke or discovery audit plan before implementation tickets when local evidence is insufficient; Separates evidence gaps from actionable findings; Names the next files or commands needed to raise confidence; Avoids harden or clean tickets with no proof route",
+      "files": [],
+      "assertions": [
+        "Labels missing PRD, architecture, tests, configs, dependencies, and code evidence instead of pretending confidence",
+        "Creates a smoke or discovery audit plan before implementation tickets when local evidence is insufficient",
+        "Separates evidence gaps from actionable findings",
+        "Names the next files or commands needed to raise confidence",
+        "Avoids harden or clean tickets with no proof route"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Low-confidence audit ideas remain evidence gaps",
+          "tags": [
+            "code-health",
+            "audit",
+            "evidence-gap"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_lean_skip_speculative_01",
+      "prompt": "The team wants a plugin framework now so potential future export formats can each have an adapter. There is one JSON export today, no second format is scheduled, and no caller has a current extension requirement. What should we do?",
+      "expected_output": "Names the lean-gate rung the skip rung; identifies the plugin framework as speculative; defers the work until a concrete second format or extension contract exists; preserves the current JSON export.",
+      "files": [],
+      "assertions": [
+        "Selects skip as the first sufficient rung",
+        "Does not propose a framework, adapter layer, or configuration surface",
+        "Names the evidence that would justify reopening the work"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Lean gate defers speculative work",
+          "tags": [
+            "code-health",
+            "lean-gate"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_lean_native_platform_01",
+      "prompt": "A settings form needs a single date field with browser validation and submission. A proposal adds a JavaScript date-picker library, but there are no range, calendar, or formatting requirements beyond a normal date value. What should the implementation use?",
+      "expected_output": "Names the lean-gate rung native_platform; chooses an HTML date input instead of a picker library; preserves the form validation and submission contract.",
+      "files": [],
+      "assertions": [
+        "Selects native_platform before an added date-picker dependency",
+        "Names the native date input as the smallest action",
+        "Keeps validation and submission proof"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Lean gate prefers the native platform control",
+          "tags": [
+            "code-health",
+            "lean-gate"
+          ]
+        }
+      }
+    },
+    {
+      "id": "code_health_lean_minimum_new_code_01",
+      "prompt": "A service must atomically reserve a unique slot while enforcing a product-specific capacity rule. No existing local helper handles the transaction, the standard library and platform do not expose the required database transaction, and installed dependencies do not fit the database adapter. What is the correct lean conclusion?",
+      "expected_output": "Names the lean-gate rung minimum_new_code; states why every earlier rung is insufficient; scopes a small owner-local transaction implementation with concurrency proof.",
+      "files": [],
+      "assertions": [
+        "Selects minimum_new_code only after ruling out earlier rungs with evidence",
+        "Keeps the new behavior owner-local and narrowly scoped",
+        "Requires concurrency proof rather than optimizing it away"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Lean gate reaches minimum new code only with evidence",
+          "tags": [
+            "code-health",
+            "lean-gate"
+          ]
+        }
+      }
+    }
+  ]
+}

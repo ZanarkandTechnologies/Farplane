@@ -24,7 +24,7 @@ runtime.
 - system/feature metadata and generated registries: dedupe and local
   baseline
 - `docs/features/README.md`: human-readable current inventory
-- [codebase-analysis](../../codebase-analysis/SKILL.md): checks local behavior
+- [explore agent](../../../agents/explore.toml): checks local behavior
   when registry/docs search is inconclusive
 - [implementation-research](../../implementation-research/SKILL.md):
   checks source repos or real implementation patterns

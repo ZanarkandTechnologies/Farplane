@@ -84,7 +84,7 @@ refs:
 - Codex SDK pre-push diff reviewer policy: optional, ticket-driven.
 - Canonical TAS reviewer route: reviewer lane for material review when
   available.
-- Simplification policy: use `lean-check` for implementation bloat and
+- Simplification policy: use the `code-health` lean gate for implementation bloat and
   `unslop` for prose when cleanup is explicit.
 - Separate CI / deployment gate: no deploy/publish action without explicit
   operator approval.

@@ -135,7 +135,7 @@ serious_work = ground -> decide -> plan? -> execute -> verify -> review?
   small reversible work may collapse those gates.
 - Stop at the first sufficient build rung. Keep changes near their owner, use
   structured tools for structured data, and keep side effects at explicit
-  boundaries. Use `lean-check` for detailed review or apply the rung directly.
+  boundaries. Use `code-health` for detailed review or apply the rung directly.
 - Do not add aliases, shims, fallback paths, legacy names, configuration, or
   abstractions without a verified need. A field with one valid behavior is
   normally policy rather than configuration. When no current change is needed,

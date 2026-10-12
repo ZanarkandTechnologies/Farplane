@@ -89,19 +89,27 @@ visible.
 Use this shape:
 
 ```text
-Verb input/context into output/artifact when call-condition.
+Use for "<phrase>", "<phrase>" or "<phrase>": <what it does and returns>.
 ```
+
+Lead with 2-4 short phrases in the words the operator actually uses for this
+need ("I have an idea", "fix this bug", "clean this up"), then name the output.
+Routing matches the request's wording against descriptions, so artifact
+language alone ("turn a complaint into a problem frame") is not picked: in a
+2026-10-12 Codex check, `frame` routed 0/2 natural prompts with an artifact-only
+description and 2/2 with operator phrases (#41). Choose phrases that separate
+this skill from its neighbours; a phrase two skills could both claim belongs to
+one of them.
 
 Good descriptions name:
 
-- the input or starting context, such as a URL, ticket, decision, bug, prompt,
-  PR, design goal, media file, or existing codebase
+- the operator phrases that should select it
 - the output or artifact, such as a recommendation, plan, evidence bundle,
   generated asset, rendered video, ticket, proof packet, review verdict, or
   implementation handoff
 - the ownership condition that separates this skill from neighboring skills
 
-Do not use description text for trigger phrase catalogs, examples,
+Do not use description text for long phrase catalogs (more than four), examples,
 model/provider maps, orchestration policy, tool instructions, long caveats,
 method lists, or downstream routing chains. Put that detail in `SKILL.md` or a
 reference so it is loaded only after selection.

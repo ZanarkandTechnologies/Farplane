@@ -4,7 +4,7 @@
     {
       "id": "opportunity_research_industry_premise_01",
       "prompt": "I want to work on AI for data-center construction. Figure out who we should talk to, what might be worth offering, and what we should show them.",
-      "expected_output": "Bounds the industry/value-chain and geography before broad research; separates relationship strategies; produces source-traceable candidates and provenance-labeled hypotheses; compares a dated established benchmark, emerging specialist, and agency path on equal buyer-choice fields; composes research, brainstorm, solution-shaping, and proof checks without copying them; returns an OpportunityCase and routes durable sourced facts through Manage Wiki preview because no Wiki write direction was supplied; lets Manage Wiki choose pages/entities while leaving canonical and generated state unchanged; preserves research gaps, external-action gates, and the next owner.",
+      "expected_output": "Bounds the industry/value-chain and geography before broad research; separates relationship strategies; produces source-traceable candidates and provenance-labeled hypotheses; compares a dated established benchmark, emerging specialist, and agency path on equal buyer-choice fields; composes research, frame, solution-shaping, and proof checks without copying them; returns an OpportunityCase and routes durable sourced facts through Manage Wiki preview because no Wiki write direction was supplied; lets Manage Wiki choose pages/entities while leaving canonical and generated state unchanged; preserves research gaps, external-action gates, and the next owner.",
       "files": [
         "docs/prd.md",
         "skills/agency-opportunity-research/templates/opportunity-case.md"
@@ -14,7 +14,7 @@
         "Separates relationship strategies instead of emitting one lead score",
         "Labels evidence provenance and inferred problem hypotheses",
         "Produces an honest sourced three-way buyer choice as a table without cards or a duplicate sidecar",
-        "Composes brainstorm and solution-shaping without duplicating them",
+        "Composes frame and solution-shaping without duplicating them",
         "Checks existing proof packages before proposing a new demo",
         "Separates structured Wiki frontmatter from durable Markdown-body context",
         "Routes durable sourced facts through Manage Wiki preview without Wiki writes",

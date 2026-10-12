@@ -20,7 +20,7 @@ Own the thin callable review wrapper for Farplane's docs-owned rubric contract.
 - For code, cleanup, integration, or evidence-heavy review, the live review surface must use the anti-slop search playbook, return a compact `search_scope`, and express substantive findings with severity/confidence and concrete file refs. See `MEM-0020`.
 - Review output must contain concrete findings and next actions, not just questions or vibes.
 - The canonical live rubric references are `docs/review/rubrics/*`, not the
-  retired review-skill reference directory or `skills/code-review/`.
+  retired review-skill reference directory or `skills/code-health/`.
 - Keep the `SKILL.md` Todo List as plain natural-language todo-list text with Markdown links rather than a custom mini-language. See `MEM-0028` and `MEM-0124`.
 
 ## Notes
@@ -29,7 +29,7 @@ Own the thin callable review wrapper for Farplane's docs-owned rubric contract.
   keep caller-owned routing and TAS contract explicit.
 - Keep the reusable reviewer handoff template in `docs/review/rubrics/reviewer-handoff.md`.
 - Keep one reference file per review family in `docs/review/rubrics/`.
-- Keep implementation bloat with `lean-check` and prose cleanup with `unslop`;
+- Keep implementation bloat with the `code-health` lean gate and prose cleanup with `unslop`;
   do not recreate a second anti-slop review workflow.
 - Each family file should stay skimmable while still including required checks,
   blocker checks, evidence checks, and finding cues.

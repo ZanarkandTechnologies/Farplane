@@ -10,7 +10,7 @@ from skill_registry import extract_skill_mentions, load_skill_registry
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 CONTROL_SURFACE_PATTERN = re.compile(
-    r"(?:(?<!\S)\$(?P<plain_control>brainstorm|impl-plan|goal-advisor|qa|demo)(?![A-Za-z0-9_-])|(?<=\[)\$(?P<linked_control>brainstorm|impl-plan|goal-advisor|qa|demo)(?=\]\([^\n)]*/SKILL\.md(?:#[^\n)]*)?\)))",
+    r"(?:(?<!\S)\$(?P<plain_control>frame|impl-plan|goal-advisor|qa|demo)(?![A-Za-z0-9_-])|(?<=\[)\$(?P<linked_control>frame|impl-plan|goal-advisor|qa|demo)(?=\]\([^\n)]*/SKILL\.md(?:#[^\n)]*)?\)))",
     re.IGNORECASE,
 )
 CONTROL_SURFACE_ALIASES: dict[str, str] = {}

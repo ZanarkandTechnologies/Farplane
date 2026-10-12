@@ -166,9 +166,9 @@ Reviewer sanity check:
   `integration-readiness` for cross-surface changes.
 - Report any added family in `rubrics_used` and explain why.
 - Do not silently replace the caller's routing with a generic default.
-- For suspected over-engineering, use `lean-check` before assigning
-  `debloatability`. For prose cleanup, return an explicit operator route to
-  the unslop shortcut and the applicable documentation or prompt rubric.
+- For suspected over-engineering, apply the `code-health` lean gate before
+  assigning `debloatability`. For prose cleanup, return an explicit operator
+  route to the unslop shortcut and the applicable documentation or prompt rubric.
 
 ## TAS Verdicts
 

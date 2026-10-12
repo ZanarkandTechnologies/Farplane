@@ -1,0 +1,6 @@
+interface:
+  display_name: "Frame"
+  short_description: "Frame an idea and play it back before building"
+  default_prompt: "Use $frame to split the symptom from the real problem, pick the smallest boundary, and play it back for correction."
+policy:
+  allow_implicit_invocation: true

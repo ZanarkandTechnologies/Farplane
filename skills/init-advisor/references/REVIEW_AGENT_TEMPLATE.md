@@ -15,11 +15,11 @@ local pre-push by default as an advisory check.
 ## Relationship To Farplane Reviewers
 
 - Reusable local diff-review contract:
-  `~/.codex/skills/code-review/SKILL.md`.
+  `~/.codex/skills/code-health/references/review.md`.
 - Canonical material review: installed Farplane reviewer lane at
   `~/.codex/agents/reviewer.toml` plus `~/.codex/skills/review/SKILL.md`.
 - Local pre-push review: `scripts/codex_review_agent.ts`, which reviews check
-  logs and git diff using the `code-review` skill. It is lighter-weight and
+  logs and git diff using `code-health` review mode. It is lighter-weight and
   does not issue TAS verdicts.
 - `install.sh` from the Farplane repo links skills, canonical reviewer agents,
   and review rubrics into `~/.codex`; keep those installed before relying on
@@ -58,7 +58,7 @@ project-native wrapper.
 - `STRICT_AGENT_REVIEW=1`: make agent review required during pre-push.
 - `CODEX_REVIEW_MODEL=<model>`: override the Codex SDK model.
 - `CODEX_REVIEW_TIMEOUT_MS=<ms>`: abort the review turn after a timeout.
-- `CODEX_REVIEW_SKILL_FILE=<path>`: override the code-review skill file.
+- `CODEX_REVIEW_SKILL_FILE=<path>`: override the code-health review contract file.
 - `CODEX_REVIEW_REACT_GUIDE_FILE=<path>`: override the React/frontend
   guideline skill file. Defaults to
   `~/.codex/skills/vercel-react-best-practices/SKILL.md`.

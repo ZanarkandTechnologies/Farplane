@@ -131,8 +131,8 @@ whenever the ticket changes. For branch detail load only the relevant reference:
     `Reference Manifest`, and one `Done assertion -> owning change -> evidence
     source -> supported | pending` row per Completion Closure item. End with
     `stop_complete: withheld until every closure row is supported`.
-  - [ ] Use the shared Decision Backbone. Invoke Leverage Advisor only when
-    several plausible moves need judgment; otherwise act directly.
+  - [ ] Use the shared Decision Backbone; invoke Leverage Advisor only when
+    moves need judgment. Diagnose a blocking failure with `code-health` debug.
 - [ ] 4. Enforce the first-load budget.
   - [ ] Initial context is full `ticket.md`, full `program.md`, and at most the
     latest 80 lines of `progress.md`. Load older receipts or artifacts only for

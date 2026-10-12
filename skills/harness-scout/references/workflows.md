@@ -17,7 +17,7 @@
 6. Extract concrete feature candidates.
 7. Search `docs/systems/*.md`, generated `docs/systems/registry.jsonl`,
    generated `docs/features/registry.jsonl`, and nearby local docs/skills; use
-   [codebase-analysis](../../codebase-analysis/SKILL.md) when the match depends
+   the [explore agent](../../../agents/explore.toml) when the match depends
    on local implementation behavior.
 8. Use [implementation-research](../../implementation-research/SKILL.md)
    or [doc-advisor](../../doc-advisor/SKILL.md) only when source claims need

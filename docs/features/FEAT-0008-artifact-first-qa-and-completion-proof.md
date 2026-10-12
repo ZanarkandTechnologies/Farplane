@@ -129,7 +129,7 @@ Proof scales with risk, blast radius, and user-facing impact.
 - `docs/review/rubrics` owns family definitions, stable checks, TAS calibration,
   and evidence limits; tickets and caller workflows own rubric routing.
 - Review keeps neighboring-surface skepticism inside the selected rubric family.
-  Suspected implementation bloat routes to `lean-check`; prose cleanup routes
+  Suspected implementation bloat routes to the `code-health` lean gate; prose cleanup routes
   to `unslop` instead of a parallel catch-all cleanup rubric.
 - Purchase-conviction review requires one explicit buyer, a credible product or
   offer, the current alternative, price or equivalent commitment, and material

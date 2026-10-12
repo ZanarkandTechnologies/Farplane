@@ -162,14 +162,14 @@
     {
       "id": "init_advisor_quality_tooling_slots_01",
       "prompt": "A TypeScript/Python mixed project is being initialized and the operator is open to quality tooling. What should the project rules template record without forcing installation?",
-      "expected_output": "Records maintainability/refactoring command slots such as lint, complexity, duplication, dependency boundaries, dead code, static analysis dashboard, and mutation testing; Records hardening command slots such as SAST, dependency audit, secret scan, config validation, and resilience/failure tests; Keeps tools optional and stack-specific instead of mandating one universal linter stack; Does not install tools automatically unless code scaffold/tooling installation is explicitly in scope; Routes behavior-preserving cleanup to the refactoring skill and risk-reduction work to the hardening skill",
+      "expected_output": "Records maintainability/refactoring command slots such as lint, complexity, duplication, dependency boundaries, dead code, static analysis dashboard, and mutation testing; Records hardening command slots such as SAST, dependency audit, secret scan, config validation, and resilience/failure tests; Keeps tools optional and stack-specific instead of mandating one universal linter stack; Does not install tools automatically unless code scaffold/tooling installation is explicitly in scope; Routes behavior-preserving cleanup to code-health clean mode and risk-reduction work to code-health harden mode",
       "files": [],
       "assertions": [
         "Records maintainability/refactoring command slots such as lint, complexity, duplication, dependency boundaries, dead code, static analysis dashboard, and mutation testing",
         "Records hardening command slots such as SAST, dependency audit, secret scan, config validation, and resilience/failure tests",
         "Keeps tools optional and stack-specific instead of mandating one universal linter stack",
         "Does not install tools automatically unless code scaffold/tooling installation is explicitly in scope",
-        "Routes behavior-preserving cleanup to the refactoring skill and risk-reduction work to the hardening skill"
+        "Routes behavior-preserving cleanup to code-health clean mode and risk-reduction work to code-health harden mode"
       ],
       "metadata": {
         "farplane": {
@@ -177,8 +177,7 @@
           "tags": [
             "init-advisor",
             "quality-tooling",
-            "refactoring",
-            "hardening"
+            "code-health"
           ]
         }
       }

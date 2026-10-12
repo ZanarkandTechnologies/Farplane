@@ -152,7 +152,7 @@ label = "Engineer"
 department = "operations"
 deliverable = "a planned and implemented change"
 primary = "impl-plan"
-skills = ["impl-plan", "code-audit", "goal-advisor", "pr-review-watch", "pr-splitting"]
+skills = ["impl-plan", "code-health", "goal-advisor", "pr-review-watch", "pr-splitting"]
 
 [specialists.qa-engineer]
 label = "QA Engineer"

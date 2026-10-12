@@ -1,0 +1,381 @@
+{
+  "skill_name": "frame",
+  "evals": [
+    {
+      "id": "frame_diagnose_operator_idea_full_path_01",
+      "prompt": "I have an idea: I want to build a Slack bot that summarizes every channel for my team each morning. Are we aligned on what this is before I start?",
+      "expected_output": "Keeps the Slack bot as the requested artifact while naming the likely problem behind it; compares at least two rungs on the boundary ladder with too-small or too-large reasons; plays the recommendation back as one proposed visual chosen for what the team will see; ends with one to three correction questions and one next owner; writes no plan or code.",
+      "files": [],
+      "assertions": [
+        "States the Slack bot as the requested artifact and names the likely problem behind it on a separate line",
+        "Compares at least two boundary rungs such as a manual digest, a bot, and a broader product, with too-small or too-large reasons",
+        "Shows one proposed visual chosen for what the team will see, not the bot's architecture",
+        "Ends with one to three correction questions and names one next owner",
+        "Does not produce an implementation plan, ticket, or code"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Operator idea runs the full frame path",
+          "tags": [
+            "skill",
+            "frame",
+            "trigger",
+            "full-path"
+          ],
+          "notes": "Covers the operator wording the descriptions of the skills merged into frame missed: 'I have an idea', 'I want to build', 'are we aligned'."
+        }
+      }
+    },
+    {
+      "id": "frame_diagnose_requested_artifact_trap_01",
+      "prompt": "A custom manufacturing client keeps saying, \"we just need a simple pricing calculator so sales can quote faster.\" They want us to start building this week.",
+      "expected_output": "Captures the calculator request literally without accepting it as the build target; Separates quote speed or reliability as the likely problem from calculator as the requested artifact; Names the actor, job, stakes, current workflow unknowns, and quote-decision constraints; Compares at least two plausible product boundaries such as calculator, quote workflow, and ERP-like system; Routes to evidence gathering, MVP synthesis, system design, or implementation planning based on boundary confidence",
+      "files": [],
+      "assertions": [
+        "Captures the calculator request literally without accepting it as the build target",
+        "Separates quote speed or reliability as the likely problem from calculator as the requested artifact",
+        "Names the actor, job, stakes, current workflow unknowns, and quote-decision constraints",
+        "Compares at least two plausible product boundaries such as calculator, quote workflow, and ERP-like system",
+        "Routes to evidence gathering, MVP synthesis, system design, or implementation planning based on boundary confidence"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Requested artifact is treated as evidence, not solution",
+          "tags": [
+            "skill",
+            "frame",
+            "artifact-trap"
+          ],
+          "notes": "Source: real thread failure mode. Failure should route to the frame N1 symptom split if the answer jumps to building the requested artifact."
+        }
+      }
+    },
+    {
+      "id": "frame_diagnose_sparse_operational_complaint_01",
+      "prompt": "A hospital operations manager says bed allocation is broken and patient flow is getting worse. That's all we have so far.",
+      "expected_output": "Does not invent a single definitive root cause; Names candidate frames such as visibility, prioritization, turnover, staffing, transport, discharge timing, or permissions; Labels missing actor, workflow, data, permission, urgency, and success-signal evidence; Identifies the next human or research input needed before product boundary selection; Avoids producing implementation tickets from sparse complaint text",
+      "files": [],
+      "assertions": [
+        "Does not invent a single definitive root cause",
+        "Names candidate frames such as visibility, prioritization, turnover, staffing, transport, discharge timing, or permissions",
+        "Labels missing actor, workflow, data, permission, urgency, and success-signal evidence",
+        "Identifies the next human or research input needed before product boundary selection",
+        "Avoids producing implementation tickets from sparse complaint text"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Sparse operational complaint preserves uncertainty",
+          "tags": [
+            "skill",
+            "frame",
+            "sparse-input"
+          ],
+          "notes": "Source: synthetic gap for unknown user reality. Failure should route to frame unknown-handling or direct-clarification/research routing."
+        }
+      }
+    },
+    {
+      "id": "frame_diagnose_continuous_improvement_reset_01",
+      "prompt": "The current onboarding process takes 74 days. The team found a few tweaks that might bring it down to 72. Can we frame what problem we should actually solve?",
+      "expected_output": "Identifies 74-to-72 optimization as a current-process improvement frame rather than the only valid goal; Asks why the current process takes 74 days and what constraints are hard, soft, inherited, obsolete, or unknown; States the irreducible outcome or job if the process were rebuilt from zero; Compares current workflow against the simplest plausible correct workflow before selecting product boundaries; Preserves legitimate compromises instead of assuming the first-principles version is automatically feasible",
+      "files": [],
+      "assertions": [
+        "Identifies 74-to-72 optimization as a current-process improvement frame rather than the only valid goal",
+        "Asks why the current process takes 74 days and what constraints are hard, soft, inherited, obsolete, or unknown",
+        "States the irreducible outcome or job if the process were rebuilt from zero",
+        "Compares current workflow against the simplest plausible correct workflow before selecting product boundaries",
+        "Preserves legitimate compromises instead of assuming the first-principles version is automatically feasible"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Continuous-improvement proposal is reset to first principles",
+          "tags": [
+            "skill",
+            "frame",
+            "first-principles"
+          ],
+          "notes": "Source: Jensen transcript/source ingest. Failure should route to first-principles and why-chain gates."
+        }
+      }
+    },
+    {
+      "id": "frame_diagnose_platform_overbuild_negative_01",
+      "prompt": "A disaster-response nonprofit has messy coordination during emergencies. I think we should pitch a full operations platform with maps, roles, chat, inventory, and AI triage.",
+      "expected_output": "Treats the proposed platform as one possible boundary rather than the default answer; Frames the coordination complaint in terms of stakeholders, decisions, current workflow, and emergency constraints; Compares smaller boundaries such as manual service, checklist/workflow aid, dashboard, integration, or system of record; Names evidence that would justify or reject a full platform; Recommends restraint or an evidence gate when platform scope is not yet proven",
+      "files": [],
+      "assertions": [
+        "Treats the proposed platform as one possible boundary rather than the default answer",
+        "Frames the coordination complaint in terms of stakeholders, decisions, current workflow, and emergency constraints",
+        "Compares smaller boundaries such as manual service, checklist/workflow aid, dashboard, integration, or system of record",
+        "Names evidence that would justify or reject a full platform",
+        "Recommends restraint or an evidence gate when platform scope is not yet proven"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Platform overbuild is rejected when evidence is missing",
+          "tags": [
+            "skill",
+            "frame",
+            "anti-overbuild"
+          ],
+          "notes": "Source: known overbuild risk. Anti-cheat control: user wording pushes a large platform, but reference points require boundary restraint."
+        }
+      }
+    },
+    {
+      "id": "frame_diagnose_already_framed_handoff_01",
+      "prompt": "We already know the problem: dispatchers need a shared view of open service calls, technician availability, and exceptions so they can reassign work before SLAs slip. What should happen next?",
+      "expected_output": "Recognizes that a coherent problem frame is already present; Briefly validates actor, job, stakes, and product-boundary assumptions without restarting broad discovery; Names remaining unknowns such as data ownership, integrations, permissions, or review proof; Routes to functional-ui, PRD, MVP synthesis, or implementation planning based on the requested next step; Does not overuse problem framing when the correct behavior is downstream handoff",
+      "files": [],
+      "assertions": [
+        "Recognizes that a coherent problem frame is already present",
+        "Briefly validates actor, job, stakes, and product-boundary assumptions without restarting broad discovery",
+        "Names remaining unknowns such as data ownership, integrations, permissions, or review proof",
+        "Routes to functional-ui, PRD, MVP synthesis, or implementation planning based on the requested next step",
+        "Does not overuse problem framing when the correct behavior is downstream handoff"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Already framed problem routes forward instead of redoing work",
+          "tags": [
+            "skill",
+            "frame",
+            "handoff-boundary"
+          ],
+          "notes": "Source: boundary case. Failure should route to skill trigger/Do Not Overuse behavior."
+        }
+      }
+    },
+    {
+      "id": "frame_widen_structured_optional_lanes_01",
+      "prompt": "We have an inherited weekly planning process that feels stale. Brainstorm from first principles what the process should be and compare it with the current reality.",
+      "expected_output": "Uses structured decomposition mode; Runs the base spine and explicitly contrasts current reality with first-principles rebuild; Uses a why-chain lane because inherited process and incentives matter; Uses additional lanes only when they reduce uncertainty rather than stacking every available framework; Ends with a recommendation and next owner without creating tickets",
+      "files": [],
+      "assertions": [
+        "Uses structured decomposition mode",
+        "Runs the base spine and explicitly contrasts current reality with first-principles rebuild",
+        "Uses a why-chain lane because inherited process and incentives matter",
+        "Uses additional lanes only when they reduce uncertainty rather than stacking every available framework",
+        "Ends with a recommendation and next owner without creating tickets"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Structured decomposition uses targeted optional lanes",
+          "tags": [
+            "skill",
+            "frame",
+            "structured-decomposition",
+            "optional-lanes"
+          ],
+          "notes": "Prevents regression to choosing only Palantir or McKinsey as the whole decomposition."
+        }
+      }
+    },
+    {
+      "id": "frame_widen_auto_ensemble_personas_01",
+      "prompt": "Brainstorm a new onboarding workflow for Farplane with ensemble=auto. Use independent perspectives if useful, but preserve the frame output shape.",
+      "expected_output": "Loads `ensemble.yaml` for complete persona prompts; Selects exactly three relevant diverse personas without invoking a shared budget system; States why those personas fit; Synthesizes back into the normal frame output (directions, recommended boundary, next owner) while preserving dissent",
+      "files": [],
+      "assertions": [
+        "Loads `ensemble.yaml` for complete persona prompts",
+        "Selects exactly three relevant diverse personas without invoking a shared budget system",
+        "States why those personas fit",
+        "Synthesizes back into the normal frame output (directions, recommended boundary, next owner) while preserving dissent"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Auto ensemble selects complete frame persona prompts",
+          "tags": [
+            "skill",
+            "frame",
+            "ensemble",
+            "personas"
+          ],
+          "notes": "Catches thin labels, hidden subagent execution, and ensemble output-contract drift."
+        }
+      }
+    },
+    {
+      "id": "frame_widen_no_celebrity_cosplay_01",
+      "prompt": "Brainstorm this like Elon Musk and Jensen Huang would: how should we redesign our product ideation process?",
+      "expected_output": "Does not prompt lanes as real public figures or imitate private identity; Translates the request into behavioral archetypes such as FirstPrinciplesOperator and SystemsReinventionArchitect; Names the useful reasoning behaviors rather than relying on celebrity labels; Runs the first-principles contrast and at most one lane that fits the request; Preserves concise recommendation and next owner",
+      "files": [],
+      "assertions": [
+        "Does not prompt lanes as real public figures or imitate private identity",
+        "Translates the request into behavioral archetypes such as FirstPrinciplesOperator and SystemsReinventionArchitect",
+        "Names the useful reasoning behaviors rather than relying on celebrity labels",
+        "Runs the first-principles contrast and at most one lane that fits the request",
+        "Preserves concise recommendation and next owner"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Reject public-figure cosplay in favor of behavioral archetypes",
+          "tags": [
+            "skill",
+            "frame",
+            "personas",
+            "safety"
+          ],
+          "notes": "Protects the design decision from the source conversation: use archetypes, not cosplay."
+        }
+      }
+    },
+    {
+      "id": "frame_widen_product_bet_working_backwards_01",
+      "prompt": "Brainstorm a product bet for a browser-based skill registry that makes agents easier to trust. I am not ready for requirements yet.",
+      "expected_output": "Recognizes this as an early product bet, not a PRD or ticket request; Runs the base spine; Uses a working-backwards or customer-backwards lane to name user, promise, objections, and first lovable slice; Avoids implementation planning and ticket creation; Stops for operator clarification if still fuzzy or hands off to `prd` if coherent",
+      "files": [],
+      "assertions": [
+        "Recognizes this as an early product bet, not a PRD or ticket request",
+        "Runs the base spine",
+        "Uses a working-backwards or customer-backwards lane to name user, promise, objections, and first lovable slice",
+        "Avoids implementation planning and ticket creation",
+        "Stops for operator clarification if still fuzzy or hands off to `prd` if coherent"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Product bets use working-backwards depth without becoming PRD",
+          "tags": [
+            "skill",
+            "frame",
+            "working-backwards",
+            "product"
+          ],
+          "notes": "Catches premature PRD/ticket creation while making product brainstorms more concrete."
+        }
+      }
+    },
+    {
+      "id": "frame_playback_reconstructs_operated_model_01",
+      "prompt": "We have spent a while discussing a content-intelligence product. A user pastes YouTube videos, sees when analysis is still running, reads a source dossier, and can inspect news extracted from those sources. We discovered that the current screen calls broad robotics-topic matches ‘related coverage,’ while I mean coverage to be sources discussing the same development. Generated event summaries currently hide the original verification links. Describe the product back to me so I can check whether we are on the same page before we plan changes.",
+      "expected_output": "Returns a proposed product model centered on the user's operated journey, distinguishes sources, exact developments, evidence, topic navigation, and analysis state, uses a fenced Mermaid journey or state-aware flow, labels assumptions, and asks focused alignment questions without writing a plan.",
+      "files": [],
+      "assertions": [
+        "States a concise product promise or central user value without turning the response into a capability inventory",
+        "Narrates one user journey from video ingest through visible analysis state to dossier and verified development",
+        "Uses coverage only for sources tied to the same event and does not label broad topic overlap as coverage",
+        "Makes original evidence links part of the development experience rather than treating generated prose as evidence",
+        "Detects an end-to-end product experience and uses the journey template with nouns consistent with the interpretation",
+        "Labels the result proposed and ends with focused questions instead of implementation steps"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Playback reconstructs an operated product model",
+          "notes": "Primary positive case derived from an observed product-alignment workflow.",
+          "tags": [
+            "skill",
+            "frame",
+            "product",
+            "alignment",
+            "story"
+          ]
+        }
+      }
+    },
+    {
+      "id": "frame_playback_preserves_conflict_01",
+      "prompt": "Play our product back to me before we commit. We agreed that every imported customer interview should be searchable immediately. Earlier I also said nothing should become visible until a researcher reviews it. The product should help product teams understand recurring customer problems, but I have not decided whether themes deserve their own workspace or should only be filters.",
+      "expected_output": "Builds the clearest product story supported by the discussion while keeping immediate search versus review visibility as an explicit conflict and the themes workspace as an unresolved choice; it does not silently choose either path.",
+      "files": [],
+      "assertions": [
+        "Separates confirmed purpose from conflicting visibility rules",
+        "Does not resolve the immediate-search versus human-review conflict without user input",
+        "Treats the themes workspace as an open decision rather than an accepted feature",
+        "Uses one representative researcher path in the visual model to make the conflict concrete",
+        "Makes the affected visibility boundary explicit and asks questions aimed at the highest-risk misunderstandings"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Playback preserves contradictions and open choices",
+          "notes": "Protects against polished prose manufacturing false agreement.",
+          "tags": [
+            "skill",
+            "frame",
+            "product",
+            "alignment",
+            "conflict"
+          ]
+        }
+      }
+    },
+    {
+      "id": "frame_playback_selects_user_visible_ui_flow_01",
+      "prompt": "Play this dashboard redesign back to me visually before we plan it. Today a support lead lands on a wall of account metrics and has to open several panels to discover which conversations need attention. I want the first screen to show a prioritized conversation queue, why each item needs attention, and the next action. Selecting one should open the conversation with customer context and suggested actions. Show me what the end user would actually see and do; do not give me an architecture diagram.",
+      "expected_output": "Selects a user-visible screen-state flow rather than a system map, uses a fenced Mermaid diagram to show visible content and actions across queue and conversation states, includes loading/empty/error or success behavior where material, and asks focused correction questions.",
+      "files": [],
+      "assertions": [
+        "Frames the alignment question around the support lead's visible experience",
+        "Detects UI design intent and renders the UI screen-flow template inline without an artifact link, ASCII supplement, or backend architecture",
+        "Shows the prioritized queue, attention reason, next action, conversation context, and suggested actions",
+        "Includes material loading, empty, error, or success states without turning the result into a full UI specification",
+        "Labels the model proposed and asks no more than three high-risk correction questions"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Playback selects a user-visible UI flow",
+          "notes": "Protects the context-sensitive branch where the operator needs to see the end-user experience rather than system internals.",
+          "tags": [
+            "skill",
+            "frame",
+            "product",
+            "alignment",
+            "ui",
+            "visualization"
+          ]
+        }
+      }
+    },
+    {
+      "id": "frame_playback_selects_before_after_example_01",
+      "prompt": "Play the change back to me before we commit. Today an operations manager opens the dashboard, scans broad weekly metrics, and opens multiple panels to find delayed orders. We want the landing view to put delayed orders first, explain why each one is delayed, and offer the next recovery action. Show the current experience, the intended experience, and one concrete delayed-order example so I can check whether the change is right.",
+      "expected_output": "Detects a change to an existing experience and selects the Before / After / Example template, using fenced Mermaid to contrast the two user experiences and prove the delta with one concrete delayed-order trace.",
+      "files": [],
+      "assertions": [
+        "Frames the alignment question around the experiential shift from discovering delayed work to acting on prioritized delayed work",
+        "Uses a fenced Mermaid Before / After / Example structure rather than a generic journey or backend map",
+        "Before shows broad metrics and panel hunting while After shows delayed orders, delay reasons, and recovery actions",
+        "The example traces one concrete delayed order through its visible reason and next recovery action",
+        "Labels the model proposed and asks no more than three correction questions"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Playback selects Before After Example for a delta",
+          "notes": "Protects template detection when an existing user experience is being changed.",
+          "tags": [
+            "skill",
+            "frame",
+            "product",
+            "alignment",
+            "delta",
+            "visualization"
+          ]
+        }
+      }
+    },
+    {
+      "id": "frame_playback_rejects_status_only_01",
+      "prompt": "Play back TASK-4821, which I just reopened after two weeks. What changed, which tests passed, and what should I do next?",
+      "expected_output": "Does not fabricate an idea recap from a status-only resumption request; routes to recap-task or requests the authoritative task reference needed for a grounded recap.",
+      "files": [],
+      "assertions": [
+        "Recognizes the request as task resumption rather than product alignment",
+        "Routes to recap-task or names the missing authoritative task source",
+        "Does not invent product purpose, user journeys, decisions, test results, or an ASCII product model",
+        "Does not mutate or resume the underlying task"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Playback rejects a status-only recap request",
+          "notes": "Protects the boundary with recap-task.",
+          "tags": [
+            "skill",
+            "frame",
+            "product",
+            "routing",
+            "negative"
+          ]
+        }
+      }
+    }
+  ]
+}

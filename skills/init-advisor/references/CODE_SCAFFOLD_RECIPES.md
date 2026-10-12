@@ -61,5 +61,5 @@ or selected stack setup explicitly includes those tools.
   creation, or other external side effects.
 - Record canonical app-only and QA/evidence run commands in `AGENTS.md` (Build & Run),
   `docs/bootstrap-brief.md`, and the Agent QA section of `AGENTS.md`.
-- Route behavior-preserving cleanup to `refactoring`; route risk-reduction work
-  to `hardening`.
+- Route behavior-preserving cleanup to `code-health` clean mode and
+  risk-reduction work to its harden mode.

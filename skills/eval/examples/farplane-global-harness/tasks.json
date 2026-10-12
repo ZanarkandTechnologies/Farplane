@@ -558,11 +558,11 @@
     "notes": "First rung of the implementation reuse ladder: unnecessary work should stop before code is proposed."
   },
   {
-    "id": "global_lean_check_skill_call_01",
-    "title": "Use the installed lean-check skill before implementation",
+    "id": "global_code_health_lean_gate_call_01",
+    "title": "Use the installed code-health lean gate before implementation",
     "query": "The storefront needs a single date field, and someone proposed adding a JavaScript date-picker library. The browser date control satisfies the stated validation and submission requirements. Give me the implementation approach.",
     "reference_points": [
-      "Invokes the installed lean-check skill before proposing code, or uses the stated inline fallback only when the skill is unavailable",
+      "Invokes the installed code-health skill (lean gate) before proposing code, or uses the stated inline fallback only when the skill is unavailable",
       "Returns or records a first-sufficient-rung receipt with local evidence and the smallest safe action",
       "Selects the native platform date control rather than adding a date-picker library",
       "Preserves form validation, submission behavior, and focused proof"
@@ -573,7 +573,7 @@
       "leanness",
       "skill-invocation"
     ],
-    "notes": "Regression for global routing into the callable lean-check contract rather than relying on an unnamed heuristic."
+    "notes": "Regression for global routing into the callable code-health lean gate rather than relying on an unnamed heuristic."
   },
   {
     "id": "global_follow_up_rhetorical_correction_01",

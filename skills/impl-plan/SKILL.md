@@ -159,10 +159,10 @@ For a material request with no selected ticket, create or request the canonical
     diagram review materially help; validate it when linked.
   - [ ] Move execution history and bulky proof to `progress.md` or `artifacts/`.
 - [ ] 8. Run minimality and mechanical gates.
-  - [ ] Call the Lean Check direct command once after context resolution
-    and before finalizing the Change Plan. Preserve its first sufficient rung,
-    evidence, and smallest action only where they change scope, a change unit,
-    or QA; do not create a parallel ticket schema.
+  - [ ] Apply the `code-health` lean gate once after context resolution; keep
+    its rung, evidence, and smallest action only where they change scope, a
+    change unit, or QA. Name a `code-health` review (or clean) pass after the
+    build in `QA Strategy`; do not create a parallel ticket schema.
   - [ ] Run `farplane ticket check <ticket> --phase planning`; inspect raw
     first-load and Markdown category counts, then consolidate duplicated policy
     or bulky evidence when pressure is reported.
