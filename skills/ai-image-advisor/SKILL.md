@@ -131,7 +131,6 @@ Browse live apps with `belt app list --category image`.
 | Grok Imagine | `xai/grok-imagine-image` | xAI image generation, multiple aspects |
 | Ideogram 4.5 | Ideogram API `/v2/image/precise-edit/ideogram-4-5` | Default editor; masks, references, text edits |
 | Seedream 4.5 | `bytedance/seedream-4-5` | Edit fallback; 2K-4K cinematic quality |
-| Seedream 4.0 | `bytedance/seedream-4-0` | High quality 2K-4K |
 | Seedream 3.0 | `bytedance/seedream-3-0-t2i` | Accurate text rendering |
 | Reve | `falai/reve` | Natural language editing, text rendering |
 | ImagineArt 1.5 Pro | `falai/imagine-art-1-5-pro-preview` | Ultra-high-fidelity 4K |
