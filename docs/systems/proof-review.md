@@ -97,7 +97,7 @@ belongs in Self-Improvement And Learning.
 - Proof scales with risk rather than becoming ceremony for every tiny edit.
 - Experimental work preregisters its expected observation through the metric or
   experiment owner. Material negative surprise or implausibly positive results
-  route to `agent-qa-test:experiment`; final causal inference routes through
+  route to `eval:experiment`; final causal inference routes through
   `scientific-evidence`. Domain skills remain experiment executors.
 - Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
 - Registry data is generated from system and feature docs, not edited by hand.
@@ -113,7 +113,7 @@ flowchart LR
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   claim["completion or behavior claim<br/>ticket / skill / agent"]:::keep
-  qa["qa + agent-qa-test<br/>evidence capture"]:::changed
+  qa["qa (adversarial mode)<br/>evidence capture"]:::changed
   evals["FEAT-0039 Farplane evals<br/>hardcases and rubrics"]:::changed
   retired["FEAT-0043 + FEAT-0054<br/>retired eval surfaces"]:::retired
   review["reviewer lane<br/>TAS verdict + residual risk"]:::changed

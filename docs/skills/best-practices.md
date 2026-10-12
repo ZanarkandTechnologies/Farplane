@@ -417,7 +417,7 @@ Use this routing:
 | Claim | Finish Gate | Where Detail Belongs |
 | --- | --- | --- |
 | Human judgment, sufficiency, taste, readiness, or evidence quality. | `review` / reviewer lane | Review rubric or reviewer handoff. |
-| User-visible workflow, browser operation, UI state, generated media playback, or demo realism. | `qa` / `visual-qa` / `agent-qa-test` | QA artifact contract or conditional reference. |
+| User-visible workflow, browser operation, UI state, generated media playback, or demo realism. | `qa` (functional / visual / adversarial) | QA artifact contract or conditional reference. |
 | Repeatable agent, prompt, or skill behavior. | `eval` | `evals/evals.json` or eval suite artifact. |
 | Deterministic file, schema, registry, link, generated state, or syntax invariant. | validator or command | Script, validator, or proof command in `SKILL.md`. |
 | Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality check | `doc-advisor`, the documentation rubric, or an owned reference. |

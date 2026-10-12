@@ -122,7 +122,7 @@ returns: the frame, one proposed visual, 1-3 correction questions, and the next 
 
   Rule: Ask only questions whose answer would change the frame, the rung, or
   the view, riskiest mismatch first. Route accepted product scope to `prd`, UI
-  or workflow uncertainty to `functional-ui`, agency or client MVPs to
+  or workflow uncertainty to `prd` workflow mode, agency or client MVPs to
   `approach`, an accepted build slice to `impl-plan`, unknown user
   reality to `prospect`, and a current-practice gap to
   `research`. Create no tickets and write no code.

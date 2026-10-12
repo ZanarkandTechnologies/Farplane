@@ -20,7 +20,7 @@ approaches the evidence supports, picks one, builds the contribution or offer
 behind it, and drafts one unsent message. One pass returns one approach packet.
 
 It does not find or research targets (`prospect`), price a proposal
-(`proposal-pricing`), polish final copy (`copywriting-advisor`), or send
+(`proposal-pricing`), polish final copy (`copywriting`), or send
 anything. The problem frame comes from `frame`; the boundary ladder lives
 there.
 
@@ -96,7 +96,7 @@ returns: the approach packet, readiness send | revise | stop, the approval still
   if they never reply, within a recipient-effort budget of 2, 5, or 10
   minutes. Reject free-help offers and disguised discovery homework. A demo
   needs a reason a static artifact cannot test the uncertainty, one workflow
-  and one decision, and a route receipt: boundary accepted, `demo-realism`
+  and one decision, and a route receipt: boundary accepted, `prd` realism mode
   needed or not, build owner (project owner or `impl-plan`), inspection
   surface. An offer names the target outcome, smallest engagement,
   deliverables, proof and its limit, reason-now hypothesis, and non-goals; the
@@ -111,7 +111,7 @@ returns: the approach packet, readiness send | revise | stop, the approval still
   Rule: Lead with the artifact and the signal that made it relevant, state its
   limit, and ask one easy correction question; make no reply comfortable.
   Every personalisation claim carries its evidence and a correction question.
-  Use `copywriting-advisor` when wording quality matters, and draft only the
+  Use `copywriting` when wording quality matters, and draft only the
   channels asked for. Name the exact approval needed before contact.
 
   Assert:

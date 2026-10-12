@@ -10,9 +10,9 @@ tags:
   - sys-0010
 refs:
   - skills/impl-plan
-  - skills/functional-ui
+  - skills/prd
   - skills/visual-design
-  - skills/visual-qa
+  - skills/qa
   - skills/landing-page
   - "docs/MEMORY.md#MEM-0085"
   - docs/HISTORY.md
@@ -22,9 +22,9 @@ category: frontend-skills
 public: true
 surfaces:
   - skills/impl-plan
-  - skills/functional-ui
+  - skills/prd
   - skills/visual-design
-  - skills/visual-qa
+  - skills/qa
   - skills/landing-page
 source_refs:
   - "docs/MEMORY.md#MEM-0085"
@@ -37,9 +37,9 @@ external_refs:
   - https://ui.shadcn.com/r/registries.json
 evidence_refs:
   - skills/impl-plan/SKILL.md
-  - skills/functional-ui/SKILL.md
+  - skills/prd/SKILL.md
   - skills/visual-design/SKILL.md
-  - skills/visual-qa/SKILL.md
+  - skills/qa/SKILL.md
   - docs/HISTORY.md
 known_limits: Retired as a feature because frontend parity is a domain skill-family concern, not a Farplane product capability. Keep current truth in Domain Skill Families and the owner skills.
 metrics:
@@ -113,7 +113,7 @@ flowchart LR
   sources["external parity refs<br/>shadcn + UI skill examples<br/>MEM-0085"]:::keep
   retired["FEAT-0014<br/>status: retired<br/>system_id: SYS-0010"]:::retired
   owner["SYS-0010 Domain Skills<br/>docs/systems/domain-skill-families.md"]:::changed
-  skills["UI planning family<br/>skills/impl-plan<br/>skills/functional-ui<br/>skills/visual-qa"]:::added
+  skills["UI planning family<br/>skills/impl-plan<br/>skills/prd<br/>skills/qa"]:::added
   record["durable memory<br/>docs/MEMORY.md<br/>docs/HISTORY.md"]:::keep
 
   sources --> retired --> owner --> skills --> record
@@ -126,9 +126,9 @@ The retired feature handle now points at `SYS-0010` and the active frontend skil
 Owner surfaces:
 
 - `skills/impl-plan`
-- `skills/functional-ui`
+- `skills/prd`
 - `skills/visual-design`
-- `skills/visual-qa`
+- `skills/qa`
 - `skills/landing-page`
 
 Source context:
@@ -147,9 +147,9 @@ External context:
 Evidence:
 
 - `skills/impl-plan/SKILL.md`
-- `skills/functional-ui/SKILL.md`
+- `skills/prd/SKILL.md`
 - `skills/visual-design/SKILL.md`
-- `skills/visual-qa/SKILL.md`
+- `skills/qa/SKILL.md`
 - `docs/HISTORY.md`
 
 ## Proof And Quality

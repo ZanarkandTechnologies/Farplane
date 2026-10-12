@@ -484,14 +484,13 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         if edge.get("confidence") == "explicit" and not edge.get("evidence_ref"):
             errors.append(f"explicit edge lacks evidence_ref: {edge}")
     required_nodes = [
-        "skill:init-advisor",
+        "skill:setup-advisor",
         "skill:goal-advisor",
         "skill:report-gen",
         "skill:doc-advisor",
         "skill:manage-wiki",
         "skill:skill-maintenance",
         "skill:eval",
-        "skill:consolidate",
         "file:farplane/metrics.yaml",
         "file:farplane/pm.json",
         "hook:UserPromptSubmit",

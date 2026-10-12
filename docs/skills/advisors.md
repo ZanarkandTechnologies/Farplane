@@ -38,7 +38,7 @@ The current family contains:
 - `advise`, the foundational recommendation
   primitive used when no domain-specific advisor owns the decision.
 
-As of 2026-10-12, that is 16 named advisor packages plus `advise`: 17 entries.
+As of 2026-10-12 (after the #41 unit merges), that is 5 named advisor packages plus `advise`: 6 entries.
 
 ## Choose By Use Case
 
@@ -55,7 +55,7 @@ As of 2026-10-12, that is 16 named advisor packages plus `advise`: 17 entries.
 | --- | --- | --- |
 | Decide where a Farplane behavior or capability belongs | [`harness-advisor`](../../skills/harness-advisor/SKILL.md) | Owner-surface recommendation across policy, skills, agents, hooks, tickets, docs, and validators |
 | Compile material work into the right execution loop | [`goal-advisor`](../../skills/goal-advisor/SKILL.md) | Goal architecture, ticket-backed state, and native Goal prompt when warranted |
-| Initialize or migrate a project into Farplane | [`init-advisor`](../../skills/init-advisor/SKILL.md) | Substrate/readiness audit, optional scaffold, and harness handoff |
+| Initialize or migrate a project into Farplane | [`setup-advisor`](../../skills/setup-advisor/SKILL.md) | Substrate/readiness audit, optional scaffold, and harness handoff |
 | Define project-owned recurring Codex work | [`automation-advisor`](../../skills/automation-advisor/SKILL.md) | Automation configuration using Pulse and Interval workflows |
 
 ### Plan proof and durable documentation

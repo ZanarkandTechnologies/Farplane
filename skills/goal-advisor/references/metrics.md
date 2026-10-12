@@ -48,7 +48,7 @@ none            no honest metric; use judgment questions and write "none mechani
    only to causal, comparative, or uncertainty-reducing work.`
 6. Route direct repair when owner and fix are clear; `self-improve` only when
    candidate search and a baseline are needed; material causal surprise to
-   `agent-qa-test:experiment`; a delayed ticket Reward miss with no causal
+   `eval:experiment`; a delayed ticket Reward miss with no causal
    experiment back to its owning ticket, preserving the check-in's
    `accept | kill | monitor` decision.
 7. Finish-check: when the primary metric is a proxy, say what it misses and

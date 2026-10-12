@@ -206,7 +206,7 @@ create_repurpose_ticket(source_ref, note, intended_output)
 `future_creation` creates one thin ticket by default. The ticket instruction is
 `Repurpose <idea> from <source URL or Resource Bank asset ID> into <output>`,
 with the operator's material constraints and taste note preserved. Its first
-program operation is `content-impl-plan`; ingest does not need to expand the
+program operation is `storyboard`; ingest does not need to expand the
 full storyboard or content action graph.
 
 Save-only intent creates no ticket. `generate_now` creates the same durable

@@ -563,7 +563,7 @@ Budgeted skills include:
 | native planning, `impl-plan`, `goal-advisor` | planning depth, ambiguity gates, decomposition depth |
 | `research` | source count, search breadth, recency/currentness, citation depth |
 | `advise` | option count, local ensemble persona lanes, synthesis |
-| `review`, `visual-qa`, `agent-qa-test` | rubric depth, evidence depth, reviewer/QA lanes |
+| `review`, `qa` | rubric depth, evidence depth, reviewer/QA lanes |
 | `eval`, `eval-onboarding` | case count, fixture depth, judge strictness, heldout coverage |
 | `optimize-harness`, `self-improve` | candidate count, iteration count, metric budget, rollback gate |
 | `goal-advisor` | execution scope, proof rows, QA/review gates |
@@ -841,7 +841,7 @@ eval owns:
 skill-maintenance owns:
   first-load todo shape, skill audit writeback, and guardrail placement
 
-agent-qa-test or reviewer owns:
+qa adversarial mode or reviewer owns:
   adversarial or independent judgment of real behavior
 
 qa owns:

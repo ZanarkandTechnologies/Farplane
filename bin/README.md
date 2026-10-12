@@ -164,10 +164,10 @@ success quiet and make failure output the thing that stands out.
 
 - `python3 skills/skill-maintenance/scripts/install_selected_skills.py --search frontend`
   Use to discover shareable skills without rendering the full Farplane config.
-- `python3 skills/skill-maintenance/scripts/install_selected_skills.py --skills review,visual-qa --dry-run`
+- `python3 skills/skill-maintenance/scripts/install_selected_skills.py --skills review,qa visual mode --dry-run`
   Use to preview selected skill symlinks into `~/.codex/skills`.
-- `python3 skills/pr-review-watch/scripts/pr_review_watch.py classify --repo <repo> --pr <number> --json`
-  Compatibility command for the `pr-review-watch` skill-owned classifier.
+- `python3 skills/commit/scripts/pr_review_watch.py classify --repo <repo> --pr <number> --json`
+  Compatibility command for the `commit` PR watch skill-owned classifier.
 - `python3 bin/validators/check_doc_refs.py`
   Use after moving docs or updating local references. The old top-level
   `bin/check_doc_refs.py` wrapper was removed during TASK-0218 bin
@@ -206,7 +206,7 @@ continuation advice, the final-response length retry, and observational telemetr
 - `python3 bin/validators/check_doc_refs.py`
 - `python3 -m unittest bin/validators/test_harness_invariants.py`
 - `python3 -m unittest bin/validators/test_doc_parity.py`
-- `python3 -m unittest skills/pr-review-watch/scripts/test_pr_review_watch.py`
+- `python3 -m unittest skills/commit/scripts/test_pr_review_watch.py`
 - `python3 -m unittest bin/tests/test_ticket_metadata.py`
 - `python3 -m unittest bin/tests/test_ticket_runtime.py`
 - `python3 -m py_compile bin/core/farplane_ticket_runtime.py bin/tests/test_ticket_runtime.py`

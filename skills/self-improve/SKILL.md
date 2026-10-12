@@ -53,7 +53,7 @@ gates:
   packet_approved
 
 routes: goal-advisor | eval | skill-maintenance |
-  agent-qa-test | review
+  qa adversarial mode | review
 
 fails:
   taste_only_optimization; mutation_before_baseline; changing_suite_mid_goal;
@@ -106,7 +106,7 @@ with `report_now`, `request_feedback`, and `stop`.
      conditions, and source refs. Generate initial intervention hypotheses with
      expected observations, falsifiers, expected compounding rewards, and short
      reward bases in ticket-local `hypothesis-tree.json`.
-   - [ ] Route adversarial cases through `agent-qa-test`; a separate evidence
+   - [ ] Route adversarial cases through `qa` adversarial mode; a separate evidence
      reviewer must accept a case before Eval does. The tester cannot approve its
      own case.
    - [ ] When several credible initial leaves need judgment, apply
@@ -192,7 +192,7 @@ launcher.
 - [Gotchas](references/gotchas.md) — load for leakage, overfitting, or bloat.
 - [Bounded source upgrades](../skill-maintenance/references/upgrade-skill-from-sources.md)
   — load only when local evidence is insufficient.
-- [Adversarial agent proof](../agent-qa-test/SKILL.md) — load when a proposed
+- [Adversarial agent proof](../qa/SKILL.md) — load when a proposed
   case needs separate tester and evidence-review lanes.
 
 ## Output

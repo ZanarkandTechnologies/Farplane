@@ -34,10 +34,11 @@ their default styling automatically; apply the accepted visual constraints.
 - React Flow or another graph library: inspect its current official docs and
   examples after the ticket establishes the node/edge model.
 - Generated or rendered website media: use the owning image, video, or
-  Remotion advisor and preserve its asset receipt in the ticket.
+  HyperFrames route (`ai-image`, `ai-video`, `/hyperframes`) and preserve its
+  asset receipt in the ticket.
 
 ## Proof
 
 Name the component state, responsive breakpoint, browser evidence, and visual
 judgment required by `tickets/TASK-XXXX/design.md`. Route source checks through
-`web-design-guidelines` and screenshots through `visual-qa` only at QA/review.
+`code-health` review mode and screenshots through `qa` visual mode only at QA/review.

@@ -1,8 +1,8 @@
 ---
 name: visual-design
 version: 1.0.0
-description: "Turn an accepted UI workflow and visual references into a visual system, anti-patterns, and a planning handoff."
-department: operations
+description: "Use for \"make it look good\", \"pick a visual style\", \"it looks generic\" or \"define the design system\": a reference-backed visual system, anti-patterns and a planning handoff."
+department: delivery
 source: local
 allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 ---
@@ -14,7 +14,7 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 
 - [ ] Confirm the functional basis: user, primary action, states, workflow, and
   existing UX decision. If missing, route to
-  [functional-ui](../functional-ui/SKILL.md).
+  [prd](../prd/SKILL.md).
 - [ ] Run the **Steve Jobs Focus & Simplicity Pass**: state the user-facing
   benefit, visual focal action, elements to remove or defer, and deliberate
   `no`; preserve functional requirements, accessibility, and necessary state.
@@ -76,19 +76,19 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 ## Use When
 
 - The user asks for visual polish, better aesthetics, taste, style, hierarchy, typography, color, density, or brand fit.
-- `functional-ui` has already decided how the surface should work.
+- `prd` workflow mode has already decided how the surface should work.
 - `impl-plan` needs a visual brief before composing UI implementation work.
 - A UI looks generic, default, AI-made, or visually incoherent.
 
 ## Do Not Use When
 
-- The workflow, IA, or component behavior is still broken: use `functional-ui` first.
+- The workflow, IA, or component behavior is still broken: use `prd` workflow mode first.
 - The target is a one-page marketing or cinematic landing page: use `landing-page` first, then this skill for visual system decisions.
 - The task is only code wiring with a fixed design system.
 
 ## Core Workflow
 
-1. **Confirm functional basis.** Identify the user, primary action, states, and interaction model. If missing, route to `functional-ui`.
+1. **Confirm functional basis.** Identify the user, primary action, states, and interaction model. If missing, route to `prd` workflow mode.
 2. **Run the Steve Jobs Focus & Simplicity Pass.** State the user-facing benefit, visual focal action, elements to remove or defer, and deliberate `no`; do not remove functional requirements, accessibility, or necessary state.
 3. **Lock reference fidelity.** When the operator named references, palette, or fonts, get a yes on the steal table first. Concept, directions, dials, and visual system then work inside those values.
 4. **Classify register.** Product UI serves repeated work; brand UI creates memory and desire. Choose the register before taste decisions.

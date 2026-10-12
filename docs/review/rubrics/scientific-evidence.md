@@ -1,7 +1,7 @@
 # Scientific Evidence
 
 Use when reviewing a material experimental conclusion, reproduction, ablation,
-or causal claim after `agent-qa-test:experiment` has produced a diagnosis
+or causal claim after `eval:experiment` has produced a diagnosis
 receipt and any bounded probe/rerun receipts.
 
 Required TAS: `TAS-A` for `method_refuted_in_scope`, material trust removal, or

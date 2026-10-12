@@ -1,12 +1,13 @@
 ---
 name: commit
 version: 0.6.0
-description: "Turn the shared checkout's current changes into one labelled commit on main and, when asked to push, publish it straight to main."
+description: "Use for \"commit this\", \"push it\" or \"watch this PR\": one labelled commit on main, a push straight to main when asked, or a bounded watch on an open PR."
+department: delivery
 source: local
 capability:
   kind: shortcut
 template_uses:
-  skill-template: "0.6.2"
+  skill-template: "0.6.5"
   skill-eval-task: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash
 ---
@@ -21,7 +22,8 @@ has changed, not only this thread's files. The subject names this thread's
 change; the body labels what other threads left in progress. Imperfect history
 is the accepted price of never waiting on, merging with, or unstaging another
 thread. When the operator asks to push, push `main` straight to `origin/main`.
-Open a PR only when the operator asks for one.
+Open a PR only when the operator asks for one; watching an open PR's checks
+and review comments is the PR-branch-only [PR watch](references/pr-review-watch.md).
 
 ## Skill Signature
 
@@ -91,6 +93,8 @@ returns: commit SHA, subject, this thread's paths, other included paths, gate wa
 - [commit message style](references/style.md)
 - [push to main](references/push-main.md)
 - [PR publication](references/single-worktree-pr.md)
+- [PR review watch](references/pr-review-watch.md) - PR branches only:
+  classify, fix actionable comments, one visible heartbeat per wait.
 
 ## Output
 

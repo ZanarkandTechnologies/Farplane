@@ -1,8 +1,8 @@
 ---
 name: review-dashboard
-description: "Review a dashboard screen, or a whole app's dashboards, against ten clarity and consistency criteria and the closest real products, then return a keep, fix, merge or cut verdict with Before/After changes."
+description: "Use for \"review this dashboard\", \"is this screen clear\" or \"audit our dashboards\": ten clarity and consistency criteria plus the closest real products, then keep, fix, merge or cut with Before/After."
 source: local
-department: operations
+department: delivery
 template_uses:
   skill-template: "0.6.3"
 allowed-tools: Read, Glob, Grep, Bash, WebSearch, WebFetch
@@ -18,7 +18,7 @@ question it exists to answer, measures what the first screen actually shows on
 real data, compares it with the closest real products, and returns the smallest
 change set. It reviews; it does not redesign the visual system (that is
 `visual-design`) or diff a build against an accepted board (that is
-`visual-qa`).
+`qa` visual mode).
 
 ## Skill Signature
 

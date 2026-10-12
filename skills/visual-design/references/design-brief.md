@@ -95,7 +95,7 @@ QA gates:
 ## Rules
 
 - Keep design brief text concrete enough to build from.
-- Do not let the brief replace `functional-ui`; it assumes workflow and states
+- Do not let the brief replace `prd` workflow mode; it assumes workflow and states
   are already known.
 - Record numeric taste dials.
 - Record the concept, the directions considered, and the render receipt.

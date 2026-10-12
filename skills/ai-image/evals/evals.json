@@ -1,0 +1,134 @@
+{
+  "skill_name": "ai-image",
+  "evals": [
+    {
+      "id": "ai_image_precise_edit_01",
+      "prompt": "Here's hero.png from the landing page. Can you swap the coffee mug for a matte black tumbler through treg? Keep everything else exactly as it is.",
+      "expected_output": "Classifies the request as edit mode even though treg was named; routes to Ideogram 4.5 Precise Edit via farplane run, gets a free dry_run price quote before the paid call; writes a prompt that lists what must stay unchanged; saves source, prompt, result and final file locally; inspects the unchanged regions before accepting; logs the spend line. If the Ideogram key is missing it falls back to Seedream and says it re-dresses the whole set rather than editing precisely.",
+      "files": [],
+      "assertions": [
+        "Chooses edit mode and Ideogram 4.5 Precise Edit despite the operator naming treg",
+        "Names a dry_run price quote before any paid call",
+        "Prompt states the elements that must not change",
+        "Any Seedream fallback is disclosed as not a precise edit",
+        "Accepts only an inspected local file, not a job id, and adds a spend-log line"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "ai-image precise edit route 01",
+          "tags": [
+            "skill",
+            "ai-image",
+            "edit",
+            "ideogram",
+            "spend"
+          ],
+          "notes": "New row for the merged skill; carries the Editing Default of the former AI Image Advisor skill, which had no evals."
+        }
+      }
+    },
+    {
+      "id": "ai_image_exact_ui_text_01",
+      "prompt": "Make me a hero image for the launch post showing our dashboard with the headline 'Ship agents that prove their work' and the real revenue card numbers from this screenshot.",
+      "expected_output": "Refuses to rely on the image model for the headline or the dashboard numbers; composites the real screenshot or renders the text deterministically over a generated background; quotes the treg price for the generated part; saves and inspects the final asset and checks every text string against the supplied copy.",
+      "files": [],
+      "assertions": [
+        "Does not ask the image model to render the exact headline or dashboard numbers",
+        "Composites the real screen or uses a deterministic text layer",
+        "Quotes the treg price before generating the background",
+        "Checks the final text against the supplied copy during inspection"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "ai-image exact UI text 01",
+          "tags": [
+            "skill",
+            "ai-image",
+            "create",
+            "text-fidelity"
+          ],
+          "notes": "New row for the merged skill; encodes the kept exact-UI-text rule from infographic and product-photography gotchas."
+        }
+      }
+    },
+    {
+      "id": "ai_image_infographic_handdrawn_01",
+      "prompt": "Make a monochrome hand-sketched infographic that explains four states of our AI operations dashboard: today pulse, worker team, worker detail, and integrations. It needs lots of readable UI labels and callout arrows.",
+      "expected_output": "Selects infographic mode and loads references/handdrawn-saas-wireframe.md; names the text-fidelity risk and prefers a deterministic render or mixed deterministic-plus-texture route; produces a copy inventory before any image prompt; includes style constraints: monochrome, hand-drawn, dense SaaS UI, callout arrows, no gradients or photorealism; saves and inspects the rendered file.",
+      "files": [
+        "references/handdrawn-saas-wireframe.md",
+        "examples/handdrawn-saas-wireframe/example.md"
+      ],
+      "assertions": [
+        "Selects infographic mode and loads references/handdrawn-saas-wireframe.md",
+        "Names text fidelity risk and prefers deterministic render or mixed deterministic-plus-texture route",
+        "Produces copy inventory before image prompt",
+        "Includes style constraints: monochrome, hand-drawn, dense SaaS UI, callout arrows, no gradients or photorealism"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "ai-image infographic hand-drawn 01",
+          "tags": [
+            "skill",
+            "ai-image",
+            "infographic"
+          ],
+          "notes": "Carried from infographic handdrawn-saas-wireframe-routing."
+        }
+      }
+    },
+    {
+      "id": "ai_image_product_marketplace_01",
+      "prompt": "I need an Amazon listing set for our water bottle: a hero, a couple of detail close-ups of the cap and texture, and one lifestyle shot in a gym. I've attached the studio photo.",
+      "expected_output": "Selects product mode with marketplace as the primary shot kind and hero, detail and lifestyle as supporting kinds; builds a shot matrix with channel, aspect ratio, background, source asset and route; uses the supplied studio photo through Ideogram edits or compositing so the real label is not redrawn by a model; quotes spend before paid calls; does not claim Amazon compliance without checking channel requirements; does not upload to the store.",
+      "files": [
+        "references/product-photography.md"
+      ],
+      "assertions": [
+        "Chooses marketplace as primary with hero, detail and lifestyle supporting",
+        "Builds a shot matrix before generating",
+        "Keeps the real product label from the source photo rather than model-drawn text",
+        "Does not claim marketplace compliance without checking requirements",
+        "Does not upload or change the store listing"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "ai-image product marketplace 01",
+          "tags": [
+            "skill",
+            "ai-image",
+            "product",
+            "marketplace"
+          ],
+          "notes": "Carried from product-photography references/method-selection-smoke.md supporting-method case (product-photography had no evals.json)."
+        }
+      }
+    },
+    {
+      "id": "ai_image_reel_collage_01",
+      "prompt": "Turn these four photos into a background for my talking-head reel, I'll be keyed over the middle: ./shots/desk.jpg ./shots/robot.jpg ./shots/office.jpg ./shots/street.jpg",
+      "expected_output": "Selects collage mode; runs skills/ai-image/scripts/make_collage.py with the four sources at 1080x1920 rather than rewriting the compositor; keeps faces out of the centre frame (position or source choice) because the speaker is keyed there; adds no baked-in text; saves the output and sources notes in the workspace; inspects the collage and reports crop caveats; publishes nothing.",
+      "files": [
+        "references/collage.md",
+        "scripts/make_collage.py"
+      ],
+      "assertions": [
+        "Runs scripts/make_collage.py instead of writing a new compositor",
+        "Keeps faces out of the centre where the speaker is keyed",
+        "Adds no baked-in text",
+        "Reports the saved output path and crop caveats after inspecting it"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "ai-image reel collage 01",
+          "tags": [
+            "skill",
+            "ai-image",
+            "collage"
+          ],
+          "notes": "New row from the reel-collage todo list and gotchas (reel-collage had no evals.json)."
+        }
+      }
+    }
+  ]
+}

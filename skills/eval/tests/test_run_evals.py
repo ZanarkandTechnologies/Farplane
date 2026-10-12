@@ -5,10 +5,12 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import shlex
 import sys
 import tempfile
 import textwrap
 import unittest
+import unittest.mock
 from pathlib import Path
 
 
@@ -447,6 +449,18 @@ class EvalRunnerTests(unittest.TestCase):
 
         self.assertEqual(args[-5:], ["--ephemeral", "--disable", "hooks", "-c", "notify=[]"])
 
+    def test_claude_runs_carry_the_eval_marker_hooks_skip(self) -> None:
+        seen: dict[str, object] = {}
+
+        def fake_run(command, **kwargs):
+            seen.update(kwargs)
+            return runner.subprocess.CompletedProcess(command, 0, stdout="ok", stderr="")
+
+        with tempfile.TemporaryDirectory() as tmp, unittest.mock.patch.object(runner.subprocess, "run", side_effect=fake_run):
+            runner.run_claude("prompt", Path(tmp) / "out.txt", Path(tmp), [])
+
+        self.assertEqual(seen["env"]["FARPLANE_CODEX_RUNTIME_PURPOSE"], "eval")
+
     def test_codex_profile_rejects_path_like_names(self) -> None:
         with self.assertRaises(runner.EvalError):
             runner.codex_extra_args([], "../skill-eval")
@@ -513,7 +527,7 @@ class EvalRunnerTests(unittest.TestCase):
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
 
-            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --prompt-file {{prompt_file}} --output-file {{output_file}}"
             code = runner.main(
                 [
                     "run",
@@ -575,7 +589,7 @@ class EvalRunnerTests(unittest.TestCase):
             )
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
-            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --prompt-file {{prompt_file}} --output-file {{output_file}}"
 
             code = runner.main(
                 [
@@ -638,7 +652,7 @@ class EvalRunnerTests(unittest.TestCase):
             write_tasks(qa_eval)
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
-            template = f"{sys.executable} {fake_cli} --skill-event qa --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --skill-event qa --prompt-file {{prompt_file}} --output-file {{output_file}}"
 
             code = runner.main(
                 [
@@ -687,7 +701,7 @@ class EvalRunnerTests(unittest.TestCase):
             for output_kind in ("planner-json", "text"):
                 with self.subTest(output_kind=output_kind):
                     template = (
-                        f"{sys.executable} {fake_cli} --output-kind {output_kind} "
+                        f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --output-kind {output_kind} "
                         "--prompt-file {prompt_file} --output-file {output_file}"
                     )
                     code = runner.main(
@@ -738,7 +752,7 @@ class EvalRunnerTests(unittest.TestCase):
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
 
-            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --prompt-file {{prompt_file}} --output-file {{output_file}}"
             code = runner.main(
                 [
                     "run",
@@ -782,7 +796,7 @@ class EvalRunnerTests(unittest.TestCase):
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
 
-            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --prompt-file {{prompt_file}} --output-file {{output_file}}"
             code = runner.main(
                 [
                     "run",
@@ -821,7 +835,7 @@ class EvalRunnerTests(unittest.TestCase):
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
 
-            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --prompt-file {{prompt_file}} --output-file {{output_file}}"
             code = runner.main(
                 [
                     "run",
@@ -861,7 +875,7 @@ class EvalRunnerTests(unittest.TestCase):
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
 
-            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --prompt-file {{prompt_file}} --output-file {{output_file}}"
             code = runner.main(
                 [
                     "run",
@@ -959,7 +973,7 @@ class EvalRunnerTests(unittest.TestCase):
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
 
-            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --prompt-file {{prompt_file}} --output-file {{output_file}}"
             code = runner.main(
                 [
                     "run",
@@ -1002,7 +1016,7 @@ class EvalRunnerTests(unittest.TestCase):
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
 
-            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --prompt-file {{prompt_file}} --output-file {{output_file}}"
             code = runner.main(
                 [
                     "run",
@@ -1045,7 +1059,7 @@ class EvalRunnerTests(unittest.TestCase):
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
 
-            template = f"{sys.executable} {fake_cli} --skill-event qa --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --skill-event qa --prompt-file {{prompt_file}} --output-file {{output_file}}"
             code = runner.main(
                 [
                     "run",
@@ -1132,7 +1146,7 @@ class EvalRunnerTests(unittest.TestCase):
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
 
-            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            template = f"{shlex.quote(sys.executable)} {shlex.quote(str(fake_cli))} --prompt-file {{prompt_file}} --output-file {{output_file}}"
             code = runner.main(
                 [
                     "run",

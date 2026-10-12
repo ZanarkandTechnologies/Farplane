@@ -46,7 +46,7 @@ Use these as starting points, then narrow or expand based on the concrete task:
 - Eval change: `eval-quality`, `evidence-quality`, `integration-readiness`
 - UI or user-facing workflow: `user-intent-satisfaction`, `ui-quality`,
   `frontend-guidelines`, `frontend-code-maintainability` when source structure
-  matters, `vercel-react-best-practices` when React/Next.js performance is in
+  matters, `code-health` UI review (React rules) when React/Next.js performance is in
   scope, and `evidence-quality`
 - Cleanup/refactor/runtime/doc simplification: `debloatability`,
   `integration-readiness`, `evidence-quality`

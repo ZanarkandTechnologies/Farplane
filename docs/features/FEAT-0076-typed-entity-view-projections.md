@@ -22,7 +22,7 @@ surfaces:
   - bin/core/farplane_wiki.py
   - docs/farplane-framework/entity-view-projection-standard.md
   - docs/farplane-framework/entity-markdown-authoring.md
-  - skills/init-advisor/scripts/bootstrap.sh
+  - skills/setup-advisor/scripts/bootstrap.sh
 source_refs:
   - docs/farplane-framework/entities.md
 external_refs: []
@@ -116,7 +116,7 @@ flowchart LR
   - `docs/farplane-framework/entity-view-projection-standard.md`
 - Supporting surfaces:
   - `docs/farplane-framework/entity-markdown-authoring.md`
-  - `skills/init-advisor/scripts/bootstrap.sh`
+  - `skills/setup-advisor/scripts/bootstrap.sh`
 - Generated surfaces:
 - `.farplane/views/<view-id>.json`
   - bounded normalized view membership in the Wiki graph plus typed interpretation

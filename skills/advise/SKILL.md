@@ -116,7 +116,7 @@ preview** before the recommendation:
   synthesis-needed handoff rather than silently expanding this shortcut.
 - Do not run an ensemble unless the operator explicitly requests `auto` or
   `max`; normal advice stays fast and single-agent.
-- Hand UI/UX-facing choices to `functional-ui`.
+- Hand UI/UX-facing choices to `prd` workflow mode.
 - Embed this inside `impl-plan` for coding implementation plans.
 
 ## Gotchas

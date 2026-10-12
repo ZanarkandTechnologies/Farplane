@@ -1,0 +1,51 @@
+# Git Hooks
+
+These hooks are optional. `setup-advisor` scaffolds them so each repo has a
+clear place for local quality gates, but nothing is enabled automatically.
+
+## Recommended Default
+
+Use `pre-push` for the heavier local gate:
+
+- large-file scan: warn at `500` raw lines, block at `1000`
+- project-owned local validators such as lint, typecheck, tests, and optional build
+- advisory Codex SDK diff review after deterministic checks
+- optional advisory agent review
+
+Use `pre-commit` only when you explicitly want a smaller fast gate before each
+commit.
+
+## Activate
+
+To make this repo use `.githooks/`:
+
+```bash
+git config core.hooksPath .githooks
+chmod +x .githooks/pre-push
+```
+
+If you also want the optional pre-commit hook:
+
+```bash
+chmod +x .githooks/pre-commit
+```
+
+## Notes
+
+- The sample hooks call repo-local validation scripts first:
+  - `scripts/pre_commit_check.sh`
+  - `scripts/pre_push_check.sh`
+- `scripts/pre_push_check.sh` is the main policy surface. Put project-specific
+  commands and exclusions there rather than expanding the hook itself.
+- The `pre-push` hook runs the local Codex SDK diff reviewer by default when
+  configured. Use `FARPLANE_SKIP_AGENT_REVIEW=1` to skip it or
+  `STRICT_AGENT_REVIEW=1` to make it blocking.
+- The local diff reviewer should read the installed Farplane `code-health`
+  review contract from `~/.codex/skills/code-health/references/review.md` when
+  available. Run the Farplane install script to keep skills and review rubrics
+  linked into `~/.codex`.
+- Use Farplane reviewer agents for material review instead of external
+  pre-push review CLIs.
+- Utility-sharing warnings should stay advisory by default. Put the real shared
+  utility placement convention in `AGENTS.md`.
+- Remove or rename the hook files if the project should not use them.

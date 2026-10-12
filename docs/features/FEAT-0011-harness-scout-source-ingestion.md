@@ -9,7 +9,7 @@ tags:
   - feature
   - sys-0008
 refs:
-  - skills/harness-scout
+  - skills/feed-scout
   - docs/features/registry.jsonl
   - docs/HISTORY.md
 feature_id: FEAT-0011
@@ -17,14 +17,14 @@ system_id: SYS-0008
 category: source-ingestion
 public: true
 surfaces:
-  - skills/harness-scout
+  - skills/feed-scout
   - docs/features/registry.jsonl
 source_refs:
   - docs/HISTORY.md
 external_refs:
   - https://www.youtube.com/watch?v=2zhchG0r6iI
 evidence_refs:
-  - skills/harness-scout/SKILL.md
+  - skills/feed-scout/references/single-source.md
   - docs/sources/registry.jsonl
   - docs/HISTORY.md
 known_limits: Manual scorecard and dedupe workflow only; no cron polling, OpenClaw integration, or async Codex benchmark runner.
@@ -67,7 +67,7 @@ candidate, ticket, or rejection note.
 
 ## What It Does
 
-- Ingests high-signal external sources into a local harness-scout run directory.
+- Ingests high-signal external sources into a local feed-scout run directory (single-source mode).
 - Scores variants with a manual decision matrix instead of treating every source as automatically useful.
 - Classifies findings as adopt, adapt, reject, or defer.
 - Dedupes candidates against existing features, docs, skills, and tickets.
@@ -98,7 +98,7 @@ flowchart TD
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   trigger["Trigger<br/>external source or inspiration target"]:::keep
-  owner["Owner surface<br/>skills/harness-scout<br/>docs/sources/registry.jsonl"]:::changed
+  owner["Owner surface<br/>skills/feed-scout<br/>docs/sources/registry.jsonl"]:::changed
   readers["Files and fields read<br/>source URL, extraction question<br/>score basis, owner-surface candidates"]:::keep
   decision["Decision record<br/>adopt, adapt, reject, or defer<br/>with rationale"]:::changed
   artifact["Created artifact/evidence<br/>source record, scout report<br/>or ticket handoff"]:::added
@@ -119,7 +119,7 @@ Legend:
 
 Owner surfaces:
 
-- `skills/harness-scout`
+- `skills/feed-scout`
 - `docs/features/registry.jsonl`
 
 Source context:
@@ -132,7 +132,7 @@ External context:
 
 Evidence:
 
-- `skills/harness-scout/SKILL.md`
+- `skills/feed-scout/references/single-source.md`
 - `docs/sources/registry.jsonl`
 - `docs/HISTORY.md`
 

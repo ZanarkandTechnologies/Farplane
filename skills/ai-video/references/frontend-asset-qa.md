@@ -26,7 +26,7 @@ Tell `impl-plan` and the ticket build lane:
 
 ## Visual QA
 
-Run `visual-qa` when:
+Run `qa` visual mode when:
 
 - the video is first-viewport hero media
 - the clip establishes brand/taste quality

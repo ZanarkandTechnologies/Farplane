@@ -25,13 +25,13 @@ language, trends, notable things, and source gaps. Merge or replace current
 synthesis in place—do not append daily snapshots or a monthly timeline. Report at
 most one direct recovery candidate, only for an evidenced existing failure with
 known fix, KPI/guard, proof, and no experiment debt; never create the issue.
-Opportunities remain candidates for the next-wave planner. Do not execute tickets.
+Opportunities remain report candidates for the operator to pick. Create and execute no tickets.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 config_ref = "farplane/bindings.yaml#feed_scout"
 window = "last_24h"
-recovery_ticket_limit = 1
+recovery_candidate_limit = 1
 write_policy = "no task-record writes; recovery and opportunity candidates stay in the report"
 
 Final response:
@@ -40,7 +40,7 @@ Final response:
   refs, and validation result.
 - List the direct recovery candidate, or `none`.
 - List candidate interventions and their admission result:
-  `recovery_candidate`, `planner_candidate`, `source_gap`, `blocked_by_gate`, or `not_ticketable`.
+  `recovery_candidate`, `candidate`, `source_gap`, `blocked_by_gate`, or `not_actionable`.
 - Name source gaps, external side-effect gates, and next owner.
 - Include the no-execution receipt.
 

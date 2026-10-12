@@ -16,11 +16,11 @@
 2. Include `frontend-guidelines` when UI source files changed.
 3. Include `frontend-code-maintainability` when changed frontend files are long,
    stateful, provider-like, component-heavy, or expected to keep growing.
-4. Include `vercel-react-best-practices` as a supporting skill when React or
+4. Include `code-health` UI review (React rules) as a supporting skill when React or
    Next.js performance, bundle size, data fetching, waterfalls, rerenders, or
    rendering behavior are in scope.
-5. Run `web-design-guidelines` on the changed UI files.
-6. Include `visual-qa` evidence when rendered UI proof is in scope.
+5. Run `code-health` UI review on the changed UI files.
+6. Include `qa` visual mode evidence when rendered UI proof is in scope.
 7. Compare `ui-quality`, `frontend-guidelines`, and
    `frontend-code-maintainability` TAS verdicts for alignment.
 

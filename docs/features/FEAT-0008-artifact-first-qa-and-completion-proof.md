@@ -115,7 +115,7 @@ Proof scales with risk, blast radius, and user-facing impact.
 - Reviewer owns material judgment of plans, implementations, prompts, evidence, and completion claims.
 - For a new terminal close, the issue body is deliberately glanceable:
   `Before`, `After`, `Example`, `Key decisions`, and compact `Proof`. Material
-  feature tickets require the passing independently reviewed `$demo` MP4 as
+  feature tickets require the passing independently reviewed `$qa closeout` MP4 as
   the first marked browser comment; explicitly selected screenshots may follow.
 - Core renders and creates or resumes the marked issue, then verifies its body
   and every expected media comment before closing it. The agent only uploads
@@ -130,7 +130,7 @@ Proof scales with risk, blast radius, and user-facing impact.
   and evidence limits; tickets and caller workflows own rubric routing.
 - Review keeps neighboring-surface skepticism inside the selected rubric family.
   Suspected implementation bloat routes to the `code-health` lean gate; prose cleanup routes
-  to `unslop` instead of a parallel catch-all cleanup rubric.
+  to the `copywriting` final pass (formerly `unslop`) instead of a parallel catch-all cleanup rubric.
 - Purchase-conviction review requires one explicit buyer, a credible product or
   offer, the current alternative, price or equivalent commitment, and material
   adoption constraints. Buying groups are reviewed one role at a time.

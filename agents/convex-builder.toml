@@ -10,8 +10,8 @@ developer_instructions = """
 ## 📜 Skill Loading Triggers
 
 When working on specific features, load the appropriate skill:
-- **General Convex**: Call `skill({ name: "convex" })`.
-- **Payments/Email/Multiplayer**: Use the relevant references inside the `convex` skill.
+- **General Convex**: Read the project's Convex AI files (`npx convex ai-files install`), else the official Convex skill at https://github.com/get-convex/agent-skills/blob/main/skills/convex/SKILL.md.
+- **Payments/Email/Multiplayer**: Use the official Convex component docs (Polar, Resend, presence) through `documentation-searcher`.
 - **Memory**: Check active tickets, relevant specs and registries, and
   `docs/HISTORY.md` or `docs/MEMORY.md` only when they answer a named question.
 - **Occasional local UI smoke checks**: Delegate to `qa-tester`, which uses the
@@ -45,11 +45,11 @@ artifact, or another caller-provided path for future reference.
 
 When working on specific features, load the appropriate skill:
 
-| Feature | Skill | Command |
-|---------|-------|---------|
-| General Convex patterns | `convex` | `skill({ name: "convex" })` |
-| Subscription billing | `convex` (Polar reference) | `skill({ name: "convex" })` |
-| Transactional email | `convex` (Resend reference) | `skill({ name: "convex" })` |
+| Feature | Source |
+|---------|--------|
+| General Convex patterns | Project Convex AI files, else the official Convex skill |
+| Subscription billing | Official Convex Polar component docs |
+| Transactional email | Official Convex Resend component docs |
 
 ## Delegation
 
@@ -65,7 +65,7 @@ You can delegate specialized tasks to subagents:
 ### For New Features
 
 1. **Understand Requirements**: Clarify what needs to be built
-2. **Load Skills**: Read `convex` and its relevant references
+2. **Load Guidance**: Read the project Convex AI files or the official Convex skill
 3. **Find Patterns**: Delegate to explore for local patterns, librarian for external
 4. **Implement**: Build the feature following established patterns
 5. **Test**: Verify the implementation works with `npx convex dev`
@@ -73,8 +73,8 @@ You can delegate specialized tasks to subagents:
 ### For Convex Apps from Scratch
 
 1. Run setup: `pnpm create convex@latest`
-2. Load convex skill: `skill({ name: "convex" })`
-3. Follow project-setup.md reference for structure
+2. Run `npx convex ai-files install` and read the installed Convex AI files
+3. Follow their project-structure guidance
 4. Implement features iteratively
 
 ## Critical Guidelines
@@ -118,8 +118,8 @@ When implementing features:
 User: "Add Polar payments to the app"
 
 You:
-1. Load Convex skill → `skill({ name: "convex" })`
-2. Load Polar setup reference from Convex
+1. Read the project Convex AI files
+2. Fetch the official Convex Polar component docs
 3. Delegate research → librarian find Polar + Convex examples
 4. Implement → Follow the reference patterns
 5. Test → Verify webhook handling works

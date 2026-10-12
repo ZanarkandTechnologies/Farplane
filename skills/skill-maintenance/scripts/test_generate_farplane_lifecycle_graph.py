@@ -109,7 +109,7 @@ routes:
         nodes = {node["id"] for node in graph["nodes"]}
         edges = {(edge["source"], edge["target"], edge["type"]) for edge in graph["edges"]}
 
-        self.assertIn("skill:init-advisor", nodes)
+        self.assertIn("skill:setup-advisor", nodes)
         self.assertIn("file:farplane/metrics.yaml", nodes)
         self.assertNotIn("file:farplane/goals.yaml", nodes)
         self.assertIn("skill:goal-advisor", nodes)
@@ -222,8 +222,8 @@ routes:
             (repo / "farplane").mkdir()
             (repo / "config").mkdir()
             (repo / "skills" / "alpha-skill").mkdir(parents=True)
-            (repo / "skills" / "init-advisor").mkdir(parents=True)
-            (repo / "skills" / "harness-creator").mkdir(parents=True)
+            (repo / "skills" / "setup-advisor").mkdir(parents=True)
+            (repo / "skills" / "prd").mkdir(parents=True)
             (repo / "docs" / "root.md").write_text(
                 "See [second](docs/second.md), [child](docs/child.md), and alpha-skill.\n",
                 encoding="utf-8",
@@ -236,12 +236,12 @@ routes:
                 "---\nname: alpha-skill\ndescription: test\n---\n",
                 encoding="utf-8",
             )
-            (repo / "skills" / "init-advisor" / "SKILL.md").write_text(
-                "---\nname: init-advisor\ndescription: test\n---\n",
+            (repo / "skills" / "setup-advisor" / "SKILL.md").write_text(
+                "---\nname: setup-advisor\ndescription: test\n---\n",
                 encoding="utf-8",
             )
-            (repo / "skills" / "harness-creator" / "SKILL.md").write_text(
-                "---\nname: harness-creator\ndescription: test\n---\n",
+            (repo / "skills" / "prd" / "SKILL.md").write_text(
+                "---\nname: prd\ndescription: test\n---\n",
                 encoding="utf-8",
             )
             (repo / "farplane" / "manifest.json").write_text(
@@ -275,8 +275,8 @@ routes:
         self.assertIn(("file:docs/root.md", "file:docs/second.md", "markdown-link"), edges)
         self.assertIn(("file:docs/root.md", "skill:alpha-skill", "mentions-skill"), edges)
         self.assertIn(("workflow:lifecycle", "workflow:bootstrap", "workflow-stage"), edges)
-        self.assertIn(("workflow:bootstrap", "skill:init-advisor", "workflow-skill"), edges)
-        self.assertIn(("skill:init-advisor", "skill:harness-creator", "workflow-next"), edges)
+        self.assertIn(("workflow:bootstrap", "skill:setup-advisor", "workflow-skill"), edges)
+        self.assertIn(("skill:setup-advisor", "skill:prd", "workflow-next"), edges)
 
     def test_temp_artifacts_match_fresh_generation(self) -> None:
         repo = Path(__file__).resolve().parents[3]

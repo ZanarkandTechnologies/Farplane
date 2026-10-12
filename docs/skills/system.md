@@ -191,7 +191,7 @@ Core primitives are small moves or provider contracts that many workflows need
 as base obligations. Farplane's current core behavior primitives are:
 
 - `advise`: choose among real options and name the recommendation.
-- `consolidate`: compress artifacts into their minimal owner-correct form while
+- `doc-advisor` consolidate mode: compress artifacts into their minimal owner-correct form while
   preserving required behavior, proof, IDs, and actionability.
 
 Grounding one claim is not a skill: the global contract's `Grounding:` rule
@@ -248,7 +248,7 @@ skills into a new skill.
 Boundary examples:
 
 - Generic planning and execution stay in native Codex phases.
-- Artifact-producing skills such as `impl-plan`, `spec-to-ticket`, and
+- Artifact-producing skills such as `impl-plan` and
   `goal-advisor` remain callable because they return domain-owned tickets,
   programs, or proof-bearing plans.
 - `review` is better understood as a review protocol and rubric/TAS contract.
@@ -263,7 +263,7 @@ actually hands work to, not every primitive it might touch.
 - Link a shared interface (`research` with its branch, a domain
   workflow interface) when it is a real invocable contract the step needs.
 - Link a peer domain skill when the flow has an intentional handoff.
-- Link a core primitive (`advise`, `consolidate`)
+- Link a core primitive (`advise`, `doc-advisor` consolidate mode)
   only when the skill owns that step in its first-load contract;
   otherwise let the interface carry it.
 - Phase-protocol steps do not need skill links or skill-local phase sections.
@@ -382,7 +382,7 @@ This marker is backed by `FEAT-0062` and checked by
 default `10 / 5` budget: 10 top-level `SKILL.md` todos and 5 skill-local eval
 tasks. Before adding item N+1,
 run `skill-maintenance.refine_skill` with
-`consolidate(target = edited_skill, structure = skill)` and keep, merge, move,
+`doc_advisor(mode = consolidate, target = edited_skill, structure = skill)` and keep, merge, move,
 or delete units by value rather than appending by default.
 
 ## Source Ownership

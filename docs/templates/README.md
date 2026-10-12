@@ -25,8 +25,8 @@ The registry is deliberately focused on high-leverage surfaces:
 - `skills/skill-creator/references/EVAL_TASK_TEMPLATE.json`
 - `tickets/templates/ticket.md`
 - `tickets/templates/goal-loop/program.md`
-- `skills/harness-creator/templates/project-harness.md`
-- `skills/init-advisor/references/MANIFEST_TEMPLATE.json`
+- `skills/setup-advisor/templates/project-harness.md`
+- `skills/setup-advisor/references/MANIFEST_TEMPLATE.json`
 - `docs/templates/HUMAN_REPORT_TEMPLATE.md` (prototype consumer only)
 
 Each tracked template declares:

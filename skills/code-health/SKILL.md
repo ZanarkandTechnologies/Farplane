@@ -2,7 +2,7 @@
 name: code-health
 description: "Use for \"fix this bug\", \"clean this up\", \"review my changes\" or \"audit the codebase\": pick the mode, change the smallest thing, prove behaviour held, report residual risk."
 source: local
-department: operations
+department: delivery
 template_uses:
   skill-template: "0.6.5"
   skill-eval-task: "0.2.0"
@@ -16,8 +16,9 @@ allowed-tools: Read, Glob, Grep, Bash
 Use this when working code needs a bug fixed, a tidy-up, a pre-push review, a
 safety pass, or a whole-repo audit. One pass runs one mode on one target and
 returns one receipt. It does not design features, plan tickets (`impl-plan`),
-debug UI from screenshots (`visual-qa`), or issue a TAS verdict (`review`).
-To map or explain unfamiliar code, use the `explore` agent first.
+debug UI from screenshots (`qa` visual mode), or issue a TAS verdict (`review`).
+To map or explain unfamiliar code, use the `explore` agent first. For a Convex
+repo, read the official Convex AI instructions before changing backend code.
 
 ## Skill Signature
 
@@ -87,8 +88,9 @@ sample easiest to demo. Example: a date-picker ask lands on `native_platform`
   Rule: Read the whole branch before any hunk. Look for duplicated helpers
   across commits, parallel abstractions and misplaced modules; ask "would a
   future agent know where to extend this from the folder structure alone?"
-  Load `vercel-react-best-practices` when React is touched. Load
-  [review](references/review.md) for priorities and the JSON contract.
+  Load [ui-review](references/ui-review.md) when UI, React or Next.js is
+  touched. Load [review](references/review.md) for priorities and the JSON
+  contract.
 
   Assert:
   - Findings are actionable and ranked; no style nits.
@@ -147,6 +149,8 @@ sample easiest to demo. Example: a date-picker ask lands on `native_platform`
 - [harden](references/harden.md) - risk model, proof choice, residual risk.
 - [audit](references/audit.md) - component ranking, architecture pass, finding
   routes, ticket spec.
+- [ui-review](references/ui-review.md) - Web Interface Guidelines audit, Vercel
+  React/Next.js rules in `references/react-rules/`, Convex pointer.
 
 ## Output
 

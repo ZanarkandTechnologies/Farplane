@@ -1,6 +1,6 @@
 ---
 name: bookmark-recovery
-description: "Turn frozen personal-save source caches into one deduped, prioritized recovery inbox when scheduled capture needs a safe review artifact."
+description: "Use for \"recover my bookmarks\", \"what did I save\", \"triage my saved posts\" or \"who could use this bookmark\": one deduped, prioritized recovery inbox from frozen save caches, with project and people matches."
 department: intelligence
 source: local
 capability:
@@ -78,7 +78,7 @@ returns: inbox path, counts, coverage, routing candidates, and limitations
 - [ ] **N4 — Emit routing without side effects.**
   `ranked candidates -> reviewable inbox + next-owner route`
 
-  Rule: Use `intelligest_candidate`, `ingest_content_candidate`, `dismiss`, or
+  Rule: Use `intelligest_candidate`, `resource_bank_candidate`, `dismiss`, or
   `needs_review` as recommendations only. Do not invoke another skill, create
   Work, write Wiki, or save Resource Bank material.
 

@@ -10,7 +10,7 @@ tags:
   - domain-skill-families
 refs:
   - skills/impl-plan/SKILL.md
-  - skills/functional-ui/SKILL.md
+  - skills/prd/SKILL.md
   - skills/visual-design/SKILL.md
 system_record_json: |
   {
@@ -25,7 +25,7 @@ system_record_json: |
     ],
     "refs": [
       "skills/impl-plan/SKILL.md",
-      "skills/functional-ui/SKILL.md",
+      "skills/prd/SKILL.md",
       "skills/visual-design/SKILL.md"
     ],
     "last_verified": "2026-06-26"
@@ -103,7 +103,7 @@ Domain Skill Families package specialized workflows on top of the same ticket, s
 ## Surfaces
 
 - `skills/impl-plan/SKILL.md`
-- `skills/functional-ui/SKILL.md`
+- `skills/prd/SKILL.md`
 - `skills/visual-design/SKILL.md`
 
 ## Proof And Maintenance

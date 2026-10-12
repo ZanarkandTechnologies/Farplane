@@ -96,18 +96,18 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | --- | --- | --- | --- |
 | Choose among real options and name a recommendation, or sequence a roadmap | `advise` | It starts from first principles, frames 3 viable choices, names one recommendation, and states the accepted tradeoff; `mode: roadmap` sequences phases whose first proof is a completed loop. | The user already gave a direct execution request. |
 | Make a high-stakes or complex recommendation with independent critique | `advise ensemble=auto|max` | It adds three context-selected or all owner-local independent personas, then synthesizes a recommendation with visible dissent and an explicit next owner. | The decision is simple, reversible, already grounded, or only needs concise advice. |
-| Compress an artifact, registry, memory file, or docs tree without losing required value | `consolidate` | It inventories units, finds the owning contract, scores value versus duplication and staleness, preserves exact source rows when required, routes knowledge to its retrieval owner, rebuilds minimally, and runs a loss check. | You only need a reader-facing summary; use the native or CLI summarization path. You need domain-specific skill-package edits; route the final patch through `skill-maintenance`. |
+| Compress an artifact, registry, memory file, or docs tree without losing required value | `doc-advisor` consolidate mode | It inventories units, finds the owning contract, scores value versus duplication and staleness, preserves exact source rows when required, routes knowledge to its retrieval owner, rebuilds minimally, and runs a loss check. | You only need a reader-facing summary; use the native or CLI summarization path. You need domain-specific skill-package edits; route the final patch through `skill-maintenance`. |
 | Write or revise durable docs so they are clear, consistent, and human-usable | `doc-advisor` | It owns doc-quality checks: reader contract, term consistency, duplicate definitions, stale sections, examples, links, and agent-facing commentary cleanup. | You only need compact evidence or official-doc lookup; state `Grounding:` inline. |
 | Choose an honest metric, provider, guard metric, or no-metric rationale; define `metrics.yaml` objectives and guards | `goal-advisor` metric card (`references/metrics.md`) | It turns objectives, eval results, tickets, Goal loops, and proof evidence into a compact metric card with direction, anti-metrics, measurement method, and route hint, plus explicit `metrics.yaml` objective/guard deltas before execution is selected. | You need to execute the loop; use the owning caller such as `optimize-harness`, `self-improve`, `impl-plan`, or `review`. |
 | "Research X", "how do others do this", "who are the competitors", "find the paper" | `research` | One branch (market, code, papers, synthesis) qualifies candidates at the source and returns a ranked evidence note. | One claim needs grounding (state `Grounding:` inline), or the target is one person or account (`prospect`). |
 | Add independent perspectives to a skill that owns an ensemble | `ensemble=auto|max` on that skill | `auto` selects exactly three relevant diverse personas from the skill's `ensemble.yaml`; `max` runs all of them and preserves dissent in synthesis. | The direct path is enough, or the skill does not declare an ensemble file. |
-| Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing the task's assigned checkout and reviewer-agent review. | You only need one explicit material review (`review`). |
-| Choose how to prove a behavior claim; check, scaffold, onboard, and run harness-native evals | `eval` | It picks proof cases (real failures first, small batches, an anti-cheat control) and the proof surface per case, initializes/discovers clean-room eval tasks, judges boolean/tier outcomes, keeps difficult reusable cases as ordinary runnable regressions, and can preserve one isolated CLI run as a scored `behavior_trace` with prompt, events, logs, output, checkpoints, artifacts, schema verdict, and baseline comparison. | You need adversarial tester/evidence-review orchestration or only native-subagent evidence; use `agent-qa-test`. |
-| Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include Eval `behavior_trace` capture. | You only need one cheap CLI conformance probe and no adversarial proof loop. |
+| Watch an existing PR until review agents and checks pass | `commit` PR watch | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing the task's assigned checkout and reviewer-agent review. | You only need one explicit material review (`review`). |
+| Choose how to prove a behavior claim; check, scaffold, onboard, and run harness-native evals | `eval` | It picks proof cases (real failures first, small batches, an anti-cheat control) and the proof surface per case, initializes/discovers clean-room eval tasks, judges boolean/tier outcomes, keeps difficult reusable cases as ordinary runnable regressions, and can preserve one isolated CLI run as a scored `behavior_trace` with prompt, events, logs, output, checkpoints, artifacts, schema verdict, and baseline comparison. | You need adversarial tester/evidence-review orchestration or only native-subagent evidence; use `qa` adversarial mode. |
+| Test a feature, skill, prompt, or workflow adversarially | `qa` adversarial mode | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include Eval `behavior_trace` capture. | You only need one cheap CLI conformance probe and no adversarial proof loop. |
 | Apply a normal skill guardrail | The owning Todo List `Rule`/`Assert` | It keeps the instruction beside the workflow node that needs it. | The guard is a repeatable behavior case, deterministic invariant, or material judgment; use eval, a validator, QA, or review. |
 | Debug, clean up, review a diff, harden, or audit code | `code-health` | One pass picks one mode (debug, clean, review, harden, audit), applies the lean gate (first sufficient build rung), changes the smallest thing, and returns proof plus residual risk; review mode returns the `patch_correct` JSON used by pre-push reviewers. | The work needs a TAS verdict, completion receipt, or evidence-bundle judgment; use `review`. You only need to locate or explain code; use the `explore` agent. |
 | Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It applies docs-owned rubric families through a callable TAS wrapper and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
-| Prove a user-visible or operated workflow | `qa`, `visual-qa`, or `agent-qa-test` | QA owns operated evidence, screenshots, browser/media behavior, case coverage, and proof bundles that review can later judge. | The claim is purely judgment-heavy, deterministic, or behavioral-regression oriented; use `review`, a validator, or `eval`. |
+| Prove a user-visible or operated workflow | `qa` (functional, visual, or adversarial mode) | QA owns operated evidence, screenshots, browser/media behavior, case coverage, and proof bundles that review can later judge. | The claim is purely judgment-heavy, deterministic, or behavioral-regression oriented; use `review`, a validator, or `eval`. |
 | Decide where a Farplane harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
 | Fix a harness behavior end to end | `optimize-harness` | It orchestrates gap diagnosis, placement, eval/proof, optional metric experiment, implementation routing, and review without absorbing the lower-level skill jobs. | You only need a placement recommendation; use `harness-advisor` directly. |
 | Route extracted durable knowledge | `skill-maintenance` + `doc-advisor` + `manage-wiki` | Send reusable operational procedures to skills, project knowledge and articles to their owning project docs, and sourced entities to canonical Wiki articles. | The input is still raw or unbounded; first bind a source/evidence window and produce explicit deltas. |
@@ -118,7 +118,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 Agent testing stack:
 
 ```text
-agent-qa-test orchestrates serious proof
+qa adversarial mode orchestrates serious proof
   -> tester lane gathers evidence
   -> Eval behavior_trace captures CLI child-agent behavior when useful
   -> evidence-review lane attacks proof strength
@@ -127,7 +127,7 @@ agent-qa-test orchestrates serious proof
 ```
 
 Use Eval `behavior_trace` alone for cheap CLI skill or prompt conformance probes.
-Use `agent-qa-test` for `$test`, "please test properly", app readiness, or any
+Use `qa` adversarial mode for `$test`, "please test properly", app readiness, or any
 claim where the evidence itself needs a skeptical lane.
 
 ## Frontmatter Contract
@@ -205,7 +205,7 @@ template_uses:
 ```
 
 If a skill is over budget, run `skill-maintenance.refine_skill` with
-`consolidate(..., structure = skill)` before enrolling it.
+`doc_advisor(mode = consolidate, ..., structure = skill)` before enrolling it.
 
 Do not add `before`; reverse lookups should be derived by tooling.
 
@@ -253,10 +253,10 @@ scores.
 - Domain todos link `research` with its branch, plus peer domain
   skills when a handoff needs one.
 - Domain todos do not link core primitives such as `advise` or
-  `consolidate` directly unless the skill owns that
+  `doc-advisor` consolidate mode directly unless the skill owns that
   primitive step as part of its first-load contract.
 - Native Codex phases own generic planning and execution. Artifact-producing
-  domain skills such as `impl-plan`, `spec-to-ticket`, and `goal-advisor` own
+  domain skills such as `impl-plan` and `goal-advisor` own
   their specialized plans, tickets, and work programs.
 - `review` is a callable TAS wrapper over docs-owned rubrics in
   `docs/review/rubrics/*`.
@@ -323,15 +323,15 @@ surfaces instead of creating hidden repair work. The canonical contract lives in
   explicitly requests that exact external edit
 
 Project-type exploration belongs upstream of domain execution skills. Use
-`skills/init-advisor/references/project-profiles.md` to seed
-`docs/bootstrap-brief.md`, direct clarification, `prd`, and `spec-to-ticket` with
+`skills/setup-advisor/references/project-profiles.md` to seed
+`docs/bootstrap-brief.md`, direct clarification, `prd`, and `impl-plan` with
 component sets, advice axes, prototype gates, and pipeline handoffs. Domain
 skills should consume selected directions and execution packets instead
 of rediscovering the whole project profile during implementation.
 
-Project lifecycle is currently an `init-advisor` reference, not a public
+Project lifecycle is currently a `setup-advisor` reference, not a public
 top-level skill. Use
-`skills/init-advisor/references/project-lifecycle.md` for the shared
+`skills/setup-advisor/references/project-lifecycle.md` for the shared
 `bootstrap -> interview -> PRD -> tickets -> native planning phase -> implement -> proof/review -> close`
 shape. Generated project `AGENTS.md` carries the compact lifecycle rule plus
 technical standards, commands, runtime, and QA paths; there is no second root

@@ -2,26 +2,102 @@
   "skill_name": "social-content",
   "evals": [
     {
-      "id": "social_content_routes_x_thread_01",
-      "prompt": "Plan three Twitter/X thread options for a tiny desk toy that helps builders ship stuck tasks. The user will approve one option from Telegram, so the options must be judgeable from the message.",
-      "expected_output": "Routes the X-native thread request to x-thread rather than selecting a social-content method; preserves the explicit publishing boundary; and gives the caller the artifact owner needed for a concrete tweet-by-tweet draft.",
-      "files": [],
+      "id": "social_content_x_concrete_stack_01",
+      "prompt": "Give me three X thread options for a tiny desk toy that helps builders ship stuck tasks. I'll pick one from Telegram, so I need to be able to judge each one right there in the message.",
+      "expected_output": "Selects mode x; presents each of the three directions as a full numbered tweet stack with every tweet written out (not a premise or outline), a standalone hook, a concrete reader promise, one idea per body tweet, payoff, and one stage-appropriate CTA; puts the copy inline so the Telegram review is self-contained; invents no metric or anecdote; keeps publication_status approval_required and leaves posting to zernio after explicit approval.",
+      "files": ["SKILL.md", "references/x-output.md"],
       "assertions": [
-        "Routes X-native thread requests to x-thread",
-        "Does not recreate a social-content:twitter-thread method",
-        "Keeps publishing and scheduling outside scope unless explicitly approved"
+        "Selects the x mode rather than a generic social plan",
+        "Writes every tweet out and numbers it for each of the three directions",
+        "Each direction has a concrete hook and reader value promise",
+        "Shows evidence, payoff, and a stage-appropriate CTA",
+        "Makes the review message self-contained enough to judge without a local path",
+        "Keeps posting and scheduling outside scope and routes approved copy to zernio"
       ],
       "metadata": {
         "farplane": {
-          "title": "X thread requests route to the dedicated artifact skill",
-          "tags": [
-            "skill",
-            "social-content",
-            "twitter-thread",
-            "human-feedback",
-            "thread-planning"
-          ],
-          "notes": "Regression for the retired social-content:twitter-thread method: X-native thread drafting now has one dedicated artifact owner."
+          "title": "X thread options contain full tweet stacks",
+          "tags": ["skill", "social-content", "x", "human-feedback"],
+          "notes": "Merged from x_thread_concrete_stack_01 and social_content_routes_x_thread_01: X drafting is now the x mode of social-content."
+        }
+      }
+    },
+    {
+      "id": "social_content_newsletter_release_digest_01",
+      "prompt": "Turn these four verified AI-office product updates into this week's release-note newsletter: durable task-thread ownership, a department-to-workflow capability map, project-bound specialist dispatch, and one consolidated content-intelligence feed. Group the high-impact changes so I can scan them quickly. This should not read like a personal story. Do not publish it.",
+      "expected_output": "Selects mode newsletter and the release-digest format instead of an editorial arc or personal story; groups the changes into two to four impact themes; renders each change as an indented or blockquoted unit with Changed, Impact, and Evidence; uses a short factual opener; writes three honest subject lines of 45 characters or fewer and additive preview text of 90 characters or fewer; uses at most one CTA; names voice mode and source gaps; keeps publication approval required.",
+      "files": ["references/newsletter.md", "examples/newsletter/example.md"],
+      "assertions": [
+        "Selects the release-digest format instead of forcing a personal story",
+        "Groups the changes into two to four impact themes",
+        "Renders each change as an indented or blockquoted unit that separates what changed, why it matters, and attributable evidence",
+        "Produces three subject lines no longer than 45 characters and additive preview text no longer than 90 characters",
+        "Uses at most one CTA",
+        "Names voice mode and source gaps",
+        "Keeps publication approval required"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Release recap becomes a grouped release digest",
+          "tags": ["skill", "social-content", "newsletter", "release-digest"],
+          "notes": "Carried from newsletter_writer_weekly_office_recap."
+        }
+      }
+    },
+    {
+      "id": "social_content_newsletter_missing_voice_01",
+      "prompt": "Write a founder newsletter about our new workflow engine. I've got the product facts but no past issues or voice guide. Make it sound personal and throw in a memorable story if it needs one.",
+      "expected_output": "Selects mode newsletter; names voice mode as hypothesis; refuses to invent a personal anecdote, feeling, quotation, or customer claim; drafts on transparent assumptions because the topic is sufficient, or asks for only the one missing input when truth is blocked; centres one idea; keeps the human publication gate.",
+      "files": ["references/newsletter.md"],
+      "assertions": [
+        "Names voice mode as hypothesis",
+        "Refuses to invent a personal anecdote, feeling, quotation, or customer claim",
+        "Drafts with transparent assumptions when the topic is sufficient, or asks for only one missing input when truth is blocked",
+        "Produces one central idea with a human publication gate"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Personalization pressure does not fabricate autobiography",
+          "tags": ["skill", "social-content", "newsletter", "voice"],
+          "notes": "Carried from newsletter_writer_missing_voice_evidence."
+        }
+      }
+    },
+    {
+      "id": "social_content_newsletter_soft_promotion_01",
+      "prompt": "Draft a useful weekly issue teaching consultants one follow-up lesson, and mention my paid template without making the whole email a pitch.",
+      "expected_output": "Teaches one useful lesson before any promotion; keeps the template mention in an optional P.S.; uses exactly one CTA; subjects and preview honestly match the lesson rather than baiting with the product; keeps publication approval required.",
+      "files": ["references/newsletter.md"],
+      "assertions": [
+        "Teaches one useful lesson before promotion",
+        "Keeps the promotional mention in an optional P.S.",
+        "Uses exactly one CTA in the issue",
+        "Produces subjects and preview text that honestly match the lesson rather than baiting with the product"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Promotion stays a soft P.S.",
+          "tags": ["skill", "social-content", "newsletter", "promotion"],
+          "notes": "Carried from newsletter_writer_soft_promotion_boundary."
+        }
+      }
+    },
+    {
+      "id": "social_content_linkedin_carousel_01",
+      "prompt": "Make a LinkedIn carousel explaining why long-running agents need a written contract instead of more memory. Audience is people building agent workflows. Draft it so I can approve it, and tell me what visuals we need.",
+      "expected_output": "Selects carousel as the primary mode with linkedin as supporting; returns slide-by-slide copy with one job per slide, a hook slide, a takeaway, and one save-style CTA; gives visual direction and routes slide images to ai-image with a price quote before any paid generation; runs the copywriting final pass; does not post and keeps publication_status approval_required.",
+      "files": ["SKILL.md", "references/examples.md"],
+      "assertions": [
+        "Selects carousel as primary and linkedin as supporting mode",
+        "Returns full slide-by-slide copy rather than a slide outline",
+        "Routes slide visuals to ai-image and quotes any paid generation before running it",
+        "Uses one CTA and keeps publication approval required"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "LinkedIn carousel returns slide copy and an asset route",
+          "tags": ["skill", "social-content", "carousel", "linkedin"],
+          "notes": "New row covering the carousel and linkedin modes, grounded in references/examples.md and the method-selection smoke supporting-method case."
         }
       }
     }

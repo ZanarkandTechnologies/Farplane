@@ -8,8 +8,8 @@ paths = [
   "runtimes/AGENTS.md",
   "tickets/templates/ticket.md",
   "tickets/templates/goal-loop/program.md",
-  "skills/harness-creator/templates/project-harness.md",
-  "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
+  "skills/setup-advisor/templates/project-harness.md",
+  "skills/setup-advisor/references/MANIFEST_TEMPLATE.json",
   "docs/templates/HUMAN_REPORT_TEMPLATE.md",
 ]
 

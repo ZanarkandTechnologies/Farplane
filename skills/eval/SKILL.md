@@ -85,11 +85,11 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
         run one worker, and inspect prompt, JSONL events, logs, final output,
         command/usage scores, schema validation, and artifact inventory. Route
         native-subagent-only capture to
-        [agent-qa-test](../agent-qa-test/SKILL.md).
+        [qa adversarial mode](../qa/SKILL.md).
   - [ ] For `experiment`, preregister the aggregate expectation, horizon,
         confidence, falsifier, and surprise trigger outside task grading fields.
         Compare observed versus expected results; route material misses or
-        implausible wins to `agent-qa-test:experiment`.
+        implausible wins to `eval:experiment`.
   - [ ] For the weekly drain, load
         [eval consolidation](references/eval-consolidation.md), fetch changed
         eval files, and apply its one-file loss check while preserving distinct
@@ -122,7 +122,7 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
   core primitive, meta, `eval`, or cross-skill structure coverage.
 - Load [automation prompt](references/automation-prompt.md) only when installing
   or updating the weekly consolidation automation.
-- The weekly drain uses the shared [consolidation primitive](../consolidate/SKILL.md);
+- The weekly drain uses the shared [consolidation primitive](../doc-advisor/references/consolidate.md);
   do not load it for normal proof or regression runs.
 
 ## Gotchas

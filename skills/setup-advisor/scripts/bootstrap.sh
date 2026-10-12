@@ -1,0 +1,190 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+#
+# bootstrap.sh
+#
+# Scaffolds docs-first project state and base templates.
+#
+# Usage:
+#   bootstrap.sh [--force] [target_project_dir]
+#
+
+FORCE=0
+TARGET_DIR="."
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --force|-f)
+      FORCE=1
+      shift
+      ;;
+    --help|-h)
+      echo "Usage: $(basename "$0") [--force] [target_project_dir]"
+      exit 0
+      ;;
+    *)
+      TARGET_DIR="$1"
+      shift
+      ;;
+  esac
+done
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+SKILL_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+REF_DIR="${SKILL_DIR}/references"
+
+if [ ! -d "$REF_DIR" ]; then
+  echo "Error: references directory not found: $REF_DIR" >&2
+  exit 1
+fi
+
+TARGET_DIR="$(cd -- "$TARGET_DIR" && pwd)"
+
+copy_file() {
+  local src="$1"
+  local dest="$2"
+
+  if [ ! -f "$src" ]; then
+    echo "Error: missing source file: $src" >&2
+    exit 1
+  fi
+
+  if [ -e "$dest" ] && [ "$FORCE" -ne 1 ]; then
+    echo "Skip (exists): $dest"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "$dest")"
+  cp "$src" "$dest"
+  echo "Wrote: $dest"
+}
+
+write_file_if_missing() {
+  local dest="$1"
+  local content="$2"
+
+  if [ -e "$dest" ] && [ "$FORCE" -ne 1 ]; then
+    echo "Skip (exists): $dest"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "$dest")"
+  printf "%b" "$content" > "$dest"
+  echo "Wrote: $dest"
+}
+
+append_gitignore_block_if_missing() {
+  local dest="$1"
+  local template="$2"
+  local marker="# Farplane local runtime and work state"
+
+  if [ ! -f "$template" ]; then
+    echo "Error: missing source file: $template" >&2
+    exit 1
+  fi
+
+  if [ -e "$dest" ] && grep -Fxq "$marker" "$dest"; then
+    echo "Skip (block exists): $dest :: $marker"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "$dest")"
+  {
+    if [ -s "$dest" ]; then
+      printf "\n"
+    fi
+    cat "$template"
+  } >> "$dest"
+  echo "Updated: $dest"
+}
+
+echo "Bootstrapping docs-first scaffold into: $TARGET_DIR"
+echo "Force overwrite: $FORCE"
+
+copy_file "${REF_DIR}/AGENTS_TEMPLATE.md" "${TARGET_DIR}/AGENTS.md"
+copy_file "${REF_DIR}/ARCHITECTURE_TEMPLATE.md" "${TARGET_DIR}/ARCHITECTURE.md"
+
+mkdir -p "${TARGET_DIR}/farplane"
+mkdir -p "${TARGET_DIR}/.agents/skills"
+copy_file "${REF_DIR}/FARPLANE_README_TEMPLATE.md" "${TARGET_DIR}/farplane/README.md"
+copy_file "${REF_DIR}/MANIFEST_TEMPLATE.json" "${TARGET_DIR}/farplane/manifest.json"
+copy_file "${REF_DIR}/HARNESS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/harness.yaml"
+copy_file "${REF_DIR}/METRICS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/metrics.yaml"
+# Jobs are added one file each by automation-advisor; a new project starts with none.
+mkdir -p "${TARGET_DIR}/farplane/automations"
+copy_file "${REF_DIR}/BINDINGS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/bindings.yaml"
+copy_file "${REF_DIR}/LOCAL_SKILLS_README_TEMPLATE.md" "${TARGET_DIR}/.agents/skills/README.md"
+copy_file "${REF_DIR}/PM_TEMPLATE.json" "${TARGET_DIR}/farplane/pm.json"
+
+# .farplane/ subfolders are created by their writers on first use, never pre-made empty.
+write_file_if_missing "${TARGET_DIR}/.farplane/README.md" "# .farplane\n\nIgnored local state for this project.\n\nUse owner-named paths for reports, metric observations, eval outputs, content, logs, and tool-specific continuation state. Flat Wiki article Markdown and views.yaml are explicit authored local exceptions. Do not add a generic runtime, evidence, review, or config bucket.\n\nShared framework config belongs in farplane/.\n"
+write_file_if_missing "${TARGET_DIR}/.farplane/views.yaml" "views: {}\n"
+
+mkdir -p "${TARGET_DIR}/docs/features" "${TARGET_DIR}/docs/systems"
+copy_file "${REF_DIR}/FEATURES_README_TEMPLATE.md" "${TARGET_DIR}/docs/features/README.md"
+copy_file "${REF_DIR}/SYSTEMS_README_TEMPLATE.md" "${TARGET_DIR}/docs/systems/README.md"
+copy_file "${REF_DIR}/BOOTSTRAP_BRIEF_TEMPLATE.md" "${TARGET_DIR}/docs/bootstrap-brief.md"
+copy_file "${REF_DIR}/CODE_REVIEW_TEMPLATE.md" "${TARGET_DIR}/docs/code_review.md"
+copy_file "${REF_DIR}/REVIEW_AGENT_TEMPLATE.md" "${TARGET_DIR}/docs/review-agent.md"
+
+write_file_if_missing "${TARGET_DIR}/docs/prd.md" "# PRD\n\n## Problem / Context\n\n## Audience\n\n## JTBD\n\n## SLC Slice\n\n## Goals\n\n## Non-Goals\n\n## Constraints\n\n## Risks\n\n## Backpressure\n"
+write_file_if_missing "${TARGET_DIR}/docs/HISTORY.md" "# HISTORY\n\nAppend-only change log.\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | summary\n\n"
+write_file_if_missing "${TARGET_DIR}/docs/MEMORY.md" "# MEMORY\n\nCurated durable constraints and invariants future work must obey.\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | MEM-#### | tags | durable rule\n\n"
+copy_file "${REF_DIR}/TASTE_TEMPLATE.md" "${TARGET_DIR}/docs/TASTE.md"
+
+mkdir -p "${TARGET_DIR}/tickets" "${TARGET_DIR}/tickets/archive" "${TARGET_DIR}/tickets/templates"
+copy_file "${REF_DIR}/TICKETS_README_TEMPLATE.md" "${TARGET_DIR}/tickets/README.md"
+copy_file "${REF_DIR}/TICKET_TEMPLATE.md" "${TARGET_DIR}/tickets/templates/ticket.md"
+copy_file "${REF_DIR}/FOUNDATION_FIND_CUSTOMER_TICKET_TEMPLATE.md" "${TARGET_DIR}/tickets/TASK-0001/ticket.md"
+copy_file "${REF_DIR}/FOUNDATION_DELIVER_VALUE_TICKET_TEMPLATE.md" "${TARGET_DIR}/tickets/TASK-0002/ticket.md"
+copy_file "${REF_DIR}/FOUNDATION_COLLECT_REVENUE_TICKET_TEMPLATE.md" "${TARGET_DIR}/tickets/TASK-0003/ticket.md"
+
+mkdir -p "${TARGET_DIR}/.githooks"
+copy_file "${REF_DIR}/GITHOOKS_README_TEMPLATE.md" "${TARGET_DIR}/.githooks/README.md"
+copy_file "${REF_DIR}/PRE_COMMIT_HOOK_TEMPLATE.sh" "${TARGET_DIR}/.githooks/pre-commit"
+copy_file "${REF_DIR}/PRE_PUSH_HOOK_TEMPLATE.sh" "${TARGET_DIR}/.githooks/pre-push"
+
+mkdir -p "${TARGET_DIR}/scripts"
+copy_file "${REF_DIR}/PRE_COMMIT_CHECK_TEMPLATE.sh" "${TARGET_DIR}/scripts/pre_commit_check.sh"
+copy_file "${REF_DIR}/PRE_PUSH_CHECK_TEMPLATE.sh" "${TARGET_DIR}/scripts/pre_push_check.sh"
+copy_file "${REF_DIR}/COLLECT_REVIEW_CONTEXT_TEMPLATE.sh" "${TARGET_DIR}/scripts/collect_review_context.sh"
+copy_file "${REF_DIR}/CODEX_REVIEW_AGENT_TEMPLATE.ts" "${TARGET_DIR}/scripts/codex_review_agent.ts"
+copy_file "${REF_DIR}/RUN_PRE_PUSH_REVIEW_TEMPLATE.sh" "${TARGET_DIR}/scripts/run_pre_push_review.sh"
+append_gitignore_block_if_missing "${TARGET_DIR}/.gitignore" "${REF_DIR}/GITIGNORE_TEMPLATE"
+
+echo ""
+echo "Done."
+echo "Next:"
+echo "  - Fill in AGENTS.md: stack, one canonical app-only run path, one canonical QA/evidence run path, required services, and port/env assumptions."
+echo "  - Fill in ARCHITECTURE.md so the repo has one top-level system map."
+echo "  - Review farplane/manifest.json for the current Farplane project spec version and expected surfaces."
+echo "  - Fill in farplane/harness.yaml, or run setup-advisor in charter mode."
+echo "  - Fill in farplane/metrics.yaml with measurable objectives, guards, metric meaning, and display fields."
+echo "  - Fill in farplane/bindings.yaml with non-secret project IDs, connector coordinates, and metric refresh recipes."
+echo "  - Add scheduled jobs to farplane/automations/ with automation-advisor, one file per live routine."
+echo "  - Keep skills generic and parameterized; configure project paths, cadence, schedule, thread IDs, and exact prompts in farplane/automations/."
+echo "  - Use .agents/skills/ for project-local capability skills; promote only stable cross-project workflows to root skills/."
+echo "  - Use the goal-advisor metric card to shape measurable objectives and guards when they are missing or weak."
+echo "  - Use goal-advisor to compile the first executable frontier after goals are concrete."
+echo "  - Fill in farplane/pm.json with PM-visible chat and automation thread IDs so the UI groups them under one employee."
+echo "  - Use owner-named .farplane/ paths for ignored reports, metric observations, eval outputs, content, logs, and tool-specific state; do not add generic runtime, evidence, or review buckets."
+echo "  - Keep each Wiki article in flat .farplane/entities/<id>.md; run 'farplane wiki doctor' then 'farplane wiki rebuild' to generate search state and JSON projections. Skill reports link entities with entity_refs."
+echo "  - Define private named entity slices in .farplane/views.yaml; each view lists canonical entity_ids and compiles into bounded graph membership plus .farplane/views/<view-id>.json, not the lookup index or CRM."
+echo "  - Start by refining docs/bootstrap-brief.md with a structured intake before locking stack or topology decisions."
+echo "  - Fill the bootstrap brief's agent-experience section so the repo knows how agents should reach, inspect, and verify important app states."
+echo "  - Refine docs/TASTE.md so UI tickets and QA share one visual doctrine."
+echo "  - Record evidence-capture launch paths, shortcuts, deep links, seed/reset paths, target URLs, and debug probes in the Agent QA section of AGENTS.md (docs/qa/<flow>.md only for a long repeatable flow)."
+echo "  - Route repeated failures into the owning ticket, skill, eval, validator, or canonical doc; promote only durable invariants to docs/MEMORY.md."
+echo "  - Fill in docs/bootstrap-brief.md with explicit local-hook, heavy-check, CI/deploy gate, runtime-command, and service-assumption decisions before finalizing the scaffold."
+echo "  - Fill in scripts/pre_push_check.sh with the repo's lint, typecheck, test, build, and optional agent review."
+echo "  - For Node projects, add @openai/codex-sdk + tsx and package scripts review:agent / review:prepush to enable the default Codex SDK diff reviewer."
+echo "  - Optional: enable .githooks with 'git config core.hooksPath .githooks' and prefer pre-push over pre-commit."
+echo "  - Optional: run the Farplane install script so ~/.codex/skills/code-health/, reviewer agents, and review rubrics are linked."
+echo "  - If the idea is still open-ended, start with frame."
+echo "  - For bootstrap ambiguity, ask focused questions and keep the answers in docs/bootstrap-brief.md."
+echo "  - Then use prd + impl-plan to author docs/features/FEAT-*.md and file GitHub issues."
+echo "  - Use docs/systems/*.md for product/system grouping and boundaries when features become a coherent system."
+echo "  - File the three foundation drafts (tickets/TASK-0001..0003) as GitHub issues when the project has a repo, then complete them in order: find the first customer, deliver the first value, collect the first revenue."
+echo "  - After the foundation closes, use prd + impl-plan for the next product slice."
+echo "  - For an existing repo, read ~/.codex/skills/setup-advisor/references/migration.md and preserve existing ticket paths unless explicit scaffold replacement is intended."

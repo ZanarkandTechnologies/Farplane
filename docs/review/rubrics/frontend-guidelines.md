@@ -4,13 +4,13 @@ Use this when review covers UI source files, rendered frontend work, or a
 ticket that claims accessibility, interaction, responsive, form, animation, or
 web-interface quality.
 
-This is a bridge between the source-fresh `web-design-guidelines` skill and the
+This is a bridge between the source-fresh `code-health` UI review skill and the
 TAS `review` contract. It is not a replacement for `ui-quality`,
-`frontend-code-maintainability`, `vercel-react-best-practices`, or `visual-qa`.
+`frontend-code-maintainability`, `code-health` UI review (React rules), or `qa` visual mode.
 
 ## Source Of Truth
 
-Run `web-design-guidelines` against the changed UI files and let that skill
+Run `code-health` UI review against the changed UI files and let that skill
 fetch the latest upstream command before judging.
 
 Do not copy the upstream rules into this file. The value of this lane is that it
@@ -33,7 +33,7 @@ source, backend/API code, or docs-only work.
 
 1. Identify the changed UI file set from the ticket, diff, or implementation
    summary.
-2. Run `web-design-guidelines <file-or-pattern>` on that set.
+2. Run `code-health UI review <file-or-pattern>` on that set.
 3. Save or paste the guideline findings into the review evidence when useful.
 4. Convert the result into a `frontend-guidelines` TAS using the scale below.
 5. Attach the TAS beside `ui-quality`, not inside it.
@@ -41,7 +41,7 @@ source, backend/API code, or docs-only work.
    `evidence-quality`, or `integration-readiness` when they affect trust.
 7. Use `frontend-code-maintainability` separately when the source code's
    component shape, file size, state ownership, or testability is in question.
-8. Use `vercel-react-best-practices` separately when React/Next.js performance,
+8. Use `code-health` UI review (React rules) separately when React/Next.js performance,
    bundle size, data fetching, rerenders, or rendering behavior are in question.
 
 ## TAS Guide
@@ -68,7 +68,7 @@ Add this object to the structured review result when the lane runs:
   "tas": "TAS-A",
   "required_tas": "TAS-A",
   "pass": true,
-  "source": "web-design-guidelines",
+  "source": "code-health UI review",
   "files_checked": ["src/app/page.tsx"],
   "findings_count": 0,
   "findings": [],

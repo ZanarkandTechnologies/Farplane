@@ -33,10 +33,11 @@ GATE_FIELDS = {"contract", "mechanism", "journey", "adversarial", "receipt"}
 GATE_VERDICTS = {"pass", "fail", "blocked"}
 LEARNING_OUTCOMES = {"ticket_only", "cookbook_update", "instrumentation_ticket"}
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
-TICKET_ID = re.compile(r"^TASK-\d{4,}$")
+TICKET_ID = re.compile(r"^(?:TASK-\d{4,}|(?:[\w.-]+/[\w.-]+)?#\d+)$")
+# A passing policy that names a judgment needs a receipt path from that lane.
 JUDGMENT_PATH_MARKERS = {
-    "visual-qa": "visual-qa",
-    "agent-qa-test": "agent-qa-test",
+    "visual": "visual",
+    "adversarial": "adversarial",
     "reviewer": "review",
 }
 
@@ -73,7 +74,7 @@ def validate(payload: Any) -> list[str]:
     if payload.get("schema_version") != "1":
         errors.append('schema_version: expected "1"')
     if not _nonempty_string(payload.get("ticket_id")) or not TICKET_ID.fullmatch(payload["ticket_id"]):
-        errors.append("ticket_id: expected TASK- followed by at least four digits")
+        errors.append("ticket_id: expected owner/repo#N, #N, or legacy TASK-NNNN")
     if payload.get("phase") != "qa":
         errors.append('phase: expected "qa"')
 

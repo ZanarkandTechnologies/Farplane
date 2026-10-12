@@ -27,7 +27,7 @@ Files:
 Trigger: native Goal, one uninterrupted 90-minute window
 Metric: ticket critical-path checks + delegated QA/review; no proxy-only finish
 Drift Policy: compare ticket/program/progress after each turn
-QA Proof Route: qa-tester captures CSV workflow and screenshot -> visual-qa
+QA Proof Route: qa-tester captures CSV workflow and screenshot -> qa visual mode
 judges design fidelity -> reviewer judges evidence sufficiency
 Compiled Execution Path:
   S1 customer table -> Change 1 expose export action -> D1 action visible
@@ -38,7 +38,7 @@ Reference Manifest:
   ticket.md -> all nodes; owns scope and Done / Proof
   program.md -> loop; owns order, drift, and stopping
   progress.md -> writeback; owns observations and evidence chronology
-  design.md -> S1/S3/F1 + visual-qa; owns UI state baseline
+  design.md -> S1/S3/F1 + qa visual mode; owns UI state baseline
 Completion Closure:
   D1 -> Change 1 -> screenshot compared with design.md -> pending
   D2 -> Change 2 -> focused CSV assertions -> pending

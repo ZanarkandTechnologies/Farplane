@@ -78,7 +78,7 @@ experiment, evaluate, keep or discard, repeat) into a visible Goal Packet:
 6. Change only the allowed surface. Update the tree node first, then append the
    immutable `progress.md` receipt; never overwrite a failed attempt. Route a
    material miss or implausibly strong result through
-   `agent-qa-test:experiment` before rejecting or promoting; the domain
+   `eval:experiment` before rejecting or promoting; the domain
    executor owns any repair or rerun inside the remaining budget.
 7. Separate claim failure from causal resolution. A missed score falsifies the
    performance claim, not its cause. Mark a cause `supported` only when

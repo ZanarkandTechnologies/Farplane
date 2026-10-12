@@ -1,17 +1,25 @@
 # QA
 
-Proof-gathering execution phase for one selected ticket.
+The one Delivery proof skill. `$qa` proves a GitHub issue's `Done / Proof` and
+`QA Strategy` in one of three modes and, after a pass, records the closeout
+demo:
 
-Use `$qa` to collect evidence under `tickets/TASK-XXXX/artifacts/qa/`, update
-ticket `Links`, conditionally append an existing/required `progress.md`, write
-and validate canonical `result.json`, classify reusable learning, and finish with a
-compact `QA_RESULT: verdict=... evidence=... reason=...` line.
+- `functional` (default): claim-matched evidence through the real mechanism;
+  browser operation is delegated to `qa-tester`.
+- `visual`: four-part judgment of captured UI against `design.md`
+  ([references/visual.md](references/visual.md)).
+- `adversarial`: separate tester and evidence-review lanes attack a claim
+  ([references/adversarial.md](references/adversarial.md)).
+- `closeout: demo`: the Before/After/Example MP4 that leads the closing proof
+  comment ([references/closeout-demo.md](references/closeout-demo.md)).
 
-When `$qa` is invoked from a live Goal-backed coordinator lane, keep browser
-driving delegated to `qa-tester`, which uses the Codex in-app Browser, instead
-of self-certifying operated proof from the coordinator session.
+Per-run artifacts go under `.farplane/qa/<issue>/<run>/`; the verdict and
+strongest evidence go on the issue with `gh issue comment`. Every run writes a
+canonical `result.json` checked by `scripts/validate_qa_result.py` and ends
+with `QA_RESULT: verdict=... evidence=... reason=...`.
 
 Read [references/guide.md](references/guide.md), the project's `AGENTS.md`
-Agent QA section, and any matching `docs/qa/*.md` page before driving the browser. Reusable shortcuts, deep
-links, fixtures, and test hooks belong there; per-run artifacts still belong
-under `tickets/TASK-XXXX/artifacts/qa/`.
+Agent QA section, and any matching `docs/qa/*.md` page before driving the
+browser. Reusable shortcuts, deep links, fixtures, and test hooks belong there.
+
+Test: `.venv/bin/python -m unittest discover -s skills/qa/scripts -p "test_*.py"`.

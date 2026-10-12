@@ -20,7 +20,7 @@ class SkillMentionTests(unittest.TestCase):
         text = "First $impl-plan TASK-0160, then $qa and $demo. Please do not double count $qa."
 
         self.assertEqual(extract_control_surfaces(text), ["impl-plan", "qa", "demo"])
-        self.assertEqual(extract_skill_mentions(text), ["impl-plan", "qa", "demo"])
+        self.assertEqual(extract_skill_mentions(text), ["impl-plan", "qa"])
 
     def test_control_surfaces_accept_linked_syntax_but_stay_narrow(self) -> None:
         text = (

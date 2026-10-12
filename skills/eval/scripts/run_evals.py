@@ -772,8 +772,10 @@ def run_codex(
 
 def run_claude(prompt: str, output_file: Path, cwd: Path, extra_args: Sequence[str]) -> CommandResult:
     command = ["claude", "-p", "--output-format", "text", *extra_args, prompt]
+    # Claude runs Farplane hooks; the eval marker keeps eval Skill calls out of telemetry and skill heat.
+    env = {**os.environ, "FARPLANE_CODEX_RUNTIME_PURPOSE": "eval"}
     started_at = time.perf_counter()
-    completed = subprocess.run(command, cwd=cwd, text=True, capture_output=True, check=False)
+    completed = subprocess.run(command, cwd=cwd, env=env, text=True, capture_output=True, check=False)
     duration_ms = round((time.perf_counter() - started_at) * 1000)
     output_file.write_text(completed.stdout)
     return CommandResult(

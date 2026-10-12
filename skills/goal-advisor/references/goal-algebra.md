@@ -58,7 +58,7 @@ ProjectPortfolio :=
 
 ## Composition Rules
 
-- `agent-qa-test` fills the `agent_qa` metric provider and the fix-or-rerun
+- `qa` adversarial mode fills the `agent_qa` metric provider and the fix-or-rerun
   policy.
 - [human-feedback](human-feedback.md) fills `MetricProvider.human_feedback` through
   `feedback-request.md`, `feedback.json`, and `human_score` or `accepted`.

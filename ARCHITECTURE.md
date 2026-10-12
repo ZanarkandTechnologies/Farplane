@@ -91,13 +91,13 @@ flowchart LR
     interfaces["shared workflow interfaces<br/>frame<br/>research<br/>harness-advisor"]:::callout
     intake["frame<br/>direct clarification<br/>prd<br/>visual-design"]:::skill
     readiness["impl-plan agent testability<br/>Run Hints"]:::callout
-    research["doc-advisor<br/>feed-scout<br/>harness-scout<br/>research<br/>self-improve"]:::skill
-    ticketSkill["spec-to-ticket"]:::callout
+    research["doc-advisor<br/>feed-scout<br/>research<br/>self-improve"]:::skill
+    ticketSkill["impl-plan"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     goalSkill["goal-advisor<br/>native Goal"]:::callout
     execSkill["goal-advisor<br/>native Codex task checkout"]:::callout
     assetSkill["storyboard<br/>ai-image<br/>ai-video<br/>hyperframes render"]:::skill
-    closeSkill["demo -> proof comment<br/>issue closed<br/>commit<br/>pr-splitting"]:::callout
+    closeSkill["qa closeout -> proof comment<br/>issue closed<br/>commit"]:::callout
   end
 
   subgraph Board["Ticket + QA Surfaces"]
@@ -114,7 +114,7 @@ flowchart LR
   end
 
   subgraph Proof["Proof + Review"]
-    qa["qa-tester<br/>eval<br/>visual-qa<br/>Codex Browser"]:::quality
+    qa["qa-tester<br/>eval<br/>qa visual mode<br/>Codex Browser"]:::quality
     review["review<br/>reviewer agent<br/>code-health + copywriting final pass"]:::callout
   stop["Stop hook<br/>telemetry only"]:::quality
   end
@@ -244,8 +244,9 @@ during cleanup unless the replacement carries the same routing information.
   surfaces, source references, evidence, limits, and metrics
 - [skills/feed-scout/SKILL.md](skills/feed-scout/SKILL.md)
   Purpose: tracked-profile monitoring recipe for discovering X, YouTube, and
-  blog content, deduping canonical URLs in a content/proposal ledger, and
-  routing eligible items to harness-scout and research synthesis
+  blog content, deduping canonical URLs in a content/proposal ledger,
+  scouting single sources for adopt/adapt/reject/defer verdicts, and routing
+  convergent items to research synthesis
 - [docs/features/FEAT-0060-registry-backed-documentation-os.md](docs/features/FEAT-0060-registry-backed-documentation-os.md)
   Purpose: structural versus narrative doc-audit policy and the doc-gardening
   workflow

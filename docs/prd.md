@@ -173,7 +173,7 @@ remain in the ticket body, Goal Packet, progress log, or artifacts.
 | Source | Authority |
 | --- | --- |
 | Work Pulse next-wave planner | globally ranked tickets when no unclaimed executable or due-check-in work exists |
-| Feed Scout | source report, candidates, and bounded direct recovery tickets |
+| Feed Scout | source report, candidates, recovery candidates, and single-source adopt/adapt/reject/defer verdicts (no tickets) |
 | Daily/Weekly review | project memory, targeted follow-ups, weekly reports, and operator-visible work proposals; no independent strategy or ticket admission |
 | Operator | explicit direction, feedback, correction, or approval |
 

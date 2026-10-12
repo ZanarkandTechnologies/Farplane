@@ -25,7 +25,7 @@ signals, accept/hold/rollback rules, or research framing.
 
 This is a shared workflow interface. It may use core primitives directly, then
 hand implementation to an owning skill such as `skill-maintenance`, `impl-plan`,
-`goal-advisor`, `qa`, `demo`, or another Farplane application skill.
+`goal-advisor`, `qa`, or another Farplane application skill.
 
 ## Skill Signature
 
@@ -33,7 +33,7 @@ hand implementation to an owning skill such as `skill-maintenance`, `impl-plan`,
 harness_place(gap_or_request, evidence?) -> placement_decision
 state: reads(harness doctrine, system and feature metadata, generated registries, skill registry, relevant surfaces); writes(ticket? handoff?)
 gates: failure_named; owner_surface:named; rejected_surfaces:named; proof_path:named
-routes: eval | self-improve | skill-maintenance | impl-plan | spec-to-ticket | direct-answer
+routes: eval | self-improve | skill-maintenance | impl-plan | direct-answer
 fails: defaults to AGENTS.md; creates new skill before checking registry; recommends hooks for judgment-heavy work
 ```
 

@@ -84,7 +84,7 @@ RULES: tuple[HarnessRule, ...] = (
         ),
     ),
     HarnessRule(
-        relative_path="skills/consolidate/SKILL.md",
+        relative_path="skills/doc-advisor/references/consolidate.md",
         required_substrings=(
             "Agent Kernel",
             "Feature Fidelity Gate",

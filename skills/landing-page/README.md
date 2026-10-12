@@ -33,7 +33,7 @@ Shape one-page, marketing, launch, portfolio, and cinematic frontend surfaces be
 - Confirm modern scroll-scrub requests follow the `SKILL.md` Todo List before
   spec handoff.
 - Score a Terminal-style output with `python3 skills/landing-page/scripts/terminal_landing_score.py`.
-- Confirm product app screens route away to `functional-ui`.
+- Confirm product app screens route away to `prd` workflow mode.
 - Confirm JSON registries parse with `python3 -m json.tool`.
 - Confirm cinematic/scroll requests do not duplicate GSAP API details.
 - Confirm the skill returns `LANDING_SPEC.md` and never implements, renders, or

@@ -112,7 +112,7 @@ def build_minimizer_report(skill_dir: Path, surface: str, limit: int) -> str:
             "- `delete`: duplicated, stale, or todo-restating units with no distinct guardrail value.",
             "",
             "## Handoff",
-            "Run `skill-maintenance.refine_skill` with `consolidate(target = edited_skill, structure = skill)` before enrolling over-budget skills.",
+            "Run `skill-maintenance.refine_skill` with `doc_advisor(mode = consolidate, target = edited_skill, structure = skill)` before enrolling over-budget skills.",
         ]
     )
     return "\n".join(lines)

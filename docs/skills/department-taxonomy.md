@@ -3,7 +3,7 @@ title: Skill department taxonomy
 status: active
 owner: skills/skill-maintenance
 created_at: 2026-08-13
-updated_at: 2026-09-28
+updated_at: 2026-10-12
 source_of_truth: [config/skill-departments.toml, config/skill-workflows.toml]
 ---
 
@@ -16,17 +16,19 @@ technical implementation tag and it does not imply that one skill invokes anothe
 | ID | Label | Owns in the constellation |
 | --- | --- | --- |
 | `leadership` | Leadership | advice, framing, planning, business review, goals, and reports |
+| `delivery` | Delivery | product specs, UI and visual design, implementation tickets, code health, QA, review, commits, docs, diagrams, and project or client setup |
 | `back-office` | Back Office | finance, internal records, people, office administration |
 | `sales` | Sales | prospects, approaches, offers, and proposals |
 | `deals` | Deals | replies, calls, solution shaping, and closing |
 | `marketing` | Marketing | content, brand, creative, distribution, and channels |
-| `operations` | Operations | delivery systems, builds, automation, and internal operations |
+| `operations` | Operations | the internal machine: skills, evals, automations, messages, and usage |
 | `intelligence` | Intelligence | companies, people, markets, research, and learning |
 | `customer` | Customer | support, success, and community |
 
 The Capability Map is organized by **specialist desks**. A specialist groups
-skill variants that one office employee offers (for example `engineer` holds
-`impl-plan`, `code-health`, `pr-review-watch`, and `pr-splitting`).
+skill variants that one office employee offers (for example the Delivery
+`engineer` desk holds `impl-plan`; a unit's internal steps are modes or
+references inside its desk skill).
 `config/skill-workflows.toml` `[specialists]` owns each desk's label, department,
 deliverable, primary skill (its default verb), and member `skills`. A member
 must be in the desk's department and sits at only one desk; the

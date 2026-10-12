@@ -9,7 +9,7 @@ kind: workflow-reference
 
 Load for the `synthesis` branch in N5: several projects, repos, products, or
 articles feed one target workflow, page, or skill. A single external source
-mined for Farplane features belongs to `harness-scout`.
+mined for Farplane features belongs to `feed-scout` single-source mode.
 
 ## Order
 

@@ -9,9 +9,8 @@ tags:
   - feature
   - sys-0008
 refs:
-  - skills/harness-scout
-  - skills/media-ingest
-  - skills/learn-from-video
+  - skills/feed-scout
+  - skills/intelligest
   - SRC-0008
   - docs/HISTORY.md
 feature_id: FEAT-0025
@@ -19,16 +18,15 @@ system_id: SYS-0008
 category: source-ingestion
 public: true
 surfaces:
-  - skills/harness-scout
-  - skills/media-ingest
-  - skills/learn-from-video
+  - skills/feed-scout
+  - skills/intelligest
 source_refs:
   - SRC-0008
 external_refs:
   - https://www.instagram.com/p/DYijhcetmBP/
 evidence_refs:
-  - skills/media-ingest/SKILL.md
-  - skills/learn-from-video/SKILL.md
+  - skills/intelligest/references/media.md
+  - skills/intelligest/references/pre-watch-novelty.md
   - docs/HISTORY.md
 known_limits: Retired as a generic skill/source workflow rather than a Farplane product feature. Keep current behavior in source-ingestion and media skills.
 metrics:
@@ -100,7 +98,7 @@ flowchart LR
   source["media source evidence<br/>SRC-0008<br/>TASK-0158"]:::keep
   retired["FEAT-0025<br/>status: retired<br/>system_id: SYS-0008"]:::retired
   owner["SYS-0008 Sources<br/>docs/systems/source-sidecar-systems.md"]:::changed
-  skills["media/source skills<br/>skills/media-ingest<br/>skills/learn-from-video<br/>skills/harness-scout"]:::added
+  skills["media/source skills<br/>skills/intelligest<br/>skills/feed-scout"]:::added
   registry["source registry + decisions<br/>docs/sources/registry.jsonl<br/>adopt/adapt/reject/defer"]:::added
 
   source --> retired --> owner --> skills --> registry
@@ -112,9 +110,8 @@ The retired video-specific feature now routes source reconstruction through `SYS
 
 Owner surfaces:
 
-- `skills/harness-scout`
-- `skills/media-ingest`
-- `skills/learn-from-video`
+- `skills/feed-scout`
+- `skills/intelligest`
 
 Source context:
 
@@ -126,8 +123,8 @@ External context:
 
 Evidence:
 
-- `skills/media-ingest/SKILL.md`
-- `skills/learn-from-video/SKILL.md`
+- `skills/intelligest/references/media.md`
+- `skills/intelligest/references/pre-watch-novelty.md`
 - `docs/HISTORY.md`
 
 ## Proof And Quality
@@ -154,7 +151,7 @@ Acceptance signals:
 
 - This feature is not a transcript archive.
 - This feature does not copy creator phrasing into skill docs as policy.
-- This feature does not replace harness-scout source scoring.
+- This feature does not replace feed-scout single-source scoring.
 - Known limit: Support-skill and artifact contract only; platform fetching still depends on available local tools, public access, or user-provided exports, and transcript gaps must be recorded rather than hidden.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 

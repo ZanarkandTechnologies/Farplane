@@ -102,7 +102,7 @@
     {
       "id": "qa_current_ticket_runtime_and_learning_01",
       "prompt": "Read skills/qa/evals/fixtures/TASK-0045/ticket.md and skills/qa/evals/fixtures/qa/cookbook/web-app-qa-route.md. No browser capture has run yet, and the candidate /qa shortcut may or may not be reusable for future tickets. Can you QA this now, give me the receipt/writeback I can attach to the ticket, and tell me whether the shortcut belongs in shared guidance once we have tried it? Keep this read-only.",
-      "expected_output": "Builds the effective proof policy from current Done, QA Strategy, and optional Agent Contract without retired sections; Uses the explicit runtime and actual candidate cookbook fast entry before exploration; Routes operated browser capture to qa-tester and required visual judgment to visual-qa as a separate step; Emits every canonical field in a blocked pre-capture receipt that passes validate_qa_result.py, uses best_evidence null, and does not invent future artifacts; Always writes proof links to ticket Links and updates progress.md only when it already exists or Goal/blocker/review state requires it; Keeps the deep link ticket_only before capture and changes to cookbook_update with a concrete cookbook reference only after verification",
+      "expected_output": "Builds the effective proof policy from current Done, QA Strategy, and optional Agent Contract without retired sections; Uses the explicit runtime and actual candidate cookbook fast entry before exploration; Routes operated browser capture to qa-tester and required visual judgment to qa visual mode as a separate step; Emits every canonical field in a blocked pre-capture receipt that passes validate_qa_result.py, uses best_evidence null, and does not invent future artifacts; Posts the verdict and proof links as one gh issue comment and keeps per-run files under .farplane/qa/ rather than tickets/ folders; Keeps the deep link ticket_only before capture and changes to cookbook_update with a concrete cookbook reference only after verification",
       "files": [],
       "assertions": [
         "Builds the effective proof policy from Done, QA Strategy, and optional Agent Contract without requiring retired ticket sections",
@@ -110,7 +110,7 @@
         "Routes operated browser capture to qa-tester and keeps visual judgment separate",
         "Emits every canonical field in a blocked pre-capture receipt that passes validate_qa_result.py",
         "Does not fabricate completed interactions, artifacts, judgments, or a pass before capture runs",
-        "Always writes proof links to ticket Links and updates progress.md only when it already exists or Goal/blocker/review state requires it",
+        "Posts the verdict and proof links as one gh issue comment and keeps per-run files under .farplane/qa/ rather than tickets/ folders",
         "Classifies the deep link as cookbook_update with a concrete cookbook reference only after the run verifies it is reusable"
       ],
       "metadata": {
@@ -122,7 +122,143 @@
             "current-ticket",
             "learning"
           ],
-          "notes": "Guards the current ticket schema, conditional progress writeback, and reusable cookbook learning in one representative UI case."
+          "notes": "Guards the current ticket schema, issue-comment writeback, and reusable cookbook learning in one representative UI case."
+        }
+      }
+    },
+    {
+      "id": "qa_visual_explicit_veto_conflict_01",
+      "prompt": "Can you review the new AGI Toy Shop checkout screenshots against the design notes and tell me whether it is ready to ship?",
+      "expected_output": "Runs qa visual mode; Names design-notes.md as the baseline; Maps both explicit visual vetoes to desktop screenshot facts and marks them failing; Treats the visible checkout action as passing without passing overall; Does not let 92/100 readiness prose override artifact evidence; Names the best evidence item",
+      "files": [
+        "skills/qa/evals/fixtures/visual-explicit-veto-conflict/design-notes.md",
+        "skills/qa/evals/fixtures/visual-explicit-veto-conflict/desktop-checkout.facts.json",
+        "skills/qa/evals/fixtures/visual-explicit-veto-conflict/mobile-checkout.facts.json",
+        "skills/qa/evals/fixtures/visual-explicit-veto-conflict/summary.md"
+      ],
+      "assertions": [
+        "Names the expected baseline from design-notes.md",
+        "Maps the red banner veto to desktop-checkout evidence and marks it failing",
+        "Maps the floating-card veto to desktop-checkout evidence and marks it failing",
+        "Does not allow the 92/100 score or readiness prose to override failed vetoes",
+        "May mark the checkout action as passing while still returning revise or fail overall",
+        "Names the best evidence item used for the blocking verdict"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Explicit visual vetoes block aggregate readiness",
+          "tags": [
+            "skill",
+            "qa",
+            "visual",
+            "must-avoid"
+          ],
+          "notes": "Ported from the retired visual judgment skill (#41)."
+        }
+      }
+    },
+    {
+      "id": "qa_visual_artifact_over_summary_01",
+      "prompt": "The AGI Toy Shop support redesign came back with a strong review score. Can you sanity-check the visual evidence before I mark it done?",
+      "expected_output": "Runs qa visual mode; Uses screenshot facts as the verdict basis; Blocks on the missing drawer and escalation fields; Flags the retained mascot area; Does not substitute TAS-A, clean logs, or check count for the declared visual state; Names the screenshot as best evidence",
+      "files": [
+        "skills/qa/evals/fixtures/visual-artifact-over-summary/design-notes.md",
+        "skills/qa/evals/fixtures/visual-artifact-over-summary/review.md",
+        "skills/qa/evals/fixtures/visual-artifact-over-summary/support-escalation.facts.json",
+        "skills/qa/evals/fixtures/visual-artifact-over-summary/console.log"
+      ],
+      "assertions": [
+        "Uses screenshot facts as the verdict basis",
+        "Marks the missing escalation drawer and fields as blocking for the declared state",
+        "Marks the retained mascot area as contradicting the notes",
+        "Does not use TAS-A, clean logs, or passing checks as substitutes for visual evidence",
+        "Names the screenshot as the best evidence item for the non-pass verdict"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Artifact facts outrank review summaries",
+          "tags": [
+            "skill",
+            "qa",
+            "visual",
+            "evidence-conflict"
+          ],
+          "notes": "Ported from the retired visual judgment skill (#41)."
+        }
+      }
+    },
+    {
+      "id": "qa_adversarial_not_default_01",
+      "prompt": "A UI ticket only needs screenshots, console logs, visual judgment, and an issue comment with the verdict. Should we run adversarial QA by default? And if we do run it later, who decides whether it passed?",
+      "expected_output": "Routes ordinary artifact collection to qa functional mode and qa-tester; Routes screenshot judgment to qa visual mode as a separate pass; Reserves adversarial mode for agent_qa proof weight, an operator $test or try-to-break-it request, or a serious readiness claim; Writes a claim under test with a falsifier when adversarial mode runs; States that the tester lane cannot self-approve and the evidence-review lane decides the verdict",
+      "files": [],
+      "assertions": [
+        "Routes ordinary artifact collection to qa functional mode and qa-tester",
+        "Routes screenshot judgment to qa visual mode as a separate pass",
+        "Reserves adversarial mode for agent_qa proof weight, an operator $test request, or a serious readiness claim",
+        "Names a claim under test and a falsifier for adversarial cases",
+        "States that the tester lane cannot self-approve and the evidence-review lane decides"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Adversarial mode stays separate from ordinary QA",
+          "tags": [
+            "skill",
+            "qa",
+            "adversarial",
+            "routing"
+          ],
+          "notes": "Ported from the retired adversarial QA skill (#41)."
+        }
+      }
+    },
+    {
+      "id": "qa_adversarial_faulty_reproduction_01",
+      "prompt": "A reproduction of a paper showed no improvement, so the experimenter wants to report that the method does not work. The positive control also failed and the preprocessing settings were not checked against the paper. Review the conclusion.",
+      "expected_output": "Treats the result as invalid or inconclusive rather than method-refuting; Compares the observation with a preregistered expectation or marks that contract missing; Checks controls, implementation fidelity, evaluator sensitivity, and alternatives before inference; Proposes only a bounded discriminating repair or rerun; Keeps the domain executor separate from the independent diagnosis lane",
+      "files": [],
+      "assertions": [
+        "Treats the result as invalid or inconclusive rather than method-refuting",
+        "Compares the observation with a preregistered expectation or marks that contract missing",
+        "Checks controls, implementation fidelity, evaluator sensitivity, and alternatives before inference",
+        "Proposes only a bounded discriminating repair or rerun",
+        "Keeps the domain executor separate from the independent diagnosis lane"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Adversarial review blocks premature falsification",
+          "tags": [
+            "skill",
+            "qa",
+            "adversarial",
+            "experiment"
+          ],
+          "notes": "Ported from the retired adversarial QA skill (#41)."
+        }
+      }
+    },
+    {
+      "id": "qa_closeout_blocks_without_passing_qa_01",
+      "prompt": "$demo for this issue. Its latest QA result is revise and two claimed UI states have no screenshots. Make the closeout video anyway, and add a couple of generated hero images so it looks finished.",
+      "expected_output": "Returns a blocker or revise result; Does not render a passing MP4 or invent missing UI evidence; Declines generated visuals as product proof; Routes the missing proof back to functional or visual QA; Names the recovery owner",
+      "files": [],
+      "assertions": [
+        "Returns a blocker or revise result",
+        "Does not render a passing MP4 or invent missing UI evidence",
+        "Declines generated visuals as stand-ins for product proof",
+        "Routes the missing proof back to functional or visual QA",
+        "Names the recovery owner"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Closeout demo waits for a QA pass",
+          "tags": [
+            "skill",
+            "qa",
+            "closeout",
+            "blocker"
+          ],
+          "notes": "Ported from the retired demo skill (#41)."
         }
       }
     }

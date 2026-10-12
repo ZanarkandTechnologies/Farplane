@@ -66,7 +66,7 @@ Phase detail lives in [phase router](phase-router.md); storage fields in
    action when supplied.
 7. Tickets: save-only creates none. `future_creation` creates one thin
    source-addressable ticket, "Repurpose <idea> from <source URL or asset ID>
-   into <output>", whose first operation is `content-impl-plan`; dedupe on
+   into <output>", whose first operation is `storyboard`; dedupe on
    source plus equivalent intent first. `generate_now` creates the ticket, then
    continues into `ai-image` or `ai-video`.
 8. Verify retrieval through Tasty Pack: the capture returns with source,

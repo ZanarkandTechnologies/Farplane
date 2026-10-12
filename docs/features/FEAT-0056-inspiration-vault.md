@@ -10,25 +10,25 @@ tags:
   - sys-0012
 refs:
   - docs/systems/content-production.md
-  - skills/ingest-content/SKILL.md
-  - skills/media-ingest/SKILL.md
-  - skills/harness-scout/SKILL.md
+  - skills/intelligest/references/resource-bank/branch.md
+  - skills/intelligest/references/media.md
+  - skills/intelligest/SKILL.md
 feature_id: FEAT-0056
 system_id: SYS-0012
 category: content-production
 public: true
 surfaces:
   - docs/systems/content-production.md
-  - skills/ingest-content/SKILL.md
-  - skills/media-ingest/SKILL.md
-  - skills/harness-scout/SKILL.md
+  - skills/intelligest/references/resource-bank/branch.md
+  - skills/intelligest/references/media.md
+  - skills/intelligest/SKILL.md
 source_refs:
   - docs/systems/content-production.md
 external_refs: []
 evidence_refs:
-  - skills/ingest-content/SKILL.md
-  - skills/media-ingest/SKILL.md
-  - skills/harness-scout/SKILL.md
+  - skills/intelligest/references/resource-bank/branch.md
+  - skills/intelligest/references/media.md
+  - skills/intelligest/SKILL.md
 known_limits: Tasty Packs are computed retrieval results, not saved rows or approved identity; production quality still depends on complete captured element capsules and downstream proof.
 metrics:
   - inspiration_recall_quality
@@ -89,7 +89,7 @@ Tasty Pack retrieval is a computed inspiration surface, not durable approval.
   rows. A capture may therefore contain zero elements.
 - Future-creation notes create or reuse one thin content-production ticket
   containing the stable source URL or Resource Bank asset ID, intended output,
-  and operator details. Its first operation is `content-impl-plan`; no reverse
+  and operator details. Its first operation is `storyboard`; no reverse
   ingestion-job/task link is required.
 - Element kinds remain exactly `format`, `storyboard`, `visual`, `character`, `audio`, and `editing`.
 - Hook mechanics are the opening beat of `storyboard`; semantic copy is part of `storyboard`; subtitle rendering, caption timing, transition behavior, and cut rhythm belong to `editing`; layout stays under `visual`; vocal pacing stays under `audio`.
@@ -138,9 +138,9 @@ Legend:
 Owner surfaces:
 
 - `docs/systems/content-production.md`
-- `skills/ingest-content/SKILL.md`
-- `skills/media-ingest/SKILL.md`
-- `skills/harness-scout/SKILL.md`
+- `skills/intelligest/references/resource-bank/branch.md`
+- `skills/intelligest/references/media.md`
+- `skills/intelligest/SKILL.md`
 
 Source context:
 

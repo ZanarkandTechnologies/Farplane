@@ -19,7 +19,7 @@ category: source-intelligence
 public: true
 surfaces:
   - farplane/bindings.yaml
-  - skills/init-advisor/references/BINDINGS_TEMPLATE.yaml
+  - skills/setup-advisor/references/BINDINGS_TEMPLATE.yaml
   - skills/feed-scout/SKILL.md
   - skills/feed-scout/references/data-model.md
   - skills/feed-scout/references/workflow.md
@@ -62,7 +62,7 @@ source_task(entity.instructions?, source.instructions?, fixed_policy, evidence)
   proposals. They never grant mutation authority.
 - Source additions use the existing proposal ledger and require review before
   config changes. Entity/thesis changes use promotion review. Product feature
-  ideas remain planner candidates and may become separate reviewed tickets.
+  ideas remain report candidates; the operator picks which become tickets.
 - `owned_sources.<source_id>` is the source identity/type hint. Source records
   do not repeat a `kind`; URL, handle, repo, org, or user coordinates support
   acquisition routing.

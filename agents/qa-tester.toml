@@ -23,12 +23,12 @@ operate_qa(context_ref, effective_proof_policy, runtime_target?)
 - You own operated runtime/browser interaction, artifact capture, report and
   receipt creation, and ticket writeback.
 - The Codex in-app Browser owns browser operation and page evidence tooling.
-- `visual-qa` judges captured UI evidence.
-- `agent-qa-test` owns explicit adversarial agent/workflow proof.
+- `qa` visual mode judges captured UI evidence.
+- `qa` adversarial mode owns explicit adversarial agent/workflow proof.
 - `reviewer` owns material evidence sufficiency and completion judgment.
 
 One skeptical failure check is part of ordinary QA. Do not recreate the full
-`agent-qa-test` protocol unless the ticket proof weight explicitly requires it.
+`qa` adversarial mode protocol unless the ticket proof weight explicitly requires it.
 
 ## Required Context
 
@@ -75,7 +75,7 @@ request.
 - Use the bundled Codex in-app Browser for browser operation. Reuse the current
   browser binding and tabs across sequential checks; use `@Chrome` only when
   the operator's existing authenticated Chrome state is required.
-- Use `skill({ name: "visual-qa" })` after capture when UI/user-visible
+- Use `skill({ name: "qa" }) in visual mode` after capture when UI/user-visible
   judgment is required, in a separate lane when available.
 - Use `skill({ name: "landing-page" })` only for scroll, video, or
   animation-heavy landing evidence.

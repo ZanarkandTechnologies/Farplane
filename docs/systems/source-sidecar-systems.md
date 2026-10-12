@@ -10,7 +10,7 @@ tags:
   - source-and-sidecar-systems
 refs:
   - docs/sources/registry.jsonl
-  - skills/harness-scout/SKILL.md
+  - skills/feed-scout/references/single-source.md
   - skills/feed-scout/SKILL.md
   - docs/features/FEAT-0072-scout-brief.md
   - docs/features/FEAT-0074-feed-scout-source-instructions.md
@@ -31,7 +31,7 @@ system_record_json: |
     ],
     "refs": [
       "docs/sources/registry.jsonl",
-      "skills/harness-scout/SKILL.md",
+      "skills/feed-scout/references/single-source.md",
       "skills/feed-scout/SKILL.md",
       "docs/features/FEAT-0072-scout-brief.md",
       "docs/features/FEAT-0074-feed-scout-source-instructions.md",
@@ -101,7 +101,7 @@ flowchart LR
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   sources["external sources<br/>repos, videos, feeds, inspiration"]:::keep
-  scout["FEAT-0011<br/>harness-scout ingestion"]:::changed
+  scout["FEAT-0011<br/>feed-scout single-source"]:::changed
   retired["FEAT-0025<br/>retired video-to-skill reconstruction"]:::retired
   content["SYS-0012<br/>Content Production<br/>Tasty Pack + Brand Kit"]:::added
   registry["docs/sources/registry.jsonl<br/>source decisions"]:::added
@@ -117,7 +117,7 @@ Source And Sidecar Systems let Farplane learn from outside material while keepin
 ## Surfaces
 
 - `docs/sources/registry.jsonl`
-- `skills/harness-scout/SKILL.md`
+- `skills/feed-scout/references/single-source.md`
 - `skills/feed-scout/SKILL.md`
 - `docs/features/FEAT-0072-scout-brief.md`
 - `docs/features/FEAT-0074-feed-scout-source-instructions.md`

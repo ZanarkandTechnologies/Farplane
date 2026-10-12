@@ -180,7 +180,7 @@ returns: the packet, a pass | revise | blocked verdict, source gaps, human gate,
 - [landing page example](examples/landing-page/example.md) and
   [article brief example](examples/article-brief/example.md) - calibrate
   packet length and tone.
-- [ingest-content](../ingest-content/SKILL.md) - save swipes or references as
+- [intelligest](../intelligest/SKILL.md) - save swipes or references as
   reusable Resource Bank material.
 - [review](../review/SKILL.md) - before high-visibility public copy.
 

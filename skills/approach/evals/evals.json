@@ -104,7 +104,7 @@
     {
       "id": "approach_relationship_frontier_01",
       "prompt": "We have a reviewed exception-workflow demo, a short research brief on operations leader Sam, and a note that our advisor Priya knows Sam well but has never offered an introduction. We could ask Sam directly for a pilot, send a useful annotated sample first, or ask Priya for an intro. Pick the best path and draft only a short DM. Don't update the Wiki or contact anyone.",
-      "expected_output": "Uses only the supplied proof, research brief, and relationship note; compares the three genuinely viable paths and does not claim Priya owes a favor or will introduce; judges commercial movement, relationship value, ask burden, and relationship risk separately with evidence-backed ordinal labels and no numeric total; selects one path based on the evidence and explains why the other two lost; changes selection if the warm path's willingness is unsupported or its relationship risk outweighs faster movement; passes only the selected strategy to copywriting-advisor for one unsent short DM; excludes options, ranks, selection rationale, and message prose from any proposed entity delta; does not update the Wiki or contact anyone.",
+      "expected_output": "Uses only the supplied proof, research brief, and relationship note; compares the three genuinely viable paths and does not claim Priya owes a favor or will introduce; judges commercial movement, relationship value, ask burden, and relationship risk separately with evidence-backed ordinal labels and no numeric total; selects one path based on the evidence and explains why the other two lost; changes selection if the warm path's willingness is unsupported or its relationship risk outweighs faster movement; passes only the selected strategy to copywriting for one unsent short DM; excludes options, ranks, selection rationale, and message prose from any proposed entity delta; does not update the Wiki or contact anyone.",
       "files": [
         "templates/approach-packet.md"
       ],
@@ -229,7 +229,7 @@
     {
       "id": "approach_justified_demo_01",
       "prompt": "We researched a regional project-controls director who publicly argues that static weekly reports hide how one delayed authority approval changes multiple commissioning dates. A one-page diagram cannot show the cascading state changes they are discussing. We have a reviewed synthetic dependency model and can spend one day. Shape the smallest useful contribution and the unsent approach; do not contact them or use company branding.",
-      "expected_output": "Justifies a proof-sized demo because the relevant uncertainty is the changing cascade rather than a static explanation; keeps it to one workflow and one decision with synthetic data and a one-day budget; routes the accepted boundary through the N2 frame and solution boundary, optionally through demo-realism for believable workflow/data, and then to an actual implementation owner through impl-plan or a project-local demo builder rather than calling demo-realism the builder; defines the inspection surface, standalone value, correction ask, learning objective, falsifier, stop condition, and unchanged outreach, branding, spend, and publication gates.",
+      "expected_output": "Justifies a proof-sized demo because the relevant uncertainty is the changing cascade rather than a static explanation; keeps it to one workflow and one decision with synthetic data and a one-day budget; routes the accepted boundary through the N2 frame and solution boundary, optionally through prd realism mode for believable workflow/data, and then to an actual implementation owner through impl-plan or a project-local demo builder rather than calling prd realism mode the builder; defines the inspection surface, standalone value, correction ask, learning objective, falsifier, stop condition, and unchanged outreach, branding, spend, and publication gates.",
       "files": [
         "templates/approach-packet.md"
       ],
@@ -302,12 +302,12 @@
     {
       "id": "approach_accepted_mvp_execution_gate_01",
       "prompt": "The client likes the quote workflow idea. Can we turn it into something the agent team can build without losing the sales-review angle?",
-      "expected_output": "Preserves the accepted MVP boundary instead of reopening broad ideation; Produces or updates a brief with V1 scope, proof model, review artifact, risks, and assumptions; Identifies whether the next owner is PRD, functional-ui, impl-plan, or goal-advisor; Does not route to autonomous execution until the build slice and proof contract are explicit; Keeps the prospect/client review angle visible as part of done or proof",
+      "expected_output": "Preserves the accepted MVP boundary instead of reopening broad ideation; Produces or updates a brief with V1 scope, proof model, review artifact, risks, and assumptions; Identifies whether the next owner is PRD (incl. workflow mode), impl-plan, or goal-advisor; Does not route to autonomous execution until the build slice and proof contract are explicit; Keeps the prospect/client review angle visible as part of done or proof",
       "files": [],
       "assertions": [
         "Preserves the accepted MVP boundary instead of reopening broad ideation",
         "Produces or updates a brief with V1 scope, proof model, review artifact, risks, and assumptions",
-        "Identifies whether the next owner is PRD, functional-ui, impl-plan, or goal-advisor",
+        "Identifies whether the next owner is PRD (incl. workflow mode), impl-plan, or goal-advisor",
         "Does not route to autonomous execution until the build slice and proof contract are explicit",
         "Keeps the prospect/client review angle visible as part of done or proof"
       ],

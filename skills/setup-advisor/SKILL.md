@@ -1,13 +1,11 @@
 ---
 name: setup-advisor
-version: 0.1.0
-description: "Turn a project and desired external services into an operated setup, a human-gate wizard when needed, and a verified setup receipt."
-department: operations
+description: "Use for \"set up this project\", \"start a new project\", \"set up the client deployment\" or \"wire up secrets\": a Farplane substrate, split charter with honest KPIs, wired services and a verified setup receipt."
 source: local
+department: delivery
 template_uses:
-  skill-template: "0.4.0"
+  skill-template: "0.6.5"
   skill-eval-task: "0.2.0"
-  skill-surface-budget: "0.1.0"
 allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 ---
 
@@ -15,172 +13,172 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 
 ## Context
 
-Use this skill to provision, configure, migrate, or connect external services
-for an existing project while minimizing operator work. The agent should
-perform every safe, authorized, automatable step itself. Generate an interactive
-wizard only for irreducible human gates such as login, MFA, secret revelation,
-legal acceptance, payment, or an approval-gated cutover.
-
-Keep `init-advisor` responsible for Farplane project substrate and stack
-scaffolding. Keep `automation-advisor` responsible for recurring Codex
-automations. This skill owns the verified setup receipt for service setup; it
-does not own later service operation.
+Use this to set up a project or client deployment end to end: scaffold a new
+Farplane project, upgrade an existing one, turn a business or project idea into
+its charter, metric objectives and starter tickets, or provision and connect
+external services and secrets. The agent runs every safe, authorized step
+itself; the operator only clears login, MFA, OAuth, payment, legal or CAPTCHA
+gates. It does not own recurring automations (`automation-advisor`), feature
+specs (`prd`), ticket plans (`impl-plan`) or Goal execution (`goal-advisor`).
 
 ## Skill Signature
 
 ```text
-setup_advisor(project_root, services?, target_state?, secret_store?, ci_target?, execution_mode?)
-  -> setup_receipt + human_gate_wizard_or_spec? + verification_evidence
-state: reads(repo config, env examples, CI references, provider config, local tool/auth readiness, current official docs); writes authorized setup/config changes, an ephemeral wizard by default, and a redacted receipt
-owns: one verified setup receipt for the requested service set
-gates: current_journey_grounded; automate_before_handoff; secret_destination_safe; external_side_effect_authorized; every_service_status_verified
-routes: init-advisor | automation-advisor | research | direct-action
-fails: asks the operator to do automatable work; invents dashboard steps; exposes or tracks secrets; claims setup complete with unverified or blocked services
+setup_advisor(target, mode?: init | charter | deploy | migrate, services?, human_intake?, force?)
+  -> setup_receipt
+reads: repo files, farplane/*, docs/bootstrap-brief.md, .env examples, CI refs,
+       provider config, CLI auth state, current official provider docs
+does: scaffolds or upgrades the substrate, drafts the split charter, files
+      starter issues, operates safe service setup, wizards only human gates
+writes: Farplane scaffold, farplane/{harness,metrics,bindings}.yaml deltas,
+        GitHub issues, provider config, an ephemeral wizard, a redacted receipt
+returns: per-surface status + evidence + human gates + readiness gaps + next owner
 ```
-
-`execution_mode := operate | guide | plan`. Default to `operate` when the
-request authorizes setup. Use `guide` when only a human can operate the target
-environment, and `plan` when the user asked for analysis only.
-
-## Phase Boundary
-
-Inspect official provider documentation inline for a single ordinary service.
-Use `research` (code) only when several providers, conflicting docs, or
-a migration need a separate evidence artifact. Use independent review for
-material cutovers or credential-routing changes; do not externalize routine
-setup planning.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Route and preflight the setup request.
-  - [ ] Read the first-load Todo List guardrails before execution.
-  - [ ] Route Farplane substrate creation to `init-advisor` and recurring Codex
-        automation activation to `automation-advisor`; retain external-service
-        provisioning here. For a mixed request, return the explicit owner
-        sequence: initialize the project first, run service setup against that
-        state second, then activate automations that consume the bindings.
-  - [ ] Resolve `project_root`, desired end state, execution mode, service set,
-        secret store, CI target, available tools, and side-effect authority from
-        the request and local state before asking a question.
-- [ ] 2. Discover the real setup contract.
-  - [ ] Inspect README files, package manifests, `.env*` examples, compose and
-        deployment files, provider configs, and every CI `secrets.*` / `vars.*`
-        reference; never print existing values.
-  - [ ] Check local CLI installation and authentication redactedly, then read
-        current official docs for each command or dashboard journey that will
-        be prescribed. Record each inspected source by provider, page title,
-        and URL; when current docs could not be inspected, say so and avoid
-        asserting an exact UI journey or undocumented authenticated command.
-        A URL found in a fixture or recalled from memory is not inspection.
-        Never claim a source was inspected “today” or “this run” unless an
-        actual web/browser open is present in this invocation's evidence. In a
-        read-only fixture, isolated eval, or supplied-context-only plan, default
-        every external source to `not_inspected`; describe provider commands as
-        pending live-doc confirmation instead of presenting them as current.
-  - [ ] Build a dependency-ordered map of prerequisites, exact current
-        commands or probes, outputs, destinations, secret/public
-        classification, reversibility, verification, and owner (`agent` or
-        `human`). Distinguish provider-login credentials from application
-        runtime values and name the safe destination for both. Preserve every
-        discovered configuration key exactly and map `source value -> exact
-        destination store + key`; categories such as “runtime secrets” are not
-        a sufficient destination.
-  - [ ] Account for every discovered dependency and safety step in the map;
-        mark each `agent`, `human`, or `blocked` rather than silently dropping
-        inconvenient items such as TTL preparation, rollback snapshots, or
-        preflight probes.
-- [ ] 3. Operate everything the agent can safely complete.
-  - [ ] Use available CLI, API, and browser capabilities for reversible,
-        authorized steps; reuse existing configuration and make reruns safe.
-        Keep install, local configuration, linking, and non-secret probes in an
-        agent-preparation block; never bundle them into a human wizard stage.
-  - [ ] Pause only for login/MFA, secret reveal, legal or payment acceptance,
-        missing authority, destructive changes, deploys, DNS/cutovers, or
-        another action whose consequence requires the operator.
-  - [ ] Store Farplane-project secrets in Doppler by default and CI secrets in
-        the named CI store. Never write a secret to a tracked file; use a local
-        ignored env file only when the project contract and operator explicitly
-        select it. When the request proposes repo storage, state this opt-in
-        boundary explicitly rather than presenting an ignored env file as a
-        fallback. Verify secret presence by names or consumer readiness only:
-        for Doppler use `doppler secrets --only-names`, never `secrets get
-        --plain`, and for CI use the provider's secret-name listing.
-- [ ] 4. Generate a wizard only for remaining human gates.
-  - [ ] Copy `templates/setup-wizard.sh` to an ignored project-local scratch
-        path when available, otherwise an OS temp directory. Commit a wizard
-        under `scripts/` only when the operator requests a repeatable setup path.
-        In a read-only or plan-only environment, return the complete ordered
-        wizard stage specification plus the exact agent-preparation commands,
-        probes, and intended evidence paths instead of omitting them.
-  - [ ] Author one focused stage per human task with the exact URL, current UI
-        journey, captured value, safe destination, confirmation gate, and
-        dependency order. A stage may name the agent action it unlocks, but must
-        not ask the human to perform that automatable action. Use only helpers
-        already present in the template.
-  - [ ] Run `bash -n`, run `shellcheck` when available, make the copy executable,
-        and statically trace every captured value to its declared destination.
-- [ ] 5. Verify and return the setup receipt.
-  - [ ] Give every requested service exactly one status: `configured`,
-        `human_required`, `blocked`, or `failed`; run non-secret health probes
-        and config-name checks wherever the provider supports them. For a
-        cutover, name distinct pre-change and post-change probes, including
-        consumer-visible routing/delivery checks rather than only rollback
-        tripwires. Also account explicitly for current TTL, TTL preparation,
-        config snapshots, exact mutation boundary, and rollback destination;
-        in read-only mode, label authenticated provider commands as unavailable
-        unless current docs were actually opened.
-  - [ ] Record changed surfaces, redacted evidence, wizard path and run command,
-        remaining human gates, rollback notes, and the next smallest action.
-  - [ ] Apply the first-load Todo List guardrails again. Never collapse `human_required` or
-        `blocked` into “setup complete.”
+- [ ] **N1 — Bind the target and pick the mode.**
+  `request + repo state -> mode sequence + project_root + authority | blocked`
+
+  Rule: No `farplane/` yet is `init`; an old `farplane/manifest.json` version
+  is `migrate`; an idea, thesis, KPI or "operating model" ask is `charter`;
+  services, secrets, CI, DNS or a client deployment is `deploy`. A mixed ask
+  runs in that order (substrate, then charter, then services, then
+  `automation-advisor` for jobs) with one receipt. Inspect README, AGENTS,
+  docs, package files and existing tickets before writing or asking.
+
+  Example: "start a new project and hook up Stripe" -> `init` -> `charter` ->
+  `deploy`, one receipt.
+
+  Assert:
+  - One ordered mode sequence and named authority, or the missing input.
+- [ ] **N2 — init / migrate: lay down or upgrade the substrate.**
+  `project_root + profile + force? -> scaffold + bootstrap brief | collisions`
+
+  Rule: Run `scripts/bootstrap.sh <project>`; it never overwrites without
+  `--force`, which is only for an explicit scaffold replacement. To upgrade an
+  existing project, apply [FRAMEWORK_CHANGELOG](references/FRAMEWORK_CHANGELOG.md)
+  entries in order and run `scripts/migrate_framework.py --project-root <p>
+  --force`, the only safe force path: never hand-force over project files.
+  Pick the profile from [project-profiles](references/project-profiles.md); for
+  an app scaffold load [CODE_SCAFFOLD_RECIPES](references/CODE_SCAFFOLD_RECIPES.md)
+  and stop at cloud login, billing or deploy. Load
+  [migration](references/migration.md) for the inventory and finish checklist.
+
+  Assert:
+  - Every pre-existing file is byte-identical or named as an approved overwrite.
+  - Hooks stay disabled; no live automation or thread is created.
+- [ ] **N3 — charter: draft the split charter with honest metrics.**
+  `idea + values + constraints -> harness/metrics/bindings delta | readiness gap`
+
+  Rule: The charter is split: `farplane/harness.yaml` (thesis, non-tradeoffs,
+  authority, planning areas, capability and metric refs), `metrics.yaml`
+  (meaning, direction, freshness, guards, refresh) and `bindings.yaml`
+  (non-secret provider coordinates), from the HARNESS/METRICS/BINDINGS
+  templates. Reuse `docs/skills/registry.jsonl`, root and `.agents/skills/`
+  workflows before proposing a local skill. Missing thesis, non-goals or
+  authority is one question or a gap in `docs/bootstrap-brief.md`
+  ([phase-boundary](references/phase-boundary.md)).
+
+  Assert:
+  - Every live KPI names an honest provider binding; with none, it is marked
+    not live with the credential, export, API or instrumentation that unblocks
+    it. No number is invented.
+- [ ] **N4 — charter: file starter tickets and hand off.**
+  `approved charter + milestone -> GitHub issues + next owner`
+
+  Rule: Starter and unblock tickets are GitHub issues in the project's own repo
+  (search first, `gh issue create --body-file`); bootstrap's `TASK-0001..0003`
+  foundation files are body drafts for find customer -> deliver value ->
+  collect revenue. Client and business issues go to private repos only. Use
+  [goal-advisor handoff](templates/goal-advisor-handoff.md) once a ticket,
+  metric provider, stop rule and proof boundary are known; route owner
+  placement to `harness-advisor`, new workflows to `skill-creator`.
+
+  Assert:
+  - Each access, setup or approval blocker is its own unblock issue.
+  - No controller, extra heartbeat or native Goal is created here.
+- [ ] **N5 — deploy: map the real setup contract and operate safe steps.**
+  `repo config + CI refs + docs -> dependency map + configured steps | gate`
+
+  Rule: Read `.env*` examples, compose/deploy files, provider config and every
+  CI `secrets.*`/`vars.*` ref; check CLI auth redactedly; open current official
+  docs before prescribing a command or UI journey (otherwise mark it
+  `not_inspected`). Map each value `source -> exact store + key`. Secrets go to
+  Doppler for Farplane projects and to the named CI store; check them with
+  `doppler secrets --only-names`, never `--plain`, and never write one to a
+  tracked file.
+
+  Assert:
+  - Every discovered key, TTL, snapshot and probe is `agent`, `human` or
+    `blocked`; none is silently dropped.
+- [ ] **N6 — deploy: wizard only the human gates.**
+  `remaining gates -> ephemeral wizard | stage spec`
+
+  Rule: Copy [setup-wizard.sh](templates/setup-wizard.sh) to ignored scratch
+  only for login, OAuth, payment, legal, MFA, secret reveal or CAPTCHA; every
+  install, config, link or probe stays with the agent. One stage per gate with
+  URL, captured value, destination and confirmation; read-only runs return the
+  stage spec. Pause before DNS, cutover, deploy or destructive steps.
+
+  Assert:
+  - `bash -n` passes and each captured value traces to its destination.
+- [ ] **N7 — Verify and return the setup receipt.**
+  `mode outputs + probes -> receipt | escalation`
+
+  Rule: Run the narrowest proof per mode: `bootstrap.sh`/migration output,
+  `python3 bin/validators/check_farplane_project_files.py` where present,
+  non-secret health and name probes, pre- and post-change probes for a cutover.
+  Report a plain status: "Ready", "Filesystem ready, operating model still
+  missing", "Services human_required" or "Blocked".
+
+  Assert:
+  - Each service is `configured | human_required | blocked | failed`; a human
+    or blocked item is never reported as complete.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
-
-## Templates
-
-- [Setup wizard template](templates/setup-wizard.sh) — copy only when Todo 4
-  finds at least one irreducible human gate; never edit the library section in
-  the generated copy.
-
-Every operated, guide, or plan response uses this compact receipt shape; write
-`none` rather than omitting a section:
-
-```text
-Setup status: service | configured|human_required|blocked|failed | evidence/blocker
-Grounding: provider | inspected_this_run + page + URL | not_inspected + resulting limit
-Current -> target: surface | exact current state | exact target state
-Agent preparation: dependency order | exact command/action | proof | evidence path
-Human gates: stage | exact human-only action | current URL | agent action unlocked
-Value map: source value | secret/public/login | exact store | exact key
-Local env policy: not selected | explicitly selected by project + operator
-Verification / rollback: pre|post | probe | expected observation | recovery action
-```
-
-Positive example: “Set up Stripe and Vercel” leads the agent to inspect the
-repo and CI, install a missing CLI before its login gate, configure authenticated
-paths itself, and create a wizard only for login/key revelation. Each provider
-login credential and application value has an explicit safe destination; the
-receipt names configured and human-gated services without displaying values.
 
 ## Gotchas
 
-- A link list is not a setup: operate the safe steps and make each human step
-  precise enough for a stranger to complete.
-- A successful command is not end-to-end proof: verify the consumer can see the
-  expected non-secret configuration or readiness state.
-- Do not create provider recipes before repeated evidence shows a stable,
-  reusable journey; current official docs remain the source of truth.
+- File existence is not readiness: placeholder `harness.yaml` means the
+  operating model is still missing.
+- `bootstrap.sh --force` is not an upgrade; it replaces whole files.
+- A link list is not a setup: operate the safe steps, wizard only the gates.
+- A successful command is not end-to-end proof; check the consumer sees it.
+- The charter worksheet is evidence, never the charter; do not create a
+  Markdown charter.
+- Do not invent thesis, authority, spend, publishing, contact or credentials.
+- Keep project-specific capabilities in `.agents/skills/` until repeated
+  cross-project proof.
 
 ## Reference Map
 
-- the first-load Todo List guardrails — read before every setup and apply
-  again before returning the receipt.
-- [Behavioral eval suite](evals/evals.json) — use when changing routing,
-  automation-first behavior, secret handling, or completion claims.
+- [reference-map](references/reference-map.md) - every template, its target,
+  and which mode loads it.
+- [migration](references/migration.md) - bootstrap inventory, brownfield
+  upgrade, Wiki regeneration, finish checklist.
+- [phase-boundary](references/phase-boundary.md) - `human_intake`, readiness
+  states, split-file ownership.
+- [CODE_SCAFFOLD_RECIPES](references/CODE_SCAFFOLD_RECIPES.md) - stack recipes
+  (Convex, Next.js, Clerk, shadcn, quality tooling).
+- [project-harness worksheet](templates/project-harness.md),
+  [capability map](templates/capability-map.md),
+  [missing primitive plan](templates/missing-primitive-plan.md) - charter mode.
+- [AGENTS.md](AGENTS.md) - bootstrap invariants for the generated project.
+- [evals](evals/evals.json) - routing, secrets, foundation and KPI honesty.
 
 ## Output
 
-Return one redacted setup receipt containing scope, service-status table,
-automated actions, human gates, exact source-to-destination key map, changed
-surfaces, verification evidence, rollback notes, and the exact wizard command
-when a wizard exists.
+```text
+Mode: init | migrate | charter | deploy (sequence)
+Status: Ready | Filesystem ready, operating model still missing | Services human_required | Blocked
+Substrate: written | preserved | collisions <paths> | migrated <from -> to>
+Charter: harness/metrics/bindings deltas | KPI -> provider | not-live KPIs + unblock
+Issues: starter and unblock issue links | foundation drafts
+Setup status: service | configured|human_required|blocked|failed | evidence
+Grounding: provider | inspected + page + URL | not_inspected + limit
+Value map: source value | secret/public/login | exact store | exact key
+Human gates: stage | human-only action | URL | agent action unlocked | wizard cmd
+Verification / rollback: probe | expected observation | recovery action
+Next owner: automation-advisor | prd | impl-plan | goal-advisor | none
+```

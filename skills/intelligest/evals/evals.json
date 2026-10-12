@@ -398,12 +398,12 @@
     {
       "id": "intelligest_resource_bank_future_creation_ticket_01",
       "prompt": "Ingest this interview and make a ticket so we later produce a short video from its argument about agent trust. Keep the source wording as reference, but do not generate the video now.",
-      "expected_output": "Stores the capture using a stable source URL or Resource Bank asset ID.; Creates or reuses one thin content-production ticket whose instruction says to repurpose the agent-trust argument from that source into a short video.; Preserves the operator details and names content-impl-plan as the first operation.; Returns the ticket ID or path in tickets[].; Does not require a reverse ingestionJobId-to-taskId link.; Repeating the same source and materially equivalent intent reuses the existing ticket.",
+      "expected_output": "Stores the capture using a stable source URL or Resource Bank asset ID.; Creates or reuses one thin content-production ticket whose instruction says to repurpose the agent-trust argument from that source into a short video.; Preserves the operator details and names storyboard as the first operation.; Returns the ticket ID or path in tickets[].; Does not require a reverse ingestionJobId-to-taskId link.; Repeating the same source and materially equivalent intent reuses the existing ticket.",
       "files": [],
       "assertions": [
         "Creates or reuses one source-addressable repurpose ticket for future_creation intent.",
         "Names the intended short-video output and preserves the selected agent-trust argument.",
-        "Uses content-impl-plan as the ticket's first operation.",
+        "Uses storyboard as the ticket's first operation.",
         "Returns the ticket ID or path in tickets[].",
         "Does not require a reverse ingestion-job/task link.",
         "Dedupes by normalized source reference plus materially equivalent intent."
@@ -416,7 +416,7 @@
             "intelligest",
             "future-creation",
             "content-ticket",
-            "content-impl-plan",
+            "storyboard",
             "resource-bank"
           ]
         }

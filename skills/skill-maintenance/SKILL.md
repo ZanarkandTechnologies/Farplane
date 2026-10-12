@@ -21,7 +21,7 @@ metadata, registry sync, installed-copy checks, and review routing.
 Every edited `skills/**/SKILL.md` has a hard envelope of 200 physical lines.
 Within that envelope, use responsibility, first-load cost, duplication, and
 observed maintenance pain to decide what should split. Use
-`consolidate(target = edited_skill, structure = skill)` when compaction needs
+`doc_advisor(mode = consolidate, target = edited_skill, structure = skill)` when compaction needs
 judgment rather than mechanical extraction.
 
 ## Skill Signature

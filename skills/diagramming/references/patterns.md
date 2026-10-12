@@ -106,7 +106,7 @@ outcome. This is often clearer than architecture for a workflow review.
 ```
 
 Use it for interaction and state; route detailed screens, copy, geometry, and
-visual assertions to `design.md`, `functional-ui`, and `visual-design`.
+visual assertions to `design.md`, `prd` workflow mode, and `visual-design`.
 
 ## 6. Before / After Delta
 

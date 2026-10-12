@@ -56,7 +56,7 @@ gates:
   budget_and_stops_named; drift_and_logging_named; proof_route_named;
   packet_context_budget_pass; material_packet_approved
 routes:
-  impl-plan | telegram-message | qa | visual-qa | agent-qa-test | review | direct-answer
+  impl-plan | telegram-message | qa | review | direct-answer
 fails:
   hidden_loop; prompt_only_material_goal; full_progress_first_load;
   duplicated_ticket_policy; self_certified_material_proof; stale_packet;
@@ -152,7 +152,7 @@ whenever the ticket changes. For branch detail load only the relevant reference:
     long-running, strategic, rollout, or self-approval-prone work.
 - [ ] 6. Compile proof and completion.
   - [ ] Ticket Done and QA Strategy win over program or launcher prose.
-  - [ ] Name `qa-tester`, `visual-qa`, `agent-qa-test`, `reviewer`, `demo`, or
+  - [ ] Name `qa-tester`, `qa` (visual, adversarial, closeout), `reviewer`, or
     human feedback when required; self-certification is not proof.
   - [ ] Material implementation invariant: ordered sanity checks -> QA evidence
     review -> narrated lead-engineer demo MP4 -> ticket-scoped response draft ->

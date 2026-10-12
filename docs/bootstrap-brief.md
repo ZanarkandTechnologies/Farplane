@@ -6,7 +6,7 @@ created_at: 2026-06-21
 updated_at: 2026-06-21
 framework_template_version: "0.1.0"
 refs:
-  - skills/init-advisor/SKILL.md
+  - skills/setup-advisor/SKILL.md
   - farplane/manifest.json
   - docs/farplane-framework/project-files.md
 ---
@@ -23,7 +23,7 @@ refs:
 ## Intent
 
 - Why now: Farplane is dogfooding the project substrate created by
-  `init-advisor`.
+  `setup-advisor`.
 - What good looks like: A new agent can find the project harness, metric
   objectives, automation manifest, runtime state, tickets, proof commands, and
   stop conditions without relying on transcript memory.
@@ -86,7 +86,7 @@ refs:
 - Canonical TAS reviewer route: reviewer lane for material review when
   available.
 - Simplification policy: use the `code-health` lean gate for implementation bloat and
-  `unslop` for prose when cleanup is explicit.
+  the `copywriting` final pass for prose when cleanup is explicit.
 - Separate CI / deployment gate: no deploy/publish action without explicit
   operator approval.
 

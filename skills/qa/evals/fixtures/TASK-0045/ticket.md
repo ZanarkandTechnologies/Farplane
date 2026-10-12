@@ -30,7 +30,7 @@ Use the candidate cookbook entry, delegate capture, then reconcile evidence.
 ## QA Strategy
 
 Runtime: `http://127.0.0.1:4173/qa`. Delegate browser operation to
-`qa-tester`; the rendered-state obligation requires a separate `visual-qa`
+`qa-tester`; the rendered-state obligation requires a separate `qa` visual-mode
 judgment after capture.
 
 ## Agent Contract

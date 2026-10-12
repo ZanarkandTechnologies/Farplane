@@ -11,7 +11,7 @@ Define frontend look, taste, hierarchy, and visual-system direction once the fun
 
 ## Minimal Example
 
-1. Confirm `functional-ui` has settled the workflow.
+1. Confirm `prd` workflow mode has settled the workflow.
 2. Classify product vs brand register.
 3. Set scene sentence and a visual concept from the product's world.
 4. Sketch three directions, pick one, then set numeric taste dials and the visual system.
@@ -21,6 +21,6 @@ Define frontend look, taste, hierarchy, and visual-system direction once the fun
 
 ## How to Test
 
-- Confirm the skill routes broken workflows back to `functional-ui`.
+- Confirm the skill routes broken workflows back to `prd` workflow mode.
 - Confirm the output gives implementation-ready visual constraints.
 - Run `python3 skills/skill-creator/scripts/quick_validate.py skills/visual-design`.

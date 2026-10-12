@@ -1,0 +1,102 @@
+{
+  "skill_name": "prd",
+  "evals": [
+    {
+      "id": "prd_workflow_browser_comparables_01",
+      "prompt": "We are redesigning first-run onboarding for a collaborative AI workspace. Use this browser receipt from today's research: Mobbin https://mobbin.com/browse/web/apps redirected to its marketing/login surface, so deeper flow access was unavailable; Page Flows https://pageflows.com/web/flows/ exposed onboarding and invite categories; its public HeyGen onboarding flow https://pageflows.com/post/desktop-web/onboarding/heygen/ showed Home, Sign up, Enter code, Pricing, Get started, Add prompt, Submit, Generating answer, Loading, Generated AI, Download, Onboarding tasks, Create video, and return Home. Evidence files: tickets/TASK-9004/artifacts/mobbin-public-flows.png, tickets/TASK-9004/artifacts/pageflows-web-flows-index.png, and tickets/TASK-9004/artifacts/pageflows-heygen-direct.png. Recommend a proven interaction model rather than an invented wizard and preserve the evidence decisions.",
+      "expected_output": "Validates and reuses the supplied current browser receipt rather than rerunning it; Captures source URLs, job, sequence, states, access limits, evidence refs, and adopt/adapt/reject decisions; Uses Page Flows workflow evidence and treats Mobbin as an access-limited source; Uses functional sources rather than taste galleries; Recommends a concrete state-complete workflow",
+      "files": [],
+      "assertions": [
+        "Validates and reuses the supplied current browser-operation receipt instead of redundantly rerunning the same sources.",
+        "Records source URL, user job/query, observed sequence and states, access/login limits, evidence refs, and adopt/adapt/reject decisions.",
+        "Treats Mobbin as an access-limited source and Page Flows/HeyGen as operated journey and sequence evidence.",
+        "Does not use Pinterest, galleries, or isolated aesthetic screenshots as functional workflow proof.",
+        "Recommends one concrete onboarding model with empty, loading, failure, recovery, success, and return states."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Browser-operates comparables for a material unsettled workflow",
+          "tags": [
+            "skill",
+            "prd",
+            "browser-research",
+            "comparables",
+            "workflow-mode"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prd_workflow_skip_comparables_01",
+      "prompt": "The existing settings screen works. Move the Save button into the sticky footer used everywhere else and fix its disabled and saving labels. This is a small same-pattern correction.",
+      "expected_output": "Uses the settled local pattern without broad browser research; Defines disabled, saving, success, and error behavior; Keeps scope small; Does not use aesthetic references as functional proof",
+      "files": [],
+      "assertions": [
+        "Uses the settled local sticky-footer pattern and explicitly skips broad comparable research.",
+        "Defines disabled, saving, success, and error behavior for the button.",
+        "Keeps the handoff scoped to the small same-pattern correction.",
+        "Does not use Pinterest or aesthetic references as functional evidence."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skips heavyweight research for a tiny settled correction",
+          "tags": [
+            "skill",
+            "prd",
+            "negative-route",
+            "workflow-mode"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prd_workflow_focus_and_simplicity_01",
+      "prompt": "An incident lead must assign each incoming production incident to an owner fast. The draft puts a recommendations carousel, an import wizard, a permanent activity feed, and a six-step setup before the incident queue. The actual workflow must still handle evidence requests, resolution, reopening, empty, loading, error, and recovery states. Recommend the functional planning handoff.",
+      "expected_output": "Names the operator benefit and one core assignment action; removes or defers unrelated choices while preserving necessary incident states and evidence; records an explicit rejected complexity; recommends a concrete workflow rather than a visual style imitation.",
+      "files": [],
+      "assertions": [
+        "States the customer benefit and identifies assigning an incident owner as the core action.",
+        "Removes or defers the recommendations carousel, import wizard, permanent activity feed, or setup steps unless a user-job reason justifies them.",
+        "Names a deliberate no rather than merely calling the UI cleaner or simpler.",
+        "Preserves evidence requests, resolution, reopening, empty, loading, error, and recovery behavior.",
+        "Returns a concrete functional handoff without substituting visual style for workflow judgment."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Protects the primary incident-assignment action through subtraction",
+          "tags": [
+            "skill",
+            "prd",
+            "focus",
+            "simplicity",
+            "workflow-mode"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prd_realism_source_ladder_01",
+      "prompt": "Our permit-tracking MVP for a mid-size general contractor feels fake: every permit in the demo is a generated PDF with lorem-ipsum conditions, and the 'AI risk score' is the model guessing a number. We pitch to the client's operations director next week. Make the demo feel real and hand it to the builder.",
+      "expected_output": "Selects realism mode; Searches user-provided or public permit artifacts before generating synthetic ones and labels each artifact's provenance; Moves the risk score to a deterministic rule or calculation instead of LLM imitation; Builds operating hypothesis, MVP slice, workflow and screen/state ladders, and a demo-data pack scored with the rubric; Requires an expectation-check artifact in the build handoff",
+      "files": [],
+      "assertions": [
+        "Selects realism mode and frames the operating model as inference, not verified client truth.",
+        "Tries user-provided, local, or public permit artifacts before synthetic ones and labels each real-public, user-provided, local-supplied, or synthetic-fallback.",
+        "Assigns the risk score to a deterministic rule, calculation, or retrieval rather than letting the LLM imitate the computation.",
+        "Produces workflow and screen/state ladders plus a demo-data pack with statuses, timelines, and edge cases, scored against the realism rubric.",
+        "Requires the builder's handoff to include an expectation-check artifact with data exercised, workflow, observed result, mismatch notes, evidence, and an operator question."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Realism mode sources real artifacts and a deterministic mechanism",
+          "tags": [
+            "skill",
+            "prd",
+            "realism-mode",
+            "provenance"
+          ]
+        }
+      }
+    }
+  ]
+}

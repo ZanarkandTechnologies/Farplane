@@ -44,10 +44,10 @@ roles:
 ## Claims
 
 ### Audience and content
-<!-- social-content, storyboard, copywriting-advisor -->
+<!-- social-content, storyboard, copywriting -->
 
 ### Offers and sales
-<!-- review-business (offer), copywriting-advisor, approach, proposal-pricing -->
+<!-- review-business (offer), copywriting, approach, proposal-pricing -->
 
 ### Outreach and relationships
 <!-- prospect, approach, review-business (leads) -->

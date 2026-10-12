@@ -40,7 +40,7 @@ mix records when the reason is explicit.
 - Keep implementation library details in `effect-stacks.json`, not recipes.
 - Keep visual taste in `taste-profiles.json`, not effect stacks.
 - Keep app UI profiles out of these landing registries; app UI stays with
-  `functional-ui` and `visual-design`.
+  `prd` workflow mode and `visual-design`.
 
 ## New Record Checklist
 

@@ -39,8 +39,8 @@ documentation, metric, and proof artifacts when sufficient. Do not self-author
 an advisor-owned gap or defer its resolution to implementation.
 
 For UI-bearing work, resolve only the facets that change the ticket: workflow
-and low-fi wireflow (`functional-ui`), visual reference/system
-(`visual-design`), production media (`asset-advisor`), and one-page offer/story
+and low-fi wireflow (`prd` workflow mode), visual reference/system
+(`visual-design`), production media (`storyboard` asset plan), and one-page offer/story
 (`landing-page`). Fold accepted output into `tickets/TASK-XXXX/design.md`; do
 not create a frontend planner, router, or parallel design schema.
 

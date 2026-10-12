@@ -1,7 +1,7 @@
 # Review Mode
 
 Load after `SKILL.md` selects `review`. This file is also the contract that
-project pre-push reviewers load (init-advisor's `scripts/codex_review_agent.ts`
+project pre-push reviewers load (setup-advisor's `scripts/codex_review_agent.ts`
 reads `~/.codex/skills/code-health/references/review.md`), so it stands alone.
 
 Review mode is a maintainability-first second pair of eyes for a staged,
@@ -35,8 +35,8 @@ is not a TAS verdict; that belongs to the `review` skill and the reviewer agent.
    pure logic, unclear names, broad mutable state, weak exported types.
 4. Frontend: avoidable rerenders, duplicated derived state, mutated props or
    state, heavy eager bundles, ad hoc effects hiding cleanup. When React,
-   Next.js or client data fetching is touched, apply the installed
-   `vercel-react-best-practices` skill; project module boundaries still decide
+   Next.js or client data fetching is touched, apply
+   [ui-review](ui-review.md) and its React rules; project module boundaries still decide
    where code belongs.
 5. Docs and operating memory: new modules without README or AGENTS guidance,
    durable rules left only in code, stale docs that will mislead the next agent.
@@ -57,7 +57,7 @@ is not a TAS verdict; that belongs to the `review` skill and the reviewer agent.
 When the answer is yes, the finding carries a concrete plan, for example: "move
 both helpers into `src/modules/runtime/lib/`, export only from
 `modules/runtime/index.ts`, and update both call sites." For docs, skills,
-registries or eval rows, route the consolidation to the `consolidate` skill.
+registries or eval rows, route the consolidation to `doc-advisor` consolidate mode.
 
 ## Project overlay
 

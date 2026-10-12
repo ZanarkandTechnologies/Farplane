@@ -27,7 +27,7 @@ surfaces:
   - skills/skill-maintenance/scripts/minimize_skill_surface.py
   - skills/skill-maintenance/scripts/check_skills.py
 source_refs:
-  - skills/consolidate/SKILL.md
+  - skills/doc-advisor/references/consolidate.md
   - skills/skill-maintenance/SKILL.md
 external_refs: []
 evidence_refs:
@@ -76,7 +76,7 @@ agents apply every item.
   todos and `evals/evals.json` rows.
 - Skips unsubscribed skills without warnings so rollout can happen gradually.
 - Reports exact minimizer commands for over-budget subscribed skills.
-- Uses `skill-maintenance.refine_skill` and `consolidate(..., structure =
+- Uses `skill-maintenance.refine_skill` and `doc_advisor(mode = consolidate, ..., structure =
   skill)` for value-preserving compaction before enrolling over-budget skills.
 - Starts new skills from a compact four-section core and admits signatures,
   phase boundaries, budgets, templates, references, QA, and evals only when
@@ -174,7 +174,7 @@ Acceptance signals:
 - This feature does not auto-rewrite skills.
 - This feature does not globally enforce all existing skills.
 - This feature does not prove the selected top items are semantically best;
-  that judgment stays with `skill-maintenance.refine_skill`, `consolidate`, and
+  that judgment stays with `skill-maintenance.refine_skill`, `doc-advisor` consolidate mode, and
   review.
 
 ## Alternatives Considered

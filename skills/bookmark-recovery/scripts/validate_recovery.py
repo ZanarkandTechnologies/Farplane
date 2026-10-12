@@ -9,7 +9,7 @@ from pathlib import Path
 
 ALLOWED_COVERAGE = {"complete", "partial", "blocked", "empty"}
 ALLOWED_PRIORITY = {"high", "medium", "low"}
-ALLOWED_ROUTES = {"intelligest_candidate", "ingest_content_candidate", "dismiss", "needs_review"}
+ALLOWED_ROUTES = {"intelligest_candidate", "resource_bank_candidate", "dismiss", "needs_review"}
 ALLOWED_CONFIDENCE = {"high", "medium", "low"}
 ALLOWED_RELATIONS = {"addresses_constraint", "supports_next_commitment", "project_opportunity"}
 PERSON_RELATION = "may_solve_problem"

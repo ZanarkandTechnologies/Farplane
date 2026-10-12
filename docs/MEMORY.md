@@ -10,7 +10,7 @@ tags:
   - promoted-decisions
 refs:
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
-  - skills/consolidate/SKILL.md
+  - skills/doc-advisor/references/consolidate.md
   - docs/HISTORY.md
 ---
 
@@ -27,7 +27,7 @@ keep temporary research outside tracked docs.
 
 ## Admission Rule
 
-Use `consolidate(target = docs/MEMORY.md, structure = memory)` before
+Use `doc_advisor(mode = consolidate, target = docs/MEMORY.md, structure = memory)` before
 compacting this file:
 
 ```text

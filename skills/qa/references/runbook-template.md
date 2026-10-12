@@ -2,7 +2,7 @@
 title: <workflow name>
 status: planned | verified | retired
 owner: <module or team>
-source_ticket: TASK-XXXX
+source_ticket: <owner/repo#N>
 updated_at: YYYY-MM-DD
 last_verified_at:
 last_verified_receipt:
@@ -33,7 +33,7 @@ shortcut:
   reset_or_cleanup:
   verification:
   evidence_to_capture: []
-  source_ticket: TASK-XXXX
+  source_ticket: <owner/repo#N>
   last_verified_receipt:
 ```
 

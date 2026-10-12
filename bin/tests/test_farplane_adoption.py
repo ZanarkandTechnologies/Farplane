@@ -57,7 +57,7 @@ class FarplaneAdoptionTests(unittest.TestCase):
                         "template_id": "farplane-framework",
                         "template_version": "1.3.0",
                         "feature_refs": ["FEAT-0061"],
-                        "path": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
+                        "path": "skills/setup-advisor/references/MANIFEST_TEMPLATE.json",
                     }
                 ],
             )

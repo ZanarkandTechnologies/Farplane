@@ -153,7 +153,7 @@ Todo List short; detailed recipes live in references and method records.
 
 ## Do Not Use When
 
-- The target is a dashboard, settings screen, CRUD workflow, or operational app UI: use `functional-ui`.
+- The target is a dashboard, settings screen, CRUD workflow, or operational app UI: use `prd` workflow mode.
 - The user only wants visual polish on an existing app component: use `visual-design`.
 - The task is GSAP implementation details: use installed official GreenSock skills when available, or fetch official GSAP docs.
 

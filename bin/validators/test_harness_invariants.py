@@ -166,7 +166,7 @@ class CheckHarnessInvariantsTest(unittest.TestCase):
             root / "docs/templates/global-agents-qa-checklist.md",
             GLOBAL_AGENTS_QA_TEXT,
         )
-        write_file(root / "skills/consolidate/SKILL.md", CONSOLIDATE_SKILL_TEXT)
+        write_file(root / "skills/doc-advisor/references/consolidate.md", CONSOLIDATE_SKILL_TEXT)
         write_file(
             root / "agents" / "reviewer.toml",
             """\

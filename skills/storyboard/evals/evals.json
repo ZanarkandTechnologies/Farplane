@@ -2,125 +2,138 @@
   "skill_name": "storyboard",
   "evals": [
     {
-      "id": "storyboard_remotion_proof_video_01",
-      "prompt": "For TASK-9999, we need a 20 second vertical video for builders showing that Farplane turns agent work into visible proof. Audience is skeptical AI operators. Make it ready for Remotion and review, but do not render yet.",
-      "expected_output": "Uses or routes to storyboard rather than jumping straight to Remotion code; Chooses tickets/TASK-9999/artifacts/storyboard.md or states that artifact path in the handoff; Binds ICP, viewer promise, core idea, proof or reason to believe, platform, duration, style, CTA, and constraints; Uses a ticket-shaped structure such as Summary, Scope, Delta, Program, Map, Done / Proof, State, Links, and Notes; Includes narrative signatures: hook, tension, turn, proof moment, payoff, and final action; Produces beat sheet, script, storyboard panels, shot list, motion notes, captions or supers, audio notes, and asset requirements; Selects Remotion as the production route and names the dimensions, duration, scene map, asset requirements, and proof needed before render; Does not publish, render, spend external compute, or claim final video quality by default",
-      "files": [],
-      "assertions": [
-        "Uses or routes to storyboard rather than jumping straight to Remotion code",
-        "Chooses tickets/TASK-9999/artifacts/storyboard.md or states that durable artifact path in the handoff",
-        "Binds ICP, viewer promise, core idea, proof or reason to believe, platform, duration, style, CTA, and constraints",
-        "Uses a ticket-shaped structure such as Summary, Scope, Delta, Program, Map, Done / Proof, State, Links, and Notes",
-        "Includes narrative signatures: hook, tension, turn, proof moment, payoff, and final action",
-        "Produces beat sheet, script, storyboard panels, shot list, motion notes, captions or supers, audio notes, and asset requirements",
-        "Selects Remotion as the production route and names the dimensions, duration, scene map, asset requirements, and proof needed before render",
-        "Does not publish, render, spend external compute, or claim final video quality by default"
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Turns a fuzzy proof-video idea into a Remotion-ready creative ticket",
-          "tags": [
-            "skill",
-            "storyboard",
-            "remotion",
-            "content-video",
-            "creative-planning"
-          ]
-        }
-      }
-    },
-    {
-      "id": "storyboard_connected_frames_for_ai_video_01",
-      "prompt": "Storyboard a 24 second vertical reel based on a Tasty Pack where a deadpan guide teaches founders that agents need receipts before they can say done. We plan to use AI video clips and Remotion.",
-      "expected_output": "Names the reel/reference type and core story engine; Defines viewer question -> answer, hook, tension, turn, proof moment, payoff, and final action; Keeps a recurring guide or explicitly states why no recurring character is needed; Keeps a recurring proof object or motif across beats; Produces scene panels plus shot list, script/VO, captions, motion, audio notes, and asset requirements; Selects a generation_topology; For deliberate scene breaks, partitions the 24 seconds into normally 4-5 second scene packets with one clean grid, one annotated grid, stable IDs, keyed notes, provider strategy, transition/audio obligations, and reuse_locked assets per clip; Shows the overview and scene packets before generation",
-      "files": [],
-      "assertions": [
-        "Names the reel/reference type and core story engine",
-        "Defines viewer question -> answer, hook, tension, turn, proof moment, payoff, and final action",
-        "Keeps a recurring guide or explicitly states why no recurring character is needed",
-        "Keeps a recurring proof object or motif across beats",
-        "Produces scene panels plus shot list, script/VO, captions, motion, audio notes, and asset requirements",
-        "Includes a continuity handoff with generation_topology and uses start/end frame pairs for continuous chains",
-        "For deliberate scene breaks, creates one normally 4-5 second clean/annotated scene-grid packet with keyed notes per provider clip",
-        "Shows all scene grids and notes for approval and locks unchanged assets for reuse",
-        "Names transitions and audio obligations for deliberate scene breaks"
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Outputs connected storyboard frames for model-native video generation",
-          "tags": [
-            "skill",
-            "storyboard",
-            "continuity",
-            "ai-video",
-            "content-video"
-          ]
-        }
-      }
-    },
-    {
-      "id": "storyboard_character_fallback_reapproval_01",
-      "prompt": "Our approved AI-video storyboard uses one recurring human guide. The provider rejected his board and the production team swapped in a robot-safe reference. Update the handoff so generation can continue.",
-      "expected_output": "Marks affected scene approvals invalid rather than carrying approval forward; Preserves the canonical character card path and hash; Creates a versioned provider-safe variant instead of mutating the original; Shows the revised character card and affected scene grids to the operator and asks for feedback before production resumes; Leaves unaffected approved scenes locked",
-      "files": [],
-      "assertions": [
-        "Marks affected scene approvals invalid rather than carrying approval forward",
-        "Preserves the canonical character card path and hash",
-        "Creates a versioned provider-safe variant instead of mutating the original",
-        "Shows the revised character card and affected scene grids to the operator and asks for feedback before production resumes",
-        "Leaves unaffected approved scenes locked"
-      ]
-    },
-    {
       "id": "storyboard_latest_news_plain_language_hook_01",
-      "prompt": "Plan the opening for a 35-second vertical news reel aimed at ordinary viewers. A new report says California lawmakers may stop sales of new gas lawnmowers next year if manufacturers do not meet tougher noise and pollution rules. The source headline is \u201cCalifornia legislature weighs conditional small-engine phaseout under emissions compliance framework.\u201d Give me an opening that is more compelling than that headline without overstating an unsigned proposal.",
-      "expected_output": "Generates a broad hook candidate set before selecting; Uses child-simple language with one recognizable actor, one concrete action, and one understandable consequence; Removes unexplained policy and regulatory jargon from the displayed candidate set; Compares finalists against the source title for comprehension, curiosity, accuracy, and first-frame visual potential; Selects one display hook of normally eight words or fewer and explains rejected finalists; Maps the winner to exact first-three-second on-screen copy, explanatory voiceover, visual action, and evidence qualifier; Does not turn a reported proposal into an enacted mower ban or settled implementation date",
-      "files": [],
+      "prompt": "Plan the opening for a 35-second vertical news reel for ordinary viewers. A new report says California lawmakers may stop sales of new gas lawnmowers next year if manufacturers do not meet tougher noise and pollution rules. The source headline is \"California legislature weighs conditional small-engine phaseout under emissions compliance framework.\" Give me an opening that beats that headline without overstating an unsigned proposal.",
+      "expected_output": "Runs the hook lab before scripting: ten or more materially different candidates across six or more lenses (at most two per lens), jargon and blocked money verbs only as rejected lines, three or more finalists compared with the source title, one display hook of at most eight words bound to the first three seconds, and uncertainty preserved.",
+      "files": [
+        "references/plain-language-hook-lab.md"
+      ],
       "assertions": [
-        "Generates at least ten materially distinct hook candidates spanning at least six causal lenses before selecting a winner, rather than synonym-swapping one financing frame",
-        "The complete displayed candidate set contains no unexplained policy or regulatory jargon such as legislature, conditional, phaseout, emissions compliance, framework, facilitate, or regulatory action; every weak or imprecise candidate has a visible rejection reason and cannot advance",
-        "The finalists use plain language that an unfamiliar viewer can understand immediately, with one recognizable actor, one concrete everyday action, one consequence, and no weakly grounded causal claim",
-        "Compares at least three finalists against the source title for immediate comprehension, curiosity, factual accuracy, one-breath delivery, and first-frame visual potential",
-        "Selects one child-simple display hook of normally eight words or fewer, explains why it beats the source title, and records why plausible finalists lost",
-        "Maps the winner to the first three seconds with exact on-screen copy, voiceover, visual action, and a compact evidence qualifier",
-        "Preserves uncertainty and does not claim that the reported proposal passed, that gas lawnmower sales have already stopped, or that the implementation date is settled"
+        "Generates at least ten materially distinct hook candidates spanning at least six causal lenses, with no more than two from one lens",
+        "The displayed candidate set contains no unexplained policy jargon such as legislature, conditional, phaseout, emissions compliance, or framework; weak or blocked lines appear only as rejected lines with reasons",
+        "Compares at least three finalists against the source title for immediate meaning, curiosity, accuracy, one-breath delivery, and drawable first frame",
+        "Selects one display hook of eight words or fewer with one recognizable actor, one concrete action, and one consequence, and records why the other finalists lost",
+        "Maps the winner to exact first-three-second on-screen copy, voiceover, visual action, and a compact evidence qualifier",
+        "Does not claim the proposal passed, that mower sales already stopped, or that the date is settled"
       ],
       "metadata": {
         "farplane": {
-          "title": "Turns an unfamiliar policy headline into a child-simple, evidence-safe opening",
-          "tags": [
-            "skill",
-            "storyboard",
-            "hook",
-            "latest-news",
-            "plain-language",
-            "vertical-video",
-            "held-out-domain"
-          ]
+          "title": "Plain-language hook for a latest-news reel",
+          "tags": ["skill", "storyboard", "hook", "latest-news", "held-out-domain"],
+          "notes": "Carried from storyboard_latest_news_plain_language_hook_01."
         }
       }
     },
     {
-      "id": "storyboard_asset_discovery_before_remotion_01",
-      "prompt": "Storyboard a 30-second editorial reel from this voiceover: \u201cThe first agent keeps the customer goal. The handoff keeps only a summary. The second agent improves the wrong version. Both outputs look competent. One shared ticket exposes the mismatch before launch.\u201d No scene imagery exists yet. The editor proposes drawing custom SVG characters, props, and backgrounds directly in Remotion to save time.",
-      "expected_output": "Produces executable visual briefs for every scene; Routes missing imagery to Asset Advisor candidate discovery before generation or Remotion; Names subject, material identity, source classes, rights constraint, framing, and acceptance check; Allows selected_source, inspiration_for_generation, or searched_no_reference plus original_generation as valid resolution outcomes; Rejects custom-created SVG or JSX scene assets; Blocks production until accepted files exist",
-      "files": [],
+      "id": "storyboard_asset_discovery_before_render_01",
+      "prompt": "Storyboard a 30-second editorial reel from this voiceover: \"The first agent keeps the customer goal. The handoff keeps only a summary. The second agent improves the wrong version. Both outputs look competent. One shared ticket exposes the mismatch before launch.\" We have no scene imagery yet. The editor wants to just draw SVG characters, props and backgrounds in the composition to save time.",
+      "expected_output": "Writes the script and scenes, lists background, main-topic and foreground assets per scene as concrete searchable briefs, runs discovery before any generation, rejects custom SVG or JSX scene art, and keeps the HyperFrames handoff blocked until accepted files exist.",
+      "files": [
+        "references/scene-asset-bundles.md",
+        "references/asset-plan.md"
+      ],
       "assertions": [
-        "Produces a searchable asset brief for every scene with concrete subject, material identity, source classes, rights constraint, framing, and acceptance check",
-        "Routes missing imagery to Asset Advisor candidate discovery before image or video generation and before Remotion",
+        "Every scene lists a background, main-topic, and foreground asset with concrete subject, material identity, source classes, rights constraint, framing, and acceptance check",
+        "Searches before generating along reuse, source, inspired_generation, original_generation, with discovery results limited to selected_source, inspiration_for_generation, or searched_no_reference",
         "Rejects custom-created SVG animation assets and SVG or JSX scene substitutes",
-        "Blocks the Remotion handoff until required visuals have accepted files; generation packets alone do not unlock production"
+        "Names concrete expected output file paths and treats a prompt or provider job as not yet an accepted file",
+        "Keeps the HyperFrames handoff blocked until required visuals have accepted files and does not render"
       ],
       "metadata": {
         "farplane": {
-          "title": "Routes missing storyboard visuals through discovery instead of custom SVG",
-          "tags": [
-            "skill",
-            "storyboard",
-            "asset-discovery",
-            "remotion",
-            "svg"
-          ]
+          "title": "Routes missing scene visuals through discovery instead of SVG",
+          "tags": ["skill", "storyboard", "asset-discovery", "hyperframes", "svg"],
+          "notes": "Carried from storyboard_asset_discovery_before_remotion_01, with the renderer changed to HyperFrames and the asset-advisor checks folded into the assets mode."
+        }
+      }
+    },
+    {
+      "id": "storyboard_full_production_sequence_01",
+      "prompt": "I have an approved concept for a 35-second explainer but still need the scene plan, the source media, the motion and caption decisions, the final build and proof. Put the production sequence on issue #12 with one owner and one output per step.",
+      "expected_output": "Plan mode writes a Content Production action graph in the issue's Change Plan with one row per action (script, assets, ai-image/ai-video realization, edit, HyperFrames, review/qa), each naming owner, accepted inputs, primary output, acceptance or blocker, and next handoff, and keeps the approved concept as a fixed input.",
+      "files": [
+        "references/production-contract.md",
+        "templates/storyboard.md"
+      ],
+      "assertions": [
+        "Writes the action graph to the GitHub issue body under Change Plan, with receipts in Done / Proof and progress as comments, and never writes a tickets/TASK path",
+        "Emits separate rows for script, assets, realization children, edit, HyperFrames, and review or qa; no grouped production row",
+        "Each row names owner, accepted inputs, primary output, acceptance or blocker, and next handoff",
+        "Treats the approved concept as an accepted input and does not turn it back into a blocker",
+        "Orders HyperFrames only after accepted scenes, files, and edit recipe, and leaves the readiness verdict to review or qa"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Writes the full production sequence on the issue",
+          "tags": ["skill", "storyboard", "plan", "orchestration", "ownership"],
+          "notes": "Carried from content_impl_plan_full_sibling_sequence_01; sibling skills became storyboard modes and Remotion became HyperFrames."
+        }
+      }
+    },
+    {
+      "id": "storyboard_reference_roles_moodboard_01",
+      "prompt": "I need a cinematic hero image for a premium industrial landing page. References: ShotDeck composition https://shotdeck.com/browse/stills, FilmGrab lighting https://film-grab.com/, and Pinterest editorial texture https://www.pinterest.com/search/pins/?q=industrial%20editorial. Work out the asset direction without copying the originals.",
+      "expected_output": "Assets mode classifies each reference on usage_role and rights_status separately, extracts transferable traits with must-not-copy constraints, holds prompt compilation until the moodboard traits are accepted, and routes the eventual raster to ai-image with a concrete output path.",
+      "files": [
+        "references/asset-plan.md"
+      ],
+      "assertions": [
+        "Classifies every reference with an independent usage_role and rights_status",
+        "Treats ShotDeck and FilmGrab as cinematic_reference and Pinterest as taste_discovery, not cleared production sources",
+        "Extracts transferable composition, lighting, palette, texture/material, and camera traits plus explicit must-not-copy constraints",
+        "Records the moodboard as pending and blocks prompt compilation until moodboard_traits_accepted_at exists",
+        "Preserves the supplied URLs, rights uncertainty, ai-image as owner, a concrete expected file path, and an acceptance check"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Separates inspiration use from rights before prompting",
+          "tags": ["skill", "storyboard", "assets", "moodboard", "reference-routing"],
+          "notes": "Carried from asset_advisor_reference_roles_moodboard_01."
+        }
+      }
+    },
+    {
+      "id": "storyboard_brand_snapshot_boundary_01",
+      "prompt": "Our Brand Kit says calm captions and a restrained teal registration accent. The inspiration pack has aggressive word-by-word captions, whip transitions, and a nice paper-layer cadence. Tell me how to edit this one and get it ready to build.",
+      "expected_output": "Edit mode keeps Brand Kit prose policy in a BrandPolicyDecision table, decides each inspiration pattern use/adapt/reject/block, adapts the compatible cadence and rejects the conflicting captions and whips, labels its own moves as advisor-authored, and emits a timed recipe for HyperFrames.",
+      "files": [
+        "references/edit-direction.md"
+      ],
+      "assertions": [
+        "Keeps Brand Kit policy in a BrandPolicyDecision table separate from the EditingPatternDecision table",
+        "Decides every inspiration pattern as use, adapt, reject, or block, with Brand Kit policy winning conflicts",
+        "Requires a golden example and golden recipe for any selected pattern, and marks it block when either is missing",
+        "Labels moves it invents as advisor_authored_from_brief rather than as stored patterns",
+        "Produces an ordered recipe on one timing basis with caption, motion, transition, and proof checks, each row naming hyperframes as renderer owner"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Keeps Brand Kit policy apart from editing patterns",
+          "tags": ["skill", "storyboard", "edit", "brand-kit", "compatibility"],
+          "notes": "Carried from editing_advisor_brand_snapshot_boundary_01; the accent colour changed and the renderer is HyperFrames."
+        }
+      }
+    },
+    {
+      "id": "storyboard_cross_owner_edit_handoff_01",
+      "prompt": "Make the edit plan for a vertical reel with a voiceover, three SFX hits, two source photos that still need clean cutouts, kinetic captions, and an AI-generated bridge clip. We'll build it in HyperFrames.",
+      "expected_output": "Uses the measured voiceover cue sheet as the single timing master, returns the cutouts, SFX and bridge clip to the assets mode (which picks ai-image or ai-video), orders edit steps around those dependencies with concrete expected paths, and requires render proof before readiness.",
+      "files": [
+        "references/edit-direction.md",
+        "references/asset-plan.md"
+      ],
+      "assertions": [
+        "Uses the voiceover or its measured cue sheet as the single timing master, with a declared provisional basis until it is measured",
+        "Returns photo cutouts, SFX, and the bridge clip to the assets mode, which routes to ai-image or ai-video; the edit lane does not pick a generator",
+        "Orders recipe steps around the dependencies with expected output paths and accepted_file_ref left empty until inspected",
+        "Requires caption safe-zone, layer and alpha, transition range, and representative still checks rendered by HyperFrames before readiness",
+        "Does not render, generate, or spend inside the skill"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Cross-owner edit handoff on one timing master",
+          "tags": ["skill", "storyboard", "edit", "handoff", "hyperframes"],
+          "notes": "Carried from editing_advisor_cross_owner_handoff_01; Asset Advisor, Audio Advisor and AI Video Advisor routes became the assets mode, ai-image and ai-video."
         }
       }
     }

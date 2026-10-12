@@ -1,7 +1,7 @@
 # Buyer Communication Quality
 
 Use for dossiers, landing pages, proposals, and any UI whose reader must make a
-business decision. It judges the page's argument; `unslop` only removes generic
+business decision. It judges the page's argument; the `copywriting` final pass only removes generic
 phrasing after this family passes.
 
 Required TAS: `TAS-A`

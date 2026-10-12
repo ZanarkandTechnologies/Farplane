@@ -5,7 +5,7 @@ source: local
 template_uses:
   skill-template: "0.3.0"
   skill-eval-task: "0.2.0"
-department: operations
+department: delivery
 common_chains:
   after: ["goal-advisor"]
 allowed-tools: Read, Glob, Grep, Bash
@@ -29,9 +29,9 @@ advisors fill only bounded missing or stale facets. `goal-advisor` compiles the
 approved ticket for execution and does not redo planning.
 
 For UI-bearing work, resolve four independent context facets only when they
-are missing or stale: `functional-ui` for interaction evidence and wireflow,
-`visual-design` for reference-backed visual direction, `asset-advisor` for
-actual media needs, and `landing-page` for a one-page offer/story. This skill
+are missing or stale: `prd` workflow mode for interaction evidence and wireflow,
+`visual-design` for reference-backed visual direction, the `storyboard` asset
+plan for actual media needs, and `landing-page` for a one-page offer/story. This skill
 merges accepted results into one ticket and `design.md`; it is not a frontend
 router or a second design author.
 
@@ -58,10 +58,6 @@ fails:
   readiness_with_open_gate; implementation_before_approval;
   unprobed_blocker; permitted_step_handed_to_user
 ```
-
-A buyer-facing UI handoff is not approval-ready without its ticket-local,
-copy-complete `design.md`; if final copy or proof is missing, name that file as
-blocked rather than offering a ticket-shaped implementation plan.
 
 ## Phase Boundary
 
@@ -95,7 +91,10 @@ For a material request with no selected ticket, create or request the canonical
 - [ ] 1. Bind the objective and ticket.
   - [ ] Read or create the selected ticket; resolve only missing inputs that
     materially change scope, architecture, proof, permission, or Goal setup.
-  - [ ] Read the first-load Todo List guardrails before material planning.
+  - [ ] Plan the largest coherent ticket. Split only on a hard trigger: shared
+    platform reuse, migration/backfill/rollout risk, an independently blocking
+    external dependency, unresolved feasibility, or a real service boundary;
+    never by schema/backend/UI layer.
 - [ ] 2. Inspect the minimum repository and accepted context.
   - [ ] Name real code/test/doc seams, typed movement when relevant, existing
     helpers/components/assets, and implementation evidence.
@@ -107,17 +106,17 @@ For a material request with no selected ticket, create or request the canonical
   - [ ] Reuse settled UX, landing, copy, visual, asset, architecture, metric,
     documentation, and proof context. Call the narrow owner only for a real
     `targeted_refresh` or `create`; do not self-author its output.
-  - [ ] Common owners are [functional-ui](../functional-ui/SKILL.md),
+  - [ ] Common owners are [prd](../prd/SKILL.md),
     [landing-page](../landing-page/SKILL.md),
-    [copywriting-advisor](../copywriting-advisor/SKILL.md),
+    [copywriting](../copywriting/SKILL.md),
     [approach](../approach/SKILL.md),
     [visual-design](../visual-design/SKILL.md),
-    [asset-advisor](../asset-advisor/SKILL.md),
+    [storyboard asset plan](../storyboard/references/asset-plan.md),
     [research](../research/SKILL.md),
     and the `goal-advisor` metric card.
   - [ ] For UI work, reuse or resolve only the relevant facet: interaction
-    model/low-fi wireflow (`functional-ui`), visual reference and system
-    (`visual-design`), production media (`asset-advisor`), or one-page offer
+    model/low-fi wireflow (`prd` workflow mode), visual reference and system
+    (`visual-design`), production media (`storyboard` asset plan), or one-page offer
     and section architecture (`landing-page`). Load
     [UI implementation evidence](references/ui-implementation.md) only after
     those decisions identify a real component, theme, registry, framework, or
@@ -140,8 +139,8 @@ For a material request with no selected ticket, create or request the canonical
   - [ ] `Done` states outcomes; `QA Strategy` names ordered checks, delegated
     lanes, evidence, final checkpoint, and residual risk; `Docs Strategy` is
     present only when docs ownership is non-obvious or changes.
-  - [ ] Preserve existing proof briefs; use QA, visual QA, agent QA, demo, and
-    reviewer lanes when the claim needs independent evidence. When an agent must
+  - [ ] Preserve existing proof briefs; use `qa` (functional, visual,
+    adversarial, closeout) and reviewer lanes when the claim needs independent evidence. When an agent must
     operate or prove hard-to-reach or hidden state, load
     [agent testability](references/agent-testability.md) and plan the smallest hooks as change units.
   - [ ] For UI-bearing tickets, set `ui_scope: true` and create or update

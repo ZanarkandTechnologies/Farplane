@@ -22,7 +22,7 @@ pass answers one decision with one evidence note.
 A caller that only needs one claim grounded does not need this skill: follow
 the global contract's `Grounding:` rule inline and stop. Research one person
 or account with `prospect`, turn one external source into Farplane
-features with `harness-scout`, and run an accepted experiment with
+features with `feed-scout` (single-source mode), and run an accepted experiment with
 the `goal-advisor` ML preset or the experiment owner.
 
 ## Skill Signature

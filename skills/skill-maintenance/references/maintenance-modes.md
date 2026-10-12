@@ -21,7 +21,7 @@ refine_skill(skill, evals?, gotchas?, usage?)
   -> consolidated_evals + consolidated_gotchas + skill_delta + review_notes
 ```
 
-Call `consolidate(target = edited_skill, structure = skill,
+Call `doc_advisor(mode = consolidate, target = edited_skill, structure = skill,
 template = docs/skills/templates/SKILL_TEMPLATE.md,
 constraints = {preserve_evidence: true, preserve_required_sections: true})`.
 Apply only accepted owner-local edits. Split by branch or responsibility when

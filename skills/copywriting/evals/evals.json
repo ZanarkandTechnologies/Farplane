@@ -1,0 +1,161 @@
+{
+  "skill_name": "copywriting",
+  "evals": [
+    {
+      "id": "copywriting_page_compact_emotional_copy_01",
+      "prompt": "I sell a tiny follow-up CRM to solo consultants who forget to follow up after sales calls. Write me landing page copy that feels emotional but not cheesy.",
+      "expected_output": "Runs page mode: binds one reader, product, emotional job, product truth, promise, proof, and CTA; uses supplied source material or labels the result hypothesis copy; names the awareness stage and a persuasion path with a reason; returns concise page copy under 100 lines with source atoms or explicit source gaps, a word bank or cut list, a QA verdict, and a human publication gate.",
+      "files": [
+        "references/page.md",
+        "examples/landing-page/example.md"
+      ],
+      "assertions": [
+        "Selects page mode and binds audience, product, emotional job, product truth, one promise, proof, and CTA",
+        "Mines supplied source material first or labels the output as hypothesis copy",
+        "Names the reader's awareness stage and selects a persuasion path such as AIDA, PAS, 4Cs, FAB, ACC, or SLAP with a reason",
+        "Names lead posture and the weakest conversion factor instead of calling the copy generically good",
+        "Produces page copy under 100 non-empty lines and reports the line count",
+        "Includes a word bank or cut list that rejects generic AI or SaaS phrasing",
+        "Names a QA verdict and a human final-copy gate"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "copywriting page compact emotional copy 01",
+          "tags": ["skill", "copywriting", "page"],
+          "notes": "Carried from copywriting_advisor_compact_page_copy."
+        }
+      }
+    },
+    {
+      "id": "copywriting_page_swipe_moves_not_prose_01",
+      "prompt": "Here are three competitor hero sections I love and 12 reviews from our customers. Write the hero and subhead for our scheduling app using these.",
+      "expected_output": "Mines the reviews into CopyAtom rows and the competitor heroes into SwipeMove rows (structure, rhythm, proof placement) before drafting; writes original hero and subhead lines traced to customer phrases; copies no competitor wording; names source mode and any source gaps.",
+      "files": [
+        "references/source-mining-and-swipe-workflow.md"
+      ],
+      "assertions": [
+        "Extracts source atoms from the reviews before drafting any copy line",
+        "Records competitor heroes as swipe moves rather than reusing their wording",
+        "Hero and subhead trace to named customer phrases or product truth",
+        "Names source mode and any source gaps"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "copywriting page swipe moves not prose 01",
+          "tags": ["skill", "copywriting", "page", "source-mining"],
+          "notes": "New row protecting the kept rule: mine phrases from source material before writing; swipes give moves, not prose."
+        }
+      }
+    },
+    {
+      "id": "copywriting_seo_people_first_brief_01",
+      "prompt": "Write an SEO article plan for solo consultants searching how to follow up after a sales call. The product is a small CRM that drafts follow-up messages from call notes.",
+      "expected_output": "Runs seo mode: checks the live SERP (or marks the fingerprint unverified) before outlining; names search intent, real questions, format fit, and the information gain over ranking pages; returns title and meta options, an outline with section jobs, FAQ or internal-link ideas, proof and freshness gaps, and a human publication gate without keyword stuffing.",
+      "files": [
+        "references/seo.md",
+        "examples/article-brief/example.md"
+      ],
+      "assertions": [
+        "Records a SERP intent fingerprint before the outline, or marks it unverified",
+        "Names the information gain beyond paraphrasing the ranking pages",
+        "Checks article format fit",
+        "Produces title/meta options, an outline with section jobs, and FAQ or internal-link ideas",
+        "Avoids keyword stuffing and promises no rankings or traffic",
+        "Names proof and freshness gaps and a human publication gate"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "copywriting seo people first brief 01",
+          "tags": ["skill", "copywriting", "seo"],
+          "notes": "Carried from seo_content_advisor_people_first_article_brief."
+        }
+      }
+    },
+    {
+      "id": "copywriting_seo_format_block_01",
+      "prompt": "Write me a 2,000-word SEO article to rank for 'freelance hourly rate calculator'.",
+      "expected_output": "Checks the SERP, sees the query is served by calculators, and blocks the article: says plainly that an article is the wrong format, recommends a calculator (optionally with a short explainer), and gives the reason from the SERP or reader job instead of writing 2,000 words.",
+      "files": [
+        "references/seo.md"
+      ],
+      "assertions": [
+        "Checks or reasons from the SERP before writing",
+        "Returns a format block that says an article is the wrong format",
+        "Recommends a calculator or tool as the better format with a reason",
+        "Does not draft the 2,000-word article"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "copywriting seo format block 01",
+          "tags": ["skill", "copywriting", "seo"],
+          "notes": "New row protecting the kept rule: block when a tool, calculator or table serves the query better than an article."
+        }
+      }
+    },
+    {
+      "id": "copywriting_final_pass_quantifiers_vague_01",
+      "prompt": "Make this handoff sound human: 'We leveraged the migration orchestration surface to facilitate a robust transition across the evolving data landscape. The `users` backfill processed 18,420 rows, 42 tests passed, replication lag peaked at 1.8 seconds, and the NOT NULL constraint remains disabled because 17 rows have no value.'",
+      "expected_output": "Deletes the vague first sentence rather than paraphrasing it into an invented outcome, and returns a short plain handoff that keeps `users`, 18,420 rows, 42 tests, 1.8 seconds, 17 rows, and NOT NULL exactly; does not turn 42 tests into all tests, judge the lag, or add next steps.",
+      "files": [
+        "references/final-pass.md"
+      ],
+      "assertions": [
+        "Deletes the vague first sentence instead of paraphrasing it into a claim such as the data moved cleanly",
+        "Preserves `users`, 18,420 rows, 42 tests, 1.8 seconds, 17 rows, and NOT NULL",
+        "Does not add a quantifier such as all to the 42 tests",
+        "Does not add a tolerance judgment, recommendation, or unsupported fact",
+        "Returns revised prose rather than a writing lecture or change log"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "copywriting final pass quantifiers vague 01",
+          "tags": ["skill", "copywriting", "final-pass"],
+          "notes": "Carried from unslop_dense_technical_status_01, with explicit vague-sentence and quantifier assertions."
+        }
+      }
+    },
+    {
+      "id": "copywriting_final_pass_keep_all_and_opinion_01",
+      "prompt": "Tighten this, keep my voice: 'The launch was an incredibly pivotal milestone that showcased the team's unwavering dedication. All 12 beta customers renewed, and I am relieved it shipped, but the two-week support backlog makes the victory feel incomplete.'",
+      "expected_output": "Cuts the puffery sentence, keeps 'All 12 beta customers renewed' with its quantifier intact, keeps the first-person relief and mixed reaction, and preserves the two-week backlog, with natural rhythm and no invented detail.",
+      "files": [
+        "references/final-pass.md"
+      ],
+      "assertions": [
+        "Cuts promotional puffery and formulaic milestone language",
+        "Keeps 'all 12' rather than dropping the quantifier or changing the count",
+        "Keeps the first-person opinion and mixed reaction",
+        "Preserves the two-week support backlog",
+        "Uses no forced slang or invented detail"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "copywriting final pass keep all and opinion 01",
+          "tags": ["skill", "copywriting", "final-pass"],
+          "notes": "Carried from unslop_human_opinion_01, extended with an 'all 12' quantifier that must survive."
+        }
+      }
+    },
+    {
+      "id": "copywriting_final_pass_already_clear_01",
+      "prompt": "Unslop this API note: 'The idempotency key prevents duplicate charges when a client retries POST /payments after a timeout. The server stores the first response for 24 hours and returns it for matching retries.'",
+      "expected_output": "Leaves the already-clear note substantially intact, preserving idempotency key, POST /payments, the timeout behaviour, and the 24-hour rule, without adding headings, examples, caveats, or advice.",
+      "files": [
+        "references/final-pass.md"
+      ],
+      "assertions": [
+        "Keeps idempotency key and POST /payments exactly",
+        "Preserves the timeout, duplicate-charge, stored-response, and 24-hour behaviour",
+        "Makes little or no change because the source is already clear",
+        "Does not add headings, examples, caveats, or advice"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "copywriting final pass already clear 01",
+          "tags": ["skill", "copywriting", "final-pass"],
+          "notes": "Carried from unslop_preserve_precise_terms_01."
+        }
+      }
+    }
+  ]
+}

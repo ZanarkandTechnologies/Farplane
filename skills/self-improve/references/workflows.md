@@ -12,7 +12,7 @@
    - bounded practitioner, paper, or book source upgrade for a named gap;
    - extract applicable techniques, mechanisms, variables, failure conditions,
      and source refs;
-   - adversarial cases from `agent-qa-test`, accepted only by a separate
+   - adversarial cases from `qa` adversarial mode, accepted only by a separate
      evidence reviewer and Eval owner.
 5. Seed `hypothesis-tree.json` with intervention hypotheses, expected
    observations, falsifiers, expected rewards, and reward bases. Use

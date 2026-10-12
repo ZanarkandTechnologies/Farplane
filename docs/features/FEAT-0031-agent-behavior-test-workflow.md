@@ -7,7 +7,7 @@ updated_at: 2026-07-16
 tags: [farplane, feature, sys-0005]
 refs:
   - skills/eval
-  - skills/agent-qa-test
+  - skills/qa
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 feature_id: FEAT-0031
 system_id: SYS-0005

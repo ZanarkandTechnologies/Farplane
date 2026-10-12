@@ -313,9 +313,9 @@ labels.
 
 ## Initialization Contract
 
-`init-advisor` creates or preserves the minimal tracked config, ignored runtime
+`setup-advisor` creates or preserves the minimal tracked config, ignored runtime
 folders, ticket/QA surfaces, and optional project-local skill home. In `full`
-mode, `harness-creator` grounds the typed charter, planning areas/instructions,
+mode, `setup-advisor` grounds the typed charter, planning areas/instructions,
 required capabilities, feedback loops, missing-system tickets, and selected
 metric objectives.
 

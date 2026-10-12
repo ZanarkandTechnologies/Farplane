@@ -10,7 +10,7 @@ tags:
   - sys-0001
 refs:
   - runtimes/AGENTS.md
-  - skills/init-advisor/references/AGENTS_TEMPLATE.md
+  - skills/setup-advisor/references/AGENTS_TEMPLATE.md
   - ARCHITECTURE.md
   - docs/fundamentals/harness-engineering-doctrine.md
   - docs/HISTORY.md
@@ -20,7 +20,7 @@ category: context-routing
 public: true
 surfaces:
   - runtimes/AGENTS.md
-  - skills/init-advisor/references/AGENTS_TEMPLATE.md
+  - skills/setup-advisor/references/AGENTS_TEMPLATE.md
   - ARCHITECTURE.md
 source_refs:
   - docs/fundamentals/harness-engineering-doctrine.md
@@ -28,7 +28,7 @@ source_refs:
 external_refs: []
 evidence_refs:
   - runtimes/AGENTS.md
-  - skills/init-advisor/references/AGENTS_TEMPLATE.md
+  - skills/setup-advisor/references/AGENTS_TEMPLATE.md
   - docs/HISTORY.md
 known_limits: Retired as a feature because this is Agent Kernel system policy, not a distinct feature UX. Keep active truth in the Agent Kernel system and templates.
 metrics: []
@@ -98,7 +98,7 @@ flowchart LR
   doctrine["harness doctrine<br/>docs/fundamentals/harness-engineering-doctrine.md"]:::keep
   retired["FEAT-0042<br/>status: retired<br/>system_id: SYS-0001"]:::retired
   owner["SYS-0001 Agent Kernel<br/>docs/systems/agent-kernel.md"]:::changed
-  template["active prompt surfaces<br/>runtimes/AGENTS.md<br/>skills/init-advisor/references/AGENTS_TEMPLATE.md"]:::added
+  template["active prompt surfaces<br/>runtimes/AGENTS.md<br/>skills/setup-advisor/references/AGENTS_TEMPLATE.md"]:::added
   record["architecture + history<br/>ARCHITECTURE.md<br/>docs/HISTORY.md"]:::keep
 
   doctrine --> retired --> owner --> template --> record
@@ -111,7 +111,7 @@ The retired feature handle now records that lean agent-kernel behavior is owned 
 Owner surfaces:
 
 - `runtimes/AGENTS.md`
-- `skills/init-advisor/references/AGENTS_TEMPLATE.md`
+- `skills/setup-advisor/references/AGENTS_TEMPLATE.md`
 - `ARCHITECTURE.md`
 
 Source context:
@@ -122,7 +122,7 @@ Source context:
 Evidence:
 
 - `runtimes/AGENTS.md`
-- `skills/init-advisor/references/AGENTS_TEMPLATE.md`
+- `skills/setup-advisor/references/AGENTS_TEMPLATE.md`
 - `docs/HISTORY.md`
 
 ## Proof And Quality

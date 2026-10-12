@@ -2,7 +2,7 @@
 title: QA and Browser System Guide
 status: active
 owner: qa
-updated_at: 2026-08-03
+updated_at: 2026-10-12
 refs:
   - skills/qa/SKILL.md
   - agents/qa-tester.toml
@@ -20,7 +20,8 @@ qa_journey(ticket, runtime_target?, proof_policy_override?)
   -> choose -> capture -> reconcile -> judge -> receipt -> learn
 ```
 
-Per-run evidence belongs under `tickets/TASK-XXXX/artifacts/qa/`. Reusable
+Per-run evidence belongs under `.farplane/qa/<issue>/<run>/`, and the verdict
+with its strongest evidence is posted on the GitHub issue. Reusable
 entry paths, shortcuts, selectors, seeds, and observability belong in the
 project's `AGENTS.md` Agent QA section, or `docs/qa/<flow>.md` for a long flow
 (see [runbooks.md](runbooks.md)).
@@ -30,7 +31,7 @@ project's `AGENTS.md` Agent QA section, or `docs/qa/<flow>.md` for a long flow
 
 - use project QA runbooks for reusable guidance, not per-run evidence
 - keep screenshots, logs, traces, and one-off reports under
-  `tickets/TASK-XXXX/artifacts/`
+  `.farplane/qa/<issue>/<run>/`; attach the strongest to the issue comment
 - treat `skills/qa/SKILL.md` as the execution and receipt contract; this guide
   owns readable guidance and reusable runbooks
 - prefer the Codex in-app Browser for browser proof: page operation, snapshots,
@@ -46,7 +47,7 @@ project's `AGENTS.md` Agent QA section, or `docs/qa/<flow>.md` for a long flow
 
 ## Start Here
 
-1. **Choose proof.** Read ticket `Done`, `QA Strategy`, optional `Agent
+1. **Choose proof.** Read the issue's `Done / Proof`, `QA Strategy`, optional `Agent
    Contract`, linked specs, and any explicit proof-policy override. Together
    they form the effective proof policy.
 2. **Bind the runtime.** Use the ticket/runtime handoff. If an app or API target
@@ -59,9 +60,9 @@ project's `AGENTS.md` Agent QA section, or `docs/qa/<flow>.md` for a long flow
 5. **Reconcile the claim.** Mark each `Done` and `QA Strategy` obligation
    `PASS`, `FAIL`, or `not_provable` with an artifact path.
 6. **Judge separately when required.** Browser operation is not visual or
-   completion judgment.
+   completion judgment; visual and adversarial modes run as their own lane.
 7. **Write the receipt.** Produce `report.md` and validated `result.json`, then
-   link the strongest evidence from ticket `Links`.
+   post the verdict and strongest evidence with `gh issue comment`.
 8. **Learn selectively.** Decide whether the run stays ticket-local, updates a
    cookbook page, or needs an instrumentation follow-up.
 
@@ -72,8 +73,8 @@ project's `AGENTS.md` Agent QA section, or `docs/qa/<flow>.md` for a long flow
 | CLI, script, validator, or generated artifact | command output, logs, files, focused tests | `qa` / implementing lane |
 | API or integration | bound runtime, responses, logs, traces | `qa-tester` when operated capture helps |
 | New or exploratory UI workflow | snapshots, screenshots, console, errors, storyboard | `qa-tester` using the Codex in-app Browser |
-| User-visible quality | already captured images plus design/taste baseline | `visual-qa` |
-| Explicit adversarial agent claim | tester evidence plus independent evidence review | `agent-qa-test` |
+| User-visible quality | already captured images plus design/taste baseline | `qa` visual mode ([visual.md](visual.md)) |
+| Explicit adversarial agent claim | tester evidence plus independent evidence review | `qa` adversarial mode ([adversarial.md](adversarial.md)) |
 | Stable repeated UX regression | scripted assertions | Playwright |
 | Material completion sufficiency | complete proof bundle | `reviewer` |
 
@@ -90,7 +91,7 @@ Choose the browser surface by state and proof needs, never by task identity.
 
 ```text
 browser_route(operation, auth_state, repeatability, concurrency)
-  -> connector_or_cli | codex_browser | chrome | playwright | remotion_renderer
+  -> connector_or_cli | codex_browser | chrome | playwright | hyperframes_renderer
 ```
 
 | Surface | Use for | State and lifecycle |
@@ -99,7 +100,7 @@ browser_route(operation, auth_state, repeatability, concurrency)
 | Codex in-app Browser | Public or dynamic pages, local app QA, screenshots, DOM/console/network inspection | Own browser state; reuse one binding and tabs across sequential work |
 | `@Chrome` | UI work requiring the operator's existing Chrome login, tabs, or extensions | Uses the real Chrome profile; verify the active account before acting |
 | Playwright | Stable repeatable regressions, CI, clean-state tests, multi-user flows | Reuse one browser with isolated contexts/pages inside a test run; close after the run |
-| Remotion Chromium | Video composition rendering | Dedicated renderer process; launch only for rendering and close afterward |
+| HyperFrames renderer | Video composition rendering | Dedicated renderer process; launch only for rendering and close afterward |
 
 Do not create a fresh browser because a new task started. Open another tab when
 the browser identity and controller are unchanged. Use separate state only for
@@ -112,11 +113,11 @@ coordinating Codex QA lane.
 
 | Route | Skills and owners |
 | --- | --- |
-| Connector/API/CLI first | [`feed-scout`](../../feed-scout/SKILL.md), [`media-ingest`](../../media-ingest/SKILL.md), [`ingest-content`](../../ingest-content/SKILL.md) |
-| Codex in-app Browser | [`qa`](../../qa/SKILL.md), [`visual-qa`](../../visual-qa/SKILL.md), [`eval`](../../eval/SKILL.md), [`impl-plan`](../../impl-plan/SKILL.md), [`functional-ui`](../../functional-ui/SKILL.md), [`visual-design`](../../visual-design/SKILL.md), [`landing-page`](../../landing-page/SKILL.md), [`prospect`](../../prospect/SKILL.md), [`ingest-content`](../../ingest-content/SKILL.md), [`prd`](../../prd/SKILL.md), [`optimize-harness`](../../optimize-harness/SKILL.md), [`convex`](../../convex/SKILL.md), [`feed-scout`](../../feed-scout/SKILL.md), [`social-content`](../../social-content/SKILL.md) |
+| Connector/API/CLI first | [`feed-scout`](../../feed-scout/SKILL.md), [`intelligest`](../../intelligest/SKILL.md) |
+| Codex in-app Browser | [`qa`](../../qa/SKILL.md), [`eval`](../../eval/SKILL.md), [`impl-plan`](../../impl-plan/SKILL.md), [`visual-design`](../../visual-design/SKILL.md), [`landing-page`](../../landing-page/SKILL.md), [`prospect`](../../prospect/SKILL.md), [`prd`](../../prd/SKILL.md), [`optimize-harness`](../../optimize-harness/SKILL.md), [`feed-scout`](../../feed-scout/SKILL.md), [`social-content`](../../social-content/SKILL.md) |
 | `@Chrome` | [`feed-scout`](../../feed-scout/SKILL.md) only for explicitly authorized logged-in inspection |
-| Playwright | [`qa`](../../qa/SKILL.md), [`visual-qa`](../../visual-qa/SKILL.md), [`landing-page`](../../landing-page/SKILL.md), [`impl-plan`](../../impl-plan/SKILL.md), [`convex`](../../convex/SKILL.md) |
-| Remotion Chromium | [`remotion`](../../remotion/SKILL.md), [`remotion-render`](../../remotion-render/SKILL.md) |
+| Playwright | [`qa`](../../qa/SKILL.md), [`landing-page`](../../landing-page/SKILL.md), [`impl-plan`](../../impl-plan/SKILL.md) |
+| HyperFrames renderer | external `hyperframes` skill (`/hyperframes`), fed by [`storyboard`](../../storyboard/SKILL.md) |
 
 When a skill changes browser ownership, update this index and the skill-local
 route together. Do not add another standalone browser runtime without an
@@ -141,26 +142,48 @@ Screenshots are required for browser/UI proof, not for every QA run.
 
 - `qa` owns the effective proof policy, five-gate journey, canonical receipt,
   ticket reconciliation, and learning decision.
-- `qa-tester` owns operated runtime/browser capture and writes the receipt back
-  to the ticket.
+- `qa-tester` owns operated runtime/browser capture and posts the receipt back
+  to the issue.
 - The Codex in-app Browser supplies page operation, snapshots, screenshots,
   console/network inspection, page errors, and traces.
-- `visual-qa` judges captured UI evidence; it does not drive the browser.
-- `agent-qa-test` is only for explicit adversarial agent/workflow claims.
+- Visual mode judges captured UI evidence; it does not drive the browser.
+- Adversarial mode is only for explicit adversarial agent/workflow claims; its
+  tester lane cannot self-approve.
+- The closeout demo ([closeout-demo.md](closeout-demo.md)) runs only after a pass.
 - `reviewer` judges whether material evidence is sufficient for completion.
 
 The tester may perform one skeptical failure check during ordinary QA. That
-does not turn ordinary QA into the separate `agent-qa-test` protocol.
+does not turn ordinary QA into the separate adversarial protocol.
 
-## Ticket Writeback
+## Issue Writeback
 
-- Always store run artifacts under `tickets/TASK-XXXX/artifacts/qa/<run>/`.
-- Always link `report.md`, `result.json`, the verdict, and strongest evidence
-  from ticket `Links`.
-- Append `progress.md` only when it already exists, the run is Goal-backed, or
-  blocker/review state needs an append-only entry. Do not create `progress.md`
-  for every QA run.
-- Never write to retired ticket `State` or `Evidence` sections.
+- Store run artifacts under `.farplane/qa/<issue>/<run>/`; never create
+  `tickets/` folders for an issue-backed project.
+- Post one `gh issue comment <n> --body-file <file>` per executed run with the
+  verdict, receipt summary, strongest evidence attached or linked (a local path
+  alone is not shared), blockers, and residual risk.
+- For Goal-backed runs, the comment is the append-only progress entry; update
+  the issue body's `## Current Goal state` only when the checkpoint changed.
+- Issues carry engineering facts only; keep client names and private data out.
+
+## Receipt Invariants
+
+`scripts/validate_qa_result.py` enforces these on `result.json`:
+
+- `ticket_id` is `owner/repo#N`, `#N`, or a legacy `TASK-NNNN`; `phase` is
+  `qa`; `proof_type` is `cli | api | browser | ui | artifact | agent`; all five
+  gates (`contract`, `mechanism`, `journey`, `adversarial`, `receipt`) exist
+  with `pass | fail | blocked`.
+- `artifacts` is non-empty; a concrete `best_evidence` also appears there.
+- A pass has every gate passing, concrete best evidence, and no blockers. A
+  non-pass has at least one blocker and may use `best_evidence: null` when the
+  required artifact does not exist.
+- Browser/UI passes require a bound runtime, image best evidence, and a
+  completed `design.md` comparison; API proof requires a bound runtime.
+- `ticket_only` uses `learning.ref: null`; `cookbook_update` and
+  `instrumentation_ticket` require a non-empty ref.
+- A passing policy naming `visual`, `adversarial`, or `reviewer` requires a
+  `judgment_receipts` path containing `visual`, `adversarial`, or `review`.
 
 ## Learning After Every Run
 
@@ -172,7 +195,7 @@ classify_qa_learning(run)
 ```
 
 - `ticket_only`: one-off workaround, transient failure, or task-specific fact.
-  Keep it in the report and ticket links.
+  Keep it in the report and the issue comment.
 - `cookbook_update`: verified reusable route, shortcut, selector, seed/reset,
   debug control, observability method, or stable regression path. Update the
   existing workflow page and cite the verifying receipt.

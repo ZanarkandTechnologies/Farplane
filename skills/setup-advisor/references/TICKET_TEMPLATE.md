@@ -1,0 +1,159 @@
+---
+template_id: ticket-template
+template_version: "0.5.0"
+feature_refs:
+  - FEAT-0007
+  - FEAT-0008
+ticket_id: TASK-XXXX
+title: title
+status: todo
+created_at: YYYY-MM-DDTHH:MM:SSZ
+updated_at: YYYY-MM-DDTHH:MM:SSZ
+depends_on: []
+# Required only when UI, layout, interaction, visual state, or taste is in scope.
+# ui_scope: true
+---
+
+# TASK-XXXX: title
+
+<!-- Keep ticket.md + program.md + the latest 80 progress lines within the
+300-line target and 400-line hard limit. Bulky evidence belongs in artifacts/.
+Start with the sections rendered below. Add Map, Docs Strategy, Links, or Notes
+only when omitting them would lose a current execution, review, proof, or resume
+decision. Never retain an empty optional section or placeholder `none` row.
+`claimed_by` is present only while status=active. The hook may set one immutable
+`thread_id` for this ticket's persistent Codex task; never store session_id here.
+Full authoring rules: tickets/README.md. -->
+
+## Summary
+
+One paragraph: valuable outcome, beneficiary, and why this ticket matters now.
+
+## Scope
+
+- In:
+- Out:
+- Constraints:
+
+## Delta
+
+<!-- Feature/behavior preview: what changes for the user or system. This is
+distinct from the owner-level Implementation Preview inside each Change Plan
+unit. -->
+
+> **Before:** Quote or cite the observed current behavior and exact gap; if
+> evidence is missing, state the current assumption and evidence gap.
+>
+> **After:** State the smallest intended change and how it closes that gap.
+>
+> **Example:** One representative current workflow or result -> intended
+> outcome.
+
+## Contract Diagram
+
+<!-- Required. First identify the approval question, then draw the smallest
+ASCII form that lets an unfamiliar agent simulate the work. Choose one:
+- user/action handoff -> numbered sequence or swimlane
+- state, retry, or recovery -> state transition
+- data, ownership, or architecture -> boundary/data-flow map
+- dry run or decision -> numbered trace with the material branch
+- UI behavior -> wireflow/state map here; detailed screens stay in design.md
+- system behavior or ownership change -> before/after delta map
+For field mapping or comparison, add a table beside the minimal ASCII path; do
+not repackage Scope prose as boxes. Give referenced states, seams, branches,
+and proof points stable IDs. -->
+
+```text
+# Replace with the selected form; do not leave this generic scaffold in a live ticket.
+[S1] input/current state -> [S2] decision/change -> [S3] intended state
+                               |
+                               +-> [F1] failure/recovery
+[S3] -> [P1] observable proof
+```
+
+<!-- Add Planned Skill Call, Objective Contribution, or Reward only when their
+named consumer exists; use tickets/README.md for those optional shapes. -->
+
+## Change Plan
+
+### Change 1: coherent unit
+
+#### Implementation Preview
+
+> **Current owner:** `path:line` — quote the smallest exact code, prompt,
+> schema, config, or copy excerpt that establishes the present seam.
+>
+> **Planned owner:** `path` — show the intended replacement excerpt or compact
+> pseudocode, clearly labeling illustrative syntax.
+>
+> **Expected example:** `representative input or action` -> `expected result`.
+
+```yaml
+diagram_nodes: [S2, S3]
+files:
+  read: []
+  edit: []
+operation: concrete change
+signature_delta: before -> after
+assertions:
+  - observable postcondition linked to the diagram
+proof: command, eval, QA, or review artifact
+failure: blocker or rollback condition
+```
+
+<!-- Repeat Change N only for independently reviewable units. Each unit owns
+its owner-level preview, files, operation, local proof, and failure boundary;
+do not repeat the feature-level Delta, QA Strategy, Docs Strategy, or routing
+policy in every unit. When no exact textual seam exists, use the smallest
+current -> planned signature, state, or ownership trace instead of inventing
+code. -->
+
+## Done
+
+- [ ] User-visible or system outcome is satisfied.
+- [ ] Required checks pass with evidence links.
+- [ ] No declared guard regresses.
+- [ ] Bottom line held: the Autonomy Preflight floor was reached by its
+  deadline, and nothing crossed the interrupt line.
+
+## QA Strategy
+
+```yaml
+proof_weight: mechanical | eval | qa | visual_qa | agent_qa | review | hybrid
+checks: []
+delegated_lanes: []
+evidence_paths: []
+final_checkpoint: inline | reviewer | none
+residual_risk: none
+```
+
+<!-- Add Gap Analysis, Docs Strategy, Agent Contract, or Run Hints only when the
+branch needs them; use tickets/README.md for their compact contracts. -->
+
+## Autonomy Preflight
+
+<!-- Required before approval. Filled by impl-plan from probes it actually ran,
+so the run can go unattended. Standing permissions and the spend cap come from
+the operator's private profile; never copy the cap or credentials here. -->
+
+- Target and floor: the outcome by its deadline, and the minimum the operator
+  returns to if the target slips (for example, a saved checkpoint plus the
+  cause and next step).
+- Choose by: expected value in money: the goal reached sooner, operator hours
+  included, minus spend and expected loss.
+- Will do myself: every command, browser step, check, and allowed spend the run
+  needs without asking.
+- Checks I run: each QA Strategy check, run by the agent, with its evidence path.
+- Blockers (probed): `dependency -> probe result -> fix or fallback`, one per
+  login, key, service, site, or tool the run touches.
+- Needs you before AFK: only what the agent may not do (passwords, account
+  creation, CAPTCHAs, OAuth grants, spend over the cap); empty when none.
+- Interrupt only for: reputational harm, financial harm over the cap, or
+  irreversible loss of the operator's data (anything with no other copy;
+  checkpoints, caches, and build artifacts are regenerable).
+
+## State
+
+- Current:
+- Next:
+- Blockers: none

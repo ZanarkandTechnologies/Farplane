@@ -12,7 +12,7 @@ Pair with:
 - `ui-quality` for visible product quality
 - `frontend-guidelines` for accessibility and web-interface fundamentals
 - `code-quality` for general implementation quality
-- `vercel-react-best-practices` for React/Next.js performance, waterfalls,
+- `code-health` UI review (React rules) for React/Next.js performance, waterfalls,
   bundle size, data fetching, rerender, and rendering-performance checks
 - `debloatability` when the work is explicitly cleanup or simplification
 
@@ -62,7 +62,7 @@ Pair with:
   non-obvious decisions, invariants, or browser/rendering quirks; they do not
   narrate obvious code.
 - [ ] `performance-skill-routed`: React/Next.js performance claims are routed
-  through `vercel-react-best-practices` instead of copied from memory into this
+  through `code-health` UI review (React rules) instead of copied from memory into this
   maintainability rubric.
 
 ## Blocker Checks
@@ -95,7 +95,7 @@ Pair with:
   new abstraction good.
 - [ ] `react-performance-routing-checked`: For React or Next.js code where
   performance is in scope, the review records whether
-  `vercel-react-best-practices` was loaded, skipped, or not applicable.
+  `code-health` UI review (React rules) was loaded, skipped, or not applicable.
 
 ## Relationship To Vercel React Best Practices
 
@@ -104,7 +104,7 @@ state ownership, hook seams, DRY, comments, and testability. It does not own the
 React/Next.js performance rulebook.
 
 When reviewing React or Next.js files and performance could matter, use
-`vercel-react-best-practices` as the supporting skill for:
+`code-health` UI review (React rules) as the supporting skill for:
 
 - async waterfalls and parallel data loading
 - bundle size, barrel imports, dynamic imports, and third-party loading

@@ -12,5 +12,5 @@ updated_at: 2026-07-17
 - [ ] The expected observation, horizon, named confidence, falsifier, and
       surprise trigger are recorded before comparison results are read.
 - [ ] Material expectation misses or implausibly strong results have an
-      `agent-qa-test:experiment` diagnosis before `delete` or productization.
+      `eval:experiment` diagnosis before `delete` or productization.
 - [ ] The result is visible and ends in `keep | modify | delete`, with content/productization only after a meaningful win.

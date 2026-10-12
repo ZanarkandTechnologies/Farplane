@@ -1,12 +1,12 @@
 ---
 name: review
-description: "Turn task context, artifacts, and evidence into a TAS review verdict: pass-ready, needs revision, blocked, or invalid."
+description: "Use for \"is it ready\", \"give me a verdict\", \"check the evidence\" or \"review the ticket\": a TAS verdict over task context, artifacts and evidence: pass-ready, needs revision, blocked or invalid."
 source: local
+department: delivery
 template_uses:
   skill-template: "0.2.0"
   skill-surface-budget: "0.1.0"
   skill-eval-task: "0.2.0"
-
 ---
 
 # Review
@@ -168,7 +168,7 @@ Reviewer sanity check:
 - Do not silently replace the caller's routing with a generic default.
 - For suspected over-engineering, apply the `code-health` lean gate before
   assigning `debloatability`. For prose cleanup, return an explicit operator
-  route to the unslop shortcut and the applicable documentation or prompt rubric.
+  route to the `copywriting` final pass and the applicable documentation or prompt rubric.
 
 ## TAS Verdicts
 
@@ -253,5 +253,5 @@ Return or write:
   use when family choice or modular checklist shape is unclear.
 - Lean Check direct-command evidence for unnecessary code, dependencies,
   abstractions, or features.
-- Explicit operator shortcut: unslop when prose simplification is part of the
+- Explicit operator route: the `copywriting` final pass when prose simplification is part of the
   review.

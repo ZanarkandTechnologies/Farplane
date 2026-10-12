@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 TARGET_SKILLS = [
-    "init-advisor",
+    "setup-advisor",
     "goal-advisor",
     "harness-advisor",
     "impl-plan",
@@ -14,7 +14,6 @@ TARGET_SKILLS = [
     "optimize-harness",
     "skill-creator",
     "skill-maintenance",
-    "consolidate",
     "eval",
     "qa",
     "review",
@@ -53,15 +52,14 @@ CURATED_FILES = {
 }
 
 CURATED_EDGES = [
-    ("skill:init-advisor", "file:AGENTS.md", "writes", "docs/farplane-framework/init-advisor-critical-path.md"),
-    ("skill:init-advisor", "file:ARCHITECTURE.md", "writes", "docs/farplane-framework/init-advisor-critical-path.md"),
-    ("skill:init-advisor", "file:farplane/manifest.json", "writes", "docs/farplane-framework/project-files.md"),
-    ("skill:init-advisor", "file:farplane/harness.yaml", "writes", "docs/farplane-framework/project-files.md"),
-    ("skill:init-advisor", "file:farplane/metrics.yaml", "writes", "docs/farplane-framework/project-files.md"),
-    ("skill:init-advisor", "file:farplane/automations/", "writes", "docs/farplane-framework/project-files.md"),
-    ("skill:init-advisor", "file:.agents/skills/README.md", "writes", "docs/farplane-framework/project-files.md"),
-    ("skill:init-advisor", "file:farplane/pm.json", "writes", "docs/farplane-framework/project-files.md"),
-    ("skill:harness-creator", "file:.agents/skills/README.md", "updates", "docs/farplane-framework/project-files.md"),
+    ("skill:setup-advisor", "file:AGENTS.md", "writes", "docs/farplane-framework/setup-advisor-critical-path.md"),
+    ("skill:setup-advisor", "file:ARCHITECTURE.md", "writes", "docs/farplane-framework/setup-advisor-critical-path.md"),
+    ("skill:setup-advisor", "file:farplane/manifest.json", "writes", "docs/farplane-framework/project-files.md"),
+    ("skill:setup-advisor", "file:farplane/harness.yaml", "writes", "docs/farplane-framework/project-files.md"),
+    ("skill:setup-advisor", "file:farplane/metrics.yaml", "writes", "docs/farplane-framework/project-files.md"),
+    ("skill:setup-advisor", "file:farplane/automations/", "writes", "docs/farplane-framework/project-files.md"),
+    ("skill:setup-advisor", "file:.agents/skills/README.md", "writes", "docs/farplane-framework/project-files.md"),
+    ("skill:setup-advisor", "file:farplane/pm.json", "writes", "docs/farplane-framework/project-files.md"),
     ("skill:goal-advisor", "file:farplane/metrics.yaml", "updates", "docs/farplane-framework/lifecycle.md"),
     ("file:farplane/metrics.yaml", "skill:goal-advisor", "informs", "docs/farplane-framework/lifecycle.md"),
     ("skill:goal-advisor", "ticket:tickets/TASK-*/ticket.md", "writes", "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md"),
@@ -86,7 +84,7 @@ CURATED_EDGES = [
     ("skill:harness-advisor", "skill:goal-advisor", "routes_to", "docs/farplane-framework/lifecycle.md"),
     ("skill:doc-advisor", "file:README.md", "updates", "docs/features/FEAT-0060-registry-backed-documentation-os.md"),
     ("skill:manage-wiki", "doc:.farplane/entities/*.md", "updates", "docs/systems/wiki.md"),
-    ("skill:consolidate", "doc:docs/MEMORY.md", "updates", "skills/consolidate/SKILL.md"),
+    ("skill:doc-advisor", "doc:docs/MEMORY.md", "updates", "skills/doc-advisor/references/consolidate.md"),
     ("skill:skill-maintenance", "skill:eval", "routes_to", "skills/skill-maintenance/SKILL.md"),
 ]
 

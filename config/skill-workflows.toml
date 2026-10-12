@@ -77,19 +77,33 @@ deliverable = "a priced proposal"
 primary = "proposal-pricing"
 skills = ["proposal-pricing"]
 
+[specialists.researcher]
+label = "Researcher"
+department = "intelligence"
+deliverable = "a ranked, sourced evidence note"
+primary = "research"
+skills = ["research"]
+
 [specialists.analyst]
 label = "Analyst"
 department = "intelligence"
 deliverable = "an intelligence dossier"
 primary = "intelligest"
-skills = ["intelligest", "research", "learn-from-video"]
+skills = ["intelligest"]
 
 [specialists.scout]
 label = "Scout"
 department = "intelligence"
 deliverable = "a dated source report"
 primary = "feed-scout"
-skills = ["feed-scout", "bookmark-recovery", "harness-scout"]
+skills = ["feed-scout"]
+
+[specialists.bookmark-keeper]
+label = "Bookmark Keeper"
+department = "intelligence"
+deliverable = "a prioritized bookmark recovery inbox"
+primary = "bookmark-recovery"
+skills = ["bookmark-recovery"]
 
 [specialists.librarian]
 label = "Librarian"
@@ -101,79 +115,135 @@ skills = ["manage-wiki"]
 [specialists.content-producer]
 label = "Content Producer"
 department = "marketing"
-deliverable = "a content production ticket"
-primary = "content-impl-plan"
-skills = ["content-impl-plan", "storyboard"]
+deliverable = "a storyboard and production plan ready to render"
+primary = "storyboard"
+skills = ["storyboard"]
 
 [specialists.social-manager]
 label = "Social Manager"
 department = "marketing"
-deliverable = "an approval-ready social post"
-primary = "x-thread"
-skills = ["x-thread", "social-content", "zernio"]
+deliverable = "an approval-ready post, thread, carousel or newsletter"
+primary = "social-content"
+skills = ["social-content", "zernio"]
 
 [specialists.copywriter]
 label = "Copywriter"
 department = "marketing"
 deliverable = "page or article copy"
-primary = "copywriting-advisor"
-skills = ["copywriting-advisor", "landing-page", "newsletter-writer", "seo-content-advisor"]
+primary = "copywriting"
+skills = ["copywriting"]
+
+[specialists.landing-page-designer]
+label = "Landing Page Designer"
+department = "marketing"
+deliverable = "an approved landing-page spec"
+primary = "landing-page"
+skills = ["landing-page"]
 
 [specialists.visual-designer]
 label = "Visual Designer"
 department = "marketing"
 deliverable = "a finished image asset"
-primary = "ai-image-advisor"
-skills = ["ai-image-advisor", "infographic", "product-photography", "reel-collage"]
+primary = "ai-image"
+skills = ["ai-image"]
 
 [specialists.video-producer]
 label = "Video Producer"
 department = "marketing"
-deliverable = "a rendered video"
-primary = "remotion"
-skills = ["remotion", "ai-video-advisor", "remotion-render"]
+deliverable = "a generated clip, avatar clip or audio file"
+primary = "ai-video"
+skills = ["ai-video"]
 
 [specialists.ads-manager]
 label = "Ads Manager"
 department = "marketing"
-deliverable = "an approval-ready ad campaign"
-primary = "ad-impl-plan"
-skills = ["ad-impl-plan", "ad-advisor", "meta-ads"]
-
-[specialists.clipper]
-label = "Clipper"
-department = "marketing"
-deliverable = "a Resource Bank capture"
-primary = "ingest-content"
-skills = ["ingest-content"]
+deliverable = "an approval-ready ad campaign or ad report"
+primary = "ads"
+skills = ["ads"]
 
 [specialists.character-artist]
 label = "Character Artist"
 department = "marketing"
-deliverable = "a 3D asset or animated pet"
+deliverable = "a 3D asset"
 primary = "meshy-3d-generation"
-skills = ["meshy-3d-generation", "hatch-pet"]
+skills = ["meshy-3d-generation"]
 
 [specialists.product-planner]
 label = "Product Planner"
-department = "operations"
-deliverable = "a PRD or ticket plan"
+department = "delivery"
+deliverable = "a PRD, workflow handoff, or demo realism pack"
 primary = "prd"
-skills = ["prd", "functional-ui", "review-dashboard", "spec-to-ticket", "visual-design"]
+skills = ["prd"]
+
+[specialists.ui-designer]
+label = "UI Designer"
+department = "delivery"
+deliverable = "a visual system and planning handoff"
+primary = "visual-design"
+skills = ["visual-design"]
+
+[specialists.dashboard-reviewer]
+label = "Dashboard Reviewer"
+department = "delivery"
+deliverable = "a keep, fix, merge, or cut dashboard verdict"
+primary = "review-dashboard"
+skills = ["review-dashboard"]
 
 [specialists.engineer]
 label = "Engineer"
-department = "operations"
-deliverable = "a planned and implemented change"
+department = "delivery"
+deliverable = "an approval-ready implementation ticket"
 primary = "impl-plan"
-skills = ["impl-plan", "code-health", "pr-review-watch", "pr-splitting"]
+skills = ["impl-plan"]
+
+[specialists.maintainer]
+label = "Maintainer"
+department = "delivery"
+deliverable = "a fix, refactor, review, or audit receipt"
+primary = "code-health"
+skills = ["code-health"]
 
 [specialists.qa-engineer]
 label = "QA Engineer"
-department = "operations"
-deliverable = "QA proof and a demo"
+department = "delivery"
+deliverable = "a QA receipt and closeout demo"
 primary = "qa"
-skills = ["qa", "demo", "demo-realism", "eval"]
+skills = ["qa"]
+
+[specialists.review-lead]
+label = "Review Lead"
+department = "delivery"
+deliverable = "a TAS review verdict"
+primary = "review"
+skills = ["review"]
+
+[specialists.release-manager]
+label = "Release Manager"
+department = "delivery"
+deliverable = "a labelled commit on main or a watched PR"
+primary = "commit"
+skills = ["commit"]
+
+[specialists.technical-writer]
+label = "Technical Writer"
+department = "delivery"
+deliverable = "a docs update or loss-checked consolidation"
+primary = "doc-advisor"
+skills = ["doc-advisor"]
+
+[specialists.diagrammer]
+label = "Diagrammer"
+department = "delivery"
+deliverable = "a compact diagram pack"
+primary = "diagramming"
+skills = ["diagramming"]
+
+[specialists.interior-designer]
+label = "Interior Designer"
+department = "delivery"
+deliverable = "an interior composition brief and blockout"
+primary = "interior-design"
+skills = ["interior-design"]
 
 [specialists.automation-engineer]
 label = "Automation Engineer"
@@ -187,11 +257,11 @@ label = "Harness Engineer"
 department = "operations"
 deliverable = "an improved skill or harness"
 primary = "skill-creator"
-skills = ["skill-creator", "harness-creator", "optimize-harness", "self-improve", "skill-maintenance"]
+skills = ["skill-creator", "optimize-harness", "self-improve", "skill-maintenance"]
 
 [specialists.setup-technician]
 label = "Setup Technician"
-department = "operations"
-deliverable = "a verified setup"
+department = "delivery"
+deliverable = "a verified project or client setup"
 primary = "setup-advisor"
-skills = ["setup-advisor", "init-advisor"]
+skills = ["setup-advisor"]

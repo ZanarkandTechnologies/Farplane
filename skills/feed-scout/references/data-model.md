@@ -23,7 +23,7 @@ FeedScoutConfig {
   ledger: string
   proposal_ledger: string
   scout_brief: string
-  destination: "local_ledger" | "local_inbox" | "notion_tasks"
+  destination: "local_ledger" | "local_inbox"
   write_policy: "local_first" | "report_only"
   ui?: {
     default_view: "daily_feed" | string

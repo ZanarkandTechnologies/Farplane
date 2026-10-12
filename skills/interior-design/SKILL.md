@@ -1,8 +1,8 @@
 ---
 name: interior-design
 version: 0.1.0
-description: "Turn an existing room, office, or navigable interior plus activities and taste into an evidence-backed composition brief, blockout, and operator review gate."
-department: operations
+description: "Use for \"lay out this room\", \"design the office\", \"furnish this space\" or \"where should things go\": an evidence-backed composition brief, blockout and operator review gate."
+department: delivery
 source: local
 template_uses:
   skill-template: "0.3.8"
@@ -22,7 +22,7 @@ circulation, furniture and landmark scale, occupied mass, negative space,
 material and furniture grammar, lighting composition, and review blockout.
 
 `visual-design` owns interface typography, UI hierarchy, component styling,
-and screen-level color systems. `functional-ui` owns interaction workflow.
+and screen-level color systems. `prd` workflow mode owns interaction workflow.
 Implementation remains with the owning frontend or scene module after the
 interior direction is accepted.
 

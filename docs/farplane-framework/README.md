@@ -9,7 +9,7 @@ source_of_truth:
   - docs/prd.md
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/project-files.md
-  - docs/farplane-framework/init-advisor-critical-path.md
+  - docs/farplane-framework/setup-advisor-critical-path.md
   - docs/farplane-framework/pulse-and-interval-loop.md
   - docs/farplane-framework/ticket-execution-loop.md
   - docs/farplane-framework/hooks-and-runtime.md
@@ -61,7 +61,7 @@ Then open only the contract needed for the current question:
 | Question | Owner document |
 | --- | --- |
 | Which tracked and generated files exist? | [Project Files](project-files.md) |
-| How is a project initialized or migrated? | [Init Advisor Critical Path](init-advisor-critical-path.md) |
+| How is a project initialized or migrated? | [Setup Advisor Critical Path](setup-advisor-critical-path.md) |
 | How do Pulse, planning, reports, Feed Scout, and Dogfood coordinate? | [Work Pulse And Scheduled Ticket Sources](pulse-and-interval-loop.md) |
 | How does a shaped idea become reviewed completed work? | [Ticket Execution Loop](ticket-execution-loop.md) |
 | What may hooks do, and where does runtime state live? | [Hooks And Runtime](hooks-and-runtime.md) |

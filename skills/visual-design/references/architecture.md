@@ -4,7 +4,7 @@
 
 Inputs:
 
-- `functional-ui` handoff,
+- `prd` workflow mode handoff,
 - existing design system,
 - brand/product context,
 - user taste references or anti-references.

@@ -13,10 +13,10 @@ planning entrypoint and owner of the merged `tickets/TASK-XXXX/design.md`.
 Route narrowly:
 
 - unclear user journeys, product states, or interaction hierarchy ->
-  `functional-ui`, which may supply a low-fi ASCII wireflow;
+  `prd` workflow mode, which may supply a low-fi ASCII wireflow;
 - unclear visual tone, hierarchy, typography, layout, or reference transfer ->
   `visual-design`;
-- missing image, video, icon, illustration, or media slot -> `asset-advisor`;
+- missing image, video, icon, illustration, or media slot -> the `storyboard` asset plan (`ai-image` / `ai-video` generate);
 - a one-page marketing or launch surface -> `landing-page`, which returns a
   bounded `LANDING_SPEC.md`.
 
@@ -28,7 +28,7 @@ has identified a concrete implementation need; do not prescribe a component
 library, font, theme, registry, animation, or aesthetic intensity by default.
 
 After implementation, route standards and screenshot judgment through
-`web-design-guidelines`, `visual-qa`, and the ticket review route. Those are
+`code-health` UI review, `qa` visual mode, and the ticket review route. Those are
 quality gates, not upstream advisors. Preserve unrelated changes and write the
 bounded handoff or review evidence to the active ticket.
 """

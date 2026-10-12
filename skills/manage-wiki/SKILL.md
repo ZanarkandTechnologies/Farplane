@@ -1,6 +1,6 @@
 ---
 name: manage-wiki
-description: "Turn sourced facts or page deltas into resolved canonical Wiki articles, entity links, and validated local search and graph projections."
+description: "Use for \"add this to the wiki\", \"update their wiki page\", \"remember this person\" or \"link these entities\": resolved canonical Wiki pages, entity links, and validated local search and graph projections."
 source: local
 capability:
   kind: integration

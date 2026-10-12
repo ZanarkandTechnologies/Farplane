@@ -9,12 +9,12 @@ tags:
   - feature
   - sys-0005
 refs:
-  - skills/agent-qa-test
+  - skills/qa
   - docs/skills/registry.jsonl
   - docs/fundamentals/harness-engineering-doctrine.md
   - skills/eval
-  - skills/agent-qa-test/SKILL.md
-  - skills/agent-qa-test/references/scientific-claim-review.md
+  - skills/qa/SKILL.md
+  - skills/qa/references/scientific-claim-review.md
   - docs/review/rubrics/scientific-evidence.md
   - docs/HISTORY.md
 feature_id: FEAT-0034
@@ -22,14 +22,14 @@ system_id: SYS-0005
 category: proof
 public: true
 surfaces:
-  - skills/agent-qa-test
+  - skills/qa
   - docs/skills/registry.jsonl
 source_refs:
   - docs/fundamentals/harness-engineering-doctrine.md
   - skills/eval
 external_refs: []
 evidence_refs:
-  - skills/agent-qa-test/SKILL.md
+  - skills/qa/SKILL.md
   - docs/HISTORY.md
 known_limits: Skill and prompt-template surface only; actual native subagent execution still depends on the invoking agent and available runtime tools.
 metrics:
@@ -73,7 +73,7 @@ run or capture evidence, critique results, and publish a proof bundle.
 - Collects tester evidence, critique, findings, and residual risk.
 - Produces a readiness verdict instead of a vague confidence statement.
 - Routes repeated failures into hardcases, evals, or skill maintenance.
-- Exposes `agent-qa-test:experiment` for independent first-principles diagnosis
+- Exposes `eval:experiment` for independent first-principles diagnosis
   when an observation materially violates a preregistered expectation.
 - Distinguishes invalid, inconclusive, challenged, refuted-in-scope, and
   supported-in-scope experimental verdicts; suspiciously strong success is
@@ -107,7 +107,7 @@ flowchart TD
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   trigger["Trigger<br/>agent workflow readiness claim"]:::keep
-  owner["Owner surface<br/>skills/agent-qa-test<br/>docs/skills/registry.jsonl"]:::changed
+  owner["Owner surface<br/>skills/qa<br/>docs/skills/registry.jsonl"]:::changed
   readers["Files and fields read<br/>claim under test<br/>adversarial case set<br/>behavior-test evidence"]:::keep
   review["Judgment route<br/>tester evidence critique<br/>residual risk and blockers"]:::changed
   artifact["Created artifact/evidence<br/>QA verdict and proof bundle<br/>with follow-up route"]:::added
@@ -128,7 +128,7 @@ Legend:
 
 Owner surfaces:
 
-- `skills/agent-qa-test`
+- `skills/qa`
 - `docs/skills/registry.jsonl`
 
 Source context:
@@ -138,7 +138,7 @@ Source context:
 
 Evidence:
 
-- `skills/agent-qa-test/SKILL.md`
+- `skills/qa/SKILL.md`
 - `docs/HISTORY.md`
 
 ## Proof And Quality
@@ -191,5 +191,5 @@ Acceptance signals:
 - 2026-07-16: Routed instrumented CLI child runs through Eval
   `behavior_trace`; Agent QA keeps adversarial and native-subagent evidence
   review.
-- 2026-07-25: Added the risk-triggered `agent-qa-test:experiment` method,
+- 2026-07-25: Added the risk-triggered `eval:experiment` method,
   two-sided surprise diagnosis, bounded reruns, and scoped scientific verdicts.

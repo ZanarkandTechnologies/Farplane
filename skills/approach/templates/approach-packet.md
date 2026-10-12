@@ -50,7 +50,7 @@ Contribution:
 - Recipient benefit (useful with no reply):
 - Creator effort cap / recipient time cap: `2 | 5 | 10` minutes
 - Honest claim and known limits:
-- Demo route receipt (demo only): boundary `accepted | blocked`; `demo-realism`
+- Demo route receipt (demo only): boundary `accepted | blocked`; `prd` realism mode
   `required | not_required`; build owner `project owner | impl-plan`;
   inspection surface
 

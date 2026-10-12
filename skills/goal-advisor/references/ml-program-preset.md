@@ -78,7 +78,7 @@ loop:
     - when valid, run the exact full frozen evaluator
     - update the selected tree node and append an immutable receipt
     - if the observation materially violates the expectation or is implausibly
-      strong, route the receipt through agent-qa-test:experiment before method
+      strong, route the receipt through eval:experiment before method
       rejection or candidate promotion; the domain executor owns any repair or
       rerun inside the campaign's remaining budget
     - for surprising, invalid, prerequisite-uncertain, or causally ambiguous

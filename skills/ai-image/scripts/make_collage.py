@@ -10,7 +10,10 @@ import urllib.request
 from pathlib import Path
 from typing import Iterable
 
-from PIL import Image, ImageEnhance, ImageFilter
+try:
+    from PIL import Image, ImageEnhance, ImageFilter
+except ModuleNotFoundError:  # --help works without Pillow; main() reports the missing dependency.
+    Image = ImageEnhance = ImageFilter = None
 
 
 def parse_args() -> argparse.Namespace:
@@ -242,6 +245,8 @@ def write_notes(path: str | None, sources: Iterable[str], output: str) -> None:
 
 def main() -> int:
     args = parse_args()
+    if Image is None:
+        raise SystemExit("Pillow is required: run with `uv run --with pillow python make_collage.py ...`.")
     output = Path(args.output).expanduser()
     output.parent.mkdir(parents=True, exist_ok=True)
     collage = build_collage(args)

@@ -99,7 +99,7 @@ EvalExperimentExpectation:
   confidence: low | medium | high
   falsifier:
   surprise_trigger:
-  surprise_route: agent-qa-test:experiment
+  surprise_route: eval:experiment
 ```
 
 Write it before candidate results are read and keep it in the ticket, Goal
@@ -109,7 +109,7 @@ points as hidden grading truth.
 
 After the run, compare the aggregate observation against the preregistered
 band. Continue normally when it is expected. Route a material negative miss or
-an implausibly strong result through `agent-qa-test:experiment` to check setup,
+an implausibly strong result through `eval:experiment` to check setup,
 implementation fidelity, leakage, contamination, evaluator integrity, baseline
 comparability, and alternatives before rejecting a method or promoting a
 candidate.

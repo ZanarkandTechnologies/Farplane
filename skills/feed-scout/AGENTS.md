@@ -14,7 +14,7 @@ This folder owns the feed-scout recipe for tracked-profile monitoring.
 - Do not store raw transcripts, bulky article text, secrets, or customer data
   in tracked docs.
 - Promote only useful/scouted items into `docs/sources/registry.jsonl`.
-- Keep Notion as proposal review/writeback, not the only durable source of
+- Keep Notion as an optional proposal review view, not the only durable source of
   truth.
 - Do not invoke Goal, Pulse, workers, implementation, publication, outreach, or
   live Tasks writeback from candidate or recovery generation.

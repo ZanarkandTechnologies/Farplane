@@ -30,7 +30,7 @@
 2. Open the fast-entry route.
 3. Exercise the user-visible workflow.
 4. Capture screenshot, page snapshot, console logs, and page errors.
-5. Save evidence under the owning ticket's `artifacts/` directory.
+5. Save evidence under `.farplane/qa/<issue>/<run>/` and post the strongest on the issue.
 
 ## Playwright Path
 1. Use when the workflow has graduated to stable regression coverage.
@@ -45,5 +45,5 @@
 
 ## Known Gaps
 - This repo is not itself a UI app. Farplane UI proof normally runs in the
-  Farplane UI project, then links evidence back to the owning ticket when
+  bunker (Farplane-UI-v2) project, then posts evidence on the owning issue when
   needed.

@@ -18,7 +18,7 @@ lesson/trouble-derived regression until the weekly drain.
 
 ```text
 lesson_or_trouble -> optimize_harness -> immediate evals/evals.json row
-weekly_eval_drain -> fetch changed eval files -> consolidate(..., structure = eval_suite) per file
+weekly_eval_drain -> fetch changed eval files -> doc_advisor(mode = consolidate, ..., structure = eval_suite) per file
 ```
 
 The eval drain exists to reduce noise after coverage exists. It should produce
@@ -35,7 +35,7 @@ fetch_evals_edited_since_last_run(project_root, processed_state)
   -> changed_eval_files + content_hashes
 
 for each changed_eval_file:
-  consolidate(
+  doc_advisor(mode = consolidate,
     target = changed_eval_file,
     structure = eval_suite,
     constraints = { preserve_evidence: true }
@@ -55,7 +55,7 @@ python3 skills/eval/scripts/fetch_evals_edited_since_last_run.py \
 ## Consolidate Binding
 
 For each changed `skills/<skill>/evals/evals.json`, use the shared
-`consolidate` frame with eval-specific bindings:
+`doc-advisor` consolidate mode frame with eval-specific bindings:
 
 ```text
 target = skills/<skill>/evals/evals.json
@@ -74,7 +74,7 @@ value_function = default consolidate value
                - duplicate_coverage
 ```
 
-Map `consolidate` actions into eval dispositions:
+Map `doc-advisor` consolidate mode actions into eval dispositions:
 
 - `keep`: unique failure mode, difficult regression, or high-signal boundary case.
 - `merge`: rows test the same behavior with superficial query differences.
@@ -100,7 +100,7 @@ Context:
 - Rubric: skills/eval/references/eval-writing-rubric.md
 
 Task:
-Run consolidate(target = <eval file>, structure = eval_suite). Review only this
+Run doc_advisor(mode = consolidate, target = <eval file>, structure = eval_suite). Review only this
 eval file and the listed references. Produce a consolidation report with:
 - keep_ids
 - merge_groups with replacement row drafts

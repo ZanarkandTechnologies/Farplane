@@ -42,7 +42,7 @@ still binds the deliverable, but Brand Kit policy wins creative-source conflicts
 Tasty elements augment the kit by role; incompatible elements are explicitly
 rejected or block the plan. `style_profile` is not an input or fallback in this
 composition contract. Saved captures may compile into a separately owned
-`ingest-content` profile package, but that package is not a composition input.
+intelligest Resource Bank profile package, but that package is not a composition input.
 
 ```text
 compose_elements(brand_kit?, tasty_pack?, idea)

@@ -14,7 +14,7 @@ tags:
 refs:
   - docs/farplane-framework/README.md
   - docs/prd.md
-  - docs/farplane-framework/init-advisor-critical-path.md
+  - docs/farplane-framework/setup-advisor-critical-path.md
   - docs/farplane-framework/project-files.md
   - docs/farplane-framework/ticket-execution-loop.md
   - docs/farplane-framework/pulse-and-interval-loop.md
@@ -51,7 +51,7 @@ own planner, worker pool, strategy file, or heartbeat.
 
 ## Quick Start
 
-1. Run `init-advisor` to create or migrate the project substrate.
+1. Run `setup-advisor` to create or migrate the project substrate.
 2. Read `farplane/harness.yaml` for identity, the `planning.skill_refs`
    allowlist, passive area context, authority, and selected objectives/guards.
 3. Read `farplane/metrics.yaml` for metric meaning, direction, freshness, and
@@ -64,7 +64,7 @@ own planner, worker pool, strategy file, or heartbeat.
    are ready. Feed Scout, Daily/Weekly review, Dogfood, and maintenance are
    separate cron or manual automations.
 
-The deeper bootstrap path is [Init Advisor Critical Path](init-advisor-critical-path.md).
+The deeper bootstrap path is [Setup Advisor Critical Path](setup-advisor-critical-path.md).
 The file-by-file reference is [Project Files](project-files.md).
 
 ## Lifecycle Map
@@ -76,7 +76,7 @@ flowchart TD
   classDef source fill:#fef3c7,stroke:#b45309,color:#78350f
   classDef proof fill:#f3e8ff,stroke:#7e22ce,color:#581c87
 
-  A["Operator intent"]:::program --> B["init-advisor"]:::program
+  A["Operator intent"]:::program --> B["setup-advisor"]:::program
   B --> C["harness.yaml + metrics.yaml + capability skills"]:::program
   C --> D["one ticket board"]:::work
   D --> E["one Work Pulse"]:::work

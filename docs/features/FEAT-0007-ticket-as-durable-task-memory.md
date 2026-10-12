@@ -12,7 +12,7 @@ refs:
   - tickets/README.md
   - tickets/templates/ticket.md
   - skills/impl-plan
-  - skills/spec-to-ticket
+  - skills/impl-plan
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - docs/features/README.md
   - "docs/MEMORY.md#MEM-0058"
@@ -26,7 +26,7 @@ surfaces:
   - tickets/README.md
   - tickets/templates/ticket.md
   - skills/impl-plan
-  - skills/spec-to-ticket
+  - skills/impl-plan
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
 source_refs:
   - docs/features/README.md
@@ -81,7 +81,7 @@ Chat can steer the work, but the ticket owns the durable contract.
   strategy, links, and notes appear only when their
   content changes execution, review, proof, or resumption.
 - Moves bulky proof into `tickets/TASK-*/artifacts/` and links it from the ticket.
-- Lets `impl-plan`, `spec-to-ticket`, Goal Packets, QA, review, and closeout all read the same task contract.
+- Lets `impl-plan`, `impl-plan`, Goal Packets, QA, review, and closeout all read the same task contract.
 - Preserves resume state through `program.md`, `progress.md`, and artifact links when a work loop needs more than one turn.
 - Turns each newly completed ticket into one verified closed issue in the
   project's configured GitHub repository, then retains only a compact local
@@ -165,7 +165,7 @@ flowchart TD
   trigger["Trigger<br/>accepted task or planning handoff"]:::keep
   owner["Owner surface<br/>tickets/README.md<br/>tickets/templates/ticket.md"]:::changed
   readers["Files and fields read<br/>Summary, Scope, Delta<br/>Change Plan, Done, QA Strategy<br/>frontmatter state, Links"]:::keep
-  routes["Execution routes<br/>impl-plan, spec-to-ticket<br/>Pulse priority + due_at ordering"]:::changed
+  routes["Execution routes<br/>impl-plan<br/>Pulse priority + due_at ordering"]:::changed
   artifact["Created artifact/evidence<br/>tickets/TASK-XXXX/ticket.md<br/>with proof scoreboard"]:::added
   close["Terminal record<br/>verified closed configured-repo issue<br/>compact local locator"]:::added
   old["Retired<br/>chat-only task memory"]:::retired
@@ -189,7 +189,7 @@ Owner surfaces:
 - `tickets/README.md`
 - `tickets/templates/ticket.md`
 - `skills/impl-plan`
-- `skills/spec-to-ticket`
+- `skills/impl-plan`
 - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 
 Source context:

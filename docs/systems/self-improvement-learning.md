@@ -158,7 +158,7 @@ every failed technique.
 - preserve `adopt | adapt | reject | defer` source dispositions;
 - follow linked primary evidence when it materially changes mechanism or
   confidence, without requiring direct-paper subscriptions;
-- route adversarial break cases through `agent-qa-test`, then require a
+- route adversarial break cases through `qa` adversarial mode, then require a
   distinct evidence reviewer and Eval owner to accept them;
 - guard against seed anchoring by preserving credible sibling branches and
   expanding sources only for a named coverage gap.
@@ -222,7 +222,7 @@ flowchart LR
 - `eval` owns clean execution, grading, comparison, and run artifacts.
 - The `goal-advisor` metric card helps when the honest performance target or
   guard is unclear.
-- `agent-qa-test` proposes adversarial evidence but cannot approve its own case.
+- `qa` adversarial mode proposes adversarial evidence but cannot approve its own case.
 - `skill-maintenance` owns accepted skill writeback and bounded source upgrades.
 - The `goal-advisor` ML autoresearch preset owns ML mutable-surface execution,
   receipts, and final candidate verification under a frozen evaluator.

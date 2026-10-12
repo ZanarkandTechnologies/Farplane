@@ -70,7 +70,7 @@ book_to_skill_input:
    identity, the command/receipt, provenance, quote limits, and claim-level
    grounding. If the binary is missing or extraction fails, use a faithful
    local/public read or record the access gap; never invent source content.
-   Use `media-ingest` or `learn-from-video` only when representative frames,
+   Use `intelligest` (its media route and skill level-up) only when representative frames,
    audio/video metadata, storyboard evidence, or deeper media handling changes
    the skill design.
 4. **Build a source packet.** Record title, author, edition/year when visible,
@@ -108,7 +108,7 @@ book_summary_to_skill_packet:
       source_type:
       why_this_source:
       workflow_signal:
-      extraction_plan: direct_cli | media-ingest | learn-from-video | manual
+      extraction_plan: direct_cli | intelligest | manual
       score: high | medium | low | discovery_only
   direct_cli_extractions:
     - source_ref:

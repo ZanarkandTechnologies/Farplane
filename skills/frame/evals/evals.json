@@ -125,13 +125,13 @@
     {
       "id": "frame_diagnose_already_framed_handoff_01",
       "prompt": "We already know the problem: dispatchers need a shared view of open service calls, technician availability, and exceptions so they can reassign work before SLAs slip. What should happen next?",
-      "expected_output": "Recognizes that a coherent problem frame is already present; Briefly validates actor, job, stakes, and product-boundary assumptions without restarting broad discovery; Names remaining unknowns such as data ownership, integrations, permissions, or review proof; Routes to functional-ui, PRD, MVP synthesis, or implementation planning based on the requested next step; Does not overuse problem framing when the correct behavior is downstream handoff",
+      "expected_output": "Recognizes that a coherent problem frame is already present; Briefly validates actor, job, stakes, and product-boundary assumptions without restarting broad discovery; Names remaining unknowns such as data ownership, integrations, permissions, or review proof; Routes to PRD workflow mode, MVP synthesis, or implementation planning based on the requested next step; Does not overuse problem framing when the correct behavior is downstream handoff",
       "files": [],
       "assertions": [
         "Recognizes that a coherent problem frame is already present",
         "Briefly validates actor, job, stakes, and product-boundary assumptions without restarting broad discovery",
         "Names remaining unknowns such as data ownership, integrations, permissions, or review proof",
-        "Routes to functional-ui, PRD, MVP synthesis, or implementation planning based on the requested next step",
+        "Routes to PRD workflow mode, MVP synthesis, or implementation planning based on the requested next step",
         "Does not overuse problem framing when the correct behavior is downstream handoff"
       ],
       "metadata": {

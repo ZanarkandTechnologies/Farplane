@@ -15,7 +15,7 @@ from validate_qa_result import validate
 def valid_result(**overrides):
     payload = {
         "schema_version": "1",
-        "ticket_id": "TASK-0356",
+        "ticket_id": "ZanarkandTechnologies/Farplane#41",
         "phase": "qa",
         "proof_type": "cli",
         "runtime_target": None,
@@ -29,10 +29,10 @@ def valid_result(**overrides):
             "adversarial": "pass",
             "receipt": "pass",
         },
-        "best_evidence": "tickets/TASK-0356/artifacts/qa/run/checks.txt",
+        "best_evidence": ".farplane/qa/41/run/checks.txt",
         "artifacts": [
-            "tickets/TASK-0356/artifacts/qa/run/report.md",
-            "tickets/TASK-0356/artifacts/qa/run/checks.txt",
+            ".farplane/qa/41/run/report.md",
+            ".farplane/qa/41/run/checks.txt",
         ],
         "blockers": [],
         "residual_risk": [],
@@ -53,7 +53,7 @@ class ValidateQaResultTest(unittest.TestCase):
         self.assertTrue(any("runtime_target" in error for error in errors))
         self.assertTrue(any("image path" in error for error in errors))
 
-        image = "tickets/TASK-0356/artifacts/qa/run/screens/final.png"
+        image = ".farplane/qa/41/run/screens/final.png"
         payload["runtime_target"] = "http://127.0.0.1:3000"
         payload["best_evidence"] = image
         payload["artifacts"].append(image)
@@ -92,28 +92,33 @@ class ValidateQaResultTest(unittest.TestCase):
 
     def test_pass_requires_named_judgment_receipts_from_policy(self):
         payload = valid_result(
-            proof_policy="Done + QA Strategy + visual-qa + agent-qa-test + reviewer"
+            proof_policy="Done + QA Strategy + visual + adversarial + reviewer"
         )
         errors = validate(payload)
-        self.assertTrue(any("visual-qa receipt" in error for error in errors))
-        self.assertTrue(any("agent-qa-test receipt" in error for error in errors))
+        self.assertTrue(any("visual receipt" in error for error in errors))
+        self.assertTrue(any("adversarial receipt" in error for error in errors))
         self.assertTrue(any("reviewer receipt" in error for error in errors))
 
         payload["judgment_receipts"] = [
-            "tickets/TASK-0356/artifacts/qa/run/visual-qa/report.md",
-            "tickets/TASK-0356/artifacts/qa/run/agent-qa-test/result.json",
-            "tickets/TASK-0356/artifacts/review/completion-review.md",
+            ".farplane/qa/41/run/visual.md",
+            ".farplane/qa/41/run/adversarial/review.json",
+            ".farplane/review/41/completion-review.md",
         ]
         self.assertEqual(validate(payload), [])
 
     def test_non_pass_may_block_on_missing_required_judgment(self):
         payload = valid_result(
             verdict="blocked",
-            proof_policy="Done + QA Strategy + visual-qa",
-            blockers=["Required visual-qa judgment has not run."],
+            proof_policy="Done + QA Strategy + visual",
+            blockers=["Required visual judgment has not run."],
         )
         payload["gate_results"]["adversarial"] = "blocked"
         self.assertEqual(validate(payload), [])
+
+    def test_ticket_id_accepts_issue_refs_and_legacy_ids(self):
+        for ticket_id in ("ZanarkandTechnologies/Farplane#41", "#41", "TASK-0356"):
+            self.assertEqual(validate(valid_result(ticket_id=ticket_id)), [])
+        self.assertTrue(any("ticket_id" in error for error in validate(valid_result(ticket_id="41"))))
 
     def test_best_evidence_must_be_an_artifact(self):
         errors = validate(valid_result(best_evidence="elsewhere.txt"))

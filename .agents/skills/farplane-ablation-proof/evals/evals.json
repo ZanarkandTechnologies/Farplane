@@ -25,7 +25,7 @@
     {
       "id": "ablation_surprise_requires_diagnosis_01",
       "prompt": "The with-surface condition unexpectedly scored perfectly while the recognizable baseline failed half the cases. The expected change was only modest. Can we productize the surface now?",
-      "expected_output": "Uses the preregistered expected observation to identify an implausibly strong result, routes the immutable comparison through agent-qa-test:experiment, checks leakage/evaluator/baseline integrity before productization, and preserves ablation execution ownership",
+      "expected_output": "Uses the preregistered expected observation to identify an implausibly strong result, routes the immutable comparison through eval:experiment, checks leakage/evaluator/baseline integrity before productization, and preserves ablation execution ownership",
       "files": [".agents/skills/farplane-ablation-proof/SKILL.md"],
       "assertions": [
         "The implausibly strong result is treated as a surprise",

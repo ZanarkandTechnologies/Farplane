@@ -8,7 +8,7 @@ Use it to:
 - read the ticket `QA Strategy` block for declared rubric gates and metric
   claims, and `Done` for completion conditions
 - choose the right rubric families for the ticket
-- use the `code-health` lean gate for suspected implementation bloat and `unslop` for prose
+- use the `code-health` lean gate for suspected implementation bloat and the `copywriting` final pass for prose
   that needs simplification
 - locate the correct family reference files
 - assign one TAS to each family from modular binary checks
@@ -148,10 +148,10 @@ Choose rubric families from the ticket context:
   - `evidence-quality` when claims depend on proof
 - UI work:
   - `ui-quality`
-  - `frontend-guidelines` via `web-design-guidelines` when source files are available
+  - `frontend-guidelines` via `code-health` UI review when source files are available
   - `frontend-code-maintainability` when UI source files are long, stateful,
     reused, provider-like, component-heavy, or likely to keep growing
-  - `vercel-react-best-practices` as a supporting skill when React/Next.js
+  - `code-health` UI review (React rules) as a supporting skill when React/Next.js
     performance, waterfalls, bundle size, data fetching, rerenders, or
     rendering behavior are in scope
   - `user-intent-satisfaction` when the ticket clearly expresses the user-facing ask or success feel
@@ -277,7 +277,7 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - React/component modularity, file length, hooks, state ownership, DRY, comments, and testable helper seams
   - agent/human readability for frontend code that will grow by breadth
   - long-file thresholds and extraction cues for dialogs, providers, pages, canvas scenes, and feature modules
-  - routing React/Next.js performance-specific review to `vercel-react-best-practices` instead of duplicating that rulebook
+  - routing React/Next.js performance-specific review to `code-health` UI review (React rules) instead of duplicating that rulebook
 
 ### 6. Debloatability
 - File: `debloatability.md`

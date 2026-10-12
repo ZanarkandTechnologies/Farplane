@@ -70,7 +70,7 @@ Brand Kit approved snapshots, computed Tasty Pack retrieval, Brand Kit plus opti
 
 ## What Belongs Elsewhere
 
-Raw source capture and unresolved inspiration belong in [Source And Sidecar Systems](source-sidecar-systems.md). General domain skill packaging belongs in [Domain Skill Families](domain-skill-families.md). `ingest-content` may compile a saved capture into a reusable style profile, but that profile is not a third creative source inside the Brand Kit plus Tasty Pack content-production path.
+Raw source capture and unresolved inspiration belong in [Source And Sidecar Systems](source-sidecar-systems.md). General domain skill packaging belongs in [Domain Skill Families](domain-skill-families.md). `intelligest`'s Resource Bank branch may compile a saved capture into a reusable style profile, but that profile is not a third creative source inside the Brand Kit plus Tasty Pack content-production path.
 
 ## Operating Contract
 

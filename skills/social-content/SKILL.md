@@ -3,6 +3,9 @@ name: social-content
 description: "Use for \"write a thread\", \"draft a LinkedIn post\", \"make a carousel\" or \"write the newsletter\": approval-ready posts, threads, carousels and newsletter issues; posting stays with zernio."
 source: local
 department: marketing
+capability:
+  kind: artifact
+  produces: [social-post-draft]
 template_uses:
   skill-template: "0.6.5"
   skill-eval-task: "0.2.0"
@@ -170,22 +173,13 @@ returns: the draft with publication_status: approval_required, source gaps, and 
 
 ## Reference Map
 
-- [model](references/model.md) - artifact matrix, mode selection, execution
-  packet for `cross-platform` and multi-format work.
-- [method-selection-smoke](references/method-selection-smoke.md) - when the
-  mode is unclear or when changing this skill.
-- [x-output](references/x-output.md) - the `x` draft template (N3).
-- [newsletter](references/newsletter.md) - format rules, cadence, subject and
-  preview limits, issue and blueprint templates; credits the MIT upstream
-  ([license](references/newsletter-UPSTREAM_LICENSE.txt)).
-- [newsletter example](examples/newsletter/example.md) - a release digest built
-  from verified weekly updates.
-- [examples](references/examples.md) - carousel quality bar and visual direction.
-- [upstream-twitter](references/upstream-twitter.md),
-  [upstream-linkedin](references/upstream-linkedin.md),
-  [upstream-carousel](references/upstream-carousel.md),
-  [upstream-social](references/upstream-social.md) - platform specs, hook
-  formulas, and format rules.
+- Mode references are in the Modes table; load them in N2-N3.
+- [model](references/model.md) - artifact matrix and execution packet for
+  multi-format work; [method-selection-smoke](references/method-selection-smoke.md)
+  when the mode is unclear or when changing this skill.
+- [newsletter](references/newsletter.md) credits the MIT upstream
+  ([license](references/newsletter-UPSTREAM_LICENSE.txt)); its worked release
+  digest is [examples/newsletter](examples/newsletter/example.md).
 
 ## Output
 

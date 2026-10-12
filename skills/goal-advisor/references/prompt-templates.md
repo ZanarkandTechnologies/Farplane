@@ -111,7 +111,7 @@ multi-ticket goals, each ticket must have its own QA result; batch or
 integration proof is additional. If ticket and program proof policies conflict,
 the ticket `QA Strategy` wins and the packet should be revised. If a ticket's
 QA Strategy proof weight includes `qa`, `visual_qa`, `agent_qa`, `review`, or
-`demo`, use the delegated lane named by the ticket/program and do not count
+`qa` closeout, use the delegated lane named by the ticket/program and do not count
 self-certification as proof.
 
 Final checkpoint: Before `stop_complete` on material ticket work, run or
@@ -123,7 +123,7 @@ the ticket `Links` and the relevant `progress.md`. If QA evidence review,
 completion review, reviewed `approved_response`, docs validation, or packet freshness is missing, stale, or
 below the required gate, stop blocked or revise instead of claiming completion.
 For a material implementation Goal, after QA passes and before completion
-review, run the `demo` skill to produce the default narrated lead-engineer recap
+review, run the `qa` closeout skill to produce the default narrated lead-engineer recap
 MP4. Do not add a ticket demo flag or apply this step to heartbeats, feedback
 checks, planning-only Goals, or direct non-Goal work.
 When every gate passes, run `farplane ticket finalize TASK-XXXX` and include its

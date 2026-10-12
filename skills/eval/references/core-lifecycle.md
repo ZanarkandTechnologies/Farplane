@@ -15,7 +15,7 @@ claiming behavior success.
 
 | Lifecycle stage | Skill owners |
 | --- | --- |
-| Bootstrap and objectives | `init-advisor`, `harness-creator`, `goal-advisor` (metric card) |
+| Bootstrap and objectives | `setup-advisor`, `goal-advisor` (metric card) |
 | Execution compilation and recurring work | `goal-advisor`, `automation-advisor` |
 | Work supply and operating review | `pm`, `report-gen`, `feed-scout` |
 | Skill self-improvement | `eval`, `self-improve` |

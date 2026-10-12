@@ -23,7 +23,7 @@ farplane_experiment_report(hypothesis, target_surface, metric, baseline?, varian
   -> experiment_report + keep_reject_decision + follow_up_ticket_or_handoff
 state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, ticket/program/progress/proof refs, target surface); writes(ticket artifact)
 gates: canonical_icp_bound; baseline_named; intended_decision_delta_named; metric_direction_named; evidence_not_vibes; rollout_not_implicit
-routes: root skill `eval` with `behavior_trace` for isolated agent evidence | root skill `agent-qa-test:experiment` for material surprise | ../farplane-productization/SKILL.md
+routes: root skill `eval` with `behavior_trace` for isolated agent evidence | root skill `eval:experiment` for material surprise | ../farplane-productization/SKILL.md
 fails: changes strategy without evidence; claims improvement without baseline; rolls out before deciding keep/reject
 ```
 
@@ -42,7 +42,7 @@ fails: changes strategy without evidence; claims improvement without baseline; r
 - [ ] 4. Write baseline, variant, metric, evidence, decision, risks, and next action.
 - [ ] 5. If the observation materially misses its expectation or is
       implausibly strong, route the immutable report through
-      `agent-qa-test:experiment` before reject or rollout. Keep this skill as
+      `eval:experiment` before reject or rollout. Keep this skill as
       report/decision owner; Agent QA diagnoses the inference.
 - [ ] 6. Route accepted results to bounded rollout; record rejected learning and stop.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
