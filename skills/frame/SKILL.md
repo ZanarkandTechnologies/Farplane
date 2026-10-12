@@ -3,7 +3,7 @@ name: frame
 description: "Use for \"I have an idea\", \"what should we build\", \"brainstorm\" or \"are we aligned\": separate symptom from problem, widen options, pick the smallest build, play it back for correction."
 source: local
 template_uses:
-  skill-template: "0.6.4"
+  skill-template: "0.6.5"
 allowed-tools: Read, Glob, Grep
 ---
 

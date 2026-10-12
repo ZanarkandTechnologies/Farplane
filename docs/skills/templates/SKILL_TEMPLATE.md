@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.6.4"
+template_version: "0.6.5"
 feature_refs:
   - FEAT-0022
   - FEAT-0054

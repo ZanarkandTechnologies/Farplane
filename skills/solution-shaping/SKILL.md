@@ -59,9 +59,8 @@ checklist into a queue of tiny review tasks.
   - [ ] Label facts as `supplied`, `observed`, `researched`, `inferred`, or
         `unknown`.
 - [ ] 2. Read the problem frame from `frame`.
-  - [ ] When no frame exists yet, run `frame` in `diagnose` mode first and
-        use its actor, job, stakes, classed constraints, and boundary ladder
-        rather than re-deriving them here.
+  - [ ] With no frame yet, run `frame` (`diagnose`) and use its actor, job,
+        stakes, constraints, and boundary ladder; do not re-derive them.
   - [ ] Do not proceed to MVP selection while the frame lacks actor, job,
         stakes, constraints, or boundary options.
 - [ ] 3. Ground the opportunity enough for an honest solution.

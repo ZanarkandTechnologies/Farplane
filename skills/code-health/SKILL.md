@@ -4,7 +4,7 @@ description: "Use for \"fix this bug\", \"clean this up\", \"review my changes\"
 source: local
 department: operations
 template_uses:
-  skill-template: "0.6.4"
+  skill-template: "0.6.5"
   skill-eval-task: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash
 ---
