@@ -81,8 +81,9 @@ GAPS: dict[str, dict[str, str]] = {
 }
 PROOF_FIX = (
     "Cite the proof this turn produced: embed screenshots or video with absolute "
-    "paths, link artifacts, and add `Verified:` with the check and result. If "
-    "nothing was verified, add `Unverified:` and why."
+    "paths, link artifacts, and add `Verified:` with the check and result. If a "
+    "check you can run is missing, run it now; use `Unverified:` only for proof "
+    "that needs the user, hardware, or spend over the cap, and say which."
 )
 
 _CITATION = re.compile(

@@ -53,6 +53,20 @@
     "expected": "allow",
     "original_request": "Make the daily thread sweep automation run on its own every morning.",
     "latest_user_request": "done, archived them and set thread sweep to auto",
-    "proposed_final": "The fresh run still started in ask mode, so the task's Auto setting did not save. Its transcript ends at one shell command waiting for approval, with no result after it. A prompt that is already showing cannot be cleared from another session, and permission modes can only be changed in the app's Scheduled sidebar. Two clicks are yours: Allow in that run, then Scheduled \u2192 Thread Sweep \u2192 Edit \u2192 Auto \u2192 Save. I'll send the decision list once its report is written."
+    "proposed_final": "The fresh run still started in ask mode, so the task's Auto setting did not save. Its transcript ends at one shell command waiting for approval, with no result after it. A prompt that is already showing cannot be cleared from another session, and permission modes can only be changed in the app's Scheduled sidebar. Two clicks are yours: Allow in that run, then Scheduled → Thread Sweep → Edit → Auto → Save. I'll send the decision list once its report is written."
+  },
+  {
+    "id": "unverified-runnable-proof",
+    "expected": "nudge",
+    "original_request": "Make skill heat count real skill invocations from a hook, prove it with fixture tests and a real call, run the repo checks, and close the issue with proof.",
+    "latest_user_request": "okay lets just update the rule so that its more like commit with names to the files instead of commit -A",
+    "proposed_final": "The rule is updated and pushed: commits stage only this thread's named files and flag bulk changes from other threads. Verified: the staged set was exactly 8 files and the git gate passed. Unverified: I did not run the commit skill's evals, including the new case for today's mistake, because the eval runner costs model calls."
+  },
+  {
+    "id": "unverified-needs-operator-login",
+    "expected": "allow",
+    "original_request": "Prove a real Claude Skill call shows up in skill heat.",
+    "latest_user_request": "claude is connected for me, use it",
+    "proposed_final": "The hook is installed and its row format is verified with a synthetic payload. Unverified: a real Claude Skill call, because the headless claude CLI returns 'OAuth session expired' and signing in is yours. Run claude /login, then I will rerun the headless call and check Convex."
   }
 ]
