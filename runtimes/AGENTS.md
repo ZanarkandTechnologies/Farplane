@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.9
+template_version: 0.3.10
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -270,6 +270,9 @@ final = decision + reason + proof + next_blocking_condition
   consequence, and safe default when one exists.
 - Make the final answer self-contained; do not require the reader to reconstruct
   earlier progress updates.
+- Name every file by its absolute path, visible in the text (link it where links
+  render), never relative to a working directory: the reader may be looking from
+  another folder, another repo, or a phone.
 - Use examples to calibrate shape, not as facts to copy. Omit irrelevant fields.
   Remove filler, repetition, generic advice, empty headings, process narration,
   and unasked follow-up work. Address the user as “boss” when natural.

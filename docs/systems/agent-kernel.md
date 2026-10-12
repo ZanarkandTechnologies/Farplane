@@ -126,7 +126,7 @@ either AGENTS file must be listed here.
 | --- | --- | --- | --- |
 | `AK-G01` | `runtimes/AGENTS.md` | `## Context` | User collaboration, current task state, verified evidence, and smallest-owner routing |
 | `AK-G02` | `runtimes/AGENTS.md` | `## Behavior` | Authority, reasoning, grounding, execution, task state, thread notes, skills, delegation, and workspace safety |
-| `AK-G03` | `runtimes/AGENTS.md` | `## Output Formatting` | Conditional long-horizon progress ledger, route tables, examples, visuals, proof, and completion handoff |
+| `AK-G03` | `runtimes/AGENTS.md` | `## Output Formatting` | Conditional long-horizon progress ledger, route tables, examples, visuals, proof, absolute file paths, and completion handoff |
 | `AK-P01` | `AGENTS.md` | `## Operating model` | Farplane's visible ticket, skill, Goal Packet, and proof model |
 | `AK-P02` | `AGENTS.md` | `## Context budget` | Project-local context budget and owner routing |
 | `AK-P03` | `AGENTS.md` | `## Local boundaries` | Farplane placement, browser proof, checkout, credential, and runtime boundaries |
