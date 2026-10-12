@@ -16,39 +16,6 @@ human_gates:
 - external_contact
 - account_mutation
 - destructive_cleanup
-operator:
-  review_chase_policy:
-    timezone: Asia/Kuala_Lumpur
-    active_hours:
-      start: '10:00'
-      end: 01:00
-    pulse_interval_minutes: 30
-    initial_telegram: immediate
-    telegram_reminder_after_unanswered_turns:
-    - 2
-    - 4
-    phone_chaser_after_unanswered_turns:
-    - 6
-    - 12
-    phone_chaser_repeat_after_turns: 6
-    telegram_reminder_limit: 2
-    phone_chaser_limit: 2
-    actions_per_beat: 1
-    notification_authority:
-      owner: work_pulse_automation
-      allows:
-      - telegram_review_request
-      - telegram_review_reminder
-      - phone_review_chaser
-      rule: Internal review notifications use automation-owned credentials and are not blocked by a worker
-        ticket's no-credentials, no-publication, or no-account-mutation boundary. They never authorize
-        publication, outreach, spend, deploy, or mutation of a public account.
-    escalation_rule: Send the initial Telegram review request immediately. While the Review block is undecided,
-      send bounded Telegram reminders after two and four unanswered Pulse turns, then dispatch bounded
-      Phone Chaser calls after six and twelve unanswered turns. A later phone call must also be at least
-      six Pulse turns after the prior dispatch. Chases run only during active hours, at most one action
-      per beat, and only for Kenji or an explicitly approved internal recipient. Queue size never triggers
-      a chase.
 spend_model:
   monthly_ai_spend: 400
 integrations:

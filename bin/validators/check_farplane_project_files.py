@@ -95,6 +95,7 @@ ALLOWED_DIAGNOSTIC_METRIC_IDS = {
 ALLOWED_DIAGNOSTIC_SOURCE_IDS = {
     "autonomy_time_feedback",
     "github_repo_feedback",
+    # Retired Work Pulse ledgers: kept so June-July observations still validate.
     "pulse_decision_ledger",
     "pulse_reward_ledger",
     "ticket_board",
@@ -308,7 +309,6 @@ def validate_automations_dir(root: Path, automations_dir: Path) -> list[str]:
     files = sorted(automations_dir.glob("*.md")) if automations_dir.is_dir() else []
     errors = [f"{path.relative_to(root).as_posix()} is retired; use one Markdown file per automation." for path in sorted(automations_dir.glob("*.toml"))]
     seen_ids: set[str] = set()
-    heartbeat_records: list[tuple[str, str]] = []
     for path in files:
         rel_path = path.relative_to(root).as_posix()
         if path.name == "index.md":
@@ -336,8 +336,6 @@ def validate_automations_dir(root: Path, automations_dir: Path) -> list[str]:
             seen_ids.add(automation_id)
         if automation.get("kind") not in {"heartbeat", "cron"}:
             errors.append(f"{rel_path}.kind must be heartbeat or cron.")
-        elif automation.get("kind") == "heartbeat":
-            heartbeat_records.append((str(automation_id or path.stem), str(automation.get("prompt") or "")))
         if automation.get("status") not in {"active", "paused"}:
             errors.append(f"{rel_path}.status must be active or paused.")
         target = automation.get("target")
@@ -369,8 +367,6 @@ def validate_automations_dir(root: Path, automations_dir: Path) -> list[str]:
             errors.append(f"{rel_path}.schedule.day_of_month must be an integer.")
         if schedule_type in {"interval", "active_hours_interval"} and not isinstance(schedule.get("interval_minutes"), int):
             errors.append(f"{rel_path}.schedule.interval_minutes must be an integer.")
-    if len(heartbeat_records) > 1:
-        errors.append(f"{rel_dir}/ may define at most one heartbeat record for Work Pulse; found {len(heartbeat_records)}.")
     return errors
 
 def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:

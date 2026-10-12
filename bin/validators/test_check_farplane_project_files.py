@@ -447,29 +447,6 @@ def test_retired_steer_files_fail(tmp_path: Path) -> None:
     assert "farplane/steer.config.toml is retired; use farplane/automations/." in errors
     assert ".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling." in errors
 
-def test_automations_allow_at_most_one_pulse_heartbeat(tmp_path: Path) -> None:
-    farplane = tmp_path / "farplane"
-    farplane.mkdir()
-    write_framework_manifest(farplane)
-    write_required_project_files(tmp_path)
-    (farplane / "automations" / "second-heartbeat.md").write_text(
-        '''---
-schema: farplane_project_automation
-framework_template_version: 1.0.0
-id: second-heartbeat
-name: Second Heartbeat
-kind: heartbeat
-status: active
-target:
-  workspace: /tmp/project
-schedule:
-  type: interval
-  interval_minutes: 60
----
-Run the second heartbeat.
-''', encoding="utf-8")
-    errors = validate(tmp_path)
-    assert "farplane/automations/ may define at most one heartbeat record for Work Pulse; found 2." in errors
 
 def test_retired_file_growth_hook_config_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"

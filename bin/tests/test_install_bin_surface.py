@@ -48,6 +48,7 @@ class InstallBinSurfaceTests(unittest.TestCase):
                 "stop-gate",
                 "lifecycle-telemetry",
                 "skill-length",
+                "skill-invocation",
                 "user-turn",
                 "shared",
             ),

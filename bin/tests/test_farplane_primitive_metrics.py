@@ -114,7 +114,7 @@ class FarplanePrimitiveMetricsTests(unittest.TestCase):
         self.assertIn("Drifted", excluded)
         self.assertEqual(
             excluded["Inactive"]["activation_gap"],
-            "no_work_pulse_decision_after_manifest_update",
+            "no_automation_decision_after_manifest_update",
         )
 
     def test_activation_lifecycle_fixture_matrix_isolates_manifest_and_decision_conditions(self) -> None:
@@ -158,7 +158,7 @@ class FarplanePrimitiveMetricsTests(unittest.TestCase):
         self.assertEqual(excluded["MissingDecision"]["drift"], [])
         self.assertEqual(
             excluded["MissingDecision"]["activation_gap"],
-            "no_work_pulse_decision_after_manifest_update",
+            "no_automation_decision_after_manifest_update",
         )
 
     def test_kpi_counts_require_realized_accepted_ticket_rewards(self) -> None:
@@ -360,7 +360,7 @@ kpi_rewards:
         self.assertEqual(planner_rejections["value"], 1)
         self.assertEqual(
             planner_rejections["payload"]["origin_filter"],
-            "pulse_plan_next_wave_admitted",
+            "ai_planned",
         )
 
     def test_empty_windows_are_zero_readings_not_source_gaps(self) -> None:

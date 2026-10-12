@@ -870,7 +870,7 @@ def content_views_total(project_root: Path, date_value: str) -> dict[str, Any]:
 
 
 def activated_external_projects(project_root: Path) -> dict[str, Any]:
-    """Count current nearby projects with post-migration Work Pulse evidence."""
+    """Count current nearby projects with an automation decision after their manifest update."""
 
     standard_manifest_path = project_root / "farplane" / "manifest.json"
     standard_manifest = read_json(standard_manifest_path)
@@ -917,12 +917,7 @@ def activated_external_projects(project_root: Path) -> dict[str, Any]:
             activation_rows = []
             for decision in read_jsonl(root / ".farplane" / "automation" / "decisions.jsonl"):
                 timestamp = event_timestamp(decision)
-                pulse_owned = (
-                    str(decision.get("lane") or "") == "pulse"
-                    or str(decision.get("mode") or "") == "work_pulse"
-                    or str(decision.get("automation_id") or "").endswith("ticket-update")
-                )
-                if pulse_owned and timestamp and timestamp >= manifest_mtime:
+                if timestamp and timestamp >= manifest_mtime:
                     activation_rows.append(
                         {
                             "timestamp": timestamp.isoformat(),
@@ -934,7 +929,7 @@ def activated_external_projects(project_root: Path) -> dict[str, Any]:
             if activation_rows:
                 activated.append(row)
             else:
-                row["activation_gap"] = "no_work_pulse_decision_after_manifest_update"
+                row["activation_gap"] = "no_automation_decision_after_manifest_update"
                 excluded.append(row)
     return reading(
         len(activated),
@@ -969,7 +964,7 @@ def primitive_snapshot(
         window,
         "rejected",
     )["_total"]
-    rejected_ai_ticket_count["payload"]["origin_filter"] = "pulse_plan_next_wave_admitted"
+    rejected_ai_ticket_count["payload"]["origin_filter"] = "ai_planned"
     if ticket_status:
         by_kpi_status = ticket_count_by_kpi_with_status(tickets, window, ticket_status)
     else:
