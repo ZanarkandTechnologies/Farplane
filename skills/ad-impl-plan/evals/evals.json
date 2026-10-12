@@ -75,7 +75,6 @@
       "expected_output": "Creates one spend-safe campaign ticket with a conditional Telegram Message route that packages the visual review for Telegram, asks one concrete approval reply, and preserves separate production, setup, launch, spend, and mutation gates without sending a message during drafting.",
       "files": [
         "skills/ad-impl-plan/SKILL.md",
-        "skills/telegram-message/SKILL.md",
         "skills/telegram-message/SKILL.md"
       ],
       "assertions": [
