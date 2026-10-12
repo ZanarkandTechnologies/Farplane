@@ -87,11 +87,11 @@ flowchart LR
   end
 
   subgraph Skills["Skill Layer"]
-    primitives["core primitives<br/>advise<br/>reference-grounding<br/>review<br/>direct Todo List"]:::callout
-    interfaces["shared workflow interfaces<br/>frame<br/>*-research skills<br/>harness-advisor"]:::callout
+    primitives["core primitives<br/>advise<br/>review<br/>direct Todo List"]:::callout
+    interfaces["shared workflow interfaces<br/>frame<br/>research<br/>harness-advisor"]:::callout
     intake["frame<br/>direct clarification<br/>prd<br/>visual-design"]:::skill
-    readiness["agent-testability-plan<br/>Run Hints"]:::callout
-    research["doc-advisor<br/>feed-scout<br/>harness-scout<br/>*-research skills<br/>best-of-worlds<br/>self-improve"]:::skill
+    readiness["impl-plan agent testability<br/>Run Hints"]:::callout
+    research["doc-advisor<br/>feed-scout<br/>harness-scout<br/>research<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     goalSkill["goal-advisor<br/>native Goal"]:::callout
@@ -114,7 +114,7 @@ flowchart LR
   end
 
   subgraph Proof["Proof + Review"]
-    qa["qa-tester<br/>proof-advisor<br/>visual-qa<br/>Codex Browser"]:::quality
+    qa["qa-tester<br/>eval<br/>visual-qa<br/>Codex Browser"]:::quality
     review["review<br/>reviewer agent<br/>code-health + unslop"]:::callout
   stop["Stop hook<br/>telemetry only"]:::quality
   end
@@ -245,7 +245,7 @@ during cleanup unless the replacement carries the same routing information.
 - [skills/feed-scout/SKILL.md](skills/feed-scout/SKILL.md)
   Purpose: tracked-profile monitoring recipe for discovering X, YouTube, and
   blog content, deduping canonical URLs in a content/proposal ledger, and
-  routing eligible items to harness-scout and best-of-worlds
+  routing eligible items to harness-scout and research synthesis
 - [docs/features/FEAT-0060-registry-backed-documentation-os.md](docs/features/FEAT-0060-registry-backed-documentation-os.md)
   Purpose: structural versus narrative doc-audit policy and the doc-gardening
   workflow

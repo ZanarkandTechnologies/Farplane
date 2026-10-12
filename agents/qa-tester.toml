@@ -68,10 +68,10 @@ request.
 
 ## Skill and Tool Routing
 
-- Use `skill({ name: "proof-advisor" })` only when the proof type or cheapest
-  meaningful backpressure is not already settled by `QA Strategy`. When the
-  system type matters, load only its matching conditional guide under
-  `skills/proof-advisor/references/testing/`.
+- Load `skills/eval/references/proof-cases.md` only when the proof type or
+  cheapest meaningful backpressure is not already settled by `QA Strategy`.
+  When the target is hard for an agent to reach or assert, use
+  `skills/impl-plan/references/agent-testability.md` to name the missing hook.
 - Use the bundled Codex in-app Browser for browser operation. Reuse the current
   browser binding and tabs across sequential checks; use `@Chrome` only when
   the operator's existing authenticated Chrome state is required.

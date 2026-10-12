@@ -80,7 +80,7 @@ WORKFLOWS = [
         "label": "Strategy",
         "description": "Shape measurable objectives, guards, proposal trajectories, and executable frontier choices.",
         "doc": "docs/farplane-framework/lifecycle.md",
-        "skills": ["metric-advisor", "leverage-advisor", "harness-advisor", "goal-advisor"],
+        "skills": ["metric-advisor", "advise", "harness-advisor", "goal-advisor"],
     },
     {
         "id": "workflow:goal-execution",
@@ -101,7 +101,7 @@ WORKFLOWS = [
         "label": "Proof",
         "description": "Select and run proof paths for claims, tickets, skills, and workflows.",
         "doc": "docs/farplane-framework/lifecycle.md",
-        "skills": ["proof-advisor", "eval", "qa", "review"],
+        "skills": ["eval", "qa", "review"],
     },
     {
         "id": "workflow:improvement",

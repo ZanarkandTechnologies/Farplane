@@ -54,7 +54,7 @@ gates:
   no_skill_mutation; planner_context_only
 
 routes: plan-next-wave current_context | self-improve | skill-maintenance |
-        eval | optimize-with-human | review | pulse-update
+        eval | goal-advisor | review | pulse-update
 
 fails:
   declared_experiments_only; target_ticket_quota; planner_or_allocation_api;

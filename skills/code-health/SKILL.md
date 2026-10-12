@@ -34,10 +34,11 @@ returns: finding or fix + proof + residual risk + next owner
 Applies to every mode before any change. Stop at the first sufficient rung:
 `skip` (no current need) -> `reuse_local` -> `standard_library` ->
 `native_platform` -> `installed_dependency` -> `inline` -> `minimum_new_code`.
-Name the rung and its evidence; never invent a numeric score. A smaller diff is
-not lean when it removes a test, safety check, accessibility behaviour,
-migration, or proof. Example: a date-picker library request lands on
-`native_platform` (`<input type="date">`) and keeps the form's validation proof.
+Name the rung and its evidence; never a numeric score. A smaller diff is not
+lean when it drops a test, safety check, accessibility behaviour, migration, or
+proof. Label prototype-only shortcuts as such; prove on the hard case, not the
+sample easiest to demo. Example: a date-picker ask lands on `native_platform`
+(`<input type="date">`).
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -135,7 +136,6 @@ migration, or proof. Example: a date-picker library request lands on
   only show up at branch level.
 - Claiming hardening from a checklist: an untested rate limiter is a residual
   risk, not a mitigation.
-- Lowering a smell score by scattering one clear function into helpers.
 
 ## Reference Map
 

@@ -9,6 +9,7 @@ Guide agents to act like a reliable consultant when the user has not already cho
 - `SKILL.md`: main decision-framing contract
 - `AGENTS.md`: maintenance rules
 - `SKILL.md` Todo List: decision checklist
+- `references/roadmap.md`: `mode: roadmap` sequencing rules
 
 ## Minimal Example
 
@@ -25,6 +26,6 @@ Guide agents to act like a reliable consultant when the user has not already cho
 - Confirm the options are grounded in first-principles basis rather than only
   surface preference.
 - Confirm one option is explicitly recommended.
-- Confirm fact-dependent recommendations are grounded through
-  `reference-grounding` or the relevant specialized research skill.
+- Confirm fact-dependent recommendations are grounded inline or
+  through `research`.
 - Confirm the answer does not end with "if you want I can ...".

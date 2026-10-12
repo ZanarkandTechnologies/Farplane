@@ -409,7 +409,7 @@ ProjectionVerification {
 
 NotionTaskProjection {
   title: string
-  body_source: "harness_scout_handoff" | "best_of_worlds_handoff" | "operator_summary"
+  body_source: "harness_scout_handoff" | "research_synthesis_handoff" | "operator_summary"
   project_relation?: RelationRef
   areas_relations: RelationRef[]
   routing_status: "resolved" | "routing_missing" | "local_only"

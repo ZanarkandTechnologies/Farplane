@@ -16,8 +16,8 @@ allowed-tools: Read, Glob, Grep, Bash
 Use this skill when a URL or local file may contain audio or video evidence and
 a downstream workflow needs more than page text. It turns media sources into a
 small, auditable evidence bundle before `harness-scout`, `ingest-content`,
-`video-understanding`, `content-impl-plan`, `storyboard`, or `impl-plan` makes claims
-from the source.
+`learn-from-video`, `content-impl-plan`, `storyboard`, or `impl-plan` makes
+claims from the source.
 
 This is a support workflow, not a scraping product. Prefer compact metadata,
 transcript summaries, selected frames, contact sheets, command provenance, and
@@ -75,9 +75,9 @@ phase_contract(source, operator_note?, bundle_owner?)
 ## Phase Boundary
 
 Run native phases inline for ordinary ingests. Compare source privacy, retention,
-or visual-only sufficiency tradeoffs inline and recommend one. Hand video
-interpretation to `video-understanding`; do not make
-storyboard or reimplementation claims inside media-ingest.
+or visual-only sufficiency tradeoffs inline and recommend one. The caller
+interprets the bundle; `learn-from-video` owns reimplementing a taught method.
+Do not make storyboard or reimplementation claims inside media-ingest.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -128,7 +128,8 @@ storyboard or reimplementation claims inside media-ingest.
 - [ ] 8. Write the `MediaIngestBundle` manifest and route the handoff.
   - [ ] Include source identity, commands, transcript status, selected frames,
     contact sheet, optional music recognition, retention note, known gaps, and
-    downstream recommendation, usually `video-understanding` for video.
+    downstream recommendation: `learn-from-video` for a taught method,
+    otherwise the calling workflow.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
@@ -150,7 +151,7 @@ selected_frames:
 retention_note: stored and intentionally omitted material
 known_gaps:
   - missing transcript, blocked profile, or unverified source detail
-downstream: video-understanding | ingest-content | audio-advisor | other
+downstream: learn-from-video | ingest-content | audio-advisor | other
 ```
 
 Positive command pattern:
@@ -163,7 +164,9 @@ ffmpeg -i "$workdir/source.mp4" -vf "fps=1/2,scale=270:-1,tile=4x2" "$workdir/co
 
 ## Gotchas
 
-- Do not claim transcript coverage when only frames were inspected.
+- Do not claim transcript coverage when only frames were inspected. Any reader
+  of the bundle keeps transcript facts, frame observations, creator claims, and
+  inference apart, each anchored to a timestamp or frame with a confidence.
 - Do not treat one missing browser cookie store as proof that browser-cookie
   fetch is unavailable.
 - Do not claim a music match unless the recognition tool returned one; store
@@ -173,8 +176,8 @@ ffmpeg -i "$workdir/source.mp4" -vf "fps=1/2,scale=270:-1,tile=4x2" "$workdir/co
 
 ## Reference Map
 
-- [video-understanding](../video-understanding/SKILL.md) - use after ingest
-  when video content needs storyboard, workflow, or source-todo reconstruction.
+- [learn-from-video](../learn-from-video/SKILL.md) - use after ingest when a
+  video teaches a method to reconstruct as a skill or artifact.
 - [transcription notes](references/transcription.md) - read when speech or
   narration needs local/API transcription beyond direct CLI extraction.
 - [music recognition notes](references/music-recognition.md) - read only when

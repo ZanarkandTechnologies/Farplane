@@ -137,8 +137,8 @@ fails:
 - Stable problems constrain refill; system and feature registries keep proposed
   solution evidence coherent without storing mutable solution bets in the harness.
 - Plan Next Wave performs only the bounded comparison needed to admit configured
-  skill calls. It does not invoke `leverage-advisor` during refill; use that
-  separate operator-facing workflow for a capability roadmap or contingent
+  skill calls. It does not run the Goal choose-next comparison during refill;
+  use `advise` for a capability roadmap and `goal-advisor` for a contingent
   compounding campaign.
 - A validator proves contract integrity, not human interest; human preference
   remains delayed bootstrap evidence.

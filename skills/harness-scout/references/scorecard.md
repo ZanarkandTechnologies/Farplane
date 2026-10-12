@@ -10,7 +10,7 @@ Use this before building async benchmark infrastructure.
 - `competing-implementation`: Farplane already has a local version and the
   source claims a better approach. Pick one small representative task and
   compare `current-farplane`, `source-proposed`, and
-  [best-of-worlds](../../best-of-worlds/SKILL.md) before recommending
+  `combined` before recommending
   replacement or expansion.
 
 Compare three variants on one small task:
@@ -18,7 +18,7 @@ Compare three variants on one small task:
 1. `current-farplane`: use the existing Farplane workflow.
 2. `source-proposed`: emulate the external source's proposed technique as
    instructions or a manual process, without changing repo contracts.
-3. [best-of-worlds](../../best-of-worlds/SKILL.md): combine the source idea
+3. `combined`: use [research](../../research/SKILL.md) synthesis to combine the source idea
    with Farplane conventions.
 
 ## Dimensions

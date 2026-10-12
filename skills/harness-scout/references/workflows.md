@@ -19,7 +19,7 @@
    generated `docs/features/registry.jsonl`, and nearby local docs/skills; use
    the [explore agent](../../../agents/explore.toml) when the match depends
    on local implementation behavior.
-8. Use [implementation-research](../../implementation-research/SKILL.md)
+8. Use [research](../../research/SKILL.md) (code)
    or [doc-advisor](../../doc-advisor/SKILL.md) only when source claims need
    code or official-doc verification.
 9. Score each candidate.
@@ -33,7 +33,7 @@
 1. Create one run folder per source.
 2. Normalize duplicate feature candidates.
 3. Build a project comparison matrix when feature support differs by source.
-4. Use [best-of-worlds](../../best-of-worlds/SKILL.md) for synthesis.
+4. Use [research](../../research/SKILL.md) for synthesis.
 5. Update the source registry for provenance and feature docs only for durable
    local feature knowledge, then regenerate the registries.
 6. Ticket only the chosen now-scope.
@@ -42,7 +42,7 @@
 
 1. Pick one small task.
 2. Compare `current-farplane`, `source-proposed`, and
-   [best-of-worlds](../../best-of-worlds/SKILL.md).
+   `combined`.
 3. Score each `1-10` across completion, evidence, trust, resume quality,
    overhead, and maintainability.
 4. Record confidence and anti-metrics.

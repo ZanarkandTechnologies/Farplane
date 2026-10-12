@@ -89,7 +89,7 @@ bundles to `review`, but Goal mode remains the continuation owner.
   - [ ] For ordinary UI proof, explicitly say `qa / qa-tester` owns artifacts,
     `visual-qa` owns screenshot judgment, and `agent-qa-test` is not the
     default.
-- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect the
+- [ ] Ground each case in the
   smallest relevant ticket, spec, skill, prompt, app files, or prior QA evidence.
 - [ ] Design 2-4 focused test cases with explicit required evidence for each.
   - [ ] For user-facing or workflow claims, shape each case as a

@@ -52,7 +52,7 @@ gates:
   hypothesis_tree_bound;
   packet_approved
 
-routes: leverage-advisor | goal-advisor | eval | metric-advisor | skill-maintenance |
+routes: goal-advisor | eval | metric-advisor | skill-maintenance |
   agent-qa-test | review
 
 fails:
@@ -74,7 +74,7 @@ goal_advisor(ticket.md + program preset + hypothesis-tree.json + progress.md)
 observe(ticket + program + tree + progress tail + current Eval evidence)
 choose_next(eligible leaves + remaining budget)
   -> execute | diagnose | report_now | request_feedback | stop
-leverage_advisor(eligible leaves + evidence + outside options)? -> selected move
+choose_next_comparison(eligible leaves + evidence + outside options)? -> selected move
 eval(next experiment, frozen complete suite) -> evidence
 update_tree(result + insight + bounded diagnostic children?)
 progress.md.append(selection + tree mutation + evidence + next_action)
@@ -82,9 +82,9 @@ native_goal(updated packet state) -> continue | transition | block | complete
 ```
 
 Goal Advisor compiles or regenerates the packet. Metric Advisor is setup/repair
-only. Invoke Leverage Advisor when several plausible moves need judgment; when
-one move is mechanically implied, execute it directly. Always compare further
-work with `report_now`, `request_feedback`, and `stop`.
+only. Use the choose-next comparison when several moves need judgment; when one
+move is mechanically implied, execute it directly. Always compare further work
+with `report_now`, `request_feedback`, and `stop`.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -109,9 +109,9 @@ work with `report_now`, `request_feedback`, and `stop`.
    - [ ] Route adversarial cases through `agent-qa-test`; a separate evidence
      reviewer must accept a case before Eval does. The tester cannot approve its
      own case.
-   - [ ] When several credible initial leaves need judgment, use
-     [leverage-advisor](../leverage-advisor/SKILL.md) for one ordinal comparison
-     that includes outside options. Skip this hop when one move is mechanically
+   - [ ] When several credible initial leaves need judgment, apply
+     [choose-next](../goal-advisor/references/choose-next.md) once, with the
+     outside options. Skip this hop when one move is mechanically
      implied. Never use a tournament, persistent score table, or invented lift.
 - [ ] 4. Invoke `goal-advisor` to instantiate
   `references/goal-program-template.md` into the ticket's `program.md`, create
@@ -124,8 +124,8 @@ work with `report_now`, `request_feedback`, and `stop`.
   fresh packet and baseline; never change cases mid-comparison.
 - [ ] 6. Harden first. Apply `choose_next` to the `program.md` policy, pending
   tree leaves, recent `progress.md` learnings, current Eval evidence, and
-  remaining harden budget. Invoke Leverage Advisor only for a real multi-option
-  judgment. Before ranking, disposition every known prerequisite-invalid leaf
+  remaining harden budget. Use the choose-next comparison only for a real
+  multi-option judgment. Before ranking, disposition every known prerequisite-invalid leaf
   explicitly as `reject` or `defer` and record the failed prerequisite; omission
   is not filtering. Verify that one complete round fits the remaining budget;
   never assume an unstated budget or candidate prerequisite. Run the complete frozen
@@ -161,9 +161,9 @@ change, ticket progress, and generated evidence.
 
 The active Goal owns `choose_next`. `program.md` owns source/search and replan policy;
 `hypothesis-tree.json` owns current hypotheses, results, and insights;
-`progress.md` owns chronological receipts. Leverage Advisor is loaded only when
-several plausible moves need evidence-backed ordinal comparison. It does not
-execute Eval, mutate the target, compile the Goal, or create an experiment ticket.
+`progress.md` owns chronological receipts. The choose-next comparison is loaded
+only when several plausible moves need evidence-backed ordinal comparison. It
+does not execute Eval, mutate the target, or create an experiment ticket.
 
 External research is optional and evidence-triggered, not an automatic web
 search. Adversarial agents strengthen the eval boundary before a Goal or force
@@ -181,8 +181,8 @@ launcher.
 
 - [Goal program template](references/goal-program-template.md) — instantiate
   for every material self-improvement Goal.
-- [Leverage Advisor](../leverage-advisor/SKILL.md) — load only when several
-  eligible moves need evidence-backed comparison.
+- [Choose-next](../goal-advisor/references/choose-next.md) — load only when
+  several eligible moves need evidence-backed comparison.
 - [Goal Packet ownership](references/skill-memory.md) — load when compiling or
   repairing state surfaces.
 - [Skill eval use](references/skill-evals.md) — load for suite, metric,
@@ -212,7 +212,7 @@ Packet: owning ticket + program + hypothesis tree + progress + approval/freshnes
 Phase: baseline | harden | refine
 Budget: harden max_rounds/patience + refine max_rounds/patience
 Observation: performance + guards + length + evidence ref
-Selector: eligible pending leaves + direct or Leverage-assisted rationale + outside-option comparison
+Selector: eligible pending leaves + direct or choose-next rationale + outside options
 Decision: retain | reject | transition_refine | blocked | complete
 Diagnostic: bounded children + preserved sibling ids + repair/reject/defer/backtrack branches, when evidence is ambiguous
 Writeback: tree mutation + observation + evidence + learned constraint + next action
@@ -242,7 +242,7 @@ and remaining budget.
 When asked to seed from supplied sources, render the extracted source refs,
 techniques, mechanisms, variables, and concrete initial nodes. Each node names
 its expected observation, falsifier, expected reward, reward basis, and source
-refs before one ordinal Leverage Advisor selection. For an ambiguous miss,
+refs before one ordinal choose-next selection. For an ambiguous miss,
 the `Diagnostic` and `Writeback order` lines above are mandatory even when the
 answer is brief; list preserved sibling IDs and all four outcome branches.
 

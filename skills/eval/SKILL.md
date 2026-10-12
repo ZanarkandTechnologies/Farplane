@@ -1,6 +1,6 @@
 ---
 name: eval
-description: "Turn agent, prompt, or skill behavior into local eval tasks, boolean or tier judges, run artifacts, and verdicts."
+description: "Use for \"test this skill\", \"write evals\", \"prove it works\" or \"how do we prove this\": picks proof cases and surface, writes eval rows and judges, runs them, and returns a verdict."
 department: operations
 source: local
 template_uses:
@@ -26,14 +26,13 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill to create, run, repair, or consolidate a real eval for an agent,
-prompt, skill, or workflow. Skill comparisons keep one Agent Skills
-`evals/evals.json` and use Promptfoo; project suites and behavior traces use the
-existing `.farplane/evals` runner. This skill owns eval semantics and artifacts;
-Farplane Office owns rendering, history, and drilldown.
-
-Use AGI Toy Shop for generic clean-room cases. Use a real repo fixture only
-when its files are the behavior under test.
+Use this skill to decide how to prove a behavior claim, then create, run,
+repair, or consolidate a real eval for an agent, prompt, skill, or workflow.
+Skill comparisons keep one Agent Skills `evals/evals.json` and use Promptfoo;
+project suites and behavior traces use the `.farplane/evals` runner. This skill
+owns eval semantics and artifacts; Farplane Office owns rendering and history.
+Use AGI Toy Shop for clean-room cases; use a real repo fixture only when its
+files are the behavior under test.
 
 ## Skill Signature
 
@@ -60,6 +59,9 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
         active cross-skill cases under `.farplane/evals/tasks`, and reusable
         examples under `skills/eval/examples`.
 - [ ] 2. Author or select honest cases.
+  - [ ] When cases or the proof surface are unsettled, load [proof cases](references/proof-cases.md):
+        real failures before synthetic, 3-7 per batch with an anti-cheat
+        control, and a deterministic check wherever one can judge.
   - [ ] For skill rows, write a natural `prompt`, human-readable
         `expected_output`, optional `files`, and one canonical `assertions`
         list. Use typed `metadata.farplane` only for a current UI/runtime/link
@@ -103,9 +105,8 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
         points in evals. Use [self-improve](../self-improve/SKILL.md) only for
         measured variant search with an owning ticket.
 - [ ] 5. Finish with independent proof.
-  - [ ] Reapply the first-load Todo List guardrails and the owning validators. For core primitive, meta,
-        `eval`, cross-skill, or precedent-setting changes, record the
-        the high-stakes design decision and use an independent reviewer.
+  - [ ] Reapply the Todo List guardrails and owning validators. For core, meta, `eval`,
+        cross-skill, or precedent-setting changes, record the decision and use an independent reviewer.
   - [ ] Do not claim task or review-rate improvement without run artifacts or a
         reviewer receipt. Return the artifact path and next fix.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -121,9 +122,8 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
   core primitive, meta, `eval`, or cross-skill structure coverage.
 - Load [automation prompt](references/automation-prompt.md) only when installing
   or updating the weekly consolidation automation.
-- The weekly drain's reference workflow uses the shared
-  [consolidation primitive](../consolidate/SKILL.md); do not load it for normal
-  proof or regression runs.
+- The weekly drain uses the shared [consolidation primitive](../consolidate/SKILL.md);
+  do not load it for normal proof or regression runs.
 
 ## Gotchas
 

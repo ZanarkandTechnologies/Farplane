@@ -22,7 +22,7 @@ entries and evidence receipts, not tickets.
 This adapts Karpathy's minimal Autoresearch loop—baseline, one code experiment,
 evaluate, keep or discard, repeat—into Farplane's visible Goal Packet. The
 active Goal chooses the next action from eligible leaves and accumulated
-evidence; Leverage Advisor is conditional on a real multi-option judgment.
+evidence; the choose-next comparison applies only to a real multi-option choice.
 Native Goal is the sole continuation engine. Goal Advisor compiles the packet
 but does not choose ML techniques.
 
@@ -49,8 +49,8 @@ gates:
   packet_approved
 
 routes:
-  leverage-advisor | goal-advisor | metric-advisor | competitor-research |
-  reference-grounding | best-of-worlds | eval | agent-qa-test | review
+  goal-advisor | metric-advisor | research |
+  eval | agent-qa-test | review
 
 fails:
   evaluator_or_data_boundary_mutation; experiment_before_baseline;
@@ -74,7 +74,7 @@ goal_advisor(ticket.md + program preset + hypothesis-tree.json + progress.md)
 observe(ticket + program + tree + progress tail + current receipts)
 choose_next(eligible leaves + remaining budget)
   -> execute | diagnose | report_now | request_feedback | stop
-leverage_advisor(eligible leaves + evidence + outside options)? -> selected move
+choose_next_comparison(eligible leaves + evidence + outside options)? -> selected move
 domain_executor(next experiment) -> receipt + tree update + progress.md append
 native_goal(updated packet state) -> continue | replan | block | complete
 ```
@@ -83,8 +83,8 @@ The campaign Goal Packet always contains `ticket.md`, `program.md`,
 `hypothesis-tree.json`, and `progress.md`. `program.md` owns source/search
 policy; the tree owns current hypotheses, results, and insights; `progress.md`
 owns append-only selections and mutation receipts. Goal Advisor is only the
-packet/native-Goal compiler. Metric Advisor is setup/repair only. Use Leverage
-Advisor only when several plausible experiments need judgment; otherwise the
+packet/native-Goal compiler. Metric Advisor is setup/repair only. Use the
+choose-next comparison only when several experiments need judgment; otherwise the
 Goal executes the mechanically implied move directly.
 
 ## Phase Boundary
@@ -117,8 +117,8 @@ the authority named by the ticket.
 - [ ] 3. Run the source stage and seed the hypothesis tree.
   - [ ] Start with local failures, the optional technique catalog, supplied
     references, and configured Feed Scout signals. When credible coverage is
-    missing or stale, route bounded research or
-    [Best Of Worlds](../best-of-worlds/SKILL.md).
+    missing or stale, route bounded [research](../research/SKILL.md)
+    (papers or synthesis).
   - [ ] Extract applicable techniques, mechanisms, variables, failure
     conditions, and source refs; record source dispositions before use.
   - [ ] Generate intervention hypotheses through combination, permutation,
@@ -131,7 +131,7 @@ the authority named by the ticket.
     options unlocked, or proof accelerated—not merely restate expected metric
     lift.
   - [ ] When several credible initial hypotheses need judgment, use
-    [Leverage Advisor](../leverage-advisor/SKILL.md) for one ordinal comparison
+    [choose-next](../goal-advisor/references/choose-next.md) for one ordinal comparison
     including outside options. Skip this hop when one move is mechanically
     implied. Do not use a tournament, persistent rank, or numeric lift.
 - [ ] 4. Use [Goal Advisor](../goal-advisor/SKILL.md) to instantiate
@@ -142,7 +142,7 @@ the authority named by the ticket.
 - [ ] 5. Select the next experiment from current evidence.
   - [ ] Apply `choose_next` to `program.md` policy, eligible pending tree
     leaves, recent `progress.md` learnings, current full-evaluator receipts,
-    and remaining budget. Invoke Leverage Advisor only for a real multi-option
+    and remaining budget. Use the choose-next comparison only for a multi-option
     judgment. Do not continue a fixed roadmap order.
   - [ ] Preregister one hypothesis, expected observation, observation horizon,
     named confidence, falsifier, surprise trigger, changed boundary, expected
@@ -257,7 +257,7 @@ next_action:
 
 - Do not mistake search volume for research quality. Prefer the experiment that
   best distinguishes the current bottleneck or unlocks reusable capability.
-- Do not let Leverage Advisor become an ML executor or state store. It returns
+- Do not let the choose-next comparison become an ML executor or state store. It returns
   a decision; the campaign tree and receipts preserve state.
 - Do not mutate the evaluator, split, primary metric, or prohibited inputs to
   manufacture improvement. Such changes stale the packet and require a new
@@ -270,7 +270,7 @@ next_action:
 
 - [ML Goal program preset](references/goal-program-template.md) — instantiate
   for every material campaign; it owns source/search and tree writeback policy.
-- [Leverage Advisor](../leverage-advisor/SKILL.md) — conditional comparison when
+- [Choose-next](../goal-advisor/references/choose-next.md) — conditional comparison when
   several eligible experiments need judgment.
 - [Goal Advisor](../goal-advisor/SKILL.md) — packet and native Goal compiler;
   never the technique selector.
@@ -293,7 +293,7 @@ For any requested loop policy, packet draft, or active turn, explicitly report:
 Packet: ticket.md + program.md + hypothesis-tree.json + progress.md + Goal Advisor compilation state
 Tree: source synthesis + eligible pending leaves + current branch state
 Progress: progress.md learnings + current full-evaluator receipt refs
-Selector: eligible moves + direct or Leverage-assisted rationale + outside-option comparison
+Selector: eligible moves + direct or choose-next rationale + outside-option comparison
 Experiment: hypothesis + falsifier + changed boundary + guards + cost
 Expectation: expected observation + horizon + confidence + surprise trigger
 Writeback: receipt ref + decision + learned constraint + tree mutation + next action
@@ -304,9 +304,9 @@ For a source-stage request with concrete inputs, also render the extracted
 followed by concrete initial nodes. Every node includes `hypothesis`,
 `mechanism`, `expected_observation`, `falsifier`, `expected_reward`,
 `reward_basis`, and `source_refs`; render those labels for every node before
-making one ordinal Leverage Advisor selection. Do not replace these outputs
+making one ordinal choose-next selection. Do not replace these outputs
 with a setup checklist or infer a shared reward basis across nodes. Label the
-comparison `Leverage Advisor comparison`, apply it through `choose_next`, and
+comparison `Choose-next comparison`, apply it through `choose_next`, and
 name the selected node or blocking input explicitly.
 
 For a surprise request, explicitly render the bounded diagnostic children,

@@ -39,7 +39,7 @@ harness_scout(source, project_context, decision_goal?, output_root?)
   separation, grounding, visibility, redaction, and retention notes.
 - [ ] For video/audio that teaches a workflow, follow the
   [video-to-skill route](references/video-to-skill.md) through media evidence,
-  [video-understanding](../video-understanding/SKILL.md), source todos, and
+  [learn-from-video](../learn-from-video/SKILL.md) source todos, and
   owner handoff.
 - [ ] Write or update `.farplane/harness-scout/runs/<date-slug>/`, keeping raw
   transcripts, secrets, PII, and bulky extracts out of tracked canonical docs.
@@ -47,14 +47,14 @@ harness_scout(source, project_context, decision_goal?, output_root?)
   feature registries, docs, skills, memory, lessons, troubles, and tickets for
   local matches. Use the [explore agent](../../agents/explore.toml) only when
   docs/registry search cannot settle behavior.
-- [ ] Route claims narrowly: [best-of-worlds](../best-of-worlds/SKILL.md) for
+- [ ] Route claims narrowly: [research](../research/SKILL.md) `synthesis` for
   multi-source normalization and convergence, and
-  [implementation-research](../implementation-research/SKILL.md) for repository
+  its `code` branch for repository
   behavior and externally grounded implementation scope.
 - [ ] Score each candidate with [decision-matrix](references/decision-matrix.md)
   and choose `adopt`, `adapt`, `reject`, `defer`, or the evidence-state label.
 - [ ] Use [harness-advisor](../harness-advisor/SKILL.md) for ambiguous placement,
-  and [best-of-worlds](../best-of-worlds/SKILL.md) for competing sources; keep
+  and `research` synthesis for competing sources; keep
   unresolved material judgment in the native planning phase.
 - [ ] Create an [impl-plan](../impl-plan/SKILL.md) handoff only for strong
   `adopt`/`adapt` decisions; update the `SRC-*` record and durable feature docs
@@ -90,12 +90,12 @@ project.
 | Need | Route |
 | --- | --- |
 | Video/audio bundle | [media-ingest](../media-ingest/SKILL.md) |
-| Taught workflow reconstruction | [video-understanding](../video-understanding/SKILL.md) |
-| Repo implementation claim | [implementation-research](../implementation-research/SKILL.md) |
+| Taught workflow reconstruction | [learn-from-video](../learn-from-video/SKILL.md) |
+| Repo implementation claim | [research](../research/SKILL.md) (code) |
 | Official API/platform behavior | [doc-advisor](../doc-advisor/SKILL.md) |
-| Compact evidence confidence | [reference-grounding](../reference-grounding/SKILL.md) |
+| Compact evidence confidence | Inline `Grounding:` line |
 | Alternate scout/scorecard shapes | Expand first-principles alternatives inline |
-| Multi-source synthesis | [best-of-worlds](../best-of-worlds/SKILL.md) |
+| Multi-source synthesis | [research](../research/SKILL.md) (synthesis) |
 | Material judgment after evidence | Compare viable options and recommend one inline |
 | Honest metric beyond manual scoring | [metric-advisor](../metric-advisor/SKILL.md) |
 | Eval-backed skill follow-up | [self-improve](../self-improve/SKILL.md) |
@@ -104,7 +104,7 @@ project.
 
 - Existing equal/stronger behavior: `already-dominating` or `duplicate`; cite
   it and do not ticket.
-- Partial local behavior: `hybrid`; run `competitor-research` before handoff.
+- Partial local behavior: `hybrid`; run `research` (market) before handoff.
 - Missing behavior: score credibility, fit, cost, risk, and benchmarkability;
   use Harness Advisor when ownership is unclear.
 - Competing implementation: compare one small task across current, source, and

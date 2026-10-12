@@ -47,7 +47,7 @@ selection:
   source_stage:
     inputs: <local failures, supplied refs, configured Feed Scout signals, or bounded research>
     extracts: <techniques, mechanisms, variables, failure conditions, source refs>
-  rule: choose execute | diagnose | report_now | request_feedback | stop; use leverage-advisor only for real multi-option judgment
+  rule: choose execute | diagnose | report_now | request_feedback | stop; use goal-advisor references/choose-next.md only for real multi-option judgment
   before_each_experiment:
     inputs:
       - this program.md policy
@@ -56,7 +56,7 @@ selection:
       - current complete-suite Eval evidence
       - remaining phase budget and patience
     output: one next experiment + expected observation + falsifier + expected reward + reward basis + material selection rationale + replan conditions
-    rule: execute a mechanically implied move directly; otherwise invoke leverage-advisor; verify eligibility and budget fit
+    rule: execute a mechanically implied move directly; otherwise apply goal-advisor references/choose-next.md; verify eligibility and budget fit
 
 loop:
   round: one bounded target edit followed by the complete frozen eval
@@ -74,7 +74,7 @@ loop:
 
 after_each_turn:
   - observe ticket, program, tree, latest 80 progress lines, current evidence, and remaining budget
-  - choose execute | diagnose | report_now | request_feedback | stop; use leverage-advisor only when several moves need judgment
+  - choose execute | diagnose | report_now | request_feedback | stop; use the choose-next comparison only when several moves need judgment
   - preregister and run the one selected round in the current phase
   - update the selected tree node with its result and insight; add only bounded diagnostic children for surprising, invalid, prerequisite-uncertain, or causally ambiguous evidence
   - append selection, tree mutation, evidence, decision, learned constraint, and next action to progress.md
@@ -88,8 +88,8 @@ stop:
   complete: final full-suite verification passes on the shortest retained candidate
 ```
 
-Never trade required behavior for length. The Goal chooses; Leverage Advisor
-conditionally compares; Eval measures; the tree owns current search state and
+Never trade required behavior for length. The Goal chooses; the choose-next
+comparison conditionally ranks; Eval measures; the tree owns current search state and
 progress owns chronology. Do not create another loop owner or target-local
 state.
 ````

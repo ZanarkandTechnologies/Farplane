@@ -16,7 +16,7 @@
      evidence reviewer and Eval owner.
 5. Seed `hypothesis-tree.json` with intervention hypotheses, expected
    observations, falsifiers, expected rewards, and reward bases. Use
-   `leverage-advisor` for one ordinal compounding-leverage comparison when
+   goal-advisor `references/choose-next.md` for one ordinal comparison when
    several credible initial leaves need judgment.
 6. Use `goal-advisor` to instantiate the reusable template into the ordinary
    ticket Goal Packet and obtain operator approval.
@@ -26,7 +26,7 @@
 
 On each native Goal turn, apply `choose_next` to the program policy, eligible
 pending tree leaves, `progress.md` learnings, current Eval evidence, and
-remaining harden budget. Invoke `leverage-advisor` only when several eligible
+remaining harden budget. Apply the choose-next comparison only when several eligible
 moves need judgment; execute a mechanically implied move directly.
 Make the selected bounded instruction change, run the complete frozen suite,
 and retain the candidate only when performance improves without a guard

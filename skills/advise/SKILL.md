@@ -1,6 +1,6 @@
 ---
 name: advise
-description: "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice."
+description: "Use for \"what should I do\", \"which option\", \"plan the next steps\" or \"give me a roadmap\": one recommendation over real options, or a phased roadmap whose first proof is a completed loop."
 source: local
 capability:
   kind: shortcut
@@ -18,12 +18,14 @@ template_uses:
 judgment call among real options; direct execution requests should stay with
 the owning skill or caller.
 
-Use when the user needs judgment, not a neutral menu.
+Use when the user needs judgment, not a neutral menu. Use `roadmap` mode when
+the decision is how to sequence the path from the current state to a goal.
 
 ## Skill Signature
 
 ```text
-advise(decision, context?, ensemble?: auto | max) -> recommendation + dissent?
+advise(decision, context?, mode?: choose | roadmap, ensemble?: auto | max)
+  -> recommendation + dissent? | phased_roadmap + immediate_move
 
 state: reads(decision, supplied context, and relevant evidence); writes(advice
   response or decision note); never mutates external state
@@ -41,11 +43,19 @@ fails: neutral_menu; fake_options; automatic_ensemble; hidden_evidence_gap
 - [ ] 2. State the real decision and the criteria that matter.
 - [ ] 3. Check evidence needs; use supplied/local grounding when needed, or name
   the evidence gap instead of doing a full research pass inside this skill.
+  Propose an evidence step only when its result would change the recommendation.
 - [ ] 4. Compare exactly 3 viable options with concrete pros and cons when three
   realistic options exist.
 - [ ] 5. Recommend one option clearly, name the accepted tradeoff, and state the
   direct next step or owning next skill.
-- [ ] 6. Finish-check the advice.
+- [ ] 6. `roadmap` mode: sequence instead of compare.
+  - [ ] The first phase ends in a completed loop (paid commitment, observed
+    customer result, shipped core workflow), never preparation, strategy,
+    infrastructure, or a polished artifact.
+  - [ ] A distant goal that is causing avoidance stays the direction; only the
+    next focused mission is planned, and the one after it is chosen from what
+    happened. Load [roadmap](references/roadmap.md) for the shape and precedent.
+- [ ] 7. Finish-check the advice.
   - [ ] No neutral menu, fake third option, hidden evidence gap, or vague
     "if you want" ending.
   - [ ] When `ensemble` is `auto` or `max`, load `ensemble.yaml`, collect
@@ -121,3 +131,4 @@ preview** before the recommendation:
 - Inspect supplied and local evidence directly when enough; otherwise name the
   exact grounding or synthesis handoff the operator must request.
 - [ensemble.yaml](ensemble.yaml) — load only for `ensemble: auto | max`.
+- [roadmap](references/roadmap.md) — load for `mode: roadmap`.

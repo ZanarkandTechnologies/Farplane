@@ -1,0 +1,398 @@
+{
+  "skill_name": "research",
+  "evals": [
+    {
+      "id": "research_market_review_triangulation_01",
+      "prompt": "Compare three scheduling assistants for small recruiting teams. Search official product sources and tracked review, Reddit, X, and YouTube surfaces; qualify finalists before deep-diving and return the strongest opportunity.",
+      "expected_output": "Defines the recruiting job and decision; records platform-specific query families; searches beyond one result; promotes only threshold-passing finalists; investigates reviews and discussions in depth; separates table stakes, differentiation, recurring pain, and recommendation",
+      "files": [
+        "evals/fixtures/scheduling-assistants.md"
+      ],
+      "assertions": [
+        "Names the customer job and comparison dimensions",
+        "Records reproducible queries for multiple relevant platforms",
+        "Uses a threshold and rejection ledger before top-k deep dives",
+        "Reads threads, comments, transcripts, and linked evidence rather than result snippets alone",
+        "Distinguishes anecdotes from recurring independent themes",
+        "Returns one sourced opportunity and its downside"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Market research triangulates review and community evidence",
+          "tags": [
+            "research",
+            "market",
+            "reviews",
+            "normal"
+          ],
+          "notes": "Normal cross-platform competitor case."
+        }
+      }
+    },
+    {
+      "id": "research_market_syndicated_reviews_01",
+      "prompt": "Five sites repeat the same complaint about a competitor, while Reddit has one detailed contrary thread and the current changelog claims a fix. Determine whether this is a current recurring pain.",
+      "expected_output": "Deduplicates syndicated reviews into one lineage; dates and versions the complaint; reads the contrary thread and comments; verifies the changelog; lowers confidence or refines the hypothesis rather than counting copies as prevalence",
+      "files": [
+        "evals/fixtures/scheduling-assistants.md"
+      ],
+      "assertions": [
+        "Treats copied reviews as one source lineage",
+        "Uses product version and date in the assessment",
+        "Includes contrary community and official evidence",
+        "Revises the hypothesis when evidence conflicts",
+        "Avoids claiming prevalence without independent support"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Market research deduplicates stale syndicated complaints",
+          "tags": [
+            "research",
+            "market",
+            "dedupe",
+            "hard"
+          ],
+          "notes": "Hard source-lineage and contradiction case."
+        }
+      }
+    },
+    {
+      "id": "research_market_single_product_01",
+      "prompt": "I only care whether one named competitor supports a specific regulated export workflow. Do not broaden this into a market landscape.",
+      "expected_output": "Uses a one-product capability check; verifies official behavior and relevant user evidence; keeps other products out unless needed to interpret the claim; reports uncertainty and stops when the decision is supported",
+      "files": [],
+      "assertions": [
+        "Preserves the single-product decision boundary",
+        "Verifies the claim against current official evidence",
+        "Uses user evidence only where it changes confidence",
+        "Does not manufacture a multi-competitor quota",
+        "Returns a direct decision and remaining unknowns"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Market research respects a single-product boundary",
+          "tags": [
+            "research",
+            "market",
+            "boundary"
+          ],
+          "notes": "Boundary case against unnecessary landscape expansion."
+        }
+      }
+    },
+    {
+      "id": "research_market_false_threat_qualification_01",
+      "prompt": "Research meaningful Malaysian competitors for a robotics product. Search results suggest Nexpuran is Malaysian and show Cytron listing one relevant SO-ARM101 product. Decide whether either is a current direct competitive threat. Do not accept the search snippets as proof.",
+      "expected_output": "Opens and operates candidate sites; records a qualification ledger across geography and market availability, product availability and production, offering breadth, recency, site freshness, social activity and engagement, traffic or demand proxies, customer evidence, organizational credibility, and same-job fit; refuses to promote unresolved geography or a limited, backordered, discontinued, or incidental SKU; classifies candidates and records rejections or unknowns with confidence",
+      "files": [
+        "evals/fixtures/robotics-false-threats.md"
+      ],
+      "assertions": [
+        "Treats search snippets only as discovery evidence",
+        "Records direct-site URLs, inspection dates, observations, and unknowns for every qualification field",
+        "Requires same job, served target geography, current availability and production, and meaningful offering depth before a competitive-threat claim",
+        "Requires a current official observation plus at least two independent evidence lineages before a competitive-threat claim",
+        "Separates direct competitors, adjacent competitors, suppliers, inactive or noise candidates, and unverified candidates",
+        "Keeps a rejection ledger with failed or unknown gates and confidence",
+        "Does not classify Nexpuran as Malaysian without direct evidence",
+        "Does not infer a meaningful direct threat from Cytron's single limited, backordered, discontinued, or incidental listing"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Market research rejects search-snippet false threats",
+          "tags": [
+            "research",
+            "market",
+            "qualification",
+            "hard"
+          ],
+          "notes": "Regression case for geography, availability, production status, and incidental-SKU overclaiming."
+        }
+      }
+    },
+    {
+      "id": "research_code_multipart_01",
+      "prompt": "Research how to add resumable multipart uploads to evals/fixtures/service/src/upload.ts. External access is unavailable; use evals/fixtures/multipart-pattern-packet.md and return an Implementation Research Brief with the local seam, literal queries, candidate threshold, repository deep dives, local delta, decision, and proof handoff.",
+      "expected_output": "Maps the local seam before asserting a gap; records literal searches; filters a broad candidate set; inspects files, tests, lifecycle, and failures; distinguishes transferable constraints from source syntax; recommends the smallest local adaptation and proof path",
+      "files": [
+        "evals/fixtures/multipart-pattern-packet.md",
+        "evals/fixtures/service/src/upload.ts"
+      ],
+      "assertions": [
+        "Maps the local implementation and tests before recommending a pattern",
+        "Records reproducible literal code queries and candidate rejections",
+        "Deep-dives maintained sources with exact repository and file provenance",
+        "Covers lifecycle, validation, retries or cleanup, and failure tests",
+        "Returns adopt, adapt, reject, or defer decisions plus a local proof path"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Code research adapts maintained multipart patterns",
+          "tags": [
+            "research",
+            "code",
+            "code-patterns",
+            "normal"
+          ],
+          "notes": "Normal multi-candidate implementation case."
+        }
+      }
+    },
+    {
+      "id": "research_code_stream_01",
+      "prompt": "Use evals/fixtures/tool-stream-pattern-packet.md to determine how the smaller Node service should stream tool-call results. Return the local contract, query and source trail, repository map, failure evidence, rejected assumptions, and implementation handoff.",
+      "expected_output": "Uses the named repository as one inspectable candidate; maps entrypoints and tests; examines abort, timeout, schema, and error behavior; rejects unnecessary continuation behavior; adapts only the constraints the smaller service needs",
+      "files": [
+        "evals/fixtures/tool-stream-pattern-packet.md"
+      ],
+      "assertions": [
+        "Uses literal symbols and file paths rather than tutorial queries",
+        "Maps the repository before interpreting a snippet",
+        "Inspects tests and cancellation, timeout, validation, or error behavior",
+        "Separates repository-specific machinery from transferable constraints",
+        "Recommends a proportional local implementation and falsifiable proof"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Code research rejects oversized stream machinery",
+          "tags": [
+            "research",
+            "code",
+            "deep-dive",
+            "hard"
+          ],
+          "notes": "Hard proportional-adaptation case."
+        }
+      }
+    },
+    {
+      "id": "research_code_no_external_01",
+      "prompt": "The local code and official API contract are available, but repository, X, and YouTube access are unavailable. Research the implementation boundary without pretending those sources were searched.",
+      "expected_output": "Uses the local owner and official contract; reports unavailable source classes and untested hypotheses; avoids padded candidates; returns a bounded docs-only conclusion or evidence gap with a recovery path",
+      "files": [],
+      "assertions": [
+        "Does not claim unavailable platforms were searched",
+        "Uses local and official evidence for only the claims they support",
+        "Leaves unsupported implementation claims unresolved",
+        "Does not fill top-k with weak or invented candidates",
+        "Returns the smallest safe handoff and missing-evidence recovery path"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Code research preserves a docs-only boundary",
+          "tags": [
+            "research",
+            "code",
+            "boundary"
+          ],
+          "notes": "Boundary case for unavailable external implementation evidence."
+        }
+      }
+    },
+    {
+      "id": "research_papers_robotics_01",
+      "prompt": "Choose which of three learned robotic grasping approaches is worth a two-week local experiment. Trace papers, authors, labs, code, replications, talks, X, and demos; normalize their evaluations and rank experiments for our hardware.",
+      "expected_output": "Defines falsifiable hypotheses and local metrics; follows paper and researcher trails; qualifies approaches by evidence, artifacts, and hardware fit; compares protocols and negative evidence; ranks small experiments by information gain, reproducibility, cost, and transfer fit",
+      "files": [
+        "evals/fixtures/robotics-approaches.md"
+      ],
+      "assertions": [
+        "Defines baseline, metrics, constraints, and falsifiers",
+        "Searches beyond the first paper or lab through citations, authors, code, and independent evidence",
+        "Normalizes dataset, baseline, metric, compute, and protocol differences",
+        "Includes contrary evidence and transfer risks",
+        "Returns a ranked experiment with promotion and stop conditions"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Paper research ranks robotics trials by learning value",
+          "tags": [
+            "research",
+            "papers",
+            "robotics",
+            "normal"
+          ],
+          "notes": "Normal researcher-trail and experiment-ranking case."
+        }
+      }
+    },
+    {
+      "id": "research_papers_vendor_demo_01",
+      "prompt": "A foreign robotics vendor has a striking demo and a paper from its founders, but no public dataset and only a hardware-specific SDK. Decide whether to trial it against an open baseline.",
+      "expected_output": "Treats the demo and founder paper as related evidence; checks artifacts, independent replication, hardware and vendor dependency, data handling, cost, and reproducibility; proposes a controlled trial only if it can discriminate the claim",
+      "files": [
+        "evals/fixtures/robotics-approaches.md"
+      ],
+      "assertions": [
+        "Does not treat founder-authored sources as independent corroboration",
+        "Checks code, data, protocol, hardware, and vendor constraints",
+        "Includes an open baseline and comparable metric",
+        "States lock-in and transfer assumptions",
+        "Defines a falsifier and stop condition before recommending a trial"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Paper research qualifies a foreign vendor demo",
+          "tags": [
+            "research",
+            "papers",
+            "vendor",
+            "hard"
+          ],
+          "notes": "Hard vendor, provenance, and reproducibility case."
+        }
+      }
+    },
+    {
+      "id": "research_papers_no_comparable_results_01",
+      "prompt": "Three papers report gains using different datasets, baselines, and metrics, and none releases code. Rank them anyway.",
+      "expected_output": "Refuses a false numeric ranking; records why results are incomparable; uses evidence quality and local feasibility only for a provisional ordering; proposes the smallest normalization or reproduction experiment and marks confidence low",
+      "files": [
+        "evals/fixtures/robotics-approaches.md"
+      ],
+      "assertions": [
+        "Does not compare incompatible headline gains directly",
+        "Names dataset, baseline, metric, and artifact gaps",
+        "Separates provisional feasibility from demonstrated performance",
+        "Keeps confidence low",
+        "Returns a normalization or reproduction experiment with a stop condition"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Paper research preserves incomparable-result uncertainty",
+          "tags": [
+            "research",
+            "papers",
+            "boundary"
+          ],
+          "notes": "Boundary case against false benchmark precision."
+        }
+      }
+    },
+    {
+      "id": "research_inline_grounding_visible_source_line_01",
+      "prompt": "How do teams usually decide whether to use a feature flag or a config setting for an AGI Toy Shop release workflow?",
+      "expected_output": "Classifies the request as depending on real-world practice, peer norms, or implementation examples rather than local memory alone; Includes a visible `Grounding:` line naming the source class used, such as official docs, maintained examples, peer implementations, web sources, or supplied/local files; Does not claim a source class was checked unless the answer says it was actually inspected; Gives a concise recommendation or evidence gap instead of expanding into a full research brief; Routes broader parity or source synthesis to the research skill when compact grounding is insufficient",
+      "files": [],
+      "assertions": [
+        "Classifies the request as depending on real-world practice, peer norms, or implementation examples rather than local memory alone",
+        "Includes a visible `Grounding:` line naming the source class used, such as official docs, maintained examples, peer implementations, web sources, or supplied/local files",
+        "Does not claim a source class was checked unless the answer says it was actually inspected",
+        "Gives a concise recommendation or evidence gap instead of expanding into a full research brief",
+        "Routes broader parity or source synthesis to the research skill when compact grounding is insufficient"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Research makes real-world evidence visible",
+          "tags": [
+            "research",
+            "inline-grounding",
+            "visible-evidence"
+          ],
+          "notes": "Regression guard for silent or skipped grounding when the user asks how things are usually done."
+        }
+      }
+    },
+    {
+      "id": "research_inline_grounding_skipped_reason_01",
+      "prompt": "For a tiny local-only copy edit in AGI Toy Shop's internal README, do I need to check external sources before fixing it?",
+      "expected_output": "Classifies the request as local-only or tiny same-scope work where external grounding may be skipped; Includes a visible `Grounding:` line that states why external grounding is intentionally skipped; Keeps the answer brief and does not turn the copy edit into a research pass; Preserves the rule that current docs, APIs, standards, best practices, latest facts, or peer expectations would require non-local evidence; Names the direct next action or proof appropriate for the local edit",
+      "files": [],
+      "assertions": [
+        "Classifies the request as local-only or tiny same-scope work where external grounding may be skipped",
+        "Includes a visible `Grounding:` line that states why external grounding is intentionally skipped",
+        "Keeps the answer brief and does not turn the copy edit into a research pass",
+        "Preserves the rule that current docs, APIs, standards, best practices, latest facts, or peer expectations would require non-local evidence",
+        "Names the direct next action or proof appropriate for the local edit"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Research states why external evidence is skipped",
+          "tags": [
+            "research",
+            "inline-grounding",
+            "skip-reason"
+          ],
+          "notes": "Prevents the grounding rule from becoming invisible ceremony on tasks where local-only evidence is enough."
+        }
+      }
+    },
+    {
+      "id": "research_market_operator_phrase_01",
+      "prompt": "who are the competitors for a small-team recruiting scheduler? use evals/fixtures/scheduling-assistants.md",
+      "expected_output": "Selects the market branch from the operator's wording; names the customer job and decision before searching; qualifies candidates on their official sites before calling any a competitor; keeps a rejection ledger; returns one opportunity with its downside and next owner",
+      "files": [
+        "evals/fixtures/scheduling-assistants.md"
+      ],
+      "assertions": [
+        "Selects the market branch without being told the branch name",
+        "Names the customer job and the decision the evidence must move",
+        "Does not promote a candidate from a search snippet alone",
+        "Keeps rejected or unverified candidates with their failed or unknown fields",
+        "Returns one opportunity, its downside, and a next owner"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Research routes an operator's competitor question to the market branch",
+          "tags": [
+            "research",
+            "market",
+            "operator-phrase"
+          ],
+          "notes": "Operator-wording routing case added when five research skills merged (#41)."
+        }
+      }
+    },
+    {
+      "id": "research_code_operator_phrase_01",
+      "prompt": "how do others do resumable uploads? I want something we can copy into evals/fixtures/service/src/upload.ts. Offline, so use evals/fixtures/multipart-pattern-packet.md.",
+      "expected_output": "Selects the code branch; reads upload.ts before searching; searches with literal symbols rather than tutorial phrasing; promotes only maintained patterns with tests; recommends adapting the constraint, not copying the source wholesale, with a falsifying proof",
+      "files": [
+        "evals/fixtures/service/src/upload.ts",
+        "evals/fixtures/multipart-pattern-packet.md"
+      ],
+      "assertions": [
+        "Selects the code branch without being told the branch name",
+        "Reads the local seam before naming a gap",
+        "Uses literal symbols or error strings in its queries",
+        "Refuses to copy a pattern wholesale and states what to adapt",
+        "Names a proof that could falsify the recommended change"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Research routes \"how do others do this\" to the code branch",
+          "tags": [
+            "research",
+            "code",
+            "operator-phrase"
+          ],
+          "notes": "Operator-wording routing case added when five research skills merged (#41)."
+        }
+      }
+    },
+    {
+      "id": "research_synthesis_convergence_01",
+      "prompt": "Take the best bits from these three landing-page builders for our launch page: one has a flashy 3D hero that nobody else has, two independently use a single-CTA hero with a proof strip, and all three have pricing tables. Tell me what to adopt.",
+      "expected_output": "Selects the synthesis branch; clusters the overlapping features across sources before scoring; ranks the converged single-CTA pattern above the single impressive source; scores and decides each feature adopt, adapt, reject, or defer with a reason; leaves no feature as maybe",
+      "files": [],
+      "assertions": [
+        "Clusters overlapping features across the sources before scoring",
+        "Ranks a converged pattern above one impressive single-source feature",
+        "Gives every feature an adopt, adapt, reject, or defer decision with a reason",
+        "Rejects or defers parity bait that does not serve the launch-page job",
+        "States the tradeoff accepted and the next owner"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Research synthesis prefers convergence over one impressive source",
+          "tags": [
+            "research",
+            "synthesis",
+            "convergence"
+          ],
+          "notes": "Covers the synthesis branch, which had no eval before the merge."
+        }
+      }
+    }
+  ]
+}

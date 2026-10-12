@@ -26,18 +26,14 @@ runtime.
 - `docs/features/README.md`: human-readable current inventory
 - [explore agent](../../../agents/explore.toml): checks local behavior
   when registry/docs search is inconclusive
-- [implementation-research](../../implementation-research/SKILL.md):
+- [research](../../research/SKILL.md) (code):
   checks source repos or real implementation patterns
 - [doc-advisor](../../doc-advisor/SKILL.md): checks official docs for
   platform, API, or standard claims
 - Inline option expansion: explores alternate scout workflows when the operator
   asks for options
-- [reference-grounding](../../reference-grounding/SKILL.md): compact evidence
-  checks before scoring source claims
-- [best-of-worlds](../../best-of-worlds/SKILL.md): external convergence checks
-- [implementation-research](../../implementation-research/SKILL.md):
-  repo-specific implementation checks
-- [best-of-worlds](../../best-of-worlds/SKILL.md): multi-source synthesis
+- Inline `Grounding:` line: compact evidence checks before scoring source claims
+- [research](../../research/SKILL.md) (synthesis): external convergence checks and multi-source synthesis
 - Inline comparison: judgment calls when evidence leaves a real decision
 
 ## Downstream Outputs

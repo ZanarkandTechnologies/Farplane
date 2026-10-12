@@ -11,11 +11,7 @@ tags:
 refs:
   - runtimes/AGENTS.md
   - docs/skills/system.md
-  - skills/reference-grounding
-  - skills/prototyping
-  - skills/competitor-research
-  - skills/implementation-research
-  - skills/experimental-research
+  - skills/research
   - skills/review
   - docs/review/rubrics
   - docs/skills/README.md
@@ -27,11 +23,7 @@ public: true
 surfaces:
   - runtimes/AGENTS.md
   - docs/skills/system.md
-  - skills/reference-grounding
-  - skills/prototyping
-  - skills/competitor-research
-  - skills/implementation-research
-  - skills/experimental-research
+  - skills/research
   - skills/review
   - docs/review/rubrics
   - docs/skills/README.md

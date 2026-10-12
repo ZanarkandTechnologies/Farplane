@@ -181,7 +181,7 @@ one software Change Plan; this skill never creates a child implementation plan.
    For public industrial or physical-economy pages, also capture desktop and
    mobile screenshots for the strongest gold reference and write a gap note
    naming what the local page must match, adapt, reject, or defer.
-4. **Synthesize best-of-worlds decisions.** Use `best-of-worlds` to mark the
+4. **Synthesize best-of-worlds decisions.** Use `research` synthesis to mark the
    reference patterns `adopt`, `adapt`, `reject`, or `defer`, then use
    define a unique first-principles take that is not a collage of competitor
    sections. The spec must include the resulting golden standard and the local

@@ -112,7 +112,7 @@ observe -> choose_next(execute | diagnose | report_now | request_feedback | stop
 ```
 
 Goal Advisor compiles the packet, Metric Advisor establishes or repairs the
-measurement contract, Leverage Advisor compares moves only when several
+measurement contract, the choose-next comparison ranks moves only when several
 plausible options need judgment, and the domain skill executes. Plan Next Wave
 is an upstream empty-board refiller and never participates inside an active
 Goal.

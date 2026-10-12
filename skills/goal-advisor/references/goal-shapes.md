@@ -38,8 +38,9 @@ feedback_loop(ticket, program, progress, provider)
   -> feedback_request + observation_or_score_or_decision + next_turn
 ```
 
-Use `optimize-with-human` when Kenji's judgment is the fastest quality signal
-and the operator wants an optimization loop rather than one-off feedback.
+Load [human-feedback](human-feedback.md) when Kenji's judgment is the fastest
+quality signal and the operator wants an optimization loop rather than one-off
+feedback.
 
 ## Rollout
 

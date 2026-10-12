@@ -54,7 +54,7 @@ gates:
 routes:
   content-impl-plan | storyboard | asset-advisor | imagegen |
   ai-image-advisor | ai-video-advisor | remotion | impl-plan |
-  competitor-research | reference-grounding | review
+  research | review
 
 fails:
   vague_premise_as_thread_plan
@@ -67,7 +67,7 @@ fails:
 
 Perform planning and drafting inline. When the platform, format, hook, asset
 route, CTA, or campaign direction is a real choice, compare the viable options
-and recommend one. Use `competitor-research`
+and recommend one. Use `research`
 or current web grounding when examples, platform rules, peer patterns, or
 campaign expectations materially affect the output.
 
@@ -86,7 +86,7 @@ campaign expectations materially affect the output.
   - [ ] Use [method-selection-smoke](./references/method-selection-smoke.md) when
   method routing is unclear or when changing the skill.
 - [ ] 3. Ground the format when needed.
-  - [ ] Use current web grounding or `competitor-research`
+  - [ ] Use current web grounding or `research`
   when examples, platform specs, peer posts, swipe patterns, or campaign
   expectations should guide scope.
   - [ ] Load upstream method references only when their platform constraints,

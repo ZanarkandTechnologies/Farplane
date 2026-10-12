@@ -23,7 +23,7 @@ farplane_experiment_report(hypothesis, target_surface, metric, baseline?, varian
   -> experiment_report + keep_reject_decision + follow_up_ticket_or_handoff
 state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, ticket/program/progress/proof refs, target surface); writes(ticket artifact)
 gates: canonical_icp_bound; baseline_named; intended_decision_delta_named; metric_direction_named; evidence_not_vibes; rollout_not_implicit
-routes: root skill `prototyping` | root skill `eval` with `behavior_trace` for isolated agent evidence | root skill `agent-qa-test:experiment` for material surprise | ../farplane-productization/SKILL.md
+routes: root skill `eval` with `behavior_trace` for isolated agent evidence | root skill `agent-qa-test:experiment` for material surprise | ../farplane-productization/SKILL.md
 fails: changes strategy without evidence; claims improvement without baseline; rolls out before deciding keep/reject
 ```
 

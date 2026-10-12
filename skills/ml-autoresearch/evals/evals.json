@@ -9,7 +9,7 @@
       "assertions": [
         "Freezes the evaluator, data boundary, metric, guards, GPU budget, and unchanged baseline before mutation",
         "Extracts techniques, mechanisms, variables, failure conditions, and source refs into a small initial hypothesis tree",
-        "Gives each initial hypothesis an expected observation, falsifier, and logical compounding-reward basis, then applies choose-next and makes one ordinal Leverage Advisor comparison without a tournament because several moves are plausible",
+        "Gives each initial hypothesis an expected observation, falsifier, and logical compounding-reward basis, then applies choose-next and makes one ordinal choose-next comparison without a tournament because several moves are plausible",
         "After the miss, updates the tree before progress and uses bounded diagnostic children or a credible sibling instead of continuing a fixed roadmap"
       ],
       "metadata": {

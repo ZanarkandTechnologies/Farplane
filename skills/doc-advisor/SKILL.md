@@ -37,8 +37,7 @@ For material ticket planning, return a compact `Docs Strategy` decision:
 reason. Do not model routine ticket closure as a field; closing follows the
 close rule in `tickets/README.md`.
 
-Ground source claims through [reference-grounding](../reference-grounding/SKILL.md)
-when they depend on local canonical files, official behavior, current facts, peer
+Ground source claims per the global `Grounding:` rule when they depend on local canonical files, official behavior, current facts, peer
 norms, standards, or implementation examples. This skill turns grounded evidence
 into docs with the right reader contract, owner surface, metadata, and proof path.
 
@@ -51,7 +50,7 @@ This skill owns the executable workflow and branch-loaded references.
 doc_advisor(doc_task, target_file?, evidence?, doc_type?) -> docs_strategy | doc_delta + doc_quality_result + review_route?
 state: reads(ticket/plan/diff?, target doc?, nearest owner/index, source/evidence refs, the first-load Todo List guardrails, selected references); writes(Docs Strategy block, target doc, optional audit/proof notes)
 gates: docs_strategy_decided; reader_contract_bound_when_writing; owner_surface_chosen; claims_grounded; metadata_checked; checklist_applied; material_review_routed_or_skipped
-routes: reference-grounding | review
+routes: research | review
 fails: stale or ungrounded docs; duplicate source-of-truth; wrong feature/system boundary; agent-facing prose in human docs; routine closeout expansion; no-docs decision without reason
 ```
 
@@ -81,8 +80,8 @@ recommend one.
     `FEAT-*` or `SYS-*` decisions, and [finish gate](references/finish-gate.md)
     before material doc closeout.
 - [ ] 2. Ground claims.
-  - [ ] Use `reference-grounding` for local, official, current, peer, or
-    standard-dependent claims.
+  - [ ] State `Grounding:` for local, official, current, peer, or
+    standard-dependent claims; use `research` when one source will not do.
   - [ ] Keep task-local proof in tickets or artifacts until it is distilled into
     a durable owner.
 - [ ] 3. Draft or revise for the reader's next action.
@@ -163,8 +162,8 @@ doc_contract = {
   read when deciding feature vs system vs local reference vs ticket artifact.
 - [references/finish-gate.md](references/finish-gate.md) - read before claiming
   material docs are ready.
-- [../reference-grounding/SKILL.md](../reference-grounding/SKILL.md) - compact
-  evidence for local, official-doc, current-source, or peer claims.
+- [../research/SKILL.md](../research/SKILL.md) - outside evidence when a
+  claim needs more than one official or local source.
 - Compare placement, framing, terminology, or feature-vs-system choices inline
   when real tradeoffs remain.
 - [../review/SKILL.md](../review/SKILL.md) - material durable docs, public

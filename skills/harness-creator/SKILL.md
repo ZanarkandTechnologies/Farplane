@@ -53,10 +53,8 @@ returns: charter/metric/capability/feedback decisions, proof, and next owner
   safety gates for publishing, spend, accounts, customer contact, scraping,
   payments, legal/brand, and private data. Mark inferred values; without an
   approved gate, assume no external side effect. Use known templates first;
-  use [competitor-research](../competitor-research/SKILL.md),
-  [implementation-research](../implementation-research/SKILL.md), or
-  [experimental-research](../experimental-research/SKILL.md) only when that
-  specific evidence changes the first honest feedback loop.
+  use [research](../research/SKILL.md) only when its market, code, or papers
+  evidence changes the first honest feedback loop.
 
   Assert: Missing human thesis, non-goals, or authority produces one compact
   question or a readiness gap; safe inspection may continue, but not completion.
@@ -130,7 +128,7 @@ returns: charter/metric/capability/feedback decisions, proof, and next owner
   primitive. Use `templates/goal-advisor-handoff.md`; invoke
   [goal-advisor](../goal-advisor/SKILL.md) only after a selected ticket, source,
   metric provider, drift policy, stop conditions, and proof boundary are known.
-  Use [optimize-with-human](../optimize-with-human/SKILL.md) when human labels
+  Use the [human-feedback preset](../goal-advisor/references/human-feedback.md) when human labels
   are the honest early metric; use [review](../review/SKILL.md) for material
   harness, capability, or readiness claims.
 

@@ -23,7 +23,7 @@ allowed-tools: Read, Grep, Glob, Bash
 - [ ] Use [customer-research](../customer-research/SKILL.md)
   when users, jobs, contexts, friction, or success signals are not already
   settled.
-- [ ] Use [competitor-research](../competitor-research/SKILL.md) when comparable app
+- [ ] Use [research](../research/SKILL.md) when comparable app
   workflows or established product patterns should shape the options.
 - [ ] For a material, unsettled, current, or SOTA workflow, use the Codex
   in-app Browser to operate 2-4 established comparables or direct products and

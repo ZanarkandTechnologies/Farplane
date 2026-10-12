@@ -31,7 +31,7 @@ For each source, record:
 
 ## Best-of-worlds
 
-Route the extracted patterns through `best-of-worlds`:
+Route the extracted patterns through `research` synthesis:
 
 | Pattern | Source | Evidence | Decision | Local use |
 | --- | --- | --- | --- | --- |

@@ -34,7 +34,7 @@ farplane_content_creation(problem_ref, system_ref, feature_refs, source_or_idea,
   -> best_bet_proposals + approved_skeleton + optimized_exemplar + format_transformations + variation_matrix + ranked_shortlist + distribution_handoff + proof_refs
 state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, source/evidence refs, resolved Brand Kit, optional computed Tasty Pack, ticket Goal Packet); writes(ticket-local proposals, frozen creative-input bundle, skeleton, exemplar, variants, review evidence, and feedback state)
 gates: strategic_ref_bound; source_ref_preserved; audience_problem_named; canonical_icp_bound; baseline_named; intended_belief_or_behavior_delta_named; audience_named; content_goal_named; claim_strength_matches_proof; planning_approval_before_execution; exemplar_approval_before_variations; publish_requires_separate_approval
-routes: root skill `content-impl-plan` | root skill `optimize-with-human` | root skill `goal-advisor` | root skill `storyboard` | root skill `social-content` | root skill `video-production` | root skill `remotion` | root skill `qa` | root skill `review`
+routes: root skill `content-impl-plan` | root skill `goal-advisor` (human-feedback preset) | root skill `storyboard` | root skill `social-content` | root skill `video-production` | root skill `remotion` | root skill `qa` | root skill `review`
 fails: unreferenced_random_feature; internal_name_as_hook; executes before skeleton approval; asks a human to judge an undifferentiated batch; generates random rewrites; varies the proof spine; publishes all variants; treats feedback as publication authority
 ```
 
@@ -53,7 +53,7 @@ content_pipeline(input)
   -> gated_distribution_handoff
 ```
 
-`optimize-with-human` supplies the feedback metric and pause/resume contract.
+the `goal-advisor` human-feedback preset supplies the feedback metric and pause/resume contract.
 It does not replace `content-impl-plan`, the artifact-producing content skills,
 or the ticket Goal Packet. Use one persistent task for a material loop so the
 same worker can receive replies and continue from durable state.
@@ -66,7 +66,7 @@ proposals or artifacts, emit or persist this compact receipt:
 ```yaml
 content_pipeline_state:
   phase: planning | execution | variation | distribution_handoff
-  route: content-impl-plan -> optimize-with-human
+  route: content-impl-plan -> goal-advisor(human-feedback)
   problem_ref: configured stable problem
   system_ref: canonical system
   feature_refs: [canonical feature refs]
@@ -117,9 +117,9 @@ silently broaden into another action class.
 
 - [ ] 1. Bind one stable `problem_ref`, canonical `system_ref`, relevant `feature_refs`, audience, recognizable problem, content goal, channels, accepted source evidence, resolved Brand Kit, optional computed Tasty Pack, rights, proof limits, and authority. Freeze those inputs in one Creative Input Bundle and preserve them through every format. Lead with the audience's pain and visible result—not an internal Farplane feature name.
 - [ ] 2. Use `content-impl-plan` to shape one Best Bet by default and no more than three genuinely distinct proposals for planning feedback; for video, bind content kind and method. Do not introduce a `style_profile` as a third composition source on the Brand Kit/Tasty path.
-- [ ] 3. Run `optimize-with-human` in `phase: planning`; revise or reject locally until the human approves one proposal, then write its frozen skeleton and `approved_plan_ref`.
+- [ ] 3. Run the `goal-advisor` human-feedback preset in `phase: planning`; revise or reject locally until the human approves one proposal, then write its frozen skeleton and `approved_plan_ref`.
 - [ ] 4. Route the skeleton to the smallest faithful artifact-producing skill and build one exemplar before any batch expansion. Dispatch video through the selected `video-production` method and pass the frozen Brand Kit/Tasty visual direction instead of forcing every video through explainer.
-- [ ] 5. Run `optimize-with-human` in `phase: execution` until the exemplar reaches keep, approve, convergence, budget, or blocker; planning-invalidating feedback reopens step 2.
+- [ ] 5. Run the `goal-advisor` human-feedback preset in `phase: execution` until the exemplar reaches keep, approve, convergence, budget, or blocker; planning-invalidating feedback reopens step 2.
 - [ ] 6. After exemplar approval, transform the frozen skeleton across every configured channel and useful format in the same ticket, then generate ten controlled variants by default from declared variable axes while preserving every skeleton invariant and proof boundary.
 - [ ] 7. QA the batch, record the variation matrix and expected learning, then rank a two-to-three-item shortlist instead of sending or publishing the whole batch.
 - [ ] 8. Obtain independent review for material readiness, persist feedback and proof receipts, and leave publication, outreach, spend, filming, external generation, and account actions approval-gated.
@@ -173,12 +173,12 @@ Do not make the human rank ten hooks, ten scripts, or ten rendered artifacts
 before a direction exists.
 
 The planning response must label `phase: planning`, name the
-`content-impl-plan -> optimize-with-human` route, and fill the required turn
+`content-impl-plan -> goal-advisor(human-feedback)` route, and fill the required turn
 receipt before asking the short human question.
 
 ## 3. Optimize Planning And Freeze The Skeleton
 
-Run `optimize-with-human` with `phase: planning`. Persist each hypothesis,
+Run the `goal-advisor` human-feedback preset with `phase: planning`. Persist each hypothesis,
 artifact reference, human question, signal, learning, and next hypothesis in
 the ticket Goal Packet. Approval creates a frozen content skeleton:
 
@@ -213,7 +213,7 @@ that the underlying premise is wrong.
 
 Route to the smallest faithful production path: `storyboard`, `social-content`,
 `video-production`, `remotion`, or another explicit artifact owner. Build one
-exemplar against the approved skeleton. Then run `optimize-with-human` with
+exemplar against the approved skeleton. Then run the `goal-advisor` human-feedback preset with
 `phase: execution` and `approved_plan_ref` bound.
 
 Keep iterating one inspectable artifact until the human chooses keep/approve,

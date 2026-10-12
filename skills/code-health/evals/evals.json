@@ -138,7 +138,7 @@
     {
       "id": "code_health_audit_new_model_rewrite_temptation_01",
       "prompt": "A new frontier model just came out. I want to see if it can upgrade this whole repo. Audit the codebase and tell me what to improve first.",
-      "expected_output": "Selects audit mode instead of starting broad implementation; Binds PRD, architecture docs, project rules, tests, configs, dependency files, and ticket history when available; Inventories product-critical workflows, entry points, modules, data boundaries, dependencies, auth/secrets/config, tests, docs, and scripts; Ranks components by operator value, centrality, blast radius, churn, complexity, security exposure, dependency risk, test weakness, and evidence confidence; Audits architecture before individual modules; Classifies findings with routes such as clean, harden, debug, proof-advisor, document, delete, split-ticket, or no-action; Creates or proposes coherent tickets with scope, proof, residual risk, and next action; Rejects a whole-repo rewrite or style-only modernization plan",
+      "expected_output": "Selects audit mode instead of starting broad implementation; Binds PRD, architecture docs, project rules, tests, configs, dependency files, and ticket history when available; Inventories product-critical workflows, entry points, modules, data boundaries, dependencies, auth/secrets/config, tests, docs, and scripts; Ranks components by operator value, centrality, blast radius, churn, complexity, security exposure, dependency risk, test weakness, and evidence confidence; Audits architecture before individual modules; Classifies findings with routes such as clean, harden, debug, eval, document, delete, split-ticket, or no-action; Creates or proposes coherent tickets with scope, proof, residual risk, and next action; Rejects a whole-repo rewrite or style-only modernization plan",
       "files": [],
       "assertions": [
         "Selects audit mode instead of starting broad implementation",
@@ -146,7 +146,7 @@
         "Inventories product-critical workflows, entry points, modules, data boundaries, dependencies, auth/secrets/config, tests, docs, and scripts",
         "Ranks components by operator value, centrality, blast radius, churn, complexity, security exposure, dependency risk, test weakness, and evidence confidence",
         "Audits architecture before individual modules",
-        "Classifies findings with routes such as clean, harden, debug, proof-advisor, document, delete, split-ticket, or no-action",
+        "Classifies findings with routes such as clean, harden, debug, eval, document, delete, split-ticket, or no-action",
         "Creates or proposes coherent tickets with scope, proof, residual risk, and next action",
         "Rejects a whole-repo rewrite or style-only modernization plan"
       ],

@@ -60,7 +60,7 @@ ProjectPortfolio :=
 
 - `agent-qa-test` fills the `agent_qa` metric provider and the fix-or-rerun
   policy.
-- `optimize-with-human` fills `MetricProvider.human_feedback` through
+- [human-feedback](human-feedback.md) fills `MetricProvider.human_feedback` through
   `feedback-request.md`, `feedback.json`, and `human_score` or `accepted`.
 - `review` fills the `review_verdict` provider for serious completion,
   skill-contract, or proof-bundle judgments.

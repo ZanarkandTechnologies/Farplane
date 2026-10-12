@@ -13,7 +13,6 @@ refs:
   - docs/skills/README.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
-  - skills/best-of-worlds/references/metric-discovery.md
   - skills/metric-advisor/SKILL.md
   - skills/metric-advisor/evals/evals.json
   - bin/core/farplane_project_snapshot.py
@@ -30,7 +29,6 @@ surfaces:
   - bin/core/farplane_project_snapshot.py
   - bin/validators/check_farplane_project_files.py
 source_refs:
-  - skills/best-of-worlds/references/metric-discovery.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 external_refs: []
 evidence_refs:
@@ -145,7 +143,6 @@ Owner surfaces:
 
 Source context:
 
-- `skills/best-of-worlds/references/metric-discovery.md`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
 Evidence:

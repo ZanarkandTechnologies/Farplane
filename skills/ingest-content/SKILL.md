@@ -11,7 +11,7 @@ methods:
     class: artifact
     output: style-profile
 common_chains:
-  after: ["media-ingest", "video-understanding", "visual-design"]
+  after: ["media-ingest", "visual-design"]
 allowed-tools: Read, Glob, Grep, Bash, mcp__convex__status, mcp__convex__functionSpec, mcp__convex__run
 
 ---
@@ -48,7 +48,7 @@ analysis and create only the selected editing element.
 ingest_content(source, note?, brand_kit_id?, context?) -> saved_capture + selected_creative_elements + tickets[] + retrieval_handle + skill_findings[] + optional_promotion_receipt
 state: reads(Resource Bank schema/functions, source content, user note, optional same-source media assets, skill registry and likely owner skills for video sources, current project ticket conventions); writes(Resource Bank capture with source/note/transcript/analysisMarkdown/selected elements/tags, zero or one thin repurpose ticket by default, optional derived assets, and optional Brand Kit promotion)
 gates: source_read_or_limit_recorded; note_intent_bound; analysis_markdown_written; selected_elements_only; every_golden_example_same_ingestion_job; repurpose_ticket_created_or_not_requested; primary_asset_exists_before_derived_upload; storage_write_verified; optional_promotion_verified_or_skipped; retrieval_verified; video_skill_benefit_scan_complete_or_blocked_or_not_applicable
-routes: media-ingest | video-understanding | visual-design | harness-scout | skill-maintenance | skill-creator | content-impl-plan | ai-image-advisor | ai-video-advisor | social-content
+routes: media-ingest | visual-design | harness-scout | skill-maintenance | skill-creator | content-impl-plan | ai-image-advisor | ai-video-advisor | social-content
 fails: treats all media as text; ignores note-specific segment; stores shallow or generic creative elements; invents unseen evidence; uses an asset from another source as a golden example; copies one generic recipe across unrelated kinds; skips retrieval verification; skips the terminal video skill-benefit scan; auto-edits skills from weak source evidence; keeps legacy analysis-only records as active production data
 ```
 
@@ -170,8 +170,8 @@ source-reading or downstream interpretation phase:
   artist/title/link as attribution/research inside an `audio` element and
   record rights-safe reuse policy in analysis or Brand Kit prompt text; do not
   block ingestion when recognition is unavailable or returns no match.
-- Use [video-understanding](../video-understanding/SKILL.md) when frames or
-  transcripts need storyboard-level interpretation.
+- When frames or transcripts need storyboard-level reading, ask
+  [media-ingest](../media-ingest/SKILL.md) for frames and keep its evidence classes apart.
 - After retrieval verification for every video source, run a lightweight
   skill-benefit scan against `docs/skills/registry.jsonl` and the most likely
   owner skills. Use [harness-scout](../harness-scout/SKILL.md) only when the
@@ -246,7 +246,7 @@ saved record; downstream production skills own making new assets from records.
      in the analysis Markdown and keep elements anchored to what is actually
      known.
    - [ ] If that evidence cannot support complete element capsules, deepen the
-     read through `media-ingest` or `video-understanding`; otherwise return a
+     read through `media-ingest`; otherwise return a
      blocker instead of inventing why/example/recipe fields.
    - [ ] For visual-only screenshots/images, inspect the image directly and
      record that the analysis is visual-only.
@@ -332,8 +332,7 @@ saved record; downstream production skills own making new assets from records.
      selected creative-element capsules.
    - [ ] After the primary Resource Bank asset row exists, upload a real
      representative thumbnail/contact sheet/frame image from
-     [media-ingest](../media-ingest/SKILL.md) or
-     [video-understanding](../video-understanding/SKILL.md) with the bunker's
+     [media-ingest](../media-ingest/SKILL.md) with the bunker's
      `resource-bank:upload-thumbnail` script; use `assetRole: "thumbnail"`,
      `assetKind: "image"`, and `parentAssetId` set to the primary source asset.
    - [ ] If no visual thumbnail/contact sheet/frame image was extracted, skip
@@ -535,8 +534,6 @@ derived_preview: if media-ingest produced `/tmp/contact_sheet.jpg`, run `npm --p
   reading when direct media reuse, timing, or audit proof is actually needed.
   Load `media-ingest/references/music-recognition.md` when the note selects
   music/song/audio-bed identification.
-- [../video-understanding/SKILL.md](../video-understanding/SKILL.md) - deeper
-  storyboard interpretation when video evidence matters.
 - [../harness-scout](../harness-scout/SKILL.md) - deeper video-to-skill
   reconstruction for credible workflow-teaching sources after the lightweight
   terminal scan finds a possible owner-local benefit.

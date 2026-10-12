@@ -68,7 +68,7 @@ label = "Analyst"
 department = "intelligence"
 deliverable = "an intelligence dossier"
 primary = "intelligest"
-skills = ["intelligest", "agency-opportunity-research", "learn-from-video"]
+skills = ["intelligest", "research", "agency-opportunity-research", "learn-from-video"]
 
 [specialists.scout]
 label = "Scout"
@@ -145,7 +145,7 @@ label = "Product Planner"
 department = "operations"
 deliverable = "a PRD or ticket plan"
 primary = "prd"
-skills = ["prd", "agent-testability-plan", "functional-ui", "review-dashboard", "spec-to-ticket", "visual-design"]
+skills = ["prd", "functional-ui", "review-dashboard", "spec-to-ticket", "visual-design"]
 
 [specialists.engineer]
 label = "Engineer"

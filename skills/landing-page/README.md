@@ -17,7 +17,7 @@ Shape one-page, marketing, launch, portfolio, and cinematic frontend surfaces be
 ## Minimal Example
 
 1. Define the offer and audience.
-2. Research competitors/inspiration and synthesize best-of-worlds decisions.
+2. Research competitors/inspiration with `research` and synthesize best-of-worlds decisions.
 3. Brainstorm the differentiated creative take.
 4. Draft and approve `LANDING_SPEC.md`.
 5. Validate it with `scripts/landing_spec_lint.py`.

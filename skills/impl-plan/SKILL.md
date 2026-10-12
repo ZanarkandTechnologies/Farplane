@@ -1,6 +1,6 @@
 ---
 name: impl-plan
-description: "Turn one selected software or product request into a repository-grounded, context-resolved Change Plan, test strategy, and proof contract."
+description: "Use for \"plan this change\", \"write the ticket\" or \"how should we build this\": a repo-grounded ticket with Change Plan, test strategy, and proof contract."
 source: local
 template_uses:
   skill-template: "0.3.0"
@@ -113,8 +113,7 @@ For a material request with no selected ticket, create or request the canonical
     [personalized-offer](../personalized-offer/SKILL.md),
     [visual-design](../visual-design/SKILL.md),
     [asset-advisor](../asset-advisor/SKILL.md),
-    [competitor-research](../competitor-research/SKILL.md), [implementation-research](../implementation-research/SKILL.md),
-    [experimental-research](../experimental-research/SKILL.md),
+    [research](../research/SKILL.md),
     and the `metric-advisor` skill.
   - [ ] For UI work, reuse or resolve only the relevant facet: interaction
     model/low-fi wireflow (`functional-ui`), visual reference and system
@@ -141,8 +140,10 @@ For a material request with no selected ticket, create or request the canonical
   - [ ] `Done` states outcomes; `QA Strategy` names ordered checks, delegated
     lanes, evidence, final checkpoint, and residual risk; `Docs Strategy` is
     present only when docs ownership is non-obvious or changes.
-  - [ ] Preserve existing proof briefs and use QA, visual QA, agent QA, demo,
-    and reviewer lanes when the claim requires independent evidence.
+  - [ ] Preserve existing proof briefs; use QA, visual QA, agent QA, demo, and
+    reviewer lanes when the claim needs independent evidence. When an agent must
+    operate or prove hard-to-reach or hidden state, load
+    [agent testability](references/agent-testability.md) and plan the smallest hooks as change units.
   - [ ] For UI-bearing tickets, set `ui_scope: true` and create or update
     ticket-local `design.md` with copy-complete ASCII screens/states before
     approval. Use the [design baseline template](references/design-template.md):
@@ -180,8 +181,7 @@ For a material request with no selected ticket, create or request the canonical
 
 - Ticket body: [tickets/templates/ticket.md](../../tickets/templates/ticket.md).
 - UI baseline: [design baseline template](references/design-template.md).
-- Optional detailed visual companion:
-  [visual companion template](references/visual-companion-template.md).
+- Optional visual companion: [visual companion template](references/visual-companion-template.md).
 
 ## Gotchas
 
@@ -201,8 +201,7 @@ For a material request with no selected ticket, create or request the canonical
 - [plan prompt](prompts/plan.md) — compact invocation prompt kept aligned with
   this decision flow.
 - [examples](references/examples.md) — load only for output calibration.
-- Render necessary compact diagrams inline. The operator may explicitly invoke
-  the diagramming shortcut for an optional complex companion.
+- Render compact diagrams inline; use `diagramming` only for an explicit complex companion.
 
 ## Output
 

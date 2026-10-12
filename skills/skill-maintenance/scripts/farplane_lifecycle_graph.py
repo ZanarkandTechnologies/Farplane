@@ -487,7 +487,6 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         "skill:init-advisor",
         "skill:metric-advisor",
         "skill:goal-advisor",
-        "skill:proof-advisor",
         "skill:pulse-update",
         "skill:progress-update",
         "skill:report-gen",

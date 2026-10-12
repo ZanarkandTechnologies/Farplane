@@ -1,6 +1,6 @@
 interface:
   display_name: "Advise"
-  short_description: "Compare real options and recommend one path"
+  short_description: "Recommend one path or sequence a roadmap"
   default_prompt: "Use $advise to compare three viable options and recommend one path with its tradeoff."
 policy:
   allow_implicit_invocation: true

@@ -16,7 +16,7 @@ or call into a reviewable commercial opportunity. It owns target companies,
 roles, relationship strategy, problem hypotheses, evidence, competitor context,
 proof needs, and the next research or solution-shaping route.
 
-It composes existing methods. Use `competitor-research` for external market evidence,
+It composes existing methods. Use `research` (market) for external market evidence,
 `lead-scout` for candidate discovery, and `customer-research` for a known person
 or call target. Perform first-principles option expansion inline, and use
 `solution-shaping` only after the target/problem frame is sufficiently
@@ -86,7 +86,7 @@ path. Manage Wiki, not Impl Plan, owns normal page selection and resolution.
         create only the required parent directory. Return inline instead when
         the caller asked only for an answer or prohibited filesystem edits.
 - [ ] 3. Build the market and relationship map.
-  - [ ] For industry intake, use `competitor-research` plus `lead-scout` to identify
+  - [ ] For industry intake, use `research` (market) plus `lead-scout` to identify
         supply-chain/value-chain segments, 10-20 candidate companies, relevant
         locations/projects, and public sources unless scope specifies otherwise.
   - [ ] For company intake, identify its segment, business model, adjacent
@@ -105,7 +105,7 @@ path. Manage Wiki, not Impl Plan, owns normal page selection and resolution.
   - [ ] Route uncertain user jobs or pains to `customer-research`; do not
         treat role stereotypes or private-company guesses as facts.
 - [ ] 5. Add competitor and capability context.
-  - [ ] Use `competitor-research`, `competitor-research`, or source synthesis when
+  - [ ] Use `research` (market, code, or synthesis) when
         current vendors, startups, internal approaches, open-source tools, or
         peer workflows could change the opportunity.
   - [ ] Select an `established_benchmark` and `emerging_specialist` only from

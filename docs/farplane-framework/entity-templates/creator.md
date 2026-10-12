@@ -53,7 +53,7 @@ roles:
 <!-- first-value-outreach, review-leads, customer-research -->
 
 ### Strategy and money
-<!-- review-model, feasible-roadmap, advise -->
+<!-- review-model, advise -->
 
 ### Fundraising and deals
 

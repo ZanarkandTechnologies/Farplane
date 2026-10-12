@@ -38,7 +38,7 @@ gates: objective_named; provider_truthful; metric_matches_objective;
        direction_named; guard_metric_named; anti_metric_named; measurement_method_named;
        experimental_work:expectation_preregistered; no_fake_precision
 routes: optimize-harness | goal-advisor | self-improve | impl-plan |
-  proof-advisor | agent-qa-test:experiment | owning workflow | review
+  eval | agent-qa-test:experiment | owning workflow | review
 fails: fake numeric score; proxy gaming; missing guard metric; hidden
   subjective judgment; resurrecting retired autoresearch skill routes
 ```
@@ -234,8 +234,8 @@ Route hint: goal-advisor or self-improve, not retired autoresearch skills.
   observed-versus-expected recovery, placement, proof, and accept/hold/rollback.
 - [../self-improve/SKILL.md](../self-improve/SKILL.md) - owns baseline,
   candidate comparison, experiment memory, and promotion rules.
-- [../proof-advisor/SKILL.md](../proof-advisor/SKILL.md) - turns behavior
-  claims into proof cases and proof surface choices.
+- [../eval/SKILL.md](../eval/SKILL.md) - turns behavior claims into proof
+  cases and proof surface choices.
 - [../agent-qa-test/SKILL.md](../agent-qa-test/SKILL.md) - independently
   diagnoses material observation surprises.
 - [../review/SKILL.md](../review/SKILL.md) - judges evidence when metric

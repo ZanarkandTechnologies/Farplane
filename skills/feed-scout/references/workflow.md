@@ -73,7 +73,7 @@
    - reusable skill behavior -> `skill-creator` with
      `skills/skill-creator/references/book-to-skill.md`
    - broader harness technique -> `harness-scout`
-   - repeated pattern across several items -> `best-of-worlds`
+   - repeated pattern across several items -> `research` (synthesis)
    - generic motivation or weak recap -> ledger only
 12. Run `harness-scout` on eligible content items, carrying `entity_ids` into
    source-run provenance.
@@ -161,7 +161,7 @@ snapshot.
 
 1. Load pending proposals.
 2. Group by tags, profile, or repeated decision pattern.
-3. Use `best-of-worlds` for related proposals when several sources converge.
+3. Use `research` synthesis for related proposals when several sources converge.
 4. Recommend accept, reject, defer, or ticket.
 5. Keep candidates in the dated report for adaptive project-planner admission.
 6. Route later accepted implementation work to `impl-plan`; Feed Scout itself

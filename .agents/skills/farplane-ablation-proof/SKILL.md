@@ -31,7 +31,7 @@ farplane_ablation_proof(problem_ref, system_ref, feature_refs, claim, surface, t
   -> ablation_report + trust_decision + follow_up
 state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, current ICP complaint evidence, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, target surface, task/eval evidence); writes(ticket artifact)
 gates: strategic_ref_bound; compounding_difference; one_main_variable; claim_is_specific; canonical_icp_bound; current_pain_grounded; recognizable_baseline; comparison_is_fair; visible_result; evidence_cites_both_conditions; no_proof_theater
-routes: root skill `prototyping` | root skill `eval` | root skill `agent-qa-test` | ../farplane-productization/SKILL.md
+routes: root skill `eval` | root skill `agent-qa-test` | ../farplane-productization/SKILL.md
 fails: random_feature; generic_internal_test; multiple_main_variables; uses only intuition; compares different tasks; keeps a surface because it sounds good
 ```
 
@@ -51,7 +51,6 @@ fails: random_feature; generic_internal_test; multiple_main_variables; uses only
         run/eval evidence is the stronger grounding.
 - [ ] 3. Choose one representative ablation case with one main harness variable and a recognizable baseline.
   - [ ] Keep task, inputs, and success criteria stable across both conditions.
-  - [ ] Use `prototyping` when a smaller honest case is needed.
 - [ ] 4. Capture both conditions and a visible result; record quality, failure mode, cost, supervision, and audience-relevant consequence.
 - [ ] 5. Write claim, method, observed delta, residual risk, and an explicit `keep | modify | delete` decision.
 - [ ] 6. Route a material expectation miss or implausibly strong result through

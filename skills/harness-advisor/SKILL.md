@@ -44,8 +44,8 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
    harness failure. If the expectation is unknown, return the missing decision
    instead of inventing a target or routing through a generic diagnostic skill.
 - [ ] 2. Ground the current state with the smallest relevant evidence.
-   - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for compact
-     local evidence before recommending a surface.
+   - [ ] Ground the recommendation in compact local evidence and state
+     `Grounding:` before recommending a surface.
    - [ ] Read `docs/fundamentals/harness-engineering-doctrine.md` for placement rules.
    - [ ] Check `docs/systems/*.md`, feature pages in `docs/features/`, and generated
      `docs/systems/registry.jsonl` / `docs/features/registry.jsonl` for an

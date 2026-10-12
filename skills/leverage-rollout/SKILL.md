@@ -24,9 +24,9 @@ one to three excellent examples, extract the pattern, and only then use
 
 ```text
 roll_out_leverage(feature_ref, selected_play?, target_set?, ambition?, proof_need?) -> exemplar_packet + sample_proof + rollout_recommendation + optional_rollout_packet
-state: reads(leverage plan, feature refs, tickets, specs, registries, current repo state, existing proof); writes(ticket.md? program.md? progress.md? artifacts? rollout child tickets?)
+state: reads(selected play, feature refs, tickets, specs, registries, current repo state, existing proof); writes(ticket.md? program.md? progress.md? artifacts? rollout child tickets?)
 gates: selected_play_exists; exemplar_selected; sample_proof_created; pattern_extracted; rollout_readiness_decided; goal_advisor_rollout_used_when_scaling
-routes: leverage-advisor | metric-advisor | goal-advisor | impl-plan | review | eval | optimize-with-human
+routes: metric-advisor | goal-advisor | impl-plan | review | eval
 fails: scales before exemplar proof; treats generic advice as sample proof; creates rollout Goal without target set; hides learning outside progress or artifacts
 ```
 
@@ -53,9 +53,9 @@ rollout, batch, or final prompt compilation after an exemplar pattern exists.
 
 - [ ] 1. Bind the rollout inputs.
    - [ ] Identify the feature or capability.
-   - [ ] Load an existing leverage plan when supplied.
-   - [ ] Use [leverage-advisor](../leverage-advisor/SKILL.md) first when the
-     selected leverage play is missing or weak.
+   - [ ] Load the selected play and its evidence when supplied.
+   - [ ] When the play is missing or weak, compare the grounded candidate
+     plays inline and recommend one with its accepted tradeoff.
    - [ ] Identify or propose a target set, but do not scale to it yet.
 - [ ] 2. Choose one to three exemplar cases.
    - [ ] Prefer cases with high learning value, low setup friction, real
@@ -102,14 +102,14 @@ rollout, batch, or final prompt compilation after an exemplar pattern exists.
 ```text
 vars:
   feature = feature_ref
-  selected_play = selected_play? or leverage_advisor(feature).recommended_play
+  selected_play = selected_play? or recommend_play(feature, candidate_plays)
   target_set = target_set? or discover_likely_targets(feature, selected_play)
   exemplar_count = 1..3
 
 program:
-  load_or_create_leverage_plan(feature, selected_play) -> leverage_plan
+  ground_play(feature, selected_play) -> grounded_play
 
-  choose_exemplar(leverage_plan, target_set) -> exemplar_case
+  choose_exemplar(grounded_play, target_set) -> exemplar_case
     criteria = [
       high_learning_value,
       low_setup_friction,
@@ -168,8 +168,6 @@ Output:
 
 ## Reference Map
 
-- [../leverage-advisor/SKILL.md](../leverage-advisor/SKILL.md) - use when the
-  selected leverage play is missing or needs recommendation.
 - [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - use when exemplar
   proof needs an honest metric card before repeated measurement.
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - use for Goal Packet,
@@ -183,7 +181,7 @@ Output:
 
 Return this shape in chat or write it to the requested artifact:
 
-- `Leverage Plan`
+- `Selected Play`
 - `Exemplar Case`
 - `Sample Proof`
 - `Extracted Pattern`

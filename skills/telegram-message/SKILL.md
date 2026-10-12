@@ -15,8 +15,8 @@ allowed-tools: Bash, Read
 ## Context
 
 Use this skill when a workflow needs to notify Kenji on Telegram. This is a
-small reusable primitive; higher-level skills such as `optimize-with-human`
-write the request, then call this skill to deliver it.
+small reusable primitive; higher-level workflows such as the `goal-advisor`
+human-feedback preset write the request, then call this skill to deliver it.
 
 Telegram is often read on a phone. A notification must be useful inside
 Telegram itself. Do not send a message whose only review surface is a local
@@ -53,7 +53,7 @@ gates:
   credentials_available_or_fallback_recorded
 
 routes:
-  optimize-with-human -> telegram-message
+  goal-advisor(human-feedback) -> telegram-message
 
 fails:
   local_path_only_artifact_review

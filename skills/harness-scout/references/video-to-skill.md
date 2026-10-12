@@ -10,15 +10,16 @@ teach a reusable skill.
    [media-ingest](../../media-ingest/SKILL.md) when it can prove transcript
    acquisition; otherwise block instead of inferring the video's content.
 2. If the source contains video/audio, create a media ingest bundle.
-3. If video evidence exists, run video understanding over transcript status,
-   selected frames, and contact sheet evidence.
+3. If video evidence exists, align transcript status, selected frames, and the
+   contact sheet into a timestamped evidence ledger per learn-from-video's
+   [evidence-to-reconstruction](../../learn-from-video/references/evidence-to-reconstruction.md).
 4. Extract the source's operational todos.
 5. Compare each source todo against existing Farplane skills and skill todo lists.
 6. Route the copied-skill candidate to the likely owner skill, using
    `harness-advisor` only when ownership is ambiguous.
 
 When the operator asks to prove that the video was learned by recreating its
-demonstrated output, hand the completed reconstruction brief to
+demonstrated output, hand the evidence ledger and source todos to
 [learn-from-video](../../learn-from-video/SKILL.md). `harness-scout` continues
 to own source registry, adoption scoring, and feature handoff;
 `learn-from-video` owns the reconstruction prompt, frozen source-output eval,
@@ -41,7 +42,7 @@ Use these labels in the source-todo comparison:
 A video-to-skill scout run should leave:
 
 - compact ingest bundle
-- reconstruction brief
+- evidence ledger (storyboard)
 - source-todo comparison
 - copied-skill candidate
 - owner handoff

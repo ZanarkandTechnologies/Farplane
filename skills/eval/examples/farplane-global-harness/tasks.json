@@ -14,7 +14,7 @@
     ],
     "tags": [
       "system-prompt",
-      "reference-grounding",
+      "research",
       "eval-design",
       "best-practice"
     ],
@@ -59,7 +59,7 @@
     "tags": [
       "system-prompt",
       "coding",
-      "reference-grounding",
+      "research",
       "small-feature"
     ],
     "notes": "Regression for the coding grounding gate: even small non-ticket feature work should check current docs, Ref MCP, GitHub code search, maintained examples, or web evidence before finalizing. The query asks for the grounded approach before coding so the eval does not mutate the real repo."

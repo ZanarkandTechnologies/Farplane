@@ -14,7 +14,7 @@ refs:
   - docs/features/FEAT-0070-experimental-feature-evaluation-reports.md
   - skills/eval/SKILL.md
   - skills/goal-advisor/SKILL.md
-  - skills/leverage-advisor/SKILL.md
+  - skills/goal-advisor/references/choose-next.md
   - skills/metric-advisor/SKILL.md
   - skills/ml-autoresearch/SKILL.md
   - skills/self-improve/SKILL.md
@@ -23,11 +23,11 @@ system_record_json: |
     "id": "SYS-0007",
     "name": "Self-Improvement And Learning",
     "status": "implemented",
-    "summary": "Goal-backed improvement loops that seed a campaign-local hypothesis tree from bounded sources, then use one active-Goal choose-next decision with conditional Leverage comparison and refine from evidence.",
+    "summary": "Goal-backed improvement loops that seed a campaign-local hypothesis tree from bounded sources, then use one active-Goal choose-next decision with a conditional choose-next comparison and refine from evidence.",
     "owner_spec": "docs/systems/self-improvement-learning.md",
     "primary_feature_ref": "FEAT-0063",
     "feature_refs": ["FEAT-0063", "FEAT-0069", "FEAT-0070"],
-    "refs": ["skills/eval/SKILL.md", "skills/goal-advisor/SKILL.md", "skills/leverage-advisor/SKILL.md", "skills/metric-advisor/SKILL.md", "skills/ml-autoresearch/SKILL.md", "skills/self-improve/SKILL.md"],
+    "refs": ["skills/eval/SKILL.md", "skills/goal-advisor/SKILL.md", "skills/goal-advisor/references/choose-next.md", "skills/metric-advisor/SKILL.md", "skills/ml-autoresearch/SKILL.md", "skills/self-improve/SKILL.md"],
     "last_verified": "2026-07-31"
   }
 ---
@@ -38,8 +38,8 @@ Self-Improvement and Learning runs bounded, measurable improvement campaigns
 over skills, ML systems, or human-evaluated artifacts. Each campaign first
 grounds a source stage, then stores its live hypothesis search state in one
 ticket-local JSON tree. The active Goal owns `choose_next` from that tree plus
-current evidence; Leverage Advisor is conditional on a real multi-option
-judgment; the domain skill executes; native Goal owns continuation.
+current evidence; the choose-next comparison is conditional on a real
+multi-option judgment; the domain skill executes; native Goal owns continuation.
 
 ```text
 self_improve(target_skill, owning_ticket, performance_target, phase_budgets)
@@ -89,17 +89,17 @@ observe -> choose_next -> act -> verify -> write_back
 
 The domain skill derives eligible moves from the tree and evidence. When one
 move is mechanically implied, it executes directly. When several credible
-moves require judgment, it invokes Leverage Advisor for one evidence-backed
+moves require judgment, it applies the choose-next comparison for one evidence-backed
 ordinal comparison that includes `report_now`, `request_feedback`, and `stop`.
-Leverage Advisor does not execute, compile the Goal, or own campaign state.
+The comparison does not execute, compile the Goal, or own campaign state.
 
 Metric Advisor is used at setup or when the measurement contract becomes
 invalid. Goal Advisor compiles or regenerates the packet. Plan Next Wave only
 refills the project board and never enters an active campaign. These boundaries
 make the Goal—not a chain of advisors—the sole next-decision owner.
 
-When the candidate frontier is missing, stale, or evidence-thin, Leverage
-Advisor conditionally routes bounded parity/source research or Best Of Worlds.
+When the candidate frontier is missing, stale, or evidence-thin, the campaign
+conditionally routes bounded source research before admitting candidates.
 Start from campaign-local catalog content; do not require a global registry.
 
 ## Optimization Contract
@@ -117,8 +117,8 @@ Each phase declares `max_rounds` and patience. Hardening exhaustion blocks
 without refinement. Refinement stops on patience or its maximum rounds and
 returns the shortest verified passing candidate discovered within the budget.
 
-Before every harden or refine round, the Goal applies `choose_next`; Leverage
-Advisor is conditional on a real ranking decision. No tournament, stored
+Before every harden or refine round, the Goal applies `choose_next`; the
+choose-next comparison is conditional on a real ranking decision. No tournament, stored
 counter, daemon, or second continuation engine participates. The JSON tree
 stores current branch state, ticket `progress.md` records chronological
 receipts, Eval supplies measurements, and native Goal applies the program.
@@ -128,7 +128,7 @@ receipts, Eval supplies measurements, and native Goal applies the program.
 ML Autoresearch freezes the evaluator, data/split boundary, metric, guards,
 mutable surface, baseline, and compute/spend budget before the first change.
 Each Goal turn selects one attributable intervention or diagnostic hypothesis
-through `choose_next`, conditionally using Leverage Advisor, preregisters its expectation and falsifier, runs
+through `choose_next`, conditionally using the choose-next comparison, preregisters its expectation and falsifier, runs
 correctness smokes and the full evaluator, updates the tree, appends an
 immutable receipt, and replans. The campaign keeps the best verified candidate
 or returns an evidence-backed negative result.
@@ -180,7 +180,7 @@ requires a fresh baseline.
 flowchart LR
   coverage["source stage<br/>techniques + mechanisms + variables"]
   tree["hypothesis-tree.json<br/>current research state"]
-  leverage["Leverage Advisor<br/>conditional comparison"]
+  leverage["choose-next comparison<br/>conditional"]
   packet["Goal Packet policy<br/>program + progress"]
   baseline["frozen-suite baseline"]
   select["select pending<br/>intervention or diagnostic"]
@@ -201,7 +201,7 @@ flowchart LR
 
 - `goal-advisor` compiles and freshness-binds the packet and native launcher.
 - The active Goal owns `choose_next` from program, tree, progress, receipt
-  evidence, and remaining budget. `leverage-advisor` supplies one stateless
+  evidence, and remaining budget. The choose-next comparison supplies one stateless
   ordinal comparison only when several eligible moves need judgment.
 - `hypothesis-tree.json` is the sole current research-state owner; children,
   depth, pending leaves, and rank are derived rather than duplicated.

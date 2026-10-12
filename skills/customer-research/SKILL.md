@@ -52,7 +52,7 @@ gates: target_bound; sources_labeled; inference_labeled; minimal_frontmatter;
        deep_icp_hypotheses_testable; person_signal_card_present;
        hiring_coverage_recorded_when_deep_icp_and_company_bound;
        wiki_publication_intent_bound
-routes: reference-grounding | solution-shaping |
+routes: research | solution-shaping |
         first-value-outreach | manage-wiki
 fails: bloated_frontmatter; fake_certainty; generic_pitch; private_dossier;
        uncited_claims; biography_dump; direct_wiki_or_projection_mutation
@@ -60,7 +60,7 @@ fails: bloated_frontmatter; fake_certainty; generic_pitch; private_dossier;
 
 ## Phase Boundary
 
-Use `reference-grounding` when the person, company, field, or source set needs compact grounding;
+State `Grounding:` when the person, company, field, or source set needs compact grounding;
 use `solution-shaping` only after problem hypotheses are labeled. When the next
 goal is contribution before a commercial ask, hand the report and one traceable
 professional signal to `first-value-outreach`.
@@ -149,7 +149,7 @@ professional signal to `first-value-outreach`.
 
 - [deep ICP source protocol](references/deep-icp-sources.md) — load only for
   deep ICP evidence gathering, authorized-session inspection, or hiring scans.
-- [Reference Grounding](../reference-grounding/SKILL.md) — load for compact external grounding.
+- [Research](../research/SKILL.md) — load when the company's market needs a `market` pass.
 - [Solution Shaping](../solution-shaping/SKILL.md) — load for help/solution fit.
 - [Manage Wiki](../manage-wiki/SKILL.md) — load for a sourced durable Wiki
   preview or apply handoff.

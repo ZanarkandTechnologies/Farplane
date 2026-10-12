@@ -217,6 +217,75 @@
           "notes": "Protects the difference between hidden grading truth and a pre-run forecast about aggregate behavior."
         }
       }
+    },
+    {
+      "id": "eval_proof_source_first_01",
+      "prompt": "We have three recent misses from a planning skill: it made five generic happy-path examples, ignored a user correction about unclear ownership, and never said what evidence would prove a case. Turn this into a useful first batch of cases.",
+      "expected_output": "Uses the provided misses as primary source material before inventing synthetic cases.; Maps each selected case to a named failure risk and likely owner if it fails.; Produces a small first batch instead of an oversized list.; Includes evidence or oracle criteria for each selected case.",
+      "files": [],
+      "assertions": [
+        "Uses the provided misses as primary source material before inventing synthetic cases.",
+        "Maps each selected case to a named failure risk and likely owner if it fails.",
+        "Produces a small first batch instead of an oversized list.",
+        "Includes evidence or oracle criteria for each selected case."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Mine real failures before synthetic expansion",
+          "tags": [
+            "skill",
+            "real-failure",
+            "case-selection"
+          ],
+          "notes": "Tests the source priority rule from the external workflow. Moved from proof-advisor when it folded into eval (#41)."
+        }
+      }
+    },
+    {
+      "id": "eval_proof_dimensions_before_cases_01",
+      "prompt": "Give me 30 test ideas for a skill that writes QA plans for messy app changes. I do not have examples yet, just the general behavior.",
+      "expected_output": "Pushes back on generating a large undifferentiated list before naming dimensions.; Defines a case space with dimensions such as behavior, caller intent, scenario, fixture state, oracle, and proof surface.; Selects or proposes a smaller high-signal starter batch.; Names the missing real source material or logs that would improve the suite.",
+      "files": [],
+      "assertions": [
+        "Pushes back on generating a large undifferentiated list before naming dimensions.",
+        "Defines a case space with dimensions such as behavior, caller intent, scenario, fixture state, oracle, and proof surface.",
+        "Selects or proposes a smaller high-signal starter batch.",
+        "Names the missing real source material or logs that would improve the suite."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Build dimensions before writing a large case list",
+          "tags": [
+            "skill",
+            "dimensions",
+            "batch-size"
+          ],
+          "notes": "Catches the common failure of optimizing for case count. Moved from proof-advisor when it folded into eval (#41)."
+        }
+      }
+    },
+    {
+      "id": "eval_proof_surface_routing_01",
+      "prompt": "I need to check a skill package. Some things are structural, like frontmatter and JSON validity. Other things are judgment-heavy, like whether the generated cases are realistic and distinct. Design the proof approach.",
+      "expected_output": "Routes structural checks to deterministic validators, schema checks, or scripts.; Routes realism, distinctness, and judgment-heavy behavior to eval, QA, review, or agent QA criteria.; Explains why one proof surface should not cover all cases.; Names evidence expected from each proof surface.",
+      "files": [],
+      "assertions": [
+        "Routes structural checks to deterministic validators, schema checks, or scripts.",
+        "Routes realism, distinctness, and judgment-heavy behavior to eval, QA, review, or agent QA criteria.",
+        "Explains why one proof surface should not cover all cases.",
+        "Names evidence expected from each proof surface."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Route deterministic and variable cases to different proof surfaces",
+          "tags": [
+            "skill",
+            "proof-surface",
+            "validators"
+          ],
+          "notes": "Forces the skill to avoid using evals where deterministic tests are better. Moved from proof-advisor when it folded into eval (#41)."
+        }
+      }
     }
   ]
 }

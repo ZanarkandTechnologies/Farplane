@@ -26,11 +26,12 @@ local/source/adversarial coverage preparation
 - Native Goal: sole continuation engine.
 - Active Goal: owns `choose_next` from eligible pending tree leaves, progress
   learnings, current evidence, and remaining budget.
-- Leverage Advisor: supplies a stateless ordinal comparison only when several
+- Choose-next comparison (goal-advisor `references/choose-next.md`): a stateless
+  ordinal comparison only when several
   eligible moves need judgment.
 - Eval: suite execution, grading, and comparison.
 
-The reusable reference is policy source, not runtime state. Leverage Advisor is
-a conditional skill composition, not a state, decision, or continuation owner. Do not
+The reusable reference is policy source, not runtime state. The choose-next
+comparison is a conditional reference, not a state, decision, or continuation owner. Do not
 add a deterministic decision helper, event schema, runner, counter file,
 target-local program/tree/progress set, tournament, or another loop owner.

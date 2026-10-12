@@ -56,7 +56,7 @@ gates:
 
 routes:
   storyboard | ai-image-advisor | ai-video-advisor | avatar-advisor |
-  audio-advisor | media-ingest | video-understanding | review
+  audio-advisor | media-ingest | review
 
 fails:
   vague_asset_bucket; reference_copy_without_rights_note;
@@ -71,7 +71,7 @@ fails:
 
 ## Phase Boundary
 
-Use `media-ingest` or `video-understanding` when the input is raw media that
+Use `media-ingest` when the input is raw media that
 needs metadata, transcripts, or representative frames before decomposition. Use
 `review` when a recreation plan copies a specific reference closely or will
 drive a high-visibility campaign.

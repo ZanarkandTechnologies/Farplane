@@ -60,7 +60,7 @@ fails: unbounded_source_mining; invented_identity_or_claim; silent_merge;
 
 ## Phase Boundary
 
-Keep bounded page authoring and resolution inline. Use the relevant specialized research skill only when a
+Keep bounded page authoring and resolution inline. Use `research` only when a
 specific identity or material claim needs evidence beyond the bound source; do
 not widen a Wiki update into general discovery. Normal Wiki authoring does not
 need `impl-plan`; use that only for a software or schema change to the system.

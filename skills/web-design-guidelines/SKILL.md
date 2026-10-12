@@ -13,8 +13,8 @@ capability:
 ## Todo List
 
 - [ ] Identify the UI source files, route, component, or diff being audited.
-- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to keep the
-  audit tied to the current source files and latest guideline source.
+- [ ] Keep the audit tied to the current source files and latest guideline
+  source, and state `Grounding:`.
 - [ ] Fetch or load the current Web Interface Guidelines before judging the
   code; do not rely on stale memory of the rules.
 - [ ] Inspect the relevant source for accessibility, focus, forms, navigation,

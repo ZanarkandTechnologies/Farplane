@@ -1,6 +1,6 @@
 ---
 name: goal-advisor
-description: "Turn an ambitious request into Goal architecture, ticket-backed loop state, and a native Codex /goal prompt when warranted."
+description: "Use for \"set up a goal\", \"keep improving this until\", \"run this unattended\" or \"optimize with my feedback\": Goal Packet architecture, loop state, and a native /goal prompt when warranted."
 department: operations
 source: local
 version: 0.2.0
@@ -40,8 +40,8 @@ observe -> choose_next(execute | diagnose | report_now | request_feedback | stop
         -> act -> verify -> write_back
 ```
 
-Metric Advisor is setup/repair only. Leverage Advisor is conditional on several
-plausible moves needing judgment. Plan Next Wave refills an empty board and
+Metric Advisor is setup/repair only. `references/choose-next.md` applies only
+when several moves need judgment. Plan Next Wave refills an empty board and
 never participates inside an active Goal. The domain skill executes.
 
 ## Skill Signature
@@ -57,7 +57,7 @@ gates:
   budget_and_stops_named; drift_and_logging_named; proof_route_named;
   packet_context_budget_pass; material_packet_approved
 routes:
-  metric-advisor | impl-plan | optimize-with-human | qa | visual-qa |
+  metric-advisor | impl-plan | telegram-message | qa | visual-qa |
   agent-qa-test | review | direct-answer
 fails:
   hidden_loop; prompt_only_material_goal; full_progress_first_load;
@@ -76,6 +76,8 @@ whenever the ticket changes. For branch detail load only the relevant reference:
 - prompt emission -> `references/prompt-templates.md`
 - heartbeat, batch, rollout, project goals -> `references/goal-shapes.md`
 - composed workflows or retired-route migration -> `references/goal-algebra.md`
+- several eligible moves inside `choose_next` -> `references/choose-next.md`
+- human feedback as the metric -> `references/human-feedback.md`
 - delayed reward -> the program template's `Check-In Program`
 - prompt-heavy/judgment-heavy packet -> golden example plus the first-load Todo List guardrails
 
@@ -98,8 +100,8 @@ whenever the ticket changes. For branch detail load only the relevant reference:
   - [ ] `heartbeat`: delayed inspection over the same packet; it is not a
     second runtime. Load `references/goal-shapes.md` for its action vocabulary.
   - [ ] `feedback`, `rollout`, `batch`, or `project_goals`: load only the
-    selected branch. Use `optimize-with-human` for skill optimization whose
-    honest provider is human feedback.
+    selected branch; load `references/human-feedback.md` when the honest
+    provider is Kenji's judgment.
 - [ ] 3. Compile the minimal program.
   - [ ] Bind objective, mutable surface, metric/provider, guards, anti-metrics,
     budget, proof route, drift policy, and stop conditions without copying the
@@ -131,8 +133,8 @@ whenever the ticket changes. For branch detail load only the relevant reference:
     `Reference Manifest`, and one `Done assertion -> owning change -> evidence
     source -> supported | pending` row per Completion Closure item. End with
     `stop_complete: withheld until every closure row is supported`.
-  - [ ] Use the shared Decision Backbone; invoke Leverage Advisor only when
-    moves need judgment. Diagnose a blocking failure with `code-health` debug.
+  - [ ] Use the shared Decision Backbone; load `references/choose-next.md` only
+    when moves need judgment. Diagnose a blocking failure with `code-health` debug.
 - [ ] 4. Enforce the first-load budget.
   - [ ] Initial context is full `ticket.md`, full `program.md`, and at most the
     latest 80 lines of `progress.md`. Load older receipts or artifacts only for
@@ -261,7 +263,6 @@ state that `stop_complete` remains withheld unless all rows are supported.
 - `program.md` is executable loop policy, not a second ticket or optional note.
 - `progress.md` is evidence memory, not a transcript; initial load uses its tail.
 - A listed file is context or evidence unless the ticket grants executable scope.
-- Heartbeat is a trigger over the same packet, never hidden autonomy.
 - Honest review/human/market signals beat fake numeric metrics.
 - Do not route new work through retired `$work`, `$ralph`, or `batch-work`.
 - A Stop hook does not repair proof, review, closeout, or packet drift.
@@ -277,7 +278,6 @@ state that `stop_complete` remains withheld unless all rows are supported.
 - [Program template](../../tickets/templates/goal-loop/program.md)
 - [Progress template](../../tickets/templates/goal-loop/progress.md)
 - [Metric Advisor](../metric-advisor/SKILL.md)
-- [Optimize With Human](../optimize-with-human/SKILL.md)
 
 ## Output
 

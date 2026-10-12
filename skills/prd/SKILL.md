@@ -18,7 +18,7 @@ common_chains:
 - [ ] Use [customer-research](../customer-research/SKILL.md)
   when audiences, jobs, user stories, contexts, friction, or success criteria
   are not already grounded.
-- [ ] Use [competitor-research](../competitor-research/SKILL.md) when product
+- [ ] Use [research](../research/SKILL.md) when product
   expectations, peer workflows, or market examples should shape the PRD.
 - [ ] Use
   [first-principles-planning](../../docs/features/FEAT-0042-lean-global-agent-operating-kernel.md)

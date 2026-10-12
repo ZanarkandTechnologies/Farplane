@@ -16,8 +16,8 @@ allowed-tools: Read, Glob, Grep, Bash
 Use this when Farplane should behave differently, not merely be explained. It
 owns the end-to-end behavior-gap loop: diagnose, place, prove, change or
 experiment, then accept, hold, or roll back. Lower-level skills retain their
-own artifacts: `harness-advisor`, `metric-advisor`,
-`proof-advisor`, `eval`, and implementation owners.
+own artifacts: `harness-advisor`, `metric-advisor`, `eval`, and
+implementation owners.
 
 ## Skill Signature
 
@@ -64,8 +64,8 @@ writes: placement/proof decision and changed owner artifact when accepted
 - [ ] **N4 — Choose proof before the change.**
   `owner + expected behavior -> proof route + runnable case | no durable proof`
 
-  Rule: Use [proof-advisor](../proof-advisor/SKILL.md); use an eval only for a
-  durable, testable behavior. Keep difficult reusable cases in the normal eval
+  Rule: Pick cases with [eval's proof cases](../eval/references/proof-cases.md);
+  write an eval only for a durable, testable behavior. Keep difficult reusable cases in the normal eval
   suite, with scenario in the fixture and expected behavior in assertions.
 
   Assert: Browser/UI proof stays with QA: qa-tester operates the Codex in-app

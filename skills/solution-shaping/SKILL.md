@@ -33,7 +33,7 @@ state: reads(supplied context, prospect notes, problem frames, research notes,
 gates: problem_frame_exists; realistic_solution_boundary; proof_model_named;
        risks_and_assumptions_section_present; decision_rights_permissions_named_for_system_mvp;
        mvp_walkthrough_present_for_operational_systems; assumptions_labeled; next_owner_named
-routes: customer-research | competitor-research |
+routes: customer-research | research |
   demo-realism | prd | impl-plan | goal-advisor
 fails: sends a feature pitch without problem proof; invents client facts;
   overbuilds the solution; creates autonomous tickets before reviewable scope
@@ -42,7 +42,7 @@ fails: sends a feature pitch without problem proof; invents client facts;
 ## Phase Boundary
 
 Keep the full solution synthesis inline unless a child phase needs separate
-evidence. Read the problem frame from `frame`, use the relevant specialized research skill for user or
+evidence. Read the problem frame from `frame`, use `customer-research` or `research` for user or
 best-practice grounding, `demo-realism` when the MVP needs believable operating
 examples, `prd` for product scope, and `impl-plan` or `goal-advisor` only after
 the solution boundary is accepted. For material operational or demo-bound
@@ -66,7 +66,7 @@ checklist into a queue of tiny review tasks.
 - [ ] 3. Ground the opportunity enough for an honest solution.
   - [ ] Use `customer-research` when the target user's job, friction, or
         success signal is uncertain.
-  - [ ] Use `competitor-research` when current practice or best-in-class workflow
+  - [ ] Use `research` when current practice or best-in-class workflow
         could change the MVP boundary.
   - [ ] For outreach targets, include an explicit correction ask that invites
         the prospect to reject or revise the inferred pain.

@@ -51,7 +51,7 @@ code supported by evidence.
 | `clean` | behaviour is known; shape slows future work |
 | `harden` | abuse, failure, security or operational risk |
 | `debug` | a concrete reproducible defect |
-| `proof-advisor` | behaviour plausible, proof strategy unresolved |
+| `eval` | behaviour plausible, proof strategy unresolved |
 | `document` | code fine, docs mislead |
 | `delete` | evidence shows the surface is unused or duplicated |
 | `split-ticket` | crosses independent proof or ownership boundaries |
@@ -64,7 +64,7 @@ proof route and owner. Keep broad waves as the audit artifact, not as tickets.
 
 ```text
 Ticket: title, finding + evidence refs, scope_in, scope_out,
-  owner (code-health mode | impl-plan | proof-advisor | doc-advisor),
+  owner (code-health mode | impl-plan | eval | doc-advisor),
   done_when, proof, residual_risk, next_action
 ```
 

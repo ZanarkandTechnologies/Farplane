@@ -42,6 +42,22 @@ For each relevant beat record:
 Do not promote low-confidence inference into a must-match check without a
 separate visible output observation.
 
+Order the ledger by timestamp or frame so it doubles as the storyboard. Classify
+each beat (folded from `video-understanding`, #41):
+
+- transcript and frames agree: high confidence;
+- frames show it but no transcript: frame fact; do not assert spoken detail;
+- transcript claims it but no frame shows it: creator claim; needs proof before
+  it can shape the candidate.
+
+### Source todos
+
+From the ledger, write the operational checklist the creator teaches, keeping
+claimed, inferred, and visibly proven steps apart. Map each todo to the local
+skill that would own it as `covered | augment | missing | reject | defer`.
+Prefer augmenting an existing owner over a new skill; when todos split across
+owners, that comparison is the input to `harness-advisor`.
+
 ## Workflow
 
 ### Reconstruction prompt
@@ -91,8 +107,9 @@ Must-match checks should be boolean or coarse-tier judgeable. Examples:
 
 ## Output Shape
 
-Return `evidence_ledger`, `reconstruction_prompt`, `source_output_eval`,
-`unresolved_evidence_gaps`, and `production_owner_requirements`.
+Return `evidence_ledger`, `source_todos`, `reconstruction_prompt`,
+`source_output_eval`, `unresolved_evidence_gaps`, and
+`production_owner_requirements`.
 
 ## Quality Gates
 

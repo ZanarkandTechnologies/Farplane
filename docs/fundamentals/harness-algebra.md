@@ -388,7 +388,7 @@ off_desk(skill)    -> internal helper that planners dispatch
 ```
 
 `config/skill-workflows.toml` `[specialists]` owns the desks. Core primitives
-such as advise, consolidate, reference-grounding, and prototyping are shared
+such as advise and consolidate are shared
 skills many workflows call, so improving them compounds widely.
 
 Native phases are not skill links. They are the lifecycle every skill
@@ -561,7 +561,7 @@ Budgeted skills include:
 | Skill family | Budget fields |
 | --- | --- |
 | native planning, `impl-plan`, `goal-advisor` | planning depth, ambiguity gates, decomposition depth |
-| `research`, `reference-grounding` | source count, search breadth, recency/currentness, citation depth |
+| `research` | source count, search breadth, recency/currentness, citation depth |
 | `advise` | option count, local ensemble persona lanes, synthesis |
 | `review`, `visual-qa`, `agent-qa-test` | rubric depth, evidence depth, reviewer/QA lanes |
 | `eval`, `eval-onboarding` | case count, fixture depth, judge strictness, heldout coverage |

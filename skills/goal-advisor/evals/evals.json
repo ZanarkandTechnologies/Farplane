@@ -54,14 +54,14 @@
       }
     },
     {
-      "id": "goal_advisor_skill_improvement_optimize_with_human_01",
+      "id": "goal_advisor_skill_improvement_human_feedback_01",
       "prompt": "I want AGI Toy Shop's social-content skill to keep improving short-form toy launch posts by showing me variants for feedback before we try market tests. How should we use Goal mode?",
-      "expected_output": "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime; Requires a Goal Packet with an inline Files list that names ticket.md, program.md, hypothesis-tree.json, and progress.md; Uses optimize-with-human as the human-feedback optimization preset and defines the feedback artifact shape; Includes a native /goal prompt or prompt plan with Files, Task, Logging, Metric, and After each turn sections; Names drift review or inline drift checks before continuing after feedback",
+      "expected_output": "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime; Requires a Goal Packet with an inline Files list that names ticket.md, program.md, hypothesis-tree.json, and progress.md; Loads the human-feedback preset and defines the feedback artifact shape; Includes a native /goal prompt or prompt plan with Files, Task, Logging, Metric, and After each turn sections; Names drift review or inline drift checks before continuing after feedback",
       "files": [],
       "assertions": [
         "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime",
         "Requires a Goal Packet with an inline Files list that names ticket.md, program.md, hypothesis-tree.json, and progress.md",
-        "Uses optimize-with-human as the human-feedback optimization preset and defines the feedback artifact shape",
+        "Loads the human-feedback preset (references/human-feedback.md) and defines the feedback artifact shape",
         "Includes a native /goal prompt or prompt plan with Files, Task, Logging, Metric, and After each turn sections",
         "Names drift review or inline drift checks before continuing after feedback"
       ],
@@ -72,7 +72,7 @@
             "skill",
             "goal-advisor",
             "skill-improvement",
-            "optimize-with-human"
+            "human-feedback"
           ],
           "notes": "Guards the first intended rollout: content-skill self-improvement with Kenji feedback before market exposure."
         }
@@ -346,6 +346,104 @@
             "complaint",
             "completion-closure"
           ]
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_choose_next_replans_from_progress_01",
+      "prompt": "We have a hypothesis tree for improving a model, but the first cheap representation probe was flat overall and improved only one target class. What should we try next?",
+      "expected_output": "Grounds the current objective and observation; Revises eligible pending leaves from the asymmetric result; Recommends one evidence-linked next proof only if it beats report-now, feedback, and stop; States positive, negative, diagnostic, and budget replan conditions; Keeps execution and tree mutation with the owning workflow",
+      "files": [],
+      "assertions": [
+        "Uses program policy, current tree leaves, progress evidence, and receipts rather than replaying the original order",
+        "Ranks the remaining frontier by bottleneck fit, information value, unlocks, cost, and risk",
+        "Selects one bounded first proof, names what would falsify it, and compares it with report_now, request_feedback, and stop",
+        "States contingent replan conditions for the result",
+        "Does not execute the experiment, mutate the tree, compile a Goal, or create a ticket per attempt"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Choose-next replans from asymmetric evidence",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "replanning"
+          ],
+          "notes": "Ported from leverage-advisor (#41); protects tree plus evidence selection."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_choose_next_diagnoses_then_backtracks_01",
+      "prompt": "A selected intervention missed its expected reward, but the control was noisy and a prerequisite may be absent. Preserve useful alternatives and decide the next research move.",
+      "expected_output": "Treats the miss as causally ambiguous; Proposes only bounded diagnostic children; Preserves credible siblings; Defines repair, reject, defer, and backtrack outcomes; Returns a tree mutation expectation without owning state",
+      "files": [],
+      "assertions": [
+        "Distinguishes an intervention hypothesis from diagnostic hypotheses about the miss",
+        "Adds no more diagnostic children than the program budget allows",
+        "Preserves credible sibling intervention leaves while diagnosing",
+        "Defines how diagnostic evidence causes repair, rejection, deferral, or backtracking",
+        "Does not rescue every expected negative or take ownership of tree mutation"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Choose-next diagnoses a surprise before backtracking",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "diagnosis"
+          ],
+          "notes": "Ported from leverage-advisor (#41); bounded diagnosis with sibling preservation."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_choose_next_rejects_non_decisive_measurement_01",
+      "prompt": "A founder is deciding whether to keep pursuing a possible collaboration. The only concrete question is whether the partner will give access to one real operating workflow next month. Someone proposes spending a week surveying 500 people about whether they like automation, but says the founder will pursue the collaboration regardless of the survey result. What should the next evidence step be?",
+      "expected_output": "Rejects the survey because neither result changes the decision; identifies access commitment as the key uncertainty; recommends the smallest honest evidence request that would change pursue, defer, or decline; records downside and falsifier; preserves the outside options",
+      "files": [],
+      "assertions": [
+        "Explains why the proposed survey is not decision-changing rather than collecting a convenient metric",
+        "Identifies the partner access commitment as the critical uncertainty and makes it the evidence target",
+        "States a bounded positive and negative branch that changes the next action",
+        "Includes a pre-outcome thesis, downside, and falsifier without pretending to know calibrated probabilities",
+        "Keeps the recommendation as advice and does not contact the partner or execute an experiment"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Choose-next rejects a convenient non-decisive measurement",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "measurement",
+            "decision"
+          ],
+          "notes": "Ported from leverage-advisor (#41); information-value discipline."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_human_feedback_experiment_tree_01",
+      "prompt": "An approved multi-turn toy-launch content Goal uses human feedback as its evaluator. local-feedback-3 says the product benefit appears too late; feed-scout:creator-9 reports that contrast-before-reveal improves comprehension. Technique: move contrast before reveal. Mechanism: establish the problem before showing the toy. Variables: contrast wording and reveal timing. Seed and select the first hypothesis, show the feedback turn writeback, and state what a one-off review would omit.",
+      "expected_output": "Extracts the source facts; Seeds a concrete hypothesis with expected reward fields; Uses one ordinal selection; Updates the tree before progress after feedback; Omits the tree for one-off review",
+      "files": [],
+      "assertions": [
+        "Extracts source refs, technique, mechanism, and variables into a concrete intervention hypothesis",
+        "Records expected observation, falsifier, expected reward, and reward basis before feedback",
+        "Uses one ordinal compounding-leverage selection rather than a variant tournament",
+        "Updates hypothesis-tree.json before appending the progress.md feedback receipt and preserves siblings or bounded diagnostics when relevant",
+        "States that a one-off feedback request omits hypothesis-tree.json"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Human-feedback preset uses the experiment tree conditionally",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "human-feedback",
+            "hypothesis-tree"
+          ],
+          "notes": "Ported from optimize-with-human (#41); human ranking is a signal, not the selector."
         }
       }
     }

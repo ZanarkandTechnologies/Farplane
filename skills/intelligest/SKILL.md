@@ -50,7 +50,7 @@ gates: canonical_source_bound; queued_or_existing_job_visible_before_analysis;
        resource_save_intent_explicit; wiki_intent_bound;
        wiki_fact_durable_and_sourced;
        every_branch_receipted
-routes: media-ingest | reference-grounding |
+routes: media-ingest | research |
         manage-wiki | ingest-content
 fails: duplicate analysis job; ephemeral dossier; media fetch after sufficient
        text evidence; broad-tag related coverage; generated-summary citation;
@@ -128,9 +128,9 @@ pages, resolves entities, and links mentions. Missing fetchable media returns
 
 ## Phase Boundary
 
-Keep the dossier and comparison judgment here. Use
-[reference-grounding](../reference-grounding/SKILL.md) for current claim, News, or
-identity checks. Downstream skills own their writes and return receipts; they do
+Keep the dossier and comparison judgment here. State `Grounding:` for
+current claim, News, or identity checks; use [research](../research/SKILL.md)
+when one source will not settle them. Downstream skills own their writes and return receipts; they do
 not replace the Intelligence Receipt.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->

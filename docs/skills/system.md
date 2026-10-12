@@ -193,8 +193,9 @@ as base obligations. Farplane's current core behavior primitives are:
 - `advise`: choose among real options and name the recommendation.
 - `consolidate`: compress artifacts into their minimal owner-correct form while
   preserving required behavior, proof, IDs, and actionability.
-- `reference-grounding`: ground claims, plans, and recommendations in evidence.
-- `prototyping`: prove a pattern at the smallest honest scale before expanding.
+
+Grounding one claim is not a skill: the global contract's `Grounding:` rule
+covers it, and `research` owns outside-evidence passes.
 
 Create a new core primitive only when several shared workflow interfaces need
 that move as a base dependency. Small provider primitives, such as notification
@@ -205,7 +206,7 @@ Shared workflow interfaces turn primitive obligations into reusable protocol
 surfaces such as:
 
 - `frame`
-- the relevant specialized research skill
+- `research` (market, code, papers, synthesis)
 - `harness-advisor`
 
 Common reusable work that many domain skills need should usually start as a
@@ -259,11 +260,11 @@ Boundary examples:
 First-load todo links preserve progressive disclosure: link what the skill
 actually hands work to, not every primitive it might touch.
 
-- Link a shared interface (the relevant specialized research skill, a domain
+- Link a shared interface (`research` with its branch, a domain
   workflow interface) when it is a real invocable contract the step needs.
 - Link a peer domain skill when the flow has an intentional handoff.
-- Link a core primitive (`advise`, `consolidate`, `reference-grounding`,
-  `prototyping`) only when the skill owns that step in its first-load contract;
+- Link a core primitive (`advise`, `consolidate`)
+  only when the skill owns that step in its first-load contract;
   otherwise let the interface carry it.
 - Phase-protocol steps do not need skill links or skill-local phase sections.
   Put a real domain action in the todo instead of linking to a generic phase

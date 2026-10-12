@@ -11,7 +11,7 @@ tags:
 refs:
   - skills/harness-scout
   - skills/media-ingest
-  - skills/video-understanding
+  - skills/learn-from-video
   - SRC-0008
   - docs/HISTORY.md
 feature_id: FEAT-0025
@@ -21,14 +21,14 @@ public: true
 surfaces:
   - skills/harness-scout
   - skills/media-ingest
-  - skills/video-understanding
+  - skills/learn-from-video
 source_refs:
   - SRC-0008
 external_refs:
   - https://www.instagram.com/p/DYijhcetmBP/
 evidence_refs:
   - skills/media-ingest/SKILL.md
-  - skills/video-understanding/SKILL.md
+  - skills/learn-from-video/SKILL.md
   - docs/HISTORY.md
 known_limits: Retired as a generic skill/source workflow rather than a Farplane product feature. Keep current behavior in source-ingestion and media skills.
 metrics:
@@ -100,7 +100,7 @@ flowchart LR
   source["media source evidence<br/>SRC-0008<br/>TASK-0158"]:::keep
   retired["FEAT-0025<br/>status: retired<br/>system_id: SYS-0008"]:::retired
   owner["SYS-0008 Sources<br/>docs/systems/source-sidecar-systems.md"]:::changed
-  skills["media/source skills<br/>skills/media-ingest<br/>skills/video-understanding<br/>skills/harness-scout"]:::added
+  skills["media/source skills<br/>skills/media-ingest<br/>skills/learn-from-video<br/>skills/harness-scout"]:::added
   registry["source registry + decisions<br/>docs/sources/registry.jsonl<br/>adopt/adapt/reject/defer"]:::added
 
   source --> retired --> owner --> skills --> registry
@@ -114,7 +114,7 @@ Owner surfaces:
 
 - `skills/harness-scout`
 - `skills/media-ingest`
-- `skills/video-understanding`
+- `skills/learn-from-video`
 
 Source context:
 
@@ -127,7 +127,7 @@ External context:
 Evidence:
 
 - `skills/media-ingest/SKILL.md`
-- `skills/video-understanding/SKILL.md`
+- `skills/learn-from-video/SKILL.md`
 - `docs/HISTORY.md`
 
 ## Proof And Quality

@@ -179,9 +179,9 @@ do an executable ticket; otherwise plan a bounded next wave
   alone materializes tickets and dispatches workers. It does not delay
   grounded Interval work.
 - Plan Next Wave performs the bounded leverage comparison required for refill
-  directly. It does not invoke `leverage-advisor`; that operator-facing skill
-  owns capability roadmaps, contingent campaigns, and first-proof selection
-  outside the heartbeat refill path.
+  directly. Capability roadmaps belong to `advise` and contingent campaigns to
+  the goal-advisor choose-next comparison, both outside the heartbeat refill
+  path.
 - Capability skills own domain workflows.
 - Goal Advisor owns material ticket execution compilation.
 - Worker Artifact Review Request owns the phone-readable review message and

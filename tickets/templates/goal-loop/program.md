@@ -1,6 +1,6 @@
 ---
 template_id: goal-loop-program
-template_version: "0.2.0"
+template_version: "0.2.1"
 feature_refs:
   - FEAT-0029
   - FEAT-0032
@@ -84,7 +84,7 @@ choose_next(objective, evidence, eligible_moves, remaining_budget)
 1. `observe`: read `ticket.md`, `program.md`, and only the latest 80 lines of
    `progress.md`; load older receipts or artifacts only to resolve a named gap.
 2. `choose_next`: compare the best eligible move with the outside options.
-   Invoke Leverage Advisor only when several plausible moves need judgment;
+   Apply goal-advisor `references/choose-next.md` only when several moves need judgment;
    execute a mechanically implied move directly.
 3. `act`: the domain skill executes one bounded move. Advisors do not execute.
 4. `verify`: use the declared metric and ticket proof without weakening guards.
@@ -95,7 +95,7 @@ Role boundaries:
 
 - Goal Advisor compiles or regenerates this packet; it does not choose every turn.
 - Metric Advisor is setup/repair only when the measurement contract is unclear.
-- Leverage Advisor is a conditional comparison method, not campaign state.
+- The choose-next comparison is a conditional method, not campaign state.
 - Plan Next Wave refills an empty board and never participates inside this Goal.
 - The domain skill owns execution; the ticket owns scope and proof.
 

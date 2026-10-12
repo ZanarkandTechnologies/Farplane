@@ -12,10 +12,10 @@ checks.
 
 ```text
 upgrade_skill_from_sources(target_skill, improvement_goal, source_budget?)
-  -> source_packet + best_of_worlds_decisions + skill_delta + proof_plan
+  -> source_packet + synthesis_decisions + skill_delta + proof_plan
 state: reads(target skill package, practitioner sources, public book summaries,
              video transcripts when available, book-to-skill extraction,
-             best-of-worlds, skill-system docs)
+             research synthesis, skill-system docs)
        writes(target skill SKILL.md?, references?,
               examples?, evals/evals.json?, skill-local audit?)
 gates: target_baseline_named; source_budget_bounded; source_confidence_labeled;
@@ -84,7 +84,7 @@ better source.
    provenance, quote limits, and claim-level grounding. If the binary is
    missing or extraction fails, use a faithful local/public read or record the
    access gap. Do not bypass paywalls or paste long expressive passages.
-5. **Synthesize with best-of-worlds.** Use `best-of-worlds` to classify each
+5. **Synthesize the sources.** Use `research` (synthesis) to classify each
    candidate method as `adopt`, `adapt`, `reject`, or `defer` against the
    target skill's job.
 6. **Patch the smallest owner-local surfaces.**
@@ -122,7 +122,7 @@ skill_source_upgrade_packet:
       takeaways:
       convergence: converged | single-source | conflicting | weak
       handling: adopt | adapt | reject | defer
-  best_of_worlds:
+  synthesis:
     adopt:
     adapt:
     reject:
@@ -142,7 +142,7 @@ skill_source_upgrade_packet:
 - Source budget is bounded and source confidence is labeled.
 - Book, book-summary, author-interview, lecture, or public-notes inputs route
   through `book-to-skill` instead of becoming generic summaries.
-- `best-of-worlds` decisions are recorded as `adopt`, `adapt`, `reject`, and
+- Synthesis decisions are recorded as `adopt`, `adapt`, `reject`, and
   `defer`.
 - The applied delta changes skill behavior through a todo, gate, QA check,
   eval, example, reference, or output contract.

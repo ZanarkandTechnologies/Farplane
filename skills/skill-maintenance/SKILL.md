@@ -4,7 +4,7 @@ description: "Turn skill behavior deltas, lesson hardening, or skill compaction 
 department: operations
 source: local
 template_uses:
-  skill-template: "0.6.4"
+  skill-template: "0.6.5"
   skill-eval-task: "0.2.0"
 skill_ui: skills/skill-maintenance/graph/index.html
 ---

@@ -18,11 +18,11 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 - [ ] Run the **Steve Jobs Focus & Simplicity Pass**: state the user-facing
   benefit, visual focal action, elements to remove or defer, and deliberate
   `no`; preserve functional requirements, accessibility, and necessary state.
-- [ ] Use [competitor-research](../competitor-research/SKILL.md) when visual
-  direction needs product, brand, or peer grounding.
+- [ ] Use [research](../research/SKILL.md) when visual direction needs
+  product, brand, or peer grounding (`market`).
 - [ ] When the user provides a strong reference or the surface needs a taste
-  upgrade, use [best-of-worlds](../best-of-worlds/SKILL.md) to extract what to
-  adopt, adapt, reject, or defer before defining the final visual system.
+  upgrade, use its `synthesis` branch to extract what to adopt, adapt,
+  reject, or defer before defining the final visual system.
 - [ ] When direction is vague, ask the smallest high-leverage taste question:
   a concrete reference, anti-reference, or a bolder-versus-safer tradeoff.
   Do not run a separate stateful taste-interview workflow.

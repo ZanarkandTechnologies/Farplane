@@ -38,7 +38,7 @@ The current family contains:
 - `advise`, the foundational recommendation
   primitive used when no domain-specific advisor owns the decision.
 
-As of 2026-08-03, that is 18 named advisor packages plus `advise`: 19 entries.
+As of 2026-10-12, that is 16 named advisor packages plus `advise`: 17 entries.
 
 ## Choose By Use Case
 
@@ -46,8 +46,7 @@ As of 2026-08-03, that is 18 named advisor packages plus `advise`: 19 entries.
 
 | Need | Advisor | Produces |
 | --- | --- | --- |
-| Compare viable options and recommend one | [`advise`](../../skills/advise/SKILL.md) | Three options, tradeoffs, one recommendation, and next action; `ensemble=auto|max` adds independent local perspectives when requested |
-| Rank compounding opportunities and select the next wave | [`leverage-advisor`](../../skills/leverage-advisor/SKILL.md) | Ranked leverage roadmap, next wave, and first proof step |
+| Compare viable options and recommend one | [`advise`](../../skills/advise/SKILL.md) | Three options, tradeoffs, one recommendation, and next action, or a phased roadmap (`mode: roadmap`) whose first proof is a completed loop; `ensemble=auto|max` adds independent local perspectives when requested |
 | Define honest success, guardrails, and failure signals | [`metric-advisor`](../../skills/metric-advisor/SKILL.md) | Metric card, guard metrics, anti-metrics, and route hint |
 
 ### Shape projects and harness execution
@@ -63,7 +62,7 @@ As of 2026-08-03, that is 18 named advisor packages plus `advise`: 19 entries.
 
 | Need | Advisor | Produces |
 | --- | --- | --- |
-| Decide how a behavior claim should be proved | [`proof-advisor`](../../skills/proof-advisor/SKILL.md) | Proof cases, proof-surface choice, and QA/eval/review handoff |
+| Decide how a behavior claim should be proved | [`eval`](../../skills/eval/SKILL.md) | Proof cases, proof-surface choice, and eval rows or a QA/review handoff |
 | Place, write, or revise durable documentation | [`doc-advisor`](../../skills/doc-advisor/SKILL.md) | Docs strategy or grounded doc delta with quality checks |
 
 ### Produce creative assets and video

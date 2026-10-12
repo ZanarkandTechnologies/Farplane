@@ -20,9 +20,9 @@
     "notes": "Layer: skill-specific. Expected result: mirrors the advise checklist in a compact recommendation."
   },
   {
-    "id": "tier1_reference_grounding_01",
-    "title": "Reference grounding checks local evidence",
-    "query": "Use the reference-grounding skill shape. Does the current workspace already have an eval skill? Answer with compact local evidence and local impact.",
+    "id": "research_grounding_01",
+    "title": "Research grounds a local claim",
+    "query": "Use the research skill shape. Does the current workspace already have an eval skill? Answer with compact local evidence and local impact.",
     "reference_points": [
       "States the one claim or question being grounded",
       "Captures the local baseline from repo files such as skills, docs, tickets, or registries",
@@ -33,30 +33,9 @@
     ],
     "tags": [
       "skill",
-      "tier-1",
-      "reference-grounding"
+      "research"
     ],
     "notes": "Layer: skill-specific. Expected result: a grounding note, not a generic answer."
-  },
-  {
-    "id": "tier1_prototyping_01",
-    "title": "Prototyping prevents premature scale",
-    "query": "Use the prototyping skill shape. I want to add evals for every agent skill at once. Explain the smallest honest prototype first.",
-    "reference_points": [
-      "States the scale risk such as many skills, workflow breadth, automation, or file count",
-      "Names the hypothesis the prototype must prove or falsify",
-      "Picks the smallest representative slice using a 1 -> 10 -> 100 shape",
-      "Prefers a manual or non-scalable move first when it reveals the pattern faster",
-      "Defines evidence that promotes the work to the next scale",
-      "Defines evidence that forces revision, simplification, or stopping",
-      "Returns a Prototype Note with hypothesis, slice, evidence, promote criteria, revise criteria, and next scale step"
-    ],
-    "tags": [
-      "skill",
-      "tier-1",
-      "prototyping"
-    ],
-    "notes": "Layer: skill-specific. Expected result: sample-first plan instead of broad eval generation."
   },
   {
     "id": "tier1_review_01",

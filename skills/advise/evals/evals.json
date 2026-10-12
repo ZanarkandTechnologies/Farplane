@@ -1,0 +1,80 @@
+{
+  "skill_name": "advise",
+  "evals": [
+    {
+      "id": "advise_roadmap_product_01",
+      "prompt": "We have a clickable prototype for an AI operations inbox but no user evidence. We want 20 paying teams within six months; the founders can spend 10 hours a week each. Give us a feasible roadmap.",
+      "expected_output": "States the prototype-only current state and capacity constraint; sequences a first observed workflow and paid-design-partner proof before repeatable acquisition; gives observable exit milestones and risks for each phase; labels unsupported timing as conditional; and ends with one direct first-phase action.",
+      "files": [],
+      "assertions": [
+        "Uses a small number of ordered phases rather than a task dump",
+        "Makes live user evidence and a paid proof precede scaling acquisition",
+        "Names capacity as a constraint and avoids promising exact dates",
+        "Gives an observable exit milestone and a decision-relevant risk for every phase",
+        "Ends with an immediate move that advances the first proof"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Prototype-to-paying-team roadmap",
+          "tags": [
+            "skill",
+            "advise",
+            "roadmap",
+            "product"
+          ],
+          "notes": "Ported from the retired feasible-roadmap skill (#41)."
+        }
+      }
+    },
+    {
+      "id": "advise_roadmap_personal_01",
+      "prompt": "I want to run a half marathon in two months. I currently run 5 km once a week and can train three times weekly, with no injury constraints. Make a feasible roadmap.",
+      "expected_output": "Builds a capacity-aware progression with observable check points, recovery or adaptation risk checks, and an immediate first-session move; it does not invent a medical guarantee or a detailed daily calendar.",
+      "files": [],
+      "assertions": [
+        "Uses the supplied current state and three-session capacity",
+        "Organizes a progression into ordered phases with observable milestones",
+        "Names safety or adaptation conditions without pretending medical certainty",
+        "Avoids a day-by-day schedule and unsupported performance promise",
+        "Ends with a direct first-phase action"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Capacity-aware training roadmap",
+          "tags": [
+            "skill",
+            "advise",
+            "roadmap",
+            "personal"
+          ],
+          "notes": "Ported from the retired feasible-roadmap skill (#41)."
+        }
+      }
+    },
+    {
+      "id": "advise_precommits_an_uncertain_decision_01",
+      "prompt": "A local automation consultancy can either polish its generic website, spend two months building a broad dashboard, or run a one-week paid workflow pilot with a warm warehouse operator. The operator has repeatedly complained that shift handovers lose critical information. We have one engineer-week and a small travel budget. What should the team do next?",
+      "expected_output": "Identifies the handover-information bottleneck; recommends the bounded paid pilot as the completed-loop first proof over website polish or a broad dashboard; names an observation whose positive and negative results change the next decision; states the accepted tradeoff and a direct next step; leaves execution with the caller.",
+      "files": [],
+      "assertions": [
+        "Names the critical obstacle instead of treating growth as the strategy",
+        "Recommends the paid pilot as the first proof and treats website polish and the dashboard as preparation",
+        "Names one observation whose positive and negative results lead to different next actions",
+        "States the accepted tradeoff and a direct next step without an 'if you want' ending",
+        "Does not execute the pilot or invent conversion numbers"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Advise precommits an uncertain operating bet",
+          "tags": [
+            "skill",
+            "advise",
+            "uncertainty",
+            "decision"
+          ],
+          "notes": "Ported from the retired leverage-advisor skill (#41)."
+        }
+      }
+    }
+  ]
+}

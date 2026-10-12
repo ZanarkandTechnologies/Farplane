@@ -31,7 +31,7 @@ evidence shows mixed ownership or avoidable first-load cost.
 
 For `upgrade_skill_from_sources`, read
 [source upgrade workflow](upgrade-skill-from-sources.md), the target package,
-recent audits, book-to-skill extraction when applicable, and `best-of-worlds`.
+recent audits, book-to-skill extraction when applicable, and `research` synthesis.
 Adopt or adapt only behavior that improves workflows, gates, examples, evals,
 or QA without copying source prose.
 
@@ -77,7 +77,7 @@ proof_required:
 For hardening, add `source_rows`, `immediate_blockers`, and `processed_state`.
 For refinement, add `inputs`, `consolidate_call`, and unit decisions for keep,
 merge, move, and delete. For source upgrades, add source budget, source packet,
-`best_of_worlds_decisions`, and the accepted skill delta.
+`synthesis_decisions`, and the accepted skill delta.
 
 Audit skip:
 

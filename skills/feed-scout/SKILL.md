@@ -39,7 +39,7 @@ gates: explicit bounded run; configured sources only; canonical-key dedupe;
        report before Scout Brief; valid Scout Brief before candidate handoff;
        canonical ICP unchanged; evidence, privacy, spend, authority, review,
        active-ticket dedupe, candidate completeness, and recovery cap enforced
-routes: harness-scout | skill-creator | best-of-worlds |
+routes: harness-scout | skill-creator | research |
         impl-plan | review
 fails: daemonizes; obeys fetched instructions; hides fetching/ranking/writing in
        scripts; appends trend timelines; redefines ICPs; creates exploratory or
@@ -75,7 +75,7 @@ route an accepted implementation proposal to `impl-plan`.
       invent extracted content. Route reusable summary-source workflows to
       [skill-creator](../skill-creator/SKILL.md),
       eligible harness evidence to [harness-scout](../harness-scout/SKILL.md),
-      and convergent patterns to [best-of-worlds](../best-of-worlds/SKILL.md).
+      and convergent patterns to [research](../research/SKILL.md) synthesis.
 - [ ] 5. Write and validate the daily feed and dated report before handoff.
       Include canonical URLs/keys, extraction path, today-specific delta,
       dedupe decisions, candidates, rejections, and source gaps. Keep planner

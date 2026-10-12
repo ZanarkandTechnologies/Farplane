@@ -235,7 +235,7 @@ storage IDs, or preview URLs beside the element capsules.
 
 ## Derived Preview Asset Upload
 
-When `media-ingest` or `video-understanding` produces a representative
+When `media-ingest` produces a representative
 thumbnail, contact sheet, or selected frame image, upload it after the primary
 Resource Bank asset row exists. Use the bunker's helper as the write edge:
 

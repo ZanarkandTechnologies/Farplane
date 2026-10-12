@@ -54,7 +54,7 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + business_foundation_tickets + automation_setup_handoff? + next_planning_handoff
 state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/ARCHITECTURE/docs/tickets/farplane scaffolds, optional stack scaffold, and three dependent business-foundation tickets
 gates: existing_files_preserved; spec_version_recorded; human_gates_named; human_intake_decision_recorded; secrets_not_written; no_hidden_automation; interactive_stack_steps_stop_for_human
-routes: harness-creator | automation-advisor | prd | spec-to-ticket | implementation-research
+routes: harness-creator | automation-advisor | prd | spec-to-ticket | research
 fails: creates only code scaffolding with no Farplane project config; treats PRD authoring as required init completion; claims full project initialization when human intent, measurable objectives, success criteria, non-goals, or decision boundaries are still missing; deletes stack setup recipes; overwrites existing project state silently
 ```
 

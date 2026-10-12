@@ -10,7 +10,7 @@ tags:
   - sys-0007
 refs:
   - skills/dogfood-review/SKILL.md
-  - skills/optimize-with-human/SKILL.md
+  - skills/goal-advisor/references/human-feedback.md
   - skills/pulse-update/SKILL.md
   - docs/features/FEAT-0070-experimental-feature-evaluation-reports.md
   - docs/features/FEAT-0071-project-work-pulse.md
@@ -20,7 +20,7 @@ category: improvement-loop
 public: true
 surfaces:
   - skills/dogfood-review/SKILL.md
-  - skills/optimize-with-human/SKILL.md
+  - skills/goal-advisor/references/human-feedback.md
   - skills/pulse-update/SKILL.md
 source_refs:
   - docs/systems/self-improvement-learning.md
@@ -45,7 +45,7 @@ useful primitives were smaller than the controller:
 ```text
 Dogfood/self-improvement -> feedback experiment Goal Packet
 Work Pulse               -> execute ticket and due check-ins
-optimize-with-human       -> human feedback as the metric when appropriate
+human-feedback preset    -> human feedback as the metric when appropriate
 worker review request     -> initial or due Telegram request
 progress.md Review block  -> mutable wait/reminder/reply state
 ```

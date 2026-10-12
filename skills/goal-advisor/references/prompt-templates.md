@@ -138,8 +138,8 @@ explicit operator withdrawal recorded as the human disposition.
 After each turn: Apply `observe -> choose_next -> act -> verify -> write_back`.
 Choose among `execute`, `diagnose`, `report_now`, `request_feedback`, and
 `stop`; spend more budget only when the selected move beats the outside
-options. Invoke Leverage Advisor only when several plausible moves need
-judgment. Execute a mechanically implied move directly. When a
+options. Apply `references/choose-next.md` only when several plausible moves
+need judgment. Execute a mechanically implied move directly. When a
 hypothesis tree is listed, update the selected node and bounded children first;
 then append a compact selection and mutation receipt, evidence link, learning,
 decision, and next action to `progress.md`. When
@@ -246,8 +246,8 @@ metric sample, drift verdict, next action, and blockers.
 Metric: Use the listed eval, review, or human feedback provider. Do not promote
 unverified changes as accepted rules.
 
-After each turn: Apply the program's Decision Backbone. Use Leverage Advisor
-only when several eligible nodes need judgment; otherwise execute the
+After each turn: Apply the program's Decision Backbone. Use the choose-next
+comparison only when several eligible nodes need judgment; otherwise execute the
 mechanically implied node directly. Change one bounded part of the skill, run the declared complete evaluator,
 update the tree, append the observation, evidence, learning, decision, and next
 action, then request drift review when required. Promote

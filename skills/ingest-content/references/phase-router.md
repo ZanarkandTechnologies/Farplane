@@ -64,7 +64,7 @@ Routes:
   lightweight inspection when that is enough for a useful capture.
 - Media requiring element-specific visual/audio claims, a defensible golden
   example, exact timing, direct reuse, transcript, frames, or audit proof:
-  route to `media-ingest` and then `video-understanding` when needed.
+  route to `media-ingest`.
 - Media where the note selects the music/song/beat/audio bed: route to
   `media-ingest` for optional music recognition and carry matched
   artist/title/link or no-match status into the source context.

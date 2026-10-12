@@ -123,7 +123,7 @@ returns: the frame, one proposed visual, 1-3 correction questions, and the next 
   or workflow uncertainty to `functional-ui`, agency or client MVPs to
   `solution-shaping`, an accepted build slice to `impl-plan`, unknown user
   reality to `customer-research`, and a current-practice gap to
-  `competitor-research`. Create no tickets and write no code.
+  `research`. Create no tickets and write no code.
 
   Assert:
   - One to three questions, and one named next owner.
