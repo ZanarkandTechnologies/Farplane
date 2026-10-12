@@ -199,6 +199,11 @@ install_claude_runtime() {
     --all \
     --prune
   python3 "$REPO_DIR/bin/core/farplane_claude_install.py" --repo "$REPO_DIR" --target "$TARGET_DIR"
+  # Desk profiles are regenerated whole: every file in desks/ comes from the render.
+  render_skill_profiles >/dev/null
+  rm -rf -- "$TARGET_DIR/$1/desks"
+  mkdir -p "$TARGET_DIR/$1/desks"
+  cp "$PROFILE_RENDER_DIR"/claude/*.settings.json "$TARGET_DIR/$1/desks/"
   echo "Done. Restart Claude Code sessions to load new hooks, skills, and farplane:* subagents."
   echo "Hook secrets still resolve from the Codex install (~/.codex/config.toml) or runtime env."
 }

@@ -15,6 +15,7 @@ from farplane_cli_commands import (
     run_harness_health_compile_cli,
     run_mining_cli, run_project_snapshot_cli,
     run_capability_profiles_cli,
+    run_desk_cli,
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
     run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
     run_wiki_cli,
@@ -46,6 +47,15 @@ def build_parser() -> argparse.ArgumentParser:
     install.add_argument("--dry-run", action="store_true", help="Print the install command without running it.")
     install.add_argument("extra", nargs=argparse.REMAINDER, help="Extra install.sh args after --.")
     install.set_defaults(func=run_install)
+
+    desk = sub.add_parser("desk", help="Launch Codex or Claude as one Capability Map desk, with only its skills and helpers.")
+    desk.add_argument("desk", nargs="?", help="Desk id from config/skill-workflows.toml; omit to list desks.")
+    desk.add_argument("--runtime", choices=("codex", "claude"), default="codex")
+    desk.add_argument("--home", help="Runtime home. Defaults to ~/.codex or ~/.claude.")
+    desk.add_argument("--list", action="store_true", help="List desks and their skills.")
+    desk.add_argument("--dry-run", action="store_true", help="Check the install and print the launch command.")
+    desk.add_argument("extra", nargs="*", help="Extra runtime args after --.")
+    desk.set_defaults(func=run_desk_cli)
 
     doctor = sub.add_parser("doctor", help="Check Core install, hooks, config, and linked UI repo.")
     doctor.add_argument("--target", help="Codex home target. Defaults to stored codexHome or ~/.codex.")

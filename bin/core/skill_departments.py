@@ -89,6 +89,16 @@ def load_skill_specialists(
     return specialists
 
 
+def desk_identity(desk_id: str, desk: dict[str, object]) -> str:
+    """The short role prompt a desk session starts with, derived from its desk entry."""
+    skills = ", ".join(f"`{skill}`" for skill in desk["skills"])
+    return (
+        f"You are the {desk['label']} desk ({desk_id}). Your deliverable is {desk['deliverable']}. "
+        f"Start from the `{desk['primary']}` skill; your desk skills are {skills}. "
+        "Helper skills stay available. Work that belongs to another desk goes back to the operator."
+    )
+
+
 def specialist_by_skill(specialists: dict[str, dict[str, object]]) -> dict[str, str]:
     return {skill: specialist_id for specialist_id, entry in specialists.items() for skill in entry["skills"]}
 

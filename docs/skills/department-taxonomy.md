@@ -34,9 +34,11 @@ oversized skills are never grown by desk membership.
 Skills without a specialist are internal: planners dispatch them as needed and
 the map omits them. The technical Skill Library remains the full registry.
 
-This is source visibility, not active-session availability. `config/skill-profiles.toml`
-controls named-profile enablement; a profile-gated desk remains visible
-here so filtering cannot look like deletion.
+This is source visibility, not active-session availability. Each desk is also a
+launch profile: install renders one per desk (`~/.codex/<desk>.config.toml` and
+`~/.claude/farplane/desks/<desk>.settings.json`) that keeps the desk's skills and
+every helper and turns off the other desks' skills, and `farplane desk <desk>`
+launches it after checking those skills are installed.
 
 Map topology combines static ownership with declared artifact flow:
 `department -> specialist desk (workstation)`; a member skill with an

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import re
 import tempfile
 import unittest
@@ -29,8 +30,11 @@ class RenderSkillProfilesTests(unittest.TestCase):
             output = Path(temp_dir)
             result = renderer.render_profiles(ROOT, output)
 
-            self.assertEqual(result["profile_count"], 12)
-            self.assertEqual(result["managed_skill_count"], 63)
+            desks = renderer.load_skill_specialists(ROOT)
+            self.assertEqual(result["profile_count"], len(desks))
+            self.assertEqual(
+                result["managed_skill_count"], len({skill for desk in desks.values() for skill in desk["skills"]})
+            )
             all_skills = enabled_skills(output / "base.config.toml")
             self.assertEqual(all_skills, renderer.registry_skill_names(ROOT))
             self.assertIn("intelligest", all_skills)
@@ -48,8 +52,8 @@ class RenderSkillProfilesTests(unittest.TestCase):
                 len(re.findall(r'^\[\[skills\.config\]\]$', (output / "base.config.toml").read_text(), re.MULTILINE)),
                 len(all_skills),
             )
-            self.assertIn("intelligest", result["profiles"]["deep-researcher"])
-            self.assertIn("content-impl-plan", result["profiles"]["content-specialist"])
+            self.assertIn("impl-plan", result["profiles"]["engineer"])
+            self.assertIn("customer-research", result["profiles"]["customer-researcher"])
 
             for profile_name, expected_skills in result["profiles"].items():
                 profile_path = output / "profiles" / f"{profile_name}.config.toml"
@@ -62,16 +66,24 @@ class RenderSkillProfilesTests(unittest.TestCase):
                     len(re.findall(r'^\[\[skills\.config\]\]$', content, re.MULTILINE)),
                     result["managed_skill_count"],
                 )
+                hidden = json.loads((output / "claude" / f"{profile_name}.settings.json").read_text())["skillOverrides"]
+                self.assertTrue(set(hidden).isdisjoint(expected_skills))
+                self.assertEqual(len(hidden) + len(expected_skills), result["managed_skill_count"])
+                self.assertEqual(set(hidden.values()), {"off"})
 
-    def test_unknown_manifest_skill_blocks_render_before_output(self) -> None:
+    def test_desk_naming_unknown_skill_blocks_render(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             (root / "docs/skills").mkdir(parents=True)
             (root / "config").mkdir()
             (root / "docs/skills/registry.jsonl").write_text('{"name":"known"}\n')
-            (root / "config/skill-profiles.toml").write_text('[profiles]\nexample = ["missing"]\n')
+            (root / "config/skill-departments.toml").write_text('[departments]\nops = "Ops"\n')
+            (root / "config/skill-workflows.toml").write_text(
+                '[specialists.example]\nlabel = "Example"\ndepartment = "ops"\ndeliverable = "a thing"\n'
+                'primary = "missing"\nskills = ["missing"]\n'
+            )
 
-            with self.assertRaisesRegex(renderer.ProfileRenderError, "missing_from_registry"):
+            with self.assertRaisesRegex(renderer.ProfileRenderError, "desk_skills_missing_from_registry"):
                 renderer.render_profiles(root, root / "rendered")
 
 

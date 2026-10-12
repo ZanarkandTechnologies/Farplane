@@ -1,23 +1,37 @@
 #!/usr/bin/env python3
-"""Render default-enable and role-restricted Codex skill profile config files."""
+"""Render the default skill config and one launch profile per Capability Map desk.
+
+A desk profile keeps the desk's own skills and every helper (a skill at no desk)
+and turns off the other desks' skills, so a desk session routes among a short
+list. Codex reads `profiles/<desk>.config.toml` through `codex -p <desk>`;
+Claude reads `claude/<desk>.settings.json` through `claude --settings`.
+`farplane desk` launches either one.
+"""
 
 from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
-import tomllib
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(REPO_ROOT / "bin" / "core") not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT / "bin" / "core"))
+
+from skill_departments import (  # noqa: E402
+    CapabilityAdmissionConfigError,
+    DepartmentTaxonomyError,
+    desk_identity,
+    load_skill_specialists,
+)
 
 PROFILE_MARKER_BEGIN = "# BEGIN FARPLANE GENERATED SKILL PROFILE"
 PROFILE_MARKER_END = "# END FARPLANE GENERATED SKILL PROFILE"
-PROFILE_NAME_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 
 
 class ProfileRenderError(ValueError):
-    """Raised when the source profile contract cannot produce a safe config."""
+    """Raised when the desk table cannot produce a safe config."""
 
 
 def registry_skill_names(repo: Path) -> set[str]:
@@ -32,38 +46,23 @@ def registry_skill_names(repo: Path) -> set[str]:
     return names
 
 
-def load_profile_map(repo: Path, known_skills: set[str]) -> dict[str, tuple[str, ...]]:
-    manifest_path = repo / "config" / "skill-profiles.toml"
+def load_desks(repo: Path, known_skills: set[str]) -> dict[str, dict[str, object]]:
     try:
-        payload = tomllib.loads(manifest_path.read_text(encoding="utf-8"))
-    except (OSError, tomllib.TOMLDecodeError) as exc:
-        raise ProfileRenderError(f"invalid_profile_manifest:{manifest_path}") from exc
-    raw_profiles = payload.get("profiles")
-    if not isinstance(raw_profiles, dict) or not raw_profiles:
-        raise ProfileRenderError(f"invalid_profile_manifest:{manifest_path}:profiles must be a non-empty table")
-
-    profiles: dict[str, tuple[str, ...]] = {}
-    for raw_name, raw_skills in raw_profiles.items():
-        if not isinstance(raw_name, str) or not PROFILE_NAME_RE.fullmatch(raw_name):
-            raise ProfileRenderError(f"invalid_profile_name:{raw_name!r}")
-        if not isinstance(raw_skills, list) or not raw_skills:
-            raise ProfileRenderError(f"invalid_profile_skills:{raw_name}:must be a non-empty list")
-        if not all(isinstance(skill, str) and skill for skill in raw_skills):
-            raise ProfileRenderError(f"invalid_profile_skills:{raw_name}:values must be non-empty strings")
-        skills = tuple(sorted(raw_skills))
-        duplicates = sorted({skill for skill in skills if skills.count(skill) > 1})
-        if duplicates:
-            raise ProfileRenderError(f"duplicate_profile_skills:{raw_name}:{','.join(duplicates)}")
-        missing = sorted(set(skills).difference(known_skills))
+        desks = load_skill_specialists(repo)
+    except (CapabilityAdmissionConfigError, DepartmentTaxonomyError) as exc:
+        raise ProfileRenderError(f"invalid_desk_table:{exc}") from exc
+    for desk_id, desk in desks.items():
+        missing = sorted(set(desk["skills"]).difference(known_skills))
         if missing:
-            raise ProfileRenderError(f"profile_skills_missing_from_registry:{raw_name}:{','.join(missing)}")
-        profiles[raw_name] = skills
-    return dict(sorted(profiles.items()))
+            raise ProfileRenderError(f"desk_skills_missing_from_registry:{desk_id}:{','.join(missing)}")
+    return dict(sorted(desks.items()))
 
 
-def render_matrix(skill_names: tuple[str, ...], enabled_skills: tuple[str, ...]) -> str:
+def render_matrix(skill_names: tuple[str, ...], enabled_skills: tuple[str, ...], identity: str = "") -> str:
     enabled = set(enabled_skills)
     lines = [PROFILE_MARKER_BEGIN]
+    if identity:
+        lines.extend((f"developer_instructions = {json.dumps(identity)}", ""))
     for skill_name in skill_names:
         lines.extend(("[[skills.config]]", f'name = "{skill_name}"', f"enabled = {'true' if skill_name in enabled else 'false'}", ""))
     lines.append(PROFILE_MARKER_END)
@@ -73,22 +72,27 @@ def render_matrix(skill_names: tuple[str, ...], enabled_skills: tuple[str, ...])
 def render_profiles(repo: Path, output_dir: Path) -> dict[str, object]:
     resolved_repo = repo.resolve()
     known_skills = registry_skill_names(resolved_repo)
-    profiles = load_profile_map(resolved_repo, known_skills)
-    managed_skills = tuple(sorted({skill for skills in profiles.values() for skill in skills}))
+    desks = load_desks(resolved_repo, known_skills)
+    managed_skills = tuple(sorted({skill for desk in desks.values() for skill in desk["skills"]}))
     base_skills = tuple(sorted(known_skills))
-    profile_dir = output_dir / "profiles"
-    profile_dir.mkdir(parents=True, exist_ok=True)
-    (output_dir / "base.config.toml").write_text(
-        render_matrix(base_skills, base_skills), encoding="utf-8"
-    )
-    for profile_name, enabled_skills in profiles.items():
-        (profile_dir / f"{profile_name}.config.toml").write_text(
-            render_matrix(managed_skills, enabled_skills), encoding="utf-8"
+    codex_dir = output_dir / "profiles"
+    claude_dir = output_dir / "claude"
+    codex_dir.mkdir(parents=True, exist_ok=True)
+    claude_dir.mkdir(parents=True, exist_ok=True)
+    (output_dir / "base.config.toml").write_text(render_matrix(base_skills, base_skills), encoding="utf-8")
+    profiles: dict[str, list[str]] = {}
+    for desk_id, desk in desks.items():
+        own = tuple(sorted(desk["skills"]))
+        (codex_dir / f"{desk_id}.config.toml").write_text(render_matrix(managed_skills, own, desk_identity(desk_id, desk)), encoding="utf-8")
+        hidden = {skill: "off" for skill in managed_skills if skill not in own}
+        (claude_dir / f"{desk_id}.settings.json").write_text(
+            json.dumps({"skillOverrides": hidden}, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
+        profiles[desk_id] = list(own)
     return {
         "managed_skill_count": len(managed_skills),
         "profile_count": len(profiles),
-        "profiles": {name: list(skills) for name, skills in profiles.items()},
+        "profiles": profiles,
     }
 
 
@@ -110,7 +114,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.json:
         print(json.dumps(result, sort_keys=True))
     else:
-        print(f"Rendered {result['profile_count']} skill profiles across {result['managed_skill_count']} managed skills.")
+        print(f"Rendered {result['profile_count']} desk profiles across {result['managed_skill_count']} desk skills.")
     return 0
 
 

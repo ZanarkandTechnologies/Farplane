@@ -81,14 +81,12 @@ enabled = true
             self.assertEqual(rendered["desktop"]["followUpQueueMode"], "queue")
             self.assertTrue(rendered["plugins"]["browser@openai-bundled"]["enabled"])
             self.assertIn("Machine-local TOML", (target / "config.local.toml").read_text(encoding="utf-8"))
-            self.assertTrue((target / "reviewer.config.toml").is_file())
-            self.assertIn(
-                "# BEGIN FARPLANE GENERATED SKILL PROFILE",
-                (target / "reviewer.config.toml").read_text(encoding="utf-8"),
-            )
-            profile_content = (target / "reviewer.config.toml").read_text(encoding="utf-8")
-            self.assertNotIn("legacy = true", profile_content)
-            self.assertIn('name = "pr-review-watch"', profile_content)
+            # The old reviewer profile is not a desk: it is backed up and not re-rendered.
+            self.assertFalse((target / "reviewer.config.toml").exists())
+            desk_profile = tomllib.loads((target / "engineer.config.toml").read_text(encoding="utf-8"))
+            self.assertIn("Engineer desk", desk_profile["developer_instructions"])
+            self.assertIn({"name": "impl-plan", "enabled": True}, desk_profile["skills"]["config"])
+            self.assertIn({"name": "customer-research", "enabled": False}, desk_profile["skills"]["config"])
             backups = list((target / ".install-backups").glob("*/reviewer.config.toml"))
             self.assertEqual(len(backups), 1)
             self.assertIn("legacy = true", backups[0].read_text(encoding="utf-8"))
