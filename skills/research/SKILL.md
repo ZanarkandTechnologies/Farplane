@@ -129,6 +129,9 @@ returns: the evidence note, rejection ledger, recommendation and its downside, n
 ## Gotchas
 
 - Citing a source that was only searched, not opened.
+- Social and platform pages (X, Reddit, LinkedIn, YouTube, Xiaohongshu) open
+  through the `agent-reach` CLI (`agent-reach doctor --json` lists backends);
+  its skill is switched off so research requests route here.
 - Feature-count matrices hide the customer job; compare outcomes and failure
   modes first.
 - A popular repo is not automatically compatible with the local lifecycle, and
