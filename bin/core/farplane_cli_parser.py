@@ -15,12 +15,12 @@ from farplane_cli_commands import (
     run_harness_health_compile_cli,
     run_mining_cli, run_project_snapshot_cli,
     run_capability_profiles_cli,
-    run_desk_cli,
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
     run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
     run_wiki_cli,
     run_check_ticket,
 )
+from farplane_cli_desk import run_desk_cli
 from farplane_cli_metrics import add_metrics_and_loop
 from farplane_skill_sync import run_sync_skills
 from farplane_lint import run_lint_cli
