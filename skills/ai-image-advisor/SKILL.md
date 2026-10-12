@@ -108,7 +108,7 @@ Ideogram 4.5 Precise Edit is the default for every edit (one change, background 
 
 | Route | Input | Credential state |
 | --- | --- | --- |
-| Ideogram API (default) | `farplane run -- curl -X POST https://api.ideogram.ai/v2/image/precise-edit/ideogram-4-5 -H "Api-Key: $IDEOGRAM_API_KEY" -F image=@source.png -F prompt="..." -F quality=medium`; optional `reference_images` (max 4, 3 with a mask), `mask` (black = edit). Add `?dry_run=true` for a price quote. | Needs `IDEOGRAM_API_KEY` in Doppler. Not on belt or treg yet. |
+| Ideogram API (default) | `farplane run -- curl -X POST https://api.ideogram.ai/v2/image/precise-edit/ideogram-4-5 -H "Api-Key: $IDEOGRAM_API_KEY" -F image=@source.png -F prompt="..." -F quality=medium`; optional `reference_images` (max 4, 3 with a mask), `mask` (black = edit). Add `?dry_run=true` for an exact free quote (medium 2:3 frame: $0.06). | `IDEOGRAM_API_KEY` in Doppler `farplane/dev_personal`; account has credits. Not on belt or treg yet. |
 | Seedream 4.5 via belt (fallback) | `belt app run bytedance/seedream-4-5 --input input.json` with `{"prompt","image":"source.png","size":"2K"}`; one source, about $0.04 | Logged in. May re-dress the set; name props that must stay. |
 
 Without the Ideogram key, say so and use Seedream; use `openai/gpt-image-2` or treg `piapi.image-gen.gpt-image-2-5` for multi-reference. Name the route used in `notes.md`.
