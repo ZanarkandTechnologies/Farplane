@@ -104,29 +104,18 @@ These defaults come from the upstream inference.sh skill snapshot at `c5ad36c`. 
 
 ## Editing Default
 
-Seedream 4.5 is the default for every edit: change one thing in an existing
-image, swap a background, restyle, combine references, or keep a character
-consistent across shots. Pass the source image first in `image_input`, then any
-references, and say in the prompt what must stay unchanged.
+Seedream 4.5 is the default for every edit (one change, background swap, restyle, combined references, character consistency). Put the source image first in `image_input`, then references; say in the prompt what must stay unchanged.
 
 | Route | Call | Credential state |
 | --- | --- | --- |
 | treg (preferred) | `treg call replicate.x.bytedance-seedream-4-5 --method POST --data '{"input":{"prompt":"...","image_input":["<source>","<ref>"],"size":"2K","aspect_ratio":"match_input_image"}}'` | BYOK only: needs the team's Replicate key registered in treg (`my_tools` lists it once it is). Async; copy `output` before Replicate deletes it. |
 | belt | `belt app run bytedance/seedream-4-5 --input input.json --save result.json` | Needs `belt login`; confirm the schema with `belt app get` first. |
 
-If neither route has a credential, say so and use the operator's chosen
-fallback: `openai/gpt-image-2` or treg `piapi.image-gen.gpt-image-2-5` for
-masks and exact text, `reapi.image-gen.gemini-3-pro-image` for cheap
-multi-image edits. Name the fallback in `notes.md` so the result is not
-mistaken for a Seedream edit.
+If neither route has a credential, say so and fall back: `openai/gpt-image-2` or treg `piapi.image-gen.gpt-image-2-5` for masks and exact text, `reapi.image-gen.gemini-3-pro-image` for cheap multi-image edits. Name the fallback in `notes.md`.
 
 ## Model Map
 
-Browse live apps with:
-
-```bash
-belt app list --category image
-```
+Browse live apps with `belt app list --category image`.
 
 | Model | App ID | Best For |
 | --- | --- | --- |
@@ -178,16 +167,6 @@ belt app run openai/gpt-image-2 --input '{
   "prompt": "professional product photo of sneakers, studio lighting",
   "quality": "high"
 }' --save output/ai-image-advisor/sneaker-product/result.json
-
-mkdir -p output/ai-image-advisor/synth-editorial
-belt app run google/gemini-3-1-flash-image-preview --input '{
-  "prompt": "photorealistic editorial image of a modular synthesizer on a desk"
-}' --save output/ai-image-advisor/synth-editorial/result.json
-
-mkdir -p output/ai-image-advisor/signal-lab-poster
-belt app run alibaba/qwen-image-2-pro --input '{
-  "prompt": "A clean launch poster that says SIGNAL LAB in bold type"
-}' --save output/ai-image-advisor/signal-lab-poster/result.json
 
 mkdir -p output/ai-image-advisor/upscale
 belt app run falai/topaz-image-upscaler \
