@@ -1,12 +1,12 @@
 ---
 name: pm
-description: "Use the Notion Plan Week cache, tasks, projects, goals, and meeting notes to plan days, ingest commitments, and review priorities when asked for pm."
-department: back-office
+description: "Use for \"plan my day\", \"plan my week\", \"ingest this meeting\" or \"tidy my Notion tasks\": a plan grounded in Plan Week, verified task updates, or safe field fills."
+department: leadership
 source: local
 capability:
   kind: shortcut
 template_uses:
-  skill-template: "0.6.2"
+  skill-template: "0.6.5"
   skill-surface-budget: "0.1.0"
 allowed-tools: Read, Write, Glob, Grep, Bash
 ---
@@ -15,21 +15,18 @@ allowed-tools: Read, Write, Glob, Grep, Bash
 
 ## Context
 
-Use `pm` for:
-- planning a day or week;
-- processing meetings;
-- sorting projects and ideas; and
-- reviewing priorities and progress.
-
-Each week, one Task named `Plan Week` stores the accumulated plan, decisions,
-progress, and context for that week. Load this cache first. Query the other
-Tasks, Projects, Goals, and meeting notes only when the request needs more
-context or the cache has a gap that must be checked. Use the existing Notion
-setup; do not add another planning system.
+Use `pm` to plan a day or week, process meetings, sort projects and ideas,
+review priorities and progress, or tidy incomplete Notion Tasks (`hygiene`).
+Each week one Task named `Plan Week` stores the accumulated plan, decisions,
+progress, and context. Load it first; query other Tasks, Projects, Goals, and
+meeting notes only when the request needs them or the cache has a gap. Use the
+existing Notion setup; do not add another planning system.
 
 ## Skill Signature
+
 ```text
-pm(request, source_link?) -> grounded advice or verified PKMS updates
+pm(request, mode?: plan | ingest | review | hygiene, source_link?)
+  -> grounded advice | verified PKMS updates | hygiene proposal + receipts
 reads: private bindings, Plan Week first, then other relevant records as needed
 does: reconciles current evidence with weekly intentions and requested action
 writes: request-authorized Notion changes and private processing receipts only
@@ -42,33 +39,22 @@ returns: recommendation, source links, changed records, unresolved gaps
 - [ ] **N1 — Reconstruct the current week from canonical records.**
   `request + private bindings -> compact context | source gap`
 
-  Rules:
-  - Read `~/.codex/private/TOOLS.md` and
-    `~/.codex/private/docs/notion.md` for source handles, property mappings, and
-    current `ntn` recipes.
-  - Reuse `run_ntn` in
-    `../notion-task-field-fill/scripts/ntn_task_field_fill.py` when useful. Do
-    not run its field-fill workflow merely to fetch data.
+  Rule: Read `~/.codex/private/TOOLS.md` and `~/.codex/private/docs/notion.md` for
+  handles, property mappings, and current `ntn` recipes. Reuse `run_ntn` in
+  `scripts/ntn_task_field_fill.py` to fetch data.
   - Launch credentialed commands through `farplane run` or Doppler. Bridge
     `NOTION_TOKEN` to `NOTION_API_TOKEN` only for the `ntn` subprocess.
-  - Find the newest pinned page whose title begins with `Plan Week`. Order by
-    `Act Time`, then by the date in the title. Fetch its full relevant body.
-    Never use the example ID from the private docs.
-  - Start with Plan Week. Fetch other Tasks, Goals, Projects, or meeting notes
-    only when the request requires them or Plan Week lacks decisive context.
-  - When additional records are needed, include relevant recent activity and
-    older open commitments linked from Plan Week or Projects. Exclude terminal
-    Done, Dropped, or Migrated projects, then deduplicate the result.
-  - Treat planned dates and deadlines as different facts.
-  - Use Asia/Kuala_Lumpur for time windows:
-    - this week is Monday through Sunday, ending now for retrospective work;
-    - past week is the previous seven days; and
-    - next week begins the next Monday.
-  - Use compact `filter_properties` queries and normalize records before
-    reasoning. Paginate the requested scope or state that the result is
-    incomplete.
-  - Fetch the bodies of relevant meeting tasks, including Done meetings. Titles
-    alone are not enough.
+  - Find the newest pinned page whose title begins with `Plan Week`, ordered by
+    `Act Time`, then the title date. Never use the example ID from private docs.
+  - When more records are needed, include recent activity and older open
+    commitments linked from Plan Week or Projects; exclude Done, Dropped, or
+    Migrated projects and deduplicate.
+  - Planned dates and deadlines are different facts. Use Asia/Kuala_Lumpur:
+    this week is Monday to Sunday (ending now for retrospectives), past week
+    the previous seven days, next week from the next Monday.
+  - Use compact `filter_properties` queries, normalize before reasoning, and
+    paginate the requested scope or say it is incomplete. Fetch the bodies of
+    relevant meeting tasks, including Done ones; titles are not enough.
 
   Assert:
   - Context identifies window, selected Plan Week, coverage, and source gaps.
@@ -80,26 +66,17 @@ returns: recommendation, source links, changed records, unresolved gaps
 - [ ] **N2 — Reconcile projects, rewards, and commitments.**
   `context -> evidence-backed priorities + missing decisions`
 
-  Rules:
-  - Task status determines whether work is complete. Plan Week holds reasoning
-    and intentions.
-  - Recent execution can make an `Info Dumped` project active. An old focus flag
-    cannot do that by itself.
-  - Keep these categories separate:
-    - the operator's commitments;
-    - other people's actions;
-    - ideas; and
-    - actions with uncertain ownership.
-  - Preserve raw meeting notes. Add a source-linked interpretation without
-    inventing missing speech or silently changing someone's identity.
-  - Group projects that serve the same outcome.
-  - Separate meaningful building from income work. Protect accepted build time
-    without requiring every build project to make money immediately.
-  - Judge cashflow work by credible payment and the full cost of selling,
-    preparation, delivery, and support.
+  Rule: Task status decides completion; Plan Week holds reasoning and intentions.
+  Recent execution can make an `Info Dumped` project active; an old focus
+  flag cannot.
+  - Keep separate: the operator's commitments, other people's actions, ideas,
+    and actions with uncertain ownership. Preserve raw meeting notes; add a
+    source-linked interpretation without inventing speech or identity.
+  - Group projects serving one outcome. Separate building from income work and
+    protect accepted build time. Judge cashflow work by credible payment and
+    the full cost of selling, preparing, delivering, and supporting it.
   - Count access, equipment, collaborators, buyers, and permissions only when
-    the sources support them.
-  - Leave unknown capacity and income targets unknown.
+    sources support them; leave unknown capacity and income targets unknown.
 
   Example: `Done teleoperation + stale project status -> execution exists ->
   next bounded folding test, not another teleoperation setup task`.
@@ -110,59 +87,65 @@ returns: recommendation, source links, changed records, unresolved gaps
 - [ ] **N3 — Turn the request into the smallest useful decision.**
   `priorities + request -> day plan | meeting deltas | weekly review`
 
-  Rules:
-  - Day plan: one main outcome plus realistic supporting work. Plan or negotiate
-    interactively with [plan-day](references/plan-day.md) or [plan-week](references/plan-week.md).
-  - For meeting ingestion, derive concrete commitments and project context from
-    the source.
-  - For a weekly review, compare:
-    - intended results with actual results;
-    - expected rewards with actual rewards, when known; and
-    - selected work with parked work.
-  - Reuse the existing Plan Week sections, including cashflow. Do not impose a
-    new template on every run.
+  Rule: Day plan: one main outcome plus realistic supporting work; plan or
+  negotiate interactively with [plan-day](references/plan-day.md) or
+  [plan-week](references/plan-week.md).
+  - Meeting ingestion derives concrete commitments and project context.
+  - Weekly review compares intended with actual results, expected with actual
+    rewards when known, and selected with parked work. Reuse existing Plan Week
+    sections, including cashflow; impose no new template.
   - Advice and audit requests return proposals without changing Notion.
-  - Requests to edit, ingest, or save a plan in the weekly page authorize those
-    bounded writes. Do not ask again.
+    Requests to edit, ingest, or save a plan authorize those bounded writes.
   - Keep new goals, changed obligations, and unclear ownership as proposals
-    until the operator accepts them.
-  - Never send messages, publish, or spend.
+    until the operator accepts them. Never send messages, publish, or spend.
 
   Assert:
-  - The result answers the actual request and identifies missing decisive facts.
+  - The result answers the actual request and names missing decisive facts.
   - User-authored content, original expectations, and uncertainty survive edits.
 
 - [ ] **N4 — Apply deltas once and verify their effects.**
   `authorized deltas + prior receipts -> verified updates | partial recovery`
 
-  Rules:
-  - Before creating a task, compare its source, action, owner, and project with
-    existing rows. Reuse a matching row.
-  - Resolve Project and Area from current relations and evidence. Do not infer a
-    project from a title or overwrite a conflicting relation.
-  - Re-read affected content before editing, then merge around concurrent
-    changes.
-  - Read back every write, including Plan Week, before claiming success.
-  - For meeting ingestion, use
-    `~/.codex/private/pm/processed/<source-id>.json`.
-  - Record a SHA-256 fingerprint of a stable, ordered snapshot of the original
-    note text and blocks. Exclude generated PM interpretations and receipts.
-  - Store intended changes and per-action target/readback receipts privately
-    before and during the update.
-  - An unchanged fingerprint skips only identical actions that were already
-    verified.
-  - Reconcile newly accepted proposals and newly authorized changes against
-    action receipts, even when the source is unchanged.
-  - Reconcile changed notes instead of recreating actions blindly.
-  - If a write is partial or uncertain, inspect its targets and resume only the
-    missing changes.
+  Rule: Before creating a task, compare source, action, owner, and project with
+  existing rows and reuse a match. Resolve Project and Area from current
+  relations; never infer a project from a title or overwrite a conflict.
+  - Re-read affected content before editing, merge around concurrent changes,
+    and read back every write, including Plan Week, before claiming success.
+  - Meeting ingestion records `~/.codex/private/pm/processed/<source-id>.json`
+    with a SHA-256 fingerprint of the ordered original note text and blocks
+    (excluding PM interpretations), intended changes, and per-action
+    target/readback receipts, written before and during the update.
+  - An unchanged fingerprint skips only identical verified actions; reconcile
+    newly accepted or authorized changes and changed notes instead of
+    recreating actions. Resume only missing changes after a partial write.
   - Mark a source version complete only after every intended, authorized action
-    is verified. Keep unresolved proposals explicit. Reading is not processing.
+    is verified. Reading is not processing.
 
   Assert:
   - No processed stamp for advice, failed readback, or unapplied intended action.
   - Private IDs, source bodies, and receipts never enter tracked repo artifacts.
-  - No new Notion schema/Processed checkbox is needed for this initial shortcut.
+
+- [ ] **N5 — hygiene: fill missing Task fields only where evidence agrees.**
+  `task window + Plan Week/Projects/Goals -> per-field proposal + typed patches | abstain`
+
+  Rule: Default `dry-run`. Run one compact `ntn` Tasks query (bounded page
+  size, `filter_properties`, no repeated equivalent query), normalize rows,
+  then decide `Act Time`, `Project`, `Areas`, `Attention Required`, and `Tags`
+  independently. Write only high-confidence typed patches in
+  `live-high-confidence`, and read each back; abstain on conflicting evidence
+  and queue it for Telegram or local review. Never mutate `Status`. Load
+  [hygiene](references/hygiene.md) for modes, budgets, and artifacts, and
+  [model](references/hygiene-model.md) plus
+  [confidence](references/hygiene-confidence.md) when deciding fields.
+
+  Example: `task names a project but its Area relation points elsewhere ->
+  propose Project (high), abstain on Areas, ask for review`.
+
+  Assert:
+  - Unexpected Task properties or a failed compact query stop the run with a
+    named `context_gap`; no broad page dump or MCP fallback.
+  - Artifacts under `.farplane/state/pm/hygiene/runs/<run-id>/` name counts,
+    per-field confidence, review requests, and readback receipts.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Common Examples
@@ -173,9 +156,12 @@ returns: recommendation, source links, changed records, unresolved gaps
   commitments, update affected context and Plan Week, verify, record the version.
 - `pm evaluate my week and plan next week`: compare outcomes with intentions,
   recommend next week's work/cashflow priorities, and save when requested.
+- `pm tidy the tasks I added this week`: hygiene dry-run over this week's
+  incomplete Tasks with a proposal and review requests.
 
 The synthetic [golden trace](examples/golden.md) is calibration when changing
 this skill or evaluating its behavior; it is not live user context.
+
 ## Gotchas
 
 - A Done meeting can contain an unfinished commitment. Meeting completion is
@@ -184,16 +170,15 @@ this skill or evaluating its behavior; it is not live user context.
   consume a week in preparation; compare complete effort before displacing work.
 - A connection to a data-center operator is not confirmed customer access or
   demand for a cabling robot. Keep the opportunity a hypothesis.
+- A medium-confidence field written "because it is probably right" is a silent
+  wrong fact in the planner; propose it instead.
 
 ## Output
 
-Return a compact answer containing:
-- the decision or recommendation;
-- source links;
-- this week's concrete target, when relevant;
-- what should change; and
-- material unknowns.
-
-For updates, list the records that were changed and verified, plus any partial
-recovery. For advice, state that no pages changed. Do not claim complete
+Return the decision or recommendation, source links, this week's concrete
+target when relevant, what should change, and material unknowns. For updates,
+list records changed and verified plus any partial recovery; for advice, state
+that no pages changed. Hygiene returns artifact paths, candidate and proposal
+counts, per-field confidence, review requests, readback receipts, and
+`provider_effects: none` outside `live-high-confidence`. Never claim complete
 coverage when pagination or source-body fetching failed.

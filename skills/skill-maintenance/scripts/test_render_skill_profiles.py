@@ -53,7 +53,7 @@ class RenderSkillProfilesTests(unittest.TestCase):
                 len(all_skills),
             )
             self.assertIn("impl-plan", result["profiles"]["engineer"])
-            self.assertIn("customer-research", result["profiles"]["customer-researcher"])
+            self.assertIn("prospect", result["profiles"]["prospector"])
 
             for profile_name, expected_skills in result["profiles"].items():
                 profile_path = output / "profiles" / f"{profile_name}.config.toml"

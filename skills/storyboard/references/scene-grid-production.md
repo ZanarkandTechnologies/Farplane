@@ -4,27 +4,27 @@ status: active
 owner: storyboard
 kind: reference
 created_at: 2026-07-16
-updated_at: 2026-07-16
+updated_at: 2026-10-12
 applies_to:
   - model-native-video
   - deliberate-scene-breaks
   - storyboard-review
-  - remotion-assembly
+  - hyperframes-assembly
 ---
 
 # Scene-Grid Production Contract
 
 Load this reference when a multi-scene video uses model-native clips and the
 chosen generation topology is `deliberate_scene_breaks`. Storyboard owns the
-reviewable scene packet; `ai-video-advisor` verifies and executes the provider
-envelope, and Remotion assembles accepted clips.
+reviewable scene packet; `ai-video` verifies and executes the provider
+envelope, and HyperFrames assembles accepted clips.
 
 ```text
 storyboard_scene_grid(video, topology = deliberate_scene_breaks)
   -> scene_packet[] + approval_packet
 
 approved(scene_packet[], budget)
-  -> generate_one_clip_per_packet -> remotion_master
+  -> generate_one_clip_per_packet -> hyperframes_master
 ```
 
 ## Scene Boundary
@@ -166,8 +166,8 @@ The human-facing overview must make the keyed overlays readable at review size.
 Showing only clean grids or first-frame thumbnails does not satisfy review when
 the annotated boards are the motion contract.
 
-Approval of this packet authorizes generation and Remotion assembly within the
-already accepted ticket scope and spend budget. It does not authorize publishing,
+Approval of this packet authorizes generation and HyperFrames assembly within the
+already accepted issue scope and spend budget. It does not authorize publishing,
 extra spend, a new identity/likeness use, or a different runtime reference.
 
 Review is visual, not implied by prose. Show the recurring-character identity
@@ -258,11 +258,11 @@ Only `provider_input` is sent to Seedance. The local envelope retains approval
 and hashes that the provider schema does not accept. Do not submit unless every
 preflight receipt field passes.
 
-## Remotion Assembly Contract
+## HyperFrames Assembly Contract
 
-`ai-video-advisor` or the selected provider route generates one clip per scene
-packet. `audio-advisor` may accept operator-approved or generate voice, music, or SFX assets;
-Remotion places them. Remotion then:
+`ai-video` or the selected provider route generates one clip per scene
+packet. The `ai-video` audio mode may accept operator-approved or generate voice,
+music, or SFX assets; HyperFrames places them. HyperFrames then:
 
 - probes each clip's actual duration, fps, dimensions, and frame count;
 - sequences observed frames instead of assuming every clip is exactly 4–5 seconds;
@@ -273,7 +273,7 @@ Remotion places them. Remotion then:
 - trims weak handles and holds without inventing primary character motion; and
 - produces local still/MP4 proof plus visual and audio QA evidence.
 
-The storyboard owns why the scene changes. Remotion owns how the accepted clips
+The storyboard owns why the scene changes. HyperFrames owns how the accepted clips
 and audio assets are timed across that change. A failed primary action returns
 to the affected scene packet; it is not hidden with transition effects.
 
@@ -282,7 +282,7 @@ to the affected scene packet; it is not hidden with transition effects.
 Style-specific characters live with their profile package:
 
 ```text
-../ingest-content/references/style-profiles/<profile-id>/characters/<character-id>/
+<style-profile-package>/characters/<character-id>/
 ```
 
 Cross-style characters live under:
@@ -305,5 +305,5 @@ stitched with two hard cuts, one match cut, captions, VO, and generated SFX.
 
 Negative: one 24-second contact sheet is attached to six calls with no active
 panel IDs, the model invents different shot order each time, approved character
-art is regenerated between calls, and Remotion is expected to conceal failed
+art is regenerated between calls, and HyperFrames is expected to conceal failed
 actions with wipes. This fails the packet, reuse, and ownership contracts.

@@ -43,8 +43,8 @@ Daily or Weekly operating review.
 ## Company OS Daily
 
 The Daily cron fetches the bounded provider context, splits it by eligible
-Project, freezes one local input bundle per Project, and calls `progress-update` once
-per bundle. The skill reads project-local Farplane configuration and evidence,
+Project, freezes one local input bundle per Project, and calls `report-gen` in `daily`
+mode once per bundle. The skill reads project-local Farplane configuration and evidence,
 then emits one JSON extraction describing:
 
 - the operator-defined commercial bet and next monetization event;
@@ -119,7 +119,7 @@ a separate operating loop.
 
 ## Proof
 
-- Desired and live Daily prompts call `progress-update` once per eligible Project.
-- Desired and live Weekly prompts call `report-gen` once over complete coverage.
+- Desired and live Daily prompts call `report-gen` `daily` once per eligible Project.
+- Desired and live Weekly prompts call `report-gen` `weekly` once over complete coverage.
 - Exactly one Work Pulse heartbeat owns execution.
 - PM skills have no provider access and emit one structured local result.

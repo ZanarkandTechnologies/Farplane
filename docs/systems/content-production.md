@@ -3,7 +3,7 @@ title: "Content Production"
 status: designed
 owner: farplane-framework
 created_at: 2026-07-22
-updated_at: 2026-08-08
+updated_at: 2026-10-12
 tags:
   - farplane
   - systems
@@ -11,11 +11,9 @@ tags:
 refs:
   - docs/features/FEAT-0056-inspiration-vault.md
   - docs/features/FEAT-0073-brand-kit-approved-creative-identity.md
-  - skills/content-impl-plan/SKILL.md
   - skills/storyboard/SKILL.md
-  - skills/asset-advisor/SKILL.md
-  - skills/editing-advisor/SKILL.md
-  - skills/remotion/SKILL.md
+  - skills/ai-image/SKILL.md
+  - skills/ai-video/SKILL.md
 system_record_json: |
   {
     "id": "SYS-0012",
@@ -31,11 +29,9 @@ system_record_json: |
     "refs": [
       "docs/features/FEAT-0056-inspiration-vault.md",
       "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
-      "skills/content-impl-plan/SKILL.md",
       "skills/storyboard/SKILL.md",
-      "skills/asset-advisor/SKILL.md",
-      "skills/editing-advisor/SKILL.md",
-      "skills/remotion/SKILL.md"
+      "skills/ai-image/SKILL.md",
+      "skills/ai-video/SKILL.md"
     ],
     "last_verified": "2026-08-08"
   }
@@ -46,7 +42,7 @@ Content Production owns the reusable flow that turns an idea, approved Brand Kit
 
 ```text
 content_production(idea, brand_kit?, tasty_pack?)
-  -> ticket.md { Change Plan + Done + QA Strategy } + proof
+  -> GitHub issue { Change Plan + Done + QA Strategy } + proof
 ```
 
 ## At A Glance
@@ -70,7 +66,7 @@ The owning implementation evidence for this system split is Farplane-UI's local 
 
 ## What Belongs Here
 
-Brand Kit approved snapshots, computed Tasty Pack retrieval, Brand Kit plus optional Tasty Pack composition, creative hypotheses, low-fidelity review packets, visual storyboard notes, element realization packets, timing-master decisions, advisor handoffs, Remotion assembly, and final grounding proof.
+Brand Kit approved snapshots, computed Tasty Pack retrieval, Brand Kit plus optional Tasty Pack composition, creative hypotheses, low-fidelity review packets, visual storyboard notes, element realization packets, timing-master decisions, generation handoffs, HyperFrames assembly, and final grounding proof.
 
 ## What Belongs Elsewhere
 
@@ -81,10 +77,10 @@ Raw source capture and unresolved inspiration belong in [Source And Sidecar Syst
 - Project-level content skills own editorial eligibility, audience/channel
   defaults, account bindings, cadence, and workstream admission. They may hold
   or preempt a candidate, but they do not re-author production steps.
-- `content-impl-plan` starts only after project admission. It records the
+- `storyboard` (plan mode) starts only after project admission. It records the
   resolved Brand Kit id/revisions/prompt/elements, optional computed Tasty Pack
   ref, selected element IDs, conflict decisions, ICP, platform, proof limits,
-  and production policy in the canonical content ticket's `Change Plan`.
+  and production policy in the active GitHub issue's Change Plan.
 - The only reusable creative inputs for this path are `Brand Kit` and optional computed `Tasty Pack`; the task idea and invocation policy remain the brief.
 - Brand Kit supplies approved identity, production policy, and one kit-wide
   prompt. Its embedded element snapshots are durable production inputs, not
@@ -97,32 +93,30 @@ Raw source capture and unresolved inspiration belong in [Source And Sidecar Syst
 - `should_store_element(value, note) = is_element(value) && explicitly_selected_for_reuse(value, note)`: whole-source context belongs in capture analysis, while only operator-selected reusable components become CreativeElement rows.
 - Resource Bank captures keep optional transcript text separate from one
   freeform analysis-Markdown field. A note with future-creation intent creates
-  or reuses a thin source-addressable content ticket whose first operation is
-  `content-impl-plan`; the ticket does not require a reverse ingestion-job link.
+  or reuses a thin source-addressable content issue whose first operation is
+  `storyboard`; the issue does not require a reverse ingestion-job link.
 - Creative elements use exactly six kinds: `format`, `storyboard`, `visual`, `character`, `audio`, and `editing`.
 - Hook mechanics fold into the opening beat of `storyboard`; semantic copy folds into `storyboard`; subtitle rendering, caption timing, transitions, and cut rhythm belong to `editing`; layout remains `visual`; vocal pacing remains `audio`.
 - Constraints are production policy or Brand Kit prompt content, not `CreativeElement` rows.
 - Each production-ready element carries `description`, `whyItWorks`, `goldenExample { assetId, description? }`, and `goldenRecipe` as one prompt string.
 - Brand Kit production policy wins over conflicting Tasty Pack inspiration. Compatible Tasty Pack elements can augment the idea by role; conflicts must be selected or rejected explicitly.
 - Each selected element maps to a beat, planned artifact, advisor action, or production rule. Not every element creates a file.
-- Content Impl Plan owns orchestration and aggregation, not every child result:
-  Storyboard authors narrative/scene design; Asset Advisor resolves media;
-  Editing Advisor authors timed edit direction; Remotion implements and
-  renders; Review / QA judges readiness.
-- Visual work records an owner-separated action graph in the canonical ticket.
-  Storyboard, Asset Advisor, Editing Advisor, Remotion, and Review are distinct
-  actions; Remotion cannot begin until it receives the accepted outputs of the
-  three upstream production owners.
-- Asset Advisor may route image, video, avatar, and audio realization, but it
-  does not own edit direction, timeline assembly, or rendering. Content Impl
-  Plan orders Asset Advisor's returned realization actions without re-deciding
-  their generation route.
+- `storyboard` owns the plan and its internal steps as modes: plan (issue
+  action graph), script (narrative and scenes), assets (asset plan), and edit
+  (timed edit direction). `ai-image`, `ai-video`, and `meshy-3d-generation`
+  return accepted media; the external `hyperframes` skill composes and renders;
+  Review / QA judges readiness.
+- Visual work records an owner-separated action graph in the active GitHub
+  issue. Rendering cannot begin until the accepted script, media, and edit
+  direction exist.
+- The asset plan picks reuse, source, or a generation skill for each asset; the
+  plan orders the returned generation actions without re-deciding the route.
 - Resource Bank Creative Elements are reusable creative patterns whose
   `goldenRecipe` is conditioning data. Skill methods are executable agent
   procedures with branching, tools, gates, failure handling, and proof.
 - The approval packet names the creative hypothesis, why the combination should work, rejected conflicts, low-fidelity demo, visual storyboard notes, and exact element leverage map before final generation.
 - Timing-sensitive production chooses a timing master before final visual generation when applicable: voiceover, music, source video, or none.
-- Voice-led work locks script and voice timing before final visual prompts; music-led work selects or generates music first; source-video-led work inspects source duration first; all paths converge on Remotion with evidence.
+- Voice-led work locks script and voice timing before final visual prompts; music-led work selects or generates music first; source-video-led work inspects source duration first; all paths converge on HyperFrames with evidence.
 
 ## System Flow
 
@@ -136,12 +130,12 @@ flowchart LR
   admission["project content skill<br/>eligibility + one lifecycle slot"]:::keep
   kit["FEAT-0073<br/>Brand Kit approved snapshots<br/>one kit prompt"]:::changed
   tasty["FEAT-0056<br/>computed Tasty Pack<br/>complete element capsules"]:::changed
-  plan["content-impl-plan<br/>ticket action graph<br/>hypothesis + low-fi review"]:::added
-  storyboard["Storyboard<br/>narrative + scene design"]:::added
-  assets["Asset Advisor<br/>accepted media + provenance"]:::added
-  generation["image / video / avatar / audio<br/>asset realization"]:::added
-  edit["Editing Advisor<br/>timed edit direction"]:::added
-  render["Remotion<br/>timeline + rendered video"]:::added
+  plan["storyboard plan<br/>issue action graph<br/>hypothesis + low-fi review"]:::added
+  storyboard["storyboard script<br/>narrative + scene design"]:::added
+  assets["storyboard assets<br/>accepted media + provenance"]:::added
+  generation["ai-image / ai-video / meshy<br/>asset realization"]:::added
+  edit["storyboard edit<br/>timed edit direction"]:::added
+  render["HyperFrames<br/>timeline + rendered video"]:::added
   proof["grounding proof<br/>element-to-output map"]:::added
 
   idea --> admission
@@ -168,27 +162,26 @@ Content Production converts approved identity and optional inspiration into a bo
 
 - `docs/features/FEAT-0056-inspiration-vault.md`
 - `docs/features/FEAT-0073-brand-kit-approved-creative-identity.md`
-- `skills/content-impl-plan/SKILL.md`
 - `skills/storyboard/SKILL.md`
-- `skills/asset-advisor/SKILL.md`
-- `skills/audio-advisor/SKILL.md`
-- `skills/ai-image-advisor/SKILL.md`
-- `skills/ai-video-advisor/SKILL.md`
-- `skills/avatar-advisor/SKILL.md`
-- `skills/editing-advisor/SKILL.md`
-- `skills/remotion/SKILL.md`
+- `skills/ai-image/SKILL.md`
+- `skills/ai-video/SKILL.md`
+- `skills/meshy-3d-generation/SKILL.md`
+- external `hyperframes` skill (composition and render)
 
 ## Proof And Maintenance
 
 - Registry proof: `python3 docs/features/validate_features.py`.
 - Link proof: `python3 bin/validators/check_doc_refs.py`.
-- Ticket proof: `farplane ticket check <ticket> --phase planning`.
 - Update this system page when the composition policy, timing-master policy, or feature membership changes.
 - Update feature pages when Brand Kit or Tasty Pack behavior changes.
 - Regenerate registries and commit generated outputs with the source docs.
 
 ## Change History
 
+- 2026-10-12: Marketing unit merge (#41): `storyboard` absorbs content-impl-plan,
+  asset-advisor, and editing-advisor as modes; generation is `ai-image` and
+  `ai-video`; HyperFrames replaces Remotion for rendering; the action graph
+  lives on the GitHub issue.
 - 2026-08-08: Made the canonical content ticket the sole action-graph
   container; removed the duplicate JSON projection and validator.
 - 2026-08-04: Separated project admission/configuration from the reusable

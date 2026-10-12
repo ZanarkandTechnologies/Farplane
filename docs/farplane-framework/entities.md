@@ -384,7 +384,7 @@ relationship bullet and define the exact question in the same entity file:
 ## Relationships
 
 - Supplies aluminum housings to [Acme Motors](entity:acme). [^q-20260720-01]
-  Source: [Research call](../customer-research/reports/2026-07-13-call.md).
+  Source: [Research call](../prospect/reports/2026-07-13-call.md).
 
 ## Question index
 

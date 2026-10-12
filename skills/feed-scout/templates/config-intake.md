@@ -10,7 +10,7 @@ feed_scout:
       kind: person
       instructions: >-
         Track concrete product and operating-model changes. Propose valuable
-        product features as planner candidates.
+        product features as report candidates.
       owned_sources:
         x:
           url: https://x.com/example

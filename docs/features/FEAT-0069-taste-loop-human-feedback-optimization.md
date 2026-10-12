@@ -3,15 +3,13 @@ title: Retired Taste Loop human-feedback optimization
 status: retired
 owner: feature-registry
 created_at: 2026-07-07
-updated_at: 2026-07-11
+updated_at: 2026-10-12
 tags:
   - farplane
   - feature
   - sys-0007
 refs:
-  - skills/dogfood-review/SKILL.md
   - skills/goal-advisor/references/human-feedback.md
-  - skills/pulse-update/SKILL.md
   - docs/features/FEAT-0070-experimental-feature-evaluation-reports.md
   - docs/features/FEAT-0071-project-work-pulse.md
 feature_id: FEAT-0069
@@ -19,17 +17,15 @@ system_id: SYS-0007
 category: improvement-loop
 public: true
 surfaces:
-  - skills/dogfood-review/SKILL.md
   - skills/goal-advisor/references/human-feedback.md
-  - skills/pulse-update/SKILL.md
 source_refs:
   - docs/systems/self-improvement-learning.md
   - docs/prd.md
 external_refs: []
 evidence_refs: []
-known_limits: "Retired as a standalone controller; human-feedback experiments now use normal ticket Goal Packets and the shared Work Pulse."
+known_limits: "Retired as a standalone controller; human-feedback experiments now use normal GitHub-issue Goal Packets with the goal-advisor human-feedback preset."
 metrics: []
-last_verified: 2026-07-11
+last_verified: 2026-10-12
 experimental: false
 superseded_by:
   - FEAT-0070
@@ -59,6 +55,11 @@ This decomposition also prevents human-taste work from becoming a second
 project heartbeat. The only heartbeat is Work Pulse; weekly Dogfood creates a
 bounded improvement wave and all execution stays on the shared board.
 
+Both successors were later retired in #41 when `dogfood-review` and
+`pulse-update` were deleted. Human-feedback experiments now run as ordinary
+GitHub-issue Goal Packets using the goal-advisor
+[human-feedback preset](../../skills/goal-advisor/references/human-feedback.md).
+
 ## CRM Boundary
 
 Prospects and customers are durable CRM records, not long-lived BAU tickets.
@@ -71,3 +72,4 @@ do not consume Work Pulse worker or review WIP capacity.
 - 2026-07-07: Created as an experimental Taste Loop handle.
 - 2026-07-11: Retired by TASK-0326; behavior decomposed into self-improvement
   ticket supply, Work Pulse execution/check-ins, and ticket-owned review state.
+- 2026-10-12: Dropped the deleted Dogfood and Pulse skill refs (#41).

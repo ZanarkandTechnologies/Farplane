@@ -2,6 +2,8 @@
 # `department` is a single declared department membership, not a technical tag.
 
 [departments]
+leadership = "Leadership"
+delivery = "Delivery"
 "back-office" = "Back Office"
 sales = "Sales"
 deals = "Deals"

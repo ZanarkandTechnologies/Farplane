@@ -485,10 +485,7 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
             errors.append(f"explicit edge lacks evidence_ref: {edge}")
     required_nodes = [
         "skill:init-advisor",
-        "skill:metric-advisor",
         "skill:goal-advisor",
-        "skill:pulse-update",
-        "skill:progress-update",
         "skill:report-gen",
         "skill:doc-advisor",
         "skill:manage-wiki",

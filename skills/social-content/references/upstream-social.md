@@ -1,10 +1,11 @@
----
-name: ai-social-media-content
-description: "Create AI-powered social media content for TikTok, Instagram, YouTube, Twitter/X. Generate: images, videos, reels, shorts, thumbnails, captions, hashtags. Tools: FLUX, Veo, Seedance, Wan, Kokoro TTS, Claude for copywriting. Use for: content creators, social media managers, influencers, brands. Triggers: social media content, tiktok, instagram reels, youtube shorts, twitter post, content creator, ai influencer, social content, reels, shorts, viral content, thumbnail generator, caption generator, hashtag generator, ugc content"
-allowed-tools: Bash(belt *)
----
-
 # AI Social Media Content
+
+> Upstream reference adapted from the inference.sh skills collection. Owner:
+> `social-content` ([SKILL.md](../SKILL.md)). Use it for platform specs, format
+> rules and examples only. Do not run the `belt` commands below: route paid
+> images to [ai-image](../../ai-image/SKILL.md) and clips to
+> [ai-video](../../ai-video/SKILL.md) (paid calls go through `treg` within the
+> spend cap), and posting or scheduling to [zernio](../../zernio/SKILL.md).
 
 Create social media content for all platforms via [inference.sh](https://inference.sh) CLI.
 
@@ -231,21 +232,8 @@ done
 
 ## Related Skills
 
-```bash
-# Video generation
-npx skills add inference-sh/skills@ai-video-generation
-
-# Image generation
-npx skills add inference-sh/skills@ai-image-generation
-
-# Twitter automation
-npx skills add inference-sh/skills@twitter-automation
-
-# Text-to-speech for voiceovers
-npx skills add inference-sh/skills@text-to-speech
-
-# Full platform skill
-npx skills add inference-sh/skills@infsh-cli
-```
-
-Browse all apps: `belt app list`
+- [social-content](../SKILL.md) owns the draft; [zernio](../../zernio/SKILL.md)
+  owns posting, scheduling and account metrics.
+- [ai-image](../../ai-image/SKILL.md) for stills and slides,
+  [ai-video](../../ai-video/SKILL.md) for clips, and
+  [storyboard](../../storyboard/SKILL.md) for video scripts.

@@ -15,8 +15,9 @@ technical implementation tag and it does not imply that one skill invokes anothe
 
 | ID | Label | Owns in the constellation |
 | --- | --- | --- |
+| `leadership` | Leadership | advice, framing, planning, business review, goals, and reports |
 | `back-office` | Back Office | finance, internal records, people, office administration |
-| `sales` | Sales | targeting, outreach, and sequencing |
+| `sales` | Sales | prospects, approaches, offers, and proposals |
 | `deals` | Deals | replies, calls, solution shaping, and closing |
 | `marketing` | Marketing | content, brand, creative, distribution, and channels |
 | `operations` | Operations | delivery systems, builds, automation, and internal operations |
@@ -24,8 +25,8 @@ technical implementation tag and it does not imply that one skill invokes anothe
 | `customer` | Customer | support, success, and community |
 
 The Capability Map is organized by **specialist desks**. A specialist groups
-skill variants that one office employee offers (for example `reporter` holds
-`progress-update`, `report-gen`, `recap-task`, and `dogfood-review`).
+skill variants that one office employee offers (for example `engineer` holds
+`impl-plan`, `code-health`, `pr-review-watch`, and `pr-splitting`).
 `config/skill-workflows.toml` `[specialists]` owns each desk's label, department,
 deliverable, primary skill (its default verb), and member `skills`. A member
 must be in the desk's department and sits at only one desk; the

@@ -359,22 +359,22 @@ capability:
     def test_projects_specialist_from_the_desk_table(self) -> None:
         desks = (
             '[specialists.reporter]\nlabel = "Reporter"\ndepartment = "operations"\n'
-            'deliverable = "a report"\nprimary = "recap-task"\nskills = ["recap-task"]\n'
+            'deliverable = "a report"\nprimary = "report-gen"\nskills = ["report-gen"]\n'
         )
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             (repo / "config").mkdir()
             (repo / "config" / "skill-workflows.toml").write_text(desks)
-            write_skill(repo, "recap-task", department="operations")
+            write_skill(repo, "report-gen", department="operations")
             write_skill(repo, "writer", department="operations")
             rows = {row["name"]: row for row in sync_skill_registry.build_registry(repo)}
-            self.assertEqual(rows["recap-task"]["specialist"], "reporter")
+            self.assertEqual(rows["report-gen"]["specialist"], "reporter")
             self.assertNotIn("specialist", rows["writer"])
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             (repo / "config").mkdir()
             (repo / "config" / "skill-workflows.toml").write_text(desks)
-            write_skill(repo, "recap-task", department="marketing")
+            write_skill(repo, "report-gen", department="marketing")
             with self.assertRaisesRegex(sync_skill_registry.RegistryError, "specialist 'reporter' requires"):
                 sync_skill_registry.build_registry(repo)
 

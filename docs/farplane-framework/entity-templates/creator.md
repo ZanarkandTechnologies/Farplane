@@ -47,13 +47,13 @@ roles:
 <!-- social-content, storyboard, copywriting-advisor -->
 
 ### Offers and sales
-<!-- review-offer, copywriting-advisor, personalized-offer -->
+<!-- review-business (offer), copywriting-advisor, approach, proposal-pricing -->
 
 ### Outreach and relationships
-<!-- first-value-outreach, review-leads, customer-research -->
+<!-- prospect, approach, review-business (leads) -->
 
 ### Strategy and money
-<!-- review-model, advise -->
+<!-- review-business (model), advise -->
 
 ### Fundraising and deals
 

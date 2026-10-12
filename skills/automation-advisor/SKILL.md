@@ -13,9 +13,9 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill to create, revise, or audit Farplane Codex automations. Work
-Pulse is the only heartbeat and owns ticket execution. Company OS Daily and
-Weekly, Feed Scout, Dogfood, and maintenance are separate `cron` records.
+Use this skill to create, revise, or audit Farplane Codex automations. A
+project defines at most one heartbeat. Company OS Daily and Weekly, Feed Scout,
+and maintenance are separate `cron` records.
 
 Every live job lives in its owning workspace's `farplane/automations/*.md`, one
 file per routine, schema `farplane_project_automation`, tagged with the
@@ -29,8 +29,9 @@ add a compiler, scheduler thread, or second manifest.
 An automation prompt calls one owning skill. The automation owns integration
 access, collection, pagination, frozen source caches, rendering, provider
 effects, and readback. The skill reads only local inputs and writes exactly one
-structured extraction. Company OS Daily fans out one `$progress-update` call per
-eligible Project; Weekly calls `$report-gen` once over the complete frozen set.
+structured extraction. Company OS Daily fans out one `$report-gen` daily call
+per eligible Project; Weekly calls `$report-gen` weekly once over the complete
+frozen set.
 The former Interval workflow is removed and must not be restored or bound to
 Daily or Weekly.
 
@@ -51,8 +52,7 @@ state: reads(active feature/spec, farplane/automations/?, current prompts,
 gates: loop_choice; cadence; one_owning_skill; full_parseable_record;
   file_in_file_out_boundary; side_effect_gates; one_heartbeat;
   no_hidden_scheduler
-routes: pulse-update | progress-update | report-gen | feed-scout | dogfood-review |
-  goal-advisor | review
+routes: report-gen | feed-scout | goal-advisor | review
 fails: logs in tracked config; provider access inside pm skills; generated
   prompt fragments; second heartbeat; active Daily/Weekly interval binding;
   ticket creation or execution from Company OS reviews
@@ -62,7 +62,7 @@ fails: logs in tracked config; provider access inside pm skills; generated
 ## Todo List
 
 - [ ] 1. Classify the recurring job.
-  - [ ] Keep Pulse as the only heartbeat and ticket executor.
+  - [ ] Keep at most one heartbeat per project.
   - [ ] Use Company OS Daily/Weekly for project memory and money-linked review.
   - [ ] Use cron for every report, source, self-improvement, or maintenance pass.
 - [ ] 2. Bind current project surfaces.
@@ -98,10 +98,10 @@ fails: logs in tracked config; provider access inside pm skills; generated
 - [ ] 5. Activate when the accepted task includes live integration.
   - [ ] Inspect live Codex automations and update matching records instead of
         creating duplicates. Follow [live activation](references/live-activation.md).
-  - [ ] Preserve IDs, cadence, target, model, reasoning, status, and the single
-        Pulse heartbeat unless the accepted change explicitly alters one.
+  - [ ] Preserve IDs, cadence, target, model, reasoning, status, and any
+        heartbeat unless the accepted change explicitly alters one.
 - [ ] 6. Validate and review.
-  - [ ] Parse YAML front matter and use the body as the prompt; verify required fields, one `$pulse-update` heartbeat,
+  - [ ] Parse YAML front matter and use the body as the prompt; verify required fields, at most one heartbeat,
         Company OS prompt/skill parity, and no active Interval binding.
   - [ ] Verify Daily has one local skill call per eligible Project and Weekly
         has one call over a complete frozen set.
@@ -111,7 +111,6 @@ fails: logs in tracked config; provider access inside pm skills; generated
 ## Templates
 
 - [Company OS automation](templates/company-os-automation.md)
-- [Pulse automation](templates/pulse-automation.md)
 - [Live activation](references/live-activation.md)
 
 ## Gotchas
@@ -140,5 +139,5 @@ skills_provider_writes: 0
 automation_renders_and_applies: yes
 existing_issue_actions_only: yes
 multica_execution: none
-pulse_heartbeat_count: 1
+heartbeat_count: 0 | 1
 ```

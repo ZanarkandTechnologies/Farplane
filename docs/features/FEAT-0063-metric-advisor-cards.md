@@ -1,20 +1,20 @@
 ---
-title: Metric advisor cards
+title: Metric cards
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-08-13
+updated_at: 2026-10-12
 tags:
   - farplane
   - feature
   - sys-0007
 refs:
-  - skills/metric-advisor
+  - skills/goal-advisor/SKILL.md
   - docs/skills/README.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
-  - skills/metric-advisor/SKILL.md
-  - skills/metric-advisor/evals/evals.json
+  - skills/goal-advisor/references/metrics.md
+  - skills/goal-advisor/evals/evals.json
   - bin/core/farplane_project_snapshot.py
   - bin/validators/check_farplane_project_files.py
 feature_id: FEAT-0063
@@ -22,7 +22,7 @@ system_id: SYS-0007
 category: skills
 public: true
 surfaces:
-  - skills/metric-advisor
+  - skills/goal-advisor/references/metrics.md
   - docs/skills/README.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
@@ -32,20 +32,22 @@ source_refs:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 external_refs: []
 evidence_refs:
-  - skills/metric-advisor/SKILL.md
-  - skills/metric-advisor/evals/evals.json
+  - skills/goal-advisor/references/metrics.md
+  - skills/goal-advisor/evals/evals.json
 known_limits: Advisory metric-card authoring still depends on truthful refreshers and observations. Core projects equal calendar windows but does not infer missing daily facts; refreshers must emit zero or a source gap when absence is meaningful.
 metrics:
   - metric_card_traceability_pass
   - skill_eval_query_lint_pass
-last_verified: 2026-07-25
+last_verified: 2026-10-12
 experimental: false
 superseded_by: false
 ---
-# Metric advisor cards
+# Metric cards
 
-Metric advisor cards exists to turn fuzzy improvement goals into honest metric cards
-with direction, guards, and anti-metrics. It belongs to [Self-Improvement And
+Metric cards exist to turn fuzzy improvement goals into honest metric cards
+with direction, guards, and anti-metrics. The card lives in `goal-advisor` as
+[`references/metrics.md`](../../skills/goal-advisor/references/metrics.md);
+the standalone `metric-advisor` skill was absorbed there in #41. It belongs to [Self-Improvement And
 Learning](../systems/self-improvement-learning.md) and keeps `FEAT-0063` as a stable
 capability handle because the behavior has an owner, proof path, and maintenance
 boundary.
@@ -70,7 +72,7 @@ metric_card(objective, evidence)
 Optimization work becomes sloppy when agents choose convenient numbers that do not match
 the actual objective.
 
-Metric advisor cards force the metric, guardrails, failure modes, and evidence route to
+Metric cards force the metric, guardrails, failure modes, and evidence route to
 be stated before self-improvement or productization claims.
 
 ## What It Does
@@ -114,7 +116,7 @@ flowchart TD
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   trigger["Trigger<br/>objective needs an honest measure"]:::keep
-  owner["Owner surface<br/>skills/metric-advisor<br/>self-improvement docs"]:::changed
+  owner["Owner surface<br/>goal-advisor metric card<br/>self-improvement docs"]:::changed
   readers["Files and fields read<br/>objective, evidence source<br/>primary metric, guard metrics<br/>anti-metrics and failure modes"]:::keep
   card["Metric card<br/>direction + falsifiable measurement<br/>consumer workflow update"]:::added
   movement["Core projection<br/>dated facts + requested window<br/>-> current + comparison + cumulative? + trend"]:::added
@@ -136,7 +138,7 @@ Legend:
 
 Owner surfaces:
 
-- `skills/metric-advisor`
+- `skills/goal-advisor/references/metrics.md`
 - `docs/skills/README.md`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 - `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
@@ -147,8 +149,8 @@ Source context:
 
 Evidence:
 
-- `skills/metric-advisor/SKILL.md`
-- `skills/metric-advisor/evals/evals.json`
+- `skills/goal-advisor/references/metrics.md`
+- `skills/goal-advisor/evals/evals.json`
 
 ## End-To-End Contract
 
@@ -259,3 +261,6 @@ Acceptance signals:
 - 2026-07-26: Replaced consecutive-reading movement with the lean
   flow/stock definition and equal-window current, comparison, cumulative, and
   trend projection contract.
+- 2026-10-12: Moved the metric card into `goal-advisor`
+  (`references/metrics.md`, evals in `evals/evals.json`) when #41 absorbed the
+  standalone skill.

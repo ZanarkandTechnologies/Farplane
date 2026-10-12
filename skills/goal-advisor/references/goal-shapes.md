@@ -49,8 +49,8 @@ rollout_goal(pattern, sample_proof, target_set)
   -> staged_batches + child_tickets? + rollout_progress
 ```
 
-Use after one or a few examples prove the pattern. Promote to a reusable skill
-only after repeated use proves the trigger and workflow.
+Use after one or a few examples prove the pattern; the exemplar-first
+procedure is the rollout preset in [loop presets](loop-presets.md).
 
 ## Batch Goal
 

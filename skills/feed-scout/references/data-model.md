@@ -358,7 +358,7 @@ Rules:
 - Keep the live file at or under 100 non-empty lines. Demote detail to the
   dated Feed Scout report when memory pressure appears.
 - Scout Brief is optional evidence. It never overrides metrics, ticket history,
-  authority, or the planner's admission gates.
+  authority, or the operator's pick.
 - Validate the final file with `scripts/validate_scout_brief.py`; the helper checks
   line cap, simple syntax, structure, and provenance affordances but does not
   author or rank content.
@@ -378,56 +378,13 @@ ProposalDraft {
   source_refs: string[]
   scout_runs: string[]
   handoff_body?: string
-  destination: "proposal_ledger" | "local_inbox" | "notion_tasks"
-  task_projection?: NotionTaskProjection
+  destination: "proposal_ledger" | "local_inbox"
 }
 ```
 
-Use the `harness-scout` handoff body for strong adopt/adapt items. The content
-title alone is not enough task body.
-
-## NotionTaskProjection
-
-`NotionTaskProjection` is required only when feed-scout writes to a live Tasks
-database. It prevents a half-created task from looking complete when workspace
-routing fields were never resolved.
-
-```text
-RelationRef {
-  handle: string
-  page_url?: string
-  source: "operator_context" | "parent_context" | "private_context" | "operator_asserted"
-}
-
-ProjectionVerification {
-  page_url?: string
-  project_present: boolean
-  areas_present: boolean
-  checked_at: string
-  status: "passed" | "routing_missing" | "write_failed"
-}
-
-NotionTaskProjection {
-  title: string
-  body_source: "harness_scout_handoff" | "research_synthesis_handoff" | "operator_summary"
-  project_relation?: RelationRef
-  areas_relations: RelationRef[]
-  routing_status: "resolved" | "routing_missing" | "local_only"
-  routing_evidence: string[]
-  readback?: ProjectionVerification
-}
-```
-
-Rules:
-
-- `project_relation` and at least one `areas_relations` entry are required for
-  `routing_status=resolved`.
-- Reusable skill files, templates, fixtures, and docs must use relation handles
-  or placeholder URLs, not private database IDs or page IDs.
-- A live Tasks write may claim success only after readback confirms both
-  `project_present=true` and `areas_present=true`.
-- If routing cannot be resolved, write to the proposal ledger or local inbox
-  with `routing_status=routing_missing` instead of creating a partial task.
+Use the single-source run's decision and evidence for strong adopt/adapt
+items. The content title alone is not enough body. Feed Scout never writes a
+ticket, issue, or Notion task from a proposal; the operator picks.
 
 ## Promotion Rule
 

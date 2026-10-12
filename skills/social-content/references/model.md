@@ -36,6 +36,12 @@ social-content:carousel :=
 social-content:linkedin :=
   professional/founder/B2B voice, hiring post, thought leadership,
   LinkedIn-native post, or LinkedIn carousel adaptation
+
+social-content:x :=
+  X post, thread, quote-post, or reply chain as a numbered tweet stack
+
+social-content:newsletter :=
+  recurring newsletter issue or newsletter blueprint from verified material
 ```
 
 ## Method Selection Rule
@@ -64,7 +70,9 @@ ExecutionPacket :=
 + qa_assertions
 ```
 
-`social-content` owns the selected social artifact decision. `x-thread` owns
-X-native thread copy. `ai-image-advisor`,
-`ai-video-advisor`, `remotion`, `remotion-render`, and `impl-plan` own
-production routes when the packet needs them.
+`social-content` owns the selected social artifact decision across all modes
+(`x`, `linkedin`, `carousel`, `cross-platform`, `newsletter`).
+[ai-image](../../ai-image/SKILL.md), [ai-video](../../ai-video/SKILL.md),
+[storyboard](../../storyboard/SKILL.md), [copywriting](../../copywriting/SKILL.md)
+and [impl-plan](../../impl-plan/SKILL.md) own production routes when the packet
+needs them; [zernio](../../zernio/SKILL.md) owns posting and scheduling.

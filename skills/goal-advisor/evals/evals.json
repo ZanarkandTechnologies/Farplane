@@ -446,6 +446,183 @@
           "notes": "Ported from optimize-with-human (#41); human ranking is a signal, not the selector."
         }
       }
+    },
+    {
+      "id": "goal_advisor_ml_preset_pipeline_smoke_01",
+      "prompt": "Set up a small image-model improvement campaign. The evaluator and GPU cap are fixed. Our notes say large crop scales hurt small-object recall, area-aware sampling may help, and aggressive augmentation can erase tiny features. Show the initial research plan and what the loop should do if its first experiment misses.",
+      "expected_output": "Freezes and records the baseline; Extracts techniques, mechanisms, variables, and failure conditions; Seeds a small hypothesis tree with expected outcomes and falsifiers; Applies choose-next and uses one compounding-leverage comparison because several initial moves need judgment; Replans from the result with bounded diagnostics rather than following a fixed ladder",
+      "files": [],
+      "assertions": [
+        "Freezes the evaluator, data boundary, metric, guards, GPU budget, and unchanged baseline before mutation",
+        "Extracts techniques, mechanisms, variables, failure conditions, and source refs into a small initial hypothesis tree",
+        "Gives each initial hypothesis an expected observation, falsifier, and logical compounding-reward basis, then applies choose-next and makes one ordinal choose-next comparison without a tournament because several moves are plausible",
+        "After the miss, updates the tree before progress and uses bounded diagnostic children or a credible sibling instead of continuing a fixed roadmap"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "ML preset pipeline smoke",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "ml-preset",
+            "smoke"
+          ],
+          "notes": "One lightweight canary for baseline, source seeding, selection, and evidence-driven replanning."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_ml_preset_resolves_diagnostic_cause_01",
+      "prompt": "The transfer experiment and its follow-up diagnostics are finished. Reconcile the attached campaign state, decide what caused the miss, and give the final stakeholder conclusion.",
+      "expected_output": "Uses controlled diagnostics rather than the bad score alone; Supports lithology shift and falsifies resolution; Propagates valid evidence to the parent; Gives a bounded failed-because conclusion; Updates the tree before progress",
+      "files": [
+        "skills/goal-advisor/evals/fixtures/domain-transfer-resolved.json"
+      ],
+      "assertions": [
+        "Treats the performance failure and causal diagnosis as separate decisions",
+        "Treats lithology shift as supported and grid resolution as falsified from the completed diagnostics",
+        "Updates the parent insight and evidence refs with the valid diagnostic evidence before progress",
+        "States that transfer failed because of lithology shift within the tested campaign boundary without inventing another cause"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "ML preset reports a proven cause",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "ml-preset",
+            "causal-proof"
+          ],
+          "notes": "Happy path: a controlled diagnostic isolates the root cause."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_ml_preset_refuses_unproven_cause_01",
+      "prompt": "The cross-region run missed its target. Local training is better and a geology note says the regions differ, but the grid resolutions also differ and no matched ablation has run. The team wants a confident reason and wants to close today. Reconcile the attached campaign state.",
+      "expected_output": "Records the tested performance failure but keeps its cause unresolved; Treats local performance and research as clues; Preserves one bounded discriminator; Refuses a fabricated failed-because conclusion; Updates the tree before progress",
+      "files": [
+        "skills/goal-advisor/evals/fixtures/domain-transfer-unresolved.json"
+      ],
+      "assertions": [
+        "Records that the tested transfer configuration failed its control without treating the score as a cause",
+        "Explains that target-local performance and background research do not isolate domain shift from resolution",
+        "Keeps the parent causal status unresolved and preserves one authorized discriminating diagnostic",
+        "Refuses a confident failed-because conclusion and updates the tree before progress"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "ML preset leaves an unproven cause unresolved",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "ml-preset",
+            "causal-restraint"
+          ],
+          "notes": "Negative path: plausible clues are not causal isolation."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_ml_preset_rejects_drifted_diagnostic_receipt_01",
+      "prompt": "The follow-up run is complete and the campaign tree marks a cause as supported. Reconcile the attached state and close the campaign if the evidence is defensible.",
+      "expected_output": "Checks receipt integrity before trusting the tree label; Names evaluator and split drift; Keeps the invalid receipt append-only but removes it from causal support; Makes the cause unresolved and packet stale; Does not run again or use failed-because language",
+      "files": [
+        "skills/goal-advisor/evals/fixtures/domain-transfer-drifted-diagnostic.json"
+      ],
+      "assertions": [
+        "Names evaluator_hash eval-v2 versus eval-v1 and data_split_hash target-split-v2 versus target-split-v1",
+        "Preserves the drifted receipt append-only while removing it from diagnostic and parent causal evidence",
+        "Keeps the parent performance claim falsified but changes the stale supported diagnostic and parent cause to unresolved",
+        "Marks the packet stale, authorizes only Goal Advisor regeneration, and avoids a failed-because conclusion"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "ML preset rejects invalid causal evidence",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "ml-preset",
+            "integrity"
+          ],
+          "notes": "Integrity boundary: state labels cannot override a drifted receipt."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_metric_card_no_fake_metric_01",
+      "prompt": "We need to make our ticket plans feel easier to approve, but there is no command or benchmark for it yet. What metric should we use?",
+      "expected_output": "States that no honest mechanical metric exists yet or uses none mechanical; Chooses review, human_feedback, or hybrid as the provider instead of fake precision; Defines pass/fail or accept/revise criteria with judgment questions; Adds guard metrics around concrete proof, scope creep, and operator control; Names anti-metrics such as long prose, approval theater, or numeric confidence theater; Routes to review, goal-advisor, or impl-plan proof wording rather than retired autoresearch skills",
+      "files": [],
+      "assertions": [
+        "States that no honest mechanical metric exists yet or uses none mechanical",
+        "Chooses review, human_feedback, or hybrid as the provider instead of fake precision",
+        "Defines pass/fail or accept/revise criteria with judgment questions",
+        "Adds guard metrics around concrete proof, scope creep, and operator control",
+        "Names anti-metrics such as long prose, approval theater, or numeric confidence theater",
+        "Routes to review, goal-advisor, or impl-plan proof wording rather than retired autoresearch skills"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Metric card rejects fake numeric quality scores",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "metric-card",
+            "no-fake-precision"
+          ],
+          "notes": "Protects the primitive from pretending qualitative approval can become a reliable number without a real provider."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_metric_card_experiment_expectation_01",
+      "prompt": "We're changing the support agent prompt because six of twenty held-out cases currently miss the escalation policy. Before we run the same cases again, define what result would actually support the hypothesis and what should happen if the result is very different.",
+      "expected_output": "Builds an eval-backed metric card with the held-out miss count as the primary signal; Preregisters an expected aggregate observation before the run, including direction or meaningful band, horizon, named confidence, falsifier, and surprise trigger; Treats both a disappointing result and an implausibly perfect result as possible surprises; Keeps hidden answer keys or reference points out of the user-facing eval prompts; Routes a material causal surprise to agent-qa-test:experiment without taking over execution",
+      "files": [],
+      "assertions": [
+        "Builds an eval-backed metric card with the held-out miss count as the primary signal",
+        "Preregisters an expected aggregate observation before the run, including direction or meaningful band, horizon, named confidence, falsifier, and surprise trigger",
+        "Treats both a disappointing result and an implausibly perfect result as possible surprises",
+        "Keeps hidden answer keys or reference points out of the user-facing eval prompts",
+        "Routes a material causal surprise to agent-qa-test:experiment without taking over execution"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Metric card preregisters an experiment expectation",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "metric-card",
+            "experiment-expectation"
+          ],
+          "notes": "Tests the immediate expected-observation layer without confusing it with grading truth or delayed Reward."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_metric_card_deterministic_no_expectation_01",
+      "prompt": "This ticket only renames a documented command and updates all references. The proof is a search plus the existing validators. Do we need to invent a hypothesis and confidence score before doing it?",
+      "expected_output": "Uses mechanical checks for the deterministic change; Does not invent an experiment hypothesis, expected observation band, or confidence score; Keeps the normal metric, guard, anti-metric, and proof route; Explains that the expectation block is only for causal, comparative, or uncertainty-reducing work",
+      "files": [],
+      "assertions": [
+        "Uses mechanical checks for the deterministic change",
+        "Does not invent an experiment hypothesis, expected observation band, or confidence score",
+        "Keeps the normal metric, guard, anti-metric, and proof route",
+        "Explains that the expectation block is only for causal, comparative, or uncertainty-reducing work"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Metric card does not force experiments onto deterministic work",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "metric-card",
+            "non-trigger"
+          ],
+          "notes": "Protects the optional boundary of the expectation contract."
+        }
+      }
     }
   ]
 }

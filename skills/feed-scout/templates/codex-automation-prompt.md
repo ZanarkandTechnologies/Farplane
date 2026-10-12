@@ -34,17 +34,16 @@ Steps:
 7. Only after the report and Scout Brief exist, project up to the configured proposal
    cap. Require canonical ICP and complete selected source-backed facts, a named baseline/default,
    intended belief or workflow delta, canonical source evidence, strong signal,
-   active-ticket dedupe, executable scope, Reward, proof, stop condition,
-   authority, and ticket quality. Link accepted and rejected candidates back
-   into the report.
-8. Write candidates to the proposal ledger for normal planning. Do not create,
-   assign, start, or update a Multica issue from Feed Scout.
+   open-issue dedupe, executable scope, Reward, proof, stop condition, and
+   authority. List accepted and rejected candidates in the report.
+8. Write candidates to the proposal ledger for the operator to pick. Do not
+   create, assign, start, or update any issue, ticket, or task from Feed Scout.
 9. Return report path, feed path, Scout Brief update receipt, proposal refs,
    rejections, source gaps, cap, and a no-execution receipt.
 
 When instructions ask for new sources, entity/thesis changes, or product
 features, route them respectively to the existing proposal ledger, promotion
-review evidence, or planner candidates. Only sources configured at run start
+review evidence, or report candidates. Only sources configured at run start
 may nominate sources; nominees cannot be fetched recursively or added to config
 inside the run.
 

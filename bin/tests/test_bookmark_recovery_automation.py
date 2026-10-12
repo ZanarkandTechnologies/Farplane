@@ -10,7 +10,7 @@ class BookmarkRecoveryAutomationTests(unittest.TestCase):
     def test_record_calls_one_skill_and_preserves_boundaries(self) -> None:
         prompt = (ROOT / "farplane/automations/steps/bookmark-recovery.md").read_text(encoding="utf-8").split("---\n", 2)[2]
         self.assertEqual(prompt.count("$bookmark-recovery"), 2)
-        self.assertNotIn("$progress-update", prompt)
+        self.assertNotIn("$report-gen", prompt)
         self.assertIn("provider_mutations: 0", prompt)
         self.assertIn("resource_bank_writes: 0", prompt)
         self.assertIn("project_memory_writes: 0", prompt)

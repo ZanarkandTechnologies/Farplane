@@ -20,11 +20,11 @@ class AutomationFileTests(unittest.TestCase):
             folder = root / "farplane" / "automations"
             folder.mkdir(parents=True)
             (folder / "work-pulse.md").write_text(
-                '---\nid: pulse\nname: Work Pulse\nkind: heartbeat\nstatus: active\n---\nUse $pulse-update.\n',
+                '---\nid: pulse\nname: Work Pulse\nkind: heartbeat\nstatus: active\n---\nRun the heartbeat.\n',
                 encoding="utf-8",
             )
             (folder / "daily.md").write_text(
-                '---\nid: daily\nname: Daily\nkind: cron\nstatus: paused\n---\nUse $progress-update.\n',
+                '---\nid: daily\nname: Daily\nkind: cron\nstatus: paused\n---\nUse $report-gen.\n',
                 encoding="utf-8",
             )
 

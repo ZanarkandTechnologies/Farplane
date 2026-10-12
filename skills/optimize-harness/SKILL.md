@@ -16,7 +16,7 @@ allowed-tools: Read, Glob, Grep, Bash
 Use this when Farplane should behave differently, not merely be explained. It
 owns the end-to-end behavior-gap loop: diagnose, place, prove, change or
 experiment, then accept, hold, or roll back. Lower-level skills retain their
-own artifacts: `harness-advisor`, `metric-advisor`, `eval`, and
+own artifacts: `harness-advisor`, the `goal-advisor` metric card, `eval`, and
 implementation owners.
 
 ## Skill Signature
@@ -53,7 +53,7 @@ writes: placement/proof decision and changed owner artifact when accepted
 - [ ] **N3 — Place one owner and its success signal.**
   `gap report + loss term -> primary owner + rejected surfaces + reward | metric branch`
 
-  Rule: Use `metric-advisor` when the reward signal
+  Rule: Use the `goal-advisor` metric card when the reward signal
   is missing, then [harness-advisor](../harness-advisor/SKILL.md) to select the
   primary owner. Return a smaller metric or leverage route when no full loop is
   needed.

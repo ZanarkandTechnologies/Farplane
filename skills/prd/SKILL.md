@@ -15,7 +15,7 @@ common_chains:
 
 - [ ] Read the current project surfaces before asking: `docs/prd.md`, active
   ticket, `docs/features/`, and `docs/MEMORY.md` when it answers a named question.
-- [ ] Use [customer-research](../customer-research/SKILL.md)
+- [ ] Use [prospect](../prospect/SKILL.md)
   when audiences, jobs, user stories, contexts, friction, or success criteria
   are not already grounded.
 - [ ] Use [research](../research/SKILL.md) when product

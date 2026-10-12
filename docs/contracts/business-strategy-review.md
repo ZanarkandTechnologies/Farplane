@@ -1,14 +1,14 @@
 ---
 title: Business Strategy Review Contract
 status: active
-owner: review-offer | review-leads | review-model
+owner: review-business
 created_at: 2026-09-20
-updated_at: 2026-09-20
+updated_at: 2026-10-12
 ---
 
 # Business Strategy Review Contract
 
-The `review-offer`, `review-leads`, and `review-model` skills return the same
+The `review-business` lenses (`offer`, `model`, `leads`) return the same
 decision shape so their domain judgments remain comparable without collapsing
 the business into one score.
 

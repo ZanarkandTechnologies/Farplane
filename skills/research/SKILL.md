@@ -21,9 +21,9 @@ pass answers one decision with one evidence note.
 
 A caller that only needs one claim grounded does not need this skill: follow
 the global contract's `Grounding:` rule inline and stop. Research one person
-or account with `customer-research`, turn one external source into Farplane
+or account with `prospect`, turn one external source into Farplane
 features with `harness-scout`, and run an accepted experiment with
-`ml-autoresearch` or the experiment owner.
+the `goal-advisor` ML preset or the experiment owner.
 
 ## Skill Signature
 
@@ -119,7 +119,7 @@ returns: the evidence note, rejection ledger, recommendation and its downside, n
 
   Rule: Tag every claim with its source class and whether it was opened.
   Route the result: an accepted build to `impl-plan`, a product scope to `prd`,
-  an experiment to `ml-autoresearch`, a fuzzy metric to `metric-advisor`.
+  an experiment or a fuzzy metric to `goal-advisor` (ML preset, metric card).
 
   Assert:
   - Source fact, synthesis, and recommendation are distinguishable.
@@ -161,5 +161,5 @@ candidates: <finalists + rejection ledger with failed or unknown fields>
 evidence: <claim -> source URL or file, source class, opened yes/no, date>
 verdict: <opportunity | local delta + decisions | ranked experiments | decision table>
 downside: <what this costs or risks, and what would reverse it>
-next_owner: impl-plan | prd | ml-autoresearch | metric-advisor | none
+next_owner: impl-plan | prd | goal-advisor | none
 ```

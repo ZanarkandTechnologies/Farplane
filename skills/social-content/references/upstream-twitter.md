@@ -1,10 +1,11 @@
----
-name: twitter-thread-creation
-description: "Twitter/X thread writing with hook tweets, thread structure, and engagement optimization. Covers tweet formatting, character limits, media attachments, and posting strategies. Use for: Twitter threads, X posts, tweet storms, Twitter content, social media writing. Triggers: twitter thread, tweet thread, x thread, twitter post, tweet writing, thread creation, tweet storm, twitter content, x post, twitter writing, twitter hook, tweet formatting, thread structure"
-allowed-tools: Bash(belt *)
----
-
 # Twitter/X Thread Creation
+
+> Upstream reference adapted from the inference.sh skills collection. Owner:
+> `social-content` ([SKILL.md](../SKILL.md)). Use it for platform specs, format
+> rules and examples only. Do not run the `belt` commands below: route paid
+> images to [ai-image](../../ai-image/SKILL.md) and clips to
+> [ai-video](../../ai-video/SKILL.md) (paid calls go through `treg` within the
+> spend cap), and posting or scheduling to [zernio](../../zernio/SKILL.md).
 
 Write high-engagement Twitter/X threads via [inference.sh](https://inference.sh) CLI.
 
@@ -318,10 +319,8 @@ belt app run infsh/html-to-image --input '{
 
 ## Related Skills
 
-```bash
-npx skills add inference-sh/skills@linkedin-content
-npx skills add inference-sh/skills@content-repurposing
-npx skills add inference-sh/skills@social-media-carousel
-```
-
-Browse all apps: `belt app list`
+- [social-content](../SKILL.md) owns the draft; [zernio](../../zernio/SKILL.md)
+  owns posting, scheduling and account metrics.
+- [ai-image](../../ai-image/SKILL.md) for stills and slides,
+  [ai-video](../../ai-video/SKILL.md) for clips, and
+  [storyboard](../../storyboard/SKILL.md) for video scripts.

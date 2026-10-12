@@ -3,7 +3,7 @@ title: "Self-Improvement And Learning"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-07-31
+updated_at: 2026-10-12
 tags:
   - farplane
   - systems
@@ -15,8 +15,9 @@ refs:
   - skills/eval/SKILL.md
   - skills/goal-advisor/SKILL.md
   - skills/goal-advisor/references/choose-next.md
-  - skills/metric-advisor/SKILL.md
-  - skills/ml-autoresearch/SKILL.md
+  - skills/goal-advisor/references/metrics.md
+  - skills/goal-advisor/references/loop-presets.md
+  - skills/goal-advisor/references/ml-program-preset.md
   - skills/self-improve/SKILL.md
 system_record_json: |
   {
@@ -27,8 +28,8 @@ system_record_json: |
     "owner_spec": "docs/systems/self-improvement-learning.md",
     "primary_feature_ref": "FEAT-0063",
     "feature_refs": ["FEAT-0063", "FEAT-0069", "FEAT-0070"],
-    "refs": ["skills/eval/SKILL.md", "skills/goal-advisor/SKILL.md", "skills/goal-advisor/references/choose-next.md", "skills/metric-advisor/SKILL.md", "skills/ml-autoresearch/SKILL.md", "skills/self-improve/SKILL.md"],
-    "last_verified": "2026-07-31"
+    "refs": ["skills/eval/SKILL.md", "skills/goal-advisor/SKILL.md", "skills/goal-advisor/references/choose-next.md", "skills/goal-advisor/references/metrics.md", "skills/goal-advisor/references/loop-presets.md", "skills/goal-advisor/references/ml-program-preset.md", "skills/self-improve/SKILL.md"],
+    "last_verified": "2026-10-12"
   }
 ---
 
@@ -69,8 +70,9 @@ generated:
   .farplane/evals/runs/      Eval evidence only
 ```
 
-The Self Improve and ML Autoresearch Goal program templates are reusable policy
-sources instantiated into each ticket. They are not runtime state. Existing
+The Self Improve program template and the goal-advisor ML autoresearch preset
+([`ml-program-preset.md`](../../skills/goal-advisor/references/ml-program-preset.md))
+are reusable policy sources instantiated into each ticket. They are not runtime state. Existing
 target-local `self-improve/*` folders are legacy experiment material; the
 active workflow does not read, write, generate, parse, or migrate them.
 
@@ -93,9 +95,10 @@ moves require judgment, it applies the choose-next comparison for one evidence-b
 ordinal comparison that includes `report_now`, `request_feedback`, and `stop`.
 The comparison does not execute, compile the Goal, or own campaign state.
 
-Metric Advisor is used at setup or when the measurement contract becomes
-invalid. Goal Advisor compiles or regenerates the packet. Plan Next Wave only
-refills the project board and never enters an active campaign. These boundaries
+The goal-advisor metric card
+([`metrics.md`](../../skills/goal-advisor/references/metrics.md)) is used at
+setup or when the measurement contract becomes invalid. Goal Advisor compiles
+or regenerates the packet. These boundaries
 make the Goal—not a chain of advisors—the sole next-decision owner.
 
 When the candidate frontier is missing, stale, or evidence-thin, the campaign
@@ -123,9 +126,11 @@ counter, daemon, or second continuation engine participates. The JSON tree
 stores current branch state, ticket `progress.md` records chronological
 receipts, Eval supplies measurements, and native Goal applies the program.
 
-## ML Autoresearch Contract
+## ML autoresearch preset
 
-ML Autoresearch freezes the evaluator, data/split boundary, metric, guards,
+The goal-advisor ML autoresearch preset
+([`loop-presets.md`](../../skills/goal-advisor/references/loop-presets.md))
+freezes the evaluator, data/split boundary, metric, guards,
 mutable surface, baseline, and compute/spend budget before the first change.
 Each Goal turn selects one attributable intervention or diagnostic hypothesis
 through `choose_next`, conditionally using the choose-next comparison, preregisters its expectation and falsifier, runs
@@ -215,23 +220,24 @@ flowchart LR
   supported cause; unresolved branches say the tested configuration failed and
   its cause remains unresolved.
 - `eval` owns clean execution, grading, comparison, and run artifacts.
-- `metric-advisor` helps when the honest performance target or guard is unclear.
+- The `goal-advisor` metric card helps when the honest performance target or
+  guard is unclear.
 - `agent-qa-test` proposes adversarial evidence but cannot approve its own case.
 - `skill-maintenance` owns accepted skill writeback and bounded source upgrades.
-- `ml-autoresearch` owns ML mutable-surface execution, receipts, and final
-  candidate verification under a frozen evaluator.
+- The `goal-advisor` ML autoresearch preset owns ML mutable-surface execution,
+  receipts, and final candidate verification under a frozen evaluator.
 - Delayed real-world outcomes belong to the product experiment able to observe
   them, not to this prompt-optimization loop.
 
 ## Feature Docs
 
-- [FEAT-0063 Metric advisor cards](../features/FEAT-0063-metric-advisor-cards.md)
+- [FEAT-0063 Metric cards](../features/FEAT-0063-metric-advisor-cards.md)
 - [FEAT-0069 Retired Taste Loop human-feedback optimization](../features/FEAT-0069-taste-loop-human-feedback-optimization.md)
-- [FEAT-0070 Experimental feature evaluation reports](../features/FEAT-0070-experimental-feature-evaluation-reports.md)
+- [FEAT-0070 Retired Dogfood portfolio checkpoints](../features/FEAT-0070-experimental-feature-evaluation-reports.md)
 
 ## Proof And Maintenance
 
-- Skill validation: `python3 skills/skill-creator/scripts/quick_validate.py skills/self-improve skills/ml-autoresearch`.
+- Skill validation: `python3 skills/skill-creator/scripts/quick_validate.py skills/self-improve skills/goal-advisor`.
 - Eval JSON and query-spoiler validation through the existing Eval tooling.
 - Skill-system validation: `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
 - Behavior proof: harden transition, harden exhaustion, regression rejection,
@@ -250,3 +256,5 @@ flowchart LR
   selector and added the ML Autoresearch domain entrypoint.
 - 2026-07-31: Added the source stage and one canonical JSON hypothesis tree for
   evidence-driven intervention, diagnosis, and backtracking across modalities.
+- 2026-10-12: Absorbed the metric card and the ML autoresearch entrypoint into
+  `goal-advisor` (#41) and retired FEAT-0070 when `dogfood-review` was deleted.

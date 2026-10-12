@@ -371,8 +371,6 @@ def validate_automations_dir(root: Path, automations_dir: Path) -> list[str]:
             errors.append(f"{rel_path}.schedule.interval_minutes must be an integer.")
     if len(heartbeat_records) > 1:
         errors.append(f"{rel_dir}/ may define at most one heartbeat record for Work Pulse; found {len(heartbeat_records)}.")
-    elif heartbeat_records and "$pulse-update" not in heartbeat_records[0][1]:
-        errors.append(f"{rel_dir}/ heartbeat {heartbeat_records[0][0]} must invoke $pulse-update.")
     return errors
 
 def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:

@@ -10,8 +10,12 @@ It chooses whether a request should become:
 - a heartbeat
 - a feedback loop
 - a skill-improvement loop
-- a rollout meta ticket
+- a rollout meta ticket (rollout preset)
+- an ML autoresearch campaign (ML preset)
 - a business/strategy loop
+
+It also writes the metric card (provider, guard, anti-metric, preregistered
+expectation) that a loop optimizes against.
 
 It owns both the architecture decision and the final Goal prompt so the metric,
 state surfaces, drift policy, and continuation instructions stay coherent.

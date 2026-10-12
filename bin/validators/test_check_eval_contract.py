@@ -189,7 +189,8 @@ class EvalContractTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[2]
         manifests = discover_eval_manifests(root)
 
-        self.assertEqual(len(manifests), 82)
+        owned = [path for path in root.glob("skills/*/evals/evals.json") if not path.parent.parent.is_symlink()]
+        self.assertEqual(len(manifests), len(owned))
         self.assertTrue(all(path.match("skills/*/evals/evals.json") for path in manifests))
         self.assertEqual(lint_eval_manifests(root, manifests), [])
 

@@ -1,10 +1,11 @@
----
-name: social-media-carousel
-description: "Multi-slide carousel design for Instagram, LinkedIn, and Twitter/X with layout rules and hooks. Covers slide structure, text hierarchy, swipe psychology, and platform-specific specs. Use for: carousel posts, Instagram carousels, LinkedIn carousels, slide posts, educational content. Triggers: carousel, instagram carousel, linkedin carousel, slide post, carousel design, swipe post, multi-image post, carousel template, educational carousel, carousel content, instagram slides, linkedin slides"
-allowed-tools: Bash(belt *)
----
-
 # Social Media Carousel
+
+> Upstream reference adapted from the inference.sh skills collection. Owner:
+> `social-content` ([SKILL.md](../SKILL.md)). Use it for platform specs, format
+> rules and examples only. Do not run the `belt` commands below: route paid
+> images to [ai-image](../../ai-image/SKILL.md) and clips to
+> [ai-video](../../ai-video/SKILL.md) (paid calls go through `treg` within the
+> spend cap), and posting or scheduling to [zernio](../../zernio/SKILL.md).
 
 Design high-engagement carousel posts via [inference.sh](https://inference.sh) CLI.
 
@@ -207,10 +208,8 @@ belt app run falai/flux-dev-lora --input '{
 
 ## Related Skills
 
-```bash
-npx skills add inference-sh/skills@ai-image-generation
-npx skills add inference-sh/skills@content-repurposing
-npx skills add inference-sh/skills@linkedin-content
-```
-
-Browse all apps: `belt app list`
+- [social-content](../SKILL.md) owns the draft; [zernio](../../zernio/SKILL.md)
+  owns posting, scheduling and account metrics.
+- [ai-image](../../ai-image/SKILL.md) for stills and slides,
+  [ai-video](../../ai-video/SKILL.md) for clips, and
+  [storyboard](../../storyboard/SKILL.md) for video scripts.

@@ -7,12 +7,47 @@
 # planners dispatch them, and the map omits them.
 
 
-[specialists.pm-assistant]
-label = "PM Assistant"
-department = "back-office"
-deliverable = "a daily plan and task updates"
+[specialists.advisor]
+label = "Advisor"
+department = "leadership"
+deliverable = "one recommendation or a phased roadmap"
+primary = "advise"
+skills = ["advise"]
+
+[specialists.framer]
+label = "Framer"
+department = "leadership"
+deliverable = "a problem frame played back for correction"
+primary = "frame"
+skills = ["frame"]
+
+[specialists.pm]
+label = "PM"
+department = "leadership"
+deliverable = "a day or week plan and verified task updates"
 primary = "pm"
-skills = ["pm", "notion-task-field-fill"]
+skills = ["pm"]
+
+[specialists.business-reviewer]
+label = "Business Reviewer"
+department = "leadership"
+deliverable = "an offer, money model, or lead gen review with one next test"
+primary = "review-business"
+skills = ["review-business"]
+
+[specialists.goal-architect]
+label = "Goal Architect"
+department = "leadership"
+deliverable = "a Goal Packet, metric card, and /goal prompt"
+primary = "goal-advisor"
+skills = ["goal-advisor"]
+
+[specialists.reporter]
+label = "Reporter"
+department = "leadership"
+deliverable = "daily Project memory or a weekly report"
+primary = "report-gen"
+skills = ["report-gen"]
 
 [specialists.phone-chaser]
 label = "Phone Chaser"
@@ -21,54 +56,33 @@ deliverable = "a reminder call"
 primary = "phone-chaser"
 skills = ["phone-chaser"]
 
-[specialists.customer-researcher]
-label = "Customer Researcher"
-department = "customer"
-deliverable = "a customer research brief"
-primary = "customer-research"
-skills = ["customer-research"]
+[specialists.prospector]
+label = "Prospector"
+department = "sales"
+deliverable = "an opportunity case"
+primary = "prospect"
+skills = ["prospect"]
+
+[specialists.outreach-lead]
+label = "Outreach Lead"
+department = "sales"
+deliverable = "an approach packet with an unsent message"
+primary = "approach"
+skills = ["approach"]
 
 [specialists.proposal-writer]
 label = "Proposal Writer"
-department = "deals"
+department = "sales"
 deliverable = "a priced proposal"
 primary = "proposal-pricing"
-skills = ["proposal-pricing", "personalized-offer"]
-
-[specialists.solution-shaper]
-label = "Solution Shaper"
-department = "deals"
-deliverable = "a solution brief"
-primary = "solution-shaping"
-skills = ["solution-shaping"]
-
-[specialists.lead-scout]
-label = "Lead Scout"
-department = "sales"
-deliverable = "a ranked prospect list"
-primary = "lead-scout"
-skills = ["lead-scout"]
-
-[specialists.outreach-planner]
-label = "Outreach Planner"
-department = "sales"
-deliverable = "an approval-ready outreach campaign"
-primary = "outreach-impl-plan"
-skills = ["outreach-impl-plan", "first-value-outreach"]
-
-[specialists.offer-reviewer]
-label = "Offer Reviewer"
-department = "sales"
-deliverable = "an offer or business model review"
-primary = "review-offer"
-skills = ["review-offer", "review-model"]
+skills = ["proposal-pricing"]
 
 [specialists.analyst]
 label = "Analyst"
 department = "intelligence"
 deliverable = "an intelligence dossier"
 primary = "intelligest"
-skills = ["intelligest", "research", "agency-opportunity-research", "learn-from-video"]
+skills = ["intelligest", "research", "learn-from-video"]
 
 [specialists.scout]
 label = "Scout"
@@ -152,7 +166,7 @@ label = "Engineer"
 department = "operations"
 deliverable = "a planned and implemented change"
 primary = "impl-plan"
-skills = ["impl-plan", "code-health", "goal-advisor", "pr-review-watch", "pr-splitting"]
+skills = ["impl-plan", "code-health", "pr-review-watch", "pr-splitting"]
 
 [specialists.qa-engineer]
 label = "QA Engineer"
@@ -161,26 +175,19 @@ deliverable = "QA proof and a demo"
 primary = "qa"
 skills = ["qa", "demo", "demo-realism", "eval"]
 
-[specialists.reporter]
-label = "Reporter"
-department = "operations"
-deliverable = "a project report"
-primary = "recap-task"
-skills = ["recap-task", "dogfood-review", "progress-update", "report-gen"]
-
 [specialists.automation-engineer]
 label = "Automation Engineer"
 department = "operations"
 deliverable = "a scheduled automation"
 primary = "automation-advisor"
-skills = ["automation-advisor", "plan-next-wave", "pulse-update"]
+skills = ["automation-advisor"]
 
 [specialists.harness-engineer]
 label = "Harness Engineer"
 department = "operations"
 deliverable = "an improved skill or harness"
 primary = "skill-creator"
-skills = ["skill-creator", "harness-creator", "leverage-rollout", "ml-autoresearch", "optimize-harness", "self-improve", "skill-maintenance"]
+skills = ["skill-creator", "harness-creator", "optimize-harness", "self-improve", "skill-maintenance"]
 
 [specialists.setup-technician]
 label = "Setup Technician"

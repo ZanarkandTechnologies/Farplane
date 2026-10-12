@@ -1,6 +1,6 @@
 ---
 name: meshy-3d-generation
-description: "Generate, texture, rig, or animate 3D assets through the Meshy API when a user requests text-to-3D, image-to-3D, model conversion, or character workflows."
+description: "Use for \"make a 3D model\", \"turn this image into 3D\", \"rig this character\" or \"animate this model\": Meshy text/image-to-3D, texture, rig and animation with a credit quote and saved files."
 department: marketing
 source: external
 capability:
@@ -14,16 +14,6 @@ allowed-tools: Bash, Read, Write, Glob, Grep
 Directly communicate with the Meshy AI API to generate 3D assets. This skill handles the complete lifecycle: environment setup, API key detection, task creation, polling, downloading, and chaining multi-step pipelines.
 
 For full endpoint reference (all parameters, response schemas, error codes), read [reference.md](reference.md).
-
----
-
-## IMPORTANT: 3D Printing → Use `meshy-3d-printing` Skill
-
-**If the user's request involves 3D printing** (keywords: print, 3d print, slicer, slice, bambu, orca, prusa, cura, multicolor, 3mf, figurine, miniature, statue, physical model), **use the `meshy-3d-printing` skill instead of this one for the entire workflow.** The printing skill handles generation with correct print-optimized parameters (e.g. `target_formats` with `"3mf"` for multicolor), slicer detection, coordinate conversion, and slicer launch — all in one pipeline.
-
-This skill's `create_task`/`poll_task`/`download` template functions are reused by the printing skill, but the **workflow orchestration** (what to generate, which formats, what to do after) must come from the printing skill when printing is involved.
-
-**Do NOT generate a model with this skill and then hand off to the printing skill** — the printing skill needs to control parameters from the start (e.g. `target_formats`, `should_texture`).
 
 ---
 
@@ -45,19 +35,6 @@ All downloaded files MUST go into a structured `.farplane/meshy/` directory unde
 - Auto-download thumbnails alongside models
 
 The Reusable Script Template below includes `get_project_dir()`, `record_task()`, and `save_thumbnail()` helpers.
-
----
-
-## IMPORTANT: Shell Command Rules
-
-**Use only standard POSIX tools in shell commands.** Do NOT use `rg` (ripgrep), `fd`, or other non-standard CLI tools — they may not be installed. Use these standard alternatives instead:
-
-| Do NOT use | Use instead |
-|---|---|
-| `rg` | `grep` |
-| `fd` | `find` |
-| `bat` | `cat` |
-| `exa` / `eza` | `ls` |
 
 ---
 
@@ -243,7 +220,7 @@ Wait for user confirmation before executing.
 | Check FDM printability (watertight / non-manifold edges / holes) | Analyze Printability | `POST /openapi/v1/print/analyze` | **0 (free)** |
 | Repair non-manifold/degenerate-face/hole topology | Repair Printability | `POST /openapi/v1/print/repair` | 10 |
 | Multi-color 3D print | Multi-Color Print | `POST /openapi/v1/print/multi-color` | 10 |
-| Stylized printable product from a photo (figure / lamp / keychain / fridge-magnet) | Creative Lab — **see the `meshy-3d-printing` skill** for the full prototype→build flow | `POST /openapi/creative-lab/{product}/v1/{prototype,build}` | 36 (6+30) |
+| Stylized printable product from a photo (figure / lamp / keychain / fridge-magnet) | Creative Lab prototype → build (see [reference.md](reference.md)) | `POST /openapi/creative-lab/{product}/v1/{prototype,build}` | 36 (6+30) |
 | Check credit balance | Balance | `GET /openapi/v1/balance` | 0 |
 
 ---
@@ -650,8 +627,7 @@ After task succeeds, report:
    - Model done → "Want to rig this character for animation?"
    - Rigged → "Want to apply an animation?"
    - Any model → "Want to remesh / export to another format?"
-   - Any textured model → "Want to 3D print this? Multicolor printing is available!" (requires `meshy-3d-printing` skill)
-   - Any model → "Want to 3D print this model?" (requires `meshy-3d-printing` skill)
+   - Any model → "Want to 3D print this?" (check with the free Analyze Printability endpoint first; Multi-Color Print outputs 3MF)
 
 ---
 

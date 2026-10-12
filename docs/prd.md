@@ -45,7 +45,7 @@ next consequential action visible.
 
 This PRD is the accepted product direction. The money-execution boundary and
 lean Daily/Weekly Company OS contract are implemented by the active automation
-prompts and the `progress-update` and `report-gen` skills. The AI Office hierarchy is
+prompts and the `report-gen` skill (`daily` and `weekly` modes). The AI Office hierarchy is
 not yet fully implemented. The Interval weekly-draft and broad promotion
 machinery is legacy reference and has no active Daily or Weekly binding.
 
@@ -175,7 +175,6 @@ remain in the ticket body, Goal Packet, progress log, or artifacts.
 | Work Pulse next-wave planner | globally ranked tickets when no unclaimed executable or due-check-in work exists |
 | Feed Scout | source report, candidates, and bounded direct recovery tickets |
 | Daily/Weekly review | project memory, targeted follow-ups, weekly reports, and operator-visible work proposals; no independent strategy or ticket admission |
-| Dogfood Review | killed with Weekly Self-Improvement on 2026-09-30; no active binding |
 | Operator | explicit direction, feedback, correction, or approval |
 
 Only Work Pulse executes tickets and matured check-ins.

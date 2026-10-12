@@ -30,8 +30,8 @@ refs:
 
 Farplane V1 is an operating system for moving an operator-chosen commercial bet
 toward money. Its center is deliberately small. Active Daily and Weekly use the
-Company OS file-in/file-out boundary owned by `progress-update`, `report-gen`, and the
-AI Office `farplane/automations/`; Interval is legacy reference only.
+Company OS file-in/file-out boundary owned by `report-gen` (`daily` and `weekly`
+modes) and the AI Office `farplane/automations/`; Interval is legacy reference only.
 
 ```text
 project(commercial intent, execution, evidence)
@@ -57,7 +57,7 @@ own planner, worker pool, strategy file, or heartbeat.
 3. Read `farplane/metrics.yaml` for metric meaning, direction, freshness, and
    guard rules; read generated observations for current values.
 4. Read the ticket board for executable commitments and proof.
-5. Use `metric-advisor` when the objective, direction, guard, or proof
+5. Use the `goal-advisor` metric card (`references/metrics.md`) when the objective, direction, guard, or proof
    provider needs a material change.
 6. Use `goal-advisor` when a selected material ticket needs a Goal Packet.
 7. Activate exactly one Work Pulse heartbeat after the board and proof surfaces
@@ -135,8 +135,7 @@ heartbeats or worker authorities:
 | Dogfood | active and recent archived experiments plus prior report | portfolio learning report + experiment candidates | none; self-improvement competes globally |
 | Maintenance | registries, docs, skills, validators | maintenance report + repair candidates | none unless directly invoked by the operator |
 
-Daily and Weekly do not invent direction, fake momentum, execute work, or call
-Plan Next Wave. Feed Scout and Dogfood do not materialize their candidates.
+Daily and Weekly do not invent direction, fake momentum, or execute work. Feed Scout and Dogfood do not materialize their candidates.
 Work Pulse is the single normal path that turns a low-supply refill candidate
 into a ticket on the shared board.
 

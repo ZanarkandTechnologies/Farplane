@@ -3,7 +3,7 @@ title: "Horizon Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-09-20
+updated_at: 2026-10-12
 tags:
   - farplane
   - systems
@@ -19,7 +19,7 @@ system_record_json: |
     "id": "SYS-0003",
     "name": "Horizon Loop",
     "status": "implemented",
-    "summary": "The project control loop where Company OS Daily and Weekly maintain money-linked project memory while Work Pulse dispatches accepted work and Plan Next Wave handles low-supply refill.",
+    "summary": "The project control loop where Company OS Daily and Weekly maintain money-linked project memory over work state held in GitHub Issues.",
     "owner_spec": "docs/systems/horizon-loop.md",
     "primary_feature_ref": "FEAT-0032",
     "feature_refs": [
@@ -37,16 +37,17 @@ system_record_json: |
       "docs/features/FEAT-0067-daily-interval-review-reports.md",
       "docs/features/FEAT-0071-project-work-pulse.md"
     ],
-    "last_verified": "2026-09-20"
+    "last_verified": "2026-10-12"
   }
 ---
 # Horizon Loop
 
 The project control loop where Company OS Daily and Weekly maintain
 source-grounded project memory around money movement, constraints, decisions,
-and next commitments. Work Pulse dispatches or checks in accepted work, and
-Plan Next Wave remains the side-effect-free low-supply refill path. The former
-Interval weekly-draft and broad promotion route is legacy reference only.
+and next commitments. Work state lives in GitHub Issues; Work Pulse and its
+low-supply refill planner were retired in #41 when `pulse-update` and
+`plan-next-wave` were deleted. The former Interval weekly-draft and broad
+promotion route is legacy reference only.
 
 ```text
 horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + maintenance_signal
@@ -62,10 +63,9 @@ horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 
 ## Role
 
-Horizon Loop owns recurring and longer-running autonomy: Goal Packets, one Work
-Pulse, Company OS Daily/Weekly project memory and reports, low-supply refill,
-backoff, PR watching, and bounded handoffs from Feed Scout, Dogfood, and the
-operator.
+Horizon Loop owns recurring and longer-running autonomy: Goal Packets, Company
+OS Daily/Weekly project memory and reports, backoff, PR watching, and bounded
+handoffs from Feed Scout and the operator.
 
 ## Feature Docs
 
@@ -74,13 +74,12 @@ operator.
 - [FEAT-0065 Pulse and interval automation](../features/FEAT-0065-pulse-and-interval-automation.md)
 - [FEAT-0066 Product-scoped Pulse loops](../features/FEAT-0066-product-scoped-pulse-loops.md)
 - [FEAT-0067 Daily interval review reports](../features/FEAT-0067-daily-interval-review-reports.md)
-- [FEAT-0071 Project Work Pulse](../features/FEAT-0071-project-work-pulse.md)
+- [FEAT-0071 Retired Project Work Pulse](../features/FEAT-0071-project-work-pulse.md)
 
 ## What Belongs Here
 
-Goal-backed continuation, Pulse dispatch/check-ins, Company OS review and
-project memory, low-supply refill, adaptive waits, and visible automation
-cadence.
+Goal-backed continuation, Company OS review and project memory, adaptive
+waits, and visible automation cadence.
 
 ## What Belongs Elsewhere
 
@@ -92,15 +91,12 @@ And Learning; proof standards belong in Proof And Review.
 
 - Recurring loops must have visible prompts, reports, tickets, or automations as state owners.
 - Automations may no-op when no safe valuable action exists.
-- Exactly one base project automation is a heartbeat: Work Pulse. Other
-  recurring jobs are bounded cron/manual automations.
+- No project heartbeat runs; recurring jobs are bounded cron/manual
+  automations, and GitHub Issues hold work state.
 - Daily maintains one source-grounded memory result per eligible Project.
   Weekly reviews the complete frozen Project set and carries forward supported
   commitments. Both may update only authorized existing issues and neither
   admits work, invents strategy, promotes broad knowledge, or executes work.
-- Work Pulse dispatches executable tickets and calls Plan Next Wave only when
-  ready supply is low. Plan Next Wave ranks configured skill calls from stable
-  problems, areas, metric movement, source-backed context, and ticket history.
 - Backoff and polling stay tracked and bounded.
 - Human authority remains required for ambiguous or high-risk direction.
 - Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
@@ -120,31 +116,28 @@ flowchart LR
   intent["stable intent<br/>problems + areas + metrics"]:::keep
   automations["automation config<br/>root + project-local"]:::keep
   advisor["FEAT-0032<br/>goal-advisor"]:::changed
-  pulse["FEAT-0071<br/>project Work Pulse"]:::added
+  pulse["FEAT-0071<br/>retired Work Pulse"]:::retired
   companyos["FEAT-0067<br/>Company OS Daily + Weekly"]:::changed
   memory["project memory + reports<br/>money movement + commitments"]:::added
-  sources["Feed Scout + Dogfood + operator<br/>reports + context"]:::keep
+  sources["Feed Scout + operator<br/>reports + context"]:::keep
   old["FEAT-0065<br/>retired umbrella automation"]:::retired
   productPulse["FEAT-0066<br/>retired product-scoped Pulse"]:::retired
-  planner["Plan Next Wave<br/>low-supply refill"]:::added
-  board["ticket board<br/>priority + due_at + proof"]:::added
+  board["GitHub Issues<br/>priority + proof"]:::added
   outputs["reports + tickets<br/>bounded next work"]:::added
 
   metrics --> companyos --> memory --> outputs
   intent --> companyos
-  intent --> planner
-  automations --> pulse --> board
   automations --> companyos
-  sources --> planner --> board --> pulse
+  sources --> board
   board --> advisor --> outputs
   old -. "superseded_by" .-> pulse
   old -. "superseded_by" .-> companyos
   productPulse -. "superseded_by" .-> pulse
+  pulse -. "retired #41" .-> board
 ```
 
-The Horizon Loop coordinates one execution heartbeat, one Company OS memory
-and review path, and one low-supply refill planner without giving every source
-its own strategy ledger or executor.
+The Horizon Loop coordinates one Company OS memory and review path over
+GitHub Issues without giving every source its own strategy ledger or executor.
 
 ## Surfaces
 
@@ -180,3 +173,6 @@ its own strategy ledger or executor.
   Daily incremental owner updates and Weekly receipt consolidation/showcase.
 - 2026-08-20: Replaced eager Daily owner updates with a weekly working draft
   and Weekly selective promotion.
+- 2026-10-12: Retired Work Pulse (FEAT-0071) and its refill planner in #41
+  when `pulse-update` and `plan-next-wave` were deleted; GitHub Issues hold
+  work state.

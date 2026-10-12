@@ -1,0 +1,233 @@
+{
+  "skill_name": "review-business",
+  "evals": [
+    {
+      "id": "review_business_offer_selects_value_visibility_01",
+      "prompt": "Review our fractional COO offer. Clients retain for years and report strong operational results, but prospects say the proposal looks like expensive weekly meetings. Delivery and market fit are strong. What should we improve next?",
+      "expected_output": "Reviews all ten criteria but selects category/value visibility as the binding constraint; shows a specific Before and After; treats the creator's examples as optional; proposes a bounded framing test without changing delivery or price",
+      "files": [],
+      "assertions": [
+        "Separates proven delivery outcomes from weak perceived value",
+        "Grades all ten criteria with confidence without creating one total score",
+        "Prioritizes category and value visibility rather than unrelated bonuses or guarantees",
+        "Shows Before, After, and a clearly labeled illustrative mechanism",
+        "Uses the matching source trajectory's Before, Move, and After/Result and explicitly adapts or rejects its mechanism",
+        "Defines a bounded test with buyer-behavior signals and branch conditions"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Select visible value as the offer constraint",
+          "tags": [
+            "skill",
+            "review-business",
+            "offer",
+            "normal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "review_business_offer_rejects_conversion_tricks_01",
+      "prompt": "Our program rarely gets customers the promised result and refund complaints are rising. Add scarcity, ten bonuses, and a no-refund guarantee so it converts better.",
+      "expected_output": "Identifies delivered outcome and trust as blockers; rejects fake scarcity, clutter bonuses, and risk dumping; defines a customer-outcome Before and After; recommends repairing or proving delivery before conversion optimization",
+      "files": [],
+      "assertions": [
+        "Does not apply requested conversion tactics over a broken offer",
+        "Uses outcome and refund evidence to identify the binding constraint",
+        "Rejects deceptive or economically abusive adaptations",
+        "Keeps source tactics as examples rather than pass requirements",
+        "Explains why scarcity, bonuses, and guarantee source trajectories do not transfer to the broken-delivery case",
+        "Avoids invented lift or unsupported guarantees"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Reject tactics that hide broken delivery",
+          "tags": [
+            "skill",
+            "review-business",
+            "offer",
+            "hardcase"
+          ]
+        }
+      }
+    },
+    {
+      "id": "review_business_offer_unknown_market_01",
+      "prompt": "Review this offer: AI transformation for any small business, $20,000. We have no customer interviews, sales calls, pilots, or outcome data yet.",
+      "expected_output": "Uses unknown grades where evidence is absent; identifies market and buyer pain as prerequisites; avoids fabricating value, price justification, bonuses, or guarantees; proposes a bounded evidence step",
+      "files": [],
+      "assertions": [
+        "Does not infer market fit or purchasing power from the offer text",
+        "Uses grade 0 for missing evidence",
+        "Selects the lowest missing capability blocking a real offer review",
+        "Defines a testable Before and After rather than a polished Grand Slam Offer",
+        "Keeps customer contact and price changes as proposals"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Handle an evidence-free offer boundary",
+          "tags": [
+            "skill",
+            "review-business",
+            "offer",
+            "boundary"
+          ]
+        }
+      }
+    },
+    {
+      "id": "money_model_review_selects_binding_constraint_01",
+      "prompt": "Review our consultancy money model. We sell only a $24,000 annual transformation. Qualified prospects like the outcome but 8 of the last 10 stalled before signing because they want to experience how we work. Delivery capacity is healthy; retained clients renew at 80%. What should we improve next?",
+      "expected_output": "Reviews all ten criteria but selects first-yes risk as the binding constraint; states an observable Before and After; treats a paid diagnostic as an adapted example rather than a universal answer; proposes one bounded test with decision branches; does not prescribe ten projects",
+      "files": [],
+      "assertions": [
+        "Maps the current customer-to-cash path and separates evidence from unknowns",
+        "Grades all ten criteria with confidence while avoiding a summed maturity score",
+        "Selects first-yes risk because current evidence links it to stalled qualified prospects",
+        "Shows Before, After, and a clearly labeled adapted example",
+        "Uses Greg's failed giveaway and successful Strategy Sprint trajectory to distinguish transferable design from copyable tactics",
+        "Proposes a bounded experiment with success, guardrail, and positive/negative next branches"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Select the binding first-yes constraint",
+          "tags": [
+            "skill",
+            "review-business",
+            "model",
+            "money-model",
+            "normal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "money_model_review_rejects_front_end_tactic_01",
+      "prompt": "Our course has poor completion, refund requests are rising, and buyers say the promised outcome is not achieved. Build us a cheap paid diagnostic and an upsell ladder so we can make more money.",
+      "expected_output": "Identifies product outcome and trust as blockers; does not use a new attraction offer to paper over delivery failure; records relevant rubric grades and recommends repairing or proving customer value before ladder optimization",
+      "files": [],
+      "assertions": [
+        "Does not blindly prescribe a cheaper first offer",
+        "Names outcome quality, refunds, and trust as the causal constraint",
+        "Uses source examples as optional mechanisms rather than requirements",
+        "Explains why the source's attraction, upsell, and continuity trajectories do not transfer while the core outcome is broken",
+        "Defines a Before and After centered on customer outcomes",
+        "Avoids invented revenue lift"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Reject offer optimization over broken delivery",
+          "tags": [
+            "skill",
+            "review-business",
+            "model",
+            "money-model",
+            "hardcase"
+          ]
+        }
+      }
+    },
+    {
+      "id": "money_model_review_sparse_evidence_01",
+      "prompt": "Can you review the money model for my new business? I have an idea for an AI service but no customers, prices, or tested offer yet.",
+      "expected_output": "Returns an evidence-limited rubric with unknown grades; avoids fabricating conversion or economics; identifies the minimum offer and customer evidence needed; proposes a discovery or offer test rather than a complex ladder",
+      "files": [],
+      "assertions": [
+        "Uses grade 0 where evidence is absent",
+        "Does not create false precision or a complete offer ladder",
+        "Separates current unknown Before from a testable After",
+        "Names the smallest decision-changing evidence step",
+        "Keeps spend and customer contact as proposals"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Handle a pre-revenue evidence boundary",
+          "tags": [
+            "skill",
+            "review-business",
+            "model",
+            "money-model",
+            "boundary"
+          ]
+        }
+      }
+    },
+    {
+      "id": "lead_engine_review_more_before_new_01",
+      "prompt": "We got two consulting clients from 18 warm messages. The founder now wants to start LinkedIn content, cold email, and Meta ads at the same time. We do not know our reply or close rates beyond those 18 messages. What should we improve next?",
+      "expected_output": "Reviews all five lessons and Core Four methods; identifies insufficient repetitions and measurement in the working warm channel; recommends a bounded More test before Better or New; shows Before/After and does not start three channels",
+      "files": [],
+      "assertions": [
+        "Separates current evidence from missing rates and economics",
+        "Grades the five lessons; labels every Core Four channel for applicability and does not grade not-currently-required channels",
+        "Applies More before Better or New because the existing sample is thin",
+        "Shows an observable Before and After with an illustrative mechanism",
+        "Compares the current strategy with the source's More-Better-New trajectory and states what transfers and what does not",
+        "Defines a bounded test and positive/negative branch conditions"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Choose more evidence before channel expansion",
+          "tags": [
+            "skill",
+            "review-business",
+            "leads",
+            "lead-engine",
+            "normal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "lead_engine_review_product_referral_blocker_01",
+      "prompt": "We spend profitably on ads, but churn is 18% monthly, customers rarely finish onboarding, and referrals are almost zero. Management wants to double ad spend next month.",
+      "expected_output": "Identifies product/onboarding retention and customer-created growth as constraints; does not recommend scaling ads despite current acquisition profitability; defines a Before/After around early value, churn, and referral readiness; proposes a bounded repair/proof experiment",
+      "files": [],
+      "assertions": [
+        "Distinguishes acquisition profitability from whole-system health",
+        "Uses churn, onboarding, and referrals as evidence against immediate scale",
+        "Does not treat more ad volume as the next move",
+        "Uses the customer-created-growth and level-scaling trajectories to explain why the source's ad-scaling path does not yet transfer",
+        "Shows Before, After, and an adapted source example rather than copying a tactic",
+        "Names delivery/customer guardrails and decision branches"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Block ad scaling when customer value leaks",
+          "tags": [
+            "skill",
+            "review-business",
+            "leads",
+            "lead-engine",
+            "hardcase"
+          ]
+        }
+      }
+    },
+    {
+      "id": "lead_engine_review_prelaunch_boundary_01",
+      "prompt": "Review lead generation for a prelaunch industrial AI product. We have interviewed three operations managers but have no offer, lead magnet, audience, funnel, or customers.",
+      "expected_output": "Uses unknown grades where evidence is absent; avoids prescribing a full channel stack; identifies offer/audience validation as the prerequisite; frames a small evidence-gathering step and explicit Before/After",
+      "files": [],
+      "assertions": [
+        "Does not invent funnel benchmarks or channel economics",
+        "Does not penalize the business for not running all Core Four channels",
+        "Identifies the lowest missing capability that blocks acquisition review",
+        "Returns a bounded next evidence step rather than a scale plan",
+        "Keeps outreach, publishing, and spend as proposals"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Handle a prelaunch acquisition boundary",
+          "tags": [
+            "skill",
+            "review-business",
+            "leads",
+            "lead-engine",
+            "boundary"
+          ]
+        }
+      }
+    }
+  ]
+}

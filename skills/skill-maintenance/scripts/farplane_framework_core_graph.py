@@ -80,7 +80,7 @@ WORKFLOWS = [
         "label": "Strategy",
         "description": "Shape measurable objectives, guards, proposal trajectories, and executable frontier choices.",
         "doc": "docs/farplane-framework/lifecycle.md",
-        "skills": ["metric-advisor", "advise", "harness-advisor", "goal-advisor"],
+        "skills": ["advise", "harness-advisor", "goal-advisor"],
     },
     {
         "id": "workflow:goal-execution",
@@ -92,9 +92,9 @@ WORKFLOWS = [
     {
         "id": "workflow:autonomy-loops",
         "label": "Autonomy loops",
-        "description": "Run Pulse plus Company OS Daily and Weekly for bounded execution and operating review.",
+        "description": "Run Company OS Daily and Weekly for operating review.",
         "doc": "docs/farplane-framework/hooks-and-runtime.md",
-        "skills": ["automation-advisor", "pulse-update", "progress-update", "report-gen"],
+        "skills": ["automation-advisor", "report-gen"],
     },
     {
         "id": "workflow:proof",

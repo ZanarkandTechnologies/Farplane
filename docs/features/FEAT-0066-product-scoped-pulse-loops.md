@@ -56,8 +56,8 @@ The retired feature:
 
 ## Retirement Boundary
 
-- Active `pulse-update` and `plan-next-wave` no longer require or
-  invoke product controllers.
+- The former `pulse-update` and `plan-next-wave` skills no longer required or
+  invoked product controllers; both were deleted in #41.
 - The five product Pulse automations are removed in TASK-0318.
 - TASK-0321 removed the retained product files, registry, and active readers.
 - Historical product-loop details remain only in archived evidence and this

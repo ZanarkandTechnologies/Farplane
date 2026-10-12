@@ -110,11 +110,11 @@ For a material request with no selected ticket, create or request the canonical
   - [ ] Common owners are [functional-ui](../functional-ui/SKILL.md),
     [landing-page](../landing-page/SKILL.md),
     [copywriting-advisor](../copywriting-advisor/SKILL.md),
-    [personalized-offer](../personalized-offer/SKILL.md),
+    [approach](../approach/SKILL.md),
     [visual-design](../visual-design/SKILL.md),
     [asset-advisor](../asset-advisor/SKILL.md),
     [research](../research/SKILL.md),
-    and the `metric-advisor` skill.
+    and the `goal-advisor` metric card.
   - [ ] For UI work, reuse or resolve only the relevant facet: interaction
     model/low-fi wireflow (`functional-ui`), visual reference and system
     (`visual-design`), production media (`asset-advisor`), or one-page offer

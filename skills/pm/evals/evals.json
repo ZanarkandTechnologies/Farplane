@@ -94,6 +94,29 @@
           ]
         }
       }
+    },
+    {
+      "id": "hygiene_abstains_on_conflicting_fields",
+      "prompt": "pm tidy the tasks I added this week. Fixture date Wednesday 2026-10-14, Asia/Kuala_Lumpur, live-high-confidence mode is approved. Two incomplete Tasks: 'Send partner follow-up' names the Hiring project in its body and Plan Week lists it under Thursday; 'Fix gripper' has a Project relation to Robotics but its body says it belongs to the Client Deployment project. Fixture supplies normalized rows and full pagination.",
+      "expected_output": "Uses one compact Tasks query; writes only the high-confidence Project and Act Time for the follow-up and reads them back; abstains on the conflicting gripper Project/Areas and queues a review request; never changes Status; returns per-field confidence and receipts.",
+      "files": [],
+      "assertions": [
+        "Writes only high-confidence fields and verifies each with readback",
+        "Abstains on the conflicting Project evidence instead of picking one",
+        "Queues a review request for the abstained field",
+        "Does not mutate task Status",
+        "Reports per-field confidence and artifact paths"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Hygiene: write high-confidence fields, abstain on conflicts",
+          "tags": [
+            "skill",
+            "pm",
+            "hygiene"
+          ]
+        }
+      }
     }
   ]
 }

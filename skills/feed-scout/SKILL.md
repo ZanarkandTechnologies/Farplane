@@ -16,7 +16,7 @@ allowed-tools: Read, Glob, Grep, Bash
 Run bounded discovery over `farplane/bindings.yaml#feed_scout` without creating
 a crawler platform. Feed Scout normalizes and dedupes configured sources,
 writes one dated report, updates one compact Scout Brief in place, and leaves
-source-backed candidates for Plan Next Wave. It may create only bounded direct
+source-backed candidates for the operator's planning. It may create only bounded direct
 recovery tickets for an evidenced existing failure with a known correction.
 
 Load [references/workflow.md](references/workflow.md) for acquisition routes,

@@ -1,7 +1,7 @@
 ---
 name: goal-advisor
 description: "Use for \"set up a goal\", \"keep improving this until\", \"run this unattended\" or \"optimize with my feedback\": Goal Packet architecture, loop state, and a native /goal prompt when warranted."
-department: operations
+department: leadership
 source: local
 version: 0.2.0
 template_uses:
@@ -40,9 +40,8 @@ observe -> choose_next(execute | diagnose | report_now | request_feedback | stop
         -> act -> verify -> write_back
 ```
 
-Metric Advisor is setup/repair only. `references/choose-next.md` applies only
-when several moves need judgment. Plan Next Wave refills an empty board and
-never participates inside an active Goal. The domain skill executes.
+The metric card is setup/repair only. `references/choose-next.md` applies only
+when several moves need judgment. The domain skill executes.
 
 ## Skill Signature
 
@@ -57,12 +56,11 @@ gates:
   budget_and_stops_named; drift_and_logging_named; proof_route_named;
   packet_context_budget_pass; material_packet_approved
 routes:
-  metric-advisor | impl-plan | telegram-message | qa | visual-qa |
-  agent-qa-test | review | direct-answer
+  impl-plan | telegram-message | qa | visual-qa | agent-qa-test | review | direct-answer
 fails:
   hidden_loop; prompt_only_material_goal; full_progress_first_load;
   duplicated_ticket_policy; self_certified_material_proof; stale_packet;
-  plan_next_wave_inside_active_goal; advisor_chain_owns_next_turn;
+  advisor_chain_owns_next_turn;
   invented_baseline_or_threshold; invented_budget
 ```
 
@@ -78,6 +76,8 @@ whenever the ticket changes. For branch detail load only the relevant reference:
 - composed workflows or retired-route migration -> `references/goal-algebra.md`
 - several eligible moves inside `choose_next` -> `references/choose-next.md`
 - human feedback as the metric -> `references/human-feedback.md`
+- unclear metric, guard, or expectation -> `references/metrics.md`
+- staged rollout or ML campaign -> `references/loop-presets.md`
 - delayed reward -> the program template's `Check-In Program`
 - prompt-heavy/judgment-heavy packet -> golden example plus the first-load Todo List guardrails
 
@@ -106,7 +106,7 @@ whenever the ticket changes. For branch detail load only the relevant reference:
   - [ ] Bind objective, mutable surface, metric/provider, guards, anti-metrics,
     budget, proof route, drift policy, and stop conditions without copying the
     ticket or tree.
-  - [ ] Use Metric Advisor only when the measurement contract is unclear.
+  - [ ] Load `references/metrics.md` only when the measurement contract is unclear.
   - [ ] Select the honest provider class even when its threshold is still
     pending. For an underspecified “clearly better” workflow with no reliable
     market baseline, default to `hybrid` frozen-scenario eval plus explicit
@@ -277,7 +277,7 @@ state that `stop_complete` remains withheld unless all rows are supported.
   QA for prompt-heavy/judgment-heavy planning and independent review.
 - [Program template](../../tickets/templates/goal-loop/program.md)
 - [Progress template](../../tickets/templates/goal-loop/progress.md)
-- [Metric Advisor](../metric-advisor/SKILL.md)
+- [Metric card](references/metrics.md) and [loop presets](references/loop-presets.md)
 
 ## Output
 

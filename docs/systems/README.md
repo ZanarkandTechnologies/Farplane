@@ -39,7 +39,7 @@ reports/proof/registries without duplicating feature-level file detail.
 
 System records may include optional `"track": false` or `"track": "<review prompt>"`
 inside `system_record_json`. Tracking prompts are compact review briefs for
-workflows such as `dogfood-review`; detailed review logic belongs in the
+workflows such as `review` or `self-improve`; detailed review logic belongs in the
 owning skill.
 
 ## System Map

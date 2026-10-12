@@ -21,7 +21,7 @@ Outputs:
 - approved `LANDING_SPEC.md` or an exact blocked-spec report for the calling
   implementation planner.
 
-It uses `visual-design` for visual-system decisions, `asset-advisor` for
+It uses `visual-design` for visual-system decisions, the `storyboard` asset plan for
 missing/reference-led/rights-sensitive media, and official GreenSock skills or
 docs for GSAP details. It does not implement, render, deploy, or create another
 implementation plan.

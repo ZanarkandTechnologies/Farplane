@@ -57,7 +57,7 @@ names its source; inferences go in *italics*. Absolute dates. Never a value with
 footer.
 
 Runtime notes (they don't change the records' rules):
-- A skill written `$name` in a record is the Claude skill `name` (e.g. `progress-update`, `manage-wiki`); invoke it with the Skill tool.
+- A skill written `$name` in a record is the Claude skill `name` (e.g. `report-gen`, `manage-wiki`); invoke it with the Skill tool.
 - Tasks are GitHub Issues of each project's own repo; use the `gh` CLI. The only write allowed is a `gh issue comment` on an existing issue, through Progress Updater's allowlist. The public repo (Farplane) and the bunker repo (farplane-bunker, private but written as if public) get engineering facts only; Farplane-UI is archived. Multica is archived.
 - Read Notion (the Plan Week and Life Plan adapter, and call notes) through the Notion connector, read-only.
 - Credentialed commands go through `farplane run -- <command>`; never print secrets.

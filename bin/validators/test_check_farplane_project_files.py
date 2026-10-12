@@ -79,7 +79,7 @@ schedule:
   type: interval
   interval_minutes: 30
 ---
-Use $pulse-update.
+Run the project heartbeat.
 
 Params:
 project_root = "/tmp/project"
@@ -466,7 +466,7 @@ schedule:
   type: interval
   interval_minutes: 60
 ---
-Use $dogfood-review.
+Run the second heartbeat.
 ''', encoding="utf-8")
     errors = validate(tmp_path)
     assert "farplane/automations/ may define at most one heartbeat record for Work Pulse; found 2." in errors

@@ -110,7 +110,6 @@ routes:
         edges = {(edge["source"], edge["target"], edge["type"]) for edge in graph["edges"]}
 
         self.assertIn("skill:init-advisor", nodes)
-        self.assertIn("skill:metric-advisor", nodes)
         self.assertIn("file:farplane/metrics.yaml", nodes)
         self.assertNotIn("file:farplane/goals.yaml", nodes)
         self.assertIn("skill:goal-advisor", nodes)
@@ -119,8 +118,7 @@ routes:
         self.assertIn(("skill:goal-advisor", "ticket:tickets/TASK-*/program.md", "writes"), edges)
         self.assertIn(("skill:harness-advisor", "skill:eval", "routes_to"), edges)
         self.assertIn(("skill:eval", "skill:qa", "routes_to"), edges)
-        self.assertIn(("automation:pulse", "skill:pulse-update", "triggers"), edges)
-        self.assertIn(("automation:daily-operating-update", "skill:progress-update", "triggers"), edges)
+        self.assertIn(("automation:daily-operating-update", "skill:report-gen", "triggers"), edges)
         self.assertIn(("automation:weekly-operating-review", "skill:report-gen", "triggers"), edges)
 
     def test_core_graph_excludes_noisy_detail_nodes(self) -> None:

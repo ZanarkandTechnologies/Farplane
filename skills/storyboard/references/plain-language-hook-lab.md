@@ -4,7 +4,7 @@ owner: storyboard
 status: active
 kind: reference
 created_at: 2026-07-29
-updated_at: 2026-07-29
+updated_at: 2026-10-12
 ---
 
 # Plain-Language Hook Lab
@@ -25,8 +25,9 @@ hook_lab(idea, proof, audience, source_title?)
 
 ## Candidate Pass
 
-Write at least ten materially different hooks. Vary the causal frame, not only
-the wording:
+Write at least ten materially different hooks across at least six of the
+lenses below, with no more than two candidates from one lens. Vary the causal
+frame, not only the wording:
 
 1. recognizable actor causes a consequence;
 2. recognizable actor stops or reverses a consequence;
@@ -59,9 +60,13 @@ A strong general-audience hook normally has:
 - one breath of spoken language;
 - no definition required before the stakes become interesting.
 
-Reject hooks led by abstract verbs or bridge phrases such as `back`, `backing`,
-`secure`, `facilitate`, `support`, `finance`, `fund`, `get the money`, or
-`help fund` when a concrete everyday verb can carry the same evidence safely.
+Block display hooks containing the abstract money verbs `fund`, `funding`,
+`secure`, `backing`, `back`, `finance`, `financing`, `guarantee`, `support`,
+`unlock`, or `get money` (and bridges such as `get the money`, `get backing`,
+`help fund`, `facilitate`) unless the ordinary word itself is the story and the
+audience already understands it. A blocked term cannot win on other scores.
+The displayed candidate table is the post-cleanup set: a blocked draft appears
+only as a rejected line with its reason, never as a candidate or finalist.
 Reject unexplained nouns such as `guarantee`, `backstop`, `capex`,
 `interconnection`, `off-balance-sheet vehicle`, or `lease facility`. These
 terms may appear later in the explanation.

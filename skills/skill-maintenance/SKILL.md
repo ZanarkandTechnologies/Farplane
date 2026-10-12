@@ -133,7 +133,7 @@ source upgrades, automation presets, and review handoff templates.
   After structural edits, run `python3 scripts/check_skills.py --write` and
   report its result.
 - Do not convert checklist items into scalar metrics; project measurement
-  belongs with `metric-advisor`, while skill repair needs reasons and evidence.
+  belongs with the `goal-advisor` metric card, while skill repair needs reasons and evidence.
 
 ## Reference Map
 

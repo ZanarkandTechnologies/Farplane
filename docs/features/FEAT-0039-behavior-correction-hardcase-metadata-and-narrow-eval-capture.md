@@ -3,14 +3,14 @@ title: Farplane evals
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-08-23
+updated_at: 2026-10-12
 tags:
   - farplane
   - feature
   - sys-0005
 refs:
   - skills/harness-advisor
-  - skills/metric-advisor
+  - skills/goal-advisor/references/metrics.md
   - skills/optimize-harness
   - skills/eval
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
@@ -22,7 +22,7 @@ category: proof
 public: true
 surfaces:
   - skills/harness-advisor
-  - skills/metric-advisor
+  - skills/goal-advisor/references/metrics.md
   - skills/optimize-harness
   - skills/eval
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
@@ -33,7 +33,7 @@ source_refs:
 external_refs: []
 evidence_refs:
   - skills/harness-advisor/SKILL.md
-  - skills/metric-advisor/SKILL.md
+  - skills/goal-advisor/references/metrics.md
   - skills/optimize-harness/SKILL.md
   - skills/eval/SKILL.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
@@ -94,7 +94,7 @@ owner, patch the smallest durable surface, and prove it with a representative ca
   exact-suite, and per-case stability evidence before material promotion.
 - Reports image-evidence fixture tension separately from target behavior so a
   facts-only fixture cannot silently masquerade as rendered visual proof.
-- Routes metric selection through metric-advisor before self-improvement claims.
+- Routes metric selection through the goal-advisor metric card before self-improvement claims.
 - Promotes repeated failures into skills, evals, docs, hooks, validators, or tickets.
 
 ## User Stories
@@ -127,7 +127,7 @@ flowchart TD
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   trigger["Trigger<br/>miss, correction, or behavior gap"]:::keep
-  owner["Owner surface<br/>harness-advisor, metric-advisor<br/>optimize-harness, eval"]:::changed
+  owner["Owner surface<br/>harness-advisor, goal-advisor metric card<br/>optimize-harness, eval"]:::changed
   readers["Files and fields read<br/>gap evidence, owner surface<br/>metric card, eval query<br/>ticket context"]:::keep
   capture["Narrow capture<br/>runnable regression case<br/>testable expectation and proof path"]:::changed
   artifact["Created artifact/evidence<br/>candidate seed, eval task,<br/>or repair ticket"]:::added
@@ -149,7 +149,7 @@ Legend:
 Owner surfaces:
 
 - `skills/harness-advisor`
-- `skills/metric-advisor`
+- `skills/goal-advisor/references/metrics.md`
 - `skills/optimize-harness`
 - `skills/eval`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
@@ -163,7 +163,7 @@ Source context:
 Evidence:
 
 - `skills/harness-advisor/SKILL.md`
-- `skills/metric-advisor/SKILL.md`
+- `skills/goal-advisor/references/metrics.md`
 - `skills/optimize-harness/SKILL.md`
 - `skills/eval/SKILL.md`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
@@ -196,7 +196,7 @@ Acceptance signals:
 - This feature does not auto-apply broad harness migrations without proof.
 - The Promptfoo path proves skill-local Codex comparison; it does not yet
   replace project suites, behavior traces, or arbitrary file-content grading.
-- Known limit: Correction is skill-and-artifact driven. Legacy standalone difficult-case artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
+- Known limit: Correction is skill-and-artifact driven. Legacy standalone difficult-case artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through the goal-advisor metric card before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
 - Native-subagent-only reports do not claim CLI JSON-event parity; route them
   through Agent QA.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
@@ -219,6 +219,9 @@ Acceptance signals:
   Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
 
 ## Change History
+
+- 2026-10-12: Repointed metric selection to the goal-advisor metric card
+  (`skills/goal-advisor/references/metrics.md`) after #41.
 
 - 2026-08-20: Added the thin Agent Skills-to-Promptfoo comparison boundary;
   retained the existing runner for project suites and behavior traces pending

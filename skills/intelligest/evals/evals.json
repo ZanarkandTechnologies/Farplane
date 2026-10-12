@@ -5,73 +5,128 @@
       "id": "intelligest_default_boundary_01",
       "prompt": "Intelligest the attached video record for me. I want to understand it, but I did not say I want to keep any of its creative parts.",
       "expected_output": "Creates or reuses visible Content Intelligence state, produces an evidence-backed dossier, leaves Resource Bank unchanged, and never applies Wiki changes because no Wiki write intent was supplied; durable facts may receive a read-only Manage Wiki preview.",
-      "files": ["skills/intelligest/evals/fixtures/recent-content.json"],
+      "files": [
+        "skills/intelligest/evals/fixtures/recent-content.json"
+      ],
       "assertions": [
         "Creates or reuses the canonical Content Intelligence source/job before long analysis",
         "Produces the base dossier from the available transcript evidence",
         "Returns a Resource Bank skipped_no_reuse_intent outcome",
-        "Does not call ingest-content or imply that analysis automatically saves inspiration",
+        "Does not open the Resource Bank branch or imply that analysis automatically saves inspiration",
         "Does not apply Wiki changes; any durable-fact handoff is preview or no-op"
       ],
-      "metadata": {"farplane": {"title": "Default analysis does not become a Resource Bank save", "tags": ["skill", "intelligest", "resource-boundary"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Default analysis does not become a Resource Bank save",
+          "tags": [
+            "skill",
+            "intelligest",
+            "resource-boundary"
+          ]
+        }
+      }
     },
     {
       "id": "intelligest_recent_comparison_01",
       "prompt": "Compare this new video with the recent items in the attached Content Intelligence snapshot and tell me which other creators are actually covering the same thing.",
       "expected_output": "Retains the recent Atlas Control 3 field test as a comparable take, rejects the broad warehouse-robot roundup and the old history video, and explains each inclusion or rejection from source evidence.",
-      "files": ["skills/intelligest/evals/fixtures/recent-content.json"],
+      "files": [
+        "skills/intelligest/evals/fixtures/recent-content.json"
+      ],
       "assertions": [
         "Retains the distinct-creator field test because it covers the same Atlas Control 3 development",
         "Rejects the warehouse-robot roundup because it is only broad topic overlap",
         "Rejects the history video because it is outside the bounded recent window",
         "Does not substitute public web results or shared tags for existing-video comparison evidence"
       ],
-      "metadata": {"farplane": {"title": "Recent coverage compares takes instead of broad tags", "tags": ["skill", "intelligest", "related-coverage"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Recent coverage compares takes instead of broad tags",
+          "tags": [
+            "skill",
+            "intelligest",
+            "related-coverage"
+          ]
+        }
+      }
     },
     {
       "id": "intelligest_explicit_reuse_01",
       "prompt": "Analyze this video, and save the opening benchmark comparison because I want to reuse that presentation pattern in a future launch video.",
       "expected_output": "Produces the intelligence dossier and routes only the selected opening benchmark pattern through Resource Bank ingestion with the operator's reuse instruction preserved.",
-      "files": ["skills/intelligest/evals/fixtures/recent-content.json"],
+      "files": [
+        "skills/intelligest/evals/fixtures/recent-content.json"
+      ],
       "assertions": [
         "Produces the Content Intelligence dossier regardless of the reuse branch",
-        "Recognizes explicit reuse intent and routes to ingest-content",
+        "Recognizes explicit reuse intent and opens the Resource Bank branch",
         "Selects only the named opening benchmark pattern rather than every observed element",
         "Returns a Resource Bank branch receipt separate from the intelligence job"
       ],
-      "metadata": {"farplane": {"title": "Explicit reuse intent opens the Resource Bank branch", "tags": ["skill", "intelligest", "explicit-save"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Explicit reuse intent opens the Resource Bank branch",
+          "tags": [
+            "skill",
+            "intelligest",
+            "explicit-save"
+          ]
+        }
+      }
     },
     {
       "id": "intelligest_media_escalation_01",
       "prompt": "The transcript describes the conclusion, but my question is whether the on-screen benchmark chart supports it. Analyze the video and answer that visual claim.",
-      "expected_output": "Uses transcript extraction first, recognizes that the requested chart claim requires visual evidence, and explicitly routes that bounded need to media-ingest or returns its missing-source blocker instead of answering from text alone.",
+      "expected_output": "Uses transcript extraction first, recognizes that the requested chart claim requires visual evidence, and explicitly opens the bounded media evidence route or returns its missing-source blocker instead of answering from text alone.",
       "files": [],
       "assertions": [
         "Attempts or consumes transcript/text evidence first",
         "Recognizes that the chart claim cannot be verified from transcript text",
-        "Names media-ingest as the bounded visual route or returns media-ingest: blocked_missing_source when no video or frames were supplied",
+        "Names the media evidence route as the bounded visual route or returns blocked_missing_source when no video or frames were supplied",
         "Does not invent chart values or claim transcript-only verification"
       ],
-      "metadata": {"farplane": {"title": "Visual claims trigger bounded media evidence", "tags": ["skill", "intelligest", "media-gate"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Visual claims trigger bounded media evidence",
+          "tags": [
+            "skill",
+            "intelligest",
+            "media-gate"
+          ]
+        }
+      }
     },
     {
       "id": "intelligest_duplicate_source_01",
       "prompt": "This URL may already be in Content Intelligence. Intelligest it without making another copy.",
       "expected_output": "Canonicalizes the URL, finds the ready existing analysis job, reuses its dossier, and does not create another analysis run unless re-analysis was explicitly requested.",
-      "files": ["skills/intelligest/evals/fixtures/duplicate-source.json"],
+      "files": [
+        "skills/intelligest/evals/fixtures/duplicate-source.json"
+      ],
       "assertions": [
         "Canonicalizes the supplied URL to the existing YouTube source",
         "Reuses the ready existing job and dossier",
         "Does not create a duplicate analysis job or dossier",
         "Returns the reused disposition and visible existing references"
       ],
-      "metadata": {"farplane": {"title": "Canonical duplicate requests reuse ready intelligence", "tags": ["skill", "intelligest", "dedupe"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Canonical duplicate requests reuse ready intelligence",
+          "tags": [
+            "skill",
+            "intelligest",
+            "dedupe"
+          ]
+        }
+      }
     },
     {
       "id": "intelligest_video_save_to_wiki_01",
       "prompt": "Use the attached recent-content fixture as the supplied video and catalog context. Intelligest that video and save its durable Atlas Control 3 facts to our Wiki.",
       "expected_output": "Produces the Content Intelligence dossier, recognizes explicit save-to-Wiki intent as apply, selects only durable sourced facts, and passes them to Manage Wiki without making the operator choose pages or approve a second exact delta; because this fixture supplies no observed Manage Wiki execution receipt, reports blocked or not_executed with the intended handoff rather than synthesizing applied.",
-      "files": ["skills/intelligest/evals/fixtures/recent-content.json"],
+      "files": [
+        "skills/intelligest/evals/fixtures/recent-content.json"
+      ],
       "assertions": [
         "Produces the dossier before the Wiki enrichment receipt",
         "Treats save-to-Wiki as apply rather than Resource Bank reuse intent",
@@ -79,13 +134,25 @@
         "Lets Manage Wiki choose pages, entity creation, and links without a second delta approval",
         "Reports blocked or not_executed when no observed Manage Wiki receipt exists and never synthesizes applied"
       ],
-      "metadata": {"farplane": {"title": "Video save-to-Wiki intent routes to Manage Wiki apply", "tags": ["skill", "intelligest", "wiki", "apply"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Video save-to-Wiki intent routes to Manage Wiki apply",
+          "tags": [
+            "skill",
+            "intelligest",
+            "wiki",
+            "apply"
+          ]
+        }
+      }
     },
     {
       "id": "intelligest_article_preview_wiki_01",
       "prompt": "Use the attached wiki-article fixture as the supplied article and Wiki context. Analyze it and show what it would change, but don't write. Return the Manage Wiki handoff with page selection, entity resolution, validation, expected sync, and expected graph projection outcomes.",
       "expected_output": "Produces the dossier, binds Wiki intent to preview, and passes durable sourced facts to Manage Wiki for page/entity resolution and validation. It returns an observed Manage Wiki staged-pages receipt when available; otherwise it reports not_executed with the intended handoff and expected-not-executed sync/graph refs—never a synthetic receipt. Canonical Markdown and generated projections remain unchanged.",
-      "files": ["skills/intelligest/evals/fixtures/wiki-article.json"],
+      "files": [
+        "skills/intelligest/evals/fixtures/wiki-article.json"
+      ],
       "assertions": [
         "Treats show-me and don't-write language as preview",
         "Lets Manage Wiki select and resolve the affected pages and entities",
@@ -93,12 +160,22 @@
         "Labels sync and projection effects as expected rather than executed",
         "Leaves canonical and generated Wiki state unchanged"
       ],
-      "metadata": {"farplane": {"title": "Article Wiki preview resolves fully without writes", "tags": ["skill", "intelligest", "wiki", "preview"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Article Wiki preview resolves fully without writes",
+          "tags": [
+            "skill",
+            "intelligest",
+            "wiki",
+            "preview"
+          ]
+        }
+      }
     },
     {
       "id": "intelligest_social_summarize_first_01",
       "prompt": "Intelligest this creator's Instagram reel: https://www.instagram.com/<creator>/reel/<id>/ . The agent-reach Instagram channel is off.",
-      "expected_output": "Runs `farplane run -- summarize \"$source\" --extract` on the reel URL before any other route or blocker. When summarize returns only a login-wall page (e.g. `Instagram` via readability, exit 0), it treats that as a failed extraction, fetches the media through media-ingest, and runs `summarize <file> --extract --timestamps`. A missing summarize transcriber is reported as a setup blocker with its fix, never as the platform being blocked.",
+      "expected_output": "Runs `farplane run -- summarize \"$source\" --extract` on the reel URL before any other route or blocker. When summarize returns only a login-wall page (e.g. `Instagram` via readability, exit 0), it treats that as a failed extraction, fetches the media (skills/intelligest/scripts/extract_source.py does both steps), and runs `summarize <file> --extract --timestamps`. A missing summarize transcriber is reported as a setup blocker with its fix, never as the platform being blocked.",
       "files": [],
       "assertions": [
         "Runs summarize on the source before yt-dlp, agent-reach, Apify, or a browser",
@@ -107,7 +184,294 @@
         "Fetches the media and runs summarize on the local file",
         "Names a missing transcriber as a setup blocker rather than a source blocker"
       ],
-      "metadata": {"farplane": {"title": "Social links try summarize first and recover from login walls", "tags": ["skill", "intelligest", "extraction", "hardcase"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Social links try summarize first and recover from login walls",
+          "tags": [
+            "skill",
+            "intelligest",
+            "extraction",
+            "hardcase"
+          ]
+        }
+      }
+    },
+    {
+      "id": "intelligest_resource_bank_complete_capsule_01",
+      "prompt": "Ingest this Instagram Reel into the Resource Bank. Note: I like the ancient papery art style and want to save the visual/story pattern for future reels. Public metadata and the operator note are available; deepen media inspection only as needed to ground complete element capsules.",
+      "expected_output": "Reads `skills/intelligest/references/resource-bank/branch.md` and applies the complete capsule contract.; Stores source/ref, operator note/focus, optional top-level transcript, freeform analysisMarkdown, tags/facets, and only explicitly selected creative elements.; Every creative element includes description, a non-empty whyItWorks string, one same-ingestion-job goldenExample assetId with optional description, one non-empty goldenRecipe prompt, and pinned: true.; Uses only the six canonical kinds and optional anchors.; Deepens media inspection or blocks unsupported elements when metadata and the note cannot ground element-specific claims.; Does not invent unseen frames, transcript, audio, or exact timing.; Keeps Tasty Pack retrieval compact as source, optional transcript, analysis.markdown, and selected complete elements without a parallel evidence or recipe collection.; Verifies retrieval preserves the complete capsule.",
+      "files": [],
+      "assertions": [
+        "Reads `skills/intelligest/references/resource-bank/branch.md` and applies the complete capsule contract.",
+        "Stores or returns source/ref, operator note/focus, optional top-level transcript, freeform analysisMarkdown, tags/facets, and only explicitly selected creative elements.",
+        "Creative elements use only the six compact kinds: format, storyboard, visual, character, audio, and editing.",
+        "Every creative element includes description, a non-empty whyItWorks string, one same-ingestion-job goldenExample assetId with optional description, and one non-empty goldenRecipe prompt.",
+        "Uses optional anchors such as opening frame, 0-3s, caption, or operator note when useful, and stores every active element with pinned: true.",
+        "States source limitations honestly instead of inventing unseen frames, transcript, audio, or exact timing.",
+        "Deepens media inspection or blocks unsupported elements when metadata and the note cannot ground element-specific claims.",
+        "When a real contact sheet, thumbnail, or representative frame image exists after media ingest, uploads it after the primary asset row exists as a storage-backed derived Resource Bank thumbnail asset with parentAssetId.",
+        "If no real visual preview was extracted, explicitly skips preview upload instead of creating a fake placeholder.",
+        "Keeps Tasty Pack retrieval compact: source, optional transcript, analysis.markdown, and selected complete elements, without parallel evidence arrays, recipe collections, storageId, or previewAsset.storageUrl.",
+        "Verifies Tasty Pack retrieval preserves description, whyItWorks, goldenExample, goldenRecipe, and optional pinned."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Ingests social inspiration into complete Resource Bank capsules",
+          "tags": [
+            "skill",
+            "intelligest",
+            "complete-capsule",
+            "resource-bank",
+            "creative-elements"
+          ],
+          "notes": "Regression for the lean complete-capsule contract: use the smallest source read that can ground every element, and deepen or block when it cannot."
+        }
+      }
+    },
+    {
+      "id": "intelligest_resource_bank_note_backed_pinned_elements_01",
+      "prompt": "Ingest this founder launch reel reference. Note: I specifically like the deadpan guide, the proof talisman prop, and the guided-meditation audio cadence. Keep the rest only as context for future remixes.",
+      "expected_output": "Represents the reel as source, analysis, and creative_elements rather than adding a separate production_pattern object.; Stores only the operator-selected deadpan guide, proof talisman prop, and guided-meditation audio cadence as complete CreativeElements; keeps other observed components in capture analysis.; Represents the operator-liked deadpan guide as a `character` element with `pinned: true` instead of burying it in visual/storyboard prose.; Marks the operator-liked talisman prop and audio cadence elements with `pinned: true`.; Does not ask for or store numeric creative-element weights.; Expects the operator note to be available as `analysis.operatorNote`.; Expects Tasty Pack `meta` to expose direct pinned/operator-note counts and warnings.; Preserves remix policy such as not copying actor likeness, exact captions, brand wrapper, source music, or protected expression.; Explains that future Tasty Packs should treat stored elements as selected reuse signals and use capture analysis for surrounding context.",
+      "files": [],
+      "assertions": [
+        "Represents the reel as source, analysis, and creative_elements rather than adding a separate production_pattern object.",
+        "Gives every element a complete description, whyItWorks, same-source goldenExample, and kind-specific goldenRecipe capsule.",
+        "Stores only components explicitly selected for reuse by the operator note; surrounding format, storyboard, visual, character, audio, or editing observations remain in capture analysis.",
+        "Represents the operator-liked deadpan guide as a `character` element with `pinned: true` instead of burying it in visual/storyboard prose.",
+        "Marks the operator-liked talisman prop and audio cadence elements with `pinned: true`.",
+        "Does not ask for or store numeric creative-element weights.",
+        "Expects the operator note to be available as `analysis.operatorNote`.",
+        "Expects Tasty Pack `meta` to expose direct pinned/operator-note counts and warnings.",
+        "Preserves remix policy such as not copying actor likeness, exact captions, brand wrapper, source music, or protected expression.",
+        "Explains that future Tasty Packs should treat stored elements as selected reuse signals and use capture analysis for surrounding context."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Stores operator taste as note-backed pinned creative elements",
+          "tags": [
+            "skill",
+            "intelligest",
+            "pinned-elements",
+            "tasty-pack",
+            "resource-bank"
+          ],
+          "notes": "Regression for taste-first Resource Bank ingestion: store broad context in analysis and create CreativeElements only for operator-selected reusable components."
+        }
+      }
+    },
+    {
+      "id": "intelligest_resource_bank_character_persona_01",
+      "prompt": "Ingest this Railway/Gilfoyle-style advert reference. Note: the Gilfoyle-like deadpan technical character is the part I love; save it so future infrastructure/product videos can remix that persona safely without copying the original character.",
+      "expected_output": "Keeps the Resource Bank shape as source, analysis, and creative_elements without adding a production_pattern object.; Extracts a `character` creative element for the deadpan technical guide/persona and marks it `pinned: true` because the operator note explicitly likes it.; Separates source facts from interpretation and states any inspection limits instead of inventing exact scenes, dialogue, or timing.; Keeps unselected storyboard, visual, format, audio, or editing observations in capture analysis rather than creating supporting context elements.; Records rights-safe production policy: do not copy the protected character, actor likeness, exact wardrobe, voice, name, catchphrases, source frames, brand wrapper, or copyrighted expression.; Does not ask for or store weights, planningWeight, or other numeric element priority.; Explains that downstream creation should use the selected character element and hydrate the capture analysis when surrounding source context is needed.",
+      "files": [],
+      "assertions": [
+        "Keeps the Resource Bank shape as source, analysis, and creative_elements without adding a production_pattern object.",
+        "Gives the character element distinct description, whyItWorks, same-source goldenExample, and goldenRecipe values, and keeps rights policy outside CreativeElement rows.",
+        "Extracts a `character` creative element for the deadpan technical guide/persona and marks it `pinned: true` because the operator note explicitly likes it.",
+        "Separates source facts from interpretation and states any inspection limits instead of inventing exact scenes, dialogue, or timing.",
+        "Keeps unselected storyboard, visual, format, audio, or editing observations in capture analysis rather than creating supporting context elements.",
+        "Records rights-safe production policy: do not copy the protected character, actor likeness, exact wardrobe, voice, name, catchphrases, source frames, brand wrapper, or copyrighted expression.",
+        "Does not ask for or store weights, planningWeight, or other numeric element priority.",
+        "Explains that downstream creation should use the selected character element and hydrate the capture analysis when surrounding source context is needed."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Extracts distinctive character/persona as a first-class creative element",
+          "tags": [
+            "skill",
+            "intelligest",
+            "character",
+            "persona",
+            "rights-safe-remix",
+            "resource-bank"
+          ],
+          "notes": "Regression for Resource Bank character elements: distinctive personas should be reusable taste signals, while protected expression stays behind remix constraints."
+        }
+      }
+    },
+    {
+      "id": "intelligest_resource_bank_selected_music_recognition_01",
+      "prompt": "Ingest this TikTok reference. Note: the music is really nice; find out what it is if you can, and save the audio direction for future product reels.",
+      "expected_output": "Routes audio/video reading through `the media evidence route` because the operator selected the music as a liked element.; Attempts optional music recognition when source access and local dependencies allow it, or records a clear no-match, missing-dependency, network, or source-access limit.; Stores a `kind: audio` creative element with artist/title/link when recognition matches, or an honest sonic-pattern description when it does not.; Marks the audio element with `pinned: true` because the operator note explicitly likes the music.; Records production policy explaining that recognized music is attribution/research and future work should use licensed, original, or generated audio rather than copying the protected track.; Keeps the Resource Bank capture compact and does not add a separate music evidence object to the active Tasty Pack contract.",
+      "files": [],
+      "assertions": [
+        "Routes audio/video reading through `the media evidence route` because the operator selected the music as a liked element.",
+        "Attempts optional music recognition when source access and local dependencies allow it, or records a clear no-match, missing-dependency, network, or source-access limit.",
+        "Stores a `kind: audio` creative element with artist/title/link when recognition matches, or an honest sonic-pattern description when it does not.",
+        "Stores a non-empty audio-specific whyItWorks, one same-source goldenExample asset, and a rights-safe goldenRecipe prompt for recreating the sonic function.",
+        "Marks the audio element with `pinned: true` because the operator note explicitly likes the music.",
+        "Records production policy explaining that recognized music is attribution/research and future work should use licensed, original, or generated audio rather than copying the protected track.",
+        "Keeps the Resource Bank capture compact and does not add a separate music evidence object to the active Tasty Pack contract."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Optionally recognizes selected music and stores rights-safe audio context",
+          "tags": [
+            "skill",
+            "intelligest",
+            "music-recognition",
+            "audio-element",
+            "rights-safe-remix",
+            "resource-bank"
+          ],
+          "notes": "Regression for Shazam-style optional enrichment: when the operator says the music is nice, try to identify it, but keep ingestion honest and rights-safe."
+        }
+      }
+    },
+    {
+      "id": "intelligest_resource_bank_low_poly_complete_capsules_01",
+      "prompt": "Reingest the approved low-poly Instagram source. The extracted source video, opening frame, contact sheet, transcript, and audio are available from one ingestion job. Save format, storyboard, visual, character, audio, and editing elements for future production; fold hook into storyboard, copy into storyboard, subtitle timing into editing, and constraints into production policy.",
+      "expected_output": "Uses only the six canonical element kinds.; Gives every element description, a specific whyItWorks string, one same-ingestion-job goldenExample assetId with an optional precise description, and one kind-specific goldenRecipe prompt.; Chooses the most useful source or derived asset per element instead of assigning one whole-source example blindly.; Keeps layout under visual, opening hook and semantic copy under storyboard, subtitle rendering/timing and cut rhythm under editing, and vocal pacing under audio.; Preserves complete capsules through Tasty Pack retrieval.; Does not add timing fields, hook/copy/constraint/director/layout/pacing kinds, recipe objects, profile records, or a production-pattern table.",
+      "files": [],
+      "assertions": [
+        "Uses only the six canonical element kinds.",
+        "Gives every element description, a specific whyItWorks string, one same-ingestion-job goldenExample assetId with an optional precise description, and one kind-specific goldenRecipe prompt.",
+        "Chooses the most useful source or derived asset per element instead of assigning one whole-source example blindly.",
+        "Keeps layout under visual, opening hook and semantic copy under storyboard, subtitle rendering/timing and cut rhythm under editing, and vocal pacing under audio.",
+        "Preserves complete capsules through Tasty Pack retrieval.",
+        "Does not add timing fields, hook/copy/constraint/director/layout/pacing kinds, recipe objects, profile records, or a production-pattern table."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Builds production-ready capsules from the low-poly source",
+          "tags": [
+            "skill",
+            "intelligest",
+            "low-poly",
+            "golden-example",
+            "golden-recipe",
+            "resource-bank"
+          ]
+        }
+      }
+    },
+    {
+      "id": "intelligest_resource_bank_shallow_metadata_blocks_capsule_01",
+      "prompt": "Save this private video as a reusable reference. Only its filename and my note 'nice pacing and visuals' are available; no frames, audio, transcript, playable source, or existing Resource Bank asset can be inspected.",
+      "expected_output": "Records the source-access limit honestly.; Does not invent element-specific visual, pacing, audio, whyItWorks, goldenExample, or goldenRecipe claims.; Attempts the appropriate the media evidence route route when access can be recovered.; Returns a blocker for complete creative-element storage when no same-source asset or defensible evidence can be produced.; Does not save shallow elements merely to satisfy the schema.",
+      "files": [],
+      "assertions": [
+        "Records the source-access limit honestly.",
+        "Does not invent element-specific visual, pacing, audio, whyItWorks, goldenExample, or goldenRecipe claims.",
+        "Attempts the appropriate the media evidence route route when access can be recovered.",
+        "Returns a blocker for complete creative-element storage when no same-source asset or defensible evidence can be produced.",
+        "Does not save shallow elements merely to satisfy the schema."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Blocks unsupported capsules from shallow metadata",
+          "tags": [
+            "skill",
+            "intelligest",
+            "source-honesty",
+            "blocked",
+            "resource-bank"
+          ]
+        }
+      }
+    },
+    {
+      "id": "intelligest_resource_bank_save_only_zero_elements_01",
+      "prompt": "Save this interview URL for context. I do not want to reuse any specific component yet and I am not asking to make content from it.",
+      "expected_output": "Stores the stable source reference, operator note, optional top-level transcript, and one freeform analysisMarkdown value.; Creates zero CreativeElements because no independently reusable component was explicitly selected.; Returns tickets: [] because the note is save-only.; Does not split the prose into fixed facts, interpretation, whyItWorks, takeaways, frameNotes, promptGuess, or remixConstraints storage fields.",
+      "files": [],
+      "assertions": [
+        "Stores optional transcript separately from one freeform analysisMarkdown value.",
+        "Creates zero CreativeElements because the note selected none for reuse.",
+        "Returns an empty tickets array for save-only intent.",
+        "Does not recreate analysis prose sections as dedicated schema fields."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Saves whole-source context without manufacturing elements or tickets",
+          "tags": [
+            "skill",
+            "intelligest",
+            "save-only",
+            "zero-elements",
+            "analysis-markdown",
+            "resource-bank"
+          ]
+        }
+      }
+    },
+    {
+      "id": "intelligest_resource_bank_future_creation_ticket_01",
+      "prompt": "Ingest this interview and make a ticket so we later produce a short video from its argument about agent trust. Keep the source wording as reference, but do not generate the video now.",
+      "expected_output": "Stores the capture using a stable source URL or Resource Bank asset ID.; Creates or reuses one thin content-production ticket whose instruction says to repurpose the agent-trust argument from that source into a short video.; Preserves the operator details and names content-impl-plan as the first operation.; Returns the ticket ID or path in tickets[].; Does not require a reverse ingestionJobId-to-taskId link.; Repeating the same source and materially equivalent intent reuses the existing ticket.",
+      "files": [],
+      "assertions": [
+        "Creates or reuses one source-addressable repurpose ticket for future_creation intent.",
+        "Names the intended short-video output and preserves the selected agent-trust argument.",
+        "Uses content-impl-plan as the ticket's first operation.",
+        "Returns the ticket ID or path in tickets[].",
+        "Does not require a reverse ingestion-job/task link.",
+        "Dedupes by normalized source reference plus materially equivalent intent."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Turns future-creation intent into a thin repurpose ticket",
+          "tags": [
+            "skill",
+            "intelligest",
+            "future-creation",
+            "content-ticket",
+            "content-impl-plan",
+            "resource-bank"
+          ]
+        }
+      }
+    },
+    {
+      "id": "intelligest_resource_bank_pinterest_canonical_source_01",
+      "prompt": "Save this Pinterest pin because I like the landing page's oversized product hero and restrained type. Source URL: https://www.pinterest.com/pin/123456789012345678/. I am not asking to make a page yet. If the pin points to the real site, use that as the durable reference.",
+      "expected_output": "Attempts canonical original resolution while preserving discovery provenance; Keeps unresolved pins inspiration-only with rights_status unknown; Stores selected complete visual elements only when source evidence supports them and otherwise returns a precise capsule blocker; Infers no license or protected-expression reuse; Creates no ticket; Verifies Resource Bank and Tasty Pack writes or reports their exact blockers",
+      "files": [],
+      "assertions": [
+        "Attempts to resolve and store the canonical original landing page while preserving the Pinterest discovery URL and operator note.",
+        "If the original cannot be resolved, stores the pin honestly as inspiration-only with rights_status: unknown.",
+        "Creates only operator-selected reusable visual elements with same-ingestion-job golden examples and rights-safe golden recipes when the pin or original is inspectable; otherwise blocks unsupported element capsules without inventing evidence.",
+        "Does not infer a production license or suggest copying protected expression from the page.",
+        "Returns tickets: [] for save-only intent and returns a capture handle plus verified Tasty Pack retrieval, or precise storage and retrieval blockers when those systems are unavailable."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Canonicalizes a Pinterest-discovered landing reference",
+          "tags": [
+            "skill",
+            "intelligest",
+            "pinterest",
+            "canonical-source",
+            "tasty-pack",
+            "resource-bank"
+          ]
+        }
+      }
+    },
+    {
+      "id": "intelligest_resource_bank_compile_style_profile_01",
+      "prompt": "Turn verified Resource Bank capture rb_123 into a reusable low-poly-concept profile. A profile with that ID already exists, and the operator asks you to copy the source creator's whole video into it so future prompts are exact.",
+      "expected_output": "Uses the Resource Bank branch compile-style-profile step and reuses the verified capture; blocks the collision without explicit replace authority; refuses to copy the source video; preserves provenance and creator-neutral grammar; requires collocated profile.md, prompts.md, and example.md.",
+      "files": [],
+      "assertions": [
+        "Uses the Resource Bank branch compile-style-profile step and the existing verified capture instead of re-ingesting the source.",
+        "Blocks the existing profile collision without explicit replace authority.",
+        "Refuses to copy source video and preserves a rights-safe source reference instead.",
+        "Keeps profile ID, prompts, and outputs creator-neutral while preserving provenance.",
+        "Requires collocated profile.md, prompts.md, and example.md before accepting the package."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Compiles a saved capture into a rights-safe style profile",
+          "tags": [
+            "skill",
+            "intelligest",
+            "style-profile",
+            "rights-safe",
+            "resource-bank"
+          ]
+        }
+      }
     }
   ]
 }

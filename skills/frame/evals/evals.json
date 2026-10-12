@@ -355,18 +355,18 @@
     {
       "id": "frame_playback_rejects_status_only_01",
       "prompt": "Play back TASK-4821, which I just reopened after two weeks. What changed, which tests passed, and what should I do next?",
-      "expected_output": "Does not fabricate an idea recap from a status-only resumption request; routes to recap-task or requests the authoritative task reference needed for a grounded recap.",
+      "expected_output": "Does not fabricate an idea recap from a status-only resumption request; points to the task's GitHub issue and latest progress comment, or requests the authoritative task reference needed for a grounded recap.",
       "files": [],
       "assertions": [
         "Recognizes the request as task resumption rather than product alignment",
-        "Routes to recap-task or names the missing authoritative task source",
+        "Points to the task's issue and progress comment or names the missing authoritative task source",
         "Does not invent product purpose, user journeys, decisions, test results, or an ASCII product model",
         "Does not mutate or resume the underlying task"
       ],
       "metadata": {
         "farplane": {
           "title": "Playback rejects a status-only recap request",
-          "notes": "Protects the boundary with recap-task.",
+          "notes": "Protects the boundary with task resumption from the issue record.",
           "tags": [
             "skill",
             "frame",

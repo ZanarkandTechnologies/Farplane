@@ -111,11 +111,9 @@ observe -> choose_next(execute | diagnose | report_now | request_feedback | stop
         -> act -> verify -> write_back
 ```
 
-Goal Advisor compiles the packet, Metric Advisor establishes or repairs the
+Goal Advisor compiles the packet and its metric card establishes or repairs the
 measurement contract, the choose-next comparison ranks moves only when several
-plausible options need judgment, and the domain skill executes. Plan Next Wave
-is an upstream empty-board refiller and never participates inside an active
-Goal.
+plausible options need judgment, and the domain skill executes.
 
 - `ticket.md` owns objective, scope, acceptance criteria, proof, blockers, and
   current next action.
@@ -397,7 +395,7 @@ the recorded terminal outcomes for portfolio learning without rescoring them.
 Pulse admission receipts may be joined to eventual Reward decisions for plan
 outcome analysis, but Farplane has no independent plan score or plan-wave loop.
 If the provider, guard, anti-metric, or proof route needs more detail, put the
-metric card in `program.md` or route through `metric-advisor`.
+metric card in `program.md` (see `goal-advisor` `references/metrics.md`).
 
 ### Reward versus experiment prediction
 

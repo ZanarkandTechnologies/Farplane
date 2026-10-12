@@ -128,7 +128,6 @@ areas:
         mechanism, with rollback or rejection criteria.
     skill_refs:
     - self-improve
-    - dogfood-review
     metric_refs:
     - metric_id: accepted_harness_improvements
     - metric_id: auto_completion_rate
@@ -166,12 +165,8 @@ operating_principles:
 - Bundle avoidable setup into the first independently useful exemplar and maximize artifact-producing
   work after quality, guard, authority, and interference gates.
 stable_capabilities:
-- pulse-update
-- plan-next-wave
-- progress-update
 - report-gen
 - feed-scout
-- dogfood-review
 - eval
 leverage_commitments:
 - id: evals_and_proof_systems

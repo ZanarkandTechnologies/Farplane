@@ -39,7 +39,8 @@ refs:
 - Rule: do not treat the bootstrap as fully initialized until the operator's
   desired outcome, success criteria, non-goals, and decision boundaries have
   been captured in `harness.yaml` and selected objectives have honest providers.
-- Next route: use `metric-advisor` for any new objective or guard, then create
+- Next route: use the `goal-advisor` metric card
+  (`skills/goal-advisor/references/metrics.md`) for any new objective or guard, then create
   a bounded instrumentation ticket for missing providers.
 
 ## Recommended Shape

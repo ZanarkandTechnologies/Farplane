@@ -17,7 +17,7 @@ checks, provider allowlists, readback, and receipts. This outline is a review
 map, not a replacement prompt:
 
 ```text
-Use $progress-update | $report-gen.
+Use $report-gen (daily | weekly).
 
 1. Fetch the bounded provider and project context; freeze sources and coverage.
 2. Cache exact local inputs with IDs, revisions, timestamps, URLs, and hashes.

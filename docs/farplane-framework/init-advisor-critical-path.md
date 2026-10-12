@@ -14,7 +14,7 @@ refs:
   - skills/init-advisor/SKILL.md
   - skills/init-advisor/scripts/bootstrap.sh
   - skills/harness-creator/SKILL.md
-  - skills/metric-advisor/SKILL.md
+  - skills/goal-advisor/references/metrics.md
   - skills/goal-advisor/SKILL.md
   - skills/automation-advisor/SKILL.md
   - docs/features/FEAT-0071-project-work-pulse.md
@@ -152,8 +152,8 @@ harness_creator(idea, values, priorities, current_files, capabilities)
 ```
 
 It checks existing reusable and project-local skills before creating a new
-workflow. `metric-advisor` handles material objective/guard depth. `goal-advisor`
-compiles a selected material ticket only after the ticket contract is concrete.
+workflow. The `goal-advisor` metric card handles material objective/guard depth;
+`goal-advisor` compiles a selected material ticket only after the ticket contract is concrete.
 
 ## 6. Prepare Automation
 

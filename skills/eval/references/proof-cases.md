@@ -40,7 +40,7 @@ a strong oracle over five with blurry criteria.
 | Variable output with explicit criteria | Eval row with assertions or a judge |
 | Tool use, multi-turn state, artifacts | `behavior_trace` or [agent-qa-test](../../agent-qa-test/SKILL.md) |
 | Running app or user-visible UI | [qa](../../qa/SKILL.md), then [visual-qa](../../visual-qa/SKILL.md) |
-| Unclear metric or reward signal | [metric-advisor](../../metric-advisor/SKILL.md) first |
+| Unclear metric or reward signal | [goal-advisor metric card](../../goal-advisor/references/metrics.md) first |
 
 When an agent cannot reach or assert the behavior, plan the test hook in
 [impl-plan's agent testability reference](../../impl-plan/references/agent-testability.md).

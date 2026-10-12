@@ -39,7 +39,7 @@ gates:
   primary_hypothesis_named; measurement_method_named; policy_risks_labeled;
   creative_and_landing_page_ready; no_secret_echo; dry_run_before_mutation
 routes:
-  social-content | landing-page | metric-advisor | zernio | review
+  social-content | landing-page | goal-advisor | zernio | review
 fails:
   launching spend without approval; hiding account IDs or budget assumptions;
   treating ad copy as approved creative; copying secrets into artifacts;
@@ -162,7 +162,7 @@ Next owner:
   creative concepts, variants, captions, hooks, or asset handoffs.
 - [landing-page](../landing-page/SKILL.md) - use when offer or
   landing-page fit is the blocker.
-- [metric-advisor](../metric-advisor/SKILL.md) - use for success
+- [metric card](../goal-advisor/references/metrics.md) - use for success
   metrics, guard metrics, anti-metrics, and measurement routes.
 - [zernio](../zernio/SKILL.md) - use for owned organic posting drafts or
   account metrics, not paid campaign launch.

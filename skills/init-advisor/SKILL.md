@@ -18,8 +18,8 @@ Scaffold `farplane/harness.yaml` for the human charter, product description,
 capability references, and metric selection; `farplane/metrics.yaml` owns
 objectives, guards, and metric definitions. In `full` mode, hand operating-model
 discovery and grounding to `harness-creator` after substrate setup. It owns
-routing to `metric-advisor`, `harness-advisor`, `skill-creator`, and
-`goal-advisor`; do not orchestrate those calls separately.
+routing to `harness-advisor`, `skill-creator`, and `goal-advisor` (including
+its metric card); do not orchestrate those calls separately.
 
 This skill also owns the place where reusable stack setup recipes live for
 common repo types such as Convex, Next.js, Clerk, shadcn, React apps, and
@@ -87,7 +87,7 @@ foundation, not init completion.
 Use destination skill signatures as the question inventory. Route static
 charter, capability workflow references, feedback loops, missing systems, and
 objective shape to `harness-creator`; route metric meaning, directions, guards,
-and proof providers to `metric-advisor`. When direct signature questions would
+and proof providers to the `goal-advisor` metric card. When direct signature questions would
 produce shallow or misleading answers, stop for focused operator clarification.
 Record the intake choice and missing answers in `docs/bootstrap-brief.md`.
 
@@ -145,8 +145,8 @@ rules in `farplane/metrics.yaml`; use
         static charter, capability workflows, metric objectives,
         feedback loops, or missing systems need
         project-specific setup.
-  - [ ] Let `harness-creator` decide whether to route to `metric-advisor`,
-        `harness-advisor`, `skill-creator`, or `goal-advisor`.
+  - [ ] Let `harness-creator` decide whether to route to `harness-advisor`,
+        `skill-creator`, or `goal-advisor` (including its metric card).
 - [ ] 5. Create the business foundation.
   - [ ] Create or preserve exactly three ordinary ticket paths:
     `TASK-0001` finds the first customer, `TASK-0002` delivers the first value,

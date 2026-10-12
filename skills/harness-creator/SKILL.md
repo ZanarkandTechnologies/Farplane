@@ -96,11 +96,10 @@ returns: charter/metric/capability/feedback decisions, proof, and next owner
 - [ ] **N4 — Choose the smallest operating surfaces and cadence.**
   `capability plan + blockers -> heartbeat/automation/maintenance policy`
 
-  Rule: Use one `pulse-update` heartbeat for board reconciliation and bounded
-  dispatch; use Feed Scout, Company OS Daily/Weekly, and Dogfood as
-  report/context lanes. `progress-update` and `report-gen` maintain project memory and
-  may propose exact existing-issue updates but do not admit or dispatch work;
-  `dogfood-review` emits bounded candidates. When no ticket can
+  Rule: Use at most one heartbeat; use Feed Scout and Company OS Daily/Weekly
+  as report/context lanes. `report-gen` (daily and weekly) maintains project
+  memory and may propose exact existing-issue updates but does not admit or
+  dispatch work. When no ticket can
   advance, inspect missing systems, weak metrics, stale assumptions, and safe
   preparation work. Keep automations
   `preview` or `ready_for_goal_advisor` until explicit scheduler approval, and
@@ -172,5 +171,5 @@ the transient worksheet, capability map, missing-primitive plan, and handoff.
 - [capability map](templates/capability-map.md) — large inventory only.
 - [missing primitive plan](templates/missing-primitive-plan.md) — material gaps.
 - [Goal Advisor handoff](templates/goal-advisor-handoff.md) — selected ticket.
-- [metric-advisor](../metric-advisor/SKILL.md) — deep metric or guard design.
+- [metric card](../goal-advisor/references/metrics.md) — deep metric or guard design.
 - [faceless AI channel example](examples/faceless-ai-channel.md) — pilot case.

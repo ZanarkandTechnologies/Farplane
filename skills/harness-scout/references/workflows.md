@@ -47,7 +47,7 @@
    overhead, and maintainability.
 4. Record confidence and anti-metrics.
 5. If the manual scorecard is too weak but the candidate is still important,
-   route to [metric-advisor](../../metric-advisor/SKILL.md) for a real metric
+   route to the [goal-advisor metric card](../../goal-advisor/references/metrics.md) for a real metric
    card.
 6. Treat the scorecard as a judgment aid, not a scientific benchmark.
 

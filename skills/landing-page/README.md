@@ -24,7 +24,7 @@ Shape one-page, marketing, launch, portfolio, and cinematic frontend surfaces be
 6. For product/device/equipment pages, define realistic product shots,
    assembly/disassembly or exploded-view media, and feature callouts.
 7. Map assets, motion, and QA from the section matrix.
-8. Resolve Asset Advisor outputs or blockers required for spec approval.
+8. Resolve storyboard asset-plan outputs or blockers required for spec approval.
 9. Return the approved spec to the calling `impl-plan` for one unified Change
    Plan.
 

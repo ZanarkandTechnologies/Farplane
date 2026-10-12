@@ -102,7 +102,7 @@ the evidence bar that would change their belief or workflow. This is canonical
 human meaning. Feed Scout may render it into Scout Brief and add observed
 current context, but external evidence cannot silently rewrite it.
 
-`planning.skill_refs` is the active allowlist for Plan Next Wave. Each skill's
+`planning.skill_refs` is the allowlist of skills a planner may call. Each skill's
 `planner_contract` owns its required arguments, while its skill body owns the
 workflow. Pulse may use areas to ground audience and metrics but may not derive
 new work types from area prose.
@@ -129,7 +129,7 @@ proactive ticket admission and execution.
 
 One ignored, update-in-place Markdown Scout Brief synthesis of canonical ICP profiles,
 current trends, notable things, and source gaps. It is a cheap retrieval surface
-for Feed Scout, Plan Next Wave, Pulse, and ticket-owned artifact work—not a
+for Feed Scout, Pulse, and ticket-owned artifact work—not a
 snapshot archive, monthly trend ledger, planner, or source of authority.
 
 ### `farplane/metrics.yaml`

@@ -3,7 +3,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 framework_template_version: "0.4.0"
-owner: metric-advisor
+owner: goal-advisor
 refreshers:
   local_project_metrics:
     refresh: >-

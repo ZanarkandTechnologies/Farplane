@@ -80,8 +80,8 @@ Done so far:
 
 Still open:
 
-- `ticket` and `tickets` work on the legacy `tickets/` files, but the `impl-plan`,
-  `goal-advisor`, `dogfood-review` and `pulse-update` skills still name them; retiring them means moving
+- `ticket` and `tickets` work on the legacy `tickets/` files, but the `impl-plan`
+  and `goal-advisor` skills still name them; retiring them means moving
   those skills to GitHub Issues first (its own issue).
 - `notify` and `reports` have no live caller but are documented operator tools; ask before removing.
 - `content add` defaults `--project-root` to the Farplane checkout, not the current folder; decide with the

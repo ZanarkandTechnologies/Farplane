@@ -15,9 +15,9 @@ claiming behavior success.
 
 | Lifecycle stage | Skill owners |
 | --- | --- |
-| Bootstrap and objectives | `init-advisor`, `harness-creator`, `metric-advisor` |
-| Execution compilation and recurring work | `goal-advisor`, `automation-advisor`, `pulse-update` |
-| Work supply and operating review | `plan-next-wave`, `progress-update`, `report-gen`, `feed-scout` |
+| Bootstrap and objectives | `init-advisor`, `harness-creator`, `goal-advisor` (metric card) |
+| Execution compilation and recurring work | `goal-advisor`, `automation-advisor` |
+| Work supply and operating review | `pm`, `report-gen`, `feed-scout` |
 | Skill self-improvement | `eval`, `self-improve` |
 | Review and completion | `telegram-message`, `impl-plan`, `qa`, `review` |
 

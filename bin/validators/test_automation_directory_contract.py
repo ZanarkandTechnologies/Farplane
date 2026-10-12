@@ -56,7 +56,7 @@ class AutomationDirectoryContractTests(unittest.TestCase):
             folder = root / "farplane" / "automations"
             folder.mkdir(parents=True)
             (folder / "pulse.md").write_text(
-                "---\nid: pulse\nstatus: paused\nstatus: active\n---\nUse $pulse-update.\n",
+                "---\nid: pulse\nstatus: paused\nstatus: active\n---\nRun the heartbeat.\n",
                 encoding="utf-8",
             )
 

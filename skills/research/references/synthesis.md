@@ -21,7 +21,8 @@ mined for Farplane features belongs to `harness-scout`.
    with its evidence location.
 4. Cluster overlapping features across sources before scoring. A pattern that
    several sources converge on outranks one impressive source.
-5. If the success metric is fuzzy, get a metric card from `metric-advisor`
+5. If the success metric is fuzzy, get a metric card from `goal-advisor`
+   (`references/metrics.md`)
    before scoring.
 6. Score and decide each cluster.
 

@@ -12,7 +12,7 @@ source: local
 
 - [ ] Read existing product context first: `docs/prd.md`, active ticket,
   `docs/features/`, user stories, customer notes, and current demo data.
-- [ ] Use [customer-research](../customer-research/SKILL.md)
+- [ ] Use [prospect](../prospect/SKILL.md)
   when user groups, jobs, operating contexts, friction, or success signals are
   not already clear.
 - [ ] Use [research](../research/SKILL.md) when the demo
@@ -25,7 +25,7 @@ source: local
 - [ ] Pick the pitch-worthy MVP slice and decompose it into workflow,
   screen/state, and data needs.
 - [ ] For an operational decision demo, use the
-  [Mine-To-Margin reference standard](../solution-shaping/references/mine-to-margin-reference-standard.md):
+  [Mine-To-Margin reference standard](../approach/references/mine-to-margin-reference-standard.md):
   name one recurring decision, the deterministic domain mechanism, and the
   ordinary, constrained, and changed-condition cases that should alter it.
 - [ ] Generate realistic entities, records, timelines, statuses, edge cases,
@@ -214,4 +214,4 @@ For demo-bearing build or review handoffs, append:
 - Failure modes: [`references/gotchas.md`](references/gotchas.md)
 - Scoring rubric: [`references/rubric.md`](references/rubric.md)
 - Operational decision reference:
-  [Mine-To-Margin](../solution-shaping/references/mine-to-margin-reference-standard.md)
+  [Mine-To-Margin](../approach/references/mine-to-margin-reference-standard.md)

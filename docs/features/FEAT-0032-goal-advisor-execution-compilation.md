@@ -108,9 +108,9 @@ Goal Advisor is an execution compiler, not a replacement for the ticket.
   owns its research-search semantics.
 - The compiled prompt shrinks the task rather than expanding global policy.
 - Every compiled program uses `observe -> choose_next -> act -> verify ->
-  write_back`. Advisor skills are conditional methods: Metric Advisor for
-  setup/repair, the choose-next comparison for real multi-option judgment, and Plan Next
-  Wave only outside an active Goal when the board needs refill.
+  write_back`. Advisor methods are conditional: the goal-advisor metric card
+  ([`metrics.md`](../../skills/goal-advisor/references/metrics.md)) for
+  setup/repair and the choose-next comparison for real multi-option judgment.
 - First load is bounded to full ticket/program plus the latest 80 progress
   lines, with a 300-line target and 400-line hard validation gate.
 - Completion still uses the ticket's proof and review gates and requires a

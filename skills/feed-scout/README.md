@@ -1,7 +1,9 @@
 # Feed Scout
 
 `feed-scout` monitors tracked profiles and turns newly discovered content into
-Farplane proposal candidates.
+Farplane proposal candidates. It also scouts one external source on request
+([single-source mode](references/single-source.md)) for an
+adopt/adapt/reject/defer verdict.
 
 Start with [SKILL.md](SKILL.md). A separate bounded Feed Scout automation calls
 the skill directly; Interval only reads completed Feed Scout reports as BAU
@@ -23,10 +25,9 @@ validation, dedupe, and normalization; they are not fetchers, rankers, or daily
 feed writers.
 
 The dated report contains source-backed, deduped, executable candidates with
-Reward, proof, stop, authority, and ticket-quality evidence. Feed Scout may
-create a bounded direct recovery ticket for an evidenced existing project
-failure with a known fix and no experiment debt. Work Pulse's adaptive planner
-ranks opportunities, uncertain fixes, and experiments globally.
+Reward, proof, stop, and authority evidence. An evidenced existing failure with
+a known fix is listed as a recovery candidate. Feed Scout creates no tickets,
+issues, or tasks; the operator picks what to act on.
 
 Daily feed items should answer `why_care_today` and include `today_delta`,
 `novelty`, `actionability`, `source_snapshot`, optional bookmark-card `embed`,
@@ -45,5 +46,5 @@ fixture examples into tracked docs. Use `farplane/automations/` to store the
 reviewable prompt for an explicit run; do not add a hidden daemon or live
 scraping loop.
 
-Notion proposal pages may remain a review surface, but live Tasks admission is
-outside Feed Scout and belongs to the project planner or an explicit operator action.
+Live Tasks or issue admission is outside Feed Scout and belongs to an explicit
+operator action.

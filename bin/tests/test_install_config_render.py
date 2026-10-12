@@ -86,7 +86,7 @@ enabled = true
             desk_profile = tomllib.loads((target / "engineer.config.toml").read_text(encoding="utf-8"))
             self.assertIn("Engineer desk", desk_profile["developer_instructions"])
             self.assertIn({"name": "impl-plan", "enabled": True}, desk_profile["skills"]["config"])
-            self.assertIn({"name": "customer-research", "enabled": False}, desk_profile["skills"]["config"])
+            self.assertIn({"name": "prospect", "enabled": False}, desk_profile["skills"]["config"])
             backups = list((target / ".install-backups").glob("*/reviewer.config.toml"))
             self.assertEqual(len(backups), 1)
             self.assertIn("legacy = true", backups[0].read_text(encoding="utf-8"))
@@ -94,6 +94,32 @@ enabled = true
                 "# BEGIN FARPLANE GENERATED SKILL PROFILE",
                 (target / "config.toml").read_text(encoding="utf-8"),
             )
+
+    def test_full_install_keeps_a_reapproved_hook_trust_hash(self) -> None:
+        marker = "# Machine-local config appended from config.local.toml"
+        key = '[hooks.state."/h/hooks.json:post_tool_use:1:0"]'
+        with tempfile.TemporaryDirectory() as temp_dir:
+            home = Path(temp_dir) / "home"
+            target = home / ".codex"
+            target.mkdir(parents=True)
+            # Codex rewrote the existing entry in config.toml when the operator re-approved a changed hook.
+            (target / "config.toml").write_text(f'model = "x"\n\n{marker}\n\n{key}\ntrusted_hash = "sha256:new"\n', encoding="utf-8")
+            (target / "config.local.toml").write_text(f'{key}\ntrusted_hash = "sha256:old"\n', encoding="utf-8")
+            env = {
+                **os.environ,
+                "HOME": str(home),
+                "REF_API_KEY": "test-ref-key",
+                "NOTION_TOKEN": "test-notion-token",
+                "FARPLANE_SKIP_GLOBAL_CLI": "1",
+            }
+            result = subprocess.run(
+                ["bash", str(INSTALL), "--target", str(target)], cwd=ROOT, env=env, capture_output=True, text=True
+            )
+            self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+
+            for name in ("config.local.toml", "config.toml"):
+                hooks = tomllib.loads((target / name).read_text(encoding="utf-8"))["hooks"]["state"]
+                self.assertEqual(hooks["/h/hooks.json:post_tool_use:1:0"]["trusted_hash"], "sha256:new", name)
 
 
 if __name__ == "__main__":

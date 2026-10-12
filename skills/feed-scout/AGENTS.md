@@ -5,8 +5,8 @@ This folder owns the feed-scout recipe for tracked-profile monitoring.
 ## Local Rules
 
 - Keep `feed-scout` as an explicit-run recipe, not a daemon or hidden runner.
-- Write the dated report before handing off candidates or creating a bounded
-  local recovery ticket. Opportunity and experiment tickets are forbidden.
+- Write the dated report before handing off candidates. Feed Scout creates no
+  tickets, issues, or tasks; recovery and opportunity items stay candidates.
 - Model user configuration as tracked profiles first, then discovered content
   items, then URL-keyed ledger rows.
 - Use helper scripts for deterministic validation, URL keys, and fixture

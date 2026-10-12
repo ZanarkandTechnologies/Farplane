@@ -97,7 +97,7 @@ project.
 | Alternate scout/scorecard shapes | Expand first-principles alternatives inline |
 | Multi-source synthesis | [research](../research/SKILL.md) (synthesis) |
 | Material judgment after evidence | Compare viable options and recommend one inline |
-| Honest metric beyond manual scoring | [metric-advisor](../metric-advisor/SKILL.md) |
+| Honest metric beyond manual scoring | [metric card](../goal-advisor/references/metrics.md) |
 | Eval-backed skill follow-up | [self-improve](../self-improve/SKILL.md) |
 
 ## Decision Branches

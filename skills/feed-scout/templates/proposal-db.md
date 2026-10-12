@@ -16,12 +16,12 @@ Recommended fields:
 - `Last Ingested At`: date/time
 - `Content Hash`: optional hash for changed content detection
 - `Status`: `seen`, `ignored`, `scout-queued`, `scouted`, `proposed`,
-  `rejected`, or `ticketed`
-- `Scout Run`: local path to `.farplane/harness-scout/runs/...`
+  `rejected`, or `picked`
+- `Scout Run`: local path to `.farplane/feed-scout/runs/...`
 - `SRC Ref`: optional `SRC-*` when promoted to durable source provenance
 - `Decision`: `adopt`, `adapt`, `defer`, `reject`, or `needs-benchmark`
 - `Proposal Summary`: short operator-facing proposal
-- `Ticket Link`: optional local ticket path or external task URL
+- `Picked As`: optional issue URL the operator created after picking it
 
 Uniqueness rule: one canonical URL/key should map to one ledger row. If the
 same content is discovered from several profiles, append profile relations
@@ -31,19 +31,3 @@ Source candidates use this same ledger. Duplicate guest/show-note nominations
 merge source refs and scout runs into the existing canonical-key row. A source
 candidate cannot become configured or nominate another source until a human
 review accepts it in a later workflow.
-
-## Live Tasks Projection
-
-This ledger can point to a live Notion Tasks ticket, but it is not itself the
-Tasks database schema. When feed-scout writes to Kenji's Tasks database, the
-projection must resolve and verify these required routing fields:
-
-- `Project`: relation handle or placeholder page URL for the owning project
-- `Areas`: one or more relation handles or placeholder page URLs
-- `Routing Status`: `resolved`, `routing_missing`, or `local_only`
-- `Routing Evidence`: compact note describing where the route came from
-- `Readback Status`: `passed`, `routing_missing`, or `write_failed`
-
-If `Project` or `Areas` cannot be resolved before the live write, keep the
-proposal in this ledger or a local inbox with `routing_missing`. Do not create a
-partial Tasks page and call it successful writeback.

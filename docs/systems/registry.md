@@ -2,7 +2,7 @@
 title: "Generated System Registry"
 status: generated
 owner: system-registry
-updated_at: 2026-09-20
+updated_at: 2026-10-12
 refs:
   - docs/systems/registry.jsonl
   - docs/features/registry.jsonl
@@ -21,7 +21,7 @@ This file is generated. Edit system pages in `docs/systems/` and feature specs i
 | [SYS-0004 Retired Invocation Runtime](../systems/invocation-runtime.md) | [FEAT-0015 Retired Symphony-compatible invocation contract](../features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md) | [FEAT-0015](../features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md) |
 | [SYS-0005 Proof And Review](../systems/proof-review.md) | [FEAT-0008 Artifact-first QA and completion proof](../features/FEAT-0008-artifact-first-qa-and-completion-proof.md) | [FEAT-0008](../features/FEAT-0008-artifact-first-qa-and-completion-proof.md), [FEAT-0031](../features/FEAT-0031-agent-behavior-test-workflow.md), [FEAT-0034](../features/FEAT-0034-adversarial-agent-qa-test-skill.md), [FEAT-0039](../features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md), [FEAT-0043](../features/FEAT-0043-project-level-system-prompt-eval-suite.md), [FEAT-0054](../features/FEAT-0054-modular-skill-local-eval-tasks.md) |
 | [SYS-0006 Skill System](../systems/skill-system.md) | [FEAT-0022 Retired skill tier leverage classes](../features/FEAT-0022-skill-tier-leverage-classes.md) | [FEAT-0022](../features/FEAT-0022-skill-tier-leverage-classes.md), [FEAT-0057](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md), [FEAT-0062](../features/FEAT-0062-capped-skill-surface-budget.md), [FEAT-0064](../features/FEAT-0064-skill-signals.md) |
-| [SYS-0007 Self-Improvement And Learning](../systems/self-improvement-learning.md) | [FEAT-0063 Metric advisor cards](../features/FEAT-0063-metric-advisor-cards.md) | [FEAT-0063](../features/FEAT-0063-metric-advisor-cards.md), [FEAT-0069](../features/FEAT-0069-taste-loop-human-feedback-optimization.md), [FEAT-0070](../features/FEAT-0070-experimental-feature-evaluation-reports.md) |
+| [SYS-0007 Self-Improvement And Learning](../systems/self-improvement-learning.md) | [FEAT-0063 Metric cards](../features/FEAT-0063-metric-advisor-cards.md) | [FEAT-0063](../features/FEAT-0063-metric-advisor-cards.md), [FEAT-0069](../features/FEAT-0069-taste-loop-human-feedback-optimization.md), [FEAT-0070](../features/FEAT-0070-experimental-feature-evaluation-reports.md) |
 | [SYS-0008 Source And Sidecar Systems](../systems/source-sidecar-systems.md) | [FEAT-0011 Harness scout source ingestion](../features/FEAT-0011-harness-scout-source-ingestion.md) | [FEAT-0011](../features/FEAT-0011-harness-scout-source-ingestion.md), [FEAT-0025](../features/FEAT-0025-video-to-skill-source-reconstruction.md), [FEAT-0072](../features/FEAT-0072-scout-brief.md), [FEAT-0074](../features/FEAT-0074-feed-scout-source-instructions.md) |
 | [SYS-0009 Maintenance And Release OS](../systems/maintenance-release-os.md) | [FEAT-0061 Farplane adoption tracker CLI](../features/FEAT-0061-farplane-adoption-tracker-cli.md) | [FEAT-0061](../features/FEAT-0061-farplane-adoption-tracker-cli.md) |
 | [SYS-0010 Domain Skill Families](../systems/domain-skill-families.md) | [FEAT-0014 Frontend skill parity upgrade](../features/FEAT-0014-frontend-skill-parity-upgrade.md) | [FEAT-0014](../features/FEAT-0014-frontend-skill-parity-upgrade.md) |

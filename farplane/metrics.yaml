@@ -3,7 +3,7 @@ status: active
 created_at: 2026-07-11
 updated_at: 2026-10-02
 framework_template_version: "0.4.0"
-owner: metric-advisor
+owner: goal-advisor
 refreshers:
   local_project_metrics:
     refresh: >-

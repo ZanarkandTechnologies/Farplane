@@ -2,6 +2,7 @@
 name: advise
 description: "Use for \"what should I do\", \"which option\", \"plan the next steps\" or \"give me a roadmap\": one recommendation over real options, or a phased roadmap whose first proof is a completed loop."
 source: local
+department: leadership
 capability:
   kind: shortcut
 template_uses:

@@ -96,7 +96,7 @@ flowchart LR
     planSkill["impl-plan<br/>diagramming"]:::callout
     goalSkill["goal-advisor<br/>native Goal"]:::callout
     execSkill["goal-advisor<br/>native Codex task checkout"]:::callout
-    assetSkill["ai-image-advisor<br/>ai-video-advisor<br/>remotion-render"]:::skill
+    assetSkill["storyboard<br/>ai-image<br/>ai-video<br/>hyperframes render"]:::skill
     closeSkill["demo -> proof comment<br/>issue closed<br/>commit<br/>pr-splitting"]:::callout
   end
 
@@ -115,7 +115,7 @@ flowchart LR
 
   subgraph Proof["Proof + Review"]
     qa["qa-tester<br/>eval<br/>visual-qa<br/>Codex Browser"]:::quality
-    review["review<br/>reviewer agent<br/>code-health + unslop"]:::callout
+    review["review<br/>reviewer agent<br/>code-health + copywriting final pass"]:::callout
   stop["Stop hook<br/>telemetry only"]:::quality
   end
 

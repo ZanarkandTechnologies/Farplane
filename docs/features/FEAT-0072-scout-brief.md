@@ -3,7 +3,7 @@ title: Scout Brief
 status: implemented
 owner: feed-scout
 created_at: 2026-07-14
-updated_at: 2026-08-19
+updated_at: 2026-10-12
 tags:
   - farplane
   - feature
@@ -11,7 +11,6 @@ tags:
   - planning-context
 refs:
   - skills/feed-scout/SKILL.md
-  - skills/plan-next-wave/SKILL.md
   - docs/features/FEAT-0071-project-work-pulse.md
 feature_id: FEAT-0072
 system_id: SYS-0008
@@ -23,30 +22,27 @@ surfaces:
   - skills/feed-scout/SKILL.md
   - skills/feed-scout/templates/scout-brief.md
   - skills/feed-scout/scripts/validate_scout_brief.py
-  - skills/plan-next-wave/SKILL.md
-  - skills/pulse-update/SKILL.md
 source_refs:
   - tickets/archive/TASK-0369/ticket.md
 external_refs: []
 evidence_refs:
   - skills/feed-scout/scripts/test_validate_scout_brief.py
-  - skills/plan-next-wave/scripts/test_validate_wave_response.py
   - tickets/archive/TASK-0369/artifacts/qa/verification.md
 known_limits: >-
   Scout Brief is capped compact mutable synthesis rather than a historical trend
-  store; realized ticket-quality improvement still requires later Pulse and
+  store; realized ticket-quality improvement still requires later ticket and
   Reward evidence.
 metrics:
   - accepted_evidence_cycles
   - rejected_ai_ticket_count
   - planner_idea_comprehension_rate
   - planner_idea_keep_rate
-last_verified: 2026-08-19
+last_verified: 2026-10-12
 experimental: true
 superseded_by: false
 track: >-
-  Review the current Feed Scout Brief, later Pulse planner receipts, and
-  admitted ticket audience_context. Judge ICP fidelity, source provenance,
+  Review the current Feed Scout Brief and later admitted ticket
+  audience_context. Judge ICP fidelity, source provenance,
   baseline and belief-delta quality, brief compactness, and whether later
   artifacts change qualified builder decisions rather than repeating trends.
 ---
@@ -79,7 +75,7 @@ daily_sources + canonical_area_icps + existing_scout_brief
   synthesis only; full canonical ICP definitions stay in `harness.yaml`. It
   never changes canonical ICP fields or overrides metrics, tickets, authority,
   or planner admission.
-- Plan Next Wave binds outward work to the selected ICP, complete selected
+- Ticket authors bind outward work to the selected ICP, complete selected
   source-backed `source_facts`, a named baseline/default, and a specific belief
   or workflow delta.
 - Selected facts label evidence as observed, analogous, hypothesis, or source
@@ -87,7 +83,7 @@ daily_sources + canonical_area_icps + existing_scout_brief
   not change the idea cannot satisfy frontier grounding.
   Self-improvement may use local ticket, Reward, run, or eval evidence when
   external context is irrelevant.
-- Pulse copies those facts into `audience_context` and stable execution inputs;
+- The ticket copies those facts into `audience_context` and stable execution inputs;
   artifact skills consume ticket context first and configured Scout Brief only
   as a direct-call fallback. Tickets never store Scout Brief pointers or hashes.
 
@@ -114,6 +110,8 @@ daily_sources + canonical_area_icps + existing_scout_brief
 
 ## Change History
 
+- 2026-10-12: Dropped the deleted `plan-next-wave` and `pulse-update`
+  consumers (#41); ticket authors bind Scout Brief facts directly.
 - 2026-08-19: Renamed the bounded planning sidecar and all live contract fields
   from World Memory to Scout Brief; selected evidence now uses `source_facts`.
 - 2026-07-18: Capped live World Memory at 100 non-empty lines and replaced

@@ -3,19 +3,18 @@
   "evals": [
     {
       "id": "automation_advisor_one_heartbeat_01",
-      "prompt": "Configure Farplane V1 automations for Pulse, Feed Scout, Daily, Weekly, and self-improvement.",
-      "expected_output": "Creates exactly one heartbeat and it invokes pulse-update; Keeps Feed Scout, Company OS Daily/Weekly, and Dogfood as cron jobs; Keeps every job in farplane/automations/ and the steps it calls in farplane/automations/steps/; Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller; Makes Work Pulse the shared ticket and matured-check-in executor",
+      "prompt": "Configure Farplane V1 automations for a heartbeat, Feed Scout, Daily, Weekly, and self-improvement.",
+      "expected_output": "Creates at most one heartbeat; Keeps Feed Scout and Company OS Daily/Weekly as cron jobs; Keeps every job in farplane/automations/ and the steps it calls in farplane/automations/steps/; Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller",
       "files": [],
       "assertions": [
-        "Creates exactly one heartbeat and it invokes pulse-update",
-        "Keeps Feed Scout, Company OS Daily/Weekly, and Dogfood as cron jobs",
+        "Creates at most one heartbeat",
+        "Keeps Feed Scout and Company OS Daily/Weekly as cron jobs",
         "Keeps every job in farplane/automations/ and the steps it calls in farplane/automations/steps/",
-        "Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller",
-        "Makes Work Pulse the shared ticket and matured-check-in executor"
+        "Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller"
       ],
       "metadata": {
         "farplane": {
-          "title": "Configure one Work Pulse and bounded scheduled sources",
+          "title": "Configure one heartbeat and bounded scheduled sources",
           "tags": [
             "automation-advisor",
             "v1",
@@ -27,18 +26,18 @@
     {
       "id": "automation_advisor_reuses_live_pulse_01",
       "prompt": "The desired config calls the heartbeat farplane-work-pulse, but the live task already uses farplane-ticket-update on the correct thread. Activate the new config.",
-      "expected_output": "Inspects the existing live automation before mutation; Updates or deliberately renames the existing heartbeat rather than creating a duplicate; Keeps exactly one active Pulse heartbeat; Aligns tracked config source identity and live prompt; Preserves the existing target thread unless a migration is explicitly required",
+      "expected_output": "Inspects the existing live automation before mutation; Updates or deliberately renames the existing heartbeat rather than creating a duplicate; Keeps exactly one active heartbeat; Aligns tracked config source identity and live prompt; Preserves the existing target thread unless a migration is explicitly required",
       "files": [],
       "assertions": [
         "Inspects the existing live automation before mutation",
         "Updates or deliberately renames the existing heartbeat rather than creating a duplicate",
-        "Keeps exactly one active Pulse heartbeat",
+        "Keeps exactly one active heartbeat",
         "Aligns tracked config source identity and live prompt",
         "Preserves the existing target thread unless a migration is explicitly required"
       ],
       "metadata": {
         "farplane": {
-          "title": "Update the existing live Pulse instead of duplicating it",
+          "title": "Update the existing live heartbeat instead of duplicating it",
           "tags": [
             "automation-advisor",
             "live-activation",
@@ -73,19 +72,18 @@
     {
       "id": "automation_advisor_company_os_boundary_01",
       "prompt": "Replace the existing Daily and Weekly Interval bindings with the Zanarkand-style Company OS flow. Multica remains dashboard-only and the skills must be file-in/file-out. Do not create another scheduled job.",
-      "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Calls progress-update once per eligible Project and report-gen once over the complete frozen set; Makes the automation own provider access, caching, rendering, existing-issue effects, and readback; Gives each skill local files and exactly one JSON output with no provider access; Forbids task admission, strategy invention, broad knowledge promotion, Multica execution, and external side effects; Preserves one Pulse heartbeat",
+      "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Calls report-gen daily once per eligible Project and report-gen weekly once over the complete frozen set; Makes the automation own provider access, caching, rendering, existing-issue effects, and readback; Gives each skill local files and exactly one JSON output with no provider access; Forbids task admission, strategy invention, broad knowledge promotion, Multica execution, and external side effects; Preserves the existing heartbeat",
       "files": [
-        "farplane/automations/",
-        "skills/automation-advisor/evals/fixtures/farplane/automations/work-pulse.md"
+        "farplane/automations/"
       ],
       "assertions": [
         "Updates existing Daily and Weekly cron records without creating another job",
-        "Calls progress-update once per eligible Project and report-gen once over the complete frozen set",
+        "Calls report-gen daily once per eligible Project and report-gen weekly once over the complete frozen set",
         "Makes the automation own provider access, caching, rendering, effects, and readback",
         "Keeps both skills file-in-file-out with one exact JSON output",
         "Limits actions to authorized existing issues",
         "Forbids task admission, strategy invention, broad promotion, and Multica execution",
-        "Preserves one Pulse heartbeat"
+        "Preserves the existing heartbeat"
       ],
       "metadata": {
         "farplane": {
@@ -93,7 +91,6 @@
           "tags": [
             "automation-advisor",
             "company-os",
-            "progress-update",
             "report-gen"
           ]
         }

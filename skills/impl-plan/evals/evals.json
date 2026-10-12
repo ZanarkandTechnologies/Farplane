@@ -108,7 +108,7 @@
       "files": [],
       "assertions": [
         "Reuses the existing validator, tests, and documented local implementation pattern",
-        "Does not call Functional UI, Landing Page, Copywriting Advisor, Personalized Offer, Visual Design, or Asset Advisor",
+        "Does not call Functional UI, Landing Page, Copywriting Advisor, Approach, Visual Design, or Asset Advisor",
         "Does not perform broad external research when current implementation documentation is already available",
         "Avoids proposing a new service, configuration surface, or unrelated cleanup",
         "Applies the code-health lean gate after context resolution and uses a minimum_new_code rung to keep the duplicate-name rule owner-local",

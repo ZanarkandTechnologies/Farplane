@@ -22,7 +22,7 @@ metric_refs:
   guards:
     - TODO_quality_metric
 
-# Plan Next Wave may select only these existing skills. Each selected skill
+# Planning may select only these existing skills. Each selected skill
 # owns its workflow and declares the arguments the planner must bind.
 planning:
   skill_refs:

@@ -41,7 +41,7 @@ state:
 owns: factual read-only Meta Ads CLI report
 gates: cli_ready; read_token_ready; read_only_command; account_or_entity_resolved;
        no_secret_or_account_id_in_tracked_artifact
-routes: ad-advisor | metric-advisor | review
+routes: ad-advisor | goal-advisor | review
 fails: mutation attempt; invented account data; unbounded data pull;
        secret/account-ID persistence
 ```
@@ -88,7 +88,7 @@ fails: mutation attempt; invented account data; unbounded data pull;
         as source gaps rather than treating them as zero.
   - [ ] Separate observed results from recommendations. Route experiment,
         targeting, creative, attribution, or spend judgments to `ad-advisor` or
-        `metric-advisor`.
+        the `goal-advisor` metric card.
 - [ ] 5. Return evidence and the next owner.
   - [ ] Name the read-only command, timestamp, scope, and redacted credential
         source; apply the first-load Todo List guardrails before returning.
@@ -129,7 +129,7 @@ Next owner:
   read to confirm the injected token and installed CLI without revealing either.
 - [ad-advisor](../ad-advisor/SKILL.md) - use for campaign decisions, config,
   policy review, or any action that might spend money.
-- [metric-advisor](../metric-advisor/SKILL.md) - use when interpreting a report
+- [metric card](../goal-advisor/references/metrics.md) - use when interpreting a report
   requires metric selection, guard metrics, or causal claims.
 
 ## Output

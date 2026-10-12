@@ -52,7 +52,7 @@ gates:
   hypothesis_tree_bound;
   packet_approved
 
-routes: goal-advisor | eval | metric-advisor | skill-maintenance |
+routes: goal-advisor | eval | skill-maintenance |
   agent-qa-test | review
 
 fails:
@@ -81,7 +81,7 @@ progress.md.append(selection + tree mutation + evidence + next_action)
 native_goal(updated packet state) -> continue | transition | block | complete
 ```
 
-Goal Advisor compiles or regenerates the packet. Metric Advisor is setup/repair
+Goal Advisor compiles or regenerates the packet; its metric card is setup/repair
 only. Use the choose-next comparison when several moves need judgment; when one
 move is mechanically implied, execute it directly. Always compare further work
 with `report_now`, `request_feedback`, and `stop`.
@@ -94,7 +94,7 @@ with `report_now`, `request_feedback`, and `stop`.
   of creating an optimization Goal.
 - [ ] 2. Bind the performance metric, passing target, guards, editable search
   space, length metric, and separate harden/refine `max_rounds` plus patience.
-  Use `metric-advisor` only when an honest metric cannot be stated directly.
+  Use the `goal-advisor` metric card only when an honest metric cannot be stated directly.
 - [ ] 3. Run the source stage and seed the hypothesis tree before freezing the
   Goal.
    - [ ] Start from local failures and scored history.

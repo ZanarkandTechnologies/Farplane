@@ -17,7 +17,7 @@ share unused, usually from the "Burn before reset" scheduled task, or manually
 with `force`. It gates on the plan limits the host reports, then spends the
 remainder on bounded jobs that leave reviewable local commits and one report.
 Backlog lines are not Farplane tickets: this skill never creates, claims, or
-comments on issues, and `pulse-update` keeps ticket execution. It does not own
+comments on issues; ticket execution stays with the issue's owner. It does not own
 scheduling, pushing, deploys, or account pooling.
 
 ## Skill Signature

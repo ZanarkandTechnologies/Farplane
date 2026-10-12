@@ -1,12 +1,12 @@
 ---
 name: landing-page
 version: 1.2.0
-description: "Turn a one-page marketing or launch request into an approved offer, story, section, asset, motion, and proof specification for implementation planning."
+description: "Use for \"build a landing page\", \"make a launch page\" or \"redo our homepage\": an approved offer, story, section, asset, motion and proof spec ready for implementation."
 department: marketing
 source: local
 allowed-tools: Read, Grep, Glob, Bash
 common_chains:
-  after: ["asset-advisor"]
+  after: ["copywriting", "ai-image", "ai-video"]
 ---
 
 # Landing Page
@@ -45,7 +45,7 @@ when the request earns that depth.
 - [ ] Draft the low-fidelity ASCII page flow before generating assets or
   writing code.
 - [ ] Route the `AssetPlan` through
-  [asset-advisor](../asset-advisor/SKILL.md) when the page needs external
+  the [storyboard asset plan](../storyboard/references/asset-plan.md) when the page needs external
   discovery, reference-led generation, missing production media, or a
   rights/recreation decision. If the supplied asset set is complete and
   licensed for the planned use, record provenance and the explicit skip reason
@@ -246,7 +246,7 @@ one software Change Plan; this skill never creates a child implementation plan.
    themselves. Hand-authored SVG illustrations should not be used for premium
    landing-page graphics.
    When those assets are missing, reference-led, or rights-uncertain, route the
-   `AssetPlan` through `asset-advisor` and require its discovery receipt,
+   `AssetPlan` through the `storyboard` asset plan and require its discovery receipt,
    independent usage-role/rights-status decisions, accepted moodboard traits,
    concrete owner/output paths, and acceptance checks before approving the
    spec. Skip that route only when supplied assets are complete and licensed
@@ -379,7 +379,7 @@ For landing pages with reusable formulas or inspiration references:
 - `references/workflows.md` - standard landing and cinematic scrolltelling paths.
 - `references/planner-executor.md` - spec-first planner/executor contract.
 - `references/asset-evidence.md` - generated/real media proof gate.
-- [asset-advisor](../asset-advisor/SKILL.md) - conditional owner for missing,
+- the [storyboard asset plan](../storyboard/references/asset-plan.md) - conditional owner for missing,
   discovered, reference-led, generated, or rights-sensitive production media.
 - `references/designer-judgment.md` - final 5% premium quality rubric.
 - `references/gotchas.md` - common landing-page mistakes.
@@ -415,14 +415,14 @@ Return a landing brief with:
 Every brief must include this route receipt before the Asset Plan:
 
 ```text
-Asset Advisor Route Decision
+Asset Plan Route Decision
 | Page / Section | Supplied Assets | Planned-Use Rights / Provenance | Missing Or Reference-Led Need | Required Usage Roles | Required Rights Statuses | Route | Skip Reason | Receipt Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
-Route is `asset-advisor` or `skip_complete_licensed_inputs`.
+Route is `storyboard-asset-plan` or `skip_complete_licensed_inputs`.
 ```
 
-For `asset-advisor`, the receipt status remains blocked until source usage
+For `storyboard-asset-plan`, the receipt status remains blocked until source usage
 roles, rights statuses, accepted moodboard traits when generation is involved,
 owner/output paths, and acceptance checks are complete. For
 `skip_complete_licensed_inputs`, provenance, planned-use rights, completeness,

@@ -94,9 +94,9 @@ choose_next(objective, evidence, eligible_moves, remaining_budget)
 Role boundaries:
 
 - Goal Advisor compiles or regenerates this packet; it does not choose every turn.
-- Metric Advisor is setup/repair only when the measurement contract is unclear.
+- Goal Advisor's metric card (`references/metrics.md`) is setup/repair only when
+  the measurement contract is unclear.
 - The choose-next comparison is a conditional method, not campaign state.
-- Plan Next Wave refills an empty board and never participates inside this Goal.
 - The domain skill owns execution; the ticket owns scope and proof.
 
 ## Experiment Backbone

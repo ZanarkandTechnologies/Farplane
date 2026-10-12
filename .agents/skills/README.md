@@ -20,10 +20,8 @@ path when those skills own the capability workflow. Promote a local capability
 skill to reusable root `skills/` only through an explicit human-reviewed change
 after repeated use shows cross-project value.
 
-These are reusable workflows called by tickets and Work Pulse. Plan Next Wave
-may select only the subset listed in `farplane/harness.yaml#planning.skill_refs`
-and binds their `planner_contract` arguments. They are not planning lanes,
-controllers, or independent heartbeats.
+These are reusable workflows called by tickets and automations. They are not
+planning lanes, controllers, or independent heartbeats.
 
 ## Farplane Capability Skills
 

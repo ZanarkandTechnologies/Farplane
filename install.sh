@@ -257,12 +257,23 @@ def should_preserve(header: str) -> bool:
     return header in preserve_exact or header.startswith(preserve_prefixes)
 
 
-local_headers = {header for header, _block in table_blocks(local_text)}
-missing_blocks = [
-    block
-    for header, block in table_blocks(candidate_text)
-    if should_preserve(header) and header not in local_headers
-]
+local_blocks = dict(table_blocks(local_text))
+missing_blocks = []
+updated_count = 0
+for header, block in table_blocks(candidate_text):
+    if not should_preserve(header):
+        continue
+    if header not in local_blocks:
+        missing_blocks.append(block)
+    elif local_blocks[header].strip() != block.strip():
+        # Codex rewrites a table in place when the operator re-approves it (a changed hook gets a
+        # new trusted_hash); keep that newer copy so a re-render never reverts the approval.
+        local_text = local_text.replace(local_blocks[header].rstrip(), block.rstrip(), 1)
+        updated_count += 1
+
+if updated_count and not missing_blocks:
+    local_path.write_text(local_text)
+    print(f"Updated {updated_count} machine-local TOML table(s) in {local_path}")
 
 if missing_blocks:
     prefix = local_text.rstrip()

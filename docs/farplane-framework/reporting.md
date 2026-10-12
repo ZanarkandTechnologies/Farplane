@@ -91,7 +91,6 @@ reports/interval/daily_interval/<timestamp>
 reports/interval/daily_interval/<timestamp>/feed-scout
 reports/pulse/<timestamp>
 reports/feed-scout/<timestamp>
-reports/dogfood-review/<timestamp>
 reports/interval/<interval_id>/context/<timestamp>
 ```
 
@@ -128,7 +127,7 @@ Each indexed report includes:
 }
 ```
 
-Customer research uses `.farplane/customer-research/reports/*` and links
+Prospect cases use `.farplane/prospect/reports/*` and links
 canonical entities through `entity_refs`. Entity source state lives in flat
 `.farplane/entities/*.md`; `manage-wiki` owns durable article mutation and
 `farplane wiki sync` generates `.farplane/wiki/wiki.sqlite` plus

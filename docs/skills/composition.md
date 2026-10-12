@@ -91,26 +91,25 @@ author of its own decision, delivery, or verdict.
 
 ## Content Production Prototype
 
-`content-impl-plan` writes a content action graph inside the canonical ticket's
-`Change Plan`: target artifact, creative intent, ordered actions, dependencies,
-gates, and proof path. It is a section of the ticket, not another artifact
-type.
+`storyboard` writes a content action graph into the active GitHub issue's
+Change Plan: target artifact, creative intent, ordered actions, dependencies,
+gates, and proof path. It is a section of the issue, not another artifact type.
 
 ```text
-ticket.md
-  -> Change Plan / Content action graph
-    -> storyboard: SCRIPT_STORYBOARD
-    -> asset-advisor: ASSET_MANIFEST + selected realization routes
-    -> image/video/audio/avatar executors: accepted media + receipt
-    -> editing-advisor: EDIT_DIRECTION
-    -> remotion/remotion-render: rendered delivery + render receipt
+GitHub issue
+  -> Change Plan / Content action graph (storyboard plan mode)
+    -> storyboard script mode: hook decision + script + scenes
+    -> storyboard assets mode: asset plan + selected realization routes
+    -> ai-image / ai-video / meshy-3d-generation: accepted media + receipt
+    -> storyboard edit mode: timed edit direction
+    -> hyperframes (external): rendered delivery + render receipt
   -> Done + QA Strategy: evidence verdict
 ```
 
-Asset Advisor chooses reuse/source/generation and the required realization
-child. Content Impl Plan schedules that returned action; it does not select the
-same provider a second time. Storyboard owns final scenes, Editing Advisor owns
-the timed recipe, and QA/review judge rather than rebuild.
+The asset plan chooses reuse, source, or generation and the generation skill;
+the plan schedules that returned action and does not pick the provider a
+second time. The edit direction owns the timed recipe, HyperFrames owns the
+render, and QA/review judge rather than rebuild.
 
 ## Migration And Proof
 

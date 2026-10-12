@@ -9,7 +9,7 @@ ui_summary: "<one concise source-change summary under 100 words>"
 source_gaps: []
 candidate_handoff:
   candidates: []
-  recovery_tickets_created: []
+  recovery_candidates: []
   no_execution_receipt: "no Goal, Pulse, worker, implementation, publication, or outreach invoked"
 ---
 
@@ -37,23 +37,22 @@ candidate_handoff:
 | Source | Effective instruction ref | Proposal type | Candidate | Existing ledger/config match | Review route |
 | --- | --- | --- | --- | --- | --- |
 
-## Ticket Candidates
+## Candidates
 
 | Candidate | Source evidence | Executable scope | Reward / proof / stop | Authority | Verdict / reason |
 | --- | --- | --- | --- | --- | --- |
 
-Verdicts: `planner_candidate`, `duplicate`, `insufficient_signal`,
+Verdicts: `candidate`, `recovery_candidate`, `duplicate`, `insufficient_signal`,
 `scope_missing`, `proof_missing`, `authority_missing`, `report_only`.
 
-## Planner Candidate Handoff
+## Candidates For The Operator
 
 | Candidate | Area / KPI | Expected reward | Source refs | Verdict |
 | --- | --- | --- | --- | --- |
 
 - `report_written_before_handoff:` yes | no
-- `recovery_ticket_limit:`
-- `recovery_tickets_created:`
-- `exploration_or_experiment_tickets_created:` 0
+- `recovery_candidate_limit:`
+- `tickets_or_issues_created:` 0
 - `notion_tasks_created:` 0
 - `execution_started:` no
 

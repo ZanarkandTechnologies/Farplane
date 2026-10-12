@@ -165,7 +165,7 @@ echo "  - Fill in farplane/bindings.yaml with non-secret project IDs, connector 
 echo "  - Add scheduled jobs to farplane/automations/ with automation-advisor, one file per live routine."
 echo "  - Keep skills generic and parameterized; configure project paths, cadence, schedule, thread IDs, and exact prompts in farplane/automations/."
 echo "  - Use .agents/skills/ for project-local capability skills; promote only stable cross-project workflows to root skills/."
-echo "  - Use metric-advisor to shape measurable objectives and guards when they are missing or weak."
+echo "  - Use the goal-advisor metric card to shape measurable objectives and guards when they are missing or weak."
 echo "  - Use goal-advisor to compile the first executable frontier after goals are concrete."
 echo "  - Fill in farplane/pm.json with PM-visible chat and automation thread IDs so the UI groups them under one employee."
 echo "  - Use owner-named .farplane/ paths for ignored reports, metric observations, eval outputs, content, logs, and tool-specific state; do not add generic runtime, evidence, or review buckets."

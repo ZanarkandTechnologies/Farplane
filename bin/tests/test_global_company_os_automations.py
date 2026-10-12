@@ -18,7 +18,7 @@ class GlobalCompanyOSAutomationTests(unittest.TestCase):
             "daily-operating-update": ("farplane-daily-interval", (
                 "## 1. Load today's collected context",
                 "## 2. Confirm coverage per Project",
-                "## 3. Run Progress Update",
+                "## 3. Run Report Gen daily",
                 "## 4. Render memory and apply JSON actions",
                 "farplane/harness.yaml",
                 "read back the issue and returned revision",

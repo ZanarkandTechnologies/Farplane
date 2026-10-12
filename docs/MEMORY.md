@@ -126,10 +126,10 @@ MEM-0035, MEM-0036, MEM-0056, MEM-0130, MEM-0151.
 - Repeated polling, retries, subagent waits, remote checks, and asset-generation
   waits should use adaptive backoff, but backoff does not authorize hidden
   daemons, queues, or always-on watchers.
-- Current Farplane framework automations are explicit loops: project-local
-  `pulse-update` for bounded execution, plus one AI Office root Company OS
-  Daily and Weekly pair that calls `progress-update` and `report-gen` across eligible
-  projects. Codex automation cadence is the scheduler; do not
+- Current Farplane framework automations are explicit loops: one AI Office
+  root Company OS Daily and Weekly pair that calls `report-gen` (`daily` and
+  `weekly` modes) across eligible projects; work state lives in GitHub Issues
+  (`pulse-update` deleted and `progress-update` folded into `report-gen` in #41). Codex automation cadence is the scheduler; do not
   restore the retired Interval skill, `farplane/steer.config.toml`, or
   `.farplane/state/steer-scheduler.json`.
 
@@ -243,7 +243,7 @@ Source rows: MEM-0110, MEM-0111, MEM-0112, MEM-0120, MEM-0123.
   personal workspace conventions belong in local private context, not tracked
   shared artifacts.
 - Notion task planning context is MCP-only for task, project, goal, and
-  pinned-task context. `notion-task-field-fill` reads private handles from
+  pinned-task context. `pm` `hygiene` mode (formerly `notion-task-field-fill`, merged in #41) reads private handles from
   `~/.codex/private/docs/notion.md`; do not call Notion's public API directly
   from ad hoc scripts unless a new ticket explicitly changes that boundary.
 - Prefer a local token-backed MCP server over remote OAuth MCP for unattended
@@ -286,7 +286,7 @@ archive.
 
 2026-06-13 00:00 +0800 | farplane,skills,qa,evals,checklists | Skill-local runtime QA guardrails should live as optional first-class `skills/<skill-name>/qa_checklist.md` files at the skill package root, not as ordinary `references/` prose. `eval_task.json` discovers and pressures expected behavior; `qa_checklist.md` applies settled reusable guardrails during real work. After editing a skill eval, skill-maintenance should decide whether changed reference points promote into `qa_checklist.md`, `SKILL.md`, a reference, or a validator, and record skipped rare or benchmark-only points in the audit.
 
-2026-06-24 00:00 +0800 | farplane,automations,pulse,company-os | Farplane projects use explicit Codex automation loops: `pulse-update` for bounded execution and Company OS Daily/Weekly for project memory and operating review. Active review lives in `progress-update` and `report-gen`; Codex automation records own cadence. Do not restore `interval-update`, `steer-update`, `farplane/steer.config.toml`, `.farplane/state/steer-scheduler.json`, or cadence compatibility alias packages.
+2026-06-24 00:00 +0800 | farplane,automations,pulse,company-os | Farplane projects use explicit Codex automation loops: `pulse-update` for bounded execution and Company OS Daily/Weekly for project memory and operating review. Active review lives in `progress-update` and `report-gen`; Codex automation records own cadence. Do not restore `interval-update`, `steer-update`, `farplane/steer.config.toml`, `.farplane/state/steer-scheduler.json`, or cadence compatibility alias packages. (Retired in #41: `pulse-update` deleted; `progress-update` is now `report-gen` `daily` mode.)
 
 2026-06-23 00:00 +0800 | farplane,knowledge,tidying | Live project memory and other knowledge artifacts should be ranked by importance, recency, factuality, and remembrance value. Keep only important, factual, current-enough knowledge that the target file is the best owner for; route generic policy to `AGENTS.md`, specs, skills, validators, or ticket templates, and preserve exact historical rows in archives before compacting semi-append-only sources.
 

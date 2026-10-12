@@ -40,7 +40,7 @@ runtime.
 
 - decision matrix
 - manual scorecard
-- optional [metric-advisor](../../metric-advisor/SKILL.md) metric card
+- optional [goal-advisor metric card](../../goal-advisor/references/metrics.md)
 - optional [self-improve](../../self-improve/SKILL.md) skill-eval follow-up
 - optional [impl-plan](../../impl-plan/SKILL.md) ticket handoff
 - optional [review](../../review/SKILL.md) quality gate

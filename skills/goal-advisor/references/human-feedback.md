@@ -3,8 +3,8 @@
 Load when Kenji's judgment is the fastest honest quality signal for an
 optimization loop (content, skills, creative artifacts, offers, demos, UI,
 taste) before a benchmark or market test exists. One-off approval goes to chat,
-`review`, or `telegram-message`; correctness goes to QA. `metric-advisor` already
-lists `human_feedback` as a signal class; this file owns only the loop
+`review`, or `telegram-message`; correctness goes to QA. The [metric card](metrics.md)
+already lists `human_feedback` as a signal class; this file owns only the loop
 protocol.
 
 ## Program binding

@@ -1,185 +1,205 @@
 ---
 name: social-content
-version: 1.0.0
-description: "Turn social campaign goals into carousels, LinkedIn posts, calendars, hooks, captions, thumbnails, or cross-platform content plans."
-department: marketing
+description: "Use for \"write a thread\", \"draft a LinkedIn post\", \"make a carousel\" or \"write the newsletter\": approval-ready posts, threads, carousels and newsletter issues; posting stays with zernio."
 source: local
+department: marketing
 template_uses:
-  skill-template: "0.3.6"
+  skill-template: "0.6.5"
   skill-eval-task: "0.2.0"
 methods:
-  - id: social-content:cross-platform
+  - id: social-content:x
     class: artifact
-    output: cross-platform-content-bundle
-  - id: social-content:carousel
-    class: artifact
-    output: social-carousel-draft
+    output: x-draft
   - id: social-content:linkedin
     class: artifact
     output: linkedin-post-draft
-allowed-tools: Read, Grep, Glob, Bash
+  - id: social-content:carousel
+    class: artifact
+    output: social-carousel-draft
+  - id: social-content:cross-platform
+    class: artifact
+    output: cross-platform-content-bundle
+  - id: social-content:newsletter
+    class: artifact
+    output: newsletter-issue
+allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # Social Content
 
 ## Context
 
-Use this skill for social content planning, copy, and asset handoff across
-platforms. It owns cross-platform, carousel, and LinkedIn draft decisions, not
-publishing.
+Use this when the operator wants a social post, X thread, LinkedIn post,
+carousel, content calendar, cross-platform bundle, or a recurring newsletter
+issue. One pass returns one approval-ready draft bundle in one mode. Drafts
+only: nothing is posted, scheduled, sent, replied to, or cross-posted here.
 
-Route a standalone X post, thread, quote-post, or reply chain to
-[x-thread](../x-thread/SKILL.md). That artifact needs a reviewable tweet
-sequence rather than a generic social-content method.
+It does not post, schedule, or read account metrics
+([zernio](../zernio/SKILL.md)), generate images ([ai-image](../ai-image/SKILL.md))
+or clips ([ai-video](../ai-video/SKILL.md)), write video scripts or
+storyboards ([storyboard](../storyboard/SKILL.md)), or write page, article,
+email-sequence, or ad copy ([copywriting](../copywriting/SKILL.md)).
 
 ## Skill Signature
 
 ```text
-social_content(brief, platform_set?, artifact_format?, stage?, constraints?)
-  -> content_plan | social_draft_bundle | blocked_report
-
-state:
-  reads(references/model.md, the first-load Todo List guardrails, method reference when needed,
-        user swipe/reference/examples when supplied)
-  writes(workspace draft artifacts when generation or external work is involved)
-
-gates:
-  artifact_matrix_bound
-  method_selected
-  platform_constraints_checked
-  concrete_structure_before_review
-  publish_boundary_explicit
-  external_spend_or_posting_approved
-
-routes:
-  content-impl-plan | storyboard | asset-advisor | imagegen |
-  ai-image-advisor | ai-video-advisor | remotion | impl-plan |
-  research | review
-
-fails:
-  vague_premise_as_thread_plan
-  local_or_private_context_missing_from_review_prompt
-  publish_or_schedule_without_explicit_user_request
-  external_generation_without_spend_or_upload_approval
+social_content(brief, mode?: x | linkedin | carousel | cross-platform | newsletter,
+               audience?, source_pack?, voice_examples?, constraints?)
+  -> draft_bundle { full copy + review notes + source receipt } | blocked_report
+reads: the brief, supplied sources, swipes and voice examples, prior posts or issues, references by mode
+does: binds one mode and reader promise, drafts the complete artifact, routes assets, runs the final pass
+writes: the caller's artifact or GitHub issue comment, else .farplane/social-content/<date>-<slug>/; inline for chat review
+returns: the draft with publication_status: approval_required, source gaps, and the next owner
 ```
 
-## Phase Boundary
+## Modes
 
-Perform planning and drafting inline. When the platform, format, hook, asset
-route, CTA, or campaign direction is a real choice, compare the viable options
-and recommend one. Use `research`
-or current web grounding when examples, platform rules, peer patterns, or
-campaign expectations materially affect the output.
+| Mode | Use for | Load |
+| --- | --- | --- |
+| `x` | X post, thread, quote-post, reply chain | [x-output](references/x-output.md), [upstream-twitter](references/upstream-twitter.md) |
+| `linkedin` | Founder, B2B, hiring, thought-leadership post | [upstream-linkedin](references/upstream-linkedin.md) |
+| `carousel` | Multi-slide post on Instagram, LinkedIn, X, Facebook | [upstream-carousel](references/upstream-carousel.md), [examples](references/examples.md) |
+| `cross-platform` | Campaign bundle, content calendar, captions, hooks, thumbnails plan | [model](references/model.md), [upstream-social](references/upstream-social.md) |
+| `newsletter` | Recurring newsletter issue or newsletter blueprint | [newsletter](references/newsletter.md) |
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the artifact.
-  - [ ] Read [model](./references/model.md) and build the artifact matrix:
-  platform, format, message job, copy payload, asset carrier, publish boundary,
-  and proof.
-  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
-- [ ] 2. Select one primary method:
-  `social-content:cross-platform`, `social-content:carousel`, or
-  `social-content:linkedin`. Add supporting methods only when the artifact
-  genuinely spans formats; route X-native copy to [x-thread](../x-thread/SKILL.md).
-  - [ ] Use [method-selection-smoke](./references/method-selection-smoke.md) when
-  method routing is unclear or when changing the skill.
-- [ ] 3. Ground the format when needed.
-  - [ ] Use current web grounding or `research`
-  when examples, platform specs, peer posts, swipe patterns, or campaign
-  expectations should guide scope.
-  - [ ] Load upstream method references only when their platform constraints,
-  examples, or format rules matter.
-- [ ] 4. Draft the concrete structure.
-  - [ ] Draft copy, hooks, CTAs, slide sequence, prompts, or asset plans before
-  generation or rendering.
-  - [ ] For quality-sensitive creative work, load
-  [examples](references/examples.md) or a user-provided swipe/reference before
-  finalizing the first variant.
-- [ ] 5. Route production work.
-  - [ ] Route idea plus Tasty Pack/reference video production planning through
-  [content-impl-plan](../content-impl-plan/SKILL.md).
-  - [ ] Route script, beats, and scene maps through
-  [storyboard](../storyboard/SKILL.md); route asset decomposition through
-  [asset-advisor](../asset-advisor/SKILL.md).
-  - [ ] Route new stills through `imagegen` or, for every edit,
-  [ai-image-advisor](../ai-image-advisor/SKILL.md) (Ideogram 4.5); route video through
-  [ai-video-advisor](../ai-video-advisor/SKILL.md) or
-  [remotion](../remotion/SKILL.md); route precise HTML assets
-  or campaign pages through [impl-plan](../impl-plan/SKILL.md).
-  - [ ] Save drafts, outlines, slide copy, prompts, inputs, result JSON,
-  generated files, final asset paths, and notes inside the workspace when
-  external generation is involved.
-  - [ ] Confirm external compute, spend, uploads, or API usage is explicitly
-  acceptable before running model or `belt` jobs.
-- [ ] 6. Finish with proof and boundary checks.
-  - [ ] Do not publish, post, reply, comment, DM, schedule, or cross-post unless
-  the user explicitly asks for that action.
-  - [ ] Apply the first-load Todo List guardrails again before claiming artifact quality or
-  sending a review request.
-  - [ ] Follow the native execution phase proof and writeback loop before
-  claiming platform fit, campaign readiness, professional voice, slide
-  hierarchy, thread quality, or final quality.
+- [ ] **N1 — Pick the mode and bind the brief.**
+  `request + sources -> mode + audience + reader promise + evidence + voice mode | one blocking question`
+
+  Rule: Infer the mode from the requested artifact: a tweet, thread,
+  quote-post, or reply chain is `x`; a LinkedIn post is `linkedin`; slides are
+  `carousel`; several platforms or a calendar is `cross-platform`; an email
+  issue for subscribers is `newsletter`. A campaign that spans formats takes
+  `cross-platform` as primary and the others as supporting modes. Bind
+  audience, one concrete reader promise, verified evidence, voice, CTA, and
+  stage. No voice examples means `voice_mode: hypothesis`. Draft on stated
+  assumptions when the topic is enough; ask for one fact only when its absence
+  would force fabrication. Use [method-selection-smoke](references/method-selection-smoke.md)
+  when the mode is unclear.
+
+  Example: "turn this essay into a thread and a carousel for launch week" ->
+  `cross-platform` primary, `x` and `carousel` supporting.
+
+  Assert:
+  - One primary mode and a reader promise stated as value, not a topic label.
+  - Every factual claim is sourced, cut, or marked as a hypothesis.
+- [ ] **N2 — Ground the format and pick the direction.**
+  `bound brief -> platform constraints + chosen spine or format | compared options`
+
+  Rule: Load the mode's reference from the Modes table only for the specs,
+  limits, or format rules the draft needs. Use `research` or supplied swipes
+  when peer examples or current platform norms change the output; never claim
+  current norms without a loaded source. For `x` pick one spine (lesson,
+  teardown, story, checklist, case, announcement). For `newsletter` the
+  available material chooses the format per [newsletter](references/newsletter.md):
+  a weekly recap or changelog is a `release-digest` with no editorial arc.
+  When platform, format, hook, or CTA is a real choice, compare complete
+  directions and recommend one.
+
+  Assert:
+  - The chosen spine or format follows from the material, not taste alone.
+  - A release digest is never forced into a founder story.
+- [ ] **N3 — Draft the complete artifact.**
+  `direction -> full copy in the mode's shape`
+
+  Rule: Write the real copy, never a direction or outline. `x` returns the
+  full tweet stack in [x-output](references/x-output.md): every tweet written
+  out and numbered, a standalone hook, one idea per body tweet, payoff, one
+  CTA, and character-budget notes; several directions each get their own full
+  stack. `linkedin` returns the post as it would appear, hook above the fold.
+  `carousel` returns slide-by-slide copy plus visual direction. `cross-platform`
+  returns the artifact matrix from [model](references/model.md) plus each
+  platform's copy. `newsletter` returns three subjects (45 chars or fewer), one
+  preview (90 chars or fewer), the body, zero or one CTA, and send notes;
+  default cadence is biweekly when a blueprint is needed. Load
+  [examples](references/examples.md) or the operator's swipe before the first
+  quality-sensitive variant.
+
+  Example: "three thread options for Telegram review" -> three numbered stacks
+  of six to eight tweets, each judgeable from the message alone.
+
+  Assert:
+  - A reviewer can decide from the actual copy without opening a local path.
+  - No invented anecdote, metric, quote, or result.
+- [ ] **N4 — Route production assets.**
+  `draft -> asset plan + owner per asset | none`
+
+  Rule: Name each asset the draft needs and its owner: stills, slides,
+  product shots, and infographics to [ai-image](../ai-image/SKILL.md); clips,
+  voice, and presenters to [ai-video](../ai-video/SKILL.md); video scripts and
+  storyboards to [storyboard](../storyboard/SKILL.md); landing-page or article
+  copy to [copywriting](../copywriting/SKILL.md). Paid generation runs through
+  `treg` inside the operator's weekly spend cap, with the price quoted first
+  and the spend logged. Include media only when it changes the reader's
+  understanding.
+
+  Assert:
+  - Every asset has one owner; no generation is claimed without a saved file.
+- [ ] **N5 — Run the final pass and return with the approval gate.**
+  `draft + assets -> draft_bundle + publication_status: approval_required`
+
+  Rule: Run the [final pass](../copywriting/references/final-pass.md) on all
+  prose. Check feed readability, character limits, repeated claims, CTA
+  count, and promotion placement (value first; a soft plug goes in a P.S.).
+  Return the copy, source receipt, voice mode, gaps, and next-issue or
+  next-post seeds. Posting, scheduling, and metrics go to
+  [zernio](../zernio/SKILL.md) only after the operator explicitly approves the
+  final copy.
+
+  Assert:
+  - `publication_status: approval_required` is visible; no post, schedule,
+    send, or delivery receipt is claimed.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
-
-## Templates
-
-Compact model:
-
-```text
-SocialContent := Brief + PlatformSet + ArtifactMatrix + MethodSet + AssetPlan + ProofPlan
-
-Artifact := Platform + Format + Audience + MessageJob + CopyPayload + AssetCarrier + PublishBoundary + QA
-
-MethodSelection(artifact, methods, constraints) :=
-  candidates = filter(methods, artifact, constraints)
-  chosen = compare_and_recommend(top3(candidates))
-```
-
-Use `references/model.md` for the artifact matrix and execution packet rules.
-
-Use method addresses to choose the smallest relevant workflow:
-
-- `social-content:cross-platform` for TikTok, Instagram, YouTube Shorts,
-  Twitter/X, content calendars, UGC concepts, thumbnails, captions, hashtags,
-  or multi-platform campaign bundles.
-- `social-content:carousel` for Instagram, LinkedIn, Twitter/X, or Facebook
-  carousel posts and multi-slide social assets.
-- `social-content:linkedin` for LinkedIn posts, professional content,
-  thought-leadership, B2B/founder content, hiring posts, comments, and
-  LinkedIn carousel planning.
 
 ## Gotchas
 
-- Do not claim a platform recommendation came from current norms unless the
-  run loaded a current source, peer examples, or supplied swipe.
-- Do not publish, schedule, comment, reply, DM, or cross-post without explicit
-  user permission.
-- Do not hide artifact context in desktop-only paths when asking for mobile or
-  Telegram feedback; include the reviewable excerpt inline.
+- A thread direction without the tweet stack is not a deliverable; neither is
+  a newsletter "angle" without the issue.
+- Personalization pressure ("make it sound personal, add a story") never
+  licenses an invented founder anecdote, feeling, or quote; use a sourced
+  observation or label a hypothesis.
+- Do not smuggle a publishing request into a draft; even "final" copy waits
+  for explicit approval and goes out through zernio.
+- When asking for review on mobile or Telegram, put the copy inline; desktop
+  paths are unreadable there.
+- Never open a newsletter with "Welcome to another issue".
+- The upstream references contain `belt` commands; they are reference
+  material only. Generation routes through ai-image or ai-video.
 
 ## Reference Map
 
-- the first-load Todo List guardrails - read at skill start and finish for social artifact QA.
-- `references/model.md` - artifact matrix, method selection, execution packet,
-  and proof rules.
-- `references/examples.md` - load for quality-sensitive voice, taste,
-  explanation, or visual structure.
-- `references/method-selection-smoke.md` - load when method routing is unclear
-  or when changing the skill.
-- `references/upstream-social.md` - load for multi-platform campaign,
-  caption, hashtag, or calendar constraints.
-- `references/upstream-carousel.md` - load for carousel format, slide count,
-  visual sequence, or platform carousel constraints.
-- `references/upstream-linkedin.md` - load for LinkedIn-native professional,
-  founder, B2B, hiring, or thought-leadership copy.
+- [model](references/model.md) - artifact matrix, mode selection, execution
+  packet for `cross-platform` and multi-format work.
+- [method-selection-smoke](references/method-selection-smoke.md) - when the
+  mode is unclear or when changing this skill.
+- [x-output](references/x-output.md) - the `x` draft template (N3).
+- [newsletter](references/newsletter.md) - format rules, cadence, subject and
+  preview limits, issue and blueprint templates; credits the MIT upstream
+  ([license](references/newsletter-UPSTREAM_LICENSE.txt)).
+- [newsletter example](examples/newsletter/example.md) - a release digest built
+  from verified weekly updates.
+- [examples](references/examples.md) - carousel quality bar and visual direction.
+- [upstream-twitter](references/upstream-twitter.md),
+  [upstream-linkedin](references/upstream-linkedin.md),
+  [upstream-carousel](references/upstream-carousel.md),
+  [upstream-social](references/upstream-social.md) - platform specs, hook
+  formulas, and format rules.
 
 ## Output
 
-- `content_plan`: bound artifact matrix, selected method, platform
-  constraints, asset route, publish boundary, and proof plan.
-- `social_draft_bundle`: copy, slide sequence, captions, prompts, or
-  saved artifact paths as appropriate.
-- `blocked_report`: missing context, missing approval for external side
-  effects, or proof that cannot run.
+```yaml
+mode: x | linkedin | carousel | cross-platform | newsletter
+brief: <audience, reader promise, stage, voice_mode: evidence_matched | hypothesis>
+draft: <full copy: numbered tweet stack | post | slide copy | artifact matrix + copy | subjects + preview + body>
+assets: <asset -> owner (ai-image | ai-video | storyboard | copywriting) | none>
+review_notes: <claims and sources, character-budget risks, CTA count, promotion placement>
+source_receipt: <verified facts, public links, interpretation, material cut>
+gaps: <missing facts or assumptions>
+publication_status: approval_required
+next_owner: zernio (after explicit approval) | review | none
+```
+
+`blocked_report`: the one missing fact that prevents a truthful draft, one
+labelled hypothesis, voice mode, and the unchanged approval gate.

@@ -3,7 +3,7 @@ title: Skill signals
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-11
+updated_at: 2026-10-12
 tags:
   - farplane
   - feature
@@ -11,12 +11,10 @@ tags:
 refs:
   - docs/features/FEAT-0064-skill-signals.md
   - docs/skills/system.md
-  - skills/dogfood-review
   - farplane/automations/
   - docs/skills/registry.jsonl
   - docs/farplane-framework/lifecycle.md
   - skills/skill-maintenance/graph/README.md
-  - skills/dogfood-review/SKILL.md
   - skills/skill-maintenance/SKILL.md
 feature_id: FEAT-0064
 system_id: SYS-0006
@@ -25,7 +23,6 @@ public: true
 surfaces:
   - docs/features/FEAT-0064-skill-signals.md
   - docs/skills/system.md
-  - skills/dogfood-review
   - farplane/automations/
   - docs/skills/registry.jsonl
 source_refs:
@@ -34,9 +31,8 @@ source_refs:
   - skills/skill-maintenance/graph/README.md
 external_refs: []
 evidence_refs:
-  - skills/dogfood-review/SKILL.md
   - skills/skill-maintenance/SKILL.md
-known_limits: Official signal contract only; the current implementation is consumed by Dogfood/skill maintenance and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
+known_limits: Official signal contract only; the current implementation is consumed by skill maintenance and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
 metrics:
   - skill_signal_contract_traceability_pass
   - dogfood_signal_breakdown_pass
@@ -86,7 +82,7 @@ deserve hardening, refinement, merging, watching, or retirement review first.
   source gaps without pretending they are direct usage.
 - Feeds skill-maintenance planning and consolidation decisions.
 - Helps decide when a skill should be split, merged, promoted, or retired.
-- Feeds Dogfood candidate selection while keeping human feedback in the
+- Feeds self-improve candidate selection while keeping human feedback in the
   experiment ticket that produced it.
 
 ## User Stories
@@ -110,7 +106,7 @@ quality grade.
   surface, or user-facing capability.
 - Recommendations use `keep`, `harden`, `refine`, `merge`, `watch`, or
   `retire_review`; destructive edits still require owner-specific review.
-- Dogfood and skill maintenance use these signals to choose which capability
+- Skill maintenance and self-improve use these signals to choose which capability
   skill or workflow deserves a bounded experiment. Human-feedback outcomes
   become maintenance evidence only when recorded with a comparable scenario
   and artifact refs.
@@ -140,7 +136,7 @@ flowchart LR
   registry["docs/skills/registry.jsonl<br/>graph refs"]:::keep
   heat["graph heat<br/>direct + composition"]:::changed
   burden["maintenance burden<br/>bloat, stale QA, missing evals"]:::changed
-  taste["Dogfood input decisions<br/>skill + ticket context"]:::changed
+  taste["self-improve input decisions<br/>skill + ticket context"]:::changed
   decision["keep / harden / refine<br/>merge / watch / retire_review"]:::added
   retire["retire_review candidate"]:::retired
 
@@ -161,7 +157,6 @@ Owner surfaces:
 
 - `docs/features/FEAT-0064-skill-signals.md`
 - `docs/skills/system.md`
-- `skills/dogfood-review`
 - `farplane/automations/`
 - `docs/skills/registry.jsonl`
 
@@ -173,7 +168,6 @@ Source context:
 
 Evidence:
 
-- `skills/dogfood-review/SKILL.md`
 - `skills/skill-maintenance/SKILL.md`
 
 ## Proof And Quality
@@ -202,7 +196,7 @@ Acceptance signals:
 - This feature does not make every skill high priority because it is useful once.
 - This feature does not replace skill-maintenance review.
 - Known limit: Official signal and recommendation contract only; the current
-  implementation is consumed by Dogfood/skill maintenance and generated graph data. No
+  implementation is consumed by skill maintenance and generated graph data. No
   standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation
   is shipped.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
@@ -230,3 +224,5 @@ Acceptance signals:
   composition heat, maintenance burden, uniqueness, and recommendations.
 - 2026-07-11: Removed the retired product-registry input; skill signals now
   feed capability-skill selection and upkeep directly.
+- 2026-10-12: Dropped the Dogfood review consumer and its refs when #41
+  deleted that skill; skill maintenance and self-improve consume the signals.

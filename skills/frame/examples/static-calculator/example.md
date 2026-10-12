@@ -63,7 +63,7 @@ Correction questions:
 1. Who signs off on a quote today when the job is unusual?
 2. Are pricing and cost rules written down anywhere, or held by people?
 
-Next owner: solution-shaping for an agency proposal, or prd if the quote
+Next owner: approach for an agency proposal, or prd if the quote
 workflow slice is approved for a system build.
 ```
 

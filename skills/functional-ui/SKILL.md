@@ -20,7 +20,7 @@ allowed-tools: Read, Grep, Glob, Bash
   diagnosis, UX brief, redesign recommendation, or planning handoff.
 - [ ] Read the first-load Todo List guardrails before execution when the task
   will shape an app screen, panel, dashboard, form, or control surface.
-- [ ] Use [customer-research](../customer-research/SKILL.md)
+- [ ] Use [prospect](../prospect/SKILL.md)
   when users, jobs, contexts, friction, or success signals are not already
   settled.
 - [ ] Use [research](../research/SKILL.md) when comparable app

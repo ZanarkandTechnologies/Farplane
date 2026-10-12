@@ -1,7 +1,7 @@
 ---
 name: proposal-pricing
-description: "Use whenever a proposal is requested from customer call notes; calculate one price from people/time, consequence cost, or direct money impact and return a concise draft."
-department: deals
+description: "Use for \"write the proposal\", \"what should we charge\", \"price this\" or \"turn this call into a proposal\": read the call notes, set one defensible price, return a concise draft."
+department: sales
 source: local
 template_uses:
   skill-template: "0.3.9"

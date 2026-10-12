@@ -2,6 +2,7 @@
 name: frame
 description: "Use for \"I have an idea\", \"what should we build\", \"brainstorm\" or \"are we aligned\": separate symptom from problem, widen options, pick the smallest build, play it back for correction."
 source: local
+department: leadership
 template_uses:
   skill-template: "0.6.5"
 allowed-tools: Read, Glob, Grep
@@ -19,8 +20,9 @@ operator what the agent thinks is being built so they can correct it.
 
 Modes change emphasis, not the output: `diagnose` (default) runs N1, N3, N4
 and N5; `widen` adds N2; `playback` leads with N4 from what the discussion
-already settled. A paused task's history, tests, or next steps belong to
-`recap-task`; choosing among options that are already real belongs to `advise`.
+already settled. A paused task's history, tests, or next steps come from its
+GitHub issue and latest progress comment; choosing among options that are
+already real belongs to `advise`.
 
 ## Skill Signature
 
@@ -121,8 +123,8 @@ returns: the frame, one proposed visual, 1-3 correction questions, and the next 
   Rule: Ask only questions whose answer would change the frame, the rung, or
   the view, riskiest mismatch first. Route accepted product scope to `prd`, UI
   or workflow uncertainty to `functional-ui`, agency or client MVPs to
-  `solution-shaping`, an accepted build slice to `impl-plan`, unknown user
-  reality to `customer-research`, and a current-practice gap to
+  `approach`, an accepted build slice to `impl-plan`, unknown user
+  reality to `prospect`, and a current-practice gap to
   `research`. Create no tickets and write no code.
 
   Assert:

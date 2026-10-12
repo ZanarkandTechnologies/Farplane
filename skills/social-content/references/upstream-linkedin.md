@@ -1,10 +1,11 @@
----
-name: linkedin-content
-description: "LinkedIn post writing with hook formulas, formatting rules, and engagement patterns. Covers post types, algorithm signals, character limits, and content pillars. Use for: LinkedIn posts, professional content, thought leadership, B2B content, personal branding. Triggers: linkedin post, linkedin content, linkedin writing, linkedin strategy, linkedin engagement, linkedin algorithm, linkedin hook, linkedin formatting, thought leadership, professional content, b2b content, linkedin growth"
-allowed-tools: Bash(belt *)
----
-
 # LinkedIn Content
+
+> Upstream reference adapted from the inference.sh skills collection. Owner:
+> `social-content` ([SKILL.md](../SKILL.md)). Use it for platform specs, format
+> rules and examples only. Do not run the `belt` commands below: route paid
+> images to [ai-image](../../ai-image/SKILL.md) and clips to
+> [ai-video](../../ai-video/SKILL.md) (paid calls go through `treg` within the
+> spend cap), and posting or scheduling to [zernio](../../zernio/SKILL.md).
 
 Write high-engagement LinkedIn posts via [inference.sh](https://inference.sh) CLI.
 
@@ -223,10 +224,8 @@ End every post with engagement driver:
 
 ## Related Skills
 
-```bash
-npx skills add inference-sh/skills@social-media-carousel
-npx skills add inference-sh/skills@content-repurposing
-npx skills add inference-sh/skills@twitter-thread-creation
-```
-
-Browse all apps: `belt app list`
+- [social-content](../SKILL.md) owns the draft; [zernio](../../zernio/SKILL.md)
+  owns posting, scheduling and account metrics.
+- [ai-image](../../ai-image/SKILL.md) for stills and slides,
+  [ai-video](../../ai-video/SKILL.md) for clips, and
+  [storyboard](../../storyboard/SKILL.md) for video scripts.

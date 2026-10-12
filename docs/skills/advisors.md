@@ -47,7 +47,7 @@ As of 2026-10-12, that is 16 named advisor packages plus `advise`: 17 entries.
 | Need | Advisor | Produces |
 | --- | --- | --- |
 | Compare viable options and recommend one | [`advise`](../../skills/advise/SKILL.md) | Three options, tradeoffs, one recommendation, and next action, or a phased roadmap (`mode: roadmap`) whose first proof is a completed loop; `ensemble=auto|max` adds independent local perspectives when requested |
-| Define honest success, guardrails, and failure signals | [`metric-advisor`](../../skills/metric-advisor/SKILL.md) | Metric card, guard metrics, anti-metrics, and route hint |
+| Define honest success, guardrails, and failure signals | [`goal-advisor` metric card](../../skills/goal-advisor/references/metrics.md) | Metric card, guard metrics, anti-metrics, and route hint |
 
 ### Shape projects and harness execution
 
@@ -67,44 +67,38 @@ As of 2026-10-12, that is 16 named advisor packages plus `advise`: 17 entries.
 
 ### Produce creative assets and video
 
-`content-impl-plan` is the orchestrator for this production family. The lanes
-below are siblings because each returns a different required output; Asset
-Advisor does not own editing or rendering.
+The Marketing unit hands out one skill per deliverable. `storyboard` plans a
+video or content piece end to end (production plan on the GitHub issue, hook
+and script, scene asset plan, timed edit direction); generation skills return
+accepted media; the external `hyperframes` skill composes and renders.
 
 ```text
-Content Impl Plan
-├── Storyboard -> approved narrative and scene design
-├── Asset Advisor -> accepted media files + provenance + asset receipts
-│   ├── AI Image Advisor -> generated image bundle
-│   ├── AI Video Advisor -> generated video bundle
-│   ├── Avatar Advisor -> persistent identity/avatar bundle
-│   └── Audio Advisor -> accepted audio bundle + mix direction
-├── Editing Advisor -> timed edit direction
-├── Remotion -> implemented timeline + rendered video
+Storyboard (plan -> script -> assets -> edit)
+├── AI Image -> inspected image asset (create, edit, product, infographic, collage)
+├── AI Video -> inspected clip, avatar clip, or audio file (voice, music, SFX)
+├── Meshy 3D Generation -> 3D model, rig, or animation
+├── HyperFrames (external) -> composed timeline + rendered video
 └── Review / QA -> independent readiness evidence
 ```
 
-The generation advisors are asset-realization children only when Asset Advisor
-has selected generation as the route. Content Impl Plan orders those returned
-actions; it does not independently choose the same generation route again.
+Storyboard's asset plan picks reuse, source, or generation for each scene
+asset; the generation skills run only after that choice.
 
-| Need | Advisor | Produces |
+| Need | Skill | Produces |
 | --- | --- | --- |
-| Turn source material or a storyboard into required production assets | [`asset-advisor`](../../skills/asset-advisor/SKILL.md) | Asset inventory, acquisition/recreation plan, and downstream handoffs |
-| Create, edit, upscale, or cut out model-native images | [`ai-image-advisor`](../../skills/ai-image-advisor/SKILL.md) | Provider route, prompt/input packet, spend gate, and saved image bundle |
-| Create, edit, upscale, or control model-native video | [`ai-video-advisor`](../../skills/ai-video-advisor/SKILL.md) | Provider route, prompt/input packet, topology/spend gate, and saved video bundle |
-| Preserve a presenter, character, likeness, or lipsync identity | [`avatar-advisor`](../../skills/avatar-advisor/SKILL.md) | Avatar direction packet and generation route |
-| Plan or generate voice, music, SFX, Foley, dubbing, or mixes | [`audio-advisor`](../../skills/audio-advisor/SKILL.md) | Audio plan, approved assets, verification, and mix handoff |
-| Compose pacing, transitions, motion, captions, and compositing | [`editing-advisor`](../../skills/editing-advisor/SKILL.md) | Timed edit recipe and renderer-ready handoff |
+| Plan a video, reel, or content piece | [`storyboard`](../../skills/storyboard/SKILL.md) | Hook decision, script, scenes, asset plan, edit direction, and HyperFrames handoff |
+| Create, edit, upscale, or cut out images, product shots, infographics, or collages | [`ai-image`](../../skills/ai-image/SKILL.md) | Provider route, prompt, spend quote, and saved image asset |
+| Generate clips, avatar/presenter video, voice, music, or SFX | [`ai-video`](../../skills/ai-video/SKILL.md) | Provider route, prompt, spend quote, and saved clip or audio file |
+| Generate, texture, rig, or animate 3D assets | [`meshy-3d-generation`](../../skills/meshy-3d-generation/SKILL.md) | Meshy model files and credit receipt |
 
 ### Market and communicate
 
-| Need | Advisor | Produces |
+| Need | Skill | Produces |
 | --- | --- | --- |
-| Turn a paid-ad directive into one approval-ready campaign ticket | [`ad-impl-plan`](../../skills/ad-impl-plan/SKILL.md) | Canonical campaign ticket, conditional action graph, and approval inventory |
-| Turn an offer and audience into a spend-gated advertising campaign | [`ad-advisor`](../../skills/ad-advisor/SKILL.md) | Reviewed campaign configuration, CLI plan, and execution handoff |
-| Write emotionally coherent product or landing-page copy | [`copywriting-advisor`](../../skills/copywriting-advisor/SKILL.md) | Story, page copy, word bank, and copy QA verdict |
-| Create people-first search content | [`seo-content-advisor`](../../skills/seo-content-advisor/SKILL.md) | SEO brief, draft, and content QA verdict |
+| Plan, launch paused, or report on paid ads | [`ads`](../../skills/ads/SKILL.md) | One-variable campaign plan, paused/draft launch handoff, or read-only report |
+| Write page or SEO article copy, or a final-pass rewrite | [`copywriting`](../../skills/copywriting/SKILL.md) | Page copy, article, or cleaned prose that keeps every fact |
+| Draft posts, threads, carousels, or newsletter issues | [`social-content`](../../skills/social-content/SKILL.md) | Approval-ready drafts; posting stays with `zernio` |
+| Specify a landing page | [`landing-page`](../../skills/landing-page/SKILL.md) | Approved offer, story, section, asset, motion, and proof spec |
 
 ## Boundaries
 
@@ -114,7 +108,7 @@ Use these ownership rules to avoid creating duplicate advisors:
 | --- | --- | --- |
 | Resource Bank | Source media and reusable creative patterns: description, why, example, and conditioning recipe | Branching, tool use, gates, or executable workflow |
 | Advisor | Selection, constraints, compatibility, configuration, and the handoff contract | Permanent storage for every source artifact |
-| Advisor method | A reusable branch inside one advisor, such as visual camera control inside AI Video Advisor | A new top-level identity before independent callers prove the split |
+| Advisor method | A reusable branch inside one advisor, such as visual camera control inside AI Video | A new top-level identity before independent callers prove the split |
 | Executor | Rendering, generation, testing, publishing, or another concrete side effect | The upstream decision when an advisor is required |
 
 Use the terms consistently:

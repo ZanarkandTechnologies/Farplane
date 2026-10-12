@@ -65,7 +65,7 @@ The script also creates ignored, owner-named `.farplane/` folders:
 `.farplane/reports/`, `.farplane/metrics/daily/`,
 `.farplane/evals/runs/`, `.farplane/logs/`, `.farplane/entities/`, `.farplane/wiki/`,
 `.farplane/views.yaml`, and skill-owned report folders such as
-`.farplane/customer-research/reports/`.
+`.farplane/prospect/reports/`.
 The flat Wiki article directory is the single source of truth. `wiki.sqlite`,
 `index.json`, `graph.json`, and `crm.json` are generated views, while reports link entities
 through `entity_refs` and remain owned by their producing skills. Keep shared
@@ -78,8 +78,8 @@ and `tickets/templates/` remain available as tracked scaffold.
 Bootstrap does not create live Codex automations by itself. After the substrate
 exists, use `harness-creator` in full mode to shape the static charter,
 capability workflows, metric objectives, guards, and feedback loops. `harness-creator`
-routes to `metric-advisor` or `goal-advisor` only when those narrower advisor
-calls are needed. When live loops are explicitly requested, use
+routes to `goal-advisor` (or its metric card) only when that narrower advisor
+call is needed. When live loops are explicitly requested, use
 `automation-advisor` to add and activate jobs, one file per live routine in
 `farplane/automations/`; bootstrap creates the folder empty.
 Activation creates or reuses the dedicated loop threads, creates or updates the
@@ -93,7 +93,7 @@ setup, credentials, billing, deploys, and destructive actions.
 After the business foundation closes, follow the planning funnel:
 
 ```text
-frame -> direct clarification -> metric-advisor -> goal-advisor
+frame -> direct clarification -> goal-advisor metric card -> goal-advisor
 prd -> spec-to-ticket -> impl-plan -> goal-advisor
 ```
 

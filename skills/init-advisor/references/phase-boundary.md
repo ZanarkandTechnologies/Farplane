@@ -28,7 +28,7 @@ foundation, not init completion.
 Use destination skill signatures as the question inventory. Route static
 charter, capability workflow references, feedback loops, missing systems, and
 objective shape to `harness-creator`; route metric meaning, directions, guards,
-and proof providers to `metric-advisor`. When direct signature questions would
+and proof providers to the `goal-advisor` metric card. When direct signature questions would
 produce shallow or misleading answers, stop for focused operator clarification.
 Record the intake choice and missing answers in `docs/bootstrap-brief.md`.
 
