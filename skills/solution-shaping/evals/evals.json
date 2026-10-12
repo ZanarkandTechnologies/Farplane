@@ -127,13 +127,13 @@
     {
       "id": "solution_shaping_system_heavy_handoff_01",
       "prompt": "A hospital reports bed allocation chaos across wards, discharge teams, and transport. They asked what a useful first product could look like.",
-      "expected_output": "Frames the operational problem without collapsing it into one root cause; Identifies stakeholders, decisions, data/entity needs, permissions, and workflow risks at a high level; Recommends a realistic MVP boundary with V1, deferred scope, and non-goals; Routes system-heavy follow-up to deep-system-design or PRD before implementation; Names operator review evidence that would validate or falsify the MVP direction",
+      "expected_output": "Frames the operational problem without collapsing it into one root cause; Identifies stakeholders, decisions, data/entity needs, permissions, and workflow risks at a high level; Recommends a realistic MVP boundary with V1, deferred scope, and non-goals; Routes system-heavy follow-up to PRD before implementation; Names operator review evidence that would validate or falsify the MVP direction",
       "files": [],
       "assertions": [
         "Frames the operational problem without collapsing it into one root cause",
         "Identifies stakeholders, decisions, data/entity needs, permissions, and workflow risks at a high level",
         "Recommends a realistic MVP boundary with V1, deferred scope, and non-goals",
-        "Routes system-heavy follow-up to deep-system-design or PRD before implementation",
+        "Routes system-heavy follow-up to PRD before implementation",
         "Names operator review evidence that would validate or falsify the MVP direction"
       ],
       "metadata": {
@@ -175,12 +175,12 @@
     {
       "id": "solution_shaping_accepted_mvp_execution_gate_01",
       "prompt": "The client likes the quote workflow idea. Can we turn it into something the agent team can build without losing the sales-review angle?",
-      "expected_output": "Preserves the accepted MVP boundary instead of reopening broad ideation; Produces or updates a brief with V1 scope, proof model, review artifact, risks, and assumptions; Identifies whether the next owner is PRD, deep-system-design, functional-ui, impl-plan, or goal-advisor; Does not route to autonomous execution until the build slice and proof contract are explicit; Keeps the prospect/client review angle visible as part of done or proof",
+      "expected_output": "Preserves the accepted MVP boundary instead of reopening broad ideation; Produces or updates a brief with V1 scope, proof model, review artifact, risks, and assumptions; Identifies whether the next owner is PRD, functional-ui, impl-plan, or goal-advisor; Does not route to autonomous execution until the build slice and proof contract are explicit; Keeps the prospect/client review angle visible as part of done or proof",
       "files": [],
       "assertions": [
         "Preserves the accepted MVP boundary instead of reopening broad ideation",
         "Produces or updates a brief with V1 scope, proof model, review artifact, risks, and assumptions",
-        "Identifies whether the next owner is PRD, deep-system-design, functional-ui, impl-plan, or goal-advisor",
+        "Identifies whether the next owner is PRD, functional-ui, impl-plan, or goal-advisor",
         "Does not route to autonomous execution until the build slice and proof contract are explicit",
         "Keeps the prospect/client review angle visible as part of done or proof"
       ],

@@ -239,11 +239,11 @@
     {
       "id": "pulse_due_review_reminder_is_worker_free",
       "prompt": "Four tickets are awaiting review, but only one has an undecided progress Review block whose next_reminder_at is due. One worker slot is idle. What should Pulse do?",
-      "expected_output": "Selects at most the one due policy action instead of chasing from queue size; Calls worker-artifact-review-request in reminder mode without a worker handoff; Preserves the idle execution worker slot for todo or due check-in work; Updates reminder_count and the Telegram receipt in progress.md; Projects distinct review tickets into area pools; Treats review WIP as an area-pool limit and strategy signal, not a global dispatch block, planning suppression, or spam trigger",
+      "expected_output": "Selects at most the one due policy action instead of chasing from queue size; Calls telegram-message in reminder mode without a worker handoff; Preserves the idle execution worker slot for todo or due check-in work; Updates reminder_count and the Telegram receipt in progress.md; Projects distinct review tickets into area pools; Treats review WIP as an area-pool limit and strategy signal, not a global dispatch block, planning suppression, or spam trigger",
       "files": [],
       "assertions": [
         "Selects at most the one due policy action instead of chasing from queue size",
-        "Calls worker-artifact-review-request in reminder mode without a worker handoff",
+        "Calls telegram-message in reminder mode without a worker handoff",
         "Preserves the idle execution worker slot for todo or due check-in work",
         "Updates reminder_count and the Telegram receipt in progress.md",
         "Treats review WIP as an area-pool limit and strategy signal, not a global dispatch block, planning suppression, or spam trigger"
@@ -308,7 +308,7 @@
     {
       "id": "pulse_repairs_silent_review_and_executes_bound_phone_action",
       "prompt": "Work Pulse finds TASK-A awaiting_review with no progress.md and TASK-B awaiting_review with a valid undecided Review block. TASK-B has sent initial Telegram plus two configured reminders, six unanswered Pulse turns have elapsed, current time is inside active hours, and Phone Chaser count is zero. The binding authorizes one review action per beat. Both workers were already released. What happens?",
-      "expected_output": "Surfaces TASK-A as malformed review state requiring a Review-ledger repair instead of calling it not due; Selects only the oldest one of the repair or TASK-B phone escalation according to policy ordering and actions_per_beat; Uses worker-artifact-review-request and a structured Phone Chaser policy receipt when TASK-B wins; Does not assign a worker; Records the Telegram or sanitized phone receipt and count; Continues dispatch/refill phases; Does not infer escalation from review queue size",
+      "expected_output": "Surfaces TASK-A as malformed review state requiring a Review-ledger repair instead of calling it not due; Selects only the oldest one of the repair or TASK-B phone escalation according to policy ordering and actions_per_beat; Uses telegram-message and a structured Phone Chaser policy receipt when TASK-B wins; Does not assign a worker; Records the Telegram or sanitized phone receipt and count; Continues dispatch/refill phases; Does not infer escalation from review queue size",
       "files": [],
       "assertions": [
         "Treats missing progress Review state as repair work rather than a silent wait",

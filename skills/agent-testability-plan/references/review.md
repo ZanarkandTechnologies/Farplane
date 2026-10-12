@@ -30,7 +30,7 @@ If any answer is weak, tighten the output first.
 
 - the brief is just “add logs” with no separation between reachability,
   hidden-state visibility, and coordination visibility
-- the output overlaps heavily with `deep-system-design` instead of consuming it
+- the output redesigns the system architecture instead of consuming it
 - the output acts like a build ticket instead of a planning/doctrine artifact
 - the autonomy boundary is weakened or left implicit
 - the consumer guidance is missing, vague, or purely aspirational

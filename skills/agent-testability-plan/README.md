@@ -22,7 +22,7 @@ $agent-testability-plan docs/features/my-system.md
 ## How To Test
 
 - Re-read `SKILL.md` once and confirm the boundary with
-  `deep-system-design`, `spec-to-ticket`, and `impl-plan` is obvious.
+  the upstream design, `spec-to-ticket`, and `impl-plan` is obvious.
 - Confirm the output contract covers control accelerators, state probes,
   coordination views, tooling/infra, proof surfaces, non-goals, and decision
   boundaries.

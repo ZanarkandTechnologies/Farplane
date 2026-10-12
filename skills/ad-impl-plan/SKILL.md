@@ -26,7 +26,7 @@ measurement, and spend review. Use [Goal Advisor](../goal-advisor/SKILL.md)
 only after the ticket is approved to compile `program.md` and `progress.md`.
 The installed [Meta Ads](../meta-ads/SKILL.md) route remains read-only.
 When a reviewable creative or campaign packet actually exists, use
-[Worker Artifact Review Request](../worker-artifact-review-request/SKILL.md)
+[Telegram Message](../telegram-message/SKILL.md)
 to deliver one phone-readable internal approval request through Telegram. A
 draft ticket alone never sends a message.
 
@@ -46,7 +46,7 @@ gates: directive_identifiable; campaign_lock_accepted_or_action_blocked;
        action_rows_complete; conditional_routes_owned; approval_boundaries_visible;
        no_unapproved_spend_or_mutation
 routes: ad-advisor | social-content | content-impl-plan | asset-advisor |
-        landing-page | goal-advisor | meta-ads | worker-artifact-review-request |
+        landing-page | goal-advisor | meta-ads | telegram-message |
         review
 fails: strategy_reimplementation; production_by_default; tasty_pack_required;
        plan_approval_implies_spend; ticket_creates_program; auto_scale_or_pause
@@ -116,7 +116,7 @@ retains its own approval gate.
         output is a later `program.md` and `progress.md`; it cannot create
         either before its own explicit approval.
   - [ ] When an actual creative or campaign decision packet becomes ready for
-        review, add an internal `Worker Artifact Review Request` row. It sends
+        review, add an internal `Telegram Message` row. It sends
         one phone-readable Telegram request to Kenji with a single reply
         action; visual creative requires a PNG/JPEG review image and photo
         delivery. The notification does not approve production, setup, launch,
@@ -180,7 +180,7 @@ static-only test, to later compile `program.md` and `progress.md` after an
 explicit approval. For reference-led or video work, include conditional rows
 for Content Impl Plan, Storyboard, and Asset Advisor even before they are
 executable. When a real campaign or creative packet is ready for an internal
-decision, include a Worker Artifact Review Request row to send one
+decision, include a Telegram Message row to send one
 phone-readable Telegram approval request; that request is a notification, not
 action authority. An unbound item appears as an explicit action-row blocker
 with its next owner; it does not disappear from the ticket.
@@ -210,7 +210,7 @@ with its next owner; it does not disappear from the ticket.
 - [Goal Advisor](../goal-advisor/SKILL.md) — compile the accepted campaign
   ticket into a Goal Packet and delayed check-in program.
 - [Meta Ads](../meta-ads/SKILL.md) — factual read-only delivery reports.
-- [Worker Artifact Review Request](../worker-artifact-review-request/SKILL.md)
+- [Telegram Message](../telegram-message/SKILL.md)
   — deliver one phone-readable, internal Telegram approval request after a
   reviewable creative or campaign packet exists.
 - the first-load Todo List guardrails — apply before planning and before return.

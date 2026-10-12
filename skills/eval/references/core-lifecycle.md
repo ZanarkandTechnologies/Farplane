@@ -19,7 +19,7 @@ claiming behavior success.
 | Execution compilation and recurring work | `goal-advisor`, `automation-advisor`, `pulse-update` |
 | Work supply and operating review | `plan-next-wave`, `progress-update`, `report-gen`, `feed-scout` |
 | Skill self-improvement | `eval`, `self-improve` |
-| Review and completion | `worker-artifact-review-request`, `impl-plan`, `qa`, `review` |
+| Review and completion | `telegram-message`, `impl-plan`, `qa`, `review` |
 
 ```text
 core_lifecycle_eval_readiness(skill_set)

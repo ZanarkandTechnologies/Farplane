@@ -63,8 +63,8 @@ Demo / review artifact: clickable quote workflow or narrated walkthrough with
 Risks and assumptions: pricing rule availability, approval authority, data
 quality, integration needs, security requirements, quote volume.
 
-Next owner: `prd` for product scope, `deep-system-design` if the workflow is
-accepted and data ownership must be designed, or `impl-plan` for a narrow demo
+Next owner: `prd` for product scope, a data-ownership section in that PRD if
+the workflow is accepted, or `impl-plan` for a narrow demo
 slice after acceptance.
 ```
 

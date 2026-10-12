@@ -29,7 +29,8 @@
      dependencies.
    - Use Codex Chrome or manual browser review when a logged-in page requires
      explicit operator approval, browser session state, or UI inspection.
-   - Use [apify](../apify/SKILL.md) only as an explicit last resort when the
+   - Use a paid scraper through `treg` (for example an Apify actor) only as an
+     explicit last resort when the
      operator approves the platform, actor, credential, spend/cache boundary,
      and live-run scope.
    - Search only the configured entity queries and platforms. Do not wander

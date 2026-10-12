@@ -50,7 +50,7 @@ unavailable for dispatch but consumes no slot.
 - An unparseable Review block is a mechanical repair, not a silent wait.
   Select the oldest due retry/reminder/phone actions up to
   `review_chase_limit` and execute through
-  `worker-artifact-review-request` without assigning a worker.
+  `telegram-message` without assigning a worker.
 - Internal review notifications use automation-owned credentials. This does
   not weaken publication, account, spend, deploy, contact, or destructive
   action gates. Review queue size alone never triggers chase or suppresses

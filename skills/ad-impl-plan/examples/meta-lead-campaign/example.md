@@ -47,7 +47,7 @@ and a later read-only learning loop. Out: automatic delivery optimization.
 | 2 | Operator | ticket and campaign-lock reference | plan acceptance | rows 1 and bindings complete | plan acceptance only | approval record |
 | 3 | Social Content | accepted lock and Brand Kit | three copy/creative variation briefs | do not make claims beyond proof | creative-planning approval | creative packet brief |
 | 4 | Creative production owner | approved briefs | three visual variants plus one approval sheet image | no generation without its own cost approval | creative-generation approval | `artifacts/creative-review/approval-sheet.png` |
-| 5 | Worker Artifact Review Request | approval sheet and compact three-variation summary | one Telegram photo request: `approve`, `revise`, or `reject` | visual packet must be phone-reviewable | review request only | Telegram delivery receipt |
+| 5 | Telegram Message | approval sheet and compact three-variation summary | one Telegram photo request: `approve`, `revise`, or `reject` | visual packet must be phone-reviewable | review request only | Telegram delivery receipt |
 | 6 | Goal Advisor | accepted ticket only | `program.md` and `progress.md` | block until explicit Goal approval | Goal Packet approval | linked packet files |
 | 7 | Meta setup operator | approved final creative, account, and event | draft/paused setup receipt | no setup authority or payment permission | draft/paused-setup approval | setup evidence |
 | 8 | Operator | setup receipt and launch checklist | launch record | requires explicit launch authority | launch approval | launch audit |

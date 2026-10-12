@@ -55,8 +55,8 @@ larger system is necessary.
 Assumptions and unknowns: pricing rules, approval authority, source data,
 integration needs, security, expected quote volume, error cost.
 
-Next owner: solution-shaping for an agency proposal, or deep-system-design if
-the quote workflow slice is approved for system design.
+Next owner: solution-shaping for an agency proposal, or prd if the quote
+workflow slice is approved for a system build.
 ```
 
 ## Comparison Gates

@@ -42,7 +42,7 @@ gates:
   scout_mode_named; prospect_tiers_named; stage_exit_checked; next_owner_named;
   wiki_publication_intent_bound
 routes:
-  customer-research | solution-shaping | feed-scout | apify |
+  customer-research | solution-shaping | feed-scout | treg |
   customer-research | manage-wiki
 fails:
   broad scraping without source boundary; creepy personal dossiering;
@@ -54,8 +54,8 @@ fails:
 
 Keep source selection, light discovery, qualification, and handoff inline. Use
 `customer-research` when the filter depends on a role, workflow, or pain
-signal that is not already grounded. Use `apify` only when the platform/source
-requires an external actor and the caller has explicitly accepted that route.
+signal that is not already grounded. Use a paid scraper through `treg` only when
+the platform/source requires an external actor and the caller has explicitly accepted that route.
 Use `customer-research` for shortlisted people or companies after qualification.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -178,8 +178,8 @@ Wiki writeback / publication intent / result:
   research produces a plausible problem frame or outreach angle.
 - [feed-scout](../feed-scout/SKILL.md) - use only for recurring
   content/feed monitoring, not prospect packet ownership.
-- [apify](../apify/SKILL.md) - use only when an approved external
-  actor route is needed for social/profile/place data.
+- `treg` - use only when an approved paid scraper (such as an Apify
+  actor) is needed for social/profile/place data.
 - [manage-wiki](../manage-wiki/SKILL.md) - use for a sourced durable Wiki preview or apply handoff after qualification.
 
 ## Output

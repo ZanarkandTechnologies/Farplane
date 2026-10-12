@@ -40,8 +40,7 @@ gates: reconcile first; current healthy guards before planning; due rewards use
        review/chase caps enforced; clean task lineage verified before claim;
        configured planner calls validated before Pulse materializes them;
        side effects remain gated; one canonical JSON receipt written
-routes: plan-next-wave | goal-advisor | worker-artifact-review-request |
-        telegram-message | qa | review
+routes: plan-next-wave | goal-advisor | telegram-message | qa | review
 fails: product controller; inline implementation; check-in ticket; invented
        reward policy; manager-task fork; claim before lineage verification;
        review queue as chase or global dispatch trigger; silent no-op

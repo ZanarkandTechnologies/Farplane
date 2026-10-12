@@ -12,7 +12,6 @@ refs:
   - skills/dogfood-review/SKILL.md
   - skills/optimize-with-human/SKILL.md
   - skills/pulse-update/SKILL.md
-  - skills/worker-artifact-review-request/SKILL.md
   - docs/features/FEAT-0070-experimental-feature-evaluation-reports.md
   - docs/features/FEAT-0071-project-work-pulse.md
 feature_id: FEAT-0069
@@ -23,7 +22,6 @@ surfaces:
   - skills/dogfood-review/SKILL.md
   - skills/optimize-with-human/SKILL.md
   - skills/pulse-update/SKILL.md
-  - skills/worker-artifact-review-request/SKILL.md
 source_refs:
   - docs/systems/self-improvement-learning.md
   - docs/prd.md

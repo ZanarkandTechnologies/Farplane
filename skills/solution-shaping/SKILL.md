@@ -122,8 +122,8 @@ checklist into a queue of tiny review tasks.
         rather than implementation.
 - [ ] 8. Route the handoff.
   - [ ] Route broad product scope to `prd`.
-  - [ ] Route system/data-heavy MVPs to `deep-system-design` before
-        implementation planning; name the data, permission, and decision-rights
+  - [ ] Route system/data-heavy MVPs to `prd` before implementation
+        planning; name the data, permission, and decision-rights
         questions that design must settle.
   - [ ] Route UI/workflow-heavy MVPs to `functional-ui`.
   - [ ] Route inferred outreach hypotheses to `customer-research`,

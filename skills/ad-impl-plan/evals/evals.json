@@ -72,15 +72,15 @@
     {
       "id": "meta_creative_telegram_review_01",
       "prompt": "We have three review-ready static ad images and their copy variants for our invoice-chasing offer, \"Get your money faster by chasing your invoices.\" Create the campaign ticket so I can approve or revise the creative packet from Telegram before any setup, production, launch, spend, or delivery change. Do not send a message or deploy anything yet.",
-      "expected_output": "Creates one spend-safe campaign ticket with a conditional Worker Artifact Review Request route that packages the visual review for Telegram, asks one concrete approval reply, and preserves separate production, setup, launch, spend, and mutation gates without sending a message during drafting.",
+      "expected_output": "Creates one spend-safe campaign ticket with a conditional Telegram Message route that packages the visual review for Telegram, asks one concrete approval reply, and preserves separate production, setup, launch, spend, and mutation gates without sending a message during drafting.",
       "files": [
         "skills/ad-impl-plan/SKILL.md",
-        "skills/worker-artifact-review-request/SKILL.md",
+        "skills/telegram-message/SKILL.md",
         "skills/telegram-message/SKILL.md"
       ],
       "assertions": [
         "Treats the three static images as a visual review packet rather than final deployment authority",
-        "Routes internal approval through Worker Artifact Review Request and a Telegram photo-capable review surface",
+        "Routes internal approval through Telegram Message and a Telegram photo-capable review surface",
         "Requests one phone-readable approve, revise, or reject decision",
         "Does not send Telegram, set up Meta, launch, spend, or mutate delivery during planning"
       ]

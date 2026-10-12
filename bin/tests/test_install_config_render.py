@@ -88,7 +88,7 @@ enabled = true
             )
             profile_content = (target / "reviewer.config.toml").read_text(encoding="utf-8")
             self.assertNotIn("legacy = true", profile_content)
-            self.assertIn('name = "coderabbit-review"', profile_content)
+            self.assertIn('name = "pr-review-watch"', profile_content)
             backups = list((target / ".install-backups").glob("*/reviewer.config.toml"))
             self.assertEqual(len(backups), 1)
             self.assertIn("legacy = true", backups[0].read_text(encoding="utf-8"))

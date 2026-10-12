@@ -35,7 +35,7 @@ state: reads(supplied notes, tickets, docs, local context, source snippets);
 gates: symptom_problem_split; actor_named_or_unknown; constraints_labeled;
        product_boundary_not_assumed; next_owner_named
 routes: customer-research | competitor-research | prd |
-  deep-system-design | functional-ui | impl-plan | solution-shaping
+  functional-ui | impl-plan | solution-shaping
 fails: treats requested feature as the problem; overbuilds to a platform;
   hides assumptions; produces tickets before the problem is framed
 ```
@@ -128,8 +128,8 @@ Problem statement: Sales cannot produce reliable quotes because pricing inputs,
 approvals, and cost assumptions are scattered across people and files.
 Recommended boundary: quote workflow slice, not a standalone calculator and not
 a full ERP until record-of-truth constraints are proven.
-Next owner: solution-shaping or deep-system-design, depending on whether this is
-an agency proposal or an approved system build.
+Next owner: solution-shaping or prd, depending on whether this is an agency
+proposal or an approved system build.
 ```
 
 ## Gotchas

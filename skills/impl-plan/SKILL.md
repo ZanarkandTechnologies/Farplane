@@ -114,7 +114,7 @@ For a material request with no selected ticket, create or request the canonical
     [visual-design](../visual-design/SKILL.md),
     [asset-advisor](../asset-advisor/SKILL.md),
     [competitor-research](../competitor-research/SKILL.md), [implementation-research](../implementation-research/SKILL.md),
-    [experimental-research](../experimental-research/SKILL.md), [deep-system-design](../deep-system-design/SKILL.md),
+    [experimental-research](../experimental-research/SKILL.md),
     and the `metric-advisor` skill.
   - [ ] For UI work, reuse or resolve only the relevant facet: interaction
     model/low-fi wireflow (`functional-ui`), visual reference and system

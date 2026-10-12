@@ -24,8 +24,8 @@ allowed-tools: Read, Glob, Grep
 - [ ] Stop after planning and do not implement the resulting utilities here.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Use this after `deep-system-design` and before `spec-to-ticket` or
-`impl-plan`.
+Use this once the architecture is settled in a PRD, spec, or design note, and
+before `spec-to-ticket` or `impl-plan`.
 
 ## Purpose
 
@@ -58,7 +58,7 @@ covering:
 
 ## Do Not Use When
 
-- architecture is still vague; use `deep-system-design`
+- architecture is still vague; settle it with `brainstorm` or `prd` first
 - the request is already a concrete file/symbol implementation task
 - the work is only a per-ticket execution plan with no broader agent-UX or
   testability question
@@ -241,6 +241,5 @@ Keep the brief compact and directly reusable.
 
 - [references/review.md](references/review.md)
 - [Eval behavior traces](../eval/SKILL.md)
-- [skills/deep-system-design/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/deep-system-design/SKILL.md)
 - [skills/spec-to-ticket/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/spec-to-ticket/SKILL.md)
 - [skills/impl-plan/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/impl-plan/SKILL.md)

@@ -19,7 +19,7 @@ build planning. See `MEM-0043`.
 ## Do Not
 
 - collapse back into generic “observability” prose
-- absorb system-design ownership from `deep-system-design`
+- design the system architecture itself; consume a settled design
 - absorb per-ticket build planning from `impl-plan`
 - implement concrete helper scripts, dashboards, or runtime adapters inside this skill
 - create hidden sidecar artifacts outside normal specs/ticket surfaces
