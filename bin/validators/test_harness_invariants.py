@@ -146,6 +146,8 @@ TICKET_TEMPLATE_TEXT = """\
 
 ## QA Strategy
 
+## Autonomy Preflight
+
 - The hook may set one immutable `thread_id`; never store session_id here.
 """
 
