@@ -37,7 +37,8 @@ Use this as the ordered checklist whenever `ai-image-advisor` is active.
 - [ ] For Instagram/LinkedIn/X carousel or multi-slide post, use `social-content:carousel`.
 - [ ] For Twitter/X threads or posts, use [x-thread](../x-thread/SKILL.md).
 - [ ] For shared production routing from a domain skill, load `references/domain-production.md`.
-- [ ] If the user only needs normal Codex-native bitmap generation/editing and did not ask for inference.sh, `belt`, a named model, CLI repeatability, or a model comparison, use `imagegen` instead.
+- [ ] For `image-edit`, `inpainting`-style changes, or `multi-reference` work, default to Seedream 4.5 (see Editing Default) before `imagegen` or GPT-Image; fall back only when Seedream cannot run or the edit needs exact text rendering or a mask.
+- [ ] If the user only needs normal Codex-native bitmap generation (not an edit) and did not ask for inference.sh, `belt`, a named model, CLI repeatability, or a model comparison, use `imagegen` instead.
 - [ ] For CLI setup, app discovery, schemas, samples, or generic inference.sh help, load `references/tools/infsh-cli.md`.
 - [ ] For vague/general AI image requests or model selection, use the best-current defaults and model map in `SKILL.md` first.
 - [ ] For GPT-Image-2, OpenAI image generation, editing, inpainting, or product/marketing outputs, load `references/tools/gpt-image.md`.
@@ -92,14 +93,32 @@ These defaults come from the upstream inference.sh skill snapshot at `c5ad36c`. 
 
 | Use Case | Default | Why |
 | --- | --- | --- |
-| Highest-quality general generation/editing | `openai/gpt-image-2` | Strong text-to-image, editing, inpainting, references, and product/marketing outputs |
+| Image editing and multi-reference edits (default) | `bytedance/seedream-4-5` | Operator's pick for editing: keeps identity and layout, takes 1-14 reference images, 2K-4K output |
+| Highest-quality general generation | `openai/gpt-image-2` | Strong text-to-image, mask inpainting, references, and product/marketing outputs; edit fallback |
 | Fast Google-native image generation/editing | `google/gemini-3-1-flash-image-preview` | Current Nano Banana 2 path, multi-image input, high-res, Google grounding |
 | Professional text-heavy posters/banners | `alibaba/qwen-image-2-pro` | Text rendering and semantic adherence are the point of the model |
 | Fast/economical generation or edits | `pruna/p-image` / `pruna/p-image-edit` | Optimized for speed/cost and common aspect ratios |
 | Custom styles or LoRA | `falai/flux-dev-lora` / `falai/flux-2-klein-lora` | FLUX family is the style/LoRA branch |
-| 2K-4K cinematic quality | `bytedance/seedream-4-5` | Upstream umbrella names it for 2K-4K cinematic quality |
 | Background removal / transparent PNG | `infsh/birefnet` or live app from `background-removal.md` | Dedicated cutout branch |
 | Upscaling/enhancement | `falai/topaz-image-upscaler` | Dedicated professional upscaling branch |
+
+## Editing Default
+
+Seedream 4.5 is the default for every edit: change one thing in an existing
+image, swap a background, restyle, combine references, or keep a character
+consistent across shots. Pass the source image first in `image_input`, then any
+references, and say in the prompt what must stay unchanged.
+
+| Route | Call | Credential state |
+| --- | --- | --- |
+| treg (preferred) | `treg call replicate.x.bytedance-seedream-4-5 --method POST --data '{"input":{"prompt":"...","image_input":["<source>","<ref>"],"size":"2K","aspect_ratio":"match_input_image"}}'` | BYOK only: needs the team's Replicate key registered in treg (`my_tools` lists it once it is). Async; copy `output` before Replicate deletes it. |
+| belt | `belt app run bytedance/seedream-4-5 --input input.json --save result.json` | Needs `belt login`; confirm the schema with `belt app get` first. |
+
+If neither route has a credential, say so and use the operator's chosen
+fallback: `openai/gpt-image-2` or treg `piapi.image-gen.gpt-image-2-5` for
+masks and exact text, `reapi.image-gen.gemini-3-pro-image` for cheap
+multi-image edits. Name the fallback in `notes.md` so the result is not
+mistaken for a Seedream edit.
 
 ## Model Map
 
@@ -121,7 +140,7 @@ belt app list --category image
 | Gemini 3.1 Flash | `google/gemini-3-1-flash-image-preview` | Nano Banana 2, fast Google image generation |
 | Gemini 2.5 Flash | `google/gemini-2-5-flash-image` | Fast Google model |
 | Grok Imagine | `xai/grok-imagine-image` | xAI image generation, multiple aspects |
-| Seedream 4.5 | `bytedance/seedream-4-5` | 2K-4K cinematic quality |
+| Seedream 4.5 | `bytedance/seedream-4-5` | Default editor; multi-reference edits, 2K-4K cinematic quality |
 | Seedream 4.0 | `bytedance/seedream-4-0` | High quality 2K-4K |
 | Seedream 3.0 | `bytedance/seedream-3-0-t2i` | Accurate text rendering |
 | Reve | `falai/reve` | Natural language editing, text rendering |
