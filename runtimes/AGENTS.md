@@ -333,7 +333,7 @@ final = decision + reason + proof + next_blocking_condition
 | Claim being proved | Proof surface |
 | --- | --- |
 | UI change | Paired screenshots |
-| Material multi-step workflow | Operated video |
+| New feature or multi-step workflow | Operated video |
 | Other behavior | Command, log, check, or inspectable artifact |
 
 - Choose the reader's question before choosing Mermaid, ASCII, a table, or
@@ -346,8 +346,8 @@ final = decision + reason + proof + next_blocking_condition
 - Make diagrams understandable without color. Keep prose out of diagram boxes,
   and do not use visuals, media, or references to introduce unrelated breadth.
 - Embed the strongest relevant image or video. Use paired images for UI deltas,
-  operated video for changed multi-step workflows, and inspectable artifacts for
-  other changes. Do not require visual proof for nonvisual work.
+  operated video for new features and changed multi-step workflows, and
+  inspectable artifacts for other changes. Do not require visual proof for nonvisual work.
 
 ### Completed change
 

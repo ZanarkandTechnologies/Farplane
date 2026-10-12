@@ -69,7 +69,8 @@
     "files_changed": true,
     "expected_shape": "completed_change",
     "expected_fixes": [
-      "proof"
+      "proof",
+      "video_proof"
     ]
   },
   {
@@ -95,7 +96,7 @@
     "files_changed": true,
     "expected_shape": "completed_change",
     "expected_fixes": [
-      "status_line"
+      "cold_read"
     ]
   },
   {
@@ -199,7 +200,8 @@
     "files_changed": true,
     "expected_shape": "completed_change",
     "expected_fixes": [
-      "proof"
+      "proof",
+      "video_proof"
     ]
   },
   {
@@ -248,5 +250,78 @@
     "files_changed": true,
     "expected_shape": "completed_change",
     "expected_fixes": []
+  },
+  {
+    "id": "robotics-delta-report",
+    "latest_user_request": "build the chat wrapper next okay but also we dont just want a room as the background, we needt to know forexample where to wash clothes, where to do the chores, where to clean and so on, it kinda like needs to map out what area can it do certain tasks",
+    "proposed_final": "Goal: chat with a robot about a scanned room and have it do chores in the right places.\nTrack: task map from the phone video alone (TASK-0003).\nProgress: built, tested on one room, and the stand-spot reach bug is fixed. Next needs a second room, ideally your own capture.\n\n### Robot must be able to reach the furniture, not just stand near it\n\n> **Before:** the video-only map placed the robot 0.75 m from the table, with the chair in between. It could stand there but not reach the table.\n> **After:** a stand spot also needs a clear strip up to the furniture's face. Detected furniture also counts as an obstacle even where the 3D reconstruction has no points.\n> **Example:** the table is now \"blocked by the chair\" in both the video-only map and the hand-labelled reference.\n\n**Mostly worked. The video-only map matches the hand-labelled map on 6 of 7 chore zones' reachability.**\n\n- **Found:** all 7 chore zones. Standing spots are 0.18–0.36 m from the reference's, and surface heights are within 12 cm.\n- **Remaining miss:** the reference blocks one wardrobe because of a thin, 2 m-tall object in front of it, probably its open door. The video path filters such things out as noise, so thin real obstacles are a known blind spot.\n- **Room map regenerated:** \"tidy the bed\" still runs from the same standing spot. The wardrobe now correctly answers \"no free spot\". Open floor is 2.92 m², down from 3.12, because furniture footprints no longer count as floor.\n- **Limit:** tested on one room; the video map is more cautious about open floor (1.43 m²).\n\n**Spend:** this step cost a few cents on a CPU pod. All my pods are confirmed stopped.\n\n**Needs you:** film a room with an iPhone capture app that records the camera track (ARKit poses). That becomes the second test room; nothing else in this track is blocked.\n\n**References**\n- [TASK-0003 progress](home-sim/tickets/TASK-0003/progress.md)\n- [task_map.py](home-sim/tools/task_map.py)\n- [task_maps_compare.json](home-sim/tickets/TASK-0003/artifacts/task_maps_compare.json)\n- [video-only map](home-sim/tickets/TASK-0003/artifacts/tm_video/task_map.png)",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": [
+      "cold_read",
+      "video_proof"
+    ]
+  },
+  {
+    "id": "robotics-overall-state-clean",
+    "latest_user_request": "build the chat wrapper next okay but also we dont just want a room as the background, we needt to know forexample where to wash clothes, where to do the chores, where to clean and so on, it kinda like needs to map out what area can it do certain tasks",
+    "files_changed": true,
+    "proposed_final": "**You can now ask the robot to do a chore and it walks to the right spot in the room, working from a phone video alone. Tested on one room so far.**\n\n- **Works:** the map marks where each chore happens (make the bed, wipe the table, put clothes in the wardrobe) and where the robot can stand to reach it. It matches a hand-made map on 6 of 7 spots.\n- **Doesn't yet:** thin tall things such as an open wardrobe door are missed, so the robot thinks it can reach that wardrobe when it can't.\n- **You:** film one room of your own with an iPhone app that saves the camera path (for example Polycam). That is the only thing blocking a second test.\n\n![Asking for \"tidy the bed\" and the robot walking to it](/Users/dev/home-sim/proof/chore-walkthrough.mp4)\n\nVerified: zone-by-zone comparison with the hand-made map, [task_maps_compare.json](/Users/dev/home-sim/proof/task_maps_compare.json).",
+    "expected_shape": "completed_change",
+    "expected_fixes": []
+  },
+  {
+    "id": "built-feature-video",
+    "latest_user_request": "Add drag-to-reorder to the task list.",
+    "files_changed": true,
+    "proposed_final": "**Worked. You can drag tasks to reorder them, and the order survives a reload.**\n\n> **Before:** Tasks showed in creation order only.\n>\n> **After:** Drag a task by its handle to move it; the new order is saved.\n>\n> **Example:** Dragging \"Pay invoice\" to the top keeps it first after refresh.\n\n[Screen recording: reorder and reload](/Users/dev/app/proof/reorder.mp4)",
+    "expected_shape": "completed_change",
+    "expected_fixes": []
+  },
+  {
+    "id": "built-feature-unverified-video",
+    "latest_user_request": "Add the pick-and-place demo to the robot sim.",
+    "files_changed": true,
+    "proposed_final": "**Partial: the pick-and-place demo runs in the sim, but I have no recording of it.**\n\n- **Works:** `run_demo.py --task pick_place` picks the red cube and places it in the bin in 9 of 10 seeded runs.\n- **Unverified:** no video, because this host has no display for the sim viewer; run `python run_demo.py --task pick_place --record` on the GPU box to capture one.",
+    "expected_shape": "completed_change",
+    "expected_fixes": []
+  },
+  {
+    "id": "built-feature-screenshot-only",
+    "latest_user_request": "Build the onboarding flow for new users.",
+    "files_changed": true,
+    "proposed_final": "**Worked. New users now go through a three-step onboarding: name, workspace, first project.**\n\n> **Before:** New users landed on an empty dashboard.\n>\n> **After:** They walk through three steps and land on their first project.\n>\n> **Example:** A new sign-up ends on \"My first project\" with a sample task.\n\n![Step 1](/Users/dev/app/proof/onboarding-1.png)\n![Step 3](/Users/dev/app/proof/onboarding-3.png)",
+    "expected_shape": "completed_change",
+    "expected_fixes": [
+      "video_proof"
+    ]
+  },
+  {
+    "id": "status-jargon",
+    "latest_user_request": "whats the status of the importer?",
+    "files_changed": false,
+    "proposed_final": "Fixed the off-by-one in chunk_seq after the v2 ws flush regression; flush is idempotent now and p95 is back under budget on fixture B. Rechecked the dedupe path too.",
+    "expected_shape": "simple_answer",
+    "expected_fixes": [
+      "cold_read"
+    ]
+  },
+  {
+    "id": "status-clean",
+    "latest_user_request": "whats the status of the importer?",
+    "files_changed": false,
+    "proposed_final": "**The new importer works for files up to 2 GB; larger files still time out.**\n\n- **Works:** uploads stream in chunks, so a 1.5 GB CSV imports in about 40 seconds.\n- **Doesn't yet:** files over 2 GB hit the 60-second upload limit.\n- **You:** nothing needed; I'm raising the limit next.",
+    "expected_shape": "simple_answer",
+    "expected_fixes": []
+  },
+  {
+    "id": "bunker-desk-workers-no-video",
+    "latest_user_request": "i think we have dedicated advise skills right like for each of the strategy boards, but for the rest of them idk if we even need advise well i guess its for the output\n\nstop creating issues lets do it all here now",
+    "proposed_final": "Everything is done and pushed, and nothing needs you. You now have 40 skills in 6 business units instead of 120, and each desk starts with only its own skills.\n\nGoal: Cut the skill system down to skills that are actually called and useful, and give desks a real profile.\nTrack: Complete.\nProgress: #41, #44 and #46 are all closed with proof.\n\n### Bunker workers start as their desk\n> **Before:** a worker hired at a desk saw all ~150 skills and only took on the desk's role after it happened to run one of the desk's skills.\n>\n> **After:** a worker hired at a role desk starts with that desk's skills plus the shared helpers, and gets a short role prompt. Workers with no desk (bean bags), the board strategists and shells start exactly as before.\n>\n> **Example:** a Claude worker at the Prospector desk starts as \"the Prospector desk\", with other desks' skills hidden. A Codex worker at the outreach desk starts with `-p outreach-lead`.\n\n**Worked.**\n- **Verified:** four new launch tests pass. Typecheck passes, the backend tests pass 210/210, and the full suite passes 378/379; the one failure is an existing cash-date test this change doesn't touch.\n- **Real launches:** the launch code was also run for real, and the actual command lines were read from the running processes. Bunker commit is `95a5f24`.\n- **Limit:** this only applies while the trial role-desk layout is switched on (`AGENT_OFFICE_ROLE_DESKS`). With it off, desks have no visible role, so hires start as before.",
+    "files_changed": true,
+    "expected_shape": "completed_change",
+    "expected_fixes": [
+      "video_proof"
+    ]
   }
 ]

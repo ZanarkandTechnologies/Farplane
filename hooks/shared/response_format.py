@@ -1,8 +1,11 @@
 """Response-format check: Jev picks the answer's shape, then scores that shape's gaps.
 
 Shapes mirror the Output Formatting templates in runtimes/AGENTS.md.
+Every shape is also asked whether a cold reader gets the overall state.
 Proof is deterministic: a completed change that changed files and cites
-nothing gets one proof nudge; any citation means the agent did not forget.
+nothing gets one proof nudge; any citation means the agent did not forget,
+except that a new feature a person would watch needs a video or `Unverified:`.
+Proof keeps its own nudge after the one format nudge per turn is spent.
 """
 from __future__ import annotations
 
@@ -53,7 +56,24 @@ _SCOPE = (
     "holds the content to fill it. Score low when it is present, unnecessary for an "
     "answer this small, or would need information the agent does not have."
 )
+# Asked of every shape: an answer can follow its template and still lose the reader.
+UNIVERSAL_GAPS = ["cold_read"]
+VIDEO_SHAPES = {"completed_change", "progress"}
 GAPS: dict[str, dict[str, str]] = {
+    "cold_read": {
+        "fix": "Lead with the overall state in plain words: what works, what does not, and the one thing the user must do. Drop internal terms and fix history.",
+        "question": (
+            "Would someone who saw only the user's latest message be lost reading this "
+            "answer: unable to tell where their request now stands, what works and what "
+            "does not, or what they must do? Score high when the answer narrates the "
+            "latest fix, bug, or step instead of the overall state of what the user asked "
+            "for, or leans on terms coined during the work (ticket or track names, "
+            "nicknames for bugs, fixes, or internal parts) that the user never used. "
+            "Score low when the answer states the result of what the user asked, even "
+            "tersely; names of the user's own code, files, and commands are not internal "
+            "terms, and an answer with nothing for the user to do need not say so."
+        ),
+    },
     "conclusion_first": {
         "fix": "Lead with the conclusion in the first sentence.",
         "question": "Does the final answer bury its conclusion behind context or process narration?" + _SCOPE,
@@ -86,6 +106,24 @@ PROOF_FIX = (
     "that needs the user, hardware, or spend over the cap, and say which."
 )
 
+VIDEO_FIX = (
+    "Record the new feature working and embed or link the video (.mp4, .mov or "
+    ".webm) by absolute path. If you cannot record it, add `Unverified:` saying "
+    "why there is no video."
+)
+FEATURE_QUESTION = (
+    "Did the agent in this turn add a new feature or multi-step workflow, or change "
+    "how a product behaves for the person using it, so that they would want to watch "
+    "it working: a new screen, UI flow, interactive page, or game; an app's agents, "
+    "characters, or workers acting differently; or robot or simulation behaviour? "
+    "Judge what the user would see, not which files changed: launch code that changes "
+    "how an app's workers behave counts. Score low for bug fixes and layout or styling "
+    "tweaks that tests or screenshots prove, and for changes with nothing running to "
+    "watch: config values, refactors, docs, tests, build scripts, internal libraries."
+)
+
+_VIDEO = re.compile(r"\.(?:mp4|mov|webm)\b", re.IGNORECASE)
+_UNVERIFIED = re.compile(r"\bunverified[*_]{0,2}\s*:", re.IGNORECASE)
 _CITATION = re.compile(
     r"!\[[^\]]*\]\([^)]+\)"                 # media embed
     r"|\[[^\]]+\]\([^)]+\)"                  # markdown link
@@ -99,6 +137,15 @@ _EDIT_TOOLS = {"Edit", "Write", "MultiEdit", "NotebookEdit", "apply_patch"}
 
 def has_citation(final: str) -> bool:
     return bool(_CITATION.search(final))
+
+
+def names_proof(feedback_text: str) -> bool:
+    """True when earlier gate feedback already asked for proof or a video."""
+    return PROOF_FIX in feedback_text or VIDEO_FIX in feedback_text
+
+
+def has_video_proof(final: str) -> bool:
+    return bool(_VIDEO.search(final) or _UNVERIFIED.search(final))
 
 
 def is_edit_tool(name: object) -> bool:
@@ -118,36 +165,56 @@ def questions() -> dict[str, object]:
     }
     for name, spec in GAPS.items():
         asked[f"gap::{name}"] = {"type": "noul", "instructions": spec["question"]}
+    asked["visible_feature"] = {"type": "noul", "instructions": FEATURE_QUESTION}
     return asked
 
 
 def select_gaps(answers: Mapping[str, object], *, files_changed: bool,
-                cited: bool) -> tuple[str, list[str]]:
-    """Return the chosen shape and at most MAX_GAPS gap names for that shape only."""
+                final: str, proof_only: bool = False) -> tuple[str, list[str]]:
+    """Return the chosen shape and at most MAX_GAPS gaps for that shape plus the universal ones.
+
+    proof_only keeps just a proof gap: proof has its own once-per-turn nudge, so an
+    earlier format nudge cannot use up the request for a video.
+    """
     shape = str(_value(answers.get("shape"), "choice"))
     if shape not in SHAPES:
         raise ValueError(f"unknown shape: {shape}")
     scored = []
-    for name in SHAPES[shape]["gaps"]:  # type: ignore[union-attr]
-        score = _value(answers.get(f"gap::{name}"), "noul")
-        if isinstance(score, (int, float)) and not isinstance(score, bool) and score >= GAP_THRESHOLD:
-            scored.append((float(score), name))
+    for name in [*SHAPES[shape]["gaps"], *UNIVERSAL_GAPS]:  # type: ignore[misc]
+        score = _score(answers.get(f"gap::{name}"))
+        if score >= GAP_THRESHOLD:
+            scored.append((score, name))
     gaps = [name for _, name in sorted(scored, reverse=True)]
-    if shape == "completed_change" and files_changed and not cited:
+    # A run's last progress update can report a new feature too. The video fix
+    # also covers citing proof, so it replaces the generic proof nudge.
+    if (files_changed and shape in VIDEO_SHAPES and not has_video_proof(final)
+            and _score(answers.get("visible_feature")) >= GAP_THRESHOLD):
+        gaps.insert(0, "video_proof")
+    elif shape == "completed_change" and files_changed and not has_citation(final):
         gaps.insert(0, "proof")
+    if proof_only:
+        gaps = [name for name in gaps if name in ("proof", "video_proof")]
     return shape, gaps[:MAX_GAPS]
 
 
 def feedback(gaps: list[str]) -> str:
+    fixes = {"proof": PROOF_FIX, "video_proof": VIDEO_FIX}
     lines = "\n".join(
-        f"- **Add:** {PROOF_FIX if name == 'proof' else GAPS[name]['fix']}" for name in gaps
+        f"- **Add:** {fixes.get(name) or GAPS[name]['fix']}" for name in gaps
     )
     return (
         f"#### Response format\n\n{TAG}\n\n{lines}\n"
-        "- **Keep:** Everything else in the answer; fill only what the dialogue "
+        "- **Keep:** The answer's facts and proof; fill only what the dialogue "
         "already supports and add no empty headings.\n"
         "- **Return:** The revised final answer only; do not mention this gate."
     )
+
+
+def _score(answer: object) -> float:
+    score = _value(answer, "noul")
+    if isinstance(score, (int, float)) and not isinstance(score, bool):
+        return float(score)
+    return 0.0
 
 
 def _value(answer: object, field: str) -> object:

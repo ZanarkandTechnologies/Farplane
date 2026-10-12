@@ -14,7 +14,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "hooks" / "shared"))
 
-from response_format import has_citation, questions, select_gaps  # noqa: E402
+from response_format import questions, select_gaps  # noqa: E402
 from skill_suggestion import (  # noqa: E402
     ENDPOINT_ENV, MODEL_ENV, HttpDecisionClient, _provider_config,
 )
@@ -51,10 +51,11 @@ def main() -> int:
         result = client.system_one(state=state, questions=questions(),
                                    model=environ.get(MODEL_ENV) or config["model"])
         shape, gaps = select_gaps(result["answers"], files_changed=bool(case["files_changed"]),
-                                  cited=has_citation(final))
+                                  final=final)
         expected = list(case["expected_fixes"])  # type: ignore[arg-type]
         scores = {key.removeprefix("gap::"): answer.get("noul")
-                  for key, answer in result["answers"].items() if key.startswith("gap::")}
+                  for key, answer in result["answers"].items()
+                  if key.startswith("gap::") or key == "visible_feature"}
         return {"id": case["id"], "shape": shape, "expected_shape": case["expected_shape"],
                 "scores": scores,
                 "gaps": gaps, "expected": expected,

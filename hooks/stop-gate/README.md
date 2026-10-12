@@ -9,10 +9,11 @@
 | --- | --- | --- | --- |
 | 1 | Length | Deterministic ([`farplane_response.py`](../../bin/core/farplane_response.py)) | Prose is over the word or line limit |
 | 2 | Continuation | Jev `nudge` score ([`continuation.py`](../continuation/continuation.py)) | Score ≥ 0.5 and fewer than three continuation nudges this user turn |
-| 3 | Response format | Jev `shape` choice plus `gap::<section>` scores ([`response_format.py`](../shared/response_format.py)) | A gap of the chosen shape scores ≥ 0.6, or a completed change that edited files cites nothing |
+| 3 | Response format | Jev `shape` choice, `gap::<section>` and `visible_feature` scores ([`response_format.py`](../shared/response_format.py)) | A gap of the chosen shape or `cold_read` scores ≥ 0.6, a new feature has no video, or a completed change that edited files cites nothing |
 
 Continuation and format share one Jev request. Format nudges at most once per
-real user turn and names at most two additions.
+real user turn and names at most two additions. Format still runs after the
+continuation cap is spent.
 
 ## Response format
 
@@ -22,11 +23,34 @@ blocked, decision needed, progress), then scores only that shape's missing
 sections. A plan is never asked for `Verified:`, and an explanation is never
 asked for Before/After.
 
-Proof is deterministic. Any citation means the agent did not forget: a media
-embed, a Markdown link, a URL, a fenced block (command output), or a
-`Verified:`/`Unverified:` label. A completed change that edited files this turn
-(Claude `Edit`/`Write`/`MultiEdit`/`NotebookEdit`, Codex `apply_patch`) and cites
-nothing gets one nudge to cite its proof or state `Unverified:` and why.
+Every shape is also scored for `cold_read`: would someone who saw only the
+user's latest message be lost, because the answer narrates the latest fix
+instead of where the request stands, or uses terms coined during the work? A
+template-perfect delta report ("reach strip fixed, 6 of 7 agree") fails it;
+the nudge asks for the overall state in plain words, what works, what does not,
+and the one thing the user must do.
+
+Proof is deterministic once Jev has said whether the turn added a new feature
+or multi-step workflow a person would watch (`visible_feature` ≥ 0.6: a screen,
+UI flow, interactive page, game, an app's agents or workers acting differently,
+or robot or simulation behaviour). Jev judges what the user would see, so launch
+code that changes how bunker workers behave counts.
+
+- **New feature** (completed change or a run's last progress update, files
+  edited): needs an embedded or linked `.mp4`, `.mov` or `.webm`, or an
+  `Unverified:` line saying why there is no video. Screenshots and links alone
+  get one nudge to record it.
+- **Anything else** (completed change, files edited): any citation means the
+  agent did not forget: a media embed, a Markdown link, a URL, a fenced block
+  (command output), or a `Verified:`/`Unverified:` label. Citing nothing gets
+  one nudge to cite its proof or state `Unverified:` and why.
+
+Edits are Claude `Edit`/`Write`/`MultiEdit`/`NotebookEdit` or Codex
+`apply_patch` calls this user turn. Cold-read and shape gaps share one format
+nudge per real user turn, naming at most two additions. Proof has its own: when
+an earlier format nudge this turn did not ask for proof, the gate asks once more
+for the proof or video only, so a Goal/Track/Progress nudge cannot use up the
+video check.
 
 Short `Verified:`, `Unverified:`, `Limit:` and `Grounding:` lines (at most 30
 words) are outside the length budget, so adding proof does not re-trigger the

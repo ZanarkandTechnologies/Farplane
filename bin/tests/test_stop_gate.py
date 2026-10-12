@@ -24,8 +24,9 @@ ALL = frozenset({"continuation", "format"})
 
 
 class Client:
-    def __init__(self, nudge=0.1, shape="completed_change", gaps=None):
-        self.answers = {"nudge": {"noul": nudge}, "shape": {"choice": shape}}
+    def __init__(self, nudge=0.1, shape="completed_change", gaps=None, feature=0.1):
+        self.answers = {"nudge": {"noul": nudge}, "shape": {"choice": shape},
+                        "visible_feature": {"noul": feature}}
         for name in response_format.GAPS:
             self.answers[f"gap::{name}"] = {"noul": (gaps or {}).get(name, 0.1)}
         self.calls = []
@@ -84,6 +85,30 @@ class StopGateTests(unittest.TestCase):
             with self.subTest(final=final):
                 self.assertIsNone(self.evaluate([human("Fix it."), edit_call()], final, Client()))
 
+    def test_new_visible_feature_needs_a_video_not_any_link(self):
+        rows = [human("Add the chore map."), edit_call()]
+        final = "Done.\n![map](/tmp/map.png) [ticket](/tmp/progress.md)"
+        for shape in ("completed_change", "progress"):
+            with self.subTest(shape=shape):
+                result = self.evaluate(rows, final, Client(shape=shape, feature=0.9))
+                self.assertIn("Record the new feature working", result["reason"])
+        self.assertNotIn("Cite the proof", result["reason"])
+        for proved in ("Done.\n[demo](/tmp/chores.mp4)", "Done. ![run](/tmp/run.webm)",
+                       "Done.\n- **Unverified:** no display to record on this host."):
+            with self.subTest(final=proved):
+                self.assertIsNone(self.evaluate(rows, proved, Client(feature=0.9)))
+
+    def test_nonvisual_change_keeps_any_citation_as_proof(self):
+        rows = [human("Bump the timeout."), edit_call()]
+        self.assertIsNone(self.evaluate(rows, "Done. Verified: config test passes.", Client(feature=0.2)))
+
+    def test_cold_read_applies_to_every_shape(self):
+        for shape in response_format.SHAPES:
+            with self.subTest(shape=shape):
+                result = self.evaluate([human("Status?")], "Reach strip fixed; 6/7 agree.",
+                                       Client(shape=shape, gaps={"cold_read": 0.8}))
+                self.assertIn("overall state in plain words", result["reason"])
+
     def test_no_edits_means_no_proof_nudge(self):
         self.assertIsNone(self.evaluate([human("Fix it."), edit_call("Read")], "Done.", Client()))
 
@@ -103,6 +128,16 @@ class StopGateTests(unittest.TestCase):
         client = Client()
         self.assertIsNone(self.evaluate(rows, "Done again.", client, active=True))
         self.assertNotIn("shape", client.calls[0]["questions"])
+
+    def test_spent_format_nudge_still_leaves_one_proof_nudge(self):
+        rows = [human("Give desks a role."), edit_call(), assistant("Done."),
+                hook(response_format.feedback(["progress_ledger"]))]
+        client = Client(feature=0.9, gaps={"cold_read": 0.9})
+        result = self.evaluate(rows, "Done. Verified: tests pass.", client, active=True)
+        self.assertIn("Record the new feature working", result["reason"])
+        self.assertNotIn("overall state", result["reason"])
+        rows += [assistant("Done. Verified: tests pass."), hook(result["reason"])]
+        self.assertIsNone(self.evaluate(rows, "Done again.", Client(feature=0.9), active=True))
 
     def test_new_user_turn_resets_edits_and_format_count(self):
         rows = [human("Fix it."), edit_call(), hook(response_format.feedback(["proof"])),
@@ -172,10 +207,11 @@ class CatalogTests(unittest.TestCase):
             with self.subTest(shape=name):
                 self.assertIn(spec["template"], headings)
                 self.assertTrue(set(spec["gaps"]) <= set(response_format.GAPS))
+        self.assertTrue(set(response_format.UNIVERSAL_GAPS) <= set(response_format.GAPS))
 
     def test_eval_cases_use_known_shapes_and_gaps(self):
         cases = json.loads((ROOT / "hooks/stop-gate/eval_cases.json").read_text())
-        known = set(response_format.GAPS) | {"proof", "status_line"}
+        known = set(response_format.GAPS) | {"proof", "video_proof"}
         for case in cases:
             self.assertIn(case["expected_shape"], response_format.SHAPES)
             self.assertTrue(set(case["expected_fixes"]) <= known, case["id"])

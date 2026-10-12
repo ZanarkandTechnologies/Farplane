@@ -224,6 +224,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
     last_user_index = -1
     nudges = 0
     format_nudges = 0
+    proof_nudges = 0
     files_changed = False
     length_feedback = False
     previous_assistant = ""
@@ -245,10 +246,12 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
                 last_user_index = len(messages)
                 nudges = 0
                 format_nudges = 0
+                proof_nudges = 0
                 files_changed = False
                 length_feedback = False
             elif role == "hook":
                 format_nudges += response_format.TAG in text
+                proof_nudges += response_format.TAG in text and response_format.names_proof(text)
                 if TAG_PATTERN.search(text):
                     if not any(nudge in text for nudge in KNOWN_NUDGES):
                         return None
@@ -281,6 +284,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
             last_user_index = len(messages)
             nudges = 0
             format_nudges = 0
+            proof_nudges = 0
             files_changed = False
             length_feedback = False
             previous_assistant = ""
@@ -299,6 +303,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
             kinds = []
         if role == "user" and not kinds and response_format.TAG in text:
             format_nudges += 1
+            proof_nudges += response_format.names_proof(text)
             role = "hook"
         elif role == "user" and not kinds and TAG_PATTERN.search(text):
             if text.strip() not in KNOWN_NUDGES:
@@ -332,6 +337,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         "proposed_final": bounded_text(final),
         "own_nudges_this_user_turn": nudges,
         "format_nudges_this_user_turn": format_nudges,
+        "proof_nudges_this_user_turn": proof_nudges,
         "files_changed": files_changed,
         "recognized_length_feedback_this_user_turn": length_feedback,
         "source_truncated": rollout_truncated or len(messages) > MAX_MESSAGES or any(
@@ -372,7 +378,10 @@ def evaluate_stop(payload: Mapping[str, object], *, environ: Mapping[str, str],
             return allow_stop("unknown_previous_hook")
         ask_nudge = ("continuation" in checks
                      and state["own_nudges_this_user_turn"] < MAX_NUDGES)
-        ask_format = "format" in checks and not state["format_nudges_this_user_turn"]
+        # Proof has its own once-per-turn nudge beside the general format nudge.
+        proof_only = bool(state["format_nudges_this_user_turn"])
+        ask_format = "format" in checks and not (
+            proof_only and state["proof_nudges_this_user_turn"])
         if not ask_nudge and not ask_format:
             return allow_stop("nudge_cap")
         config = _provider_config(environ)
@@ -410,8 +419,8 @@ def evaluate_stop(payload: Mapping[str, object], *, environ: Mapping[str, str],
                 return {"decision": "block", "reason": NUDGE}
         if ask_format:
             shape, gaps = response_format.select_gaps(
-                answers, files_changed=bool(state["files_changed"]),
-                cited=response_format.has_citation(final))
+                answers, files_changed=bool(state["files_changed"]), final=final,
+                proof_only=proof_only)
             if gaps:
                 print(json.dumps({"hook": "response-format", "status": "nudge",
                                   "shape": shape, "gaps": gaps}), file=sys.stderr)
