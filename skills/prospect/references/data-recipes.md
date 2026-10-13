@@ -23,6 +23,7 @@ treg `catalog_get` or `monid inspect` before a run; listed prices drift.
   addresses enter a case. Keep `catch_all` and `unknown` in their own column.
 - Prefer routed endpoints (`treg.<capability>`) that try the cheapest provider
   first and bill misses at zero, unless a step needs one provider's fields.
+  Check the success rate in `catalog_get` and skip a listing under about 0.95.
 - Nothing is sent, called, connected or followed. Recipes end at a shortlist
   or a draft; outreach is `approach`.
 - End with an actual-spend line and log it in the operator's spend log.
@@ -59,8 +60,8 @@ receipt: $2.33 for 50 companies, about $0.12 per deliverable lead.
 Use when the offer fixes something visible on a local business's site (no
 online booking, no reviews reply, slow site).
 
-1. Search map listings for the service and city
-   (Apify `damilo/google-maps-scraper` via Monid, or the maps winner).
+1. Search map listings for the service and city (Google Maps places; the
+   same litescrape listing on treg and Monid, about $0.00015 a call).
 2. Open each website and check for the named gap.
 3. Rank by gap severity and public contact availability.
 
@@ -93,7 +94,8 @@ Use to answer `why now`, or for a recurring signal watch.
    (`treg.companies.jobs.search`), funding (`financing.discover`), job
    changes (`people.job-change`), LinkedIn engagers on topic posts
    (`linkedin.post.search` then reactions and comments), and Reddit or X
-   complaints about a competitor.
+   complaints about a competitor (for X use the AnyAPI listing; the routed
+   X search succeeded only 0.80 of the time on 2026-10-13).
 2. Write one `why now` line per company from the signal.
 3. Score fit and timing separately; tier A (both high), B, C.
 4. Re-score weekly; report only people new since the last run.

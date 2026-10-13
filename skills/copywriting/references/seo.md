@@ -39,7 +39,8 @@ is in the tool loadout note in `~/.farplane/memory/`.
    (`google.domain.ranked_keywords`) and keep terms they rank for and the site
    does not; price them with keyword volume.
 3. **AI-answer check:** for the top 10-12 buyer questions, record which
-   domains AI answers cite (`ai-search.mentions` or Ahrefs AI responses). A
+   domains AI answers cite (Monid's DataForSEO AI-answer endpoints; Ahrefs AI
+   responses are also only on Monid). A
    cited host is a pitch or guest-post target, not only a competitor.
 4. Queue topics by demand, gap and information gain; refresh beats new.
 

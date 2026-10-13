@@ -32,7 +32,9 @@ spend cap; the gateway per job is in the tool loadout note in
 
 1. Search the niche on the target platform (TikTok, Instagram, YouTube, X)
    for the last 7-30 days, sorted by views or likes; cap at about 50 posts.
-2. For each poster, pull recent posts and compute their median views.
+2. For each poster, pull recent posts and compute their median views
+   (Instagram profile plus posts is cheapest on Monid's Apify listing, about
+   $0.0016; TikTok and YouTube on treg).
 3. Keep posts at 10x+ their creator's median: the format worked, not the
    follower count.
 4. For the top 5, pull the transcript and read the first 3 seconds; record
