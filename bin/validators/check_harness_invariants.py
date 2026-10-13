@@ -31,7 +31,6 @@ RETIRED_NAMES_PATH = "config/retired-names.toml"
 class HarnessRule:
     relative_path: str
     required_substrings: tuple[str, ...] = ()
-    forbidden_substrings: tuple[str, ...] = ()
     remediation: str = ""
 
 
@@ -160,12 +159,6 @@ def validate_root(root: Path, *, include_project_contract: bool = True) -> list[
                     f"{rule.relative_path}: missing required text: {snippet!r} | "
                     f"remediation: {rule.remediation}"
                 )
-        for snippet in rule.forbidden_substrings:
-            if snippet in text:
-                errors.append(
-                    f"{rule.relative_path}: contains forbidden retired-path text: {snippet!r} | "
-                    f"remediation: {rule.remediation}"
-                )
     errors.extend(validate_agent_roles(root))
     errors.extend(validate_agent_kernel_inventory(root))
     errors.extend(validate_agent_kernel_subsections(root))
@@ -185,31 +178,20 @@ def validate_retired_names(root: Path) -> list[str]:
     config = tomllib.loads(config_path.read_text(encoding="utf-8"))
     history = [RETIRED_NAMES_PATH, *config.get("history_paths", [])]
     entries = [(re.compile(entry["pattern"]), entry) for entry in config.get("retired", [])]
-    listed = subprocess.run(
-        ["git", "-C", str(root), "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
-        capture_output=True,
-        check=True,
-    ).stdout.decode("utf-8")
+    git_ls = ["git", "-C", str(root), "ls-files", "-z", "--cached", "--others", "--exclude-standard"]
+    listed = subprocess.run(git_ls, capture_output=True, check=True, text=True).stdout.split("\0")
     errors: list[str] = []
-    for rel_path in sorted(set(filter(None, listed.split("\0")))):
-        path = root / rel_path
-        if any(fnmatch(rel_path, glob) for glob in history) or not path.is_file():
+    for rel_path in sorted(set(filter(None, listed))):
+        if any(fnmatch(rel_path, glob) for glob in history) or not (path := root / rel_path).is_file():
             continue
         data = path.read_bytes()
-        if b"\0" in data[:8192]:
-            continue
-        text = data.decode("utf-8", errors="ignore")
-        for pattern, entry in entries:
-            if not pattern.search(text):
-                continue
-            for line_number, line in enumerate(text.splitlines(), start=1):
-                match = pattern.search(line)
-                if match:
-                    errors.append(
-                        f"{rel_path}:{line_number}: {match.group(0)!r} was retired on {entry['retired']}; "
-                        f"use {entry['use_instead']} | remediation: delete the mention, with no "
-                        f"'retired' or 'legacy' note ({RETIRED_NAMES_PATH} is the record)"
-                    )
+        lines = [] if b"\0" in data[:8192] else data.decode("utf-8", errors="ignore").splitlines()
+        for line_number, line in enumerate(lines, start=1):
+            for pattern, entry in entries:
+                if match := pattern.search(line):
+                    errors.append(f"{rel_path}:{line_number}: {match.group(0)!r} was retired on {entry['retired']}; "
+                                  f"use {entry['use_instead']} | remediation: delete the mention, with no "
+                                  f"'retired' or 'legacy' note ({RETIRED_NAMES_PATH} is the record)")
     return errors
 
 
@@ -505,10 +487,7 @@ def main() -> int:
             print(error)
         return 1
 
-    rule_count = sum(
-        len(rule.required_substrings) + len(rule.forbidden_substrings)
-        for rule in RULES
-    )
+    rule_count = sum(len(rule.required_substrings) for rule in RULES)
     agent_count = len(list((root / "agents").glob("*.toml")))
     print(
         f"harness invariants OK ({len(RULES)} files checked, {agent_count} agents, "
