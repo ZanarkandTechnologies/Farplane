@@ -1,6 +1,6 @@
 ---
 template_id: goal-loop-program
-template_version: "0.3.0"
+template_version: "0.3.1"
 feature_refs:
   - FEAT-0029
   - FEAT-0032
