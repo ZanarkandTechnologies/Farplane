@@ -47,6 +47,7 @@ selection:
   hypothesis_tree: <hypothesis-tree.json>
   source_stage:
     inputs: <local failures, supplied refs, configured Feed Scout signals, or bounded research>
+    technique_catalog: <for latency/size/on-device objectives, references/technique-catalog-efficient-inference.md; append verified outcomes to its Field results>
     extracts: <techniques, mechanisms, variables, failure conditions, source refs>
   rule: choose execute | diagnose | report_now | request_feedback | stop; use goal-advisor references/choose-next.md only for real multi-option judgment
   before_each_experiment:
