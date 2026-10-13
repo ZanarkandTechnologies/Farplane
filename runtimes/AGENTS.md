@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.13
+template_version: 0.3.14
 feature_refs:
   - FEAT-0022
   - FEAT-0042
