@@ -158,4 +158,4 @@ search_budget:
 
 <!-- One line per rule that still binds, each linking its `Decision:` comment. -->
 
-- 
+- <rule> (Decision: <comment link>)

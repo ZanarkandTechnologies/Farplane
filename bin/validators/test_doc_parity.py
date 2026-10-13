@@ -19,7 +19,7 @@ README_TEXT = """\
 # Farplane
 
 - Architecture map: [ARCHITECTURE.md](/abs/ARCHITECTURE.md)
-- Feature/spec registry: [docs/features/README.md](/abs/docs/features/README.md)
+- Feature specs and registry contract: [docs/features/README.md](/abs/docs/features/README.md)
 - Review scoring: [skills/review/README.md](/abs/skills/review/README.md)
 - Active queue: GitHub Issues in each project's own repo (`tickets/README.md`).
 """
@@ -143,7 +143,7 @@ class CheckDocParityTest(unittest.TestCase):
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("Feature/spec registry", result.stdout)
+            self.assertIn("Feature specs and registry contract", result.stdout)
 
 
 if __name__ == "__main__":

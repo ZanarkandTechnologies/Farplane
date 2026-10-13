@@ -30,9 +30,9 @@ RULES: tuple[FileRule, ...] = (
         relative_path="README.md",
         required_substrings=(
             "Architecture map: [ARCHITECTURE.md]",
-            "Feature/spec registry: [docs/features/README.md]",
+            "Feature specs and registry contract: [docs/features/README.md]",
             "Review scoring: [skills/review/README.md]",
-            "Active queue: GitHub Issues in each project's own repo (`tickets/README.md`).",
+            "Active queue: GitHub Issues in each project's own repo",
         ),
         forbidden_substrings=(
             "Active queue: none currently",
