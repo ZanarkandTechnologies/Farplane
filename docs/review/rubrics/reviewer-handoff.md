@@ -50,6 +50,8 @@ Use these as starting points, then narrow or expand based on the concrete task:
   scope, and `evidence-quality`
 - Cleanup/refactor/runtime/doc simplification: `debloatability`,
   `integration-readiness`, `evidence-quality`
+- Migration or replacement of an existing path: add `debloatability` to the
+  rubrics for its work type; every old path it keeps needs a live user.
 - Final completion review: `user-intent-satisfaction` when user-facing,
   `integration-readiness`, `evidence-quality`
 

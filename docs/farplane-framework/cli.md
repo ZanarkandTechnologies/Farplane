@@ -71,8 +71,7 @@ Done so far:
   `--json` (they always print JSON); a `CliError` prints `{"ok": false, "error": …}` under `--json`; a group
   run without its subcommand prints that group's help; the `delegate` command, the unreachable
   `resource-bank` parser entry (it is still delegated to the bunker checkout before parsing) and the duplicate
-  `capability-profiles resolve` are gone. On 2026-10-13 `ticket finalize` and the whole `mining` group went
-  too: issues close with a proof comment and `gh issue close`, and completion mining had no reader.
+  `capability-profiles resolve` are gone.
 
 **Kept, because running software calls them** (the audit's evidence): `adoption scan`, `skills rollout scan`,
 `capability-profiles read/write/snapshot` (Farplane-UI's server), `hooks list/install`

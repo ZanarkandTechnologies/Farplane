@@ -54,9 +54,7 @@ For runtime helper scripts:
 - native Goal mode owns implementation persistence. Stop hooks are telemetry
   boundaries plus bounded gates/advice and must not be used as live
   completion authority.
-- closing an issue follows the close rule in `tickets/README.md`; there is no
-  closeout control skill, and runtime parsing accepts neither `$close-ticket`
-  nor the retired docs-closeout alias.
+- closing an issue follows the close rule in `tickets/README.md`.
 - on completion-like paths, ticket-local QA/review evidence is the authority;
   the main model's completion claim is candidate-only until the ticket's
   `Done / Proof`, Goal program, and required delegated reviews are satisfied.

@@ -44,7 +44,7 @@ Hard gate: required for any overall `pass`
 
 ### Autonomy Evidence Checks
 
-- [ ] `autonomy-inputs-visible`: Evidence for autonomous or `$ralph` work shows
+- [ ] `autonomy-inputs-visible`: Evidence for autonomous work shows
   commands, tools, credentials/permission assumptions, QA surfaces, and stop
   reason.
 - [ ] `qa-deferral-explicit`: Any deferred heavy QA is explicit and
@@ -57,7 +57,7 @@ Hard gate: required for any overall `pass`
 - Ordinary evidence usually proves the main path but leaves edge states or
   ticket-to-artifact mapping somewhat loose.
 - Strong evidence is traceable, replayable, and easy to audit.
-- Strong `$ralph` evidence includes selector output, skipped-ticket reasons,
+- Strong unattended-run evidence includes selector output, skipped-ticket reasons,
   stop conditions, and the QA ring chosen for the ticket.
 - Exceptional evidence gives a skeptical reviewer very little room to doubt what
   happened.

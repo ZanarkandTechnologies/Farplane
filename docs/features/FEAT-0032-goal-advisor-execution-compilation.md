@@ -201,7 +201,7 @@ Acceptance signals:
 - This feature does not turn every task into a Goal.
 - This feature does not hide state in the compiled prompt.
 - This feature does not supersede proof review.
-- Known limit: Skill and docs contract only; it does not implement a daemon, hidden scheduler, Codex Cloud launcher, Symphony runner, or automatic Goal manager. Former work, Ralph, and batch-work public skill surfaces are retired into Goal standards.
+- Known limit: Skill and docs contract only; it does not implement a daemon, hidden scheduler, Codex Cloud launcher, Symphony runner, or automatic Goal manager.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics

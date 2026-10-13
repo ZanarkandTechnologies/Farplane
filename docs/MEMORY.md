@@ -123,8 +123,7 @@ MEM-0035, MEM-0036, MEM-0056, MEM-0130, MEM-0151.
 - Stop-hook roles are TOML-backed under `agents/*.toml`; runtime code should
   load exact role instructions from those files.
 - Same-ticket continuation requires visible Goal Packet state plus a
-  session-scoped loop gate and matching runtime claim. Legacy Ralph, `$impl`,
-  and `auto_continue` compatibility state must not become activation truth.
+  session-scoped loop gate and matching runtime claim.
 - Completion-gate review must judge both evidence quality and whether the saved
   user turn is satisfied.
 - Repeated polling, retries, subagent waits, remote checks, and asset-generation
@@ -257,22 +256,6 @@ Source rows: MEM-0110, MEM-0111, MEM-0112, MEM-0120, MEM-0123.
 - Feed-scout live Notion task writeback must resolve required Project and Areas
   relations before writing, verify by readback, and fall back to local output
   when routing is missing.
-
-### Retired Or Superseded Paths
-
-Source rows: MEM-0002, MEM-0003, MEM-0005, MEM-0021, MEM-0028, MEM-0032,
-MEM-0074, MEM-0105, MEM-0109, MEM-0114.
-
-- Historical Ralph tmux lanes and public Ralph execution surfaces are retired.
-  Use Goal-backed `goal-advisor` execution and Goal heartbeat patterns instead.
-- Legacy `$impl`, `$ralph`, `$work`, root `todos.md` board-drain, public
-  `batch-work`, and old Ralph runtime meanings are superseded by Goal Advisor
-  standards unless a compatibility parser explicitly recognizes old text.
-- Retired OMX-era instructions belong only in archives or research material.
-  Active Farplane skills and docs use current tickets, docs, Goal Packets, and
-  `.farplane/` runtime state.
-- Skill-local `todos.md` sidecars are no longer active sources. Move useful
-  checklist content into `SKILL.md` and delete the sidecar.
 
 ## Recent Promoted Log
 

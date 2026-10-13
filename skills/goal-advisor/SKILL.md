@@ -173,7 +173,6 @@ fails: hidden_loop; prompt_only_material_goal; full_history_first_load;
   writable task: fold it into the issue.
 - A listed file is context or evidence unless the ticket grants scope. Honest
   review/human/market signals beat fake numeric metrics.
-- Do not route new work through retired `$work`, `$ralph`, or `batch-work`.
 - A Stop hook does not repair proof, review, closeout, or packet drift.
 
 ## Reference Map

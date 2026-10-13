@@ -25,9 +25,7 @@ version.json
 memories/
 tmp/
 .personality_migration
-.omx/
 .farplane/
-.ralph/
 .agents/*
 !.agents/skills/
 !.agents/skills/**

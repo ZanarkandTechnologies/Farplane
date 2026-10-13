@@ -30,4 +30,4 @@ If any answer is weak, tighten the PRD first.
 - metric candidates are subjective proxies pretending to be mechanical proof
 - the document reads like implementation notes instead of product intent
 - autonomy-readiness questions are missing for a feature expected to run
-  unattended or through `$ralph`
+  unattended

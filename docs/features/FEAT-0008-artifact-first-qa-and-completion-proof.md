@@ -229,8 +229,8 @@ Acceptance signals:
 
 ## Change History
 
-- 2026-10-13: Retired Core closeout (`farplane ticket finalize`) and
-  completion mining; a close is one proof comment plus `gh issue close`.
+- 2026-10-13: A close is one proof comment plus `gh issue close`; Core
+  closeout and completion mining were removed.
 - 2026-08-19: Split cleanup ownership between rubric-local skepticism,
   `lean-check` for implementation bloat, and `unslop` for prose.
 - 2026-08-02: Clarified that closeout uses `integrations.github.repo` directly;

@@ -122,7 +122,6 @@ BIN_README_TEXT = """\
 
 - hook `session_id` for telemetry correlation
 - ticket `thread_id` for the canonical one-ticket/one-task-thread join
-- `UserPromptSubmit` no longer writes `.farplane/state/current-run.json`
 """
 
 TICKETS_README_TEXT = """\
@@ -361,6 +360,33 @@ developer_instructions = "review"
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("agents/reviewer.toml", result.stdout)
             self.assertIn("name` must match filename stem", result.stdout)
+
+    def test_validator_fails_when_a_retired_name_comes_back_outside_history(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.build_repo(root)
+            write_file(
+                root / "config/retired-names.toml",
+                """\
+history_paths = ["docs/HISTORY.md"]
+
+[[retired]]
+pattern = 'old-widget run'
+retired = 2026-10-13
+use_instead = "new-widget"
+""",
+            )
+            write_file(root / "docs/HISTORY.md", "2026-10-13 | REMOVAL | `old-widget run` deleted\n")
+            write_file(root / "skills/x/SKILL.md", "Run `old-widget run` (legacy).\n")
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("skills/x/SKILL.md:1: 'old-widget run' was retired on 2026-10-13", result.stdout)
+            self.assertNotIn("docs/HISTORY.md", result.stdout)
+
+            write_file(root / "skills/x/SKILL.md", "Run `new-widget`.\n")
+            result = self.run_validator(root)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
 if __name__ == "__main__":

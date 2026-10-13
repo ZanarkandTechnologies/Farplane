@@ -1,6 +1,7 @@
 # Debloatability
 
-Use when reviewing cleanup, simplification, runtime reduction, or dead-surface removal work.
+Use when reviewing cleanup, simplification, runtime reduction, or dead-surface
+removal work, and any migration or replacement that could leave an old path behind.
 
 Required TAS: `TAS-A`
 
@@ -41,6 +42,8 @@ Ask:
 
 - Which compatibility layer is still justified?
 - Which one remains only because nobody deleted it yet?
+- For each old path kept or labelled legacy: who uses it (a caller, a reader of
+  its output, or a run) and when did they last? No answer means delete it.
 
 ### `duplication-reduction`
 

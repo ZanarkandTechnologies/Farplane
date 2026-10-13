@@ -41,6 +41,15 @@ proof. Label prototype-only shortcuts as such; prove on the hard case, not the
 sample easiest to demo. Example: a date-picker ask lands on `native_platform`
 (`<input type="date">`).
 
+The gate covers what a change keeps, not only what it adds. An old path the
+change touches stays only with a named live user: a caller, a reader of its
+output, or a run in the last 30 days. Otherwise the change deletes it; never
+relabel it legacy, fallback or "only for X". Apply the same test before
+recommending to add or restore something. Retiring a surface adds its names to
+`config/retired-names.toml` in the same commit, with no "X is retired" notes
+in live docs. Example: a migration stops a trigger that last ran seven weeks
+ago and whose output nobody reads -> delete the trigger, don't offer to re-fire it.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
@@ -94,6 +103,8 @@ sample easiest to demo. Example: a date-picker ask lands on `native_platform`
 
   Assert:
   - Findings are actionable and ranked; no style nits.
+  - Each old path the branch keeps names its live user and last use, or is a
+    blocking finding.
   - `patch_correct` is false while any blocking finding remains.
 - [ ] **N5 — harden: prove each mitigation against its abuse case.**
   `working feature -> ranked risk map + mitigations + adversarial proof`

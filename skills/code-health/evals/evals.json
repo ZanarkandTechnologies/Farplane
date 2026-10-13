@@ -267,6 +267,30 @@
           ]
         }
       }
+    },
+    {
+      "id": "code_health_migration_keeps_dead_path_01",
+      "prompt": "We moved tickets from local files to GitHub Issues. Closing an issue with `gh issue close` no longer fires the old 'ticket completed' event, so ticket-completion mining has stopped. Mining last ran seven weeks ago and wrote 55 claim files that no skill, command or hook reads. Our migration notes currently mark `ticket finalize` and the mining route as 'legacy, for projects without a GitHub repository'. Review the branch and say what to do about mining.",
+      "expected_output": "Treats the kept legacy paths as a blocking finding: mining and `ticket finalize` have no live user (no run in seven weeks, no reader of their output), so the branch deletes them and adds their names to config/retired-names.toml. Does not propose a command, webhook or other way to re-fire the event, and does not keep a legacy route.",
+      "files": [],
+      "assertions": [
+        "Checks the kept paths for a live user (last run and readers of the output) before deciding",
+        "Recommends deleting mining and `ticket finalize` in this branch rather than labelling them legacy",
+        "Does not propose a new command, webhook or trigger to restore the completion event",
+        "Records the retired names in config/retired-names.toml instead of leaving 'retired' notes in docs"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "A migration deletes old paths that have no live user",
+          "tags": [
+            "code-health",
+            "lean-gate",
+            "review",
+            "regression"
+          ],
+          "notes": "From the 2026-10-13 goal-advisor migration, which kept completion mining as legacy and offered to re-fire it."
+        }
+      }
     }
   ]
 }

@@ -66,10 +66,6 @@ ProjectPortfolio :=
   skill-contract, or proof-bundle judgments.
 - `goal-advisor` fills coding-ticket execution by compiling the Goal files,
   mode, budget, metric, and stop policy for native Goal.
-- Retired public surfaces map into Goal standards:
-  - `$work` -> admission/profile fields in `## Goal program`
-  - `$ralph` -> heartbeat board-drain pattern
-  - `batch-work` -> batch Goal file list plus per-ticket proof ledger
 
 ## Skill Improvement Composition
 

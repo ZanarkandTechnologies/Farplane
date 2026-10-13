@@ -96,7 +96,7 @@ Ask:
 
 ### `autonomy-readiness`
 
-Inspect: whether a plan intended for `$ralph`, unattended execution, external
+Inspect: whether a plan intended for unattended execution, external
 services, hard-to-QA UI, or long-running work names the inputs and gates that
 would otherwise interrupt the run.
 

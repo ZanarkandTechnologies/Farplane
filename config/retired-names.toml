@@ -1,0 +1,40 @@
+# Retired Farplane surfaces. `check_harness_invariants.py` fails when a pattern
+# below appears in a tracked file outside `history_paths`, so a purge stays
+# purged: leftovers in rubrics, references, templates or docs get caught, and so
+# does a later change that copies the old name back.
+#
+# To retire a surface: delete it, add an entry here in the same commit, and add
+# one docs/HISTORY.md line. Do not leave "X is retired" or "legacy" notes in live
+# docs; this file and HISTORY are the record, and the check's message names the
+# replacement.
+
+# History and records, not guidance: they may name retired surfaces.
+history_paths = [
+  "docs/HISTORY.md",
+  "docs/doc-audit/*",
+  "docs/sources/*",
+  "tickets/TASK-*",
+  "tickets/archive*",
+  "*CHANGELOG*.md",
+  "*/evals/*",
+]
+
+[[retired]]
+pattern = '(?i)\bralph\b|\$work\b|\bbatch-work\b'
+retired = 2026-04-10
+use_instead = "goal-advisor and native /goal"
+
+[[retired]]
+pattern = '(?i)\bomx\b'
+retired = 2026-04-10
+use_instead = "current tickets, Goal Packets and .farplane/ state"
+
+[[retired]]
+pattern = 'close-ticket'
+retired = 2026-10-11
+use_instead = "a proof comment and gh issue close (tickets/README.md)"
+
+[[retired]]
+pattern = 'ticket finalize|farplane mining|mine_ticket|farplane\.ticket\.completed|ticket-completion-(?:learning|lean)'
+retired = 2026-10-13
+use_instead = "a proof comment and gh issue close (tickets/README.md); lessons go to their owner in the closing session"

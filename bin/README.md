@@ -145,11 +145,6 @@ Runtime routing is session-first for parallel Codex usage:
 - hook `session_id` for telemetry correlation
 - ticket `thread_id` for the canonical one-ticket/one-task-thread join
 
-`UserPromptSubmit` no longer writes `.farplane/state/current-run.json` or
-`.farplane/state/sessions/<session_id>.json`. Those Ralph-era singleton and
-per-session files may remain in fixtures or historical local state, but they
-are not authoritative runtime ownership surfaces.
-
 ## Preferred Agent-Facing Command Surfaces
 
 Use the existing helpers directly, but prefer output modes that keep routine

@@ -120,10 +120,9 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 
 ## Closed Tickets
 
-A closed GitHub issue, with its proof comment, is the terminal record. The
-`farplane ticket finalize` command and completion mining were retired on
-2026-10-13; `tickets/archive-index.jsonl` keeps the locator rows that command
-wrote and is read by `farplane tickets history`.
+A closed GitHub issue, with its proof comment, is the terminal record.
+`tickets/archive-index.jsonl` keeps locator rows for the archived local tickets
+and is read by `farplane tickets history`.
 
 Existing `tickets/archive/TASK-*` directories remain readable legacy records.
 This workflow does not migrate or delete them. GitHub Releases, release assets,
@@ -685,7 +684,7 @@ batched, or routed through external compute, add `Run Hints` and name:
 6. human gates for plan review, QA review, deploy, spend, or destructive work
 7. decisions the agent may make autonomously
 8. likely size, Goal recommendation, compute hint, proof weight, and
-   batchability when those affect `$work`
+   batchability when those affect Goal admission
 9. expected beats and parallel eligibility when Pulse or another heartbeat
    needs capacity-learning hints
 
