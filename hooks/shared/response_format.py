@@ -121,10 +121,12 @@ FEATURE_QUESTION = (
 # A relative file link target, or a backticked relative path with an extension.
 # `./run.sh` and `../x` read as commands to run, not files to open. An absolute
 # target may sit in angle brackets, `](</Users/me/My Docs/a.png>)`, to keep its
-# spaces; a local target with `%20` in it doesn't open (the app reads it literally).
+# spaces; a local target with `%20` in it doesn't open (the app reads it literally),
+# unless it's quoted in a code span as an example.
+_ENCODED_PATH = re.compile(r"\]\(<?[/~][^)]*%20[^)]*\)")
+_CODE_SPAN = re.compile(r"`[^`\n]*`")
 _RELATIVE_PATH = re.compile(
     r"\]\((?!https?:|mailto:|file:|#|/|~|<[/~])[^)\s]+\)"
-    r"|\]\(<?[/~][^)]*%20[^)]*\)"
     r"|`(?![/~]|\.\.?/)[\w.-]+(?:/[\w.-]+)+\.\w{1,6}(?::\d+)?`"
 )
 _VIDEO = re.compile(r"\.(?:mp4|mov|webm)\b", re.IGNORECASE)
@@ -145,7 +147,7 @@ def has_citation(final: str) -> bool:
 
 
 def has_relative_path(final: str) -> bool:
-    return bool(_RELATIVE_PATH.search(final))
+    return bool(_RELATIVE_PATH.search(final) or _ENCODED_PATH.search(_CODE_SPAN.sub("", final)))
 
 
 def names_proof(feedback_text: str) -> bool:

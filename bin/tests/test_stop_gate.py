@@ -142,7 +142,8 @@ class StopGateTests(unittest.TestCase):
                 self.assertIn("absolute path", result["reason"])
         for final in ("See [plan](/Users/me/docs/plan.md).", "See [PR](https://x.test/1).",
                       "Use `a/b` or `README.md`.", "Open `~/notes/a.md`.", "Run `./bin/start.sh`.",
-                      "![shot](</Users/me/My Docs/a.png>)", "See [plan](</Users/me/plan.md>)."):
+                      "![shot](</Users/me/My Docs/a.png>)", "See [plan](</Users/me/plan.md>).",
+                      "Broken: `![shot](/Users/me/My%20Docs/a.png)`."):
             with self.subTest(final=final):
                 self.assertIsNone(self.evaluate([human("Where?")], final, Client(shape="simple_answer")))
 
