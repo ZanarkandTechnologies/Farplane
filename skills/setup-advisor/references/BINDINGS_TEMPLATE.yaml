@@ -68,10 +68,3 @@ feed_scout:
             Refine the entity task for this source. New source, entity/thesis,
             and feature ideas remain reviewable proposals.
 # Metric acquisition prompts live in farplane/metrics.yaml; bindings retain coordinates only.
-event_routes:
-  - route_id: ticket-completion-learning-v1
-    event_name: farplane.ticket.completed
-    program_ref: core:ticket-completion-learning@1.1.0
-  - route_id: ticket-completion-lean-v1
-    event_name: farplane.ticket.completed
-    program_ref: core:ticket-completion-lean@1.0.0

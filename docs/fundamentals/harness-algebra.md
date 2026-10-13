@@ -683,30 +683,11 @@ context_starvation =
 + missing_proof_contract
 ```
 
-Ticket-completion learning:
+Ticket-completion learning has no separate miner: the closing session routes
+each correction to its owner while it still holds the context, and the daily
+`report-gen` automation reads issues closed since its last run.
 
-```text
-ticket_completed(ticket, thread_id?)
-  -> freeze(ticket + program? + progress? + artifacts? + operator_turn_window?(thread_id))
-  -> ticket_improvement_mining
-  -> issue_findings + projected_ticket?[0..1] + machine_receipt
-```
-
-`farplane mining ticket TASK-XXXX` constructs this mining input for repair or
-backfill.
-
-The completion miner writes only a small local machine receipt. Ticket,
-program, progress, and artifacts own the completed solution; an available
-bounded window contributes operator corrections but is not required. Core
-freezes the first event snapshot and validates schema, evidence, and privacy.
-The read-only semantic executor never mutates durable state; Core may project
-the strongest grounded issue and proposed improvement into one deduped ordinary
-`todo` ticket. There is no ticket score, KPI admission gate, human lean report,
-turn-count trigger, daily all-thread scan, or automatic eval decision. The model
-supplies a locally validated semantic dedupe key, Core ranks accepted findings,
-and generated mining tickets cannot project another ticket.
-
-Drain flow:
+Correction flow:
 
 ```text
 correction_delta =

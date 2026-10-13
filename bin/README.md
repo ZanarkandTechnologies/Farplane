@@ -76,8 +76,8 @@ or removing a `farplane` command.
 - `farplane` / `farplane.py` - Core-owned global CLI for install, hooks,
   doctor checks, UI linking/start, skill rollout projections, and delegation
   into the linked bunker checkout (Farplane-UI-v2)
-- `core/*` - implementation modules for the global CLI, ticket lifecycle,
-  mining, telemetry status, and adoption helpers
+- `core/*` - implementation modules for the global CLI, ticket checks,
+  telemetry status, and adoption helpers
 - `tests/*` - Core-owned tests for `bin/core`, the hooks, and public
   command wrappers
 - `validators/check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
@@ -99,11 +99,6 @@ or removing a `farplane` command.
 - `runtime/skill_suggestion.py` - optional dependency-free OpenRouter or
   Featherless JEV adapter using TypeSafe's official two-pass skill-suggestion
   recipe to inject one advisory entry skill when no explicit `$skill` was requested
-- `core/farplane_ticket_close.py` - issue create/resume/close, ticket completion,
-  archive, event, and mining boundary used by `farplane ticket finalize TASK-XXXX`
-  (legacy projects without a GitHub repository only)
-- `core/farplane_event_store.py` - durable local event/outbox primitives shared
-  by explicit Core commands
 - `farplane.py adoption scan` - local adoption resolver for project
   `farplane/manifest.json` pins, optional project `.agents/skills/`, feature/template
   registries, drift, and Office-consumable adoption stats; implementation lives
@@ -149,9 +144,6 @@ Runtime routing is session-first for parallel Codex usage:
 - explicit run-state selector when a managed lane exports one
 - hook `session_id` for telemetry correlation
 - ticket `thread_id` for the canonical one-ticket/one-task-thread join
-- completed ticket packets plus optional bounded operator-turn windows as
-  improvement-mining evidence, with one deduped Core-projected `todo` ticket
-  when a grounded issue and improvement exist
 
 `UserPromptSubmit` no longer writes `.farplane/state/current-run.json` or
 `.farplane/state/sessions/<session_id>.json`. Those Ralph-era singleton and

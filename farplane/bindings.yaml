@@ -201,7 +201,3 @@ bookmark_recovery:
       enabled: false
       adapter: null
       limitation: No durable WhatsApp self-message adapter is configured.
-event_routes:
-- route_id: ticket-completion-learning-v1
-  event_name: farplane.ticket.completed
-  program_ref: core:ticket-completion-learning@1.4.0

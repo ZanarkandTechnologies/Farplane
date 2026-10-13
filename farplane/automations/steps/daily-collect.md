@@ -43,13 +43,15 @@ Time and Work boundaries:
 - Freeze `run_started_at`.
 - Fetch new activity from `[run_started_at - 24 hours, run_started_at)`.
 - Fetch every open issue regardless of age, including blocked, overdue,
-  awaiting-review, and `check-in` issues.
+  awaiting-review, and `check-in` issues, plus every issue closed in the
+  activity window with its proof comment. Closed issues are how finished work
+  and its lessons reach the reports; nothing else mines them.
 
 | Source | Access | Binding | Fetch | Additional instructions |
 | --- | --- | --- | --- | --- |
 | Projects | Local file | `~/.farplane/company.json#projects[]` | Every Project's `id`, `name`, `kind`, `business`, and `trackingContext` (local root) | Read once; this is the complete Project inventory. |
 | Local Project repositories | Local filesystem and Git | Each Project's `trackingContext` root | Git/proof changes and relevant durable artifacts | Record the root; consumers read `farplane/harness.yaml`, `metrics.yaml`, and bindings themselves when present. |
-| GitHub issues and comments | `gh` CLI, read-only | `<owner>/<repo>` from `gh repo view --json nameWithOwner` in the root, else its `origin` remote | `gh issue list -R <owner>/<repo> --state open --limit 1000 --json number,title,state,labels,body,updatedAt,url,assignees` plus `gh api --paginate "repos/<owner>/<repo>/issues/comments?since=<window-start ISO>"` | Preserve issue numbers, labels, bodies, `updatedAt`, comment IDs, authors, timestamps, and URLs. A result count equal to `--limit` is truncated. |
+| GitHub issues and comments | `gh` CLI, read-only | `<owner>/<repo>` from `gh repo view --json nameWithOwner` in the root, else its `origin` remote | `gh issue list -R <owner>/<repo> --state open --limit 1000 --json number,title,state,labels,body,updatedAt,url,assignees`, issues closed in the window with `gh issue list -R <owner>/<repo> --state closed --search "closed:>=<window-start ISO>" --limit 200 --json number,title,state,labels,body,closedAt,url`, plus `gh api --paginate "repos/<owner>/<repo>/issues/comments?since=<window-start ISO>"` | Preserve issue numbers, labels, bodies, `updatedAt`/`closedAt`, comment IDs, authors, timestamps, and URLs; mark closed issues as closed. A result count equal to `--limit` is truncated. |
 | Open pull requests | `gh` CLI, read-only | Same repository | `gh pr list -R <owner>/<repo> --state open --json number,title,state,isDraft,headRefName,updatedAt,url` | Preserve numbers, branches, draft state, `updatedAt`, and URLs. |
 | Repository evidence | Local Git and declared proof paths | Project root | In-window commits and relevant proof/results referenced by current Work | Preserve paths, commit IDs, timestamps, and links. Activity is evidence, not objective movement. |
 | Operator plan (optional) | Notion through the `$pm` source resolution, read-only | Private Notion bindings used by `$pm` | Newest pinned `Plan Week` page and the goals it links | Skip with a recorded gap when no binding exists. Copy the page verbatim with its edit time; never write to Notion. |

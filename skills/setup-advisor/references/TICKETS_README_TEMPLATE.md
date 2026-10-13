@@ -39,8 +39,9 @@ procedures below for this project and any project with a GitHub repository.
   against the commits on `main`, post one proof comment (what changed, commit
   hashes, checks run, and the demo video or screenshots for UI work), then
   `gh issue close <n> --reason completed`. A follow-up that is not being done
-  now gets the `backlog` label. Do not create a second closeout issue, invoke
-  `farplane ticket finalize`, or delete the local supporting files.
+  now gets the `backlog` label. Do not create a second closeout issue or
+  delete the local supporting files. Closing emits no event and starts no
+  mining; route lessons to their owner in the closing session.
 - Resume the existing Codex task from the full issue body plus recent comments.
   Open older threads or attachments only for a named evidence gap. Preserve the
   existing proof, review and approval requirements.
@@ -79,7 +80,7 @@ One source of truth per concern:
 - body = plan, references, evidence, and blockers
 - `.farplane/state/` = live runtime state
 - `docs/` = durable knowledge after the ticket is done
-- `tickets/archive-index.jsonl` = compact locator for new GitHub-issue closes
+- `tickets/archive-index.jsonl` = historical locator rows from the retired close command
 - transcript = disposable context, not the canonical resume surface
 
 ## Canonical Layout
@@ -93,7 +94,7 @@ tickets/
     artifacts/
   TASK-0002/
     ticket.md
-  archive-index.jsonl  # compact locator for new GitHub-issue closes
+  archive-index.jsonl  # historical locator rows from the retired close command
   archive/
     TASK-0000/         # legacy local archive; remains readable
       ticket.md
@@ -113,33 +114,16 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
    `awaiting_review` or `waiting_signal`
 4. on a non-ticket blocker, clear the claim, set `blocked`, and record details
    in `progress.md`
-5. after implementation, proof, review, and durable docs, run
-   `farplane ticket finalize TASK-XXXX` with any selected media paths
-6. Core renders the glanceable `Before`, `After`, `Example`, `Key decisions`,
-   and compact `Proof`, then creates or resumes one marked issue in the
-   configured GitHub repository
-7. if selected media is missing, upload only the marked files through the
-   authenticated GitHub browser composer and rerun the same command
-8. Core verifies the issue and media, closes it as completed, writes terminal
-   metadata, mines the still-local packet, writes its compact locator, emits
-   completion, and only then deletes the exact packet
+5. after implementation, proof, review, and durable docs, record the proof in
+   the ticket body (every Done item with its evidence), set `status: done`,
+   and clear `claimed_by`; the folder stays in place
 
-## Terminal Archive Contract
+## Closed Tickets
 
-For newly closed tickets, the closed issue is the durable terminal record.
-Its body preserves the concise before/after/example, key decisions, and proof
-summary. Explicitly selected final screenshots and videos are preserved as
-marked issue comments so each upload can be verified and retried independently.
-The compact `tickets/archive-index.jsonl` row is a local identity, status, and
-URL projection; it is not a second ticket archive.
-
-Every terminal gate is retain-local. A repository that does not match
-`integrations.github.repo`, missing authentication, unsupported media, missing
-or duplicate marker, failed upload, unclosed issue, mining failure, or locator
-conflict leaves the full active packet in place. The configured repository may
-be public, private, or internal. Retries resume the exact marked issue and
-comments rather than creating duplicates. Agents must not manually move or
-delete the packet.
+A closed GitHub issue, with its proof comment, is the terminal record. The
+`farplane ticket finalize` command and completion mining were retired on
+2026-10-13; `tickets/archive-index.jsonl` keeps the locator rows that command
+wrote and is read by `farplane tickets history`.
 
 Existing `tickets/archive/TASK-*` directories remain readable legacy records.
 This workflow does not migrate or delete them. GitHub Releases, release assets,
@@ -265,7 +249,7 @@ compute_target: local_worktree
   thread. The root `UserPromptSubmit` hook writes it only when a currently
   unbound active ticket is named exactly once. A later or conflicting thread
   cannot overwrite it; resume the original task instead. This is the task's
-  operator/agent discussion history and the exact completion-mining source.
+  operator/agent discussion history.
 - `depends_on`: optional structural ticket prerequisites. Non-ticket blocker
   detail belongs in `progress.md`, not a second blocker list.
 - `compute_target`: optional ticket-level compute override. Supported values
@@ -664,9 +648,8 @@ For material Goal-backed work, put the final checkpoint in `QA Strategy`. Name
 the QA evidence review, completion review, reviewer TAS gate, or explicit
 `none` decision that must exist before completion. Do not rely on a Stop hook
 or transcript memory to discover missing QA after the agent claims done.
-After the checkpoint passes, use `farplane ticket finalize TASK-XXXX` for the
-terminal state, verified archive writeback, mining, locator write, and cleanup;
-do not hand-edit, manually move, or manually delete the packet. Farplane Stop
+After the checkpoint passes, close by the close rule above (one proof comment,
+then `gh issue close`); do not move or delete supporting files. Farplane Stop
 hooks are telemetry-only and do not own proof repair or terminal closeout.
 
 For UI-bearing, browser-driven, canvas/game, or otherwise agentically hard

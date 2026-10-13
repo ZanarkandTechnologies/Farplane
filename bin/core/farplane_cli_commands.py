@@ -178,28 +178,6 @@ def run_ticket_history_cli(args: argparse.Namespace) -> int:
     return int(run_history(args))
 
 
-def run_ticket_finalize_cli(args: argparse.Namespace) -> int:
-    from farplane_ticket_close import TicketFinalizeError, finalize_ticket
-
-    try:
-        payload = finalize_ticket(
-            Path(args.project_root).expanduser().resolve(),
-            args.ticket_id,
-            args.media,
-        )
-    except (OSError, TicketFinalizeError) as exc:
-        raise CliError(f"ticket_finalize_error:{exc}") from exc
-    if args.json:
-        print(json.dumps(payload, indent=2, sort_keys=True))
-    else:
-        print(
-            f"farplane ticket finalize {payload['ticket_id']}: {payload['status']} "
-            f"(mining={payload['mining_status']})"
-        )
-        print(f"receipt: {payload['receipt_path']}")
-    return 0 if payload["ok"] else 1
-
-
 def run_metrics_primitives_cli(args: argparse.Namespace) -> int:
     from farplane_primitive_metrics import run_primitives
 
@@ -314,86 +292,6 @@ def run_wiki_cli(args: argparse.Namespace) -> int:
         raise WikiError(f"unsupported_wiki_command:{action}")
     except (OSError, sqlite3.Error, WikiError, WikiStoreError) as exc:
         raise CliError(f"wiki_error:{exc}") from exc
-
-
-def run_mining_cli(args: argparse.Namespace) -> int:
-    from farplane_mining import (
-        MiningError,
-        drain_pending,
-        list_programs,
-        list_routes,
-        list_runs,
-        mine_ticket,
-        remove_route,
-        replay_run,
-        rerun_run,
-        set_output_verdict,
-        set_route,
-        show_run,
-        validate_routes,
-    )
-
-    project_root = Path(args.project_root).expanduser().resolve()
-    try:
-        group = args.mining_group
-        action = args.mining_action
-        if group == "programs" and action == "list":
-            payload: Any = {"ok": True, "programs": list_programs()}
-        elif group == "routes" and action == "list":
-            payload = {"ok": True, "routes": list_routes(project_root)}
-        elif group == "routes" and action == "validate":
-            payload = validate_routes(project_root)
-        elif group == "routes" and action == "set":
-            payload = {
-                "ok": True,
-                "routes": set_route(
-                    project_root,
-                    route_id=args.route_id,
-                    event_name=args.event_name,
-                    program_ref=args.program_ref,
-                ),
-            }
-        elif group == "routes" and action == "remove":
-            payload = {"ok": True, "routes": remove_route(project_root, args.route_id)}
-        elif group == "runs" and action == "list":
-            payload = {"ok": True, "runs": list_runs(project_root)}
-        elif group == "runs" and action == "show":
-            payload = {"ok": True, **show_run(project_root, args.run_id)}
-        elif group == "runs" and action == "replay":
-            payload = {"ok": True, "run": replay_run(project_root, args.run_id)}
-        elif group == "runs" and action == "rerun":
-            payload = {"ok": True, "run": rerun_run(project_root, args.run_id)}
-        elif group == "outputs" and action == "verdict":
-            payload = {
-                "ok": True,
-                "output": set_output_verdict(
-                    project_root,
-                    args.run_id,
-                    args.output_id,
-                    args.verdict,
-                ),
-            }
-        elif group == "drain":
-            payload = drain_pending(project_root)
-        elif group == "ticket":
-            payload = {"ok": True, **mine_ticket(project_root, args.ticket_id)}
-        else:
-            raise MiningError(f"unsupported_mining_command:{group}:{action}")
-    except (MiningError, OSError, json.JSONDecodeError) as exc:
-        raise CliError(f"mining_error:{exc}") from exc
-
-    if args.json:
-        print(json.dumps(payload, indent=2, sort_keys=True))
-    else:
-        count = len(payload.get("programs", payload.get("routes", payload.get("runs", [])))) if isinstance(payload, dict) else 0
-        status = "ok" if isinstance(payload, dict) and payload.get("ok", True) else "failed"
-        print(f"farplane mining {status}: {group} {action or ''}".rstrip() + (f" ({count})" if count else ""))
-        if isinstance(payload, dict):
-            for issue in payload.get("issues", []):
-                print(f"- {issue}")
-            for failure in payload.get("failed", []):
-                print(f"- {failure}")
-    return 0 if not isinstance(payload, dict) or payload.get("ok", True) else 1
 
 
 def run_content_add_cli(args: argparse.Namespace) -> int:

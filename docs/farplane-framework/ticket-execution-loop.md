@@ -217,7 +217,7 @@ of that task keep the same ID; context-isolating helpers and review/research
 subagents are internal execution details, not ticket threads.
 
 The field is the canonical ticket-to-task-thread join for lifecycle telemetry,
-completion mining, the UI, and ticket-level metrics. `claimed_by` remains the
+the UI, and ticket-level metrics. `claimed_by` remains the
 temporary human-facing live owner. Raw transport/session state and historical
 completion-only observations may stay in `.farplane/state/`, but cannot invent
 or override a ticket's `thread_id`. Missing task threads must become a metric

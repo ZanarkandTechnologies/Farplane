@@ -39,8 +39,8 @@ GoalPacket := issue body (ticket sections + ## Goal program + ## Current Goal st
 - Goal Advisor compiles the packet and launcher, never each turn; the metric
   card is setup/repair only; the domain skill executes.
 
-A project with no GitHub repository keeps the legacy files and `farplane ticket
-finalize` (`tickets/README.md`); nothing else falls back to files.
+A project with no GitHub repository keeps the legacy files (`tickets/README.md`);
+nothing else falls back to files.
 
 ## Skill Signature
 

@@ -66,9 +66,6 @@ farplane metrics primitives --project-root /path/to/project --date <YYYY-MM-DD> 
 farplane project snapshot --project-root /path/to/project --date <YYYY-MM-DD> --json
 farplane reports index --project-root /path/to/project --json
 farplane reports repair-refs --project-root /path/to/project --json
-farplane mining routes validate --project-root /path/to/project --json
-farplane mining runs list --project-root /path/to/project --json
-farplane mining drain --project-root /path/to/project --json
 farplane capability-profiles read --project-root /path/to/project
 ```
 
@@ -99,13 +96,9 @@ path-derived `ref` frontmatter to existing report Markdown before rebuilding
 the index. The standard lives in
 [docs/farplane-framework/reporting.md](../docs/farplane-framework/reporting.md).
 
-For legacy projects without a GitHub repository, `farplane ticket finalize
-TASK-XXXX` completes and archives a ticket, then writes
-its explicit completion event. `farplane/bindings.yaml#event_routes` maps that
-event to an immutable mining program. Events, outbox state, frozen run inputs,
-machine receipts, and verdicts remain ignored under `.farplane/`. Farplane UI
-may edit routes and render runs through the Core CLI but does not own mining
-semantics.
+Issues close with one proof comment and `gh issue close`
+([tickets/README.md](../tickets/README.md)); Core has no close command or
+completion mining.
 
 See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).
 

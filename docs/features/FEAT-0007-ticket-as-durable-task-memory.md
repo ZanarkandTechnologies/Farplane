@@ -137,7 +137,7 @@ The required frontmatter is only `ticket_id`, `title`, `status`, `created_at`,
 and `updated_at`. Optional `priority`, `due_at`, `claimed_by`, `thread_id`,
 `depends_on`, `human_gate`, `compute_target`, and `ui_scope` exist only when they change
 routing. `thread_id` is the ticket's one hook-written persistent Codex task
-thread: it supports exact task discussion and completion mining, not generic
+thread: it supports exact task discussion, not generic
 runtime session history. There is no parallel `phase`, hand-maintained `ready`,
 approval boolean, blocker list, QA/demo flags, next action, or verification
 field.

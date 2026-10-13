@@ -3,7 +3,7 @@ title: Artifact-first QA and completion proof
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-08-19
+updated_at: 2026-10-13
 tags:
   - farplane
   - feature
@@ -113,19 +113,11 @@ Proof scales with risk, blast radius, and user-facing impact.
   design state/assertion to current capture or operated evidence and disclose
   mismatches or unproved states.
 - Reviewer owns material judgment of plans, implementations, prompts, evidence, and completion claims.
-- For a new terminal close, the issue body is deliberately glanceable:
-  `Before`, `After`, `Example`, `Key decisions`, and compact `Proof`. Material
-  feature tickets require the passing independently reviewed `$qa closeout` MP4 as
-  the first marked browser comment; explicitly selected screenshots may follow.
-- Core renders and creates or resumes the marked issue, then verifies its body
-  and every expected media comment before closing it. The agent only uploads
-  missing selected media through the authenticated browser. Core requires a real
-  GitHub user-attachment URL in every selected-media comment,
-  mines while the local evidence still exists, writes the compact locator, and
-  only then deletes the ticket packet.
-- Missing media, missing markers, a mismatched issue, failed mining, or
-  failed locator write blocks cleanup and keeps the local proof available for
-  retry.
+- A close is one proof comment on the issue (what changed, commit hashes,
+  checks run, and the demo video or screenshots for UI work), then
+  `gh issue close` (`tickets/README.md`). Material feature tickets attach the
+  passing independently reviewed `$qa closeout` MP4. Local supporting files
+  stay; nothing is deleted at close.
 - `docs/review/rubrics` owns family definitions, stable checks, TAS calibration,
   and evidence limits; tickets and caller workflows own rubric routing.
 - Review keeps neighboring-surface skepticism inside the selected rubric family.
@@ -199,8 +191,7 @@ Acceptance signals:
 - Evidence refs support the current status.
 - Selected rubric families are discoverable from the canonical index and keep
   their claims within the supplied evidence.
-- New closes do not delete local evidence until the closed issue and every
-  selected media marker are verified and completion mining succeeds.
+- A closed issue carries a proof comment that checks every Done item.
 
 ## Rollout And Maintenance
 
@@ -238,6 +229,8 @@ Acceptance signals:
 
 ## Change History
 
+- 2026-10-13: Retired Core closeout (`farplane ticket finalize`) and
+  completion mining; a close is one proof comment plus `gh issue close`.
 - 2026-08-19: Split cleanup ownership between rubric-local skepticism,
   `lean-check` for implementation bloat, and `unslop` for prose.
 - 2026-08-02: Clarified that closeout uses `integrations.github.repo` directly;

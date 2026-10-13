@@ -139,32 +139,16 @@ Daily and Weekly do not invent direction, fake momentum, or execute work. Feed S
 Work Pulse is the single normal path that turns a low-supply refill candidate
 into a ticket on the shared board.
 
-Ticket completion is the narrow event-driven exception, not another heartbeat:
-
-```text
-verified closed issue
--> still-local completed ticket packet + optional bounded task context
--> strongest grounded issue / inefficiency / improvement
--> one deduped ordinary improvement ticket or no issue
--> compact closed-ticket locator
-```
-
 A GitHub issue closes by the close rule in `tickets/README.md`: one proof
 comment, then `gh issue close <n> --reason completed`; local supporting files
 stay. Farplane Stop hooks collect telemetry and may apply bounded deterministic
 guards such as final-response length; they do not repair proof, advance
-closeout, or close issues.
+closeout, or close issues. Closing emits no completion event and starts no
+mining: the closing session routes lessons to their owner, and the daily
+`report-gen` automation reads issues closed since its last run.
 
-Existing `tickets/archive/TASK-*` packets remain readable legacy records and
-are not migrated. `farplane mining ticket TASK-XXXX` remains the explicit
-repair/backfill entry: new remote closes can supply issue text and comments,
-but repair does not download attachments or reconstruct a deleted packet.
-GitHub Releases, release assets, tags, bundles, manifests, remote restore, and
-old-archive migration are future work and outside the current lifecycle.
-The semantic reviewer remains read-only. Deterministic Core owns the local
-ticket write after schema, evidence, privacy, confidence, and dedupe gates. A
-stable semantic key dedupes paraphrases, and a projected ticket's own completion
-is report-only to prevent recursive ticket supply.
+Existing `tickets/archive/TASK-*` packets and `tickets/archive-index.jsonl`
+rows remain readable legacy records and are not migrated.
 
 ## Goal Packets And Check-Ins
 

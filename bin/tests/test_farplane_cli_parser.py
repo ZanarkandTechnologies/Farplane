@@ -8,7 +8,7 @@ import sys
 import tempfile
 import unittest
 import unittest.mock
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
@@ -116,40 +116,16 @@ class FarplaneCliParserTests(unittest.TestCase):
         self.assertIn("refresh", out.getvalue())
         self.assertIn("choose a subcommand", err.getvalue())
 
-    def test_ticket_finalize_owns_issue_lifecycle_and_accepts_media(self) -> None:
-        args = farplane.build_parser().parse_args(
-            [
-                "ticket",
-                "finalize",
-                "TASK-0001",
-                "--media",
-                "proof.png",
-                "--media",
-                "demo.mp4",
-            ]
-        )
-
-        self.assertEqual("TASK-0001", args.ticket_id)
-        self.assertEqual(["proof.png", "demo.mp4"], args.media)
-
-    def test_ticket_finalize_requires_no_github_issue_url(self) -> None:
-        args = farplane.build_parser().parse_args(["ticket", "finalize", "TASK-0001"])
-
-        self.assertEqual([], args.media)
-
-    def test_ticket_finalize_rejects_retired_github_issue_url_argument(self) -> None:
-        with self.assertRaises(SystemExit) as raised:
-            farplane.build_parser().parse_args(
-                ["ticket", "finalize", "TASK-0001", "--github-issue-url", "https://github.com/acme/repo/issues/1"]
-            )
-
-        self.assertEqual(2, raised.exception.code)
-
-    def test_ticket_close_is_not_a_cli_subcommand(self) -> None:
-        with self.assertRaises(SystemExit) as raised:
-            farplane.build_parser().parse_args(["ticket", "close", "TASK-0001"])
-
-        self.assertEqual(2, raised.exception.code)
+    def test_retired_ticket_close_commands_are_not_cli_subcommands(self) -> None:
+        for argv in (
+            ["ticket", "close", "TASK-0001"],
+            ["ticket", "finalize", "TASK-0001"],
+            ["mining", "ticket", "TASK-0001"],
+        ):
+            with self.subTest(argv=argv), redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit) as raised:
+                    farplane.build_parser().parse_args(argv)
+                self.assertEqual(2, raised.exception.code)
 
 
 if __name__ == "__main__":

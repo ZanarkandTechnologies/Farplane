@@ -21,16 +21,12 @@ refs:
 # Farplane Hooks and Runtime
 
 Farplane has one installed hook surface. `hooks/hooks.json` contains small Codex
-lifecycle telemetry commands, edit/response gates, and a bounded Jev continuation check. Ticket
-completion and mining are explicit CLI operations; hooks do not infer durable
-state transitions from arbitrary writes.
+lifecycle telemetry commands, edit/response gates, and a bounded Jev continuation check. Hooks
+do not infer durable state transitions from arbitrary writes.
 
 ```text
 codex_hook(event, transcript/runtime_state)
   -> telemetry | mechanical_gate | bounded_continuation_advice
-
-ticket_close(project_root, ticket_id)
-  -> terminal metadata + archive + completion event -> mining route
 ```
 
 ## Codex Lifecycle Hooks
@@ -156,48 +152,15 @@ fail open with empty hook output. API keys are never stored in tracked config
 or telemetry. Enabling this feature sends the current user prompt, registry
 descriptions, and bounded shortlisted skill excerpts to the selected provider.
 
-## Explicit Ticket Completion And Mining
+## Ticket Completion
 
-`farplane/bindings.yaml#event_routes` maps an event to a versioned immutable
-Core program. Core owns deterministic event/run IDs, the durable event record
-and outbox, frozen replay, current-source rerun, small machine receipts, and
-verdict records.
-
-```text
-event_id = sha256(source, project_id, ticket_id, content_hash)
-run_id   = sha256(event_id, route_id, program_digest)
-```
-
-GitHub-backed projects close an issue with one proof comment and `gh issue
-close` (`tickets/README.md`); that path emits no completion event. For legacy
-projects without a GitHub repository, `farplane ticket finalize TASK-XXXX` owns
-the successful terminal transition. It
-creates or resumes and closes the marked GitHub issue, sets `status: done`,
-clears `claimed_by`, advances `updated_at`, writes the compact locator and
-`farplane.ticket.completed` event, applies the
-matching route, and returns a closure/mining receipt. Failed mining leaves the
-event retryable through `farplane mining drain`. There is no file watcher,
-daemon, shell-tail workflow engine, or extra heartbeat.
-
-Ticket completion has one active mining route. Its legacy entry point is
-`farplane ticket finalize TASK-XXXX`; `farplane mining ticket TASK-XXXX` remains
-an explicit repair/backfill command. The program freezes the ticket,
-optional program/progress/artifacts, and any bounded operator-turn window named
-by immutable event provenance, then runs a structured read-only Codex review in
-the detached drain process. A missing conversation window does not block mining
-because the completed ticket packet is the required source. The executor
-ignores user config and rules; Core validates output schema, evidence refs,
-sensitive patterns, and raw-source overlap before accepting findings.
-
-Each finding contains an evidenced issue, the inefficiency it caused, a proposed
-improvement, owner, confidence, and stable semantic dedupe key. Core projects at
-most the strongest high/medium-confidence finding into one ordinary deduped
-`todo` ticket. It does not compute a ticket score, require a project KPI, emit a
-human lean report, or choose an eval. Generated mining tickets cannot project
-another ticket. The command resolves active or archived ticket evidence and the
-latest task association from the ID alone. Missing
-sources or executor failures remain replayable machine receipts. Cloud telemetry
-receives status/count metadata only, never finding prose or evidence.
+An issue closes in the run that finishes it: one proof comment, then `gh issue
+close` (`tickets/README.md`). Core has no close command, completion event,
+outbox, or completion mining; the 2026-10-13 removal found that mining had not
+run since tickets moved to GitHub Issues and that nothing read its findings.
+Lessons from finished work are routed in the closing session to their owner
+(skill, eval, validator), and the daily `report-gen` automation reads issues
+closed since its last run.
 
 ## Runtime State Boundaries
 
@@ -211,7 +174,6 @@ too noisy for tracked config.
 .farplane/automation/rewards.jsonl
 .farplane/evals/runs/
 .farplane/events/
-.farplane/mine/
 .farplane/logs/
 .farplane/state/message-windows/
 .farplane/state/ticket-thread-locks/
@@ -232,7 +194,7 @@ cycle so an ordinary ticket edit cannot replace a freshly hook-bound
 
 `ticket-thread-associations.jsonl` remains an optional, completion-only metrics
 observation surface for historical sources. It is not the ticket-to-task-thread
-source of truth; lifecycle, completion mining, and UI joins resolve the ticket's
+source of truth; lifecycle and UI joins resolve the ticket's
 own `thread_id` first.
 
 The lifecycle publisher also reads the latest exact-id `thread_name` from the

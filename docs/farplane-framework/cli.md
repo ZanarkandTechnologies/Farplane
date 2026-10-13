@@ -71,18 +71,19 @@ Done so far:
   `--json` (they always print JSON); a `CliError` prints `{"ok": false, "error": …}` under `--json`; a group
   run without its subcommand prints that group's help; the `delegate` command, the unreachable
   `resource-bank` parser entry (it is still delegated to the bunker checkout before parsing) and the duplicate
-  `capability-profiles resolve` are gone.
+  `capability-profiles resolve` are gone. On 2026-10-13 `ticket finalize` and the whole `mining` group went
+  too: issues close with a proof comment and `gh issue close`, and completion mining had no reader.
 
 **Kept, because running software calls them** (the audit's evidence): `adoption scan`, `skills rollout scan`,
-`capability-profiles read/write/snapshot` and `mining` (Farplane-UI's server), `hooks list/install`
+`capability-profiles read/write/snapshot` (Farplane-UI's server), `hooks list/install`
 (Farplane-UI's install script), `extension youtube` (now delegated to the bunker). Farplane-UI was archived on
 2026-10-11 (farplane-bunker#1), so the server and install-script callers are gone: re-audit those commands.
 
 Still open:
 
-- `ticket` and `tickets` work on the legacy `tickets/` files, but the `impl-plan`
-  and `goal-advisor` skills still name them; retiring them means moving
-  those skills to GitHub Issues first (its own issue).
+- `ticket check` and `tickets history` work on the legacy `tickets/` files, but the `impl-plan`
+  skill still runs `ticket check`; retiring them means moving impl-plan to
+  GitHub Issues first (its own issue).
 - `notify` and `reports` have no live caller but are documented operator tools; ask before removing.
 - `content add` defaults `--project-root` to the Farplane checkout, not the current folder; decide with the
   content ledger's owner (its old callers, the `x-account` and `instagram-account` skills, are retired for

@@ -13,10 +13,10 @@ from farplane_cli_commands import (
     run_content_select_cli, run_content_validate_cli, run_doctor,
     run_eval_init_cli, run_eval_promptfoo_cli,
     run_harness_health_compile_cli,
-    run_mining_cli, run_project_snapshot_cli,
+    run_project_snapshot_cli,
     run_capability_profiles_cli,
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
-    run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
+    run_skill_rollout_scan_cli, run_ticket_history_cli,
     run_wiki_cli,
     run_check_ticket,
 )
@@ -235,15 +235,6 @@ def build_parser() -> argparse.ArgumentParser:
 
     ticket = sub.add_parser("ticket", help="Apply canonical Farplane ticket lifecycle transitions.")
     ticket_sub = ticket.add_subparsers(dest="ticket_command")
-    ticket_finalize = ticket_sub.add_parser(
-        "finalize",
-        help="Create or resume the issue, close it, mine completion, index it, and delete the local packet.",
-    )
-    ticket_finalize.add_argument("ticket_id")
-    ticket_finalize.add_argument("--media", action="append", default=[])
-    ticket_finalize.add_argument("--project-root", default=os.getcwd())
-    ticket_finalize.add_argument("--json", action="store_true")
-    ticket_finalize.set_defaults(func=run_ticket_finalize_cli)
     ticket_check = ticket_sub.add_parser("check", help="Check one ticket's phase-aware lifecycle proof.")
     ticket_check.add_argument("ticket")
     ticket_check.add_argument("--phase", choices=("planning", "complete"), required=True)
@@ -359,70 +350,6 @@ def build_parser() -> argparse.ArgumentParser:
     wiki_search.add_argument("--limit", type=int, default=10)
     wiki_search.add_argument("--json", action="store_true")
     wiki_search.set_defaults(func=run_wiki_cli)
-
-    mining = sub.add_parser("mining", help="Capture, route, replay, and inspect Core mining runs.")
-    mining_sub = mining.add_subparsers(dest="mining_group")
-
-    mining_programs = mining_sub.add_parser("programs", help="Inspect immutable Core mining programs.")
-    mining_programs_sub = mining_programs.add_subparsers(dest="mining_action")
-    mining_programs_list = mining_programs_sub.add_parser("list")
-    mining_programs_list.add_argument("--project-root", default=os.getcwd())
-    mining_programs_list.add_argument("--json", action="store_true")
-    mining_programs_list.set_defaults(func=run_mining_cli)
-
-    mining_routes = mining_sub.add_parser("routes", help="Inspect or edit project event routes.")
-    mining_routes_sub = mining_routes.add_subparsers(dest="mining_action")
-    for route_action in ("list", "validate"):
-        route_parser = mining_routes_sub.add_parser(route_action)
-        route_parser.add_argument("--project-root", default=os.getcwd())
-        route_parser.add_argument("--json", action="store_true")
-        route_parser.set_defaults(func=run_mining_cli)
-    mining_routes_set = mining_routes_sub.add_parser("set")
-    mining_routes_set.add_argument("route_id")
-    mining_routes_set.add_argument("event_name")
-    mining_routes_set.add_argument("program_ref")
-    mining_routes_set.add_argument("--project-root", default=os.getcwd())
-    mining_routes_set.add_argument("--json", action="store_true")
-    mining_routes_set.set_defaults(func=run_mining_cli)
-    mining_routes_remove = mining_routes_sub.add_parser("remove")
-    mining_routes_remove.add_argument("route_id")
-    mining_routes_remove.add_argument("--project-root", default=os.getcwd())
-    mining_routes_remove.add_argument("--json", action="store_true")
-    mining_routes_remove.set_defaults(func=run_mining_cli)
-
-    mining_runs = mining_sub.add_parser("runs", help="Inspect or replay deterministic mining runs.")
-    mining_runs_sub = mining_runs.add_subparsers(dest="mining_action")
-    mining_runs_list = mining_runs_sub.add_parser("list")
-    mining_runs_list.add_argument("--project-root", default=os.getcwd())
-    mining_runs_list.add_argument("--json", action="store_true")
-    mining_runs_list.set_defaults(func=run_mining_cli)
-    for run_action in ("show", "replay", "rerun"):
-        run_parser = mining_runs_sub.add_parser(run_action)
-        run_parser.add_argument("run_id")
-        run_parser.add_argument("--project-root", default=os.getcwd())
-        run_parser.add_argument("--json", action="store_true")
-        run_parser.set_defaults(func=run_mining_cli)
-
-    mining_outputs = mining_sub.add_parser("outputs", help="Record reviewer verdicts for run outputs.")
-    mining_outputs_sub = mining_outputs.add_subparsers(dest="mining_action")
-    mining_outputs_verdict = mining_outputs_sub.add_parser("verdict")
-    mining_outputs_verdict.add_argument("run_id")
-    mining_outputs_verdict.add_argument("output_id")
-    mining_outputs_verdict.add_argument("verdict", choices=("unreviewed", "promoted", "rejected"))
-    mining_outputs_verdict.add_argument("--project-root", default=os.getcwd())
-    mining_outputs_verdict.add_argument("--json", action="store_true")
-    mining_outputs_verdict.set_defaults(func=run_mining_cli)
-
-    mining_drain = mining_sub.add_parser("drain", help="Retry all pending local event routes.")
-    mining_drain.add_argument("--project-root", default=os.getcwd())
-    mining_drain.add_argument("--json", action="store_true")
-    mining_drain.set_defaults(func=run_mining_cli, mining_action=None)
-
-    mining_ticket = mining_sub.add_parser("ticket", help="Mine one completed ticket by canonical ID.")
-    mining_ticket.add_argument("ticket_id")
-    mining_ticket.add_argument("--project-root", default=os.getcwd())
-    mining_ticket.add_argument("--json", action="store_true")
-    mining_ticket.set_defaults(func=run_mining_cli, mining_action=None)
 
     content = sub.add_parser("content", help="Append or inspect local Farplane content ledger rows.")
     content_sub = content.add_subparsers(dest="content_command")

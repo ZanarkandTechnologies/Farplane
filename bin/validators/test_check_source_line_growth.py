@@ -79,7 +79,7 @@ class SourceLineGrowthTests(unittest.TestCase):
     def test_adoption_baseline_is_valid(self) -> None:
         root = MODULE_PATH.parents[2]
         baseline = MODULE.load_baseline(root / "config/source-line-baseline.toml")
-        self.assertEqual(1753, baseline["bin/core/farplane_mining.py"])
+        self.assertEqual(1649, baseline["bin/core/farplane_entities.py"])
         self.assertNotIn("bin/farplane.py", baseline)
 
     def test_adoption_baseline_covers_current_oversized_python(self) -> None:

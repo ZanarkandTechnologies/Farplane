@@ -259,20 +259,16 @@ engine underneath it.
   state.
 - Missing or ambiguous evidence becomes a source gap, not an inferred pass.
 
-### FR-9: Portable Event Mining
+### FR-9: Completion Learning Without Events
 
-- For legacy projects without a GitHub repository, `farplane ticket finalize
-  TASK-XXXX` performs the successful terminal/archive transition and writes one
-  typed `farplane.ticket.completed` event to the
-  durable local outbox. Failed mining leaves that event retryable; no hook,
-  file watcher, or cloud dispatcher infers completion from file writes.
-- `bindings.yaml` maps the explicit completion event to an immutable mining
-  program. `hooks.json` owns lifecycle telemetry plus bounded deterministic
-  guards such as final-response length; it never owns completion.
-- Default completion mining emits coverage, observations, material findings,
-  source gaps, and escalation without a scalar quality score.
-- Farplane UI edits routes and renders Core runs; it does not own event,
-  program, run, replay, rerun, or report semantics.
+- An issue closes with one proof comment and `gh issue close`; Core emits no
+  completion event and runs no completion mining (retired 2026-10-13: it had
+  not run since tickets moved to GitHub Issues, and nothing read its output).
+- The closing session routes each lesson to its owner (skill, eval, validator,
+  or `docs/MEMORY.md`), and the daily `report-gen` automation reads issues
+  closed since its last run.
+- `hooks.json` owns lifecycle telemetry plus bounded deterministic guards such
+  as final-response length; it never owns completion.
 
 ### FR-10: Money-Execution Boundary
 
@@ -350,8 +346,8 @@ cards.
       does not independently admit tickets or choose strategy.
 - [x] Immediate and delayed self-improvement use ticket Goal Packets.
 - [x] `metrics.yaml` owns metric definitions; bindings own provider mechanics.
-- [x] Core owns explicit completion events and mining; UI is an adapter over
-      Core artifacts.
+- [x] Completion learning needs no event or miner; closed issues reach the
+      daily report.
 - [x] QA and review evidence are ticket-scoped.
 - [x] Current Farplane project files and init templates validate.
 - [ ] Representative scheduled operation proves the loop over longer real
