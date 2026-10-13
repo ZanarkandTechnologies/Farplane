@@ -67,7 +67,8 @@ evaluator, and the receipt it came from. Keep project names generic.
   - Skipping the finest pyramid step: passes after fine-tuning at 4 of 5 steps; fails at 3 of 5 in a 20-min budget.
   - Narrower pyramids, 256 to 128 and to 96 channels: no measurable quality loss after a 20-min sliced-warm-start fine-tune; about 1.08x per step.
   - Narrower refine heads, generator and pyramid backbones: failed the quality guards at a 20-min budget; untested with longer distillation.
-  - Caching the fixed garment branch: exact output match, 430 to 372 ops per frame.
+  - Caching the fixed garment branch: exact output match, 430 to 372 ops per frame; about 1.05x per frame (6.28x vs the teacher, one unloaded run).
+  - Narrow-pyramid student held quality across two training seeds (paired LPIPS 0.0962 / 0.0972).
   - Activations fused (a small conv costs about 25 µs to launch). Graph capture failed when fed new CPU tensors per run.
   - A paired reconstruction loss let the student keep the original clothes: paired metric improved, unpaired FID worsened. Likely, confounded by step count.
   - Best verified result: about 5.6x vs the teacher, with paired LPIPS and unpaired FID inside the guards.
