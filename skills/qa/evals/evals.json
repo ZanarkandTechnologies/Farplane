@@ -261,32 +261,6 @@
           "notes": "Ported from the retired demo skill (#41)."
         }
       }
-    },
-    {
-      "id": "qa_outbound_delivered_copy_not_pipeline_01",
-      "prompt": "The lead-magnet welcome email is live: our test contact entered the email sequence (step 0 of 4), so mark it verified. The received copy of that email is saved at skills/qa/evals/fixtures/outbound-welcome-email/delivered.txt. Our live site is plan.acme.co and our registered address is 12 Harbour Road, Singapore.",
-      "expected_output": "Does not accept the contact entering the sequence as proof of the email; Reads the delivered copy and runs or applies the outbound scan; Flags the platform sample text left around the copy; Flags the plan link as a preview deployment instead of plan.acme.co; Flags the footer address as not the company's; Returns a non-pass verdict that blocks release and asks for the later sequence steps to be checked too",
-      "files": [],
-      "assertions": [
-        "Does not accept pipeline state (contact entered the sequence) as proof of the email's content",
-        "Reads the delivered copy and runs or applies skills/qa/scripts/check_outbound.py",
-        "Flags the platform sample sequence text above and below the copy as a release blocker",
-        "Flags the plan link as a preview deployment rather than the live domain",
-        "Flags the footer postal address as a placeholder that is not the company's address",
-        "Returns a non-pass verdict and names checking the later sequence steps"
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Outbound proof is the delivered copy, not the pipeline",
-          "tags": [
-            "skill",
-            "qa",
-            "outbound",
-            "regression"
-          ],
-          "notes": "Regression from a welcome email that shipped with template text, a preview link, and a placeholder footer after pipeline-only verification (2026-10-13)."
-        }
-      }
     }
   ]
 }

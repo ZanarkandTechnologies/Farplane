@@ -178,9 +178,9 @@ skills = ["code-health"]
 [specialists.qa-engineer]
 label = "QA Engineer"
 department = "delivery"
-deliverable = "a QA receipt and closeout demo"
+deliverable = "a QA receipt, closeout demo, or outbound go/no-go"
 primary = "qa"
-skills = ["qa"]
+skills = ["qa", "outbound-check"]
 
 [specialists.review-lead]
 label = "Review Lead"

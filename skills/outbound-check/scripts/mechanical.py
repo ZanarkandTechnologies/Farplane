@@ -1,20 +1,19 @@
-#!/usr/bin/env python3
-"""Scan the copy an outsider receives for mechanical release blockers.
+"""Fixed-rule checks on the copy an outsider receives.
 
-Input is the delivered copy: a saved email (.eml), an HTML or text file, stdin
-(-), or a public page URL. It flags unrendered placeholders, template or
-editor sample text, non-production links, and links that fail or end at a
-login wall. A clean scan is necessary, not sufficient: read the copy too.
+Unrendered placeholders, platform sample text, non-production links, and links
+that break or end at a login wall. outbound_check.py runs these first and hands
+the findings to the judge as facts. Each finding names the checklist row it
+belongs to.
 """
 
 from __future__ import annotations
 
-import argparse
 import email
 import re
 import sys
 import urllib.error
 import urllib.request
+from dataclasses import dataclass, field
 from email import policy
 from html.parser import HTMLParser
 from pathlib import Path
@@ -65,6 +64,21 @@ LOGIN_WALLS = [
 SKIP_FOLLOW = re.compile(r"unsubscribe|opt-?out|preferences|manage[-_ ]?subscription|update[-_ ]?(?:your[-_ ]?)?profile", re.I)
 URL_RE = re.compile(r"https?://[^\s<>\"'\])]+")
 
+# Checklist rows (references/checklist.md) each kind of finding belongs to.
+ROW_TEMPLATE, ROW_PLACEHOLDER, ROW_LINK_TARGET, ROW_LINK_WALL, ROW_SENDER = 1, 2, 3, 4, 5
+
+
+@dataclass
+class Piece:
+    """One delivered copy: its visible text, links, and what to render or show."""
+
+    source: str
+    text: str
+    links: list[tuple[str, str]] = field(default_factory=list)
+    html: str | None = None
+    url: str | None = None
+    image: str | None = None
+
 
 class _HTMLCopy(HTMLParser):
     """Collect visible text, link targets with their text, and image sources."""
@@ -109,28 +123,34 @@ def parse_html(html: str) -> tuple[str, list[tuple[str, str]]]:
     return "".join(parser.text), parser.links
 
 
-def load_copy(source: str, fetch=None) -> tuple[str, list[tuple[str, str]]]:
-    """Return the visible text and (url, link text) pairs of the delivered copy."""
+def load_piece(source: str, fetch=None) -> Piece:
+    """Read one delivered copy: .eml, .html, text, an image, - for stdin, or a URL."""
     if source.startswith(("http://", "https://")):
-        text, links = parse_html((fetch or fetch_url)(source)[2])
-        return text, [(source, "page")] + links
+        html = (fetch or fetch_url)(source)[2]
+        text, links = parse_html(html)
+        return Piece(source, text, [(source, "page")] + links, html=html, url=source)
+    if source.lower().endswith((".png", ".jpg", ".jpeg", ".webp")):
+        return Piece(source, "", image=source)
     data = sys.stdin.buffer.read() if source == "-" else Path(source).read_bytes()
     if source.endswith(".eml"):
         msg = email.message_from_bytes(data, policy=policy.default)
         texts = [f"Subject: {msg['subject'] or ''}\nFrom: {msg['from'] or ''}"]
-        links: list[tuple[str, str]] = []
+        piece = Piece(source, "")
         for part in msg.walk():
             if part.get_content_type() == "text/html":
-                text, found = parse_html(part.get_content())
+                piece.html = part.get_content()
+                text, found = parse_html(piece.html)
                 texts.append(text)
-                links += found
+                piece.links += found
             elif part.get_content_type() == "text/plain":
                 texts.append(part.get_content())
-        return "\n".join(texts), links
+        piece.text = "\n".join(texts)
+        return piece
     text = data.decode("utf-8", errors="replace")
     if source.endswith((".html", ".htm")) or "<html" in text[:500].lower():
-        return parse_html(text)
-    return text, []
+        visible, links = parse_html(text)
+        return Piece(source, visible, links, html=text)
+    return Piece(source, text)
 
 
 def all_links(text: str, links: list[tuple[str, str]]) -> list[tuple[str, str]]:
@@ -190,57 +210,42 @@ def link_problem(status: int, final_url: str) -> tuple[str, str] | None:
     return None
 
 
-def scan(text: str, links: list[tuple[str, str]], follow: bool = True, fetch=fetch_url) -> list[tuple[str, str, str]]:
-    findings: list[tuple[str, str, str]] = []
+def scan(text: str, links: list[tuple[str, str]], follow: bool = True, fetch=fetch_url) -> list[tuple[str, int, str, str]]:
+    """Return (level, checklist row, label, detail) findings for one copy."""
+    findings: list[tuple[str, int, str, str]] = []
     lowered = " ".join(text.split()).lower()
     for pattern, label in PLACEHOLDERS:
         for match in re.finditer(pattern, text, re.I if label != "unfinished marker" else 0):
-            findings.append(("BLOCKER", label, match.group(0)))
+            findings.append(("BLOCKER", ROW_PLACEHOLDER, label, match.group(0)))
     for fingerprint in TEMPLATE_FINGERPRINTS:
         if fingerprint in lowered:
-            findings.append(("BLOCKER", "template sample text", fingerprint))
+            findings.append(("BLOCKER", ROW_TEMPLATE, "template sample text", fingerprint))
     for pattern in EDITOR_PHRASES:
         for match in re.finditer(pattern, lowered):
-            findings.append(("WARN", "reads like editor instructions", match.group(0)))
+            findings.append(("WARN", ROW_TEMPLATE, "reads like editor instructions", match.group(0)))
     for url, label in all_links(text, links):
         problem = host_problem(urlsplit(url).hostname or "")
         if problem:
-            findings.append((problem[0], problem[1], url))
-            if problem[0] == "BLOCKER":
+            findings.append((problem[0], ROW_LINK_TARGET, problem[1], url))
+            if problem[1] in {"local address", "private network address"}:
                 continue
         if SKIP_FOLLOW.search(url) or SKIP_FOLLOW.search(label):
-            findings.append(("SKIP", "unsubscribe or preference link; test it by hand from a test contact", url))
+            findings.append(("SKIP", ROW_SENDER, "unsubscribe or preference link; test it by hand from a test contact", url))
             continue
         if not follow:
             continue
         try:
             status, final_url, _ = fetch(url)
         except (urllib.error.URLError, OSError, ValueError) as error:
-            findings.append(("BLOCKER", f"does not open ({error})", url))
+            findings.append(("BLOCKER", ROW_LINK_WALL, f"does not open ({error})", url))
             continue
-        problem = link_problem(status, final_url) or host_problem(urlsplit(final_url).hostname or "")
+        problem = link_problem(status, final_url)
         if problem:
-            findings.append((problem[0], problem[1], f"{url} -> {final_url}"))
+            findings.append((problem[0], ROW_LINK_WALL, problem[1], f"{url} -> {final_url}"))
+            continue
+        problem = host_problem(urlsplit(final_url).hostname or "")
+        if problem:
+            findings.append((problem[0], ROW_LINK_TARGET, problem[1], f"{url} -> {final_url}"))
         else:
-            findings.append(("OK", f"{status}", url if final_url == url else f"{url} -> {final_url}"))
+            findings.append(("OK", ROW_LINK_WALL, f"{status}", url if final_url == url else f"{url} -> {final_url}"))
     return findings
-
-
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("source", help="delivered copy: .eml, .html, .txt, - for stdin, or a page URL")
-    parser.add_argument("--offline", action="store_true", help="do not follow links")
-    args = parser.parse_args(argv)
-    text, links = load_copy(args.source)
-    findings = scan(text, links, follow=not args.offline)
-    for level, label, detail in findings:
-        print(f"{level:<8} {label}: {detail}")
-    blockers = sum(level == "BLOCKER" for level, _, _ in findings)
-    warnings = sum(level == "WARN" for level, _, _ in findings)
-    verdict = "not ready to send" if blockers else "no mechanical blockers; now read it as the recipient"
-    print(f"result: {blockers} blockers, {warnings} warnings - {verdict}")
-    return 1 if blockers else 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

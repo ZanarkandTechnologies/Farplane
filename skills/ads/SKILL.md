@@ -128,7 +128,7 @@ returns: the packet, its approval gates, source gaps, and the next owner
   validation first, then create every campaign, ad set, and ad paused or draft.
   Activating delivery needs a separate explicit approval naming the account,
   budget, creative, landing page, and launch window; before first live spend run
-  `qa` outbound on every ad preview and its funnel (page, form, follow-up emails),
+  `outbound-check` on every ad preview and its funnel (page, form, follow-up emails),
   then `review`. With no verified route, return a manual paused setup checklist.
 
   Assert:

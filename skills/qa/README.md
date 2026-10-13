@@ -1,7 +1,7 @@
 # QA
 
 The one Delivery proof skill. `$qa` proves a GitHub issue's `Done / Proof` and
-`QA Strategy` in one of four modes and, after a pass, records the closeout
+`QA Strategy` in one of three modes and, after a pass, records the closeout
 demo:
 
 - `functional` (default): claim-matched evidence through the real mechanism;
@@ -10,9 +10,6 @@ demo:
   ([references/visual.md](references/visual.md)).
 - `adversarial`: separate tester and evidence-review lanes attack a claim
   ([references/adversarial.md](references/adversarial.md)).
-- `outbound`: the copy an outsider receives (email, ad, post, page, message),
-  scanned by `scripts/check_outbound.py` and read against the common-mistake
-  rows before it goes live ([references/outbound.md](references/outbound.md)).
 - `closeout: demo`: the Before/After/Example MP4 that leads the closing proof
   comment ([references/closeout-demo.md](references/closeout-demo.md)).
 

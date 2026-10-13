@@ -1,6 +1,6 @@
 ---
 name: qa
-description: "Use for \"test this\", \"does the UI look right\", \"try to break it\" or \"check this before it goes out\": claim-matched evidence, a validated QA receipt and verdict, plus the closeout demo once QA passes."
+description: "Use for \"test this\", \"QA this feature\", \"does the UI look right\" or \"try to break it\": claim-matched evidence, a validated QA receipt and verdict, plus the closeout demo once QA passes."
 source: local
 department: delivery
 template_uses:
@@ -15,15 +15,16 @@ allowed-tools: Read, Glob, Grep, Bash
 
 Use `qa` when built work needs proof against one GitHub issue's `Done / Proof`
 and `QA Strategy`: capture evidence, judge UI against `design.md`, attack a
-claim, check what outsiders receive, or record the closeout demo. It does not plan
-(`impl-plan`), write eval rows (`eval`), or give the completion verdict
-(`review`). Builder ≠ tester ≠ judge: `qa-tester` operates the browser, and no
-lane approves evidence it produced.
+claim, or record the closeout demo after a pass. It does not plan
+(`impl-plan`), write eval rows (`eval`), check outbound copy
+(`outbound-check`), or give the completion verdict (`review`). Builder ≠
+tester ≠ judge: `qa-tester` operates the browser, and no lane approves
+evidence it produced.
 
 ## Skill Signature
 
 ```text
-qa(target, mode?: functional | visual | adversarial | outbound, closeout?: demo)
+qa(target, mode?: functional | visual | adversarial, closeout?: demo)
   -> result.json + report.md + best_evidence + verdict + learning
 reads: issue body and comments, design.md for UI, runtime handoff, docs/qa runbook, captures
 does: binds the proof policy, captures claim-matched evidence, judges it, validates the receipt
@@ -99,17 +100,7 @@ serious readiness claim. `closeout: demo` runs only after a pass.
 
   Assert:
   - The verdict comes from the evidence-review lane, not the tester or builder.
-- [ ] **N5 — outbound: check the delivered copy before outsiders get it.**
-  `email | ad | post | page | message -> delivered copy + scan + mistake rows | blocker`
-
-  Rule: Proof is the copy a recipient gets (inbox test send, platform preview,
-  logged-out live URL), never pipeline state like "contact entered the sequence".
-  Run `scripts/check_outbound.py` on it, read it all, click every link, and mark
-  each mistake row; no issue needed. Load [outbound](references/outbound.md).
-
-  Assert:
-  - Template text, placeholders, or a preview, broken, or walled link blocks release.
-- [ ] **N6 — Write and validate the receipt.**
+- [ ] **N5 — Write and validate the receipt.**
   `evidence + judgments -> report.md + result.json + QA_RESULT | invalid`
 
   Rule: `report.md` holds the tested path, obligation-to-evidence map, UI
@@ -122,7 +113,7 @@ serious readiness claim. `closeout: demo` runs only after a pass.
   Assert:
   - The validator exits 0; never invent commands, captures, judgments, or
     future paths to satisfy the schema.
-- [ ] **N7 — Post to the issue and classify learning.**
+- [ ] **N6 — Post to the issue and classify learning.**
   `validated receipt -> gh issue comment + learning outcome`
 
   Rule: Post one `gh issue comment <n> --body-file` with verdict, receipt
@@ -133,7 +124,7 @@ serious readiness claim. `closeout: demo` runs only after a pass.
 
   Assert:
   - A read-only preview describes this writeback without claiming it ran.
-- [ ] **N8 — closeout: record the Before/After/Example demo after QA passes.**
+- [ ] **N7 — closeout: record the Before/After/Example demo after QA passes.**
   `passing result.json + verified evidence -> final.mp4 + evidence-map.json | blocked`
 
   Rule: Material Goals and `$demo` only. QA must pass first; every claim
@@ -171,7 +162,8 @@ serious readiness claim. `closeout: demo` runs only after a pass.
 - A `qa-tester` capture run that also "approves" the UI skipped N3; capture is
   not judgment. A hero-only image passed as long-page proof never saw the
   objection section.
-- Pointing `QA_RESULT evidence=` at `best_evidence`: it names the validated `result.json` receipt.
+- Pointing `QA_RESULT evidence=` at `best_evidence`: it names the validated
+  `result.json` receipt.
 - Writing per-run files into `tickets/`: issues are GitHub Issues; files go to
   `.farplane/qa/<issue>/<run>/` and the verdict goes on the issue.
 
@@ -181,9 +173,9 @@ serious readiness claim. `closeout: demo` runs only after a pass.
 - [runbooks](references/runbooks.md), [template](references/runbook-template.md),
   [UI browser proof](references/ui-browser-proof.md) - reusable `docs/qa` pages.
 - [visual](references/visual.md) - four-part report, geometry, coverage, review.
-- [adversarial](references/adversarial.md), [scientific claim review](references/scientific-claim-review.md)
-  - lanes, cases, rerun loop, prompts, experiment diagnosis.
-- [outbound](references/outbound.md) - delivered copy, scanner, common-mistake rows.
+- [adversarial](references/adversarial.md),
+  [scientific claim review](references/scientific-claim-review.md) - lanes,
+  cases, rerun loop, prompts, experiment diagnosis.
 - [closeout demo](references/closeout-demo.md) - gates, story spine, render.
 
 ## Output

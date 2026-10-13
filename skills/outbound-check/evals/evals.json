@@ -1,0 +1,72 @@
+{
+  "skill_name": "outbound-check",
+  "evals": [
+    {
+      "id": "outbound_check_delivered_copy_not_pipeline_01",
+      "prompt": "The lead-magnet welcome email is live: our test contact entered the email sequence (step 0 of 4), so mark it verified. The received copy of that email is saved at skills/outbound-check/evals/fixtures/welcome-email/delivered.txt. Our live site is plan.acme.co and our registered address is 12 Harbour Road, Singapore.",
+      "expected_output": "Does not accept the contact entering the sequence as proof; Runs outbound_check.py on the delivered copy with the sender facts as context; Reports hold with the platform sample text, the preview-deployment link, and the wrong footer address as failing rows; Names the three unchecked sequence steps; Does not mark the email verified",
+      "files": [],
+      "assertions": [
+        "Does not accept pipeline state (contact entered the sequence) as proof of the email's content",
+        "Runs skills/outbound-check/scripts/outbound_check.py on the delivered copy with the live domain and address as context",
+        "Reports the platform sample text above and below the copy as a failing row",
+        "Reports the plan link as a preview deployment rather than plan.acme.co",
+        "Reports the Seattle footer address as not the sender's address",
+        "Returns hold and names checking the other three sequence steps"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Outbound proof is the delivered copy, not the pipeline",
+          "tags": [
+            "skill",
+            "outbound-check",
+            "regression"
+          ],
+          "notes": "Regression from a welcome email that shipped with template text, a preview link, and a placeholder footer after pipeline-only verification (2026-10-13)."
+        }
+      }
+    },
+    {
+      "id": "outbound_check_no_judge_is_not_ready_01",
+      "prompt": "Run the outbound check on skills/outbound-check/evals/fixtures/welcome-email/delivered.txt but OPENROUTER_API_KEY isn't available in this shell. The fixed-rule part is enough, right? Just tell me if it's good to send.",
+      "expected_output": "Explains that without the judge the judgment rows come back NOT_PROVABLE, so the verdict cannot be ready; Routes the run through farplane run or doppler run to supply the key, or reports the fixed-rule blockers it can see; Still reports the fixed-rule blockers in this copy; Does not say the email is good to send",
+      "files": [],
+      "assertions": [
+        "States that a fixed-rule pass alone does not make the copy ready",
+        "Runs through farplane run or doppler run, or names that route as the fix for the missing key",
+        "Reports the template-text and preview-link blockers in the copy",
+        "Does not tell the operator the email is good to send"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "No judge means not ready",
+          "tags": [
+            "skill",
+            "outbound-check",
+            "blocker"
+          ]
+        }
+      }
+    },
+    {
+      "id": "outbound_check_boundary_ticket_proof_01",
+      "prompt": "QA the new settings screen in the bunker against its design.md before I close the GitHub issue.",
+      "expected_output": "Recognises internal product work proved against a ticket, not a delivered outbound copy; Routes to the qa skill rather than outbound-check; Does not run outbound_check.py",
+      "files": [],
+      "assertions": [
+        "Routes to qa for ticket-bound UI proof",
+        "Does not run outbound_check.py on an internal screen"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Ticket UI proof stays with qa",
+          "tags": [
+            "skill",
+            "outbound-check",
+            "boundary"
+          ]
+        }
+      }
+    }
+  ]
+}
