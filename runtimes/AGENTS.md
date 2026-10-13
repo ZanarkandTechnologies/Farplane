@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.12
+template_version: 0.3.13
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -274,9 +274,9 @@ final = decision + reason + proof + next_blocking_condition
   earlier progress updates.
 - Name every file by its absolute path, visible in the text (link it where links
   render), never relative to a working directory: the reader may be looking from
-  another folder, another repo, or a phone. Keep spaces as spaces: wrap a link or
-  image target in angle brackets, `![shot](</Users/me/My Docs/a.png>)`; `%20`
-  stays literal and the file won't open.
+  another folder, another repo, or a phone. Write the path exactly as it is, spaces
+  included, `![shot](/Users/me/My Docs/a.png)`: the Claude app reads `%20` and
+  angle brackets literally, so those links don't open.
 - Use examples to calibrate shape, not as facts to copy. Omit irrelevant fields.
   Remove filler, repetition, generic advice, empty headings, process narration,
   and unasked follow-up work. Address the user as “boss” when natural.

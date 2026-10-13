@@ -136,13 +136,13 @@ class StopGateTests(unittest.TestCase):
 
     def test_relative_file_paths_get_an_absolute_path_nudge(self):
         for final in ("See [plan](docs/plan.md).", "Edited `hooks/stop-gate/README.md:12`.",
-                      "![shot](/Users/me/My%20Docs/a.png)"):
+                      "![shot](/Users/me/My%20Docs/a.png)", "See [a](</Users/me/My Docs/a.md>)."):
             with self.subTest(final=final):
                 result = self.evaluate([human("Where?")], final, Client(shape="simple_answer"))
                 self.assertIn("absolute path", result["reason"])
         for final in ("See [plan](/Users/me/docs/plan.md).", "See [PR](https://x.test/1).",
                       "Use `a/b` or `README.md`.", "Open `~/notes/a.md`.", "Run `./bin/start.sh`.",
-                      "![shot](</Users/me/My Docs/a.png>)", "See [plan](</Users/me/plan.md>).",
+                      "![shot](/Users/me/My Docs/a.png)", "See [plan](/Users/me/My Docs/plan.md).",
                       "Broken: `![shot](/Users/me/My%20Docs/a.png)`."):
             with self.subTest(final=final):
                 self.assertIsNone(self.evaluate([human("Where?")], final, Client(shape="simple_answer")))
