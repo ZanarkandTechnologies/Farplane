@@ -2,9 +2,10 @@
 """Text or transcript for any URL or media file, the whole summarize-first route in one command.
 
 1. `farplane run -- summarize SOURCE --extract`.
-2. If that came back as a login wall or next to nothing (Instagram answers a reel with the single word
-   "Instagram"), download the media with yt-dlp, trying the operator's browsers' cookies when a plain
-   download is refused.
+2. If that came back as a login wall, a mirror's notice page, or next to nothing (Instagram answers a
+   reel with the single word "Instagram"; X links can come back as Nitter's takedown notice),
+   download the media with yt-dlp, trying the operator's browsers' cookies when a plain download
+   is refused.
 3. `farplane run -- summarize <downloaded file> --extract --timestamps`.
 
 Prints the text on stdout and the route taken on stderr; exits 1 with the reason when every step fails.
@@ -28,6 +29,8 @@ from pathlib import Path
 MIN_WORDS = 40
 # What a login wall's whole extraction looks like.
 WALL = re.compile(r"^\s*(instagram|tiktok\b.*|log ?in\b.*|sign ?in\b.*|facebook|x|twitter)\s*$", re.I)
+# A mirror's own notice standing in for the post: X links come back as Nitter's takedown page.
+STAND_IN = re.compile(r"\bnitter\b.{0,600}\b(cease and desist|legal counsel|instance)", re.I | re.S)
 BROWSERS = ["brave", "chrome", "safari", "firefox", "edge", "chromium", "arc"]
 
 
@@ -49,7 +52,7 @@ def body(text: str) -> str:
 
 def thin(text: str) -> bool:
     b = body(text)
-    return not b or bool(WALL.match(b)) or len(b.split()) < MIN_WORDS
+    return not b or bool(WALL.match(b)) or bool(STAND_IN.search(b)) or len(b.split()) < MIN_WORDS
 
 
 def download(url: str, workdir: Path) -> Path | None:
@@ -94,7 +97,7 @@ def main() -> int:
     media = download(args.source, workdir)
     if not media:
         # Nothing to download: a short page that is not a login wall is still the page's text.
-        if code == 0 and body(text) and not WALL.match(body(text)):
+        if code == 0 and body(text) and not WALL.match(body(text)) and not STAND_IN.search(body(text)):
             print("route: summarize url (a short page; no media to download)", file=sys.stderr)
             print(text)
             return 0
