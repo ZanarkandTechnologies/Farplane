@@ -23,7 +23,8 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 - [ ] **Pull saved taste.** For a new direction or a taste upgrade, run
   `farplane resource-bank tasty-pack "<surface idea>" --output-type <type> --json`
   and read each pinned element's recipe as candidate steal-table rows with
-  their exact values. No captures is a stated result, not a blocker.
+  their exact values. No captures is a stated result, not a blocker. To name
+  the style itself, use [design-styles](../design-styles/SKILL.md).
 - [ ] When the user provides a strong reference or the surface needs a taste
   upgrade, use its `synthesis` branch to extract what to adopt, adapt,
   reject, or defer before defining the final visual system.

@@ -115,9 +115,9 @@ skills = ["landing-page"]
 [specialists.visual-designer]
 label = "Visual Designer"
 department = "marketing"
-deliverable = "a finished image asset"
+deliverable = "a finished image asset or a named style pick"
 primary = "ai-image"
-skills = ["ai-image"]
+skills = ["ai-image", "design-styles"]
 
 [specialists.video-producer]
 label = "Video Producer"

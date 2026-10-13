@@ -92,8 +92,9 @@ returns: final asset path(s), the receipt, the spend line for the operator's log
   deterministically (HTML/SVG) over a generated base. Assets meant for an
   overlay or video edit carry no baked-in text. For a keyed talking head or
   speaker layout, keep faces out of the centre frame. For edits, say in the
-  prompt what must stay unchanged. Save `prompt.md` and `input.json` before
-  the call.
+  prompt what must stay unchanged. When the look is still open, name it with
+  a [design-styles](../design-styles/SKILL.md) style block, not mood words.
+  Save `prompt.md` and `input.json` before the call.
 
   Example: `dashboard explainer -> generated hand-drawn texture + real labels
   rendered in SVG, not "a dashboard that says Revenue $42k"`

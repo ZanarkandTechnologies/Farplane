@@ -57,6 +57,9 @@ Use a mix of these buckets when source context supports them:
   `finance`, `design-world`, `creator-workflow`.
 - Craft: `high-contrast-copy`, `dense-background`, `human-focal-point`,
   `bold-subtitle`, `lofi-texture`, `ui-screenshot`, `before-after`.
+- Style: for a visual reference, the closest `style:<slug>` and
+  `style-family:<family>` from the
+  [design-styles vocabulary](../../../design-styles/references/styles.json).
 - Retrieval: project name, campaign name, client/product, output type, or
   platform.
 

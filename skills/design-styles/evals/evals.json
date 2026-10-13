@@ -1,0 +1,93 @@
+{
+  "skill_name": "design-styles",
+  "evals": [
+    {
+      "id": "design_styles_named_style_prompt_01",
+      "prompt": "I need a poster for a members-only cocktail night at a hotel bar. Give me the style direction for the image prompt.",
+      "expected_output": "Picks style:art-deco (optionally with one second style) with a reason tied to the event; Runs design_styles.py show art-deco and looks at the saved board image; Returns a style block that starts with 'Art Deco' and lists concrete cues (gold hairline geometry, deep navy or black, tall geometric sans, centred hero object, foil sheen); Lists an avoid line that forbids copying the board posters; Hands off to ai-image",
+      "files": [],
+      "assertions": [
+        "Names a vocabulary style tag such as style:art-deco rather than only mood words like elegant or premium",
+        "Runs skills/design-styles/scripts/design_styles.py show for the chosen style and views the board image",
+        "The style block leads with the style name and gives at least four concrete visual cues",
+        "States that the board posters are not copied or used as image references",
+        "Names ai-image as the next owner"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "A brief becomes a named style with its board",
+          "tags": [
+            "skill",
+            "design-styles",
+            "normal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "design_styles_name_reference_01",
+      "prompt": "What style is this reference? It's a workshop poster: lilac and lime cards with thick black outlines, hard black drop shadows with no blur, pill-shaped buttons, a couple of pink starbursts, chunky sans headline on a light grid-paper background. I want our agent-office demo day poster in the same style.",
+      "expected_output": "Names style:neo-brutalism from the vocabulary (not plain Brutalism, not Memphis) and says what in the reference sets it apart; Runs design_styles.py show neo-brutalism and views the board; Returns a style block led by 'Neo-Brutalism' with outline weight, unblurred offset shadow, flat fills, pill buttons and type; Keeps orange out; Does not copy the described poster layout or text; Hands off to ai-image",
+      "files": [],
+      "assertions": [
+        "Names style:neo-brutalism and distinguishes it from Brutalism or Memphis",
+        "Runs skills/design-styles/scripts/design_styles.py show neo-brutalism",
+        "The style block names hard black outlines and unblurred offset shadows as concrete cues",
+        "Names ai-image as the next owner"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Name the style of a reference",
+          "tags": [
+            "skill",
+            "design-styles",
+            "hard"
+          ]
+        }
+      }
+    },
+    {
+      "id": "design_styles_vague_brief_orange_guard_01",
+      "prompt": "Make the landing page hero for our desert retreat feel warm, rugged and a bit mystical. Western vibes, sunset colours. What style should the hero image use?",
+      "expected_output": "Maps the brief to style:mystical-western and/or style:wild-west from the vocabulary; Pulls the recipe and board with show; Swaps the genre's orange, terracotta and sunset-orange for sage, saddle brown, dusty teal, gold or bone and says so in the avoid list; Gives at most two styles, one for structure and one for surface; Returns a style block that leads with the style name",
+      "files": [],
+      "assertions": [
+        "Picks style:mystical-western or style:wild-west from the vocabulary",
+        "Runs design_styles.py show for each chosen style",
+        "Does not put orange, terracotta or rust in the style block, and names the swap in the avoid list",
+        "Uses no more than two styles"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Vague mood brief, orange ban held",
+          "tags": [
+            "skill",
+            "design-styles",
+            "hard"
+          ],
+          "notes": "The operator bans orange everywhere; sunset and western styles invite it."
+        }
+      }
+    },
+    {
+      "id": "design_styles_boundary_product_system_01",
+      "prompt": "Redo the design system for the Farplane bunker's settings screens: greys, spacing, type scale and components.",
+      "expected_output": "Recognises a product design-system job owned by visual-design; Does not replace the zero-chroma concrete greys with a style palette; At most offers a named style for type or one accent as input to visual-design",
+      "files": [],
+      "assertions": [
+        "Routes the design-system work to visual-design",
+        "Does not propose a style palette that replaces the Farplane product greys"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Product design system stays with visual-design",
+          "tags": [
+            "skill",
+            "design-styles",
+            "boundary"
+          ]
+        }
+      }
+    }
+  ]
+}
