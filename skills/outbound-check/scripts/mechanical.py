@@ -20,16 +20,17 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 
-PLACEHOLDERS = [
-    (r"\{\{[^}]*\}\}|\{%[^%]*%\}", "unrendered template tag"),
-    (r"\*\|[A-Z0-9_]+\|\*|%%[A-Za-z_]+%%", "unrendered merge field"),
-    (r"\[(?:first ?name|last ?name|name|company|insert[^\]]*|your [^\]]*|link|url|date|price)\]", "bracket placeholder"),
-    (r"<insert [^>]*>", "bracket placeholder"),
-    (r"\b(?:TODO|TBD|FIXME)\b|\bXXX+\b", "unfinished marker"),
-    (r"lorem ipsum", "lorem ipsum"),
-    (r"\bexample\.(?:com|org|net)\b", "example domain"),
-    (r"remove before publish", "internal note"),
-    (r"\b(?:Hi|Hello|Hey|Dear)\s+,", "greeting with an empty name"),
+PLACEHOLDERS = [  # TODO-style markers are matched case-sensitively; the rest ignore case
+    (re.compile(r"\{\{[^}]*\}\}|\{%[^%]*%\}", re.I), "unrendered template tag"),
+    (re.compile(r"\*\|[A-Z0-9_]+\|\*|%%[A-Za-z_]+%%", re.I), "unrendered merge field"),
+    (re.compile(r"\[(?:first ?name|last ?name|name|company|insert[^\]]*|your [^\]]*|link|url|date|price)\]", re.I), "bracket placeholder"),
+    (re.compile(r"<insert [^>]*>", re.I), "bracket placeholder"),
+    (re.compile(r"\[(?:pending|placeholder|draft|tbc)\b[^\]]*\]|awaiting sign-?off", re.I), "unfinished marker"),
+    (re.compile(r"\b(?:TODO|TBD|FIXME)\b|\bXXX+\b"), "unfinished marker"),
+    (re.compile(r"lorem ipsum", re.I), "lorem ipsum"),
+    (re.compile(r"\bexample\.(?:com|org|net)\b", re.I), "example domain"),
+    (re.compile(r"remove before publish", re.I), "internal note"),
+    (re.compile(r"\b(?:Hi|Hello|Hey|Dear)\s+,", re.I), "greeting with an empty name"),
 ]
 
 # Default copy that platforms ship inside new emails, pages, and sequences.
@@ -215,7 +216,7 @@ def scan(text: str, links: list[tuple[str, str]], follow: bool = True, fetch=fet
     findings: list[tuple[str, int, str, str]] = []
     lowered = " ".join(text.split()).lower()
     for pattern, label in PLACEHOLDERS:
-        for match in re.finditer(pattern, text, re.I if label != "unfinished marker" else 0):
+        for match in pattern.finditer(text):
             findings.append(("BLOCKER", ROW_PLACEHOLDER, label, match.group(0)))
     for fingerprint in TEMPLATE_FINGERPRINTS:
         if fingerprint in lowered:

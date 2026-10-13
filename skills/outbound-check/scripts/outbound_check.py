@@ -17,9 +17,11 @@ import base64
 import json
 import os
 import re
+import select
 import shutil
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -36,7 +38,13 @@ DEFAULT_MODEL = "anthropic/claude-sonnet-5.5"
 BROWSER_ENV = "OUTBOUND_BROWSER"
 BROWSER_GLOB = "Library/Caches/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-*/chrome-headless-shell"
 MAX_TEXT = 20_000
-MAX_IMAGES = 8
+MAX_IMAGES = 32
+PHONE_WIDTH, PHONE_HEIGHT, TILE, MAX_TILES = 390, 844, 1600, 6
+# Scroll to the bottom and back so scroll-triggered content is drawn before capture.
+SCROLL_THROUGH = """new Promise(done => { let y = 0; const step = () => { window.scrollTo(0, y);
+  y += innerHeight; if (y < document.documentElement.scrollHeight) setTimeout(step, 150);
+  else { window.scrollTo(0, 0); setTimeout(done, 500); } }; step(); })"""
+PAGE_HEIGHT = "Math.max(document.documentElement.scrollHeight, document.body ? document.body.scrollHeight : 0)"
 VERDICTS = ("PASS", "FAIL", "NOT_PROVABLE")
 
 PROMPT = """You review what an outside recipient will get from a business: emails, ads, posts, pages, or messages. You did not write any of it. Grade every checklist row strictly from the evidence given.
@@ -71,20 +79,104 @@ def find_browser() -> str | None:
     return str(chrome) if chrome.exists() else None
 
 
-def screenshot(browser: str, target: str, out: Path, dark: bool) -> Path | None:
-    args = [browser, "--headless", "--disable-gpu", "--hide-scrollbars",
-            "--window-size=390,2400", f"--screenshot={out}"]
-    if dark:
-        args.append("--blink-settings=preferredColorScheme=0")
+class Browser:
+    """Headless Chromium driven over the DevTools pipe: commands on fd 3, replies on fd 4."""
+
+    def __init__(self, path: str):
+        to_child_r, self._out = os.pipe()
+        self._in, from_child_w = os.pipe()
+
+        def wire():  # dup2 onto an fd's own number keeps close-on-exec, so clear it after
+            reader, writer = os.dup(to_child_r), os.dup(from_child_w)
+            os.dup2(reader, 3)
+            os.dup2(writer, 4)
+            os.set_inheritable(3, True)
+            os.set_inheritable(4, True)
+
+        self.proc = subprocess.Popen(
+            [path, "--headless", "--disable-gpu", "--hide-scrollbars", "--no-first-run",
+             "--remote-debugging-pipe", "about:blank"],
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            close_fds=False, preexec_fn=wire)
+        os.close(to_child_r)
+        os.close(from_child_w)
+        self._buffer, self._last_id, self.events = b"", 0, []
+
+    def _read(self, timeout: float) -> dict:
+        deadline = time.monotonic() + timeout
+        while b"\0" not in self._buffer:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0 or not select.select([self._in], [], [], remaining)[0]:
+                raise TimeoutError("the browser did not answer")
+            chunk = os.read(self._in, 1 << 20)
+            if not chunk:
+                raise RuntimeError("the browser closed")
+            self._buffer += chunk
+        message, self._buffer = self._buffer.split(b"\0", 1)
+        return json.loads(message)
+
+    def send(self, method: str, params: dict | None = None, session: str | None = None, timeout: float = 30) -> dict:
+        self._last_id += 1
+        message = {"id": self._last_id, "method": method, "params": params or {}}
+        if session:
+            message["sessionId"] = session
+        os.write(self._out, json.dumps(message).encode() + b"\0")
+        while True:
+            reply = self._read(timeout)
+            if reply.get("id") != self._last_id:
+                self.events.append(reply)
+            elif "error" in reply:
+                raise RuntimeError(f"{method}: {reply['error'].get('message')}")
+            else:
+                return reply.get("result", {})
+
+    def wait_for(self, event: str, timeout: float) -> None:
+        deadline = time.monotonic() + timeout
+        while not any(e.get("method") == event for e in self.events):
+            self.events.append(self._read(max(deadline - time.monotonic(), 0)))
+
+    def close(self) -> None:
+        try:
+            self.send("Browser.close", timeout=5)
+        except Exception:
+            pass
+        if self.proc.poll() is None:
+            self.proc.kill()
+        os.close(self._in)
+        os.close(self._out)
+
+
+def capture(path: str, target: str, stem: Path, dark: bool) -> tuple[list[Path], int]:
+    """Full-length phone-width screenshots of one page, in tiles; returns tiles and page height."""
+    browser = Browser(path)
     try:
-        subprocess.run(args + [target], capture_output=True, timeout=60, check=False)
-    except (OSError, subprocess.TimeoutExpired):
-        return None
-    return out if out.exists() and out.stat().st_size else None
+        target_id = browser.send("Target.createTarget", {"url": "about:blank"})["targetId"]
+        session = browser.send("Target.attachToTarget", {"targetId": target_id, "flatten": True})["sessionId"]
+        browser.send("Emulation.setDeviceMetricsOverride", {"width": PHONE_WIDTH, "height": PHONE_HEIGHT,
+                                                            "deviceScaleFactor": 1, "mobile": True}, session)
+        browser.send("Emulation.setEmulatedMedia", {"features": [
+            {"name": "prefers-color-scheme", "value": "dark" if dark else "light"}]}, session)
+        browser.send("Page.enable", {}, session)
+        browser.send("Page.navigate", {"url": target}, session)
+        browser.wait_for("Page.loadEventFired", 45)
+        browser.send("Runtime.evaluate", {"expression": SCROLL_THROUGH, "awaitPromise": True}, session, timeout=90)
+        height = int(browser.send("Runtime.evaluate", {"expression": PAGE_HEIGHT, "returnByValue": True},
+                                  session)["result"]["value"])
+        tiles = []
+        for index, top in enumerate(range(0, min(height, TILE * MAX_TILES), TILE), 1):
+            clip = {"x": 0, "y": top, "width": PHONE_WIDTH, "height": min(TILE, height - top), "scale": 1}
+            data = browser.send("Page.captureScreenshot", {"format": "png", "captureBeyondViewport": True,
+                                                           "clip": clip}, session)["data"]
+            tile = stem.with_name(f"{stem.name}-{index}.png")
+            tile.write_bytes(base64.b64decode(data))
+            tiles.append(tile)
+        return tiles, height
+    finally:
+        browser.close()
 
 
 def render(pieces: list[Piece], out_dir: Path) -> tuple[list[Path], str | None]:
-    """Phone-width light and dark screenshots of every piece with HTML or a URL."""
+    """Full-length phone-width light and dark screenshots of every piece with HTML or a URL."""
     targets = []
     for index, piece in enumerate(pieces, 1):
         if piece.url:
@@ -98,13 +190,18 @@ def render(pieces: list[Piece], out_dir: Path) -> tuple[list[Path], str | None]:
     browser = find_browser()
     if not browser:
         return [], f"no headless browser found; set {BROWSER_ENV}"
-    shots = []
+    shots, gaps = [], []
     for index, target in targets:
         for mode in ("light", "dark"):
-            shot = screenshot(browser, target, out_dir / f"piece-{index}-{mode}.png", mode == "dark")
-            if shot:
-                shots.append(shot)
-    return shots, None if shots else "the browser produced no screenshots"
+            try:
+                tiles, height = capture(browser, target, out_dir / f"piece-{index}-{mode}", mode == "dark")
+            except (OSError, RuntimeError, TimeoutError, KeyError, ValueError) as error:
+                gaps.append(f"piece {index} {mode}: {error}")
+                continue
+            shots += tiles
+            if height > TILE * MAX_TILES:
+                gaps.append(f"piece {index} {mode}: only the first {TILE * MAX_TILES}px of {height}px captured")
+    return shots, "; ".join(gaps) or None
 
 
 def judge_request(rows, pieces, findings, context, images, model) -> dict:
@@ -137,14 +234,23 @@ def judge(body: dict, environ=os.environ, post=post_openrouter) -> tuple[dict[in
     key = environ.get(KEY_ENV, "").strip()
     if not key:
         return {}, f"{KEY_ENV} is not set; run through farplane run or doppler run", None
-    try:
-        reply = post(body, key)
-        content = reply["choices"][0]["message"]["content"]
-        graded = json.loads(re.search(r"\{.*\}", content, re.S).group(0))["rows"]
-    except Exception as error:  # a judge failure must never read as a pass
-        return {}, f"judge call failed: {error}", None
-    rows = {int(r["id"]): r for r in graded if str(r.get("verdict")) in VERDICTS}
-    return rows, None, reply.get("usage", {}).get("cost")
+    cost, error, content = 0.0, None, None
+    for _ in range(2):  # one retry, told what was wrong with the last reply
+        try:
+            reply = post(body, key)
+            cost += reply.get("usage", {}).get("cost") or 0
+            content = reply["choices"][0]["message"]["content"]
+            graded = json.loads(re.search(r"\{.*\}", content, re.S).group(0))["rows"]
+            rows = {int(r["id"]): r for r in graded if str(r.get("verdict")) in VERDICTS}
+            return rows, None, cost or None
+        except Exception as caught:  # a judge failure must never read as a pass
+            error = caught
+            if content is not None:
+                body = {**body, "messages": body["messages"] + [
+                    {"role": "assistant", "content": content},
+                    {"role": "user", "content": f"That reply was not valid JSON ({caught}). Return the same "
+                                                "grades as valid JSON only; escape double quotes inside strings."}]}
+    return {}, f"judge call failed: {error}", cost or None
 
 
 def merge(rows, findings, judged, judge_gap) -> list[dict]:

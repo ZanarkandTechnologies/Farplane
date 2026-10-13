@@ -64,11 +64,13 @@ class MechanicalTest(unittest.TestCase):
         self.assertEqual(len(levels(findings, "OK")), 2)
 
     def test_placeholders_and_empty_greeting_block(self):
-        text = "Hi ,\nYour code is {{ coupon }} for *|FNAME|* at [Company]. TODO: price"
+        text = "Hi ,\nYour code is {{ coupon }} for *|FNAME|* at [Company]. TODO: price\n[PENDING] Credential line 1"
         labels = {label for label, _ in levels(scan(text, [], follow=False), "BLOCKER")}
         self.assertTrue({"greeting with an empty name", "unrendered template tag",
                          "unrendered merge field", "bracket placeholder",
                          "unfinished marker"} <= labels)
+        self.assertIn("[PENDING]", [d for label, d in levels(scan(text, [], follow=False), "BLOCKER")])
+        self.assertEqual(levels(scan("Our todo list app", [], follow=False), "BLOCKER"), [])
 
     def test_login_wall_broken_and_refused_links(self):
         text = "Doc: https://docs.acme.co/a Old: https://acme.co/gone Site: https://www.linkedin.com/in/x"
@@ -150,6 +152,23 @@ class VerdictTest(unittest.TestCase):
         failing = judge(body, {"OPENROUTER_API_KEY": "k"}, post=lambda b, k: {"choices": []})
         self.assertEqual(failing[0], {})
         self.assertIn("judge call failed", failing[1])
+
+    def test_judge_retries_once_on_invalid_json(self):
+        body = judge_request(self.rows, [load_piece_text(CLEAN_WELCOME)], [], "", [], "m")
+        good = json.dumps({"rows": [{"id": 1, "verdict": "PASS", "evidence": "ok"}]})
+        replies = [{"choices": [{"message": {"content": '{"rows": [{"id": 1, "evidence": "say "hi""}]}'}}],
+                    "usage": {"cost": 0.01}},
+                   {"choices": [{"message": {"content": good}}], "usage": {"cost": 0.02}}]
+        sent = []
+
+        def post(request_body, key):
+            sent.append(request_body)
+            return replies[len(sent) - 1]
+
+        rows, gap, cost = judge(body, {"OPENROUTER_API_KEY": "k"}, post=post)
+        self.assertEqual((list(rows), gap, round(cost, 2)), ([1], None, 0.03))
+        self.assertEqual(sent[1]["messages"][-1]["role"], "user")
+        self.assertIn("not valid JSON", sent[1]["messages"][-1]["content"])
 
 
 def load_piece_text(text):
