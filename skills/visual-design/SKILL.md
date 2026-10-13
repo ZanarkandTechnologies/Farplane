@@ -1,6 +1,6 @@
 ---
 name: visual-design
-version: 1.0.0
+version: 1.1.0
 description: "Use for \"make it look good\", \"pick a visual style\", \"it looks generic\" or \"define the design system\": a reference-backed visual system, anti-patterns and a planning handoff."
 department: delivery
 source: local
@@ -20,6 +20,10 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
   `no`; preserve functional requirements, accessibility, and necessary state.
 - [ ] Use [research](../research/SKILL.md) when visual direction needs
   product, brand, or peer grounding (`market`).
+- [ ] **Pull saved taste.** For a new direction or a taste upgrade, run
+  `farplane resource-bank tasty-pack "<surface idea>" --output-type <type> --json`
+  and read each pinned element's recipe as candidate steal-table rows with
+  their exact values. No captures is a stated result, not a blocker.
 - [ ] When the user provides a strong reference or the surface needs a taste
   upgrade, use its `synthesis` branch to extract what to adopt, adapt,
   reject, or defer before defining the final visual system.
@@ -32,8 +36,10 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 - [ ] **Reference fidelity.** When the operator names references or states a
   palette or fonts, that receipt is the **steal table**: write it before any
   styling, show it to the operator, and wait for a yes. Operator-stated
-  palette and fonts beat any tasty pack, concept, or direction; a conflict is
-  a question to the operator, never a silent swap.
+  palette and fonts, and standing operator rules (banned hues, a product
+  UI's neutral rule), beat any tasty pack, concept, or direction: reject a
+  clashing saved element with the rule and a substitute from the same pack; a
+  conflict with a stated value is a question, never a silent swap.
 - [ ] Use the native planning phase to choose the visual register and accepted
   tradeoff before specifying style.
 - [ ] Name a **visual concept** drawn from the product's own world (a place,
@@ -47,7 +53,11 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 - [ ] Set numeric taste dials for density, variance, motion, color commitment,
   and materiality; the dials set how loudly the concept is expressed.
 - [ ] Define typography, color roles, spacing rhythm, radius/elevation,
-  component treatment, icon/media language, and motion vocabulary.
+  component treatment, icon/media language, and motion vocabulary. Build
+  colour as ground (~60%), figure (~30%), one accent (~10%) on the single
+  focal action, and prove ground plus figure work before the accent; set
+  empty space as a numeric budget (footprint, measure, column width). See
+  `references/color-and-space.md`.
 - [ ] **Render, critique, refine.** Write the key screen as a standalone static
   HTML mock in the ticket folder (never edit app source), screenshot it in the
   in-app Browser at the target viewport with the project's real fonts, tokens,
@@ -139,6 +149,7 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 - `references/brand-product-register.md` - product vs brand visual rules.
 - `references/concept-and-directions.md` - concept test, direction cards, render spec.
 - `references/taste-dials.md` - density, variance, motion, color, anti-slop.
+- `references/color-and-space.md` - three-colour build, space budget, saved taste versus standing rules.
 - `references/design-brief.md` - durable visual-system handoff shape.
 - `references/critique-audit.md` - review checklist and score shape.
 - `references/architecture.md` - input/output boundary with functional and implementation skills.
@@ -157,7 +168,9 @@ Return a concise visual brief with:
 - `Steve Jobs Focus & Simplicity Pass`: user-facing benefit, visual focal
   action, elements removed or deferred, and deliberate `no`
 - `Taste dials` with 1-10 numeric values
-- `Visual system`
+- `Visual system`, with colour roles and their shares, the accent-off check
+  (ground plus figure must read before the accent is added: pass or fail), and
+  the space budget in numbers
 - `Visual evidence receipt` (the steal table, with operator approval, when
   references were named)
 - `Render receipt`: rendered key-screen path, viewport, critique scores,

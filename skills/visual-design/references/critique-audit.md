@@ -21,7 +21,8 @@ Score each 0-4:
 | Hierarchy | Is the primary action or message obvious? |
 | Rhythm | Do spacing, scale, and density create a deliberate cadence? |
 | Typography | Are font, scale, weight, and line length appropriate? |
-| Color | Does the palette have roles instead of decoration? |
+| Color | Does the palette have roles instead of decoration? Does ground plus figure read with the accent removed, and does the accent mark only the focal action? |
+| Space | Are the space-budget numbers (footprint, measure, column width) met, and does every text block pass contrast on the ground it actually sits on? |
 | Responsiveness | Does the design survive mobile and long text? |
 | Accessibility | Are contrast, focus, hit targets, and motion preferences respected? |
 | Concept | Does one idea from the product's world carry through type, color, and media at the register's loudness? N/A for polish with `none recorded`. |

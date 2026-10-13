@@ -143,6 +143,35 @@
           ]
         }
       }
+    },
+    {
+      "id": "visual_design_tasty_pack_taste_01",
+      "prompt": "Set the visual direction for the hero and first fold of a landing page that sells an AI engineering workflow setup to small dev teams. The operator says: \"make it feel like the stuff I saved to the Tasty Pack this week, I love the empty space and the beige.\" The pack they mean is the attached fixture. Standing operator rules: never use orange, terracotta or rust anywhere; Farplane product dashboards keep zero-chroma concrete neutrals. No fonts or palette were stated beyond that. Give the visual brief and the implementation handoff.",
+      "expected_output": "Turns the saved references into a steal table with exact values, builds a three-role palette that works before its accent is added, translates the empty space into enforceable layout numbers, rejects the saved orange accents under the standing ban, and keeps the warm ground on the brand surface without leaking it into product dashboards.",
+      "files": [
+        "skills/visual-design/evals/fixtures/tasty-pack-greige-oat.json"
+      ],
+      "assertions": [
+        "Writes a steal table from the pack with exact hex values per trait and an adopt, adapt or reject call for each, instead of adjectives such as 'warm' or 'minimal'.",
+        "Assigns the palette by role (a ground or field, a figure or ink colour for type and main shapes, one accent) with an approximate share of the surface for each, and states that ground plus figure must work before the accent is added.",
+        "Reserves the single accent for the one focal action or mark (for example the primary CTA) rather than spreading it across the page.",
+        "Turns 'empty space' into checkable numbers, such as the share of the hero the subject or content may occupy, a maximum content width, or a margin scale, rather than only saying 'lots of whitespace'.",
+        "Rejects the saved tangerine and pumpkin accents because of the standing no-orange rule and names a non-orange substitute drawn from the pack.",
+        "Keeps the warm greige or oat ground to this brand surface and states that Farplane product dashboards stay on zero-chroma neutrals.",
+        "Does not copy the source's protected marks (Meta's #0866d8 blue as the brand colour, the Muse Wonder wordmark, or the film's people) and borrows the pattern instead."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Turns saved Tasty Pack taste into an enforceable, ban-respecting visual system",
+          "tags": [
+            "skill",
+            "visual-design",
+            "tasty-pack",
+            "palette",
+            "negative-space"
+          ]
+        }
+      }
     }
   ]
 }

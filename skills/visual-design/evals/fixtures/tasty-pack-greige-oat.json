@@ -1,0 +1,185 @@
+{
+  "captures": [
+    {
+      "analysis": {
+        "markdown": "## Breakdown\nA 68 s launch film for Meta's Muse Wonder model (\"personal superintelligence\"), posted on X by Michelle Ko on 12 Oct 2026. Every scene is a small life vignette (campfire, laundromat, workbench, kitchen, bed, camper van) built on one seamless warm-grey studio cyc with no horizon line. Captions are short sentences in a small white monospace face, typed on with a blue block cursor (\"Memory that endures.\", \"This model powers your tasks, goals, and dreams.\"). The close pulls back so all vignettes share one endless floor, then cuts to a full-bleed blue card with \"MUSE WONDER\" in the same mono.\n\nSampled values: cyc wall #7a7772 to #8a877e, floor #abaca3 to #b3b9af (warm grey, slightly green), end card #0866d8. Saturation lives only in props and wardrobe (green shirt, yellow chairs, teal checker rug).\n\n## Why It Works\nThe empty greige ground makes every vignette read as a specimen: the eye has nowhere to go but the person. Because the ground never changes, a dozen unrelated scenes feel like one world, and the pull-back pays that off as \"for everyone\". The tiny mono caption reads as a machine speaking quietly instead of an ad shouting, and the one saturated blue is saved for the cursor and the end card, so the brand colour lands at the end.\n\n## Reuse Notes\nBorrow: the neutral ground with props as the only colour, small subject footprint, one accent saved for interface marks, the pull-back to a world of islands (fits the bunker's desks-as-islands idea). Do not copy: Meta's blue as a brand colour, the wordmark, the people, or shot-for-shot staging. For Farplane screens, the ground must still pass the zero-chroma concrete rule; the warm greige is for brand and content surfaces.",
+        "operatorNote": "The operator likes the empty space and the somewhat beige colour of this launch film."
+      },
+      "elements": [
+        {
+          "anchor": "captions throughout; end card 66 s",
+          "description": "One short sentence per beat in a small white monospace face, centred over the scene and typed on with a blue block cursor; the film ends on a full-bleed blue card with the name in the same mono.",
+          "goldenExample": {
+            "description": "4 s: 'MUSE WONDER' typed in small white mono above the bed island, blue block cursor at the end of the line."
+          },
+          "goldenRecipe": "Caption cap height about 1.5% of frame height, white monospace (e.g. JetBrains Mono or IBM Plex Mono, regular), centred in the upper third, one sentence of at most 10 words per beat, typed on at about 25 characters per second with a solid block cursor in the single accent colour that blinks twice after the line completes. Close on a full-bleed accent card with the product name in the same mono, centred, letter-spaced about 0.05em. Use your own accent, never Meta's #0866d8.",
+          "kind": "editing",
+          "pinned": true,
+          "tags": [
+            "negative-space",
+            "greige",
+            "studio-cyc",
+            "launch-film",
+            "monospace-caption",
+            "frame-backed",
+            "typing-cursor",
+            "end-card"
+          ],
+          "title": "Small mono caption with a blue block cursor",
+          "whyItWorks": "Small type over a big empty frame reads as quiet confidence and as a machine talking, which fits an AI product. Saving the only saturated blue for the cursor and end card makes the brand colour the last thing seen."
+        },
+        {
+          "anchor": "throughout; clearest at 22 s and the 61 s pull-back",
+          "description": "Each scene is one small vignette of props and people on a seamless warm-grey studio cyc with no horizon. The subject takes up a small share of the frame; the rest is flat, softly lit ground.",
+          "goldenExample": {
+            "description": "22 s: one figure carrying a box at the right edge, caption top-centre, roughly 85% of the frame is empty greige ground."
+          },
+          "goldenRecipe": "Ground: wall #7a7772 to #8a877e fading to floor #abaca3 to #b3b9af, soft top light, no horizon line or set walls. Subject footprint 10-25% of the frame, placed off-centre; leave the rest empty. Only props and wardrobe carry colour (one or two muted saturated hues per vignette). For UI or a page: a warm-neutral field around one small framed object, generous margins (content width at most 60% of the viewport), and no cards or borders on the field. For image prompts: 'seamless warm grey studio cyclorama, no horizon, small isolated vignette, soft overhead light, lots of empty floor'. Keep Farplane product screens on zero-chroma concrete; use the warm greige for brand and content.",
+          "kind": "visual",
+          "pinned": true,
+          "tags": [
+            "negative-space",
+            "greige",
+            "studio-cyc",
+            "launch-film",
+            "monospace-caption",
+            "frame-backed"
+          ],
+          "title": "Islands on an endless greige floor",
+          "whyItWorks": "An unchanging empty ground turns any scene into a specimen and makes unrelated scenes feel like one world. The emptiness reads as calm and confident, and every saturated colour in the props pops because the ground carries none."
+        }
+      ],
+      "source": {
+        "ageRanges": [],
+        "assetKind": "video",
+        "attribution": {
+          "author": "Michelle Ko (@michelleekokoko); film by Meta",
+          "canonicalUrl": "https://x.com/michelleekokoko/status/2109781018760847514",
+          "sourceUrl": "https://x.com/michelleekokoko/status/2109781018760847514",
+          "status": "partial"
+        },
+        "audiences": [
+          "founders",
+          "consumers"
+        ],
+        "customerRoles": [],
+        "industries": [
+          "ai"
+        ],
+        "outputTypes": [
+          "launch-film",
+          "landing-page",
+          "reel",
+          "ui"
+        ],
+        "platform": "x",
+        "sourceHandle": "https://x.com/michelleekokoko/status/2109781018760847514",
+        "tags": [
+          "negative-space",
+          "greige",
+          "studio-cyc",
+          "launch-film",
+          "monospace-caption",
+          "frame-backed"
+        ],
+        "tastinessScore": 0.9,
+        "title": "Muse Wonder launch film (Meta), shared by Michelle Ko"
+      },
+      "transcript": "On-screen captions only (no voiceover): \"Muse Wonder\" / \"Our strongest frontier-class model yet.\" / \"...ed for you.\" / \"Active memory\" / \"Memory that endures.\" / \"Active focus\" / \"This model powers your tasks, goals, and dreams. For days, weeks, and months.\" / \"Personal superintelligence for you.\" / \"Here's to AI built for everyone.\" / \"MUSE WONDER\""
+    },
+    {
+      "analysis": {
+        "markdown": "## Breakdown\nA 15 s reel by Alena (@createwithalena): a talking head below, and above her a poster that builds one colour at a time beside its Pantone chips. Voice: \"Try marine blue, bright red, and butter yellow. Try oat, blue, and hot pink. Try oat, plum purple, and tangerine. Try muted red, oat, and pumpkin.\" The page behind the posters is oat paper #f4f4ec.\n\nSampled chips: (1) marine #2b3f73, red #d82d32, butter #feeea6 (lemons poster). (2) oat #eceadb, blue #224d95, hot pink #d93c80 (risograph IDEA poster). (3) sand-oat #e9d1a9, plum #3f1d47, tangerine #e06d2d (bloom poster). (4) muted red #9f4740, oat #f3e1c8, pumpkin #ef9c44 (Autumn Vibes poster).\n\n## Why It Works\nEach palette is a role system, not three swatches: a field colour fills the poster, a second colour carries the type or figure, and a small loud accent lands last. Showing the poster gain one colour at a time teaches the order. Three of the four palettes rest on oat, a warm off-white that makes both a dark ink and a hot accent look intentional.\n\n## Reuse Notes\nBorrow the build order and the oat ground. Palettes 3 and 4 use orange accents (tangerine, pumpkin): the operator bans orange, so for their work keep them as a method example and swap the accent (plum + oat + hot pink, or muted red + oat + butter). The reel format (talking head under a building graphic, one word captioned at a time) is a possible content format but was not selected.",
+        "operatorNote": "The operator wants this designer's colour combinations and design tips cached for the visual-design skill."
+      },
+      "elements": [
+        {
+          "anchor": "finished posters at 3.4 s, 6.4 s, 10.4 s and 13.6 s",
+          "description": "Four tested three-colour palettes, three of them resting on a warm oat ground, with sampled hex values.",
+          "goldenExample": {
+            "description": "The four finished posters, each beside its three Pantone chips."
+          },
+          "goldenRecipe": "Paper #f4f4ec. (1) Marine #2b3f73 field, red #d82d32 figure, butter #feeea6 accent. (2) Oat #eceadb field, blue #224d95 figure, hot pink #d93c80 accent. (3) Sand-oat #e9d1a9 field, plum #3f1d47 figure, tangerine #e06d2d accent. (4) Muted red #9f4740 field, oat #f3e1c8 figure, pumpkin #ef9c44 accent. For this operator: palettes 3 and 4 have orange accents, which they ban; use plum #3f1d47 + oat #e9d1a9 + hot pink #d93c80, or muted red #9f4740 + oat #f3e1c8 + butter #feeea6.",
+          "kind": "visual",
+          "pinned": true,
+          "tags": [
+            "palette",
+            "three-colour",
+            "oat",
+            "poster",
+            "design-tips",
+            "frame-backed",
+            "warm-neutral"
+          ],
+          "title": "Oat-ground palettes",
+          "whyItWorks": "Oat is warmer and softer than white, so dark inks look printed rather than digital and a hot accent looks deliberate instead of loud. It is the same warm-neutral idea as an empty greige studio, at poster scale."
+        },
+        {
+          "anchor": "0-4 s, first poster",
+          "description": "A palette is three roles added in order: a field colour that fills most of the surface, a figure colour for type and the main shape, and a small loud accent added last.",
+          "goldenExample": {
+            "description": "Lemons poster in three steps: marine field alone, then red lemons, then butter-yellow type."
+          },
+          "goldenRecipe": "Pick the field (about 60% of the area), then the figure (about 30%, must reach 4.5:1 contrast against the field for text), then one accent (about 10%, used only on the single thing the eye must find: a CTA, a key word, a cursor). Check the design at each step: field + figure must already work. Keep to three colours plus the paper; tints of the figure are allowed, a fourth hue is not. For UI, map field to the page ground, figure to text and primary shapes, accent to the one primary action.",
+          "kind": "visual",
+          "pinned": true,
+          "tags": [
+            "palette",
+            "three-colour",
+            "oat",
+            "poster",
+            "design-tips",
+            "frame-backed",
+            "60-30-10",
+            "colour-roles"
+          ],
+          "title": "Three-colour build: field, figure, accent",
+          "whyItWorks": "Roles stop three nice swatches from fighting. The field sets the mood, the figure carries legibility, and a scarce accent gets all the attention. Adding them in order is a test: if the design does not work with two colours, the accent will not save it."
+        }
+      ],
+      "source": {
+        "ageRanges": [],
+        "assetKind": "video",
+        "attribution": {
+          "author": "Alena, freelance graphic and brand designer (@createwithalena)",
+          "canonicalUrl": "https://www.instagram.com/reel/DdqPoiSxDj1/",
+          "sourceUrl": "https://www.instagram.com/reel/DdqPoiSxDj1/",
+          "status": "known"
+        },
+        "audiences": [
+          "creators",
+          "founders"
+        ],
+        "customerRoles": [],
+        "industries": [],
+        "outputTypes": [
+          "poster",
+          "landing-page",
+          "thumbnail",
+          "carousel",
+          "ui"
+        ],
+        "platform": "instagram",
+        "sourceHandle": "https://www.instagram.com/reel/DdqPoiSxDj1/",
+        "tags": [
+          "palette",
+          "three-colour",
+          "oat",
+          "poster",
+          "design-tips",
+          "frame-backed"
+        ],
+        "tastinessScore": 0.8,
+        "title": "Four three-colour palettes, built poster by poster (createwithalena)"
+      },
+      "transcript": "Try marine blue, bright red, and butter yellow. Try oat, blue, and hot pink. Try oat, plum purple, and tangerine. Try muted red, oat, and pumpkin. Happy designing!"
+    }
+  ],
+  "meta": {
+    "captureCount": 2,
+    "operatorNoteCount": 2,
+    "pinnedElementCount": 4,
+    "timeframe": "past_week",
+    "warnings": []
+  }
+}
