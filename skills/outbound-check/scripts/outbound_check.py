@@ -22,6 +22,7 @@ import shutil
 import subprocess
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -46,6 +47,10 @@ SCROLL_THROUGH = """new Promise(done => { let y = 0; const step = () => { window
   else { window.scrollTo(0, 0); setTimeout(done, 500); } }; step(); })"""
 PAGE_HEIGHT = "Math.max(document.documentElement.scrollHeight, document.body ? document.body.scrollHeight : 0)"
 VERDICTS = ("PASS", "FAIL", "NOT_PROVABLE")
+# One judge run misses different faults on different runs, so two run in
+# parallel and each row keeps its worst grade.
+JUDGE_PASSES = 2
+SEVERITY = {"PASS": 0, "NOT_PROVABLE": 1, "FAIL": 2}
 
 PROMPT = """You review what an outside recipient will get from a business: emails, ads, posts, pages, or messages. You did not write any of it. Grade every checklist row strictly from the evidence given.
 - Fixed-rule findings are verified facts. A row with a BLOCKER finding fails.
@@ -208,8 +213,11 @@ def judge_request(rows, pieces, findings, context, images, model) -> dict:
     checklist = "\n".join(f"{r['id']}. {r['mistake']}: passes when {r['passes_when']}" for r in rows)
     facts = "\n".join(f"{level} row {row} [{Path(source).name}] {label}: {detail}"
                       for source, level, row, label, detail in findings) or "none"
-    copies = "\n\n".join(f"--- PIECE {i}: {p.source} ---\n{p.text[:MAX_TEXT] or '(image only)'}"
-                         for i, p in enumerate(pieces, 1))
+    copies = "\n\n".join(
+        f"--- PIECE {i}: {p.source} ---\n{p.text[:MAX_TEXT] or '(image only)'}"
+        + (f"\n[HIDDEN ON LOAD: shown only if a script reveals it, such as a form's done state; "
+           f"otherwise visible only in the page source]\n{p.hidden[:MAX_TEXT]}" if p.hidden.strip() else "")
+        for i, p in enumerate(pieces, 1))
     text = (f"CHECKLIST:\n{checklist}\n\nSENDER FACTS:\n{context or 'none given'}\n\n"
             f"FIXED-RULE FINDINGS AND LINK RESULTS:\n{facts}\n\nDELIVERED COPY:\n{copies}\n\n"
             f"SCREENSHOTS: {', '.join(p.name for p in images) or 'none'}")
@@ -218,7 +226,9 @@ def judge_request(rows, pieces, findings, context, images, model) -> dict:
         kind = "jpeg" if image.suffix.lower() in {".jpg", ".jpeg"} else image.suffix.lower().lstrip(".")
         data = base64.b64encode(image.read_bytes()).decode()
         content.append({"type": "image_url", "image_url": {"url": f"data:image/{kind};base64,{data}"}})
-    return {"model": model, "max_tokens": 4000, "temperature": 0, "usage": {"include": True},
+    # The judge reasons first; cap that so the graded rows always fit in the reply.
+    return {"model": model, "max_tokens": 12000, "reasoning": {"max_tokens": 4000},
+            "temperature": 0, "usage": {"include": True},
             "messages": [{"role": "system", "content": PROMPT}, {"role": "user", "content": content}]}
 
 
@@ -239,7 +249,10 @@ def judge(body: dict, environ=os.environ, post=post_openrouter) -> tuple[dict[in
         try:
             reply = post(body, key)
             cost += reply.get("usage", {}).get("cost") or 0
-            content = reply["choices"][0]["message"]["content"]
+            choice = reply["choices"][0]
+            content = choice["message"].get("content")
+            if not content:
+                raise ValueError(f"no text in the reply (finish_reason={choice.get('finish_reason')})")
             graded = json.loads(re.search(r"\{.*\}", content, re.S).group(0))["rows"]
             rows = {int(r["id"]): r for r in graded if str(r.get("verdict")) in VERDICTS}
             return rows, None, cost or None
@@ -251,6 +264,20 @@ def judge(body: dict, environ=os.environ, post=post_openrouter) -> tuple[dict[in
                     {"role": "user", "content": f"That reply was not valid JSON ({caught}). Return the same "
                                                 "grades as valid JSON only; escape double quotes inside strings."}]}
     return {}, f"judge call failed: {error}", cost or None
+
+
+def worst_of(passes: list[dict[int, dict]]) -> dict[int, dict]:
+    """Per row, keep the most severe grade across judge passes, joining evidence that agrees."""
+    worst: dict[int, dict] = {}
+    for graded in passes:
+        for number, row in graded.items():
+            kept = worst.get(number)
+            if kept is None or SEVERITY[row["verdict"]] > SEVERITY[kept["verdict"]]:
+                worst[number] = dict(row)
+            elif row["verdict"] == kept["verdict"] and row.get("evidence") and row["evidence"] != kept.get("evidence"):
+                kept["evidence"] = f"{kept.get('evidence', '')} / {row['evidence']}"
+                kept["fix"] = kept.get("fix") or row.get("fix", "")
+    return worst
 
 
 def merge(rows, findings, judged, judge_gap) -> list[dict]:
@@ -306,16 +333,22 @@ def main(argv: list[str] | None = None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     pieces = [load_piece(source) for source in args.copies]
-    findings = [(p.source, *finding) for p in pieces for finding in scan(p.text, p.links, follow=not args.offline)]
+    findings = [(p.source, *finding) for p in pieces for finding in scan(p.text, p.links, follow=not args.offline, hidden=p.hidden)]
     shots, render_gap = render(pieces, out_dir)
     images = shots + [Path(p.image) for p in pieces if p.image]
     rows = load_rows()
     model = os.environ.get(MODEL_ENV) or DEFAULT_MODEL
-    judged, judge_gap, cost = judge(judge_request(rows, pieces, findings, context, images, model))
+    body = judge_request(rows, pieces, findings, context, images, model)
+    with ThreadPoolExecutor(JUDGE_PASSES) as pool:
+        passes = list(pool.map(lambda _: judge(body), range(JUDGE_PASSES)))
+    judged = worst_of([graded for graded, _, _ in passes])
+    gaps = [gap for _, gap, _ in passes if gap]
+    judge_gap = gaps[0] if len(gaps) == JUDGE_PASSES else None
+    cost = sum(spent or 0 for _, _, spent in passes)
     merged = merge(rows, findings, judged, judge_gap)
     verdict = overall(merged)
 
-    judge_line = judge_gap or f"{model}" + (f" (USD {cost:.4f})" if cost else "")
+    judge_line = (judge_gap or f"{model}, {JUDGE_PASSES - len(gaps)} of {JUDGE_PASSES} passes") + (f" (USD {cost:.4f})" if cost else "")
     if render_gap:
         judge_line += f"; rendering not checked: {render_gap}"
     text = report(verdict, merged, findings, pieces, shots, judge_line, context)

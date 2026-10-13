@@ -71,7 +71,11 @@ ROW_TEMPLATE, ROW_PLACEHOLDER, ROW_LINK_TARGET, ROW_LINK_WALL, ROW_SENDER = 1, 2
 
 @dataclass
 class Piece:
-    """One delivered copy: its visible text, links, and what to render or show."""
+    """One delivered copy: its visible text, links, and what to render or show.
+
+    `hidden` is text in elements marked `hidden` or `display:none`: no reader
+    sees it, but it ships in the page source.
+    """
 
     source: str
     text: str
@@ -79,21 +83,35 @@ class Piece:
     html: str | None = None
     url: str | None = None
     image: str | None = None
+    hidden: str = ""
+
+
+VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 
 
 class _HTMLCopy(HTMLParser):
-    """Collect visible text, link targets with their text, and image sources."""
+    """Collect visible text, hidden text, link targets with their text, and image sources."""
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.text: list[str] = []
         self.links: list[tuple[str, str]] = []
+        self.hidden: list[str] = []
         self._skip = 0
+        self._hidden_tag: str | None = None
+        self._hidden_depth = 0
         self._href: str | None = None
         self._anchor: list[str] = []
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if self._hidden_tag == tag:
+            self._hidden_depth += 1
+        elif self._hidden_tag is None and tag not in VOID_TAGS and (
+                "hidden" in attrs or "display:none" in (attrs.get("style") or "").replace(" ", "").lower()):
+            self._hidden_tag, self._hidden_depth = tag, 1
+        if self._hidden_tag:
+            return
         if tag in {"script", "style", "noscript", "template"}:
             self._skip += 1
         elif tag == "a" and attrs.get("href"):
@@ -104,6 +122,11 @@ class _HTMLCopy(HTMLParser):
             self.text.append("\n")
 
     def handle_endtag(self, tag):
+        if tag == self._hidden_tag:
+            self._hidden_depth -= 1
+            if not self._hidden_depth:
+                self._hidden_tag = None
+            return
         if tag in {"script", "style", "noscript", "template"} and self._skip:
             self._skip -= 1
         elif tag == "a" and self._href is not None:
@@ -113,23 +136,26 @@ class _HTMLCopy(HTMLParser):
     def handle_data(self, data):
         if self._skip:
             return
+        if self._hidden_tag:
+            self.hidden.append(data)
+            return
         self.text.append(data)
         if self._href is not None:
             self._anchor.append(data)
 
 
-def parse_html(html: str) -> tuple[str, list[tuple[str, str]]]:
+def parse_html(html: str) -> tuple[str, list[tuple[str, str]], str]:
     parser = _HTMLCopy()
     parser.feed(html)
-    return "".join(parser.text), parser.links
+    return "".join(parser.text), parser.links, " ".join(parser.hidden)
 
 
 def load_piece(source: str, fetch=None) -> Piece:
     """Read one delivered copy: .eml, .html, text, an image, - for stdin, or a URL."""
     if source.startswith(("http://", "https://")):
         html = (fetch or fetch_url)(source)[2]
-        text, links = parse_html(html)
-        return Piece(source, text, [(source, "page")] + links, html=html, url=source)
+        text, links, hidden = parse_html(html)
+        return Piece(source, text, [(source, "page")] + links, html=html, url=source, hidden=hidden)
     if source.lower().endswith((".png", ".jpg", ".jpeg", ".webp")):
         return Piece(source, "", image=source)
     data = sys.stdin.buffer.read() if source == "-" else Path(source).read_bytes()
@@ -140,7 +166,7 @@ def load_piece(source: str, fetch=None) -> Piece:
         for part in msg.walk():
             if part.get_content_type() == "text/html":
                 piece.html = part.get_content()
-                text, found = parse_html(piece.html)
+                text, found, piece.hidden = parse_html(piece.html)
                 texts.append(text)
                 piece.links += found
             elif part.get_content_type() == "text/plain":
@@ -149,8 +175,8 @@ def load_piece(source: str, fetch=None) -> Piece:
         return piece
     text = data.decode("utf-8", errors="replace")
     if source.endswith((".html", ".htm")) or "<html" in text[:500].lower():
-        visible, links = parse_html(text)
-        return Piece(source, visible, links, html=text)
+        visible, links, hidden = parse_html(text)
+        return Piece(source, visible, links, html=text, hidden=hidden)
     return Piece(source, text)
 
 
@@ -211,9 +237,13 @@ def link_problem(status: int, final_url: str) -> tuple[str, str] | None:
     return None
 
 
-def scan(text: str, links: list[tuple[str, str]], follow: bool = True, fetch=fetch_url) -> list[tuple[str, int, str, str]]:
+def scan(text: str, links: list[tuple[str, str]], follow: bool = True, fetch=fetch_url,
+         hidden: str = "") -> list[tuple[str, int, str, str]]:
     """Return (level, checklist row, label, detail) findings for one copy."""
     findings: list[tuple[str, int, str, str]] = []
+    for pattern, label in PLACEHOLDERS:  # unseen by readers, but anyone viewing the source sees it
+        for match in pattern.finditer(hidden):
+            findings.append(("WARN", ROW_PLACEHOLDER, f"{label} in a hidden element (page source only)", match.group(0)))
     lowered = " ".join(text.split()).lower()
     for pattern, label in PLACEHOLDERS:
         for match in pattern.finditer(text):

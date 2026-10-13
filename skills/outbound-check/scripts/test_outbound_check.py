@@ -12,7 +12,7 @@ from tempfile import TemporaryDirectory
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from mechanical import load_piece, scan
-from outbound_check import judge, judge_request, load_rows, merge, overall
+from outbound_check import judge, judge_request, load_rows, merge, overall, worst_of
 
 
 # The delivered copy of a welcome email that shipped broken: the platform's
@@ -115,6 +115,22 @@ class MechanicalTest(unittest.TestCase):
         self.assertIn("local address", [label for label, _ in levels(findings, "BLOCKER")])
 
 
+    def test_hidden_element_text_warns_and_reaches_the_judge(self):
+        html = ('<html><body><p>Get your plan</p><section hidden><p>[PENDING] Credential line</p></section>'
+                '<div style="display: none"><div><p>Your plan is ready</p></div></div><p>Footer</p></body></html>')
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "page.html"
+            path.write_text(html)
+            piece = load_piece(str(path))
+        self.assertNotIn("PENDING", piece.text)
+        self.assertIn("Footer", piece.text)
+        self.assertIn("Your plan is ready", piece.hidden)
+        findings = scan(piece.text, piece.links, follow=False, hidden=piece.hidden)
+        self.assertEqual([level for level, *_ in findings], ["WARN"])
+        body = judge_request(load_rows(), [piece], [], "", [], "m")
+        self.assertIn("HIDDEN ON LOAD", body["messages"][1]["content"][0]["text"])
+
+
 class VerdictTest(unittest.TestCase):
     def setUp(self):
         self.rows = load_rows()
@@ -134,6 +150,15 @@ class VerdictTest(unittest.TestCase):
         self.assertEqual({row["verdict"] for row in merged}, {"NOT_PROVABLE"})
         self.assertEqual(overall(merged), "check")
         self.assertIn("OPENROUTER_API_KEY", merged[0]["evidence"])
+
+    def test_worst_grade_across_passes_wins(self):
+        first = {7: {"id": 7, "verdict": "FAIL", "evidence": "plan is generic"},
+                 10: {"id": 10, "verdict": "PASS", "evidence": "ok"}}
+        second = {7: {"id": 7, "verdict": "NOT_PROVABLE", "evidence": "no plan"},
+                  10: {"id": 10, "verdict": "FAIL", "evidence": "contradiction"}}
+        worst = worst_of([first, second])
+        self.assertEqual((worst[7]["verdict"], worst[10]["verdict"]), ("FAIL", "FAIL"))
+        self.assertEqual(worst[10]["evidence"], "contradiction")
 
     def test_all_pass_is_ready(self):
         judged = {row["id"]: {"id": row["id"], "verdict": "PASS", "evidence": "ok"} for row in self.rows}
