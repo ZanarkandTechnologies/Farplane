@@ -38,7 +38,12 @@ procedures below for this project and any project with a GitHub repository.
 - Close an issue in the run that finishes it. Check every `Done / Proof` item
   against the commits on `main`, post one proof comment (what changed, commit
   hashes, checks run, and the demo video or screenshots for UI work), then
-  `gh issue close <n> --reason completed`. A follow-up that is not being done
+  `gh issue close <n> --reason completed`. An issue labelled `feature` (a
+  user-facing feature) or a material Goal closes with its demo video: put it on
+  the repo's `demos` pre-release with `skills/qa/scripts/demo_shelf.py upload`
+  and make the printed `🎬 Demo: <url>` line the proof comment's first line
+  (`qa` [closeout demo](../skills/qa/references/closeout-demo.md)). Releases
+  stitch their reel from those videos. A follow-up that is not being done
   now gets the `backlog` label. Do not create a second closeout issue or
   delete the local supporting files. Closing emits no event and starts no
   mining; route lessons to their owner in the closing session.

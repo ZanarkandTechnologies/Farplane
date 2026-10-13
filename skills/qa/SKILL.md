@@ -127,11 +127,12 @@ serious readiness claim. `closeout: demo` runs only after a pass.
 - [ ] **N7 — closeout: record the Before/After/Example demo after QA passes.**
   `passing result.json + verified evidence -> final.mp4 + evidence-map.json | blocked`
 
-  Rule: Material Goals and `$demo` only. QA must pass first; every claim
-  cites an evidence-map entry; no generated visuals stand in for product proof.
-  Render via `/pr-to-video` or `/hyperframes`, probe the media, get independent
-  TAS-A review, and lead the closing proof comment with the MP4. Load
-  [closeout demo](references/closeout-demo.md).
+  Rule: `feature` issues, material Goals and `$demo` only. QA must pass first;
+  every claim cites an evidence-map entry; no generated visuals stand in for
+  product proof. Render via `/pr-to-video` or `/hyperframes`, probe the media,
+  get independent TAS-A review, put it on the repo's `demos` pre-release with
+  `scripts/demo_shelf.py upload`, and lead the closing proof comment with the
+  `🎬 Demo:` line it prints. Load [closeout demo](references/closeout-demo.md).
 
   Assert:
   - A non-pass QA result returns a blocker routed back to N2 or N3.

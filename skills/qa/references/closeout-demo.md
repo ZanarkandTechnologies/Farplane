@@ -1,9 +1,12 @@
 # Closeout Demo
 
-Load for `qa(..., closeout: demo)`: a material implementation Goal, or an
-explicit `$demo`, whose QA has already passed and now needs the 45-90 second
-Before/After/Example MP4 that leads the GitHub issue's closing proof comment.
-Direct non-Goal fixes, heartbeats, and planning-only work skip it. The video
+Load for `qa(..., closeout: demo)`: an issue labelled `feature`, a material
+implementation Goal, or an explicit `$demo`, whose QA has already passed and
+now needs the 45-90 second Before/After/Example MP4 that leads the GitHub
+issue's closing proof comment. Bug fixes, chores, heartbeats, and
+planning-only work skip it. The videos are the release record: the bunker's
+Issues board plays them on shipped cards, and the release reel is stitched
+from them. The video
 explains existing proof; it never replaces QA or adds product claims.
 
 ```text
@@ -53,9 +56,23 @@ PPTX, slide deck, or screenshot montage.
   frames and listen to a sample. Write `media-probe.json`.
 - Send the MP4, evidence map, and sources to an independent `reviewer` with the
   demo, video, and evidence rubrics; require TAS-A.
-- Then post the closing proof comment with the MP4 first: `gh issue comment
-  <n> --body-file closeout.md` (attach or link the MP4; a local path alone is
-  not shared), followed by commits, checks, and the QA receipt.
+- On a public repository the reviewer also confirms the video shows no private
+  data (client names, balances, personal details); anything uploaded there is
+  public.
+- Put it on the shelf: `python3 skills/qa/scripts/demo_shelf.py upload <n>
+  final.mp4`. It uploads `issue-<n>.mp4` to the repo's `demos` pre-release
+  (created on first use; the fixed tag keeps links stable) and prints the
+  `🎬 Demo: <url>` line.
+- Post the closing proof comment with that line first: `gh issue comment <n>
+  --body-file closeout.md`, followed by commits, checks, and the QA receipt.
+  The office reads the first `🎬 Demo:` line from the repo's owner or members.
+
+## Release Reel
+
+At release time, `python3 skills/qa/scripts/demo_shelf.py reel [--since
+<tag>]` joins the shelved demos of issues closed since that release (default:
+the latest published one) in closing order, into
+`.farplane/demo-shelf/reel-<date>.mp4`, and lists the issues it used.
 
 ## Package
 
