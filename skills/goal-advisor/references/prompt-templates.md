@@ -176,8 +176,11 @@ passes and before completion review (not for heartbeats, feedback checks,
 planning-only Goals, or direct work). If QA review, completion review,
 `approved_response`, docs validation, or packet freshness is missing, stale, or
 below the gate, stop blocked or revise. When every gate passes, post one proof
-comment (what changed, commit hashes, checks run, demo video or screenshots for
-UI work) and run `gh issue close <n> -R "$R" --reason completed`. Do not stop complete
+comment (what changed, commit hashes, checks run, and screenshots as extra UI
+evidence). For a material implementation Goal, upload the recap MP4 to the
+repo's `demos` pre-release with `skills/qa/scripts/demo_shelf.py upload` and
+make the printed `🎬 Demo: <url>` line the proof comment's first line. Then run
+`gh issue close <n> -R "$R" --reason completed`. Do not stop complete
 while any Completion Closure row is pending, unsupported, stale, or
 contradicted. Every operator screenshot complaint is a closure row keyed to the
 image, complaint, design state, and viewport; it closes only with repair, newer
@@ -246,12 +249,12 @@ scheduler.
 ```text
 Resume the original experiment Goal Packet for one due check-in.
 Files:
-- <owner/repo#n>
+- <owner/repo#n: the due `check-in` issue surfaced by the morning brief or the operator>
 - <named evidence artifacts, when any>
 
-Matured Reward IDs: <stable reward_id values derived by Work Pulse>
-Evidence refs: <refs supplied by Work Pulse or named in ## Goal program>
-Current time: <pulse timestamp>
+Matured Reward IDs: <reward_id values read from that issue's ## Goal program Check-In Program>
+Evidence refs: <refs named in that Check-In Program>
+Current time: <current time>
 
 First read `## Goal program`, then execute its `Check-In Program` exactly.
 Update only the supplied matured rows, preserve future and complete rows, post

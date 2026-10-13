@@ -10,8 +10,8 @@ framework_template_version: "0.3.0"
 
 Tracked project framework config lives here.
 
-This folder is the project-local declaration that Farplane UI should be able to
-summarize as one autonomous company inside the broader harness cockpit.
+This folder is the project-local declaration that the bunker (Farplane-UI-v2)
+should be able to summarize as one autonomous company inside the broader harness cockpit.
 
 `manifest.json` owns the compact UI identity card. Richer project meaning lives
 in tracked project files: `harness.yaml` is the typed human charter,
@@ -78,7 +78,7 @@ stores an immutable local launch receipt under
 has full access.
 
 Primitive metrics are Core-owned reducers over tickets, `bindings.yaml`, local
-Codex stores, and ignored Farplane runtime state. Farplane UI should render the
+Codex stores, and ignored Farplane runtime state. The bunker should render the
 generated project snapshot and deep-link back to the source files; canonical
 writes still belong to the tracked project files and ignored runtime ledgers.
 
@@ -111,7 +111,5 @@ retired). `automation-advisor` owns the record shape.
 - Root `Daily/Weekly Company OS`: one office-wide portfolio review pair;
   managed projects do not duplicate these records.
 - `Burn Before Reset`: runs `token-burn` near the weekly usage reset.
-- `Monthly Registry Consolidation`: optional report-only pass over registry
-  truth, duplicate rows, owner drift, and generated-output freshness.
 - Human-feedback improvements are ordinary Goal Packets compiled by
   `goal-advisor`; ticket review state waits without a worker.

@@ -137,8 +137,9 @@ Action rules:
   never edits the issue body; `status` and `priority` stay local `proposed`
   report content.
 - Check the repository's visibility (`gh repo view --json visibility`) before any
-  comment. On a public repository (Farplane, Farplane-UI, farplane-bunker) a comment
-  carries engineering facts only, never client names, money, prices, strategy, or
+  comment. On a public repository (Farplane; farplane-bunker is private but gets
+  engineering facts only, as if public) a comment carries engineering facts
+  only, never client names, money, prices, strategy, or
   personal details; that content stays in local Project Memory and reports. A
   private repository's comments may carry them. Block any body that breaks this.
 - Before each action, reread the issue and comments; verify repository membership,

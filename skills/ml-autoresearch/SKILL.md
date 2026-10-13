@@ -159,7 +159,7 @@ the authority named by the ticket.
     affect the selection or a ceiling. Never overwrite a failed attempt.
   - [ ] When the observation materially misses its expectation or is
         implausibly strong, route the immutable receipt through
-        `qa:experiment` before rejecting the method or promoting the
+        `eval:experiment` before rejecting the method or promoting the
         candidate. The domain executor owns every repair/rerun and must keep it
         inside the campaign's remaining time, compute, spend, and attempt budget.
   - [ ] For a surprising, invalid, prerequisite-uncertain, or causally

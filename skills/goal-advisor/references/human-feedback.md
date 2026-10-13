@@ -87,7 +87,8 @@ promotion decision as a Goal turn comment and rewrite `## Current Goal state`.
 }
 ```
 
-Use `score: null` for qualitative feedback. The request (`feedback-request.md`
-under the ticket artifacts, also sent via `notify`) carries: target,
+Use `score: null` for qualitative feedback. `feedback-request.md` and
+`feedback.json` live at `.farplane/goal-advisor/issue-<n>/`, referenced from
+the Goal turn comment. The request (also sent via `notify`) carries: target,
 objective, worker thread, artifact refs, proposal summary, one question, the
 `feedback.json` path, and this schema.

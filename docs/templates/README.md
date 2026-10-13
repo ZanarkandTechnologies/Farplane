@@ -17,17 +17,11 @@ template row, unless it later becomes a reusable template with consumers.
 
 ## Current Scope
 
-The registry is deliberately focused on high-leverage surfaces:
-
-- `runtimes/AGENTS.md`
-- `docs/skills/templates/SKILL_TEMPLATE.md`
-- `docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md`
-- `skills/harness/references/EVAL_TASK_TEMPLATE.json`
-- `tickets/templates/ticket.md`
-- `tickets/templates/goal-loop/program.md`
-- `skills/setup-advisor/templates/project-harness.md`
-- `skills/setup-advisor/references/MANIFEST_TEMPLATE.json`
-- `docs/templates/HUMAN_REPORT_TEMPLATE.md` (prototype consumer only)
+The registry is deliberately focused on high-leverage surfaces. The tracked
+paths are listed in `paths` in
+[config/template-registry.toml](../../config/template-registry.toml), the one
+source for that list; `docs/templates/HUMAN_REPORT_TEMPLATE.md` there has a
+prototype consumer only.
 
 Each tracked template declares:
 

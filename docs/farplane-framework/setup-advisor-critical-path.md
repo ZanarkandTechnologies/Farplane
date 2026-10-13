@@ -3,7 +3,7 @@ title: "Init Advisor Critical Path"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-07-11
+updated_at: 2026-10-14
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -157,10 +157,12 @@ workflow. The `goal-advisor` metric card handles material objective/guard depth;
 
 ## 6. Prepare Automation
 
-The desired project topology has exactly one execution heartbeat:
+The desired project topology has no execution heartbeat. Work Pulse, the
+former heartbeat, is retired; work enters as a GitHub issue in the project's
+own repository and runs when the operator, or a session they start, runs
+`goal-advisor` on it (native Goal), or directly when small.
 
 ```text
-Work Pulse            heartbeat
 Feed Scout            cron/manual
 Dogfood Improvement   cron/manual
 Maintenance           cron/manual
@@ -178,7 +180,9 @@ copy those records into managed projects.
 
 Scheduled sources may write reports and bounded tickets of their own class.
 They do not execute tickets, run due check-ins, or create additional worker
-controllers. Work Pulse owns the shared board path.
+controllers. Automations are cron records that collect, report and propose;
+they never create, close, label, assign or edit issues and never start agents
+or runs.
 
 ## 7. Verify
 
@@ -187,8 +191,8 @@ and an old-reference sweep. A clean bootstrap must not create retired project
 files or require them to validate.
 
 When live activation was requested, compare desired and live automation state:
-one heartbeat, expected cron/manual jobs, correct project target, and no
-duplicate executor.
+no execution heartbeat, expected cron/manual jobs, correct project target,
+and no duplicate executor.
 
 Report the initialized stack, human-gated omissions, current readiness, starter
 ticket, and exact next owner. Do not claim full initialization while a required

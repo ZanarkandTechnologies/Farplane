@@ -50,10 +50,10 @@ unverifiable claims.
 4. **Skills that improve like software.** Farplane skills carry checklists,
    references, examples, evals, registries, validators, and maintenance scripts,
    so repeated workflows get better without bloating the global prompt.
-5. **Harness health as a product surface.** Harness Map, Skill OS, Eval OS,
-   Rollout, Template Tracking, and Mighty Guard-style checks turn weak skills,
-   stale docs, failing evals, drift, telemetry, nudges, and maintenance
-   findings into visible operator workflows.
+5. **Harness health as a product surface.** The bunker's Skill OS, Evals, and
+   Telemetry screens (with Settings in the office) turn weak skills, stale
+   docs, failing evals, drift, telemetry, nudges, and maintenance findings into
+   visible operator workflows.
 
 ## Product Shape
 
@@ -191,8 +191,9 @@ farplane ui start
 
 What Core owns:
 
-- `farplane doctor`: reports readiness for Core install, hooks, linked UI repo,
-  local config hygiene, and this checkout's Doppler secret source.
+- `farplane doctor`: reports readiness of the Codex install (`--target`
+  defaults to `~/.codex`) for Core install, hooks, linked UI repo, local config
+  hygiene, and this checkout's Doppler secret source.
 - `farplane install`: performs safe mechanical install/reinstall work: renders
   Codex config, retains local `desktop` and `plugins.*` tables in
   `config.local.toml`, regenerates role skill profiles, links hooks, and
@@ -200,8 +201,10 @@ What Core owns:
   installer subprocess through Doppler when Doppler is configured and the
   current shell is not already Doppler-injected.
 - `farplane hooks install`: refreshes the hook install through Core.
-- `farplane hooks list`: inventories every managed Core hook command.
-- `farplane hooks doctor`: verifies Core-owned hook links, command targets,
+- `farplane hooks list`: inventories every managed Core hook command in the
+  Codex install (`--target` defaults to `~/.codex`).
+- `farplane hooks doctor`: verifies the Codex install's (`--target` defaults to
+  `~/.codex`) Core-owned hook links, command targets,
   interpreters, and known silent-skip regressions without requiring optional
   bunker/Node telemetry.
 - `farplane desk <desk> --runtime codex|claude`: launches Codex or Claude as one

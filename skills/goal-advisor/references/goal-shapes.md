@@ -59,14 +59,14 @@ batch_goal(files[], budget, proof_policy)
   -> per_ticket_proof[] + batch_evidence + progress_updates
 ```
 
-Use when one Goal should complete or advance several listed files in the same
+Use when one Goal should complete or advance several listed issues in the same
 time/budget window. The batch passes only when every listed ticket satisfies
 its own `Done` and `QA Strategy`; batch or integration proof is additional, not a
 replacement.
 
 Batch rules:
 
-- list every ticket/program/progress file inline in the generated prompt;
+- list every issue (owner/repo#n) inline in the generated prompt;
 - preserve each ticket's `Done`, `QA Strategy`, blockers, and stop conditions;
 - require one proof row per ticket;
 - treat batch/integration proof as additional;
@@ -79,12 +79,13 @@ board_drain_heartbeat(board_files[], cadence, budget)
   -> no_op | start_goal(files[]) | resume_goal(files[]) | replan | blocked
 ```
 
-For a board-drain heartbeat:
+A board-drain heartbeat runs only when the operator starts it; no automation
+starts one. For a board-drain heartbeat:
 
-- fetch proceedable tickets from the listed board or ticket index;
+- fetch proceedable issues from the listed repository or label query;
 - skip blocked, claimed, human-gated, dependency-blocked, or missing-tool work;
-- choose a time/budget-bounded file set;
-- output or resume a native Goal prompt for that file set;
+- choose a time/budget-bounded issue set;
+- output or resume a native Goal prompt for that issue set;
 - log no-op when nothing useful can advance.
 
 ## Project Ticket Portfolio
@@ -103,13 +104,17 @@ Goal execution. There is no separate durable parent goal graph.
 Project orchestration boundary:
 
 ```text
-work_pulse(tickets, harness, metric_state, reports)
-  -> start_ticket_goal | resume_ticket_goal | request_feedback | replan | no_op
+operator | operator_started_parent_heartbeat_goal(parent issue, harness, metric_state, reports)
+  -> start_issue_goal | resume_issue_goal | request_feedback | replan | no_op
 
 leaf_native_goal(issue body + Goal turn comments)
   -> artifact + evidence + proof comment
 ```
 
-Do not generate a native `/goal` prompt that tries to run the proposal
-portfolio indefinitely. Work Pulse owns replanning; generate a native Goal
-prompt only for the admitted executable ticket.
+Work enters as a GitHub Issue. The operator, or a session they start, runs
+Goal Advisor on it. The next admitted issue is picked by the operator or by a
+parent heartbeat Goal over a parent issue (the Parent Heartbeat Prompt) that
+the operator started; `report-gen` only proposes. Automations never start
+agents or runs, and there is no execution heartbeat. Do not generate a native
+`/goal` prompt that tries to run the proposal portfolio indefinitely; generate
+a native Goal prompt only for the admitted executable issue.

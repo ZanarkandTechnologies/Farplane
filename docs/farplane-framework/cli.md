@@ -83,6 +83,8 @@ Still open:
 - `ticket check` and `tickets history` work on the legacy `tickets/` files, but the `impl-plan`
   skill still runs `ticket check`; retiring them means moving impl-plan to
   GitHub Issues first (its own issue).
+- Rule 4 has exceptions: `install`, `desk`, `eval init` and `eval promptfoo` take no `--json` (`run`
+  passes its command through unchanged). Add it or record why each is exempt.
 - `notify` and `reports` have no live caller but are documented operator tools; ask before removing.
 - `content add` defaults `--project-root` to the Farplane checkout, not the current folder; decide with the
   content ledger's owner (its old callers, the `x-account` and `instagram-account` skills, are retired for

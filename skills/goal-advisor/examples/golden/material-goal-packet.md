@@ -56,8 +56,10 @@ Native Goal Prompt:
   After each turn: post one Goal turn comment, rewrite ## Current Goal state,
   and continue, revise, or block from issue-backed state.
   Completion: run ordered sanity checks, the real CSV workflow, ticket
-  validation, QA evidence review, and completion review, then one proof
-  comment and gh issue close 421 --reason completed before stop_complete.
+  validation, QA evidence review, the qa closeout demo MP4 (uploaded with
+  skills/qa/scripts/demo_shelf.py upload), and completion review, then one
+  proof comment opening with the printed 🎬 Demo line and
+  gh issue close 421 --reason completed before stop_complete.
 Next Action: start the approved Goal; block if packet freshness changes.
 ```
 

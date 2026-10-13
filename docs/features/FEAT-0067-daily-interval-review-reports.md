@@ -3,7 +3,7 @@ title: Company OS daily and weekly operating reviews
 status: implemented
 owner: feature-registry
 created_at: 2026-07-07
-updated_at: 2026-10-12
+updated_at: 2026-10-14
 tags:
   - farplane
   - feature
@@ -30,7 +30,7 @@ external_refs: []
 evidence_refs:
   - skills/report-gen/evals/evals.json
   - skills/automation-advisor/audits/2026-09-20-company-os-adoption.md
-known_limits: "Daily and Weekly maintain operating memory and existing work. They do not choose strategy, admit tasks, start Multica execution, or perform external side effects."
+known_limits: "Daily and Weekly maintain operating memory and existing work. They do not choose strategy, admit tasks, start task execution, or perform external side effects."
 metrics:
   - operating_review_usefulness
 last_verified: 2026-10-12
@@ -39,7 +39,7 @@ superseded_by: false
 track: >-
   Review Daily and Weekly source coverage, money-linked movement, constraints,
   commitments, stale-write protection, and whether the run avoided strategy
-  invention, task admission, Multica execution, and unsafe side effects.
+  invention, task admission, task execution, and unsafe side effects.
   Return continue, adjust, cap, pause, graduate, or source_gap.
 ---
 
@@ -65,7 +65,8 @@ commitments. Missing Project coverage blocks weekly effects.
 
 ## Boundaries
 
-- Multica is the task dashboard and evidence source; Codex executes work.
+- GitHub Issues are the task record and evidence source; Claude Code or Codex
+  execute work.
 - Automations own provider reads/writes, pagination, source caches, rendering,
   stale-write checks, idempotency, and readback.
 - PM skills read local files only and write exactly one JSON result.
@@ -87,3 +88,5 @@ commitments. Missing Project coverage blocks weekly effects.
 
 - 2026-10-12: Daily moved from the deleted `progress-update` skill into
   `report-gen` `daily` mode (#41); its template and evals moved with it.
+- 2026-10-14: Boundaries name GitHub Issues as the task record; Multica
+  references removed.

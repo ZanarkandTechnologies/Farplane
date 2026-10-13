@@ -153,14 +153,10 @@ This excerpt belongs in `## Goal program`, not the ticket sections. Still fill t
 template's required Goal Mode, budget, Metric Provider, Proof Policy, drift,
 check-in, batch, or rollout sections when applicable.
 
-The launcher stays small because it is not the durable contract:
-
-```text
-/goal Work on owner/repo#1243 until its Done and QA Strategy pass or the
-declared budget ends. Read the issue body and the newest Goal turn comments within 80 lines.
-Follow its ## Goal program between iterations. Do not expand ticket scope. If
-blocked, return attempted paths, evidence, and the required unlock.
-```
+The launcher stays small because it is not the durable contract. Use the
+[Native Goal Prompt](../../skills/goal-advisor/references/prompt-templates.md#native-goal-prompt)
+in `goal-advisor` for its sections; do not hand-write a sectionless `/goal`
+line.
 
 `best_so_far` is useful only for optimization campaigns whose candidates can
 be compared. Ordinary feature work instead records completed proof and the

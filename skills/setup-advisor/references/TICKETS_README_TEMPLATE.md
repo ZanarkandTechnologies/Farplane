@@ -17,7 +17,10 @@ procedures below for this project and any project with a GitHub repository.
   remains useful; its YAML queue metadata is not needed.
 - A check-in is an open issue labelled `check-in` whose body has a line
   `Due: YYYY-MM-DD`. Daily Collect records each due date and Progress Updater
-  lists the due and overdue ones.
+  lists the due and overdue ones for the morning brief. The operator, or a
+  session they start, resumes the Goal with `goal-advisor`'s Delayed Check-In
+  Resume prompt, which reads the matured Reward rows from the `## Goal program`
+  Check-In Program. Work Pulse is retired: no heartbeat executes check-ins.
 - Update the same issue as work progresses. Put queue state such as blocked or
   in review in labels or the body; waiting for a signal belongs in the blocker
   text. Do not invent live claims from imported `claimed_by` values.
@@ -38,7 +41,12 @@ procedures below for this project and any project with a GitHub repository.
 - Close an issue in the run that finishes it. Check every `Done / Proof` item
   against the commits on `main`, post one proof comment (what changed, commit
   hashes, checks run, and the demo video or screenshots for UI work), then
-  `gh issue close <n> --reason completed`. A follow-up that is not being done
+  `gh issue close <n> --reason completed`. An issue labelled `feature` (a
+  user-facing feature) or a material Goal closes with its demo video: put it on
+  the repo's `demos` pre-release with `skills/qa/scripts/demo_shelf.py upload`
+  and make the printed `🎬 Demo: <url>` line the proof comment's first line
+  (`qa` [closeout demo](../skills/qa/references/closeout-demo.md)). Releases
+  stitch their reel from those videos. A follow-up that is not being done
   now gets the `backlog` label. Do not create a second closeout issue or
   delete the local supporting files. Closing emits no event and starts no
   mining; route lessons to their owner in the closing session.
@@ -195,15 +203,16 @@ adding `compute_target` does not start an agent by itself.
 Farplane work starts from an explicit invocation:
 
 - local operator request, such as asking Codex to run `TASK-0123`
-- operator-invoked Goal/heartbeat board drain, which selects one eligible
-  ticket and emits a native Goal prompt
+- operator-invoked Goal board drain, which selects one eligible ticket and
+  emits a native Goal prompt
 - a recognized board comment or shared-board action after an external runner
   converts it into a `FarplaneRunEnvelope`
 - a future Codex Cloud, Symphony, or other runner payload
 
 `status: todo` means the ticket is eligible once invoked and its dependencies
 are satisfied. It does not mean Farplane should watch the board and begin work
-without an explicit Pulse, Goal, operator, or external-runner invocation.
+without an explicit Goal, operator, or external-runner invocation. No
+heartbeat or automation starts work (Work Pulse is retired).
 
 ## Canonical Frontmatter
 
@@ -277,8 +286,9 @@ compute_target: local_worktree
 Their former information is owned by `status`, `claimed_by`, `depends_on`, the
 ticket `Program`/`Change Plan`, `QA Strategy`, `Done`, and `progress.md`.
 
-For Goal Advisor, Pulse, heartbeat, and board-drain, the explicit invocation is
-the operator or automation running the selector. After that, a ticket is
+For Goal Advisor and board-drain, the explicit invocation is the operator, or a
+session they start, running the selector; automations never start agents or
+runs. After that, a ticket is
 selectable only when `status: todo`, `claimed_by` is absent, and every
 dependency is active-board complete, present in the compact closed-ticket
 locator, or present in a legacy local archive. A `waiting_signal` ticket is
@@ -286,16 +296,12 @@ temporarily selectable only when a ticket Reward row matures. These are hard
 gates, not ranking preferences.
 
 `human_gate` is not a second ticket-start approval gate. It marks a final
-outside-world action that the worker must not take without Kenji. Pulse records
-the review wait, releases the worker, reminds only when due, and continues safe
-local work such as artifacts, research, proof, QA, packaging, or draft content
-instead of treating human review as board-wide blockage.
+outside-world action that the worker must not take without Kenji. The worker
+records the review wait, releases the ticket, and continues safe local work such
+as artifacts, research, proof, QA, packaging, or draft content instead of
+treating human review as board-wide blockage.
 
-For Farplane invocation, `bin/farplane_boards.py` is the canonical v1
-BoardAdapter surface for reading filesystem tickets into normalized `WorkItem`
-JSON. It is intentionally read-first: evidence links still belong in the
-ticket `Links` section until a later ticket ships traceable writeback.
-Future board adapters must satisfy
+Board adapters must satisfy
 `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 before they become live ticket sources.
 
@@ -357,7 +363,7 @@ Reward scheduling is an explicit tagged union:
 - `check_in_at: <timezone-bearing ISO-8601 timestamp>` schedules delayed work.
 - `check_in_at: unscheduled` declares that no check-in should be delegated.
 - Missing, blank, null, timezone-naive, or other values are malformed and the
-  owning ticket must repair them; validators and Work Pulse do not invent a
+  owning ticket must repair them; validators and check-in sessions do not invent a
   date or silently treat them as unscheduled.
 
 ## Body Contract
@@ -442,7 +448,7 @@ Keep `Delta` brief after ticket creation. `Change Plan` owns executable units;
 `Contract Diagram` is their compact visual projection and must not repeat the
 prose.
 
-Use `Reward` for Pulse-created tactical tickets, interval-planned tickets,
+Use `Reward` for tactical tickets, interval-planned tickets,
 experiments, and other work whose planning value should be obvious before
 execution. Keep it small:
 
@@ -464,8 +470,10 @@ guard: "do not count planned intent as KPI movement; count only completed ticket
 `Reward` is not a metrics registry. Manual/operator tickets may omit it; every
 AI-planned or experimental Reward row uses the canonical fields below.
 `reward_id` is unique and stable inside the ticket and remains the identity when
-rows are reordered. `check_in_at` is when Work Pulse may resume the original
-ticket to compare the expectation with evidence. The check-in worker writes the
+rows are reordered. `check_in_at` is when the row matures: from then the due
+`check-in` issue surfaces in the morning brief, and the operator or a session
+they start resumes the original ticket to compare the expectation with
+evidence. That check-in session writes the
 latest `actual_result`, `decision`, `evaluated_at`, `evaluation_key`, and
 `evidence_refs`; score-only rows are not realized value.
 
@@ -498,11 +506,11 @@ accepted_reward(ticket, reward)
       AND ticket-scoped review evidence is pass/TAS-A
 ```
 
-There are exactly two learning horizons. Work Pulse derives matured rows and
-resumes the original ticket for ticket-local evaluation. Weekly Dogfood reads
-the recorded terminal outcomes for portfolio learning without rescoring them.
-Pulse admission receipts may be joined to eventual Reward decisions for plan
-outcome analysis, but Farplane has no independent plan score or plan-wave loop.
+There are exactly two learning horizons. The check-in session, started by the
+operator from the due `check-in` issue, derives matured rows from the Check-In
+Program and evaluates them in the original ticket. Weekly Dogfood reads the
+recorded terminal outcomes for portfolio learning without rescoring them.
+Farplane has no independent plan score or plan-wave loop.
 If the provider, guard, anti-metric, or proof route needs more detail, put the
 metric card in `program.md` or route through `metric-advisor`.
 
@@ -673,7 +681,7 @@ surfaces into the first relevant ticket instead of restating them from memory.
 When the repo has `qa/cookbook/`, point the ticket at the matching workflow doc
 or seed one during planning.
 
-For tickets that may be drained by Goal Advisor/heartbeat, run unattended,
+For tickets that may be drained by Goal Advisor, run unattended,
 batched, or routed through external compute, add `Run Hints` and name:
 
 1. human inputs/assets
@@ -685,8 +693,8 @@ batched, or routed through external compute, add `Run Hints` and name:
 7. decisions the agent may make autonomously
 8. likely size, Goal recommendation, compute hint, proof weight, and
    batchability when those affect Goal admission
-9. expected beats and parallel eligibility when Pulse or another heartbeat
-   needs capacity-learning hints
+9. expected beats and parallel eligibility when a Goal board drain needs
+   capacity-learning hints
 
 If those answers are missing, keep the ticket gated instead of marking it ready
 for the board-draining loop.

@@ -39,8 +39,8 @@ Farplane Core pairs with the bunker (Farplane-UI-v2):
 
 The UI scope split is part of the architecture contract:
 
-- **Global harness surfaces** inspect and maintain Farplane itself: Harness
-  Map, Skill OS, Eval OS, Rollout, Template Tracking, User Comms, and Settings.
+- **Global harness surfaces** inspect and maintain Farplane itself: the
+  bunker's Skill OS, Evals, and Telemetry screens, with Settings in the office.
 - **Project/company surfaces** treat each project as an autonomous company with
   stable problems, teams, agents, board state, files, memory, evidence,
   metrics, and review loops.
@@ -88,7 +88,7 @@ flowchart LR
 
   subgraph Skills["Skill Layer"]
     primitives["core primitives<br/>advise<br/>review<br/>direct Todo List"]:::callout
-    interfaces["shared workflow interfaces<br/>frame<br/>research<br/>harness"]:::callout
+    interfaces["shared workflow interfaces<br/>problem-framing<br/>research<br/>harness"]:::callout
     intake["brainstorm<br/>direct clarification<br/>prd<br/>visual-design"]:::skill
     readiness["impl-plan agent testability<br/>Run Hints"]:::callout
     research["doc-advisor<br/>feed-scout<br/>research"]:::skill
@@ -103,7 +103,7 @@ flowchart LR
   subgraph Board["Ticket + QA Surfaces"]
     tickets[(GitHub issue<br/>state, plan, evidence, blockers)]:::surface
     template[(tickets/templates/ticket.md<br/>canonical shape)]:::surface
-    cookbook[(AGENTS.md Agent QA + docs/qa/*<br/>agent-efficient proof paths)]:::surface
+    cookbook[(AGENTS.md Agent QA + per-flow docs page<br/>agent-efficient proof paths)]:::surface
   end
 
   subgraph Runtime["Runtime + Tooling"]
@@ -116,7 +116,7 @@ flowchart LR
   subgraph Proof["Proof + Review"]
     qa["qa-tester<br/>eval<br/>qa visual mode<br/>Codex Browser"]:::quality
     review["review<br/>reviewer agent<br/>code-health + copywriting final pass"]:::callout
-  stop["Stop hook<br/>telemetry only"]:::quality
+  stop["Stop gate<br/>length, continuation, format<br/>+ telemetry ping"]:::quality
   end
 
   subgraph Scale["Explicit Future Boundary"]
@@ -219,7 +219,8 @@ during cleanup unless the replacement carries the same routing information.
   that run it. Steps a job calls live in `farplane/automations/steps/`.
 - Bootstrap creates an empty `farplane/automations/`; automation-advisor adds jobs
   from its templates.
-- Codex owns live schedules; `.farplane/` owns ignored run data.
+- The runtime named in each automation record's `runtime:` field owns its live
+  schedule (currently Claude scheduled tasks); `.farplane/` owns ignored run data.
 - Skills own file-to-file business logic; automation records own integrations.
 
 ### Knowledge surfaces
@@ -272,8 +273,8 @@ during cleanup unless the replacement carries the same routing information.
 - GitHub Issues in the project's own repository
   Purpose: active task board (see `tickets/README.md`)
 - `tickets/archive-index.jsonl`
-  Purpose: compact identity, status, and URL locator for new closed issues in
-  each project's configured GitHub repository; not a duplicate ticket archive
+  Purpose: historical locator rows written by the retired close command and
+  read by `farplane tickets history`; no new rows are added
 - [tickets/archive](tickets/archive)
   Purpose: readable legacy completed or retired work history; no new terminal
   packet is created there

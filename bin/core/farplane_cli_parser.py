@@ -233,7 +233,7 @@ def build_parser() -> argparse.ArgumentParser:
     response_check.add_argument("--json", action="store_true")
     response_check.set_defaults(func=run_response_check_cli)
 
-    ticket = sub.add_parser("ticket", help="Apply canonical Farplane ticket lifecycle transitions.")
+    ticket = sub.add_parser("ticket", help="Check a legacy local ticket's lifecycle proof.")
     ticket_sub = ticket.add_subparsers(dest="ticket_command")
     ticket_check = ticket_sub.add_parser("check", help="Check one ticket's phase-aware lifecycle proof.")
     ticket_check.add_argument("ticket")

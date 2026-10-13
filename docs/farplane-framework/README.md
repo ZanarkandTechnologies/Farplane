@@ -62,7 +62,7 @@ Then open only the contract needed for the current question:
 | --- | --- |
 | Which tracked and generated files exist? | [Project Files](project-files.md) |
 | How is a project initialized or migrated? | [Setup Advisor Critical Path](setup-advisor-critical-path.md) |
-| How do Pulse, planning, reports, Feed Scout, and Dogfood coordinate? | [Work Pulse And Scheduled Ticket Sources](pulse-and-interval-loop.md) |
+| What runs each morning and each week, and who starts work? | [Morning Chain And Weekly Review](pulse-and-interval-loop.md) |
 | How does a shaped idea become reviewed completed work? | [Ticket Execution Loop](ticket-execution-loop.md) |
 | What may hooks do, and where does runtime state live? | [Hooks And Runtime](hooks-and-runtime.md) |
 | Where does one thread leave research for another thread? | [Thread Notes](notes.md) |

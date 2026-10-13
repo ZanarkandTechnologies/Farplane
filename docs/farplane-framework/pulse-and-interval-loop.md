@@ -1,15 +1,14 @@
 ---
-title: "Work Pulse And Company OS Reviews"
+title: "Morning Chain And Weekly Review"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-09-23
+updated_at: 2026-10-14
 framework_template_version: "0.3.0"
 tags:
   - farplane
   - lifecycle
   - automations
-  - pulse
   - company-os
 refs:
   - docs/farplane-framework/README.md
@@ -17,72 +16,91 @@ refs:
   - docs/farplane-framework/ticket-execution-loop.md
   - docs/features/FEAT-0071-project-work-pulse.md
   - docs/features/FEAT-0067-daily-interval-review-reports.md
+  - farplane/automations/morning.md
+  - farplane/automations/report-gen.md
 ---
 
-# Work Pulse And Company OS Reviews
+# Morning Chain And Weekly Review
 
-Farplane has one execution loop and one operating-review loop.
+Farplane has no execution heartbeat. Work Pulse, the former heartbeat, is
+retired ([FEAT-0071](../features/FEAT-0071-project-work-pulse.md)). Scheduled
+jobs are cron records in `farplane/automations/` that run as Claude scheduled
+tasks (`runtime: claude`). They collect, report and propose; they never create,
+close, label, assign or edit issues and never start agents or runs.
 
-The AI Office owns one Daily and one Weekly record in `farplane/automations/`.
-Each managed repository is an ordinary project with a thin `farplane/`
+Farplane's own `farplane/automations/` holds the portfolio Morning and weekly
+records. Each managed repository is an ordinary project with a thin `farplane/`
 adapter; it does not receive another copy of those portfolio reviews.
 
 ```text
-Work Pulse heartbeat -> reconcile and execute accepted Multica work
-Company OS Daily     -> refresh each project's operating memory
-Company OS Weekly    -> compare the full portfolio and commit the next week
+Morning (daily)   -> collect, refresh metrics and knowledge, update Project Memory, write the brief
+Report Gen (weekly) -> compare the full portfolio and carry next-week commitments
+Execution         -> operator, or a session they start, runs goal-advisor on a GitHub issue
 ```
 
-## Work Pulse
+## Execution
 
-Work Pulse is the sole heartbeat and execution owner. It reconciles existing
-Multica issues, resumes accepted work, requests due review, and refills a thin
-queue only through the configured planning skills. It does not produce the
-Daily or Weekly operating review.
+Work enters as a GitHub issue in the project's own repository. Execution starts
+when the operator, or a session they start, runs `goal-advisor` on the issue
+(native Goal); small work runs directly. Completion is one proof comment and
+`gh issue close` (`tickets/README.md`).
 
-## Company OS Daily
+Due check-ins are open issues labelled `check-in` with a `Due: YYYY-MM-DD`
+line. Daily Collect lists them and the morning brief surfaces them; the
+operator, or a session they start, resumes that Goal with `goal-advisor`'s
+Delayed Check-In Resume prompt.
 
-The Daily cron fetches the bounded provider context, splits it by eligible
-Project, freezes one local input bundle per Project, and calls `report-gen` in `daily`
-mode once per bundle. The skill reads project-local Farplane configuration and evidence,
-then emits one JSON extraction describing:
+## Morning
 
-- the operator-defined commercial bet and next monetization event;
-- observed result movement, with unknowns kept unknown;
-- the constraint closest to that event; and
-- one smallest useful commitment against existing authorized work.
+[Morning](../../farplane/automations/morning.md) runs its steps in order in one
+session; the record owns the exact chain:
 
-The automation validates the extraction, updates the existing Project Memory
-section, applies any authorized existing-issue action, and reads the result
-back. It does not create work or execute it.
+1. [Daily Collect](../../farplane/automations/steps/daily-collect.md) fetches
+   GitHub issues, Git, the operator plan, call notes, and agent-session indexes
+   once and freezes them as a dated run.
+2. [Metrics Refresh](../../farplane/automations/steps/metrics-refresh.md)
+   refreshes every registered Project's metric readings.
+3. [Knowledge Update](../../farplane/automations/steps/knowledge-update.md)
+   turns the run's call notes into local Wiki pages.
+4. [Daily Operating Update](../../farplane/automations/steps/daily-operating-update.md)
+   calls `report-gen` in `daily` mode once per eligible Project. The skill reads
+   project-local Farplane configuration and evidence, then emits one JSON
+   extraction describing:
+   - the operator-defined commercial bet and next monetization event;
+   - observed result movement, with unknowns kept unknown;
+   - the constraint closest to that event; and
+   - one smallest useful commitment against existing authorized work.
 
-## Company OS Weekly
+   The automation validates the extraction, updates the existing Project Memory
+   section, applies any authorized existing-issue comment, and reads the result
+   back. It does not create work or execute it.
+5. The morning brief reads the run, metric, Wiki, and Project Memory changes and
+   due check-ins, and writes one private brief.
 
-The Weekly cron freezes a complete Project inventory and the full week of
-Project Memory. It calls `report-gen` once over that set. Missing Project
-coverage blocks effects. The automation validates and renders the Project and
-company reports, applies authorized updates to existing issues, and reads back
-every effect.
+## Weekly Report Gen
+
+[Report Gen](../../farplane/automations/report-gen.md) freezes a complete
+Project inventory and the full week of Project Memory. It calls `report-gen`
+once over that set. Missing Project coverage blocks effects. The automation
+validates and renders the Project and company reports, folds in the week's
+Session Friction Retro reports, applies authorized comments on existing issues,
+and reads back every effect.
 
 ## Scheduled work by purpose
 
 Jobs live in `farplane/automations/`, one file per live routine; the steps they
-call live in `farplane/automations/steps/`. This table catalogs them; the linked
-records remain the exact schedule and prompt owners.
+call live in `farplane/automations/steps/` and are never scheduled on their
+own. This table catalogs them; the linked records remain the exact schedule and
+prompt owners.
 
-| Record | Purpose | Main result | Relationship to PM |
-| --- | --- | --- | --- |
-| [Daily collect](../../farplane/automations/steps/daily-collect.md) | Fetch Multica, Git, the operator plan, and agent-session indexes once | Dated context run with coverage | Owns all shared provider reads |
-| [Daily operating update](../../farplane/automations/steps/daily-operating-update.md) | Review each Project's results, blockers, and next commitment | Project Memory and bounded existing-issue updates | Owns daily Project interpretation |
-| [Report Gen](../../farplane/automations/report-gen.md) | Compare the full Project portfolio and carry forward commitments | Project and company reports, next-week memory | Owns weekly prioritization and proposals |
-| [Bookmark Recovery](../../farplane/automations/steps/bookmark-recovery.md) | Recover personal saves and match them to current Project Memory | Local candidate inbox and hypothetical Project links | Supplies optional research leads; currently paused |
-| [Feed Scout](../../farplane/automations/steps/feed-scout.md) | Monitor configured external and competitor sources | Dated report, Scout Brief, candidate interventions | Supplies source-backed planning context |
-| [Session Friction Retro](../../farplane/automations/session-friction-retro.md) | Review the day's agent sessions for agent and operator interaction friction | Dated correction and friction report | Specialized behavior review; currently does not compare conversation allocation with Project Work |
-
-The Thread Friction Audit record calls `$gap-analysis`, but this checkout and
-the installed skill directory currently contain no `gap-analysis/SKILL.md`.
-Its desired schedule is visible; successful execution is unverified until the
-skill binding is repaired.
+| Record | Purpose | Main result |
+| --- | --- | --- |
+| [Morning](../../farplane/automations/morning.md) | Daily collect, metrics, knowledge, and Project review chain | Dated run, Project Memory, bounded existing-issue comments, morning brief |
+| [Report Gen](../../farplane/automations/report-gen.md) | Compare the full Project portfolio and carry forward commitments | Project and company reports, next-week memory |
+| [Intel Digest](../../farplane/automations/intel-digest.md) | Run [Bookmark Recovery](../../farplane/automations/steps/bookmark-recovery.md), then [Feed Scout](../../farplane/automations/steps/feed-scout.md) | Bookmark candidate inbox, dated Feed Scout report and Scout Brief |
+| [Session Friction Retro](../../farplane/automations/session-friction-retro.md) | Review the day's agent sessions for agent and operator interaction friction | Dated correction and friction report, read by the weekly review |
+| [Profile Refresh](../../farplane/automations/profile-refresh.md) | Refresh the operator profile after the weekly report | Updated operator profile |
+| [Token Burn](../../farplane/automations/token-burn.md) | Use leftover usage before the weekly reset | Local-only commits and a dated report |
 
 The automation owns provider access, collection, frozen input files, validation,
 rendering, external effects, and readback. Its skill interprets those files and
@@ -97,20 +115,20 @@ distinguish discussion, decision, deliverable, and verified result. Daily could
 surface consequential drift against the current commitment; Weekly could
 summarize repeated allocation patterns across the complete Project set. Message
 volume and elapsed chat time alone do not prove progress or wasted effort.
-The separate Thread Friction Audit can continue to study interaction failures.
 
 ## Boundary
 
 ```text
 provider reads + pagination + caching        -> automation
-commercial interpretation + next commitment -> PM skill
+commercial interpretation + next commitment -> report-gen skill
 rendering + stale-write guard + effects      -> automation
-ticket execution                             -> Work Pulse
+issue execution                              -> operator or session via goal-advisor
 ```
 
-Daily and Weekly may update authorized existing issues. They cannot admit new
-tasks, start Multica runs, invent strategy, broadly promote knowledge, contact
-external parties, spend money, deploy, or perform destructive actions.
+Daily and Weekly may comment on authorized existing issues. They cannot create,
+close, label, assign or edit issues, start agents or runs, invent strategy,
+broadly promote knowledge, contact external parties, spend money, deploy, or
+perform destructive actions.
 
 The former Interval skill, weekly draft, promotion machinery, and recovery
 admission path are deleted. Reusable metric reading lives in
@@ -119,7 +137,7 @@ a separate operating loop.
 
 ## Proof
 
-- Desired and live Daily prompts call `report-gen` `daily` once per eligible Project.
-- Desired and live Weekly prompts call `report-gen` `weekly` once over complete coverage.
-- Exactly one Work Pulse heartbeat owns execution.
+- The desired Morning chain calls `report-gen` `daily` once per eligible Project.
+- The desired weekly record calls `report-gen` `weekly` once over complete coverage.
+- No execution heartbeat exists; GitHub Issues hold work state.
 - PM skills have no provider access and emit one structured local result.

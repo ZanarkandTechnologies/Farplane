@@ -1096,12 +1096,12 @@ Loss map:
 | Agent asks broad unnecessary questions. | Prompt, skill contract, or ticket contract | Behavior test on correction cases. |
 | Agent completes without evidence. | Verification, ticket contract, hook, or review | Review receipt, hook fixture, done-proof check. |
 | Agent bloats every reply with policy. | System prompt or skill | Prompt/token diff plus regression check. |
-| Agent loses long-running state. | Ticket/program/progress or Goal Packet | Resume from files without transcript context. |
+| Agent loses long-running state. | Issue Goal Packet | Resume from the issue body and newest Goal turn comments without transcript context. |
 | Agent self-approves material work. | Subagent or review gate | Reviewer-lane proof. |
 | Agent misses repeated lessons. | Learning sidecar, drain, memory, or skill update | Retrieval/drain test. |
 | Deterministic invariant keeps breaking. | Validator or hook | Validator or fixture. |
 | Skill changes regress workflows. | Skill eval or harness | Heldout skill/workflow eval. |
-| Goal loops drift or become prompt-only. | Goal Packet or drift review | Drift review over ticket/program/progress. |
+| Goal loops drift or become prompt-only. | Goal Packet or drift review | Drift review over the issue's ticket sections, Goal program and Goal turn comments. |
 
 Escalate scope only when:
 

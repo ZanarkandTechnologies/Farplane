@@ -4,7 +4,7 @@ Rules for executable helper scripts in `bin/`.
 
 ## Purpose
 
-Scripts here are small operational helpers for the live Codex harness.
+Scripts here are small operational helpers for the live Codex or Claude Code harness.
 Top-level `bin/` is for runtime shims and intentionally shared commands.
 Repo-wide checks belong in `bin/validators/`; package-specific scripts belong
 under the owning package, such as `skills/<name>/scripts/`.
@@ -43,8 +43,6 @@ When in doubt, add the implementation to the owning package.
 
 For runtime helper scripts:
 
-- worker launcher runs exactly one bounded phase
-- judge decides only from ticket + result + evidence state
 - tickets remain the canonical execution contract
 - explicit ticket selectors outrank ambient run-state when both are present
 - explicit run-state selectors outrank hook `session_id`; ambient singleton
@@ -69,4 +67,4 @@ For runtime helper scripts:
   `.farplane/state/current-run.json` or per-session ownership files; use hook
   telemetry, explicit run-state selectors, tickets, and association logs
   instead. See `MEM-0029`.
-- native Goal mode owns implementation persistence; stored `session_id` is a recovery hint only. See `MEM-0005`.
+- native Goal mode owns implementation persistence; stored `session_id` is a recovery hint only. See `docs/MEMORY.md` "Runtime, Hooks, And Continuation".

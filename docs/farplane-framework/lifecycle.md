@@ -3,7 +3,7 @@ title: "Farplane Lifecycle"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-09-20
+updated_at: 2026-10-14
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -38,7 +38,8 @@ project(commercial intent, execution, evidence)
   -> typed commercial hypothesis + selected money outcome + hard guards
   -> one ticket board
   -> Daily/Weekly maintains project memory and reviews money-linked movement
-  -> one Work Pulse executes tickets or plans a bounded refill wave
+  -> the operator, or a session they start, runs goal-advisor on an issue
+     (native Goal); small work runs directly
   -> scheduled sources add reports and context
   -> ticket programs, progress, QA, and review preserve proof
   -> durable outcomes flow back to docs, metric objectives, and skills
@@ -60,9 +61,10 @@ own planner, worker pool, strategy file, or heartbeat.
 5. Use the `goal-advisor` metric card (`references/metrics.md`) when the objective, direction, guard, or proof
    provider needs a material change.
 6. Use `goal-advisor` when a selected material ticket needs a Goal Packet.
-7. Activate exactly one Work Pulse heartbeat after the board and proof surfaces
-   are ready. Feed Scout, Daily/Weekly review, Dogfood, and maintenance are
-   separate cron or manual automations.
+7. Start execution by running `goal-advisor` on a ready issue (native Goal), or
+   run small work directly. There is no execution heartbeat. Scheduled jobs in
+   `farplane/automations/` (the Morning chain, the weekly `report-gen` review,
+   and the rest) are cron records that collect, report and propose.
 
 The deeper bootstrap path is [Setup Advisor Critical Path](setup-advisor-critical-path.md).
 The file-by-file reference is [Project Files](project-files.md).
@@ -79,13 +81,13 @@ flowchart TD
   A["Operator intent"]:::program --> B["setup-advisor"]:::program
   B --> C["harness.yaml + metrics.yaml + capability skills"]:::program
   C --> D["one ticket board"]:::work
-  D --> E["one Work Pulse"]:::work
-  E --> F{"executable ticket?"}:::work
-  F -->|yes| G["worker runs ticket / program / progress"]:::work
-  F -->|no / low supply| H["plan_next_wave<br/>refill"]:::work
-  H --> D
-  G --> I["QA + review evidence inside ticket"]:::proof
-  I --> J["verified configured-repo issue<br/>mine + locator + local cleanup"]:::proof
+  D --> E["operator or a session they start"]:::work
+  E --> F{"material issue?"}:::work
+  F -->|yes| G["goal-advisor<br/>native Goal runs program / progress"]:::work
+  F -->|no| H["direct execution"]:::work
+  G --> I["QA + review evidence inside issue"]:::proof
+  H --> I
+  I --> J["proof comment<br/>gh issue close"]:::proof
 
   K["Feed Scout"]:::source --> O
   L["Daily / Weekly review"]:::source --> O
@@ -95,49 +97,42 @@ flowchart TD
   L --> O
   M --> O
   N --> O
-  O --> H
+  O --> P["morning brief + weekly report<br/>proposals"]:::source
+  P --> A
 ```
 
 ## The Minimal Work Loop
 
 ```text
-pulse(tickets, worker_limit, review_wip, wave_size)
-  -> do(admitted_ticket)
-   | plan_next_wave(harness.areas complete records and planner instructions,
-                    metric_definitions, metric_state,
-                    ticket_history, current_context, wave_size)
+work(issue)
+  -> goal-advisor(issue) -> native Goal executes the issue's Goal program   # material
+   | direct execution                                                       # small
+  -> one proof comment + gh issue close
 ```
 
-Work Pulse is the only execution heartbeat. On each beat it:
-
-1. reconciles worker and review outcomes;
-2. derives due check-in eligibility from ticket Reward rows;
-3. admits executable tickets under worker and review capacity;
-4. hands workers the original ticket Goal Packet and proof contract;
-5. asks one adaptive planner for a bounded globally ranked refill wave only
-   when ready supply is low after dispatch; human-active tickets do not consume
-   Pulse worker capacity;
-6. writes a dated receipt.
-
-It does not run separate capability controllers or perform long-horizon
-strategy review. The planner may call capability skills when a proposed ticket
-needs them.
+There is no execution heartbeat. Work Pulse, the former heartbeat, is retired
+([FEAT-0071](../features/FEAT-0071-project-work-pulse.md)); no dispatch loop
+admits, refills, or resumes issues. Work enters as a GitHub issue in the
+project's own repository. Execution starts when the operator, or a session they
+start, runs `goal-advisor` on the issue (native Goal); small work runs
+directly. `goal-advisor` may call capability skills when the issue needs them.
 
 ## Scheduled Sources
 
-Scheduled automations are report and context producers, not additional
-heartbeats or worker authorities:
+Scheduled automations are cron records that collect, report and propose. They
+are not heartbeats or worker authorities: they never create, close, label,
+assign or edit issues and never start agents or runs.
 
 | Source | Reads | Writes | Ticket authority |
 | --- | --- | --- | --- |
-| Feed Scout | configured feeds and prior source reports | source report + candidates | none; next-wave planner compares candidates |
-| Daily / Weekly review | project memory, project configuration, configured metrics, and bounded evidence | current project memory, targeted follow-ups, weekly reports, and operator-visible work proposals | none; authorized updates and follow-ups may affect existing work, while Work Pulse or the planner owns admission |
+| Feed Scout | configured feeds and prior source reports | source report + candidates | none; candidates reach the operator through reports |
+| Daily / Weekly review | project memory, project configuration, configured metrics, and bounded evidence | current project memory, targeted follow-ups, weekly reports, and operator-visible work proposals | none beyond authorized `gh issue comment` on existing issues; new work stays a proposal for the operator |
 | Dogfood | active and recent archived experiments plus prior report | portfolio learning report + experiment candidates | none; self-improvement competes globally |
 | Maintenance | registries, docs, skills, validators | maintenance report + repair candidates | none unless directly invoked by the operator |
 
 Daily and Weekly do not invent direction, fake momentum, or execute work. Feed Scout and Dogfood do not materialize their candidates.
-Work Pulse is the single normal path that turns a low-supply refill candidate
-into a ticket on the shared board.
+A candidate becomes work only when the operator, or a session they start, opens
+a GitHub issue for it.
 
 A GitHub issue closes by the close rule in `tickets/README.md`: one proof
 comment, then `gh issue close <n> --reason completed`; local supporting files
@@ -163,11 +158,14 @@ GitHub issue <n>
   linked artifacts        # implementation, QA, review, and supporting evidence
 ```
 
-For delayed Reward rows, Work Pulse derives readiness and resumes the original
-ticket. The worker reads `## Goal program` first and executes its `Check-In Program`.
+Due check-ins are open issues labelled `check-in` with a `Due: YYYY-MM-DD`
+line. Daily Collect (`farplane/automations/steps/daily-collect.md`) lists them
+and the morning brief surfaces them; the operator, or a session they start,
+resumes that Goal with `goal-advisor`'s Delayed Check-In Resume prompt. The
+resumed Goal reads `## Goal program` first and executes its `Check-In Program`.
 It updates only matured rows and decides `accept | kill | monitor` as
-the program permits. Future rows remain dormant. Pulse dispatches this work; it
-does not reconstruct or independently score the experiment policy.
+the program permits. Future rows remain dormant. No automation resumes,
+dispatches, or scores a check-in.
 
 ## State Ownership
 
@@ -179,7 +177,7 @@ does not reconstruct or independently score the experiment policy.
 | Executable commitment and all QA/review evidence | owning GitHub issue and linked artifacts |
 | Goal/check-in loop policy | issue body `## Goal program` |
 | Append-only task or experiment observations | Goal turn comments on the issue |
-| Closed-ticket identity and archive location | `tickets/archive-index.jsonl` for new GitHub-issue closes; `tickets/archive/TASK-*` for readable legacy archives |
+| Closed-ticket identity and archive location | the closed GitHub issue and its proof comment; `tickets/archive-index.jsonl` holds historical locator rows from the retired close command, read by `farplane tickets history`; no new rows are written; `tickets/archive/TASK-*` for readable legacy archives |
 | Global Company OS Daily/Weekly prompts | AI Office `farplane/automations/` |
 | Project-local automation topology and prompts | project `farplane/automations/` |
 | Provider coordinates | `farplane/bindings.yaml` |
@@ -187,7 +185,8 @@ does not reconstruct or independently score the experiment policy.
 
 Reports help the next reader plan. Daily and Weekly reports and project memory
 may produce operator-visible work proposals, but they do not admit tickets or
-become executable state. Work Pulse or the planner remains the admission owner.
+become executable state. Work starts only when the operator, or a session they
+start, runs `goal-advisor` on an issue or does small work directly.
 Generated indexes are projections over these owners, not hand-maintained
 strategy ledgers.
 
@@ -214,8 +213,8 @@ A project needs:
   capability refs, and selected metric refs;
 - `farplane/metrics.yaml` with definitions, direction, freshness, and guard
   rules for every referenced metric;
-- `farplane/automations/` with exactly one Work Pulse heartbeat and bounded
-  scheduled sources;
+- `farplane/automations/` with cron records that collect, report and propose
+  (no execution heartbeat);
 - `farplane/bindings.yaml` for non-secret provider coordinates;
 - reusable or project-local capability skills for recurring workflows;
 - tickets with Reward, Done / Proof, and ticket-owned QA/review evidence;
@@ -235,9 +234,9 @@ smallest owner:
 - stable policy evidence can propose a human-reviewed `harness.yaml` delta;
 - repeated workflow evidence can harden or refine the owning skill;
 - unresolved executable work remains a ticket;
-- raw run detail stays in ticket artifacts or dated reports; only the selected
-  terminal problem, solution, verification, screenshots, and videos are copied
-  to the closed issue before local cleanup.
+- raw run detail stays in local artifacts or dated reports; the closing proof
+  comment carries the problem, solution, verification, screenshots, and demo
+  video, and local supporting files stay.
 
-This preserves `program + progress` without turning every observation into a
+This preserves the Goal program and Goal turn comments without turning every observation into a
 new schema or global ledger.

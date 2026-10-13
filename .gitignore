@@ -67,15 +67,19 @@ skills/feed-scout/config/
 plugins/feed-scout/skills/feed-scout/config/
 plugins/farplane-research/skills/feed-scout/config/
 
-# Local ticket working set. Keep the executable Goal Program template
-# source-controlled while other local ticket packets stay ignored.
+# Local ticket working set. Keep the canonical tickets/README.md, the legacy
+# tickets/archive/, the ticket and Goal Program templates, and the historical
+# archive-index.jsonl tracked while other local ticket packets stay ignored.
 tickets/*
+!tickets/README.md
+!tickets/archive/
 !tickets/archive-index.jsonl
 !tickets/scripts/
 tickets/scripts/*
 !tickets/scripts/check_ticket_metadata.py
 !tickets/templates/
 tickets/templates/*
+!tickets/templates/ticket.md
 !tickets/templates/goal-loop/
 tickets/templates/goal-loop/*
 !tickets/templates/goal-loop/program.md

@@ -73,8 +73,10 @@ reads it, not to a new top-level folder.
 - Memory: `docs/MEMORY.md`
 - Taste: `docs/TASTE.md`
 - Code review: `docs/code_review.md` and `docs/review-agent.md`
-- Tickets: active `tickets/TASK-*/ticket.md`, new closed-ticket locators in
-  `tickets/archive-index.jsonl`, and legacy local archives in
+- Tickets: GitHub Issues in the project's own repository are the active task
+  record (`tickets/README.md`); `tickets/archive-index.jsonl` holds historical
+  locator rows from the retired close command, read by
+  `farplane tickets history` (no new rows); legacy local archives are in
   `tickets/archive/TASK-*/ticket.md`
 
 ## Project Lifecycle

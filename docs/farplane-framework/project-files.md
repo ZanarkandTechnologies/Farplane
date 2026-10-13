@@ -3,7 +3,7 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-08-19
+updated_at: 2026-10-14
 framework_template_version: "0.3.3"
 source_of_truth:
   - docs/farplane-framework/README.md
@@ -104,7 +104,7 @@ current context, but external evidence cannot silently rewrite it.
 
 `planning.skill_refs` is the allowlist of skills a planner may call. Each skill's
 `planner_contract` owns its required arguments, while its skill body owns the
-workflow. Pulse may use areas to ground audience and metrics but may not derive
+workflow. A planner may use areas to ground audience and metrics but may not derive
 new work types from area prose.
 
 Use typed YAML. Do not add a custom harness DSL, live backlog, worker
@@ -122,14 +122,16 @@ templates. Generated run data stays in ignored `.farplane/`.
 
 YAML front matter owns identity, schedule, workspace, and status. The Markdown
 body is the exact project-specific prompt. Generic workflow behavior remains in the called skill. Scheduled
-sources write reports and bounded candidate context; Work Pulse owns normal
-proactive ticket admission and execution.
+sources are cron records that write reports and bounded candidate context;
+they never create or execute work. Work enters as a GitHub issue in the
+project's own repository and runs through `goal-advisor` (native Goal), or
+directly when small.
 
 ### `.farplane/feed-scout/scout-brief.md`
 
 One ignored, update-in-place Markdown Scout Brief synthesis of canonical ICP profiles,
 current trends, notable things, and source gaps. It is a cheap retrieval surface
-for Feed Scout, Pulse, and ticket-owned artifact work—not a
+for Feed Scout and ticket-owned artifact work—not a
 snapshot archive, monthly trend ledger, planner, or source of authority.
 
 ### `farplane/metrics.yaml`
@@ -329,7 +331,8 @@ requires:
 - an owned capability route for required recurring outputs, or a refinement
   ticket;
 - an executable board and proof surface;
-- one Work Pulse heartbeat when live automation is requested;
+- cron records only when live automation is requested (no execution
+  heartbeat; work enters through GitHub Issues and `goal-advisor`);
 - explicit source gaps for unavailable metrics, access, or integrations.
 
 ## Migration Rule

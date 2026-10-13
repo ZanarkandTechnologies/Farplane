@@ -100,8 +100,9 @@ makes one relevant.
 - Credentialed commands run through `farplane run -- <command>` or
   `doppler run -- <command>`. `farplane doctor` reports readiness and
   `farplane install` owns safe render/link/repair work.
-- Farplane is local Codex orchestration. Do not add a daemon, hosted control
-  plane, scheduler, or per-ticket runtime without a ticketed need.
+- Farplane is local agent-runtime orchestration (Codex or Claude Code). Do not
+  add a daemon, hosted control plane, scheduler, or per-ticket runtime without
+  a ticketed need.
 
 ## Durable truth
 

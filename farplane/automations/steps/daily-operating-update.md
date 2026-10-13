@@ -95,8 +95,9 @@ Input rules:
 - Block provider-facing text containing private paths, cache paths, or opaque IDs;
   return it for skill correction instead of rewriting or applying it.
 - Check the repository's visibility (`gh repo view --json visibility`) before any
-  comment. On a public repository (Farplane, Farplane-UI, farplane-bunker) a comment
-  carries engineering facts only; block any body naming clients or containing
+  comment. On a public repository (Farplane; farplane-bunker is private but gets
+  engineering facts only, as if public) a comment carries engineering facts
+  only; block any body naming clients or containing
   money, prices, strategy, or personal details, which stay in local Project Memory.
   A private repository's comments may carry them.
 - Cross-check every action's issue number, expected revision (`updatedAt`), and

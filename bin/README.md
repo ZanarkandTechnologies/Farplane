@@ -1,10 +1,10 @@
 # Bin
 
-Executable helpers for the Codex harness.
+Executable helpers for the Codex or Claude Code harness.
 
 ## Purpose
 
-This folder contains public command wrappers used by the live Codex config plus
+This folder contains public command wrappers used by the live Codex or Claude Code install plus
 shared repo commands that are intentionally broader than one skill package.
 Core implementations live under `bin/core/`; hook code lives in `hooks/`;
 Core tests live under `bin/tests/`; validators live under
@@ -18,8 +18,10 @@ Primary control plane:
 - persistent builder lanes
 
 Live PostToolUse handling returns repair feedback for edited `SKILL.md` files
-over 200 lines. Separate Stop handlers check for useful continuation, apply the
-final-response prose budget, and send observational telemetry. Native Goal mode plus ticket-local QA/review evidence owns completion.
+over 200 lines. One blocking Stop gate checks final-response length,
+continuation, and response format (at most one nudge), and a separate telemetry
+ping records the turn. Native Goal mode owns persistence; completion is the
+issue's proof comment plus `gh issue close` (`tickets/README.md`).
 
 Run `farplane hooks list` for the managed commands, events, timeouts, and source
 owners. See [Stop behavior](../docs/farplane-framework/hooks-and-runtime.md#inspecting-stop-behavior)
@@ -95,8 +97,8 @@ or removing a `farplane` command.
   ratchet: new or enlarged oversized skills fail, while legacy skills must not
   grow. `config/source-line-baseline.toml` is the one-time Python adoption
   ceiling until the comparison base contains the guard.
-- `capture_user_turn.py` - turn-start user-intent writer for the hook surface
-- `runtime/skill_suggestion.py` - optional dependency-free OpenRouter or
+- `hooks/user-turn/capture_user_turn.py` - turn-start user-intent writer for the hook surface
+- `hooks/shared/skill_suggestion.py` - optional dependency-free OpenRouter or
   Featherless JEV adapter using TypeSafe's official two-pass skill-suggestion
   recipe to inject one advisory entry skill when no explicit `$skill` was requested
 - `farplane.py adoption scan` - local adoption resolver for project
@@ -133,12 +135,6 @@ Delegated worker metadata is additive:
 - `grounding_summary` captures the worker's explicit artifact-grounding line when available
 - `worker_started_at`, `last_checkpoint_at`, and `checkpoint_summary` support stale-wait backpressure reads
 
-The live `status` surface now derives a first advisory backpressure signal:
-
-- `backpressure_state`: `within_budget`, `over_budget`, `inactive`, or `unknown`
-- `stale_for_secs`: elapsed seconds since the latest checkpoint when available
-- `recommended_action`: present for over-budget waits
-
 Runtime routing is session-first for parallel Codex usage:
 
 - explicit run-state selector when a managed lane exports one
@@ -152,7 +148,7 @@ success quiet and make failure output the thing that stands out.
 
 - `python3 skills/harness/scripts/install_selected_skills.py --search frontend`
   Use to discover shareable skills without rendering the full Farplane config.
-- `python3 skills/harness/scripts/install_selected_skills.py --skills review,qa visual mode --dry-run`
+- `python3 skills/harness/scripts/install_selected_skills.py --skills review,qa --dry-run`
   Use to preview selected skill symlinks into `~/.codex/skills`.
 - `python3 skills/commit/scripts/pr_review_watch.py classify --repo <repo> --pr <number> --json`
   Compatibility command for the `commit` PR watch skill-owned classifier.
@@ -172,20 +168,15 @@ success quiet and make failure output the thing that stands out.
   whole computer.
 - `python3 bin/farplane.py skills rollout scan --json`
   Use to inspect the current skill rollout and template-consumer projection that
-  Farplane UI can render without reading generated graph files directly.
+  the bunker can render without reading generated graph files directly.
 - `python3 tickets/scripts/check_ticket_metadata.py`
   Current mode: already near the desired quiet-success shape; keep the single-line pass output
 
-Examples:
-
-```text
-followup ok: TASK-0033 -> building pane=%42 session=main run=.farplane/runs/task-0033-building-20260410T091500000000Z.json dry-run
-```
-
 In the live interactive path, `goal-advisor` compiles the Goal-backed ticket
-execution contract. Native Goal mode owns persistence and ticket-local
-QA/review evidence owns completion. Independent Stop hooks add bounded Jev
-continuation advice, the final-response length retry, and observational telemetry.
+execution contract. Native Goal mode owns persistence; completion is the
+issue's proof comment plus `gh issue close` (`tickets/README.md`). One blocking
+Stop gate checks length, continuation, and response format (at most one nudge),
+plus a telemetry ping.
 
 ## How To Test
 
@@ -196,8 +187,6 @@ continuation advice, the final-response length retry, and observational telemetr
 - `python3 -m unittest bin/validators/test_doc_parity.py`
 - `python3 -m unittest skills/commit/scripts/test_pr_review_watch.py`
 - `python3 -m unittest bin/tests/test_ticket_metadata.py`
-- `python3 -m unittest bin/tests/test_ticket_runtime.py`
-- `python3 -m py_compile bin/core/farplane_ticket_runtime.py bin/tests/test_ticket_runtime.py`
 - `python3 -m py_compile hooks/user-turn/capture_user_turn.py bin/core/user_turn.py`
 - `python3 -m py_compile bin/validators/check_harness_invariants.py bin/validators/test_harness_invariants.py`
 - `python3 -m py_compile bin/validators/check_doc_parity.py bin/validators/test_doc_parity.py`
