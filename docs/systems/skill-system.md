@@ -71,7 +71,7 @@ canonical in each skill and in the generated skill registry.
 
 ## Feature Docs
 
-- [FEAT-0022 Retired skill tier leverage classes](../features/FEAT-0022-skill-tier-leverage-classes.md)
+- [FEAT-0022 Capability Map skill composition](../features/FEAT-0022-capability-map-skill-composition.md)
 - [FEAT-0057 Retired skill-local QA checklist artifacts](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md)
 - [FEAT-0062 Capped skill surface budget](../features/FEAT-0062-capped-skill-surface-budget.md)
 - [FEAT-0064 Skill signals](../features/FEAT-0064-skill-signals.md)

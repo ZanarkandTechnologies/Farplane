@@ -46,8 +46,7 @@ Rules:
   `.farplane/generated/graphs/skill-template-intelligence.json` refreshes
   with the template metadata. Do not hand-edit generated template intelligence
   files.
-- Skill tiers are retired; the registry rejects a `tier` field. Which skills
-  are entrypoints, and their department and default verb, come from the
+- Which skills are entrypoints, and their department and default verb, come from the
   Capability Map's specialist desks (`skill-workflows.toml` `[specialists]`);
   see `system.md` and `department-taxonomy.md`. First-load todo-link guidance
   lives in `system.md` and is not lint-enforced.

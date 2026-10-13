@@ -115,8 +115,7 @@ the skill's `specialist`. A skill on no desk is an internal helper that planners
 and other skills dispatch; the map omits it. See
 [`department-taxonomy.md`](department-taxonomy.md) for desks and map topology.
 
-Skill tiers (numeric compound-leverage classes, Tier 0 to 3) are retired: the
-registry rejects a `tier` field. Upgrade priority comes from evidence instead:
+Upgrade priority comes from evidence:
 harness health keeps each desk's primary skill and every skill used in the last
 30 days in its priority cohort, and the signals below rank improvement targets.
 

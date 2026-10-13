@@ -38,3 +38,13 @@ use_instead = "a proof comment and gh issue close (tickets/README.md)"
 pattern = 'ticket finalize|farplane mining|mine_ticket|farplane\.ticket\.completed|ticket-completion-(?:learning|lean)'
 retired = 2026-10-13
 use_instead = "a proof comment and gh issue close (tickets/README.md); lessons go to their owner in the closing session"
+
+[[retired]]
+pattern = '(?i)\bskill tiers?\b|\bTier [0-3] (?:phase|primitive|interface|domain|skill|workflow)'
+retired = 2026-10-10
+use_instead = "the Capability Map's specialist desks (FEAT-0022)"
+
+[[retired]]
+pattern = 'self-improve/program\.md|Self-Improve Program'
+retired = 2026-10-13
+use_instead = "a ticket's Goal Packet through goal-advisor"

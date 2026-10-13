@@ -256,8 +256,8 @@
       "Loads the named skills before using them",
       "Shows a compact active checklist for the current skill",
       "Recursively expands linked-skill todos only when that linked skill becomes the current step",
-      "Refreshes progress after large Tier 3 workflow items or material milestones",
-      "Keeps lower-tier checklist updates lighter when they are small support steps",
+      "Refreshes progress after large workflow items or material milestones",
+      "Keeps checklist updates lighter for small support steps",
       "Bounds skill traversal to the task and evidence need",
       "Returns implementation proof or a concrete blocker rather than only discussing checklist theory"
     ],
@@ -420,10 +420,10 @@
   {
     "id": "global_validator_regression_capture_01",
     "title": "Capture validator-detected skill contract violations as regressions",
-    "query": "A harness check fails because a Tier 2 skill todo list direct-links a peer Tier 2 skill. Fix the checklist and make sure this kind of miss becomes future eval material.",
+    "query": "A harness check fails because a retired name from config/retired-names.toml came back in a skill reference. Fix it and make sure this kind of miss becomes future eval material.",
     "reference_points": [
-      "Recognizes the tier-check failure as a clear skill todo contract violation",
-      "Fixes or proposes the checklist routing through the correct owning tier surface instead of only suppressing the validator",
+      "Recognizes the retired-name failure as a real contract violation",
+      "Removes the mention at its owner instead of suppressing the validator or adding an exception",
       "Reruns the harness validation after the fix",
       "Captures or verifies a sanitized runnable regression for the validator-detected violation when the expected behavior is testable",
       "Explains that a difficult reusable case is a normal runnable regression, not a separate backlog",

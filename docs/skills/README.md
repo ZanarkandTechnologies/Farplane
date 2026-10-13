@@ -239,8 +239,7 @@ fail missing or non-current skills.
 
 ## First-Load Todo Link Contract
 
-Skill tiers are retired: which skills are entrypoints comes from the Capability
-Map's specialist desks (see [`system.md`](system.md)). First-load todo links are
+Which skills are entrypoints comes from the Capability Map's specialist desks (see [`system.md`](system.md)). First-load todo links are
 authoring guidance, not a lint rule. Phase-protocol steps are not skill links;
 they are inherited from `runtimes/AGENTS.md`.
 

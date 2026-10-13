@@ -131,7 +131,7 @@ present. Farplane project `AGENTS.md` carries the exact `FEAT-0060` path.
 
 ### Skill Taxonomy
 
-`Before:` Global template lists Farplane skill tiers and inventory examples.
+`Before:` Global template lists Farplane skill inventory examples.
 
 `After:` Global keeps the skill-use protocol: read `SKILL.md`, bind signatures,
 load relevant references, apply Todo List Rule/Assert guardrails, and seed
