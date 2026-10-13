@@ -341,6 +341,7 @@ final = decision + reason + proof + next_blocking_condition
 | --- | --- |
 | UI change | Paired screenshots |
 | New feature or multi-step workflow | Operated video |
+| Anything outsiders receive (email, ad, post, page, message) | The delivered copy, read and clicked through as the recipient (`qa` outbound) |
 | Other behavior | Command, log, check, or inspectable artifact |
 
 - Choose the reader's question before choosing Mermaid, ASCII, a table, or

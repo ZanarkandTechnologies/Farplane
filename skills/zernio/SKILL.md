@@ -58,7 +58,8 @@ fails: a create call without is_draft; a profile guessed from login;
         `is_draft` the tool schedules the post 60 minutes out.
   - [ ] `access: read_only`: return the validated payload instead.
   - [ ] Either way end with a gate: publishing or scheduling waits for
-        Kenji's OK naming the draft and account.
+        Kenji's OK naming the draft and account, after `qa` outbound passes
+        on the platform preview.
 - [ ] 4. Comments, DMs and automations.
   - [ ] Reading comments, conversations and automation logs is allowed.
   - [ ] Replies, DMs, likes, hides, deletes, automation changes and account

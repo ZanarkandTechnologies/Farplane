@@ -127,8 +127,9 @@ returns: the packet, its approval gates, source gaps, and the next owner
   `meta-ads-open-cli` is read-only and cannot create. Run the dry run or
   validation first, then create every campaign, ad set, and ad paused or draft.
   Activating delivery needs a separate explicit approval naming the account,
-  budget, creative, landing page, and launch window; run `review` before first
-  live spend. With no verified route, return a manual paused setup checklist.
+  budget, creative, landing page, and launch window; before first live spend run
+  `qa` outbound on every ad preview and its funnel (page, form, follow-up emails),
+  then `review`. With no verified route, return a manual paused setup checklist.
 
   Assert:
   - Nothing is created active; the dry-run output is kept, redacted.
@@ -164,8 +165,7 @@ returns: the packet, its approval gates, source gaps, and the next owner
 
 - A CLI that is installed is not credential readiness: business access,
   payment, pixel, events, and token scopes can still block.
-- Changing audience, creative, offer, and page in one test makes the result
-  uninterpretable.
+- Changing audience, creative, offer, and page in one test makes the result uninterpretable.
 - Cheap leads are an anti-metric when lead quality is the goal.
 - Small budgets may never leave the learning phase; read after the window.
 - Never bypass the read-only boundary with `curl` or raw Graph API calls.

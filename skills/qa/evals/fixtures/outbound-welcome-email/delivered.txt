@@ -1,0 +1,26 @@
+From: Acme Studio <hello@acme.co>
+Subject: Your free AI adoption plan
+
+Sequences are an automated series of emails.
+
+Use these emails to deliver valuable information, and after a few educational
+messages start to pitch your product.
+
+You can add more emails by clicking "Add Email" on the right and arrange emails
+by dragging them to the proper order.
+
+Hi Sam,
+
+Here's your free AI adoption plan: https://acme-ab12cd3ef-team-projects.vercel.app/roadmap/
+
+It shows the 8 places AI makes a business more money. There's a "Save as PDF"
+button at the top if you want to send it to your team.
+
+Rather we run it for you? Message us: https://wa.me/15550100
+
+Sam at Acme
+
+Within this popover, you can also choose which days of the week this email
+will be sent on.
+
+Unsubscribe | Update your profile | 600 Placeholder Ave, Ste 330 PMB 00000, Seattle, WA 98104
