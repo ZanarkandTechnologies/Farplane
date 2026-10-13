@@ -204,7 +204,7 @@ have a narrow, stable contract.
 Shared workflow interfaces turn primitive obligations into reusable protocol
 surfaces such as:
 
-- `frame`
+- `brainstorm`
 - `research` (market, code, papers, synthesis)
 - `harness` place mode
 

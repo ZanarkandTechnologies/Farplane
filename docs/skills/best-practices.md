@@ -96,7 +96,7 @@ Lead with 2-4 short phrases in the words the operator actually uses for this
 need ("I have an idea", "fix this bug", "clean this up"), then name the output.
 Routing matches the request's wording against descriptions, so artifact
 language alone ("turn a complaint into a problem frame") is not picked: in a
-2026-10-12 Codex check, `frame` routed 0/2 natural prompts with an artifact-only
+2026-10-12 Codex check, a merged framing skill routed 0/2 natural prompts with an artifact-only
 description and 2/2 with operator phrases (#41). Choose phrases that separate
 this skill from its neighbours; a phrase two skills could both claim belongs to
 one of them.

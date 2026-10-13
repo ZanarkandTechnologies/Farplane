@@ -17,7 +17,7 @@ refs:
   - skills/goal-advisor/references/choose-next.md
   - skills/goal-advisor/references/metrics.md
   - skills/goal-advisor/references/loop-presets.md
-  - skills/goal-advisor/references/ml-program-preset.md
+  - skills/ml-autoresearch/SKILL.md
   - skills/harness/SKILL.md
 system_record_json: |
   {
@@ -28,7 +28,7 @@ system_record_json: |
     "owner_spec": "docs/systems/self-improvement-learning.md",
     "primary_feature_ref": "FEAT-0063",
     "feature_refs": ["FEAT-0063", "FEAT-0069", "FEAT-0070"],
-    "refs": ["skills/eval/SKILL.md", "skills/goal-advisor/SKILL.md", "skills/goal-advisor/references/choose-next.md", "skills/goal-advisor/references/metrics.md", "skills/goal-advisor/references/loop-presets.md", "skills/goal-advisor/references/ml-program-preset.md", "skills/harness/SKILL.md"],
+    "refs": ["skills/eval/SKILL.md", "skills/goal-advisor/SKILL.md", "skills/goal-advisor/references/choose-next.md", "skills/goal-advisor/references/metrics.md", "skills/goal-advisor/references/loop-presets.md", "skills/ml-autoresearch/SKILL.md", "skills/harness/SKILL.md"],
     "last_verified": "2026-10-12"
   }
 ---
@@ -70,8 +70,8 @@ generated:
   .farplane/evals/runs/      Eval evidence only
 ```
 
-The Self Improve program template and the goal-advisor ML autoresearch preset
-([`ml-program-preset.md`](../../skills/goal-advisor/references/ml-program-preset.md))
+The Self Improve program template and the ML autoresearch campaign program
+([`ml-autoresearch`](../../skills/ml-autoresearch/SKILL.md))
 are reusable policy sources instantiated into each ticket. They are not runtime state. Existing
 target-local `self-improve/*` folders are legacy experiment material; the
 active workflow does not read, write, generate, parse, or migrate them.

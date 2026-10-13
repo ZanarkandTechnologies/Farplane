@@ -1,4 +1,4 @@
-# Static Calculator Frame Example
+# Static Calculator Problem Frame Example
 
 ## Use When
 
@@ -55,14 +55,6 @@ larger system is necessary.
 Assumptions and unknowns: pricing rules, approval authority, source data,
 integration needs, security, expected quote volume, error cost.
 
-Playback (journey, proposed): sales rep enters job specs -> pricing rules
-apply -> approval case flagged when margin or spec is unusual -> quote sent
-and recorded -> ? who owns final quote authority.
-
-Correction questions:
-1. Who signs off on a quote today when the job is unusual?
-2. Are pricing and cost rules written down anywhere, or held by people?
-
 Next owner: approach for an agency proposal, or prd if the quote
 workflow slice is approved for a system build.
 ```
@@ -75,8 +67,6 @@ workflow slice is approved for a system build.
   boundary options.
 - The recommendation shows restraint: no full ERP unless the record-of-truth
   need is proven.
-- The playback is a journey because the operator must verify what sales does,
-  and the questions target the riskiest unknown, quote authority.
 
 ## Provenance / Rights
 

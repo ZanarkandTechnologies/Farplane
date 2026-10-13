@@ -21,8 +21,7 @@ behind it, and drafts one unsent message. One pass returns one approach packet.
 
 It does not find or research targets (`prospect`), price a proposal
 (`proposal-pricing`), polish final copy (`copywriting`), or send
-anything. The problem frame comes from `frame`; the boundary ladder lives
-there.
+anything. It uses an existing problem frame when the operator supplies one.
 
 ## Skill Signature
 
@@ -55,8 +54,9 @@ returns: the approach packet, readiness send | revise | stop, the approval still
   `signal + use case -> problem frame + solution boundary + walkthrough | skip`
 
   Rule: Skip this node for a contribution that needs no product proof. For an
-  offer, read the frame from `frame` (actor, job, stakes, constraints, rung)
-  and do not re-derive it. An ERP-adjacent tool is a decision layer beside
+  offer, use the supplied problem frame if there is one; otherwise name the
+  actor, job, stakes, constraints and the smallest rung (manual service ->
+  tool -> product -> platform) inline. An ERP-adjacent tool is a decision layer beside
   the system of record, not a replacement. When several problems share one
   planning or allocation decision, shape one loop, not one module each; load
   [Mine-to-Margin](references/mine-to-margin-reference-standard.md). Name V1,

@@ -7,27 +7,6 @@
 # planners dispatch them, and the map omits them.
 
 
-[specialists.advisor]
-label = "Advisor"
-department = "leadership"
-deliverable = "one recommendation or a phased roadmap"
-primary = "advise"
-skills = ["advise"]
-
-[specialists.framer]
-label = "Framer"
-department = "leadership"
-deliverable = "a problem frame played back for correction"
-primary = "frame"
-skills = ["frame"]
-
-[specialists.pm]
-label = "PM"
-department = "leadership"
-deliverable = "a day or week plan and verified task updates"
-primary = "pm"
-skills = ["pm"]
-
 [specialists.business-reviewer]
 label = "Business Reviewer"
 department = "leadership"
@@ -210,26 +189,12 @@ deliverable = "a TAS review verdict"
 primary = "review"
 skills = ["review"]
 
-[specialists.release-manager]
-label = "Release Manager"
-department = "delivery"
-deliverable = "a labelled commit on main or a watched PR"
-primary = "commit"
-skills = ["commit"]
-
 [specialists.technical-writer]
 label = "Technical Writer"
 department = "delivery"
 deliverable = "a docs update or loss-checked consolidation"
 primary = "doc-advisor"
 skills = ["doc-advisor"]
-
-[specialists.diagrammer]
-label = "Diagrammer"
-department = "delivery"
-deliverable = "a compact diagram pack"
-primary = "diagramming"
-skills = ["diagramming"]
 
 [specialists.interior-designer]
 label = "Interior Designer"
@@ -279,3 +244,10 @@ department = "delivery"
 deliverable = "a verified project or client setup"
 primary = "setup-advisor"
 skills = ["setup-advisor"]
+
+[specialists.research-engineer]
+label = "Research Engineer"
+department = "operations"
+deliverable = "a measured ML experiment campaign and its findings"
+primary = "ml-autoresearch"
+skills = ["ml-autoresearch"]

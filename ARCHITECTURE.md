@@ -89,7 +89,7 @@ flowchart LR
   subgraph Skills["Skill Layer"]
     primitives["core primitives<br/>advise<br/>review<br/>direct Todo List"]:::callout
     interfaces["shared workflow interfaces<br/>frame<br/>research<br/>harness"]:::callout
-    intake["frame<br/>direct clarification<br/>prd<br/>visual-design"]:::skill
+    intake["brainstorm<br/>direct clarification<br/>prd<br/>visual-design"]:::skill
     readiness["impl-plan agent testability<br/>Run Hints"]:::callout
     research["doc-advisor<br/>feed-scout<br/>research"]:::skill
     ticketSkill["impl-plan"]:::callout

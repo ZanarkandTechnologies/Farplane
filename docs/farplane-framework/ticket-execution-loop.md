@@ -41,7 +41,7 @@ ticket_execution_lifecycle(human_intent)
 ```
 
 The human conversation comes first when the direction is still a product,
-workflow, architecture, prompt, or harness choice. `frame`, `advise`
+workflow, architecture, prompt, or harness choice. `problem-framing`, `brainstorm`, `advise`
 with `ensemble=auto|max`, `prd`, `impl-plan`, direct clarification, or a
 direct operator decision turns fuzzy intent into an accepted direction. Once the
 direction is accepted, the ticket becomes the task-local source of truth and
@@ -51,7 +51,7 @@ execution can become autonomous inside that scope.
 
 | Phase | Primary owner | Ticket or artifact filled | Gate before next phase |
 | --- | --- | --- | --- |
-| Shape intent | human + `frame` / `advise` / `prd` | accepted direction, examples, rejected options | material choices are explicit |
+| Shape intent | human + `brainstorm` / `advise` / `prd` | accepted direction, examples, rejected options | material choices are explicit |
 | Bind work | ticket author / `impl-plan` | `Summary`, `Scope`, initial `Delta`, dependencies, metadata | ticket exists and scope is coherent |
 | Plan implementation | `impl-plan` | `architecture_signatures`, `Change Plan`, `Done`, `QA Strategy`, `Docs Strategy`, reviewer handoff | Todo List assertions and plan reviewer pass |
 | Compile execution | `goal-advisor` | `program.md`, `progress.md`, native `/goal` prompt | packet approved or explicitly pre-approved |
@@ -225,8 +225,9 @@ source gap rather than a guessed intervention count.
 The ticket execution path works because each skill owns a different failure
 boundary:
 
-- `frame` splits the symptom from the real problem, widens fuzzy directions,
-  and plays the idea back for correction before it becomes a ticket.
+- `problem-framing` splits the symptom from the real problem, `brainstorm`
+  widens fuzzy directions, and `recap-idea` plays the idea back for correction
+  before it becomes a ticket.
 - `advise` chooses among real options and preserves the accepted tradeoff;
   `ensemble=auto|max` adds independent local personas only when requested.
 - `prd` or `impl-plan` turns accepted product or system intent into
@@ -280,7 +281,7 @@ modes are process failures rather than classic network security issues.
 
 | Risk | Impact | Mitigation | Proof or check |
 | --- | --- | --- | --- |
-| Fuzzy intent becomes durable work too early | wrong ticket, wasted Goal execution | use `frame`, `advise`, `prd`, or explicit acceptance before ticketed execution | ticket `Summary`/`Scope` preserve accepted and rejected options |
+| Fuzzy intent becomes durable work too early | wrong ticket, wasted Goal execution | use `problem-framing`, `brainstorm`, `advise`, `prd`, or explicit acceptance before ticketed execution | ticket `Summary`/`Scope` preserve accepted and rejected options |
 | Ticket is chat-only or underfilled | executor invents scope or proof route | material work writes `ticket.md` before plan-ready state | reviewer checks ticket-first and goal-advisor readiness |
 | Architecture hides in prose | reviewer cannot catch wrong seams before code | `impl-plan` requires `architecture_signatures` for material plans | `impl-plan` Todo List assertions and plan reviewer gate |
 | Planner self-approves | same model misses its own weak assumptions | inline self-check; reviewer lane is readiness gate | review receipt linked from ticket/progress |

@@ -1,0 +1,82 @@
+{
+  "skill_name": "lean-check",
+  "evals": [
+    {
+      "id": "lean_check_skip_speculative_01",
+      "prompt": "The team wants a plugin framework now so potential future export formats can each have an adapter. There is one JSON export today, no second format is scheduled, and no caller has a current extension requirement. What should we do?",
+      "expected_output": "Returns a lean receipt with the skip rung; identifies the plugin framework as speculative; defers the work until a concrete second format or extension contract exists; preserves the current JSON export.",
+      "files": [],
+      "assertions": [
+        "Selects skip as the first sufficient rung",
+        "Does not propose a framework, adapter layer, or configuration surface",
+        "Names the evidence that would justify reopening the work"
+      ]
+    },
+    {
+      "id": "lean_check_reuse_local_01",
+      "prompt": "A form needs the same normalized-email comparison used by account recovery. The repository already has normalize_email(value) with tests, and the new form has no different normalization requirement. What should change?",
+      "expected_output": "Returns a lean receipt with reuse_local; uses the existing normalize_email helper and its behavior contract; calls for only the focused form-level proof needed for the new caller.",
+      "files": [],
+      "assertions": [
+        "Selects reuse_local rather than a new helper or dependency",
+        "Names the existing helper and tests as evidence",
+        "Preserves focused proof for the new form caller"
+      ]
+    },
+    {
+      "id": "lean_check_standard_library_01",
+      "prompt": "A Python command needs to encode and decode URL-safe base64 tokens. Someone proposed adding a package that wraps base64. The project already targets a Python version with the base64 module. What is the smallest safe route?",
+      "expected_output": "Returns a lean receipt with standard_library; uses Python base64 rather than a new package; keeps round-trip and invalid-input proof appropriate to the command contract.",
+      "files": [],
+      "assertions": [
+        "Selects standard_library before an added dependency",
+        "Names the standard library module as evidence",
+        "Does not remove required invalid-input or round-trip proof"
+      ]
+    },
+    {
+      "id": "lean_check_native_platform_01",
+      "prompt": "A settings form needs a single date field with browser validation and submission. A proposal adds a JavaScript date-picker library, but there are no range, calendar, or formatting requirements beyond a normal date value. What should the implementation use?",
+      "expected_output": "Returns a lean receipt with native_platform; chooses an HTML date input instead of a picker library; preserves the form validation and submission contract.",
+      "files": [],
+      "assertions": [
+        "Selects native_platform before an added date-picker dependency",
+        "Names the native date input as the smallest action",
+        "Keeps validation and submission proof"
+      ]
+    },
+    {
+      "id": "lean_check_installed_dependency_01",
+      "prompt": "An API boundary needs schema validation for an existing TypeScript service. package.json already includes Zod, but this is the first endpoint that validates a request body, so there is no local schema helper or error-mapping pattern to reuse. A proposal instead writes a custom validator. What is the lean route?",
+      "expected_output": "Returns a lean receipt with installed_dependency; uses the already-installed Zod package without a custom validation layer; keeps focused endpoint validation proof.",
+      "files": [],
+      "assertions": [
+        "Selects installed_dependency rather than custom validation code",
+        "Names package.json and the absence of a reusable local validation pattern as evidence",
+        "Keeps endpoint validation proof"
+      ]
+    },
+    {
+      "id": "lean_check_inline_01",
+      "prompt": "A single response field needs the string fallback value of name or Anonymous. It is used in exactly one render branch, has no validation rules, and will not be shared. Should we add a helper?",
+      "expected_output": "Returns a lean receipt with inline; keeps the fallback as one local expression and rejects a new helper or module.",
+      "files": [],
+      "assertions": [
+        "Selects inline before a new helper or file",
+        "Names the one-use render branch as evidence",
+        "Does not invent a reusable abstraction"
+      ]
+    },
+    {
+      "id": "lean_check_minimum_new_code_01",
+      "prompt": "A service must atomically reserve a unique slot while enforcing a product-specific capacity rule. No existing local helper handles the transaction, the standard library and platform do not expose the required database transaction, and installed dependencies do not fit the database adapter. What is the correct lean conclusion?",
+      "expected_output": "Returns a lean receipt with minimum_new_code; states why every earlier rung is insufficient; scopes a small owner-local transaction implementation with concurrency proof.",
+      "files": [],
+      "assertions": [
+        "Selects minimum_new_code only after ruling out earlier rungs with evidence",
+        "Keeps the new behavior owner-local and narrowly scoped",
+        "Requires concurrency proof rather than optimizing it away"
+      ]
+    }
+  ]
+}

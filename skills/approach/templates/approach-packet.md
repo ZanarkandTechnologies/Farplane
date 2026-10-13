@@ -21,7 +21,7 @@ opportunity_case:
 
 Skip for a contribution that needs no product proof.
 
-- Frame ref (`frame`): actor / job / stakes / constraints / rung
+- Problem frame: actor / job / stakes / constraints / rung
 - System boundary: (decision layer beside <system of record>, when ERP-adjacent)
 - V1:
 - Deferred V2:

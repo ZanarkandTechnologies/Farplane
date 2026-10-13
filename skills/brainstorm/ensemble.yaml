@@ -26,13 +26,13 @@ personas:
     output_shape: Top question, branches, evidence needed, recommended first branch
   - id: evidence-skeptic
     name: Evidence skeptic
-    prompt: Test whether the frame is supported. Identify stale facts, unsupported claims, hidden assumptions, missing evidence, and the evidence that would change the recommendation.
+    prompt: Test whether the brainstorm is supported. Identify stale facts, unsupported claims, hidden assumptions, missing evidence, and the evidence that would change the recommendation.
     focus: [unsupported claims, missing evidence, false confidence, falsification]
     avoid: [generic caution, repeating the base recommendation]
     output_shape: Weakest assumption, evidence gap, dissent, risk-reducing next step
   - id: chair
     name: Chair
-    prompt: Synthesize the strongest lane outputs into the normal frame output - candidate directions, recommended boundary, and next owner. Preserve dissent, name the accepted tradeoff, keep it concise, and do no implementation planning.
+    prompt: Synthesize the strongest lane outputs into the normal brainstorm exploration note. Preserve dissent, name the accepted tradeoff, keep it concise, and assign the next owner without implementation planning.
     focus: [synthesis, dissent, tradeoff, next owner]
     avoid: [majority vote, neutral menu, implementation plan]
-    output_shape: Candidate directions, recommended boundary, dissent, tradeoff, and next owner
+    output_shape: Exploration note with recommendation, dissent, tradeoff, and next owner

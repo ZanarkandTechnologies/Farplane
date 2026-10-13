@@ -1,6 +1,6 @@
-# Frame Visual Templates
+# Recap Idea Visual Templates
 
-Load this in `frame` N4 after the verification question is known. Choose one
+Load this only after `SKILL.md` has classified the product shape. Choose one
 template, replace every placeholder with discussion-grounded content, and
 remove irrelevant branches. The template is scaffolding, never visible filler.
 
