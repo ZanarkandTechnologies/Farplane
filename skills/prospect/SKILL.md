@@ -63,7 +63,8 @@ returns: the OpportunityCase, decision approach | research_more | stop, and the 
   `why them`, `why now`, `why this source`, `why this channel`. Search
   separate discovery lanes (speaker lists, repo activity, job posts, launches,
   complaints, tool migrations, community asks). Prefer supplied and public
-  sources; a paid scraper through `treg` needs the operator's acceptance. Label
+  sources; paid data calls follow [data recipes](references/data-recipes.md)
+  within the operator's weekly spend cap, price quoted first. Label
   every observation `full_public`, `indexed_snippet`, `operator_supplied`,
   `operator_authorized_session`, `auth_walled`, or `not_inspected`. Dedupe by
   URL, domain, then name. Load [sources](references/sources.md) for platform
@@ -153,6 +154,8 @@ returns: the OpportunityCase, decision approach | research_more | stop, and the 
 - [sources](references/sources.md) - load in N2 and N4: discovery lanes,
   platform limits, deep-mode sources, the authorized-session rules, and the
   hiring scan.
+- [data recipes](references/data-recipes.md) - load in N2 for a paid list,
+  contact, signal, brief or creator pull: steps, gateway and published cost.
 - [opportunity case template](templates/opportunity-case.md) - load in N6.
 - [data-center construction example](examples/data-center-construction/example.md)
   - archetypes-only case when geography and entities are not yet sourced.

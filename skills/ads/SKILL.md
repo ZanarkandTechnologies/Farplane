@@ -81,7 +81,8 @@ returns: the packet, its approval gates, source gaps, and the next owner
   row names the hypothesis, the isolated variable, the read window, and the
   kill and scale rule written before launch. Label policy risks and reframe
   sensitive targeting to observable business context. Load
-  [campaign plan](references/campaign-plan.md) for the columns.
+  [campaign plan](references/campaign-plan.md) for the columns and
+  [market signals](references/market-signals.md) for demand and competitor ads.
 
   Example: three copy angles, same audience, offer, page, and budget -> learns
   which angle wins; a new audience plus new creative learns nothing.

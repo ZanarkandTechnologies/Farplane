@@ -26,6 +26,28 @@ publication boundary. When the audience, promise, or product language is
 fuzzy, run `page` mode's message map first; the article reuses its reader
 words.
 
+## 1b. Pick the topic from search data when none is given
+
+Adapted from treg's `seo-weekly` endpoints and Monid's SEO/GEO loop. Quote
+each paid call first and stay inside the weekly spend cap; the gateway per job
+is in the tool loadout note in `~/.farplane/memory/`.
+
+1. **Striking distance:** read the site's own Search Console queries at
+   positions 8-15 (`search-console.performance`, free on the operator's own
+   property). These pages need a refresh, not a new article.
+2. **Keyword gap:** pull competitors' ranked keywords
+   (`google.domain.ranked_keywords`) and keep terms they rank for and the site
+   does not; price them with keyword volume.
+3. **AI-answer check:** for the top 10-12 buyer questions, record which
+   domains AI answers cite (`ai-search.mentions` or Ahrefs AI responses). A
+   cited host is a pitch or guest-post target, not only a competitor.
+4. Queue topics by demand, gap and information gain; refresh beats new.
+
+Tracking after publication (dated SERP position and AI-citation snapshots,
+reviewed every two weeks) is a recurring job: set it up through
+`automation-advisor`, never by hand each week. Published receipts: a full site
+teardown about $0.63; daily SERP rows cost cents.
+
 ## 2. Check the SERP before outlining
 
 Search the live query (web search, or a SERP tool through `treg` within the

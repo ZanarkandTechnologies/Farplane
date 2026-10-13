@@ -61,6 +61,25 @@ Pick the avatar or lipsync listing through treg per [providers](providers.md);
 `belt` avatar apps are the fallback. Inspect frames for identity drift, mouth
 sync against the audio, hands, and wardrobe changes before acceptance.
 
+## 5. UGC hook batch with a persistent AI actor
+
+Adapted from treg's `make-ugc` workflow and Monid's AI-actor and Jev remake
+recipes. Use when the operator wants short ad or organic hooks from one
+recurring fictional presenter (not a real person's likeness).
+
+1. Build the actor once: a portrait sheet from 3-5 image models through
+   `ai-image`, pick one, keep it as the identity reference.
+2. Take hook mechanisms from the storyboard's outlier research, not wording.
+3. Brainstorm about 10 hooks, keep 4.
+4. Render each talking-head hook with Seedance 2.5 (image + audio reference +
+   script, 9:16 720p, about 6-8 s); keep the same actor reference every time.
+5. Cut a short product or demo segment (screen recording plus a voice clone
+   through `audio` mode); stitch and caption in HyperFrames.
+
+Published receipts: about $0.67 a clip on treg's page; our own pilots on
+2026-10-12 cost about $0.71 (6 s 480p) and $1.60 (720p) a clip. Re-quote with
+`catalog_get` first: the per-call listing price has drifted from the pages.
+
 ## Packet template
 
 ```text

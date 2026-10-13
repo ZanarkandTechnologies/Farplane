@@ -23,6 +23,27 @@ hook_lab(idea, proof, audience, source_title?)
    + rejected_reasons
 ```
 
+## Outlier Research (when no reference is supplied)
+
+Adapted from Monid's TikTok-outlier and trend-scout recipes and treg's
+category-intel and launch-radar workflows. Quote first, stay inside the weekly
+spend cap; the gateway per job is in the tool loadout note in
+`~/.farplane/memory/`.
+
+1. Search the niche on the target platform (TikTok, Instagram, YouTube, X)
+   for the last 7-30 days, sorted by views or likes; cap at about 50 posts.
+2. For each poster, pull recent posts and compute their median views.
+3. Keep posts at 10x+ their creator's median: the format worked, not the
+   follower count.
+4. For the top 5, pull the transcript and read the first 3 seconds; record
+   the mechanism (claim, contrast, visual, sound) as a hook lens, never the
+   wording.
+5. For a non-English market, repeat on its native platform (Xiaohongshu for
+   China) with a native-language keyword.
+
+Published receipts: a niche scan about $0.003-0.03. A weekly scan with a diff
+of new breakouts is a recurring job for `automation-advisor`.
+
 ## Candidate Pass
 
 Write at least ten materially different hooks across at least six of the
