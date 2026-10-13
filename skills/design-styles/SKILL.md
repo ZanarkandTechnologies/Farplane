@@ -15,7 +15,7 @@ allowed-tools: Read, Glob, Grep, Bash
 
 Image models and designers respond to style names, not mood words: "Art Deco"
 pulls a precise look where "elegant and premium" pulls a generic one. This
-skill owns that vocabulary: 50 named styles in nine families
+skill owns that vocabulary: the named styles and their families
 ([styles.json](references/styles.json)), each stored in the bunker's Resource
 Bank as one Tasty Pack capture with its example board image and a recipe,
 tagged `style:<slug>` and `style-family:<family>`. `styles.json` is where the

@@ -71,10 +71,14 @@ def convex(function: str, payload: dict, push: bool = False):
 
 
 def find_element(style: dict) -> dict | None:
-    """The stored element for one style, matched by its style tag (text search only narrows)."""
+    """The library element for one style, matched by its tags (text search only narrows).
+
+    Saved references carry the same style:<slug> tag, so the style-library tag is what
+    keeps an example in someone's saved reference from being mistaken for the style itself.
+    """
     rows = convex(
         "creativeElements:listCreativeElements",
-        {"query": style["name"], "tags": [f"style:{style['slug']}"], "limit": 50},
+        {"query": style["name"], "tags": [LIBRARY_TAG, f"style:{style['slug']}"], "limit": 50},
     )
     if len(rows) > 1:
         print(f"warning: {len(rows)} stored elements for style:{style['slug']}", file=sys.stderr)
@@ -110,6 +114,11 @@ def image_size(path: Path) -> tuple[int, int] | None:
     return None
 
 
+def style_source(style: dict, catalog: dict) -> dict:
+    """The catalog's default source, overridden by a style's own `source` when it came from elsewhere."""
+    return {**catalog["source"], **style.get("source", {})}
+
+
 def analysis_markdown(style: dict, source: dict) -> str:
     return (
         f"## Breakdown\n{style['name']} ({style['family']}). Cues: {style['cues']}.\n"
@@ -117,13 +126,13 @@ def analysis_markdown(style: dict, source: dict) -> str:
         f"## Why It Works\nReads as {style['mood']}. A named style plus its concrete cues "
         "gives an image model or designer a shared target instead of a vague mood word.\n\n"
         f"## Reuse Notes\nFits {style['use']}. Recreate the style from the recipe; the board's "
-        "posters are other designers' work, so never copy a poster, logo, character or film "
-        f"or brand property. Source: {source['title']}, {source['author']} ({source['publication']})."
+        "examples are other designers' work, so never copy a poster, logo, character or film "
+        f"or brand property. Source: {source['title']}, {source['credit']}."
     )
 
 
 def seed_one(style: dict, catalog: dict, image_dir: Path, push: bool) -> str:
-    source = catalog["source"]
+    source = style_source(style, catalog)
     image = image_dir / f"{style['n']:02d}.png"
     if not image.exists():
         raise FileNotFoundError(image)
@@ -134,8 +143,8 @@ def seed_one(style: dict, catalog: dict, image_dir: Path, push: bool) -> str:
         {
             "sourceKind": "image",
             "sourceRef": source_ref,
-            "originalInstruction": "Store the 50 design styles and their example boards as design tags.",
-            "note": "The operator asked to keep these style boards in the Tasty Pack as the design-tag vocabulary (2026-10-13).",
+            "originalInstruction": "Store the design styles and their example boards as design tags.",
+            "note": "The operator asked to keep these style boards in the Tasty Pack as the design-tag vocabulary.",
             "requestedFocus": f"{style['name']} style",
             "tags": tags,
             "requestedBy": "design-styles",
@@ -165,8 +174,8 @@ def store_capture(style: dict, source: dict, image: Path, tags: list[str], job_i
             "storageId": upload(image),
             "mimeType": mimetypes.guess_type(image.name)[0],
             **({"width": size[0], "height": size[1]} if size else {}),
-            "platform": "uxplanet",
-            "author": f"{source['author']} ({source['publication']}); posters by various designers",
+            "platform": source["platform"],
+            "author": source["credit"],
             "attributionStatus": "partial",
             "outputTypes": style["outputs"],
             "tags": tags,
@@ -174,7 +183,7 @@ def store_capture(style: dict, source: dict, image: Path, tags: list[str], job_i
                 f"{style['name']} design style {style['family']} {style['cues']} "
                 f"{style['mood']} {style['use']}"
             ),
-            "retentionNote": "Private style reference; recreate the style, never reuse the posters.",
+            "retentionNote": "Private style reference; recreate the style, never reuse the examples.",
         },
     )
     analysis_id = convex(
