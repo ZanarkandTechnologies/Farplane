@@ -67,7 +67,7 @@ GAPS: dict[str, dict[str, str]] = {
         "fix": "Lead with the overall state in plain words: what works, what does not, and the one thing the user must do. Drop internal terms and fix history.",
     },
     "absolute_paths": {
-        "fix": "Name every file by its absolute path (for example /Users/…/file.md), in links and in text, so it opens from any folder or a phone.",
+        "fix": "Name every file by its absolute path (for example /Users/…/file.md), in links and in text, so it opens from any folder or a phone. Keep spaces as spaces and wrap a link or image target in angle brackets, [a](</Users/me/My Docs/a.png>); never write %20.",
     },
     "conclusion_first": {
         "fix": "Lead with the conclusion in the first sentence.",
@@ -96,14 +96,15 @@ GAPS: dict[str, dict[str, str]] = {
 }
 PROOF_FIX = (
     "Cite the proof this turn produced: embed screenshots or video with absolute "
-    "paths, link artifacts, and add `Verified:` with the check and result. If a "
+    "paths (spaces kept, target in angle brackets: ![shot](</Users/me/My Docs/a.png>), "
+    "never %20), link artifacts, and add `Verified:` with the check and result. If a "
     "check you can run is missing, run it now; use `Unverified:` only for proof "
     "that needs the user, hardware, or spend over the cap, and say which."
 )
 
 VIDEO_FIX = (
     "Record the new feature working and embed or link the video (.mp4, .mov or "
-    ".webm) by absolute path. If you cannot record it, add `Unverified:` saying "
+    ".webm) by absolute path, spaces kept and the target in angle brackets. If you cannot record it, add `Unverified:` saying "
     "why there is no video."
 )
 FEATURE_QUESTION = (
@@ -118,9 +119,12 @@ FEATURE_QUESTION = (
 )
 
 # A relative file link target, or a backticked relative path with an extension.
-# `./run.sh` and `../x` read as commands to run, not files to open.
+# `./run.sh` and `../x` read as commands to run, not files to open. An absolute
+# target may sit in angle brackets, `](</Users/me/My Docs/a.png>)`, to keep its
+# spaces; a local target with `%20` in it doesn't open (the app reads it literally).
 _RELATIVE_PATH = re.compile(
-    r"\]\((?!https?:|mailto:|file:|#|/|~)[^)\s]+\)"
+    r"\]\((?!https?:|mailto:|file:|#|/|~|<[/~])[^)\s]+\)"
+    r"|\]\(<?[/~][^)]*%20[^)]*\)"
     r"|`(?![/~]|\.\.?/)[\w.-]+(?:/[\w.-]+)+\.\w{1,6}(?::\d+)?`"
 )
 _VIDEO = re.compile(r"\.(?:mp4|mov|webm)\b", re.IGNORECASE)
