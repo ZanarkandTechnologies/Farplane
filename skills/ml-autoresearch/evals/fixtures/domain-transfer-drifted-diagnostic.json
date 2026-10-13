@@ -68,6 +68,6 @@
     "receipt_policy": "Keep receipts append-only even when invalid or non-comparable.",
     "causal_policy": "A tree status label cannot override evaluator or data-split integrity.",
     "packet_policy": "Evaluator or split drift stales the current packet; do not spend the remaining experiment until the packet is regenerated or comparable restored-boundary evidence exists.",
-    "writeback_order": "Correct hypothesis-tree.json before appending the integrity finding to progress.md."
+    "writeback_order": "Correct hypothesis-tree.json before posting the integrity finding as a Goal turn comment."
   }
 }

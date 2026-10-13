@@ -38,7 +38,7 @@ system_record_json: |
 Self-Improvement and Learning runs bounded, measurable improvement campaigns
 over skills, ML systems, or human-evaluated artifacts. Each campaign first
 grounds a source stage, then stores its live hypothesis search state in one
-ticket-local JSON tree. The active Goal owns `choose_next` from that tree plus
+issue-local JSON tree under `.farplane/goal-advisor/issue-<n>/`. The active Goal owns `choose_next` from that tree plus
 current evidence; the choose-next comparison is conditional on a real
 multi-option judgment; the domain skill executes; native Goal owns continuation.
 
@@ -58,13 +58,17 @@ target skill:
   SKILL.md                   editable behavior
   evals/evals.json           canonical cases
 
-owning ticket Goal Packet:
-  ticket.md                  objective, scope, Done, proof
-  program.md                 source/search policy, metrics, budgets, stops
-  hypothesis-tree.json       current source synthesis, hypotheses, results, insights
-  progress.md                append-only selection and mutation receipts
-  artifacts/native-goal-prompt.md
-  artifacts/experiments/     optional bulky trial receipts
+owning GitHub issue Goal Packet:
+  ticket sections            objective, scope, Done, proof
+  ## Goal program            source/search policy, metrics, budgets, stops
+    (launcher comment)       native /goal prompt
+  ## Current Goal state      latest checkpoint
+  Goal turn comments         append-only selection and mutation receipts
+  linked artifacts           optional bulky trial receipts
+
+local, linked from ## Goal program:
+  .farplane/goal-advisor/issue-<n>/hypothesis-tree.json
+                             current source synthesis, hypotheses, results, insights
 
 generated:
   .farplane/evals/runs/      Eval evidence only
@@ -72,7 +76,7 @@ generated:
 
 The Self Improve program template and the ML autoresearch campaign program
 ([`ml-autoresearch`](../../skills/ml-autoresearch/SKILL.md))
-are reusable policy sources instantiated into each ticket. They are not runtime state. Existing
+are reusable policy sources instantiated into each issue's `## Goal program`. They are not runtime state. Existing
 target-local `self-improve/*` folders are legacy experiment material; the
 active workflow does not read, write, generate, parse, or migrate them.
 
@@ -123,7 +127,7 @@ returns the shortest verified passing candidate discovered within the budget.
 Before every harden or refine round, the Goal applies `choose_next`; the
 choose-next comparison is conditional on a real ranking decision. No tournament, stored
 counter, daemon, or second continuation engine participates. The JSON tree
-stores current branch state, ticket `progress.md` records chronological
+stores current branch state, the issue's Goal turn comments record chronological
 receipts, Eval supplies measurements, and native Goal applies the program.
 
 ## ML autoresearch preset
@@ -134,8 +138,8 @@ freezes the evaluator, data/split boundary, metric, guards,
 mutable surface, baseline, and compute/spend budget before the first change.
 Each Goal turn selects one attributable intervention or diagnostic hypothesis
 through `choose_next`, conditionally using the choose-next comparison, preregisters its expectation and falsifier, runs
-correctness smokes and the full evaluator, updates the tree, appends an
-immutable receipt, and replans. The campaign keeps the best verified candidate
+correctness smokes and the full evaluator, updates the tree, posts an
+immutable Goal turn comment receipt, and replans. The campaign keeps the best verified candidate
 or returns an evidence-backed negative result.
 
 ## Source Stage And Hypothesis Generation
@@ -186,7 +190,7 @@ flowchart LR
   coverage["source stage<br/>techniques + mechanisms + variables"]
   tree["hypothesis-tree.json<br/>current research state"]
   leverage["choose-next comparison<br/>conditional"]
-  packet["Goal Packet policy<br/>program + progress"]
+  packet["Goal Packet policy<br/>Goal program + Goal turn comments"]
   baseline["frozen-suite baseline"]
   select["select pending<br/>intervention or diagnostic"]
   execute["domain experiment<br/>+ full evaluator"]
@@ -205,8 +209,8 @@ flowchart LR
 ## Boundaries
 
 - `goal-advisor` compiles and freshness-binds the packet and native launcher.
-- The active Goal owns `choose_next` from program, tree, progress, receipt
-  evidence, and remaining budget. The choose-next comparison supplies one stateless
+- The active Goal owns `choose_next` from program, tree, Goal turn comments,
+  receipt evidence, and remaining budget. The choose-next comparison supplies one stateless
   ordinal comparison only when several eligible moves need judgment.
 - `hypothesis-tree.json` is the sole current research-state owner; children,
   depth, pending leaves, and rank are derived rather than duplicated.
@@ -256,5 +260,8 @@ flowchart LR
   selector and added the ML Autoresearch domain entrypoint.
 - 2026-07-31: Added the source stage and one canonical JSON hypothesis tree for
   evidence-driven intervention, diagnosis, and backtracking across modalities.
+- 2026-10-13: Moved the campaign Goal Packet onto the GitHub issue (Goal
+  program, Current Goal state, Goal turn comments) with the hypothesis tree at
+  `.farplane/goal-advisor/issue-<n>/hypothesis-tree.json`.
 - 2026-10-12: Absorbed the metric card and the ML autoresearch entrypoint into
   `goal-advisor` (#41) and retired FEAT-0070 when `dogfood-review` was deleted.

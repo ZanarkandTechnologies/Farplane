@@ -35,11 +35,11 @@ ml_autoresearch(target_system, owning_ticket, mutable_surface,
   -> approved_goal_packet + best_verified_candidate + experiment_evidence
 
 state:
-  reads(target code/docs, immutable data/evaluator contract, owning ticket,
-        program policy, hypothesis-tree.json, progress.md learnings, experiment receipts,
+  reads(target code/docs, immutable data/evaluator contract, owning issue,
+        Goal program policy, hypothesis-tree.json, Goal turn comment learnings, experiment receipts,
         optional technique catalog, current compute/budget state)
-  writes(ticket program.md, ticket hypothesis-tree.json, ticket progress.md,
-         native Goal prompt, ticket-local experiment receipts,
+  writes(issue ## Goal program, hypothesis-tree.json, Goal turn comments,
+         native Goal prompt, linked experiment receipts,
          accepted mutable-surface change)
 
 gates:
@@ -69,20 +69,20 @@ named composition explicit:
 source_stage(local evidence + technique catalog + Feed Scout/research inputs?)
   -> techniques + mechanisms + variables
 campaign.initialize_tree(initial hypothesis candidates)
-goal_advisor(ticket.md + program preset + hypothesis-tree.json + progress.md)
+goal_advisor(issue ticket sections + program preset + hypothesis-tree.json)
   -> approved Goal Packet
-observe(ticket + program + tree + progress tail + current receipts)
+observe(issue body + tree + Goal turn comments within 80 lines + current receipts)
 choose_next(eligible leaves + remaining budget)
   -> execute | diagnose | report_now | request_feedback | stop
 choose_next_comparison(eligible leaves + evidence + outside options)? -> selected move
-domain_executor(next experiment) -> receipt + tree update + progress.md append
+domain_executor(next experiment) -> receipt + tree update + Goal turn comment
 native_goal(updated packet state) -> continue | replan | block | complete
 ```
 
-The campaign Goal Packet always contains `ticket.md`, `program.md`,
-`hypothesis-tree.json`, and `progress.md`. `program.md` owns source/search
-policy; the tree owns current hypotheses, results, and insights; `progress.md`
-owns append-only selections and mutation receipts. Goal Advisor is only the
+The campaign Goal Packet always contains the issue's ticket sections, `## Goal
+program`, `hypothesis-tree.json`, and Goal turn comments. `## Goal program` owns
+source/search policy; the tree owns current hypotheses, results, and insights;
+Goal turn comments own append-only selections and mutation receipts. Goal Advisor is only the
 packet/native-Goal compiler. Metric Advisor is setup/repair only. Use the
 choose-next comparison only when several experiments need judgment; otherwise the
 Goal executes the mechanically implied move directly.
@@ -136,12 +136,12 @@ the authority named by the ticket.
     implied. Do not use a tournament, persistent rank, or numeric lift.
 - [ ] 4. Use [Goal Advisor](../goal-advisor/SKILL.md) to instantiate
   [the ML Goal program preset](references/goal-program-template.md) into the
-  owning ticket's `program.md`, create or update `hypothesis-tree.json` and
-  `progress.md`, compile the Files-listed native Goal prompt, and obtain
+  owning issue's `## Goal program`, create or update `hypothesis-tree.json` and
+  `## Current Goal state`, compile the Files-listed native Goal prompt, and obtain
   required approval.
 - [ ] 5. Select the next experiment from current evidence.
-  - [ ] Apply `choose_next` to `program.md` policy, eligible pending tree
-    leaves, recent `progress.md` learnings, current full-evaluator receipts,
+  - [ ] Apply `choose_next` to `## Goal program` policy, eligible pending tree
+    leaves, recent Goal turn comment learnings, current full-evaluator receipts,
     and remaining budget. Use the choose-next comparison only for a multi-option
     judgment. Do not continue a fixed roadmap order.
   - [ ] Preregister one hypothesis, expected observation, observation horizon,
@@ -153,8 +153,8 @@ the authority named by the ticket.
   - [ ] Modify only the allowed surface, run correctness smokes, then run the
     exact full frozen evaluator when valid.
   - [ ] Update the selected tree node with the result, evidence, and insight,
-    then append the receipt link, learned constraint, keep/discard/repair-once
-    decision, tree mutation, and next action to ticket `progress.md`; include
+    then post the receipt link, learned constraint, keep/discard/repair-once
+    decision, tree mutation, and next action as one Goal turn comment; include
     rejected alternatives or a budget checkpoint only when they materially
     affect the selection or a ceiling. Never overwrite a failed attempt.
   - [ ] When the observation materially misses its expectation or is
@@ -282,7 +282,7 @@ next_action:
 ## Output
 
 - one approved campaign Goal Packet and compact native Goal prompt;
-- baseline and append-only experiment receipts linked from `progress.md`;
+- baseline and append-only experiment receipts linked from Goal turn comments;
 - evidence-updated tree decisions with material selection rationale;
 - best verified candidate or an evidence-backed no-improvement/blocked result;
 - independent final evidence review and residual-risk statement.
@@ -290,9 +290,9 @@ next_action:
 For any requested loop policy, packet draft, or active turn, explicitly report:
 
 ```text
-Packet: ticket.md + program.md + hypothesis-tree.json + progress.md + Goal Advisor compilation state
+Packet: issue ticket sections + ## Goal program + hypothesis-tree.json + Goal turn comments + Goal Advisor compilation state
 Tree: source synthesis + eligible pending leaves + current branch state
-Progress: progress.md learnings + current full-evaluator receipt refs
+Progress: Goal turn comment learnings + current full-evaluator receipt refs
 Selector: eligible moves + direct or choose-next rationale + outside-option comparison
 Experiment: hypothesis + falsifier + changed boundary + guards + cost
 Expectation: expected observation + horizon + confidence + surprise trigger
@@ -312,7 +312,7 @@ name the selected node or blocking input explicitly.
 For a surprise request, explicitly render the bounded diagnostic children,
 credible sibling leaves preserved for breadth, outcome branches (`repair |
 reject | defer | backtrack`), and literal writeback order:
-`hypothesis-tree.json` first, then the immutable `progress.md` receipt.
+`hypothesis-tree.json` first, then the immutable Goal turn comment receipt.
 
 For a causal-resolution request, explicitly distinguish the parent claim
 disposition from its causal status. If diagnostics isolate a cause, render the

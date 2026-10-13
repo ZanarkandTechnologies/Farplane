@@ -18,10 +18,10 @@ phase: planning | execution
 approved_plan_ref: <required for execution unless a tiny planning test>
 worker_thread_ref: <thread that receives replies, when replies resume work>
 founder_lens: true for product, content, distribution, or offer bets
-state_surfaces: ticket.md + program.md + progress.md + hypothesis-tree.json?
+state_surfaces: issue body (ticket sections + ## Goal program + ## Current Goal state) + Goal turn comments + hypothesis-tree.json?
 ```
 
-When a worker packet already exists, bind this inside its `program.md`; do not
+When a worker packet already exists, bind this inside its `## Goal program`; do not
 create a second packet. Add `hypothesis-tree.json` only for a multi-turn
 experiment-backed campaign; a one-off request omits it.
 
@@ -60,7 +60,7 @@ Before every stop, exactly one holds:
 ```text
 waiting_for_feedback: Telegram send proven | fallback request path shown | blocker
 feedback_processed_non_terminal: next artifact + next request sent | blocker
-terminal: keep | approve | convergence | budget | blocker, recorded in progress.md
+terminal: keep | approve | convergence | budget | blocker, recorded in a Goal turn comment
 ```
 
 A `revise` or `reject` reply needs the corrected understanding and the next
@@ -68,11 +68,11 @@ operator-facing action, not only "feedback recorded".
 
 ## Writeback
 
-Before the request, append to `progress.md`: phase, current hypothesis,
+Before the request, post a Goal turn comment: phase, current hypothesis,
 planned attempt, artifact refs, question, expected signal, and any
 `skill_delta_candidate`. After the reply, update the tree node first (when
-present), then append the human signal, learning, next hypothesis, and
-promotion decision.
+present), then post the human signal, learning, next hypothesis, and
+promotion decision as a Goal turn comment and rewrite `## Current Goal state`.
 
 ## Templates
 

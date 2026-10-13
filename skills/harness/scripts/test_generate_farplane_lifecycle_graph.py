@@ -115,7 +115,7 @@ routes:
         self.assertIn("skill:goal-advisor", nodes)
         self.assertIn("skill:eval", nodes)
         self.assertIn("hook:Stop", nodes)
-        self.assertIn(("skill:goal-advisor", "ticket:tickets/TASK-*/program.md", "writes"), edges)
+        self.assertIn(("skill:goal-advisor", "ticket:github-issue#goal-program", "writes"), edges)
         self.assertIn(("skill:harness", "skill:eval", "routes_to"), edges)
         self.assertIn(("skill:eval", "skill:qa", "routes_to"), edges)
         self.assertIn(("automation:daily-operating-update", "skill:report-gen", "triggers"), edges)

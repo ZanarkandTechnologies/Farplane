@@ -4,16 +4,16 @@
     {
       "id": "goal_advisor_material_goal_packet_01",
       "prompt": "I want AGI Toy Shop to keep improving its autonomous storefront until the checkout and support workflow are clearly better. How should we use Goal mode?",
-      "expected_output": "Recommends native Goal or heartbeat only with durable listed files; Names ticket.md, program.md, and progress.md under an inline Files list; Uses the shared observe, choose-next, act, verify, write-back backbone; Bounds first load to ticket, program, and the latest 80 progress lines; Chooses a metric or feedback provider without inventing fake numbers; Defines drift; Makes evaluation explicit between each bounded action and progress writeback; Keeps budgets free of subagent-count ceilings",
+      "expected_output": "Recommends native Goal or heartbeat only over one GitHub issue and durable listed files; Names the issue (owner/repo#n) first under an inline Files list, with its body holding the ticket sections, ## Goal program, and ## Current Goal state; Uses the shared observe, choose-next, act, verify, write-back backbone; Bounds first load to the full issue body plus the newest Goal turn comments within 80 lines, under a 300-line target and 400-line hard limit; Chooses a metric or feedback provider without inventing fake numbers; Defines drift; Makes evaluation explicit between each bounded action and the Goal turn comment writeback; Keeps budgets free of subagent-count ceilings",
       "files": [],
       "assertions": [
-        "Recommends native Goal or heartbeat only with durable listed files",
-        "Names ticket.md, program.md, and progress.md under an inline Files list",
+        "Recommends native Goal or heartbeat only over one GitHub issue and durable listed files",
+        "Names the issue (owner/repo#n) as the first inline Files entry, with ## Goal program and ## Current Goal state in its body and Goal turn comments as progress",
         "Chooses a metric or feedback provider without inventing fake numbers",
         "Defines a drift policy and when to use goal-drift-reviewer",
         "Includes or promises a native /goal prompt with Files, Task, Logging, Metric, and After each turn sections",
         "Uses observe -> choose_next -> act -> verify -> write_back and compares further work with report_now, request_feedback, and stop",
-        "Bounds first load to full ticket/program plus the latest 80 progress lines and requires the packet context budget gate",
+        "Bounds first load to the full issue body plus the newest Goal turn comments within 80 lines and requires the 300-line target / 400-line hard context gate",
         "Evaluates each bounded action with the declared provider before writing observation, evidence, learning, decision, and next action",
         "Does not use a subagent-count ceiling as an execution budget"
       ],
@@ -56,11 +56,11 @@
     {
       "id": "goal_advisor_skill_improvement_human_feedback_01",
       "prompt": "I want AGI Toy Shop's social-content skill to keep improving short-form toy launch posts by showing me variants for feedback before we try market tests. How should we use Goal mode?",
-      "expected_output": "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime; Requires a Goal Packet with an inline Files list that names ticket.md, program.md, hypothesis-tree.json, and progress.md; Loads the human-feedback preset and defines the feedback artifact shape; Includes a native /goal prompt or prompt plan with Files, Task, Logging, Metric, and After each turn sections; Names drift review or inline drift checks before continuing after feedback",
+      "expected_output": "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime; Requires a Goal Packet with an inline Files list that names the GitHub issue (ticket sections, ## Goal program, ## Current Goal state, Goal turn comments) and .farplane/goal-advisor/issue-<n>/hypothesis-tree.json; Loads the human-feedback preset and defines the feedback artifact shape; Includes a native /goal prompt or prompt plan with Files, Task, Logging, Metric, and After each turn sections; Names drift review or inline drift checks before continuing after feedback",
       "files": [],
       "assertions": [
         "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime",
-        "Requires a Goal Packet with an inline Files list that names ticket.md, program.md, hypothesis-tree.json, and progress.md",
+        "Requires a Goal Packet with an inline Files list that names the GitHub issue (ticket sections, ## Goal program, ## Current Goal state, Goal turn comments) and .farplane/goal-advisor/issue-<n>/hypothesis-tree.json",
         "Loads the human-feedback preset (references/human-feedback.md) and defines the feedback artifact shape",
         "Includes a native /goal prompt or prompt plan with Files, Task, Logging, Metric, and After each turn sections",
         "Names drift review or inline drift checks before continuing after feedback"
@@ -81,13 +81,13 @@
     {
       "id": "goal_advisor_project_goals_parent_heartbeat_01",
       "prompt": "I want to run AGI Toy Shop as a five-year Farplane project with year, quarter, month, week, and task levels. The parent should keep deciding what to do next after leaf tasks finish. Create the Goal setup.",
-      "expected_output": "Rejects a separate five-level durable goal graph; Keeps human direction and selected metric refs in harness.yaml plus reusable metric meaning in metrics.yaml; Uses Work Pulse to replan from tickets, metric state, history, and reports; Uses ticket.md, program.md, and progress.md only for admitted executable work; Explains that native Goal is for an uninterrupted ticket time/budget window",
+      "expected_output": "Rejects a separate five-level durable goal graph; Keeps human direction and selected metric refs in harness.yaml plus reusable metric meaning in metrics.yaml; Uses Work Pulse to replan from tickets, metric state, history, and reports; Uses an issue's ## Goal program, ## Current Goal state, and Goal turn comments only for admitted executable work; Explains that native Goal is for an uninterrupted ticket time/budget window",
       "files": [],
       "assertions": [
         "Rejects a separate five-level durable goal graph",
         "Keeps human direction and selected metric refs in harness.yaml plus reusable metric meaning in metrics.yaml",
         "Uses Work Pulse to replan from tickets, metric state, history, and reports",
-        "Uses ticket.md, program.md, and progress.md only for admitted executable work",
+        "Uses an issue's ## Goal program, ## Current Goal state, and Goal turn comments only for admitted executable work",
         "Explains that native Goal is for an uninterrupted ticket time/budget window"
       ],
       "metadata": {
@@ -105,13 +105,13 @@
     },
     {
       "id": "goal_advisor_project_goals_leaf_native_goal_01",
-      "prompt": "Given this project-goals frontier: W1 has TASK-0001 define offer, TASK-0002 landing page, and TASK-0003 tracking. TASK-0001 is the first eligible child. Write the Goal prompt.",
-      "expected_output": "Generates or recommends a native /goal prompt with an inline Files list for the admitted ticket; Uses harness.yaml and metrics.yaml only when the ticket needs charter or objective context; Requires progress.md logging and completion evidence; Returns control to Work Pulse after completion; Does not expand unadmitted future proposals",
+      "prompt": "Given this project-goals frontier: W1 has issue #1 define offer, #2 landing page, and #3 tracking. Issue #1 is the first eligible child. Write the Goal prompt.",
+      "expected_output": "Generates or recommends a native /goal prompt with an inline Files list for the admitted ticket; Uses harness.yaml and metrics.yaml only when the ticket needs charter or objective context; Requires Goal turn comment logging and completion evidence; Returns control to Work Pulse after completion; Does not expand unadmitted future proposals",
       "files": [],
       "assertions": [
         "Generates or recommends a native /goal prompt with an inline Files list for the selected file set",
         "Uses harness.yaml and metrics.yaml only when the ticket needs charter or objective context",
-        "Requires progress.md logging and completion entries for every changed ticket",
+        "Requires Goal turn comment logging and completion evidence on every changed issue",
         "Says completion should return control to Work Pulse",
         "Does not tell the native Goal to expand unadmitted future proposals"
       ],
@@ -129,12 +129,12 @@
     },
     {
       "id": "goal_advisor_project_goals_completion_handoff_01",
-      "prompt": "TASK-0001 finished and wrote its artifact. What should the Farplane project goals layer do now?",
-      "expected_output": "Requires appending a completion entry to progress.md; Updates ticket status and ticket-local proof rather than a goal graph; Runs or requests proof/review before treating the ticket as done; Returns control to Work Pulse, which dispatches another admitted ticket or replans from observed state",
+      "prompt": "Issue #1 finished and wrote its artifact. What should the Farplane project goals layer do now?",
+      "expected_output": "Requires one proof comment and gh issue close <n> --reason completed; Updates the issue state and its proof rather than a goal graph; Runs or requests proof/review before treating the ticket as done; Returns control to Work Pulse, which dispatches another admitted ticket or replans from observed state",
       "files": [],
       "assertions": [
-        "Requires appending a completion entry to progress.md",
-        "Updates ticket status and ticket-local proof rather than a goal graph",
+        "Requires one proof comment and gh issue close <n> --reason completed",
+        "Updates the issue state and its proof rather than a goal graph",
         "Runs or requests proof/review before treating the child as done",
         "Returns control to Work Pulse after completion",
         "Lets Work Pulse dispatch another admitted ticket or replan from observed state"
@@ -154,11 +154,11 @@
     {
       "id": "goal_advisor_project_goals_noop_heartbeat_01",
       "prompt": "The AGI Toy Shop project goals are waiting for Kenji's content labels before W2 can be planned. What should the heartbeat do?",
-      "expected_output": "Chooses no_op or request_feedback instead of inventing unrelated work; Logs the heartbeat/no-op in progress.md; Preserves the current frontier and hold conditions; Does not expand W2 before the required evidence arrives; Does not create hidden automation or Notion sync",
+      "expected_output": "Chooses no_op or request_feedback instead of inventing unrelated work; Logs the heartbeat/no-op as an issue comment; Preserves the current frontier and hold conditions; Does not expand W2 before the required evidence arrives; Does not create hidden automation or Notion sync",
       "files": [],
       "assertions": [
         "Chooses no_op or request_feedback instead of inventing unrelated work",
-        "Logs the heartbeat/no-op in progress.md",
+        "Logs the heartbeat/no-op as an issue comment",
         "Preserves the current frontier and hold conditions",
         "Does not expand W2 before the required evidence arrives",
         "Does not create hidden automation or Notion sync"
@@ -178,11 +178,11 @@
     },
     {
       "id": "goal_advisor_ui_goal_delegated_proof_01",
-      "prompt": "Create a native Goal prompt for TASK-1234, a UI ticket with QA Strategy proof_weight: visual_qa, a design.md baseline, and required final screenshot evidence. Keep the prompt compact.",
-      "expected_output": "Uses an inline Files list that includes ticket.md, program.md, progress.md, and design.md without restating their full contents; Names delegated proof lanes such as qa-tester, qa visual mode, and reviewer instead of self-certification; Requires drift/proof checks against the ticket before completion; Requires final UI completion to include best screenshot/image evidence as a Markdown image link or block with the missing proof; Keeps the native Goal prompt concise and file-list based",
+      "prompt": "Create a native Goal prompt for issue #1234, a UI ticket with QA Strategy proof_weight: visual_qa, a design.md baseline, and required final screenshot evidence. Keep the prompt compact.",
+      "expected_output": "Uses an inline Files list that includes the issue (owner/repo#1234) and design.md without restating their full contents; Names delegated proof lanes such as qa-tester, qa visual mode, and reviewer instead of self-certification; Requires drift/proof checks against the ticket before completion; Requires final UI completion to include best screenshot/image evidence as a Markdown image link or block with the missing proof; Keeps the native Goal prompt concise and file-list based",
       "files": [],
       "assertions": [
-        "Uses an inline Files list that includes ticket.md, program.md, progress.md, and design.md without restating their full contents",
+        "Uses an inline Files list that includes the issue (owner/repo#1234) and design.md without restating their full contents",
         "Names delegated proof lanes such as qa-tester, qa visual mode, and reviewer instead of self-certification",
         "Requires drift/proof checks against the ticket before completion",
         "Requires final UI completion to include best screenshot/image evidence as a Markdown image link or block with the missing proof",
@@ -203,15 +203,15 @@
     },
     {
       "id": "goal_advisor_material_goal_final_checkpoint_01",
-      "prompt": "Create the native Goal prompt for TASK-2345. It is a material implementation ticket with critical-path bullets, program.md, progress.md, a HEAD~1..HEAD validation boundary, and complete QA inputs: qa-tester then reviewer, evidence written to ticket/progress/artifacts, and QA evidence plus completion review before close. The old Stop hook is disabled; keep the prompt compact.",
-      "expected_output": "Uses an inline Files list with ticket.md, program.md, and progress.md instead of transcript memory; States that native Goal mode owns continuation and does not rely on a Stop hook; Requires ordered critical-path sanity checks and evidence writeback before completion; Requires QA evidence review, the default narrated demo MP4, and completion review before stop_complete; Requires ticket/progress/artifact writeback plus final Ticket, Verification, Artifacts, Grounding, and Residual risk lines",
+      "prompt": "Create the native Goal prompt for issue #2345. It is a material implementation ticket with critical-path bullets, a ## Goal program, Goal turn comments, a HEAD~1..HEAD validation boundary, and complete QA inputs: qa-tester then reviewer, evidence written to the issue body, Goal turn comments, and artifacts, and QA evidence plus completion review before close. The old Stop hook is disabled; keep the prompt compact.",
+      "expected_output": "Uses an inline Files list whose first entry is the issue (owner/repo#2345) instead of transcript memory; States that native Goal mode owns continuation and does not rely on a Stop hook; Requires ordered critical-path sanity checks and evidence writeback before completion; Requires QA evidence review, the default narrated demo MP4, and completion review before stop_complete; Requires Goal turn comment, ## Current Goal state, and artifact writeback, then one proof comment and gh issue close before stop_complete, plus final Ticket, Verification, Artifacts, Grounding, and Residual risk lines",
       "files": [],
       "assertions": [
-        "Uses an inline Files list with ticket.md, program.md, and progress.md instead of transcript memory",
+        "Uses an inline Files list whose first entry is the issue (owner/repo#2345) instead of transcript memory",
         "States that native Goal mode owns continuation and does not rely on a Stop hook",
         "Requires ordered critical-path sanity checks and evidence writeback before completion",
         "Requires QA evidence review, the default narrated demo MP4, and completion review before stop_complete",
-        "Requires ticket/progress/artifact writeback plus final Ticket, Verification, Artifacts, Grounding, and Residual risk lines"
+        "Requires Goal turn comment, ## Current Goal state, and artifact writeback, then one proof comment and gh issue close before stop_complete, plus final Ticket, Verification, Artifacts, Grounding, and Residual risk lines"
       ],
       "metadata": {
         "farplane": {
@@ -229,11 +229,11 @@
     {
       "id": "goal_advisor_delayed_checkin_program_01",
       "prompt": "A workflow change needs one week of usage before we can judge it. Its ticket has two future Reward rows, a baseline, and named analytics evidence. Compile the Goal Packet so a later worker can evaluate it safely.",
-      "expected_output": "Fills program.md Check-In Program in delayed_reward mode rather than leaving scoring across launcher prose; Names the original ticket/program/progress, matured Reward IDs, timestamp, and exact evidence sources as check-in inputs; Defines an ordered evidence, attribution, comparison, scoring, writeback, and accept/kill/monitor procedure; Defines idempotency and missing/stale/below-minimum evidence behavior while preserving future and completed rows; Keeps ticket scope and QA Strategy winning and does not create a check-in ticket",
+      "expected_output": "Fills the ## Goal program Check-In Program in delayed_reward mode rather than leaving scoring across launcher prose; Names the original issue (body and Goal turn comments), matured Reward IDs, timestamp, and exact evidence sources as check-in inputs; Defines an ordered evidence, attribution, comparison, scoring, writeback, and accept/kill/monitor procedure; Defines idempotency and missing/stale/below-minimum evidence behavior while preserving future and completed rows; Keeps ticket scope and QA Strategy winning and does not create a check-in ticket",
       "files": [],
       "assertions": [
-        "Fills program.md Check-In Program in delayed_reward mode rather than leaving scoring across launcher prose",
-        "Names the original ticket/program/progress, matured Reward IDs, timestamp, and exact evidence sources as check-in inputs",
+        "Fills the ## Goal program Check-In Program in delayed_reward mode rather than leaving scoring across launcher prose",
+        "Names the original issue (body and Goal turn comments), matured Reward IDs, timestamp, and exact evidence sources as check-in inputs",
         "Defines an ordered evidence, attribution, comparison, scoring, writeback, and accept/kill/monitor procedure",
         "Defines idempotency and missing/stale/below-minimum evidence behavior while preserving future and completed rows",
         "Keeps ticket scope and QA Strategy winning and does not create a check-in ticket"
@@ -254,13 +254,13 @@
     {
       "id": "goal_advisor_compiles_experiment_backbone_01",
       "prompt": "Compile the packet for an approved ML autoresearch campaign. It has a bounded source stage, frozen evaluator, and initial intervention hypotheses. Keep the state model lean.",
-      "expected_output": "Lists the four packet state files; Instantiates the tree only for the experiment-backed mode; Keeps policy, current state, and chronology separate; Requires tree-first writeback; Avoids duplicate derived state",
+      "expected_output": "Lists the issue and the local hypothesis tree as packet state; Instantiates the tree only for the experiment-backed mode; Keeps policy, current state, and chronology separate; Requires tree-first writeback; Avoids duplicate derived state",
       "files": [],
       "assertions": [
-        "Lists ticket.md, program.md, hypothesis-tree.json, and progress.md under Files",
+        "Lists the issue (owner/repo#n) and .farplane/goal-advisor/issue-<n>/hypothesis-tree.json under Files",
         "Instantiates hypothesis-tree.json only because this packet is experiment-backed",
-        "Keeps source and search policy in program.md, current hypotheses and results in the tree, and chronology in progress.md",
-        "Requires tree mutation before the matching progress receipt after each experiment",
+        "Keeps source and search policy in ## Goal program, current hypotheses and results in the tree, and chronology in Goal turn comments",
+        "Requires tree mutation before the matching Goal turn comment after each experiment",
         "Does not duplicate a frontier, children, depth, rank, tournament, or numeric scorer"
       ],
       "metadata": {
@@ -277,7 +277,7 @@
     },
     {
       "id": "goal_advisor_rejects_plausible_incoherent_packet_01",
-      "prompt": "Compile this approved UI ticket into a Goal. The ticket diagram says S1 select account -> S2 load dashboard -> S3 show recovery, but program.md implements the recovery screen before account selection. design.md still shows the removed S0 welcome screen. The Files list includes three research notes that no step names. Done says the UI matches design.md, while the only planned proof is unit tests. The packet otherwise looks polished and complete.",
+      "prompt": "Compile this approved UI ticket into a Goal. The ticket diagram says S1 select account -> S2 load dashboard -> S3 show recovery, but the ## Goal program implements the recovery screen before account selection. design.md still shows the removed S0 welcome screen. The Files list includes three research notes that no step names. Done says the UI matches design.md, while the only planned proof is unit tests. The packet otherwise looks polished and complete.",
       "expected_output": "Returns revise or blocked instead of launching; Identifies the execution-order contradiction; Identifies the stale design reference; Removes or binds orphan references; Maps UI Done assertions to operated capture and design comparison; Refuses stop_complete until every completion row has current evidence",
       "files": [],
       "assertions": [
@@ -425,13 +425,13 @@
     {
       "id": "goal_advisor_human_feedback_experiment_tree_01",
       "prompt": "An approved multi-turn toy-launch content Goal uses human feedback as its evaluator. local-feedback-3 says the product benefit appears too late; feed-scout:creator-9 reports that contrast-before-reveal improves comprehension. Technique: move contrast before reveal. Mechanism: establish the problem before showing the toy. Variables: contrast wording and reveal timing. Seed and select the first hypothesis, show the feedback turn writeback, and state what a one-off review would omit.",
-      "expected_output": "Extracts the source facts; Seeds a concrete hypothesis with expected reward fields; Uses one ordinal selection; Updates the tree before progress after feedback; Omits the tree for one-off review",
+      "expected_output": "Extracts the source facts; Seeds a concrete hypothesis with expected reward fields; Uses one ordinal selection; Updates the tree before the Goal turn comment after feedback; Omits the tree for one-off review",
       "files": [],
       "assertions": [
         "Extracts source refs, technique, mechanism, and variables into a concrete intervention hypothesis",
         "Records expected observation, falsifier, expected reward, and reward basis before feedback",
         "Uses one ordinal compounding-leverage selection rather than a variant tournament",
-        "Updates hypothesis-tree.json before appending the progress.md feedback receipt and preserves siblings or bounded diagnostics when relevant",
+        "Updates hypothesis-tree.json before posting the Goal turn comment feedback receipt and preserves siblings or bounded diagnostics when relevant",
         "States that a one-off feedback request omits hypothesis-tree.json"
       ],
       "metadata": {
@@ -519,6 +519,77 @@
             "non-trigger"
           ],
           "notes": "Protects the optional boundary of the expectation contract."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_stale_packet_returns_01",
+      "prompt": "The Done list on issue acme/app#88 was edited after its Goal was compiled and approved. The executor is about to start turn 4. What should happen?",
+      "expected_output": "Recomputes compiled_from_ticket_sha from the body above ## Goal program and compares it with the recorded value; Treats the mismatch as a stale packet and does not run turn 4; Returns to goal-advisor to regenerate ## Goal program and post a new **Goal launcher** comment; Requires operator approval of the regenerated packet before execution resumes; Records the stop in a **Goal turn** comment and replaces only ## Current Goal state",
+      "files": [],
+      "assertions": [
+        "Recomputes compiled_from_ticket_sha from the body above ## Goal program and compares it with the recorded value",
+        "Treats the mismatch as a stale packet and does not run turn 4",
+        "Returns to goal-advisor to regenerate ## Goal program and post a new **Goal launcher** comment",
+        "Requires operator approval of the regenerated packet before execution resumes",
+        "Records the stop in a **Goal turn** comment and replaces only ## Current Goal state"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Goal advisor stops a Goal whose ticket changed after compilation",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "freshness"
+          ],
+          "notes": "Guards the freshness hash added when Goal Packets moved onto GitHub issues."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_local_packet_beside_issue_01",
+      "prompt": "Issue acme/app#90 exists for this work in a public repository, but an earlier agent also wrote tickets/TASK-0090/program.md and progress.md with loop notes and a customer's email address. Set up the Goal.",
+      "expected_output": "Treats the local program.md/progress.md as a second writable task and folds the useful policy into the issue's ## Goal program; Moves useful history into Goal turn comments or a link rather than keeping both surfaces live; Keeps the customer's email address out of the public issue body and comments; Puts the latest checkpoint in ## Current Goal state as the last body section; Posts the native /goal prompt as a **Goal launcher** comment with approval pending",
+      "files": [],
+      "assertions": [
+        "Treats the local program.md/progress.md as a second writable task and folds the useful policy into the issue's ## Goal program",
+        "Moves useful history into Goal turn comments or a link rather than keeping both surfaces live",
+        "Keeps the customer's email address out of the public issue body and comments",
+        "Puts the latest checkpoint in ## Current Goal state as the last body section",
+        "Posts the native /goal prompt as a **Goal launcher** comment with approval pending"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Goal advisor folds a stray local packet into the issue",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "privacy"
+          ],
+          "notes": "Guards local_packet_beside_issue and the public-repo privacy rule."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_no_github_repo_legacy_01",
+      "prompt": "This project has no GitHub repository at all, only a local folder. Set up a Goal Packet for its next material task.",
+      "expected_output": "Recognises that the issue-based Goal Packet needs a GitHub repository; Uses the legacy local layout from tickets/README.md (ticket.md, program.md, progress.md) for this project only; Does not invent a GitHub issue reference; Keeps the same Goal program policy, first-load budget and Decision Backbone in the local files",
+      "files": [],
+      "assertions": [
+        "Recognises that the issue-based Goal Packet needs a GitHub repository",
+        "Uses the legacy local layout from tickets/README.md (ticket.md, program.md, progress.md) for this project only",
+        "Does not invent a GitHub issue reference",
+        "Keeps the same Goal program policy, first-load budget and Decision Backbone in the local files"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Goal advisor uses the legacy files only when there is no GitHub repository",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "legacy"
+          ],
+          "notes": "Guards the single legacy route so other projects never fall back to files."
         }
       }
     }

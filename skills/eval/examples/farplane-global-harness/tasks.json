@@ -194,7 +194,7 @@
     "query": "In Farplane, I feel like agents should always plan a new skill-system feature through a ticket before building. Can you help shape that behavior?",
     "reference_points": [
       "Recognizes this as Farplane harness-policy design, not a direct file-edit request",
-      "Names `ticket.md` as the development contract primitive for Farplane work",
+      "Names the project's GitHub issue as the development contract primitive for Farplane work",
       "Proposes a ticket-ready plan with scope, delta, proof, and eval coverage before implementation",
       "Does not edit `runtimes/AGENTS.md`, `AGENTS.md`, skills, or eval files in the answer",
       "Distinguishes full autonomy inside an approved ticket or native Goal Packet from feedback-first design outside those boundaries",
@@ -231,14 +231,14 @@
   {
     "id": "global_goal_packet_autonomy_01",
     "title": "Autonomy resumes inside an approved Goal Packet",
-    "query": "Run the approved TASK-0042 Goal Packet. Files: tickets/TASK-0042/ticket.md, tickets/TASK-0042/program.md, tickets/TASK-0042/progress.md. Continue until the ticket is complete or blocked.",
+    "query": "Run the approved Goal Packet on ZanarkandTechnologies/Farplane#42. Files: ZanarkandTechnologies/Farplane#42 (ticket sections, ## Goal program, ## Current Goal state, Goal turn comments). Continue until the issue is complete or blocked.",
     "reference_points": [
       "Treats the approved Goal Packet as an execution boundary rather than a fresh brainstorming request",
       "Does not ask for broad feedback before beginning the next unresolved Goal step",
-      "Reads or says it will read the listed ticket, program, and progress files as source of truth",
+      "Reads or says it will read the listed issue body and latest Goal turn comments as source of truth",
       "Executes or describes execution within the ticket scope and proof contract",
-      "Keeps autonomy bounded to the approved files and stop conditions",
-      "Reports complete, blocked, or next action with progress writeback rather than inventing new scope"
+      "Keeps autonomy bounded to the approved issue, listed files, and stop conditions",
+      "Reports complete, blocked, or next action with a Goal turn comment writeback rather than inventing new scope"
     ],
     "tags": [
       "system-prompt",
@@ -404,7 +404,7 @@
       "Reads or calls out the need to read the target skill package before designing changes",
       "Defines a small binary eval boundary with realistic cases and pass/fail assertions",
       "Requires a baseline run or baseline score before mutating the target skill",
-      "Names durable harness artifacts such as an owning ticket's `program.md` and `progress.md`, canonical eval cases, and generated run evidence",
+      "Names durable harness artifacts such as an owning issue's `## Goal program` and Goal turn comments, canonical eval cases, and generated run evidence",
       "Separates human rubric dimensions from mechanical assertions instead of using subjective scores as the only metric",
       "States that live hook or skill-health monitoring should wait until offline evals exist and catch a real failure",
       "Keeps the next action concrete and artifact-first without asking for broad permission"

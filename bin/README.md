@@ -101,6 +101,7 @@ or removing a `farplane` command.
   recipe to inject one advisory entry skill when no explicit `$skill` was requested
 - `core/farplane_ticket_close.py` - issue create/resume/close, ticket completion,
   archive, event, and mining boundary used by `farplane ticket finalize TASK-XXXX`
+  (legacy projects without a GitHub repository only)
 - `core/farplane_event_store.py` - durable local event/outbox primitives shared
   by explicit Core commands
 - `farplane.py adoption scan` - local adoption resolver for project

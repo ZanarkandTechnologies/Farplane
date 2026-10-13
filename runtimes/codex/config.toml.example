@@ -121,7 +121,7 @@ description = "Independent rubric reviewer for ticketed plans, implementations, 
 config_file = "agents/reviewer.toml"
 
 [agents.goal-drift-reviewer]
-description = "Read-only Goal Packet drift reviewer that compares ticket, program, progress, and the current continuation claim."
+description = "Read-only Goal Packet drift reviewer that compares the GitHub issue's ticket sections, Goal program, recent Goal turn comments, and the current continuation claim."
 config_file = "agents/goal-drift-reviewer.toml"
 
 [agents.documentation-maintainer]

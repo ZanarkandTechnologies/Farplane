@@ -94,10 +94,10 @@ flowchart LR
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   intent["operator intent<br/>chat, ticket, goal"]:::keep
-  ticket["ticket.md<br/>Summary / Scope / Done-Proof"]:::changed
-  program["program.md + progress.md<br/>route + resume state"]:::changed
+  ticket["GitHub issue body<br/>Summary / Scope / Done-Proof"]:::changed
+  program["## Goal program + Goal turn comments<br/>route + resume state"]:::changed
   goal["FEAT-0068<br/>goal-advisor execution"]:::changed
-  proof["artifacts/<br/>QA, review, closeout proof"]:::added
+  proof["linked artifacts + proof comment<br/>QA, review, closeout proof"]:::added
   registry["feature docs<br/>FEAT-0007 + FEAT-0068"]:::keep
 
   intent --> ticket --> program --> goal --> proof

@@ -42,9 +42,9 @@ lost. Farplane UI Eval OS is the only browser renderer.
   source immutability, file deltas, and normalized schema-v2 receipt.
 - Existing Eval runner: project suites and isolated behavior traces during the
   migration window.
-- Owning ticket `program.md`: instantiated harden/refine policy, metrics,
+- Owning issue `## Goal program`: instantiated harden/refine policy, metrics,
   budgets, and stop conditions.
-- Owning ticket `progress.md`: append-only hypotheses, results, and run links.
+- Owning issue Goal turn comments: append-only hypotheses, results, and run links.
 - `harness` create mode: initial draft and canonical case seeding, then eval handoff.
 - `harness` maintain mode: accepted writeback, then matched regression rerun.
 - Farplane UI Eval OS: history, health, comparison, drilldown, and visualization.

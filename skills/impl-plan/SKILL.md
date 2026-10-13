@@ -17,7 +17,7 @@ allowed-tools: Read, Glob, Grep, Bash
 
 `impl-plan` is the ticket-first planning compiler for material software and
 product work. It resolves accepted intent and repository context into one
-approval-ready `tickets/TASK-XXXX/ticket.md`; it does not implement the change
+approval-ready GitHub issue ticket; it does not implement the change
 or create child implementation plans. Tiny reversible fixes may bypass it with
 a reason, while vague epics route to discovery or ticketization first.
 
@@ -43,7 +43,7 @@ impl_plan(ticket_or_request, proof_weight?)
 
 state:
   reads(ticket?, accepted artifacts, relevant code/tests/docs, project memory?)
-  writes(ticket.md, required UI design.md?, optional diagrams.md, approval handoff)
+  writes(issue body, required UI design.md?, optional diagrams.md, approval handoff)
 
 gates:
   ticket_bound; internal_reuse_inspected; required_context_resolved_or_blocked;
@@ -83,7 +83,7 @@ permission to drop scope. When a resolver cannot run, record `block` rather
 than inventing its result.
 
 For a material request with no selected ticket, create or request the canonical
-`tickets/TASK-XXXX/ticket.md` before returning a substantive plan.
+GitHub issue (`tickets/README.md`) before returning a substantive plan.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -157,7 +157,7 @@ For a material request with no selected ticket, create or request the canonical
   - [ ] Keep the required Contract Diagram compact and type-appropriate. Create
     `diagrams.md` only when multiple detailed architecture views or independent
     diagram review materially help; validate it when linked.
-  - [ ] Move execution history and bulky proof to `progress.md` or `artifacts/`.
+  - [ ] Move execution history and bulky proof to Goal turn comments or linked artifacts.
 - [ ] 8. Run minimality and mechanical gates.
   - [ ] Apply the `code-health` lean gate once after context resolution; keep
     its rung, evidence, and smallest action only where they change scope, a

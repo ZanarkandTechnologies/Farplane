@@ -53,7 +53,7 @@
             "evals",
             "artifact-skills"
           ],
-          "notes": "Protects the new-skill lifecycle: behavior-sensitive skills need evals before done, while ongoing optimization uses the target skill's program and progress files. Carried from skill-creator."
+          "notes": "Protects the new-skill lifecycle: behavior-sensitive skills need evals before done, while ongoing optimization uses the owning issue's Goal Packet. Carried from skill-creator."
         }
       }
     },
@@ -220,7 +220,7 @@
       "files": [],
       "assertions": [
         "Defines a measurable performance target and frozen eval boundary before mutating the target",
-        "Requires an owning ticket with ticket.md, program.md, hypothesis-tree.json, and progress.md rather than target-local loop state",
+        "Requires an owning GitHub issue with ticket sections, ## Goal program, Goal turn comments, and a linked hypothesis-tree.json rather than target-local loop state",
         "Uses native Goal as the sole continuation engine",
         "Makes passing required behavior lexicographically prior to reducing instruction length",
         "Returns a concrete baseline and Goal-packet next action"
@@ -241,14 +241,14 @@
     {
       "id": "self_improve_baseline_and_harden_transition_01",
       "prompt": "The approved toy-safety self-improvement packet has a frozen ten-case suite, a recorded 8/10 baseline, passing safety guards, harden limits of six rounds with patience two, and refine limits of six rounds with patience two. The next bounded edit tests the hypothesis that an explicit sibling-access escalation closes both misses; the complete suite scores 10/10 with every guard passing and writes evidence run toy-safety-17. Show the decision, durable writeback, and following turn.",
-      "expected_output": "Runs a baseline before editing; Freezes the complete suite; Makes one bounded hardening change per turn and retains only improvements that pass guards; Enters refinement only after the full target passes; Records each turn in ticket progress",
+      "expected_output": "Runs a baseline before editing; Freezes the complete suite; Makes one bounded hardening change per turn and retains only improvements that pass guards; Enters refinement only after the full target passes; Records each turn as a Goal turn comment",
       "files": [],
       "assertions": [
         "Runs and records the baseline before target mutation",
         "Keeps the complete eval suite frozen across the Goal",
         "Makes one bounded hardening edit followed by the complete eval per turn",
         "Enters refinement only after the performance target and every guard pass",
-        "Appends hypothesis, measurements, evidence, and retain or reject decision to ticket progress.md"
+        "Appends hypothesis, measurements, evidence, and retain or reject decision as a Goal turn comment on the owning issue"
       ],
       "metadata": {
         "farplane": {

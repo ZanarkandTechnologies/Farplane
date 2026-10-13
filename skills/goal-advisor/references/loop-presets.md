@@ -1,7 +1,7 @@
 # Loop Presets
 
 Load when the Goal is a staged rollout of a proven play (`rollout`) or a
-measurable ML campaign (the `ml-autoresearch` skill). Each preset fills `program.md` and
+measurable ML campaign (the `ml-autoresearch` skill). Each preset fills `## Goal program` and
 the trigger shape; Goal Advisor still compiles the packet and launcher, native
 Goal still continues, and the domain skill still executes.
 
@@ -43,6 +43,6 @@ Output: `Selected Play`, `Exemplar Case`, `Sample Proof`, `Extracted Pattern`,
 ## ML autoresearch preset
 
 ML training or inference campaigns use the `ml-autoresearch` skill (Research
-Engineer desk). It owns the campaign `program.md`, frozen-evaluator hashing,
+Engineer desk). It owns the campaign `## Goal program`, frozen-evaluator hashing,
 and the causal-status rules; goal-advisor only compiles the Goal Packet around
 it.

@@ -9,24 +9,25 @@ kind: golden-example
 
 ## Input and context
 
-- Request: “Implement TASK-0421, CSV export for the customer table.”
-- Sources: an approved ticket, `program.md`, `progress.md`, `design.md`, and a
-  QA Strategy requiring browser capture, visual QA, and completion review.
-- State: ticket `updated_at` matches the compiled packet; no deploy or spend is
-  authorized; the final CSV workflow has not run yet.
+- Request: “Implement acme/app#421, CSV export for the customer table.”
+- Sources: an approved issue body (ticket sections, `## Goal program`,
+  `## Current Goal state`), its Goal turn comments, `design.md`, and a QA
+  Strategy requiring browser capture, visual QA, and completion review.
+- State: the body's ticket-section hash matches `compiled_from_ticket_sha`; no
+  deploy or spend is authorized; the final CSV workflow has not run yet.
 
 ## Accepted output
 
 ```text
 Goal Architecture: active_goal over one approved coding leaf
 Files:
-- tickets/TASK-0421/ticket.md
-- tickets/TASK-0421/program.md
-- tickets/TASK-0421/progress.md
-- tickets/TASK-0421/design.md
+- acme/app#421: ticket sections + ## Goal program + ## Current Goal state;
+  Goal turn comments are the progress log
+- docs/design/csv-export/design.md
 Trigger: native Goal, one uninterrupted 90-minute window
 Metric: ticket critical-path checks + delegated QA/review; no proxy-only finish
-Drift Policy: compare ticket/program/progress after each turn
+Drift Policy: compare ticket sections, Goal program, and latest Goal turn
+comments after each turn
 QA Proof Route: qa-tester captures CSV workflow and screenshot -> qa visual mode
 judges design fidelity -> reviewer judges evidence sufficiency
 Compiled Execution Path:
@@ -35,30 +36,34 @@ Compiled Execution Path:
   S3 download complete -> Change 3 browser delivery -> D3 operated download
   F1 export failure -> Change 3 recovery state -> D4 visible retry path
 Reference Manifest:
-  ticket.md -> all nodes; owns scope and Done / Proof
-  program.md -> loop; owns order, drift, and stopping
-  progress.md -> writeback; owns observations and evidence chronology
+  ticket sections -> all nodes; own scope and Done / Proof
+  ## Goal program -> loop; owns order, drift, and stopping
+  Goal turn comments -> writeback; own observations and evidence chronology
   design.md -> S1/S3/F1 + qa visual mode; owns UI state baseline
 Completion Closure:
   D1 -> Change 1 -> screenshot compared with design.md -> pending
   D2 -> Change 2 -> focused CSV assertions -> pending
   D3 -> Change 3 -> operated download trace -> pending
   D4 -> Change 3 -> failure-state capture compared with design.md -> pending
-Approval: approved; packet compiled from ticket updated_at 2026-07-16T14:20:00Z
+Approval: approved; compiled_from_ticket_sha 3f9a1c07b2e4
 Native Goal Prompt:
-  Files: [the four paths above]
-  Task: satisfy TASK-0421 scope and Done / Proof.
-  Program: read program.md first; it owns budget, proof, drift, and stop policy.
-  After each turn: append observations to progress.md and continue, revise, or
-  block from file-backed state.
+  Files: [the issue and design path above]
+  Read: first-load command (body + newest Goal turn comments within 80 lines);
+  context gate target 300 / hard 400 lines.
+  Task: satisfy acme/app#421 scope and Done / Proof.
+  Program: read ## Goal program first; it owns budget, proof, drift, and stop
+  policy.
+  After each turn: post one Goal turn comment, rewrite ## Current Goal state,
+  and continue, revise, or block from issue-backed state.
   Completion: run ordered sanity checks, the real CSV workflow, ticket
-  validation, QA evidence review, and completion review before stop_complete.
+  validation, QA evidence review, and completion review, then one proof
+  comment and gh issue close 421 --reason completed before stop_complete.
 Next Action: start the approved Goal; block if packet freshness changes.
 ```
 
 ## Why it passes QA
 
-- The launcher cites compact file-backed truth and records packet freshness.
+- The launcher cites compact issue-backed truth and records packet freshness.
 - Diagram nodes, changes, exit assertions, and evidence form one traceable path;
   no Done claim floats free of an implementation owner or proof source.
 - Every non-core reference has a named consumer, so stale and ornamental refs
@@ -72,20 +77,22 @@ Next Action: start the approved Goal; block if packet freshness changes.
 `/goal Work on CSV export until the tests pass. Use the discussion above for
 requirements and report when done.`
 
-Why it fails: it hides files in transcript memory, omits `program.md`, approval,
+Why it fails: it hides state in transcript memory, omits the issue and its
+`## Goal program`, approval,
 freshness, delegated QA, the real workflow, and the completion checkpoint.
 
 ## Transferable invariants
 
-- Material Goals are compact launchers over approved, fresh Goal Packet files.
-- The ticket owns scope/proof; the program owns execution policy; progress owns
-  observations. Do not duplicate those contracts in prompt prose.
+- Material Goals are compact launchers over an approved, fresh Goal Packet
+  issue.
+- The ticket sections own scope/proof; `## Goal program` owns execution policy;
+  Goal turn comments own observations. Do not duplicate those contracts in prompt prose.
 - Name honest metric, authority, drift, delegated proof, and stop conditions.
 
 ## Non-copyable facts and wording
 
-- TASK-0421, CSV export, file names beyond the standard packet, timestamps,
-  budget, and lane chain are fixture-specific.
+- acme/app#421, CSV export, the design path, the sha, timestamps, budget, and
+  lane chain are fixture-specific.
 - Compile fresh paths and wording from the current ticket and QA Strategy.
 
 ## Proof receipt

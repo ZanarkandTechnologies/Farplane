@@ -8,9 +8,8 @@ created_at: TODO
 
 ## Files
 
-- `ticket.md:`
-- `program.md:`
-- `progress.md:`
+- `issue (owner/repo#n):`
+- `hypothesis_tree (experiment-backed only):`
 - `project_goals_or_harness_packet:`
 - `other_source_files:`
 
@@ -63,7 +62,7 @@ TODO
 ## Native Goal Prompt Draft
 
 ```text
-/goal Run the following files as one Goal Packet.
+/goal Run the following issue and files as one Goal Packet.
 Files:
 - TODO
 

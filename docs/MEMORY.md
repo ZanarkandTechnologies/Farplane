@@ -77,7 +77,8 @@ MEM-0064, MEM-0067, MEM-0081, MEM-0082, MEM-0086, MEM-0122, MEM-0147,
 MEM-0148.
 
 - The active ticket is the task-local memory and proof contract. Keep scope,
-  decisions, state, blockers, proof, and links in ticket files rather than chat.
+  decisions, state, blockers, proof, and links on the GitHub issue rather than
+  chat.
 - Farplane tickets use the compact ticket-as-program shape:
   `Summary`, `Scope`, `Delta`, `Change Plan`, `Done`, `QA Strategy`,
   `Docs Strategy`, `Agent Contract`, `Run Hints`, `Links`, and sparse `Notes`.
@@ -87,9 +88,12 @@ MEM-0148.
 - `Done` is the scoreboard for done conditions. `QA Strategy` owns checks,
   review gates, mechanical metrics, evidence obligations, goal-advisor proof
   route, final evidence, final checkpoint, and residual risk.
-- Goal-backed work uses a Goal Packet: `ticket.md` owns the task contract,
-  `program.md` owns loop configuration, `progress.md` owns append-only observed
-  execution, and `artifacts/` owns bulky proof.
+- Goal-backed work uses a Goal Packet on the GitHub issue: the body's ticket
+  sections own the task contract, `## Goal program` owns loop configuration,
+  `## Current Goal state` holds the latest checkpoint, top-level Goal turn
+  comments own append-only observed execution, and linked artifacts own bulky
+  proof. First load is the body plus the newest Goal turn comments within
+  80 lines; the launcher is its own comment.
 - Farplane starts work from explicit invocation or an active Goal Packet, not
   from the mere existence of a ready ticket, board status, or compute target.
 - Native Codex Goal mode is the only formal semantic continuation loop.
@@ -169,8 +173,8 @@ MEM-0129, MEM-0131, MEM-0149, MEM-0150.
 - Required evidence-quality and integration-readiness gates cannot pass when
   required evidence or integration checks are missing.
 - QA and completion proof are artifact-first. Link screenshots, logs, review
-  reports, clips, and proof from ticket evidence; keep bulky proof under
-  `tickets/TASK-XXXX/artifacts/`.
+  reports, clips, and proof from the issue; keep bulky proof in repository
+  files or attachments linked from it.
 - Browser/user-visible QA defaults to `qa-tester` using the Codex in-app
   Browser for direct page operation, screenshots, snapshots, console/network
   inspection, and page errors. Reuse tabs across sequential work; use

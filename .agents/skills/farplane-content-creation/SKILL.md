@@ -95,7 +95,7 @@ when feedback invalidates the skeleton and reopens planning:
 
 ```yaml
 feedback_receipt:
-  state_path: tickets/TASK-XXXX/progress.md
+  state_path: owner/repo#n Goal turn comment
   artifact_ref: path-or-id-being-reviewed
   phase: planning | execution
   human_signal: exact verdict or bounded paraphrase

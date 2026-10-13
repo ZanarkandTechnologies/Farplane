@@ -1,14 +1,14 @@
 # Goal Program Contract Review
 
-Use this family when Goal Advisor, `program.md`, a generated native Goal
-launcher, Goal packet references, or completion routing changes.
+Use this family when Goal Advisor, an issue's `## Goal program`, a generated
+native Goal launcher, Goal packet references, or completion routing changes.
 
 Required TAS: `TAS-A`
 
 ## TAS Guide
 
 - `TAS-A`: objective, execution path, references, branches, proof, and stop
-  conditions form one coherent file-backed program that a fresh agent can run.
+  conditions form one coherent issue-backed program that a fresh agent can run.
 - `TAS-B`: one repairable binding, reference, recovery path, or proof closure
   still requires executor inference.
 - `TAS-C`: the program can pursue the wrong outcome, load scope-expanding or
@@ -32,10 +32,12 @@ Required TAS: `TAS-A`
 - [ ] `stop-soundness`: `complete` is impossible while closure rows are pending,
   unsupported, stale, or contradicted by stronger evidence.
 - [ ] `reconstructability`: A fresh agent can name current state, next eligible
-  move, why it is eligible, and what will prove it from packet files alone.
-- [ ] `ownership-consistency`: Ticket owns scope/proof, program owns
-  instantiated loop policy, progress owns observations, and launcher remains a
-  compact compiler output.
+  move, why it is eligible, and what will prove it from the issue body, latest
+  Goal turn comments, and listed files alone.
+- [ ] `ownership-consistency`: Ticket sections own scope/proof, `## Goal
+  program` owns instantiated loop policy, Goal turn comments own observations,
+  `## Current Goal state` holds only the latest checkpoint, and the launcher
+  remains a compact compiler output.
 
 ## Blocker Checks
 

@@ -13,7 +13,7 @@ Use it to:
 - locate the correct family reference files
 - assign one TAS to each family from modular binary checks
 - write one structured review result and link it from the ticket `Links`,
-  owning `progress.md`, or artifact references
+  a Goal turn comment on the owning issue, or artifact references
 
 ## Shared TAS Contract
 
@@ -402,7 +402,7 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
 ## Review Result
 
 Write the final review as a linked artifact and surface it from ticket `Links`
-or the owning `progress.md` when a Goal Packet exists.
+or a Goal turn comment on the owning issue when a Goal Packet exists.
 
 Required fields:
 

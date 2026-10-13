@@ -24,10 +24,15 @@ procedures below for this project and any project with a GitHub repository.
 - For a Goal, put executable loop policy under `## Goal program` in the issue
   body and mirror the latest checkpoint under `## Current Goal state`. Append
   each meaningful observation, evidence, decision, remaining budget, blocker,
-  and next action as a top-level comment. The body is the fast resume surface;
+  and next action as a top-level comment. Shapes:
+  `tickets/templates/goal-loop/program.md` and `progress.md`; experiment state
+  stays in `.farplane/goal-advisor/issue-<n>/hypothesis-tree.json`. A Goal
+  first loads the body plus the newest Goal turn comments within 80 lines,
+  and its launcher is a separate `**Goal launcher**` comment (`goal-advisor`). The body is the fast resume surface;
   comments are the append-only evidence history.
-- Keep structured or versioned support such as designs, hypothesis trees,
-  prompts, and proof in repository files when useful. Link committed paths or
+- Keep structured or versioned support such as designs, prompts, and proof in
+  repository files when useful; a Goal's hypothesis tree is live runtime state
+  under `.farplane/` (above). Link committed paths or
   attach snapshots when teammates need them from the issue. Local paths alone
   are not shared artifacts. Do not push a repository without authorization.
 - Close an issue in the run that finishes it. Check every `Done / Proof` item
@@ -193,8 +198,9 @@ Goal.
 - `artifacts/` owns durable proof, bulky evidence, QA, review, evals,
   screenshots, reports, and generated prompts.
 
-Use `tickets/templates/goal-loop/program.md` and
-`tickets/templates/goal-loop/progress.md` when scaffolding these files. See
+The `tickets/templates/goal-loop/` templates now describe issue sections and
+comments; in an unbound project, save the same shapes as `program.md` and
+`progress.md` beside `ticket.md`. See
 `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 for the full contract.
 
@@ -525,7 +531,7 @@ These are different learning horizons:
 Experiment prediction:
   immediate expected observation if a causal hypothesis is right
   owner: Metric Card plus experiment plan/program
-  miss route: agent-qa-test:experiment for first-principles validity/inference review
+  miss route: eval:experiment for first-principles validity/inference review
 
 Reward.expected_reward:
   delayed realized value expected from the completed ticket
@@ -569,7 +575,7 @@ signature_or_type_impact:
   - module / symbol(input): output, or compact type sketch
 routes:
   docs: doc-advisor | no_docs
-  qa: tests | qa-tester | visual-qa | agent-qa-test | none
+  qa: tests | qa-tester | qa-visual | qa-adversarial | none
   review: reviewer | inline | none
 qa:
   - focused QA or evidence expectation for this unit
@@ -624,7 +630,7 @@ qa_strategy:
   manual:
     - direct inspection
   delegated_lanes:
-    - qa-tester | visual-qa | agent-qa-test | reviewer | none
+    - qa-tester | qa-visual | qa-adversarial | reviewer | none
   review:
     - rubric: skill-contract
       required_tas: TAS-A

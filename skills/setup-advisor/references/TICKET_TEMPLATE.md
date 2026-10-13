@@ -16,8 +16,9 @@ depends_on: []
 
 # TASK-XXXX: title
 
-<!-- Keep ticket.md + program.md + the latest 80 progress lines within the
-300-line target and 400-line hard limit. Bulky evidence belongs in artifacts/.
+<!-- Keep the issue body + the newest Goal turn comments (80 lines) within
+the 300-line target and 400-line hard limit. Bulky evidence
+belongs in linked artifacts.
 Start with the sections rendered below. Add Map, Docs Strategy, Links, or Notes
 only when omitting them would lose a current execution, review, proof, or resume
 decision. Never retain an empty optional section or placeholder `none` row.

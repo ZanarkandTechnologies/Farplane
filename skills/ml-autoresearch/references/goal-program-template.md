@@ -7,30 +7,25 @@ owner: skills/ml-autoresearch
 
 # ML Autoresearch Goal Program Preset
 
-Instantiate this compact preset into the owning campaign ticket's `program.md`
-through Goal Advisor. The ticket owns scope and proof; `progress.md` owns
-observations; Goal Advisor separately compiles the Files-listed native Goal
-launcher.
+Instantiate this compact preset into the owning campaign issue's `## Goal
+program` section through Goal Advisor. The ticket sections own scope and proof;
+Goal turn comments own observations; Goal Advisor separately compiles the
+Files-listed native Goal launcher in a `**Goal launcher**` comment.
 
 ````markdown
----
-kind: goal-program
+### Goal Mode: ML Autoresearch <campaign>
+
+```yaml
 mode: ml_autoresearch
 trigger: native_goal
-status: draft
 approval: pending
-compiled_from_ticket_updated_at: <ticket-updated-at>
-generated_prompt: <native-goal-prompt-path>
----
-
-# ML Autoresearch: <campaign>
+compiled_from_ticket_sha: <first 12 hex of sha256(body above ## Goal program)>
+```
 
 ```yaml
 files:
-  - <ticket.md>
-  - <program.md>
-  - <hypothesis-tree.json>
-  - <progress.md>
+  - <owner/repo#n>
+  - <.farplane/goal-advisor/issue-<n>/hypothesis-tree.json>
   - <target docs/code>
   - <mutable surface>
   - <frozen evaluator/data contract>
@@ -56,9 +51,9 @@ selection:
   rule: choose execute | diagnose | report_now | request_feedback | stop; use goal-advisor references/choose-next.md only for real multi-option judgment
   before_each_experiment:
     inputs:
-      - this program.md policy
+      - this ## Goal program policy
       - eligible pending hypothesis-tree.json leaves
-      - progress.md learnings, prior selections, and rejected moves
+      - Goal turn comment learnings, prior selections, and rejected moves
       - current full-evaluator experiment receipts
       - remaining time, compute, spend, attempt, and patience budget
     output: one next experiment + hypothesis + expected observation +
@@ -104,10 +99,10 @@ loop:
     - keep | discard | repair_once | defer | failed
 
 after_each_turn:
-  - read this policy, hypothesis-tree.json, and the latest 80 progress.md lines
+  - read the issue body, hypothesis-tree.json, and the newest Goal turn comments within 80 lines
   - choose execute | diagnose | report_now | request_feedback | stop from pending leaves, evidence, and budget; use the choose-next comparison only when several moves need judgment
   - execute at most one selected experiment
-  - update the tree, then append receipt ref, learning, tree mutation, decision, and next action to progress.md
+  - update the tree, then post one Goal turn comment with receipt ref, learning, tree mutation, decision, and next action; rewrite ## Current Goal state
   - continue, replan, block, or complete from the declared rules
 
 drift:
@@ -122,6 +117,6 @@ stop:
 ```
 
 The Goal chooses; the choose-next comparison conditionally ranks; the domain executor runs; native Goal continues; the
-tree owns current research state and progress owns chronology. Do not add
+tree owns current research state and Goal turn comments own chronology. Do not add
 another runner, planner skill, state file, or ticket per experiment.
 ````

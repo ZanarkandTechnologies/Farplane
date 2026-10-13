@@ -3,7 +3,7 @@ title: Ticket as durable task memory
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-08-19
+updated_at: 2026-10-13
 tags:
   - farplane
   - feature
@@ -35,7 +35,7 @@ source_refs:
 external_refs: []
 evidence_refs:
   - docs/HISTORY.md
-known_limits: Only works when agents keep the compact ticket-as-program body, ticket Links, progress logs, and artifact pointers current instead of hiding state in chat.
+known_limits: Only works when agents keep the compact ticket-as-program issue body, Links, Goal turn comments, and artifact pointers current instead of hiding state in chat.
 metrics: []
 last_verified: 2026-08-02
 experimental: false
@@ -69,23 +69,23 @@ Farplane agents do long, context-heavy work. If the plan only lives in chat, the
 agent cannot reliably tell what was promised, what changed, what proof is required, or
 whether the task is blocked.
 
-A ticket fixes that by making one bounded unit of work readable from the filesystem.
+A ticket fixes that by making one bounded unit of work readable from one GitHub issue
+in the project's own repository.
 Chat can steer the work, but the ticket owns the durable contract.
 
 ## What It Does
 
-- Creates or updates a `ticket.md` for each material unit of work.
+- Creates or updates one GitHub issue for each material unit of work.
 - Keeps scope, delta, change plan, `Done`, `QA Strategy`, and state in a compact
   executable spine. A compact type-appropriate ASCII Contract Diagram is
   required so the target path can be simulated before implementation. Docs
   strategy, links, and notes appear only when their
   content changes execution, review, proof, or resumption.
-- Moves bulky proof into `tickets/TASK-*/artifacts/` and links it from the ticket.
+- Keeps bulky proof in repository files or attachments and links it from the issue.
 - Lets `impl-plan`, `impl-plan`, Goal Packets, QA, review, and closeout all read the same task contract.
-- Preserves resume state through `program.md`, `progress.md`, and artifact links when a work loop needs more than one turn.
-- Turns each newly completed ticket into one verified closed issue in the
-  project's configured GitHub repository, then retains only a compact local
-  locator after completion mining succeeds.
+- Preserves resume state through `## Goal program`, `## Current Goal state`, Goal turn comments, and artifact links when a work loop needs more than one turn.
+- Closes each completed issue with one proof comment and
+  `gh issue close <n> --reason completed`.
 
 ## User Stories
 
@@ -122,27 +122,16 @@ A durable ticket is a small program for the next agent, not a generic task note.
   timestamp. It is used for ordinary executable-board ordering inside the same
   priority band; it is not priority, lifecycle state, delayed Reward
   `check_in_at`, or Goal Packet timing.
-- `progress.md` carries current action, blockers, verification, review state,
-  and delayed check-in observations.
-- The first-load envelope is the full ticket, full Goal program when present,
-  and the latest 80 progress lines. It targets 300 lines and blocks planning or
-  completion above 400 through `ticket.context-budget`; length never licenses
-  deleting required proof or hiding executable policy. The same result reports
-  prose, Mermaid, media, and link-only reference categories through the shared
-  Markdown accountant, while raw lines remain the context gate.
+- `## Current Goal state`, labels, and Goal turn comments carry current action,
+  blockers, verification, review state, and delayed check-in observations.
+- The first-load envelope is the full issue body, including `## Goal program`
+  when present, and the newest Goal turn comments within 80 lines. It targets 300 lines and
+  marks the packet `revise` above 400; length never licenses deleting required
+  proof or hiding executable policy.
 - `Links` points to evidence, artifacts, related specs, sidecars, and handoffs.
-- On the GitHub Issues route, the close rule in `tickets/README.md` closes the
-  same issue with one proof comment. On the legacy filesystem route, the agent
-  runs Core with the ticket ID and selected media paths and uploads only missing
-  marked attachments through the authenticated browser.
-- `farplane ticket finalize TASK-XXXX` owns remote publication and the local
-  terminal transaction: render, create or resume the marked issue, verify its
-  media markers, close it, update metadata, mine the still-local packet,
-  atomically write the compact locator, emit completion, and only then delete
-  the exact active packet.
-- Any failed remote, mining, locator, or deletion prerequisite retains the
-  packet for a retry against the same marked issue. Agents do not manually move
-  or delete it.
+- The close rule in `tickets/README.md` closes the same issue with one proof
+  comment and `gh issue close <n> --reason completed`; it does not delete local
+  supporting files.
 
 The required frontmatter is only `ticket_id`, `title`, `status`, `created_at`,
 and `updated_at`. Optional `priority`, `due_at`, `claimed_by`, `thread_id`,
@@ -166,8 +155,8 @@ flowchart TD
   owner["Owner surface<br/>tickets/README.md<br/>tickets/templates/ticket.md"]:::changed
   readers["Files and fields read<br/>Summary, Scope, Delta<br/>Change Plan, Done, QA Strategy<br/>frontmatter state, Links"]:::keep
   routes["Execution routes<br/>impl-plan<br/>Pulse priority + due_at ordering"]:::changed
-  artifact["Created artifact/evidence<br/>tickets/TASK-XXXX/ticket.md<br/>with proof scoreboard"]:::added
-  close["Terminal record<br/>verified closed configured-repo issue<br/>compact local locator"]:::added
+  artifact["Created artifact/evidence<br/>GitHub issue body<br/>with proof scoreboard"]:::added
+  close["Terminal record<br/>proof comment<br/>issue closed as completed"]:::added
   old["Retired<br/>chat-only task memory"]:::retired
 
   trigger --> owner --> readers --> routes --> artifact
@@ -215,10 +204,8 @@ Acceptance signals:
 - The owner surfaces still exist and agree with this contract.
 - Optional `due_at` stays timezone-bearing and affects ordering only after
   priority; tickets without it sort last inside their priority band.
-- New closes resolve terminal identity from one compact GitHub issue locator,
-  while legacy local archive directories remain readable.
-- Local packet deletion happens only after remote verification, completion
-  mining, and locator write succeed.
+- New closes are the closed GitHub issue itself, while legacy local archive
+  directories remain readable.
 - Evidence refs support the current status.
 
 ## Rollout And Maintenance
@@ -236,7 +223,7 @@ Acceptance signals:
 - GitHub Releases, release assets, tags, downloadable bundles, remote restore,
   and migration of existing local archives are future work, not part of the
   current ticket-memory contract.
-- Known limit: Only works when agents keep the compact ticket-as-program body, ticket Links, progress logs, and artifact pointers current instead of hiding state in chat.
+- Known limit: Only works when agents keep the compact ticket-as-program issue body, Links, Goal turn comments, and artifact pointers current instead of hiding state in chat.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
@@ -269,3 +256,7 @@ Acceptance signals:
   `progress.md`, and ticket artifacts.
 - 2026-07-25: Added optional `due_at` as a timezone-bearing delivery deadline
   for same-priority executable-board ordering.
+- 2026-10-13: Moved the ticket, Goal program, and progress log from
+  `tickets/TASK-*/` files onto the project's GitHub issue body and Goal turn
+  comments; first load became the body plus the newest Goal turn comments within 80 lines;
+  the filesystem finalize command left live guidance.

@@ -19,14 +19,15 @@ If the user is present and the request is product/feature work:
 - After you have answers, load the minimum skills needed:
   - **PRD phase**: `skill({ name: "prd" })`
   - **Ticket phase**: `skill({ name: "impl-plan" })`
-  - **Memory** (only if you need prior context): check `docs/progress.md` and `docs/HISTORY.md`.
+  - **Memory** (only if you need prior context): check the active GitHub issue (body and recent comments) and `docs/HISTORY.md`.
   - **Convex patterns** (only if the project is Convex-backed): read the project Convex AI files (`npx convex ai-files install`) or the official Convex skill
   - **Proof strategy** (only if QA/backpressure is unresolved): `skill({ name: "eval" })`
   - **Visual QA** (only if UI validation is required): `skill({ name: "qa" }) in visual mode`
 
 ## 🧠 Persistence Rule
 
-Before finishing, you MUST save your structured plan to `docs/progress.md`.
+Before finishing, you MUST save your structured plan to the active GitHub issue
+body (the issue carries scope, plan, and acceptance/proof).
 
 ## CRITICAL: YOUR ONLY JOB IS TO CREATE PLANS, NOT TO IMPLEMENT THEM
 
@@ -35,7 +36,7 @@ Before finishing, you MUST save your structured plan to `docs/progress.md`.
   a `context_ref` such as a ticket, spec, decision packet, or planning artifact
   when the task depends on prior discussion, options, constraints, or evidence
 - DO NOT force a research phase before a PRD brainstorm/interview (research is optional and late)
-- DO NOT create plans without understanding project context (`docs/progress.md`, README.md)
+- DO NOT create plans without understanding project context (the active GitHub issue, README.md)
 - DO NOT burn time on tools before interviewing the user when the request is ambiguous
 - DO NOT plan in a vacuum - find real-world examples of similar implementations
 - DO NOT create overly detailed plans that prescribe exact implementation
@@ -73,7 +74,7 @@ If the user is present and the request is product/feature work:
 ### Step 2: Context & Discovery (only after answers)
 
 Read any delegated `context_ref` first when one is provided.
-Read `docs/progress.md` and `README.md` (if they exist). Use local search to confirm constraints.
+Read the active GitHub issue (body and recent comments) and `README.md` (if they exist). Use local search to confirm constraints.
 
 ### Step 3: Optional Research (only if it changes decisions)
 
@@ -89,7 +90,7 @@ If needed, use the `sequentialthinking` tool to:
 
 ### Step 5: Formal Plan Creation
 
-Produce the final markdown plan and save it to `docs/progress.md`.
+Produce the final markdown plan and save it to the active GitHub issue body.
 
 ## Output Format
 

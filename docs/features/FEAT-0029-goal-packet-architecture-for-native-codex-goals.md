@@ -3,7 +3,7 @@ title: Retired Goal Packet architecture
 status: retired
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-12
+updated_at: 2026-10-13
 tags:
   - farplane
   - feature
@@ -37,7 +37,7 @@ external_refs:
   - https://developers.openai.com/codex/use-cases/follow-goals
 evidence_refs:
   - docs/HISTORY.md
-known_limits: Superseded by the clearer Goal Advisor feature handle. Goal Packet files remain implementation surfaces, but the feature UX is Goal Advisor execution.
+known_limits: Superseded by the clearer Goal Advisor feature handle. Goal Packet issue sections and comments remain implementation surfaces, but the feature UX is Goal Advisor execution.
 metrics:
   - goal_packet_reconstructability
   - drift_review_alignment_pass
@@ -48,7 +48,7 @@ superseded_by: FEAT-0032
 ---
 # Retired Goal Packet architecture
 
-Goal Packet architecture is retired as a standalone feature handle. Goal Packet files remain implementation surfaces for the Goal Advisor execution loop. It belongs to [Horizon
+Goal Packet architecture is retired as a standalone feature handle. The Goal Packet's GitHub issue sections and comments remain implementation surfaces for the Goal Advisor execution loop. It belongs to [Horizon
 Loop](../systems/horizon-loop.md) and keeps `FEAT-0029` as a stable capability handle
 because the behavior has an owner, proof path, and maintenance boundary.
 
@@ -63,28 +63,28 @@ goal_packet(ticket, program, progress) -> native_goal_prompt + resume_contract
 - Status: `retired`
 - Category: `planning`
 - Primary user: operator and long-running coding agent
-- Job: wrap native Codex Goal mode with visible ticket, program, and progress state.
+- Job: wrap native Codex Goal mode with visible ticket, program, and progress state on the project's GitHub issue.
 
 ## Problem
 
 Native Goal mode can keep working across continuations, but Farplane still needs
-filesystem truth for scope, proof, blockers, and handoff.
+visible durable truth for scope, proof, blockers, and handoff.
 
 Goal Packets solve that by making the native goal prompt a compiled instruction, not the
 durable source of truth.
 
 ## What It Does
 
-- Attaches a material goal to a ticket.
-- Uses `ticket.md` as the task contract, `program.md` as loop configuration, and `progress.md` as append-only turn log.
-- Compiles a native Goal prompt from those files.
+- Attaches a material goal to a GitHub issue.
+- Uses the issue's ticket sections as the task contract, its `## Goal program` section as loop configuration, `## Current Goal state` as the latest checkpoint, and top-level Goal turn comments as the append-only turn log.
+- Compiles a native Goal prompt from those sections.
 - Keeps proof obligations in the ticket and artifacts rather than in hidden goal memory.
-- Lets agents resume or review a goal by reading the packet files.
+- Lets agents resume or review a goal by reading the issue body and its latest Goal turn comments.
 
 ## User Stories
 
 - As an operator, I can start a long task without losing control of proof and scope.
-- As a resumed agent, I can recover the goal state from files.
+- As a resumed agent, I can recover the goal state from the issue.
 - As a reviewer, I can compare progress against the ticket and program.
 
 ## Operating Contract
@@ -92,9 +92,9 @@ durable source of truth.
 Goal mode is the continuation engine; the Goal Packet is the visible Farplane state
 around it.
 
-- Every material Goal attaches to an active ticket or creates one.
-- `program.md` holds loop settings and continuation guidance.
-- `progress.md` records append-only turn updates.
+- Every material Goal attaches to an open GitHub issue or creates one.
+- `## Goal program` holds loop settings and continuation guidance.
+- One Goal turn comment per turn records append-only turn updates; `## Current Goal state` holds the latest checkpoint.
 - The native Goal prompt is regenerated from packet state when needed.
 - Completion still requires ticket proof gates and review when required.
 
@@ -110,15 +110,15 @@ flowchart TD
   native["native Codex Goal docs<br/>goal continuation model"]:::keep
   retired["FEAT-0029<br/>status: retired<br/>superseded_by: FEAT-0032"]:::retired
   successor["FEAT-0032 Goal Advisor<br/>skills/goal-advisor"]:::changed
-  horizon["SYS-0003 Horizon Loop<br/>ticket Goal Packets"]:::changed
-  packet["Goal Packet files<br/>ticket.md<br/>program.md<br/>progress.md"]:::added
-  review["proof and drift review<br/>agents/goal-drift-reviewer.toml<br/>ticket artifacts"]:::added
+  horizon["SYS-0003 Horizon Loop<br/>issue Goal Packets"]:::changed
+  packet["Goal Packet on the GitHub issue<br/>ticket sections<br/>## Goal program<br/>## Current Goal state<br/>Goal turn comments"]:::added
+  review["proof and drift review<br/>agents/goal-drift-reviewer.toml<br/>proof comment"]:::added
 
   native --> retired --> successor --> horizon
   successor --> packet --> review
 ```
 
-Goal Packet files remain active implementation surfaces, but the feature owner is `FEAT-0032` under the Horizon Loop.
+Goal Packet issue sections and comments remain active implementation surfaces, but the feature owner is `FEAT-0032` under the Horizon Loop.
 
 ## Surfaces
 
@@ -192,3 +192,4 @@ Acceptance signals:
 
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
+- 2026-10-13: Goal Packet moved from `ticket.md`, `program.md`, and `progress.md` files onto the project's GitHub issue body and Goal turn comments.

@@ -151,9 +151,9 @@ mirror, name that instrumentation instead of relying on coordinate wandering.
 9. **Receipt:** write and validate the canonical `result.json` from the `qa`
    skill. If validation fails, repair the receipt or return non-pass.
 10. **Write back:** always link report, result, verdict, and best evidence from
-    ticket `Links`. Append `progress.md` only when it already exists, the run is
-    Goal-backed, or blocker/review state needs an append-only entry. Do not
-    create it for every QA run.
+    ticket `Links`. Post a Goal turn comment on the issue only when the run is
+    Goal-backed or blocker/review state needs an append-only entry. Do not
+    post one for every QA run.
 11. **Learn:** classify `ticket_only`, `cookbook_update`, or
     `instrumentation_ticket`. A candidate reusable path remains `ticket_only`
     before capture. Once the run verifies it is reusable, classify

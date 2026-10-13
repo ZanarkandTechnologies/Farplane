@@ -261,8 +261,9 @@ engine underneath it.
 
 ### FR-9: Portable Event Mining
 
-- `farplane ticket finalize TASK-XXXX` performs the successful terminal/archive
-  transition and writes one typed `farplane.ticket.completed` event to the
+- For legacy projects without a GitHub repository, `farplane ticket finalize
+  TASK-XXXX` performs the successful terminal/archive transition and writes one
+  typed `farplane.ticket.completed` event to the
   durable local outbox. Failed mining leaves that event retryable; no hook,
   file watcher, or cloud dispatcher infers completion from file writes.
 - `bindings.yaml` maps the explicit completion event to an immutable mining

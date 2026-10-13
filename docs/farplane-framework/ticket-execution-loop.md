@@ -30,14 +30,14 @@ planning, autonomous execution, and independent proof:
 ```text
 ticket_execution_lifecycle(human_intent)
   -> frame_or_advice
-  -> ticket.md
-  -> impl_plan(ticket.md)
+  -> issue body (ticket sections)
+  -> impl_plan(issue)
   -> reviewer_plan_review
-  -> goal_advisor(ticket.md)
+  -> goal_advisor(issue)
   -> native_goal_execution
   -> QA/proof artifacts
   -> reviewer_completion_review
-  -> closeout + docs/memory writeback
+  -> proof comment + gh issue close + docs/memory writeback
 ```
 
 The human conversation comes first when the direction is still a product,
@@ -54,10 +54,10 @@ execution can become autonomous inside that scope.
 | Shape intent | human + `brainstorm` / `advise` / `prd` | accepted direction, examples, rejected options | material choices are explicit |
 | Bind work | ticket author / `impl-plan` | `Summary`, `Scope`, initial `Delta`, dependencies, metadata | ticket exists and scope is coherent |
 | Plan implementation | `impl-plan` | `architecture_signatures`, `Change Plan`, `Done`, `QA Strategy`, `Docs Strategy`, reviewer handoff | Todo List assertions and plan reviewer pass |
-| Compile execution | `goal-advisor` | `program.md`, `progress.md`, native `/goal` prompt | packet approved or explicitly pre-approved |
-| Execute | native Codex Goal | changed files, progress entries, command evidence | ticket `Done` and `QA Strategy` satisfied |
-| Prove | `qa` (functional, visual, adversarial), tests, or scripts | artifacts under `tickets/TASK-XXXX/artifacts/` | proof route matches ticket claim |
-| Review | native `reviewer` lane / `review` rubrics | review receipt linked from ticket and progress | required TAS gates pass |
+| Compile execution | `goal-advisor` | `## Goal program`, a `**Goal launcher**` comment holding the native `/goal` prompt, `## Current Goal state` | packet approved or explicitly pre-approved |
+| Execute | native Codex Goal | changed files, Goal turn comments, command evidence | ticket `Done` and `QA Strategy` satisfied |
+| Prove | `qa` (functional, visual, adversarial), tests, or scripts | artifacts linked from the issue | proof route matches ticket claim |
+| Review | native `reviewer` lane / `review` rubrics | review receipt linked from the issue and its Goal turn comments | required TAS gates pass |
 | Close | coordinating lane (close rule in `tickets/README.md`) | proof comment, links, docs/memory writeback, residual risk | no required proof or review missing |
 
 ## How The Ticket Fills Up
@@ -80,27 +80,29 @@ the loop:
   final checkpoint, and residual risk.
 - `Docs Strategy` says whether durable docs change and how that decision is
   validated.
-- `Links` connect `program.md`, `progress.md`, artifacts, review receipts, and
-  source refs.
+- `Links` connect artifacts, review receipts, the local hypothesis tree when
+  present, and source refs.
 - `Notes` carry blast radius, rollback, blockers, follow-ups, and compact
   citations when they clarify execution.
 
-`program.md` starts after ticket-plan approval. It does not repeat the ticket;
-it records loop shape, trigger, budget, metric or feedback provider, proof
-policy, drift policy, stop conditions, and batch/heartbeat rules when relevant.
-`progress.md` is append-only observed state: what changed, what was verified,
-what review said, what remains blocked, and what the next action is.
+`## Goal program` starts after ticket-plan approval. It does not repeat the
+ticket; it records loop shape, trigger, budget, metric or feedback provider,
+proof policy, drift policy, stop conditions, and batch/heartbeat rules when
+relevant. Goal turn comments are append-only observed state: what changed, what
+was verified, what review said, what remains blocked, and what the next action
+is. `## Current Goal state` mirrors only the latest checkpoint.
 
 ## Goal Packet Ownership
 
 Keep each concern in one durable owner:
 
 ```text
-ticket.md   = desired end state + scope + constraints + Done / Proof
-skill       = domain procedure + detailed evaluation logic
-program.md  = budget + continuation + drift + stopping + optional optimization roadmap
-progress.md = observations + evidence links + learned constraints + next action
-Goal prompt = compact pointer to the packet
+ticket sections     = desired end state + scope + constraints + Done / Proof
+skill               = domain procedure + detailed evaluation logic
+## Goal program     = budget + continuation + drift + stopping + optional optimization roadmap
+Goal turn comments  = observations + evidence links + learned constraints + next action
+## Current Goal state = latest checkpoint only
+Goal prompt         = compact pointer to the issue
 ```
 
 The common continuation cycle is:
@@ -117,46 +119,47 @@ read state
 
 Evaluation is therefore a distinct step, not another name for choosing what to
 do next. The ticket or domain skill owns what counts as evidence and how to
-interpret it. `program.md` only binds that evaluator into the continuation
+interpret it. `## Goal program` only binds that evaluator into the continuation
 loop. For optimization Goals, promising candidates remain in the program's
-roadmap or frontier until evidence rejects or invalidates them. `progress.md`
-records the selected move, rejected alternatives when relevant, learned
+roadmap or frontier until evidence rejects or invalidates them. Goal turn
+comments record the selected move, rejected alternatives when relevant, learned
 constraints, evidence links, and the current `next_action`; selecting one move
 does not silently discard the remaining candidates.
 
-### Lean `program.md`
+### Lean `## Goal program`
 
-A lean `program.md` fills the existing template sections without repeating the
-ticket. Its after-turn and stopping instructions can be as compact as this:
+A lean `## Goal program` fills the existing template sections without repeating
+the ticket. Its after-turn and stopping instructions can be as compact as this:
 
 ```markdown
-## After Each Turn
+### After Each Turn
 
-- Re-read the ticket and progress tail.
+- Re-read the issue body and the newest Goal turn comments within 80 lines.
 - Choose the largest unresolved acceptance, evidence, or blocker gap. For an
   optimization loop, select from the program roadmap or frontier using current
   progress learnings.
 - Execute one bounded move, run the evaluator declared by the ticket or active
-  skill, and append the observation, evidence, learning, and next action.
+  skill, post one Goal turn comment with the observation, evidence, learning,
+  and next action, and rewrite `## Current Goal state`.
 - Use `goal-drift-reviewer` before a material replan or completion.
 
-## Stop Conditions
+### Stop Conditions
 
 - `blocked_when:` Report attempted paths, strongest evidence, remaining work, and
   the exact input or contract change that would unlock progress.
 ```
 
-This excerpt belongs in `program.md`, not `ticket.md`. Still fill the
+This excerpt belongs in `## Goal program`, not the ticket sections. Still fill the
 template's required Goal Mode, budget, Metric Provider, Proof Policy, drift,
 check-in, batch, or rollout sections when applicable.
 
 The launcher stays small because it is not the durable contract:
 
 ```text
-/goal Work on TASK-1243 until its Done and QA Strategy pass or the declared
-budget ends. Read ticket.md, program.md, and progress.md. Follow program.md
-between iterations. Do not expand ticket scope. If blocked, return attempted
-paths, evidence, and the required unlock.
+/goal Work on owner/repo#1243 until its Done and QA Strategy pass or the
+declared budget ends. Read the issue body and the newest Goal turn comments within 80 lines.
+Follow its ## Goal program between iterations. Do not expand ticket scope. If
+blocked, return attempted paths, evidence, and the required unlock.
 ```
 
 `best_so_far` is useful only for optimization campaigns whose candidates can
@@ -260,7 +263,7 @@ material_completion(ticket)
   -> qa-tester(ticket, proof_targets) -> evidence_bundle
   -> reviewer(ticket, checklist?, evidence_bundle?, rubrics) -> TAS verdict
   -> coordinator reconciles both receipts before pass/revise/block
-  -> farplane ticket finalize TASK-XXXX on pass
+  -> proof comment + gh issue close <n> --reason completed on pass
 ```
 
 Do not use generic subagents for these roles when typed agents are available.
@@ -274,7 +277,7 @@ harden_ticket_execution(ticket_lifecycle)
   -> risk_map + mitigations + adversarial_tests + proof + residual_risk
 ```
 
-Trust boundaries include the human/operator conversation, ticket files, skill
+Trust boundaries include the human/operator conversation, GitHub issues, skill
 contracts, native Goal execution, subagent reviewer/QA lanes, command output,
 generated artifacts, and docs/memory writeback. The most realistic failure
 modes are process failures rather than classic network security issues.
@@ -282,21 +285,22 @@ modes are process failures rather than classic network security issues.
 | Risk | Impact | Mitigation | Proof or check |
 | --- | --- | --- | --- |
 | Fuzzy intent becomes durable work too early | wrong ticket, wasted Goal execution | use `problem-framing`, `brainstorm`, `advise`, `prd`, or explicit acceptance before ticketed execution | ticket `Summary`/`Scope` preserve accepted and rejected options |
-| Ticket is chat-only or underfilled | executor invents scope or proof route | material work writes `ticket.md` before plan-ready state | reviewer checks ticket-first and goal-advisor readiness |
+| Ticket is chat-only or underfilled | executor invents scope or proof route | material work writes the issue body before plan-ready state | reviewer checks ticket-first and goal-advisor readiness |
 | Architecture hides in prose | reviewer cannot catch wrong seams before code | `impl-plan` requires `architecture_signatures` for material plans | `impl-plan` Todo List assertions and plan reviewer gate |
-| Planner self-approves | same model misses its own weak assumptions | inline self-check; reviewer lane is readiness gate | review receipt linked from ticket/progress |
-| Goal Packet goes stale after plan edits | executor follows old prompt | rerun `goal-advisor` when ticket plan changes | program/progress prompt timestamp and packet approval state |
+| Planner self-approves | same model misses its own weak assumptions | inline self-check; reviewer lane is readiness gate | review receipt linked from the issue and its Goal turn comments |
+| Goal Packet goes stale after plan edits | executor follows old prompt | rerun `goal-advisor` when ticket plan changes | `compiled_from_ticket_sha` and packet approval state |
 | Proof only covers nearby pieces | false completion claim | `QA Strategy` names critical path and smaller ordered sanity checks | evidence-quality reviewer gate |
 | Reviewer route is missing or generic | material judgment becomes vibes | caller declares rubric families, TAS gates, hard gates, and evidence | reviewer handoff or ticket QA Strategy |
 | Unrelated validator failure blocks or hides real risk | noisy closeout or false confidence | name unrelated residual failures separately from task proof | progress and final response list residual risk |
-| Ticket state drifts after execution | board/Pulse may re-run or skip work | update metadata, `Links`, `progress.md`, and closeout state together | ticket metadata/doc refs checks and final reviewer receipt |
+| Ticket state drifts after execution | board/Pulse may re-run or skip work | update labels, `Links`, `## Current Goal state`, and closeout state together | ticket metadata/doc refs checks and final reviewer receipt |
 | Docs/memory writeback bloats always-loaded context | prompt tax and stale policy | route detail to skill docs, tickets, validators, or lifecycle docs; keep AGENTS compact | global AGENTS QA checklist and documentation review |
 
 Adversarial lifecycle checks:
 
-- Can a reviewer reconstruct the intended change from `ticket.md` without chat?
-- Can a Goal executor run from `ticket.md`, `program.md`, and `progress.md`
-  without transcript memory?
+- Can a reviewer reconstruct the intended change from the issue body without
+  chat?
+- Can a Goal executor run from the issue body and its newest Goal turn
+  comments (80 lines) without transcript memory?
 - Does `QA Strategy` prove the user-facing or system claim, not only adjacent
   files?
 - Are all material readiness claims backed by independent reviewer/QA evidence

@@ -34,10 +34,11 @@ returns: source-linked recap, conflicts and gaps, and one safe next posture
 - [ ] **N1 — Resolve the task packet.**
   `task_ref + supplied paths -> source_packet | source_gap`
 
-  Rule: Prefer `ticket.md`, then `program.md`, recent `progress.md`, linked
-  evidence, task-owned changes, and finally available thread context. Read every
-  supplied path before calling it missing. When no task boundary is reliable,
-  stop with the `source-gap` template.
+  Rule: Prefer the issue body (ticket sections, `## Goal program`, `## Current
+  Goal state`), then recent Goal turn comments, linked evidence, task-owned
+  changes, and finally available thread context. Read every supplied path
+  before calling it missing. When no task boundary is reliable, stop with the
+  `source-gap` template.
 
   Assert:
   - The task boundary and every source actually read are explicit.

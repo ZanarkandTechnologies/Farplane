@@ -4,7 +4,7 @@
 generated run artifacts. `harness` optimize mode owns the ordered harden/refine policy.
 
 Keep the canonical suite at `skills/<target>/evals/evals.json`. Before target
-mutation, run the full suite and record the baseline in ticket `progress.md`.
+mutation, run the full suite and record the baseline in a Goal turn comment.
 Use the same frozen suite, metric, repetitions, and guards for every harden and
 refine candidate.
 

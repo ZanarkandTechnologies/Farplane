@@ -60,8 +60,10 @@ For runtime helper scripts:
 - on completion-like paths, ticket-local QA/review evidence is the authority;
   the main model's completion claim is candidate-only until the ticket's
   `Done / Proof`, Goal program, and required delegated reviews are satisfied.
-- after those gates pass, `farplane ticket finalize TASK-XXXX` owns the successful
-  terminal metadata, archive movement, completion event, and mining route.
+- after those gates pass, a GitHub-backed issue closes with one proof comment
+  and `gh issue close` (`tickets/README.md`); `farplane ticket finalize
+  TASK-XXXX` owns terminal metadata, archive movement, completion event, and
+  mining only for legacy projects without a GitHub repository.
 - delegated workers should keep `worker_name`, `main_artifact_path`, and `grounding_summary` visible in the same runtime contract when available
 - delegated stale-wait reads should stay advisory-first and use explicit checkpoint timing instead of hidden watchdog behavior
 - current-turn user intent should be captured at `UserPromptSubmit` through

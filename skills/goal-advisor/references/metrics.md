@@ -3,7 +3,7 @@
 Load when a Goal, heartbeat, eval recovery, ticket proof, or strategy objective
 needs an honest measurement contract before work continues, or when a caller
 asks "what should we measure". It returns a card; it does not run the loop.
-The caller keeps ownership: `goal-advisor` compiles the card into `program.md`,
+The caller keeps ownership: `goal-advisor` compiles the card into `## Goal program`,
 `harness` coordinates recovery, `harness` optimize mode compares variants,
 `impl-plan` owns ticket Done / Proof wording, and `review` judges evidence. It
 may write the project's `farplane/metrics.yaml` definition delta and

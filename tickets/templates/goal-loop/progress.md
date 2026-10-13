@@ -1,73 +1,62 @@
 ---
 kind: goal-progress
-ticket_id: TASK-XXXX
 status: active
 created_at: 2026-06-12
+updated_at: 2026-10-13
 template_id: goal-loop-progress
-template_version: "0.1.1"
+template_version: "0.2.0"
 feature_refs:
   - FEAT-0029
   - FEAT-0032
 ---
 
-# TASK-XXXX Goal Progress
+<!-- Two shapes for a Goal on a GitHub issue. Only a project without a GitHub
+repository saves them as local files (`tickets/README.md`, legacy section). -->
 
-Append one entry per Goal turn, heartbeat, feedback resume, or drift checkpoint.
-Keep entries compact. Use this file for after-turn reflection, compact
-decision entries, drift notes, evidence links, and completion notes. Link
-artifacts instead of pasting raw transcripts.
+## Current Goal state
 
-Create a sibling `decisions.md` only when material branching decisions, council
-notes, or reusable architecture/API/data-model rationale would make this
-chronological log hard to scan. Do not create an empty `decisions.md` by
-default.
-
-## Review
-
-Add this block only while the ticket is `status: awaiting_review`. It is the
-mutable reminder and reply-routing ledger; frontmatter remains lifecycle-only.
+<!-- Last section of the issue body. After every Goal turn replace only this
+section (goal-advisor Issue commands, Writeback); everything above stays
+byte-identical so the freshness hash holds. History lives in Goal turn comments. -->
 
 ```yaml
-artifact_refs: []
-thread_ref:
-requested_at:
-next_reminder_at:
-reminder_count: 0
-escalation_used: false
-decision:
+updated_at:
+turn:
+decision: execute | diagnose | report_now | request_feedback | stop | blocked
+remaining_budget:
+drift_verdict: aligned | drifting | blocked | complete_candidate | not_run
+next_action:
+blocker:
 ```
 
-Remove the next reminder or fill `decision` when feedback arrives. The replying
-thread updates this block and the ticket status without occupying a worker while
-waiting.
+## Goal turn comment
 
-## Entry Template
+<!-- Post one top-level comment per Goal turn, heartbeat, feedback resume, or
+drift checkpoint (`gh issue comment <n> -R <owner/repo> --body-file <file>`).
+Every one starts with `**Goal turn N**` (add `(heartbeat)` for heartbeats) so
+first load finds it. Keep it compact, link artifacts instead of pasting
+transcripts, and keep private evidence under `.farplane/`: the repository may
+be public. When a tree is listed, name the selected node and its result. A rule
+change gets its own comment headed `Decision:`; the executor then returns
+`request_feedback` or goes back to goal-advisor, which alone updates `## Goal
+program` `### Binding Decisions` and asks for approval again. -->
 
 ```markdown
-## 2026-06-12 HH:MM +0800 - turn N
+**Goal turn N** · YYYY-MM-DD HH:MM +0800
 
 - `trigger:` native_goal | scheduled_heartbeat | human_feedback_received | manual_resume
 - `intent:`
 - `action:`
 - `observation:`
 - `evidence:`
-- `decision:` none | compact decision and rationale
 - `learning:`
+- `decision:` execute | diagnose | report_now | request_feedback | stop | blocked
+- `remaining_budget:`
 - `drift_verdict:` aligned | drifting | blocked | complete_candidate | not_run
 - `drift_evidence:`
 - `next_action:`
 - `blocker:`
 ```
 
-## Completion Entry Template
-
-```markdown
-## 2026-06-12 HH:MM +0800 - completion
-
-- `completed_goal:`
-- `proof:`
-- `review_or_drift:`
-- `portfolio_update:`
-- `next_trigger:` start_child_goal | parent_heartbeat | manual_replan | complete
-- `next_action:`
-```
+Review waits use labels and the blocker text, as `tickets/README.md` says; do
+not keep a review ledger in the body.

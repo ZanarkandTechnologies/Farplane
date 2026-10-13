@@ -80,8 +80,8 @@ recover later.
 | Reference file | Skill-local background or examples. | Detail is useful only after the skill is selected. | Hidden stale context. | Skill task uses the reference correctly. |
 | Script/template | Repeatable mechanical step or artifact skeleton. | Manual steps are error-prone or verbose. | Brittle automation, generated clutter. | Script test or generated artifact review. |
 | Ticket contract | Task boundary, Done / Proof, current state, and handoff. | Work size or proof target is unclear. | Ticket bureaucracy or fragmented work. | Ticket metadata/checks plus reviewer or QA proof. |
-| `program.md` | Loop config, metric, drift policy, heartbeat, and stop conditions. | A ticket is Goal-backed, heartbeat-based, rollout-like, or long-running. | Second-ticket confusion. | Goal Packet drift review. |
-| `progress.md` | Append-only observed execution memory. | Future turns must reconstruct state without transcript memory. | Transcript dumping, noisy logs. | Resume from files alone. |
+| Issue `## Goal program` | Loop config, metric, drift policy, heartbeat, and stop conditions. | A ticket is Goal-backed, heartbeat-based, rollout-like, or long-running. | Second-ticket confusion. | Goal Packet drift review. |
+| Goal turn comments | Append-only observed execution memory; `## Current Goal state` holds the latest checkpoint. | Future turns must reconstruct state without transcript memory. | Transcript dumping, noisy logs. | Resume from the issue body and the newest Goal turn comments (80 lines) alone. |
 | Proposal portfolio | Candidate trajectories over metric objectives and guards. | An empty board needs long-horizon comparison before admitting work. | Greedy selection or overplanning future branches. | Work Pulse admits only bounded non-interfering tickets. |
 | File/memory policy | What state is durable, searchable, drained, or archived. | Lessons are lost or context is stale/noisy. | Artifact graveyard, stale retrieval. | Drain/retrieval test. |
 | Subagent | Independent context and owned output. | Self-approval, role separation, or parallel evidence matters. | Coordination cost, duplicated work. | Subagent artifact plus integration review. |
@@ -92,7 +92,7 @@ recover later.
 | Review | Judgment-heavy sufficiency or quality claim. | Taste, proof quality, or readiness requires independent judgment. | Latency, subjective churn. | TAS verdict and cited evidence. |
 | QA/browser proof | User-visible behavior. | UI or workflow needs operated evidence. | Slow proof loops. | Screenshot, console/log trace, QA report. |
 | Automation/cron | Scheduled or event-triggered inspection. | Time, feedback, or external state determines next action. | Hidden autonomy, noisy wakeups. | Logged no-op/action and stop condition. |
-| Heartbeat | Delayed check over existing Goal Packet or portfolio state. | Work should resume only after time/feedback/external state. | Untracked background planning. | `progress.md` heartbeat entry. |
+| Heartbeat | Delayed check over existing Goal Packet or portfolio state. | Work should resume only after time/feedback/external state. | Untracked background planning. | Heartbeat Goal turn comment. |
 | Native Goal | Immediate continuation for one executable leaf. | Multi-turn work should keep moving now. | Prompt-only loops, drift. | Goal Packet with drift policy. |
 
 ## Promotion Rules
@@ -198,10 +198,10 @@ Use this ownership split for long-running work:
 ```text
 harness.yaml = human meaning + configured planning skill refs + passive area/ICP context + selected metric refs + hard constraints
 metrics.yaml = metric meaning + direction + freshness + optional guard rules
-ticket.md = executable leaf contract + Done / Proof
-program.md = loop policy + metric + stop condition
-progress.md = observed execution memory
-artifacts/ = evidence
+issue ticket sections = executable leaf contract + Done / Proof
+## Goal program = loop policy + metric + stop condition
+Goal turn comments = observed execution memory
+linked artifacts = evidence
 ```
 
 Portfolio control:

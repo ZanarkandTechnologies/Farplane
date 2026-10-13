@@ -33,6 +33,6 @@ finish implementation, validate it, write back into the ticket, then move board 
   - `docs/HISTORY.md`
   - `docs/MEMORY.md`
 - if new scope is discovered, create a linked follow-up ticket in `tickets/`
-- if blocked by execution, set `status: blocked`, clear `claimed_by`, and record the blocker in `progress.md`
+- if blocked by execution, set `status: blocked`, clear `claimed_by`, and record the blocker in the ticket's blocker text
 - if blocked by planning ambiguity, set `status: awaiting_review` and clear `claimed_by`
 - when implementation, QA, evidence, and human confirmation are complete, finish durable writeback, set `status: done`, clear `claimed_by`, and archive the ticket

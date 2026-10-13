@@ -3,7 +3,7 @@ title: Goal Advisor execution loop
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-08-01
+updated_at: 2026-10-13
 tags:
   - farplane
   - feature
@@ -68,19 +68,20 @@ compile_execution_route(ticket, trigger, budget?, hypothesis_tree?) -> goal | he
 A request can be a direct fix, native Goal, heartbeat, rollout, or feedback loop.
 Choosing wrong either overcomplicates small work or under-specifies long-running work.
 
-Goal Advisor turns the active ticket and context into a bounded execution route with
+Goal Advisor turns the active GitHub issue and context into a bounded execution route with
 proof expectations.
 
 ## What It Does
 
-- Reads ticket, program, optional hypothesis tree, progress, specs, and current
-  trigger context.
+- Reads the issue body (ticket sections, `## Goal program`, `## Current Goal
+  state`), the latest Goal turn comments, the optional local hypothesis tree,
+  specs, and current trigger context.
 - Chooses native Goal, heartbeat, rollout, feedback, or direct route.
 - Compiles a concrete execution prompt with proof gates and continuation state.
 - Compiles the ticket Contract Diagram and Change Plan into an ordered execution
   path, a consumed-reference manifest, and assertion-to-evidence completion
   closure; structurally complete but contradictory packets return revision.
-- Keeps the ticket as the source of truth for scope and Done / Proof.
+- Keeps the issue's ticket sections as the source of truth for scope and Done / Proof.
 - For experiment-backed campaigns, binds `hypothesis-tree.json` as the sole
   current research-state owner without adding it to ordinary Goal Packets.
 - Routes phases such as build, QA, and demo when the ticket requires them.
@@ -95,15 +96,18 @@ proof expectations.
 
 Goal Advisor is an execution compiler, not a replacement for the ticket.
 
-- Material work must have a visible ticket or packet before goal-backed execution.
+- Material work must have one GitHub issue before goal-backed execution.
 - Route choice names trigger mode, budget, files, and proof expectations.
 - The Compiled Execution Path binds diagram nodes to owning changes and exit
   assertions. The Reference Manifest names a consumer for every non-core file.
   Completion Closure binds each Done claim to an implementation owner and
   current evidence; pending, stale, unsupported, or contradicted rows block
   `stop_complete`.
-- Ordinary Goal Packets use `ticket.md`, `program.md`, and `progress.md`.
-  Experiment-backed packets conditionally add `hypothesis-tree.json`; the
+- Ordinary Goal Packets use the issue body (ticket sections, `## Goal program`,
+  `## Current Goal state`) plus a `**Goal launcher**` comment plus one top-level Goal turn
+  comment per turn. Experiment-backed packets conditionally add a local
+  `.farplane/goal-advisor/issue-<n>/hypothesis-tree.json` linked from the
+  program; the
   [Self-Improvement And Learning system](../systems/self-improvement-learning.md)
   owns its research-search semantics.
 - The compiled prompt shrinks the task rather than expanding global policy.
@@ -111,10 +115,11 @@ Goal Advisor is an execution compiler, not a replacement for the ticket.
   write_back`. Advisor methods are conditional: the goal-advisor metric card
   ([`metrics.md`](../../skills/goal-advisor/references/metrics.md)) for
   setup/repair and the choose-next comparison for real multi-option judgment.
-- First load is bounded to full ticket/program plus the latest 80 progress
-  lines, with a 300-line target and 400-line hard validation gate.
+- First load is bounded to the full issue body plus the newest Goal turn
+  comments within 80 lines, with a 300-line target and 400-line hard validation gate.
 - Completion still uses the ticket's proof and review gates and requires a
-  `goal-program-contract` verdict for material Goal program changes.
+  `goal-program-contract` verdict for material Goal program changes; it ends
+  with one proof comment and `gh issue close <n> --reason completed`.
 
 ## Feature Flow
 
@@ -127,8 +132,8 @@ flowchart LR
 
   request["Goal / ticket request<br/>trigger + budget"]:::keep
   advisor["skills/goal-advisor<br/>compile_execution_route"]:::changed
-  packet["Goal Packet files<br/>ticket.md<br/>program.md<br/>progress.md"]:::added
-  tree["experiment-backed only<br/>hypothesis-tree.json"]:::added
+  packet["Goal Packet on the GitHub issue<br/>ticket sections + ## Goal program<br/>## Current Goal state<br/>Goal turn comments"]:::added
+  tree["experiment-backed only<br/>.farplane/goal-advisor/issue-n/<br/>hypothesis-tree.json"]:::added
   route["native Goal<br/>or direct route"]:::changed
   proof["QA + reviewer completion<br/>ticket Done / Proof"]:::added
   hidden["hidden scheduler / daemon"]:::retired
@@ -218,3 +223,7 @@ Acceptance signals:
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
 - 2026-08-01: Added the conditional experiment-backed hypothesis-tree packet
   extension and linked its system owner and completion evidence.
+- 2026-10-13: Goal Packet state moved from `ticket.md`, `program.md`, and
+  `progress.md` onto the GitHub issue body and Goal turn comments; first load
+  became the body plus the newest Goal turn comments within 80 lines; completion closes the
+  issue.

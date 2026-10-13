@@ -206,10 +206,6 @@ def canonical_ref(value: str) -> tuple[str, str, str, list[str]]:
             pathish = "tickets/TASK-*/artifacts/"
         elif pathish.endswith("ticket.md"):
             pathish = "tickets/TASK-*/ticket.md"
-        elif pathish.endswith("program.md"):
-            pathish = "tickets/TASK-*/program.md"
-        elif pathish.endswith("progress.md"):
-            pathish = "tickets/TASK-*/progress.md"
     if pathish == "tickets/" or pathish == "tickets":
         pathish = "tickets/TASK-*/ticket.md"
     if pathish.startswith("tickets/progress"):

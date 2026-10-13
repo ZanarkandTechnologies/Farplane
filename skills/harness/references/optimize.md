@@ -15,15 +15,12 @@ harden-then-refine contract and the per-turn report shape.
 Use this when an existing skill has a measurable behavior gap and should improve
 over multiple bounded turns. Native Goal is the sole continuation engine. Each
 invocation instantiates [the reusable Goal program](goal-program-template.md)
-into the owning ticket's ordinary Goal Packet:
+into the owning GitHub issue's ordinary Goal Packet:
 
 ```text
-tickets/TASK-XXXX/
-  ticket.md
-  program.md
-  hypothesis-tree.json
-  progress.md
-  artifacts/native-goal-prompt.md
+<owner/repo#n> issue body: ticket sections + ## Goal program + ## Current Goal state (launcher in its own comment)
+<owner/repo#n> Goal turn comments
+.farplane/goal-advisor/issue-<n>/hypothesis-tree.json
 ```
 
 The target keeps its live `SKILL.md` and canonical `evals/evals.json`. Eval
@@ -38,10 +35,10 @@ harness_optimize(target_skill, performance_metric, feedback_class, failure_evide
   -> approved_goal_packet + shortest_verified_passing_candidate + eval_evidence
 
 state:
-  reads(target SKILL.md, canonical evals/evals.json, owning ticket, program
-        policy, hypothesis-tree.json, progress.md learnings, generated Eval
-        evidence)
-  writes(ticket program.md, ticket hypothesis-tree.json, ticket progress.md,
+  reads(target SKILL.md, canonical evals/evals.json, owning issue, Goal
+        program policy, hypothesis-tree.json, Goal turn comment learnings,
+        generated Eval evidence)
+  writes(issue ## Goal program, hypothesis-tree.json, Goal turn comments,
          native Goal prompt, accepted target-skill change)
 
 gates:
@@ -67,15 +64,15 @@ One Goal owns the active decision. Advisors are setup or conditional methods:
 source_stage(local failures + supplied sources + Feed Scout signals?)
   -> techniques + mechanisms + variables
 campaign.initialize_tree(initial hypothesis candidates)
-goal_advisor(ticket.md + program preset + hypothesis-tree.json + progress.md)
+goal_advisor(issue ticket sections + program preset + hypothesis-tree.json)
   -> approved Goal Packet
-observe(ticket + program + tree + progress tail + current Eval evidence)
+observe(issue body + tree + Goal turn comments within 80 lines + current Eval evidence)
 choose_next(eligible leaves + remaining budget)
   -> execute | diagnose | report_now | request_feedback | stop
 choose_next_comparison(eligible leaves + evidence + outside options)? -> selected move
 eval(next experiment, frozen complete suite) -> evidence
 update_tree(result + insight + bounded diagnostic children?)
-progress.md.append(selection + tree mutation + evidence + next_action)
+goal_turn_comment(selection + tree mutation + evidence + next_action)
 native_goal(updated packet state) -> continue | transition | block | complete
 ```
 
@@ -102,7 +99,7 @@ with `report_now`, `request_feedback`, and `stop`.
    - [ ] Extract only applicable techniques, mechanisms, variables, failure
      conditions, and source refs. Generate initial intervention hypotheses with
      expected observations, falsifiers, expected compounding rewards, and short
-     reward bases in ticket-local `hypothesis-tree.json`.
+     reward bases in the issue's `hypothesis-tree.json`.
    - [ ] Route adversarial cases through `qa` adversarial mode; a separate evidence
      reviewer must accept a case before Eval does. The tester cannot approve its
      own case.
@@ -111,16 +108,16 @@ with `report_now`, `request_feedback`, and `stop`.
      outside options. Skip this hop when one move is mechanically
      implied. Never use a tournament, persistent score table, or invented lift.
 - [ ] 4. Invoke `goal-advisor` to instantiate
-  `goal-program-template.md` into the ticket's `program.md`, create
-  or update `hypothesis-tree.json` and `progress.md`, and compile a compact
-  Files-listed native Goal prompt. Material packets remain pending until the
-  operator approves the current ticket, program, tree, progress scaffold, and
+  `goal-program-template.md` into the issue's `## Goal program`, create
+  or update `hypothesis-tree.json` and `## Current Goal state`, and compile a
+  compact Files-listed native Goal prompt. Material packets remain pending until
+  the operator approves the current ticket sections, Goal program, tree, and
   prompt together.
 - [ ] 5. Freeze the complete suite for the Goal and record the baseline before
   editing. If an accepted case changes the suite later, stop and regenerate a
   fresh packet and baseline; never change cases mid-comparison.
-- [ ] 6. Harden first. Apply `choose_next` to the `program.md` policy, pending
-  tree leaves, recent `progress.md` learnings, current Eval evidence, and
+- [ ] 6. Harden first. Apply `choose_next` to the `## Goal program` policy, pending
+  tree leaves, recent Goal turn comment learnings, current Eval evidence, and
   remaining harden budget. Use the choose-next comparison only for a real
   multi-option judgment. Before ranking, disposition every known prerequisite-invalid leaf
   explicitly as `reject` or `defer` and record the failed prerequisite; omission
@@ -139,7 +136,7 @@ with `report_now`, `request_feedback`, and `stop`.
   guard while reducing length; otherwise restore the shortest passing
   candidate. Stop on refine patience or `max_rounds`.
 - [ ] 8. Run the frozen suite once more on the shortest passing candidate,
-  append final evidence to ticket `progress.md`, obtain required Agent QA and
+  post final evidence as a Goal turn comment, obtain required Agent QA and
   review, then promote the accepted skill change through `harness` maintain mode.
 
 ## Execution Boundary
@@ -153,11 +150,11 @@ then minimize instruction length subject to that exact behavior floor
 
 One Goal owns both phases. A phase budget is a safety bound, not a competing
 controller. Candidate files may remain temporary; keep only the accepted skill
-change, ticket progress, and generated evidence.
+change, Goal turn comments, and generated evidence.
 
-The active Goal owns `choose_next`. `program.md` owns source/search and replan policy;
+The active Goal owns `choose_next`. `## Goal program` owns source/search and replan policy;
 `hypothesis-tree.json` owns current hypotheses, results, and insights;
-`progress.md` owns chronological receipts. The choose-next comparison is loaded
+Goal turn comments own chronological receipts. The choose-next comparison is loaded
 only when several plausible moves need evidence-backed ordinal comparison. It
 does not execute Eval, mutate the target, or create an experiment ticket.
 
@@ -165,12 +162,12 @@ External research is optional and evidence-triggered, not an automatic web
 search. Adversarial agents strengthen the eval boundary before a Goal or force
 a new frozen Goal; they do not mutate or approve the suite during a run.
 
-The reusable Goal program is a compact `program.md` preset only. Limit it to
+The reusable Goal program is a compact `## Goal program` preset only. Limit it to
 metric and frozen-suite bindings, source/search policy, phase budgets,
 accept/transition/stop rules, and tree/progress writeback shapes. Do not copy editable scope, detailed
 round procedures, proof lanes, completion workflow, or promotion policy from
-the ticket and skills. The ticket owns scope and proof; `progress.md` owns
-observations; `goal-advisor` separately compiles the Files-listed native
+the ticket and skills. The ticket sections own scope and proof; Goal turn
+comments own observations; `goal-advisor` separately compiles the Files-listed native
 launcher.
 
 ## Reference Map
@@ -193,9 +190,9 @@ launcher.
 
 ## Output
 
-- approved ticket Goal Packet, ticket-local hypothesis tree, and compact native
+- approved issue Goal Packet, linked local hypothesis tree, and compact native
   Goal prompt
-- append-only ticket `progress.md` observations and Eval evidence
+- append-only Goal turn comment observations and Eval evidence
 - shortest discovered candidate that passes the frozen target and guards
 - accepted target-skill change or an evidence-backed blocked result
 - optional source dispositions and separately reviewed adversarial cases
@@ -204,7 +201,7 @@ For an active turn or audit, make the decision replayable without another
 helper. Report:
 
 ```text
-Packet: owning ticket + program + hypothesis tree + progress + approval/freshness + frozen suite
+Packet: owning issue + Goal program + hypothesis tree + Goal turn comments + approval/freshness + frozen suite
 Phase: baseline | harden | refine
 Budget: harden max_rounds/patience + refine max_rounds/patience
 Observation: performance + guards + length + evidence ref
@@ -212,7 +209,7 @@ Selector: eligible pending leaves + direct or choose-next rationale + outside op
 Decision: retain | reject | transition_refine | blocked | complete
 Diagnostic: bounded children + preserved sibling ids + repair/reject/defer/backtrack branches, when evidence is ambiguous
 Writeback: tree mutation + observation + evidence + learned constraint + next action
-Writeback order: hypothesis-tree.json then progress.md
+Writeback order: hypothesis-tree.json then Goal turn comment
 Next action: one bounded next turn or stop reason
 ```
 
@@ -224,15 +221,15 @@ receipt; keep `next_action` consistent with that one decision.
 Render an outside-option comparison, not a list: give a one-line win/lose reason
 for `report_now`, `request_feedback`, and `stop`, then name the winner.
 
-When asked to show an active turn, render the compact `progress.md` writeback
+When asked to show an active turn, render the compact Goal turn comment writeback
 with `observation`, `evidence`, `decision`, `learning`, and `next_action`
 instead of merely saying it will be appended. If the remaining budget,
 eligibility, or evidence is unknown, make resolving that value the next action
 rather than inventing it. Even when missing packet state blocks selection,
 explicitly `reject` or `defer` any candidate already known to have an
 unsatisfied prerequisite and name that prerequisite. A blocking turn must list
-the presence or exact absence of all selector inputs: `program.md policy`,
-eligible pending tree leaves, `progress.md learnings`, current Eval evidence,
+the presence or exact absence of all selector inputs: `Goal program policy`,
+eligible pending tree leaves, `Goal turn comment learnings`, current Eval evidence,
 and remaining budget.
 
 When asked to seed from supplied sources, render the extracted source refs,

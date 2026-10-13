@@ -106,8 +106,8 @@ Project orchestration boundary:
 work_pulse(tickets, harness, metric_state, reports)
   -> start_ticket_goal | resume_ticket_goal | request_feedback | replan | no_op
 
-leaf_native_goal(ticket.md, program.md, progress.md)
-  -> artifact + evidence + completion_entry
+leaf_native_goal(issue body + Goal turn comments)
+  -> artifact + evidence + proof comment
 ```
 
 Do not generate a native `/goal` prompt that tries to run the proposal

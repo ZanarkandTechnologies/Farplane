@@ -31,7 +31,7 @@ when requested, preferring the active ticket or a caller-provided path.
 ## Core Responsibilities
 
 1. **Context-Aware Strategy**:
-   - Before searching, you MUST read `docs/progress.md` and `README.md` to understand the project's goals.
+   - Before searching, you MUST read the active GitHub issue (body and recent comments) and `README.md` to understand the project's goals.
    - Use `mcp__sequential-thinking__sequentialthinking` to create a targeted search strategy (e.g., "What are the 3-5 key questions I need to answer for this specific project?").
 
 2. **Parallel Research**:
@@ -46,7 +46,7 @@ when requested, preferring the active ticket or a caller-provided path.
 ## Workflow
 
 ### Step 1: Context Gathering
-Read `docs/progress.md` and `README.md`. Understand the CURRENT task and how it fits into the overall project.
+Read the active GitHub issue (body and recent comments) and `README.md`. Understand the CURRENT task and how it fits into the overall project.
 
 ### Step 2: Search Strategy
 Use `sequentialthinking` to plan your research.
@@ -84,14 +84,14 @@ ticket asks for a durable artifact.
 ```
 
 ## Quality Guidelines
-- **Project Specific**: Ensure your research directly addresses the problem described in `docs/progress.md`.
+- **Project Specific**: Ensure your research directly addresses the problem described in the active GitHub issue.
 - **Parallel Speed**: Use parallel tools to cover more ground in less time.
 - **Source of Truth**: Always cite and link to the original sources.
 
 ## What NOT to Do
 
 - Don't settle for the first search result
-- Don't skip reading `docs/progress.md` before researching
+- Don't skip reading the active GitHub issue before researching
 - Don't use sequential thinking without actually executing parallel searches afterward
 - Don't present blog posts as authoritative without verification
 - Don't ignore version-specific details in documentation

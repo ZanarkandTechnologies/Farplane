@@ -73,6 +73,6 @@
   },
   "writeback_contract": {
     "first": "Update h_transfer.insight and evidence_refs from completed diagnostic children.",
-    "second": "Append the causal conclusion, scope, evidence, and disposition to progress.md."
+    "second": "Append the causal conclusion, scope, evidence, and disposition as a Goal turn comment."
   }
 }

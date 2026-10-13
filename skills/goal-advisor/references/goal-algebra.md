@@ -67,7 +67,7 @@ ProjectPortfolio :=
 - `goal-advisor` fills coding-ticket execution by compiling the Goal files,
   mode, budget, metric, and stop policy for native Goal.
 - Retired public surfaces map into Goal standards:
-  - `$work` -> admission/profile fields in `program.md`
+  - `$work` -> admission/profile fields in `## Goal program`
   - `$ralph` -> heartbeat board-drain pattern
   - `batch-work` -> batch Goal file list plus per-ticket proof ledger
 
@@ -75,7 +75,7 @@ ProjectPortfolio :=
 
 For skill-improvement work, native Goal mode is the durable loop runner. Draft
 the Goal so it reads the target skill package plus any `self-improve/` context,
-optimizes toward `program.md`, uses `harness` optimize mode only for eval, memory, or
+optimizes toward `## Goal program`, uses `harness` optimize mode only for eval, memory, or
 prompt scaffolding, and uses `harness` maintain mode for accepted writeback into
 `SKILL.md`, references, or plugin/source copies.
 

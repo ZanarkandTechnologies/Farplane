@@ -7,29 +7,25 @@ owner: skills/harness
 
 # Self-Improve Goal Program Preset
 
-Instantiate this compact preset into the owning ticket's `program.md` through
-`goal-advisor`. The ticket owns scope and proof; Goal Advisor separately owns
-the Files-listed native Goal launcher.
+Instantiate this compact preset into the owning GitHub issue's `## Goal
+program` section through `goal-advisor`. The ticket sections own scope and
+proof; Goal Advisor separately owns the Files-listed native Goal launcher
+in a separate `**Goal launcher**` comment.
 
 ````markdown
----
-kind: goal-program
+### Goal Mode: Self-Improve <target-skill>
+
+```yaml
 mode: skill_improvement
 trigger: native_goal
-status: draft
 approval: pending
-compiled_from_ticket_updated_at: <ticket-updated-at>
-generated_prompt: <native-goal-prompt-path>
----
-
-# Self-Improve: <target-skill>
+compiled_from_ticket_sha: <first 12 hex of sha256(body above ## Goal program)>
+```
 
 ```yaml
 files:
-  - <ticket.md>
-  - <program.md>
-  - <hypothesis-tree.json>
-  - <progress.md>
+  - <owner/repo#n>
+  - <.farplane/goal-advisor/issue-<n>/hypothesis-tree.json>
   - <target-skill>/SKILL.md
   - <target-skill>/evals/evals.json
 
@@ -50,9 +46,9 @@ selection:
   rule: choose execute | diagnose | report_now | request_feedback | stop; use goal-advisor references/choose-next.md only for real multi-option judgment
   before_each_experiment:
     inputs:
-      - this program.md policy
+      - this ## Goal program policy
       - eligible pending hypothesis-tree.json leaves
-      - progress.md learnings and prior decisions
+      - Goal turn comment learnings and prior decisions
       - current complete-suite Eval evidence
       - remaining phase budget and patience
     output: one next experiment + expected observation + falsifier + expected reward + reward basis + material selection rationale + replan conditions
@@ -73,15 +69,15 @@ loop:
     exit: patience or budget exhausted -> final verification
 
 after_each_turn:
-  - observe ticket, program, tree, latest 80 progress lines, current evidence, and remaining budget
+  - observe the issue body, tree, newest Goal turn comments within 80 lines, current evidence, and remaining budget
   - choose execute | diagnose | report_now | request_feedback | stop; use the choose-next comparison only when several moves need judgment
   - preregister and run the one selected round in the current phase
   - update the selected tree node with its result and insight; add only bounded diagnostic children for surprising, invalid, prerequisite-uncertain, or causally ambiguous evidence
-  - append selection, tree mutation, evidence, decision, learned constraint, and next action to progress.md
+  - post one Goal turn comment with selection, tree mutation, evidence, decision, learned constraint, and next action; rewrite ## Current Goal state
   - continue, transition, block, or complete from the phase rules
 
 drift:
-  - regenerate from a fresh baseline if the ticket timestamp or suite changes
+  - regenerate from a fresh baseline if compiled_from_ticket_sha or the suite changes
 
 stop:
   blocked: harden ends before the target passes, or the packet becomes stale
@@ -90,6 +86,6 @@ stop:
 
 Never trade required behavior for length. The Goal chooses; the choose-next
 comparison conditionally ranks; Eval measures; the tree owns current search state and
-progress owns chronology. Do not create another loop owner or target-local
+Goal turn comments own chronology. Do not create another loop owner or target-local
 state.
 ````

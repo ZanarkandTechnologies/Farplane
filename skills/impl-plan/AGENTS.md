@@ -16,7 +16,7 @@
 - Keep `references/template.md` as a superseded pointer for historical links,
   never as an active planning surface.
 - Keep repo policy in root `AGENTS.md`; keep planning mechanics here.
-- Keep Goal runtime configuration in `goal-advisor` and Goal sidecars.
+- Keep Goal runtime configuration in `goal-advisor` and the issue's `## Goal program`.
 
 ## Contract
 
@@ -37,7 +37,7 @@
 - Use inline text/Mermaid only when it replaces prose. Use a linked
   `diagrams.md` only for complex multi-view or independently reviewed visual
   needs; validate it when present.
-- Keep bulky execution evidence in `progress.md` or ticket artifacts.
+- Keep bulky execution evidence in Goal turn comments or linked artifacts.
 
 ## Checks
 

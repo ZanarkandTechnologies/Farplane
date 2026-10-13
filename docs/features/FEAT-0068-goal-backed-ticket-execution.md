@@ -3,7 +3,7 @@ title: Goal-backed ticket execution
 status: implemented
 owner: feature-registry
 created_at: 2026-07-07
-updated_at: 2026-07-07
+updated_at: 2026-10-13
 tags:
   - farplane
   - feature
@@ -36,9 +36,10 @@ last_verified: 2026-07-07
 experimental: true
 superseded_by: false
 track: >-
-  Review goal-backed ticket execution for the current window. Read active and
-  recently archived ticket.md, program.md, progress.md, artifacts/review/*, and
-  any native Goal prompt or Goal Advisor handoff referenced by the ticket.
+  Review goal-backed ticket execution for the current window. Read open and
+  recently closed GitHub issues (body, `## Goal program`, `## Current Goal
+  state`, Goal turn and proof comments), linked review artifacts, and any
+  native Goal prompt or Goal Advisor handoff referenced by the issue.
   Judge against ticket contract quality, Goal Packet resumability, proof
   artifact integrity, reviewer-lane receipt, progress writeback, and absence of
   hidden chat-memory dependencies. Return continue, adjust, cap, pause,
@@ -78,14 +79,15 @@ proof, review, closeout, and residual risk should survive interruption.
 
 - Starts from a material ticket or equivalent accepted owner.
 - Uses Goal Advisor to compile the execution route when Goal-backed work is needed.
-- Keeps state in `ticket.md`, `program.md`, `progress.md`, and artifacts.
+- Keeps state on the GitHub issue (ticket sections, `## Goal program`,
+  `## Current Goal state`, Goal turn comments) and linked artifacts.
 - Requires proof and reviewer evidence for material completion claims.
 - Separates execution from Pulse planning and product-loop ticket supply.
 
 ## User Stories
 
 - As an operator, I can see whether a ticket actually progressed or only produced chat.
-- As an executor, I can resume from filesystem state.
+- As an executor, I can resume from the issue body and recent Goal turn comments.
 - As a reviewer, I can compare the completion claim against proof and ticket gates.
 
 ## Operating Contract
@@ -107,12 +109,12 @@ flowchart LR
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
-  accepted["Accepted ticket<br/>tickets/TASK-*/ticket.md"]:::keep
+  accepted["Accepted ticket<br/>GitHub issue body"]:::keep
   advisor["goal-advisor<br/>route + prompt"]:::changed
-  packet["Goal Packet<br/>ticket.md<br/>program.md<br/>progress.md"]:::added
+  packet["Goal Packet on the issue<br/>## Goal program<br/>## Current Goal state<br/>Goal turn comments"]:::added
   execute["native Goal execution<br/>or direct route"]:::changed
   gates["QA + reviewer lanes<br/>proof receipts"]:::changed
-  closeout["proof refs + closeout state<br/>Done / Proof updated"]:::added
+  closeout["proof comment<br/>gh issue close --reason completed"]:::added
   chatOnly["chat-only completion claim"]:::retired
 
   accepted --> advisor
@@ -148,8 +150,8 @@ Gray is the accepted ticket input, amber is execution/review behavior, green is 
 - Acceptance signals:
   - Ticket state is enough to resume without chat.
   - Proof and reviewer receipts are linked before material completion.
-  - Successful completion runs `farplane ticket finalize TASK-XXXX` so archive
-    state and mining are emitted by one explicit boundary.
+  - Successful completion posts one proof comment and runs
+    `gh issue close <n> --reason completed` as the one explicit boundary.
   - Pulse and interval reports can understand ticket state without acting as executor.
 
 ## Rollout And Maintenance
@@ -165,8 +167,8 @@ Gray is the accepted ticket input, amber is execution/review behavior, green is 
 - This feature does not create a centralized executor service.
 - This feature does not replace tickets with Goal prompts.
 - This feature does not make Pulse execute arbitrary tickets.
-- Known weak spot: compliance depends on agents keeping ticket/program/progress/proof
-  state current.
+- Known weak spot: compliance depends on agents keeping the issue body, Goal turn
+  comments, and proof state current.
 - Delete or merge this feature if the execution UX is fully absorbed into `FEAT-0007`
   and `FEAT-0032` with no distinct dogfood need.
 
@@ -182,3 +184,6 @@ Gray is the accepted ticket input, amber is execution/review behavior, green is 
 ## Change History
 
 - 2026-07-07: Created as an experimental dogfood handle for ticket execution UX.
+- 2026-10-13: Goal Packet state moved from `ticket.md`, `program.md`, and
+  `progress.md` onto the GitHub issue; completion closes the issue instead of
+  running the retired filesystem finalize command.

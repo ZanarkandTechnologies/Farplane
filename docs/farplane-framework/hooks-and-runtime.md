@@ -168,7 +168,10 @@ event_id = sha256(source, project_id, ticket_id, content_hash)
 run_id   = sha256(event_id, route_id, program_digest)
 ```
 
-`farplane ticket finalize TASK-XXXX` owns the successful terminal transition. It
+GitHub-backed projects close an issue with one proof comment and `gh issue
+close` (`tickets/README.md`); that path emits no completion event. For legacy
+projects without a GitHub repository, `farplane ticket finalize TASK-XXXX` owns
+the successful terminal transition. It
 creates or resumes and closes the marked GitHub issue, sets `status: done`,
 clears `claimed_by`, advances `updated_at`, writes the compact locator and
 `farplane.ticket.completed` event, applies the
@@ -176,7 +179,7 @@ matching route, and returns a closure/mining receipt. Failed mining leaves the
 event retryable through `farplane mining drain`. There is no file watcher,
 daemon, shell-tail workflow engine, or extra heartbeat.
 
-Ticket completion has one active mining route. Its normal entry point is
+Ticket completion has one active mining route. Its legacy entry point is
 `farplane ticket finalize TASK-XXXX`; `farplane mining ticket TASK-XXXX` remains
 an explicit repair/backfill command. The program freezes the ticket,
 optional program/progress/artifacts, and any bounded operator-turn window named

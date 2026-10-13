@@ -15,7 +15,7 @@ choose_next(objective, evidence, eligible_moves, remaining_budget)
 
 Program policy, eligible pending leaves of `hypothesis-tree.json` when present
 (derive leaves from parent and status; never store ranks or a second frontier),
-recent `progress.md` learnings and receipts, current evaluator evidence, and
+the latest Goal turn comments' learnings and receipts, current evaluator evidence, and
 remaining budget. When any is absent, return a source gap: list the presence or
 exact absence of each input, render a comparison labelled `conditional`, and
 select nothing until the missing state is bound.
@@ -68,7 +68,7 @@ Bet: thesis | confidence or uncalibrated | downside | falsifier
 First proof: <observation> -> if positive <action> | if negative <action>
 Replan: positive | flat | negative | branch | invalid | budget
 Diagnostic (ambiguous only): children | preserved siblings | repair/reject/defer/backtrack
-Writeback order: hypothesis-tree.json, then progress.md
+Writeback order: hypothesis-tree.json, then Goal turn comment, then ## Current Goal state
 ```
 
 Example: a flat representation probe that helped one target class -> rank a

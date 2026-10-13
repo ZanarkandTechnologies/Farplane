@@ -301,11 +301,11 @@ Mapping:
 
 ```text
 SKILL.md              ~= reusable prompt contract
-ticket.md             ~= task-local prompt and proof contract
+issue body            ~= task-local prompt and proof contract
 subagent prompt       ~= role and ownership contract
 reviewer handoff      ~= judgment prompt with rubric and evidence
 eval judge            ~= scoring prompt
-Goal prompt           ~= runtime prompt derived from state files
+Goal prompt           ~= runtime prompt derived from issue state
 hook message          ~= deterministic control prompt or event contract
 ```
 
@@ -631,10 +631,10 @@ docs/features/FEAT-*.md               = buildable contracts
 docs/MEMORY.md             = durable invariants
 docs/features/registry     = feature inventory
 docs/skills/registry       = skill inventory
-tickets/TASK-*/ticket.md   = task contract and proof target
-tickets/TASK-*/program.md  = loop configuration when needed
-tickets/TASK-*/progress.md = append-only observed progress
-tickets/TASK-*/artifacts   = evidence
+issue body ticket sections = task contract and proof target
+issue ## Goal program      = loop configuration when needed
+issue Goal turn comments   = append-only observed progress
+linked artifacts           = evidence
 skills/*/evals             = reusable recurrence guards
 ```
 
@@ -692,9 +692,8 @@ ticket_completed(ticket, thread_id?)
   -> issue_findings + projected_ticket?[0..1] + machine_receipt
 ```
 
-`farplane ticket finalize TASK-XXXX` constructs `ticket_completed` from the ticket
-ID after completing and archiving the ticket. `farplane mining ticket
-TASK-XXXX` can reconstruct the same mining input for repair or backfill.
+`farplane mining ticket TASK-XXXX` constructs this mining input for repair or
+backfill.
 
 The completion miner writes only a small local machine receipt. Ticket,
 program, progress, and artifacts own the completed solution; an available
@@ -924,7 +923,7 @@ Real control levers:
 
 ```text
 Stop hook          = end-of-turn observation, telemetry, and bounded deterministic gates; never completion authority
-ticket finalize cmd = verified terminal transition, writeback, and cleanup
+issue close rule   = proof comment + gh issue close; keeps local files
 UserPrompt hook    = turn-start intent capture
 learning sidecar   = bounded-window trouble/lesson writer
 validators         = mechanical invariants
@@ -949,8 +948,8 @@ Automation(trigger, schedule, state) -> task | no_op
 Heartbeat:
 
 ```text
-heartbeat(ticket, program, progress, trigger)
-  -> inspect_state + action | no_op + progress_entry
+heartbeat(issue, trigger)
+  -> inspect_state + action | no_op + Goal turn comment
 ```
 
 Cron can call `goal-advisor` to prepare a Goal Packet for a ticket:
@@ -966,31 +965,30 @@ Goal Packet:
 
 ```text
 GoalPacket :=
-  ticket.md
-+ program.md
-+ progress.md
+  issue body (ticket sections + ## Goal program + ## Current Goal state)
++ Goal turn comments
 + generated_goal_prompt
 + drift_check_contract
 
-goal_loop(ticket.md, program.md, progress.md, trigger)
+goal_loop(issue_body, latest_goal_turn_comments, trigger)
   -> next_turn + evidence + drift_verdict + state_delta
 ```
 
 Goal prompt:
 
 ```text
-native_goal_prompt(ticket.md, program.md)
+native_goal_prompt(ticket sections, ## Goal program)
   -> Task + Logging + Metric + AfterEachTurn + Budget?
 ```
 
-The prompt is generated runtime text. `ticket.md`, `program.md`, and
-`progress.md` are the state.
+The prompt is generated runtime text, posted as a `**Goal launcher**` comment. The issue body and
+its Goal turn comments are the state.
 
 After each Goal turn:
 
 ```text
-after_goal_turn(ticket, program, progress, current_claim)
-  -> append_progress
+after_goal_turn(issue, current_claim)
+  -> post_goal_turn_comment + rewrite_current_goal_state
    + drift_check?
    + continue | wait | complete | blocked
 ```
@@ -998,7 +996,7 @@ after_goal_turn(ticket, program, progress, current_claim)
 Material or self-approval-prone Goal loops use a read-only drift reviewer:
 
 ```text
-drift_check(ticket, program, progress_tail, current_claim)
+drift_check(ticket, program, goal_turn_comment_tail, current_claim)
   -> aligned | drifting | blocked | complete_candidate
    + reason
    + evidence_refs
@@ -1010,10 +1008,10 @@ Long-term project control:
 ```text
 harness.yaml = human meaning + configured planning skill refs + passive area/ICP context + selected metric refs + hard constraints
 metrics.yaml = metric meaning + direction + freshness + optional guard rules
-ticket.md = executable leaf contract + Done + QA Strategy
-program.md = loop configuration + metric + stop policy
-progress.md = append-only observed execution
-artifacts/ = evidence
+issue ticket sections = executable leaf contract + Done + QA Strategy
+## Goal program = loop configuration + metric + stop policy
+Goal turn comments = append-only observed execution
+linked artifacts = evidence
 ```
 
 Portfolio planning:
@@ -1026,16 +1024,15 @@ plan_next_wave(harness, metric_objectives, metric_state, ticket_history, reports
 Leaf execution:
 
 ```text
-leaf_native_goal(ticket.md, program.md, progress.md)
+leaf_native_goal(issue_body, latest_goal_turn_comments)
   -> artifact + evidence + completion_entry
 ```
 
 Completion transition:
 
 ```text
-ticket_finalize_command(ticket, verified_archive, metric_observations, reports)
-  -> terminal_metadata + completion_event + mined_learning
-   + archive_locator + packet_cleanup + next_pulse_trigger
+issue_close(issue, done_proof_checked_on_main)
+  -> one proof comment + gh issue close <n> --reason completed
 ```
 
 Rollout:

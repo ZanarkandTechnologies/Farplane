@@ -199,12 +199,11 @@ slice, proof/falsification, tradeoffs, and non-goals.
   follow the shared-utility row in Where Files Go.
 - If the same helper logic is appearing across multiple modules, extract it to
   the approved shared utility surface instead of copying it again.
-- Update ticket status, phase, blockers, and spawned follow-ups in the ticket
-  file as work progresses. When a ticket is complete and its writeback is done,
-  run `farplane ticket finalize TASK-XXXX` with one `--media <path>` per
-  selected file. Core creates or resumes, verifies, and
-  closes the configured-repository issue before mining and cleanup; do not
-  create the issue or move the packet into `tickets/archive/` manually.
+- Update the GitHub issue's status labels, blockers, and spawned follow-ups as
+  work progresses (`tickets/README.md`). When it is complete and its writeback
+  is done, post one proof comment (what changed, commit hashes, checks run, and
+  the demo video or screenshots for UI work), then run `gh issue close <n>
+  --reason completed`.
 - Route a repeated failure to the smallest owner: a skill, eval, validator,
   canonical doc, or ticket artifact. Promote only a durable project invariant
   to `docs/MEMORY.md`.

@@ -29,7 +29,7 @@ farplane/       tracked project framework config
 .agents/skills/ tracked project-local capability skills
 .farplane/      ignored reports, observations, generated views, eval runs, and logs
 docs/           durable human-readable system memory
-tickets/        executable work, Goal Packets, progress, QA, and review evidence
+tickets/        issue templates and the frozen legacy archive (work lives in GitHub Issues)
 skills/         reusable cross-project workflows
 ```
 
@@ -41,8 +41,8 @@ human-approved boundaries.
 
 They must not contain orchestration algorithms, worker pools, ordered artifact
 procedures, check-in implementations, review procedures, or repeated agent
-instructions. Put those in skills, small hooks/validators, or the owning ticket
-`program.md`, where behavior can be tested and resumed.
+instructions. Put those in skills, small hooks/validators, or the owning issue's
+`## Goal program`, where behavior can be tested and resumed.
 
 ## Tracked Framework Config
 
@@ -243,23 +243,24 @@ hand-editing generated thread configuration.
 ## Tickets Own Work And Evidence
 
 ```text
-tickets/TASK-XXXX/
-  ticket.md
-  program.md?
-  progress.md?
-  artifacts/
-    qa/
-    review/
+GitHub issue <n> in the project's own repository
+  body: ticket sections
+  body: ## Goal program?
+  body: ## Current Goal state?
+  Goal turn comments?
+  proof comment
+  linked artifacts (qa/, review/)
 ```
 
-The ticket is the executable contract and compact task memory. `program.md`
-owns Goal/check-in loop instructions; `progress.md` is append-only execution
-history; `artifacts/` owns implementation, QA, review, and supporting evidence.
-Do not store QA or review receipts in a detached project-level evidence folder.
+The issue body is the executable contract and compact task memory. `## Goal
+program` owns Goal/check-in loop instructions; `## Current Goal state` holds the
+latest checkpoint; Goal turn comments are append-only execution history; linked
+repository files or attachments own implementation, QA, review, and supporting
+evidence. Do not store QA or review receipts in a detached project-level
+evidence folder.
 
-Active project tickets are normally ignored local work state while ticket
-templates and board docs remain tracked, subject to the repository's explicit
-policy.
+Ticket templates and board docs remain tracked under `tickets/`, beside the
+frozen legacy archive.
 
 ## Ignored Runtime State
 

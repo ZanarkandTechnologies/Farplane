@@ -32,8 +32,8 @@ Slide sequence:
    `Long tasks drift because the agent keeps optimizing the last message, not
    the original job.`
 3. `The fix`
-   `Put the job in files: ticket.md for the promise, program.md for the loop,
-   progress.md for what actually happened.`
+   `Put the job on one issue: ticket sections for the promise, a Goal program
+   for the loop, turn comments for what actually happened.`
 4. `Why it works`
    `The agent can resume from state, reviewers can inspect proof, and humans do
    not have to reconstruct intent from chat.`

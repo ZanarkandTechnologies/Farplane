@@ -147,24 +147,13 @@ verified closed issue
 -> strongest grounded issue / inefficiency / improvement
 -> one deduped ordinary improvement ticket or no issue
 -> compact closed-ticket locator
--> exact local packet deletion
 ```
 
-The legacy filesystem closeout runs `farplane ticket finalize TASK-XXXX` with
-any selected media paths. Core renders the concise
-`Before`, `After`, `Example`, `Key decisions`, and `Proof`, then creates or
-resumes the ticket-marked issue in `integrations.github.repo`. If media is
-missing, the command leaves the issue open and returns its URL; the agent
-uploads only those marked files through the authenticated browser composer and
-reruns the same command.
-
-Core then verifies and closes the issue, mines the still-local packet from the
-ticket ID alone, atomically writes its compact locator, emits completion, and
-only then deletes the exact active packet. Every failed
-verification, mining, or locator gate retains the packet for retry. Farplane
-Stop hooks collect telemetry and may apply bounded deterministic guards such as
-final-response length; they do not repair proof, advance closeout, archive
-tickets, or delete packets.
+A GitHub issue closes by the close rule in `tickets/README.md`: one proof
+comment, then `gh issue close <n> --reason completed`; local supporting files
+stay. Farplane Stop hooks collect telemetry and may apply bounded deterministic
+guards such as final-response length; they do not repair proof, advance
+closeout, or close issues.
 
 Existing `tickets/archive/TASK-*` packets remain readable legacy records and
 are not migrated. `farplane mining ticket TASK-XXXX` remains the explicit
@@ -182,15 +171,16 @@ is report-only to prevent recursive ticket supply.
 Material or resumable work uses:
 
 ```text
-tickets/TASK-XXXX/
-  ticket.md    # scope, Reward, Done / Proof, QA/review contract
-  program.md   # loop, budgets, stop rules, executable Check-In Program
-  progress.md  # append-only observations and decisions
-  artifacts/   # implementation, QA, review, and supporting evidence
+GitHub issue <n>
+  body: ticket sections   # scope, Reward, Done / Proof, QA/review contract
+  body: ## Goal program   # loop, budgets, stop rules, executable Check-In Program
+  body: ## Current Goal state   # latest checkpoint, rewritten each turn
+  Goal turn comments      # append-only observations and decisions
+  linked artifacts        # implementation, QA, review, and supporting evidence
 ```
 
 For delayed Reward rows, Work Pulse derives readiness and resumes the original
-ticket. The worker reads `program.md` first and executes its `Check-In Program`.
+ticket. The worker reads `## Goal program` first and executes its `Check-In Program`.
 It updates only matured rows and decides `accept | kill | monitor` as
 the program permits. Future rows remain dormant. Pulse dispatches this work; it
 does not reconstruct or independently score the experiment policy.
@@ -202,9 +192,9 @@ does not reconstruct or independently score the experiment policy.
 | Identity, stable problems, planning areas/instructions, constraints, authority, capabilities, selected metric refs | `farplane/harness.yaml` |
 | Metric meaning, required direction, freshness, guard rules, and raw-observation interpretation | `farplane/metrics.yaml` |
 | Recurring workflow | reusable `skills/*` or project-local `.agents/skills/*` |
-| Executable commitment and all QA/review evidence | owning ticket and `artifacts/` |
-| Goal/check-in loop policy | ticket `program.md` |
-| Append-only task or experiment observations | ticket `progress.md` |
+| Executable commitment and all QA/review evidence | owning GitHub issue and linked artifacts |
+| Goal/check-in loop policy | issue body `## Goal program` |
+| Append-only task or experiment observations | Goal turn comments on the issue |
 | Closed-ticket identity and archive location | `tickets/archive-index.jsonl` for new GitHub-issue closes; `tickets/archive/TASK-*` for readable legacy archives |
 | Global Company OS Daily/Weekly prompts | AI Office `farplane/automations/` |
 | Project-local automation topology and prompts | project `farplane/automations/` |
