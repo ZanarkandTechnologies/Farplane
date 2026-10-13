@@ -29,13 +29,13 @@ alone. Operators clone Farplane to own their standards, skills, evals,
 templates, tickets, automations, runtime adapters, Goal Packets, guardrails,
 review loops, and self-improvement machinery.
 
-Farplane Core pairs with Farplane UI:
+Farplane Core pairs with the bunker (Farplane-UI-v2):
 
 | Surface | Path | Owns |
 | --- | --- | --- |
 | Farplane Core | `Farplane/` | Harness contracts, framework files, skills, hooks, evals, templates, tickets, review, proof, graph/projection payloads, and repo memory |
 | Farplane Bunker | `../Farplane-UI-v2/` | The operator's 3D office, the Convex backend, the YouTube extension, and the module CLI Core delegates `gateway`, `extension` and `resource-bank` to (the v1 Farplane-UI is archived) |
-| Runtime adapters | external / optional | Codex by default for local project/thread visibility; OpenClaw when persistent gateway/agent customization is needed |
+| Runtimes | `runtimes/codex`, `runtimes/claude` | Codex (default) or Claude Code, installed with `install.sh --runtime`; they run agent work and Farplane gives it a visible harness |
 
 The UI scope split is part of the architecture contract:
 
@@ -50,8 +50,8 @@ The repo is organized around five concerns:
 - `AGENTS.md`: project-local operating map loaded every loop
 - `ARCHITECTURE.md`: top-level system map and canonical surface guide
 - `docs/`: durable knowledge and feature specs
-- `tickets/`: active execution objects, compact closed-issue locators, and
-  readable legacy local archive history
+- `tickets/`: issue templates, compact closed-issue locators, and readable
+  legacy local archive history (active tasks live in GitHub Issues)
 - `skills/`, `agents/`, `bin/`: reusable workflows, bounded specialists, and
   runtime helpers
 

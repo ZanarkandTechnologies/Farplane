@@ -1,7 +1,7 @@
 # Farplane AGENTS.md
 
 This file is the project-local context for developing Farplane itself. It is a
-routing kernel. The global Codex contract is
+routing kernel. The global contract shared by the Codex and Claude runtimes is
 [runtimes/AGENTS.md](runtimes/AGENTS.md).
 Keep this file navigational: a rule belongs here only when every Farplane task
 needs it before a ticket, skill, or owner document can take over.
@@ -13,7 +13,7 @@ needs it before a ticket, skill, or owner document can take over.
   hidden orchestration.
 - The active GitHub issue in the project's own repository is the task
   contract, scope boundary, proof scoreboard, and handoff; execution stays in
-  Codex. The repository is public, so issues carry engineering facts only.
+  the agent runtime (Codex or Claude). The repository is public, so issues carry engineering facts only.
   Multica is archived read-only; don't read or write it. Follow
   `tickets/README.md` and do not keep durable state only in chat.
 - For material work, the issue body holds Goal program policy and the current
