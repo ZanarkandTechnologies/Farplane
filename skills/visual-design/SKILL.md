@@ -20,52 +20,53 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
   `no`; preserve functional requirements, accessibility, and necessary state.
 - [ ] Use [research](../research/SKILL.md) when visual direction needs
   product, brand, or peer grounding (`market`).
-- [ ] **Pull the library before any direction.** For a new direction or a
-  taste upgrade, pull both halves of the Resource Bank and look at what comes
-  back before sketching anything:
+- [ ] **Story first.** Choose the register (product UI serves repeated work;
+  brand UI creates memory), write the scene sentence (who, where, light,
+  mood), and name a **visual concept** from the product's own world (a place,
+  object, craft, or ritual), never an adjective like "clean". Reject any
+  concept that would fit an unrelated app. For polish, name the existing
+  concept or `none recorded`; do not invent one.
+- [ ] **Reference fidelity.** When the operator names references or states a
+  palette or fonts, write the **steal table** (source, trait with exact
+  value, `adopt | adapt | reject`, where it shows) before any styling, show
+  it, and wait for a yes. Operator-stated palette and fonts and standing
+  operator rules (banned hues, a product UI's neutral rule) beat any tasty
+  pack, concept, or direction: reject a clashing saved element with the rule
+  and a substitute from the same pack; a conflict with a stated value is a
+  question, never a silent swap.
+- [ ] **Match the story to the library.** For a new direction or a taste
+  upgrade, query both halves of the Resource Bank with the story:
   1. **Named styles.** Run
-     `python3 skills/design-styles/scripts/design_styles.py list` and
-     shortlist three `style:<slug>` that fit the surface, audience, and
-     register; run `show <slug> ...` and open each saved board image. An
-     untagged Tasty Pack never returns these
+     `python3 skills/design-styles/scripts/design_styles.py list`, shortlist
+     the styles that could tell this story, then `show <slug> ...` and open
+     each board. Untagged Tasty Packs never return these
      ([design-styles](../design-styles/SKILL.md) owns the vocabulary and
-     its house guards).
+     house guards).
   2. **Saved taste.** Run
-     `farplane resource-bank tasty-pack "<2-4 surface keywords>" --timeframe all --limit 20 --json`
-     with no output-type filter (the default window is one week, and few
-     saves carry a `ui` type). Read each pinned element's recipe as
-     candidate steal-table rows with their exact values.
-  Record both in the library receipt. An empty pull is a stated result, not
-  a blocker; skipping the pull is a miss.
+     `farplane resource-bank tasty-pack "<2-4 story keywords>" --timeframe all --limit 20 --json`
+     with no output-type filter, and read each pinned element's recipe as a
+     candidate steal row with its exact values.
+  Record both in the library receipt. An empty pull is a stated result;
+  skipping the pull is a miss.
+- [ ] **Three directions.** Propose three ways to tell the story, each through
+  a different library style (slug and board path on the card) plus the saved
+  elements it borrows; a direction with no anchor states why none fit. They
+  differ in concept, not palette. Skip per the existing-design-system branch.
+- [ ] **Concept art before any system.** Make one concept-art image per
+  direction through [ai-image](../ai-image/SKILL.md) (style recipe + concept +
+  the focal moment, house guards applied, spend logged) and show the three
+  side by side with their source boards and a one-line story each. The
+  operator picks. Unattended, pick against the scene sentence and focal
+  action, record why the others lost, and say so. No dials or tokens before
+  a direction is picked.
 - [ ] When the user provides a strong reference or the surface needs a taste
   upgrade, use its `synthesis` branch to extract what to adopt, adapt,
   reject, or defer before defining the final visual system.
-- [ ] When direction is vague, ask the smallest high-leverage taste question:
-  a concrete reference, anti-reference, or a bolder-versus-safer tradeoff.
-  Do not run a separate stateful taste-interview workflow.
-- [ ] Record a compact visual evidence receipt: source/reference, observed
-  trait with its exact value (hex, font and weight, size, layout move),
-  `adopt | adapt | reject`, and where it shows on the screen.
-- [ ] **Reference fidelity.** When the operator names references or states a
-  palette or fonts, that receipt is the **steal table**: write it before any
-  styling, show it to the operator, and wait for a yes. Operator-stated
-  palette and fonts, and standing operator rules (banned hues, a product
-  UI's neutral rule), beat any tasty pack, concept, or direction: reject a
-  clashing saved element with the rule and a substitute from the same pack; a
-  conflict with a stated value is a question, never a silent swap.
-- [ ] Use the native planning phase to choose the visual register and accepted
-  tradeoff before specifying style.
-- [ ] Name a **visual concept** drawn from the product's own world (a place,
-  object, craft, or ritual), not an adjective like "clean" or "premium". Reject
-  any concept that would fit an unrelated app. For polish, name the existing
-  concept or `none recorded`; do not invent one.
-- [ ] For a new direction, sketch **three materially different directions**
-  (different concepts, not palette swaps) before committing, each anchored to
-  a different shortlisted library style (its slug and board path on the card)
-  plus any saved-taste elements it borrows; a direction with no library
-  anchor states why none fit. Pick one against the scene sentence, focal
-  action, and dials, and record why the others lost. Skip per the
-  existing-design-system branch below.
+- [ ] Record a compact visual evidence receipt for every reference used:
+  source, trait with its exact value (hex, font and weight, size, layout
+  move), `adopt | adapt | reject`, and where it shows on the screen. Do not
+  run a separate stateful taste-interview workflow; the concept art is the
+  taste question.
 - [ ] Set numeric taste dials for density, variance, motion, color commitment,
   and materiality; the dials set how loudly the concept is expressed.
 - [ ] Define typography, color roles, spacing rhythm, radius/elevation,
@@ -120,12 +121,13 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 4. **Classify register.** Product UI serves repeated work; brand UI creates memory and desire. Choose the register before taste decisions.
 5. **Write a scene sentence.** Name who uses the surface, where, under what ambient light, and in what mood. Let that force dark/light, density, and contrast.
 6. **Find the visual concept.** One idea from the product's world that typography, layout, color, illustration, and motion can all borrow from. In the brand register it drives the whole surface; in the product register it stays quiet (accent, icons, empty and loading states, one signature moment) and never costs scanability. For polish, name the existing concept or `none recorded`. See `references/concept-and-directions.md`.
-7. **Diverge, then commit.** For a new direction, sketch three directions that differ in concept, not just palette, each anchored to a different library style from the pull. Compare them and keep one; record the losers as `reject` with a reason.
-8. **Choose numeric taste dials.** Set visual density, design variance, motion intensity, color commitment, and materiality on a 1-10 scale with one-line rationale for each.
-9. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary, each traceable to the concept.
-10. **Render, critique, refine.** Run the render loop from the Todo List: static HTML mock, in-app Browser screenshot at the target viewport, `critique-audit.md` score, at most two refine passes. Only an independent reviewer or the operator can return `pass`; with operator references, the critique includes a side-by-side shot of each reference.
-11. **Write a durable design brief when the work is substantial.** For a new app surface, redesign, multi-screen UI, or delegated implementation, create or update a ticket/spec-local `DESIGN_BRIEF.md` or equivalent ticket section before build handoff.
-12. **Hand off to planning.** Produce concrete constraints that `impl-plan` incorporates into the ticket `design.md` baseline; link the rendered mock from it as reference evidence, not a second baseline.
+7. **Match the story to the library.** Pull named styles and all-time saved taste with the story as the query, and open every shortlisted board.
+8. **Diverge with concept art.** For a new direction, propose three tellings of the story, each through a different library style, render one concept-art image per direction, and show them side by side with their boards. The operator picks; record the losers as `reject` with a reason.
+9. **Choose numeric taste dials.** Set visual density, design variance, motion intensity, color commitment, and materiality on a 1-10 scale with one-line rationale for each.
+10. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary, each traceable to the concept.
+11. **Render, critique, refine.** Run the render loop from the Todo List: static HTML mock, in-app Browser screenshot at the target viewport, `critique-audit.md` score, at most two refine passes. Only an independent reviewer or the operator can return `pass`; with operator references, the critique includes a side-by-side shot of each reference.
+12. **Write a durable design brief when the work is substantial.** For a new app surface, redesign, multi-screen UI, or delegated implementation, create or update a ticket/spec-local `DESIGN_BRIEF.md` or equivalent ticket section before build handoff.
+13. **Hand off to planning.** Produce concrete constraints that `impl-plan` incorporates into the ticket `design.md` baseline; link the rendered mock from it as reference evidence, not a second baseline.
 
 ## Decision Branches
 
@@ -184,8 +186,9 @@ Return a concise visual brief with:
 - `Library receipt`: the shortlisted `style:<slug>` picks with board paths
   viewed, and the saved-taste captures and pinned elements used or rejected
   (or `none matched` for either pull)
-- `Directions considered`: three direction cards, each with its library
-  anchor, the chosen one and why the others lost, or the skip reason
+- `Directions considered`: three direction cards, each with its story line,
+  library anchor, and concept-art image path, the chosen one and who chose
+  it, and why the others lost, or the skip reason
 - `Steve Jobs Focus & Simplicity Pass`: user-facing benefit, visual focal
   action, elements removed or deferred, and deliberate `no`
 - `Taste dials` with 1-10 numeric values

@@ -50,7 +50,8 @@ Concept: <one line>
 Dials: density / variance / motion / color / materiality
 Type and color: <pairing and role colors>
 Signature move: <the one thing someone would remember>
-Key screen sketch: <ASCII, quick render, or one-paragraph layout>
+Story: <one line: how this direction tells the product's story>
+Concept art: <image path, made through ai-image from the style recipe + concept>
 Risk: <what could go wrong for the primary job>
 ```
 
@@ -66,8 +67,9 @@ Rules:
   against which looks prettiest in isolation.
 - Record the losing directions as `reject` with one reason each. Ideas taken
   from a loser are `adapt`.
-- When taste is the deciding factor, show the user the three cards and ask one
-  question instead of choosing alone.
+- Show the three concept-art images side by side with their source boards
+  before any dials or tokens; the operator picks. Unattended, pick against
+  the scene sentence and focal action and say so.
 
 ## Render Spec
 
