@@ -45,6 +45,7 @@ Each direction is a card:
 
 ```text
 Direction <A|B|C>: <concept name>
+Library anchor: style:<slug> (.farplane/design-styles/refs/<slug>.png) + saved elements borrowed
 Concept: <one line>
 Dials: density / variance / motion / color / materiality
 Type and color: <pairing and role colors>
@@ -56,6 +57,10 @@ Risk: <what could go wrong for the primary job>
 Rules:
 
 - The three must differ in concept, not just in palette, font, or radius.
+- Each card anchors to a different style from the library pull. The style
+  supplies type, layout, and texture moves; the concept still comes from the
+  product's world, and house guards (banned hues, product neutrals) still
+  apply. A card with no anchor says why no library style fit.
 - One direction may be the safe option; at least one must be a bolder bet.
 - Choose against the scene sentence, the focal action, and the dials, not
   against which looks prettiest in isolation.

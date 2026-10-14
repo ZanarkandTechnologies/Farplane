@@ -172,6 +172,31 @@
           ]
         }
       }
+    },
+    {
+      "id": "visual_design_library_pull_01",
+      "prompt": "New visual direction for a booking page for a small ceramics studio: visitors pick a wheel-throwing class, choose a date, and pay a deposit. The workflow is accepted; the focal action is 'Book a seat'. No references, palette, or fonts were given. Our Resource Bank holds a named-style library (design-styles) and the operator's saved Tasty Pack captures. Give the visual brief.",
+      "expected_output": "Pulls the style library and the operator's saved taste before sketching, anchors each of three directions to a different named style with its board, and reports what both pulls returned.",
+      "files": [],
+      "assertions": [
+        "Runs or explicitly plans the design-styles `list` and `show <slug>` commands and shortlists three named `style:<slug>` picks, instead of inventing styles from memory.",
+        "Pulls saved taste with `farplane resource-bank tasty-pack` using `--timeframe all` and without restricting to a single `ui` output type.",
+        "Gives three direction cards that each name a different `style:<slug>` library anchor (or a stated reason none fit), and the directions differ in concept, not only palette.",
+        "Includes a library receipt listing the styles and boards consulted and the saved captures or elements used or rejected, stating `none matched` rather than omitting an empty pull.",
+        "Keeps the concept from the studio's own world (clay, wheel, kiln, glaze) rather than letting the borrowed style replace it."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Pulls the style library and saved taste before sketching directions",
+          "tags": [
+            "skill",
+            "visual-design",
+            "tasty-pack",
+            "design-styles",
+            "resource-bank"
+          ]
+        }
+      }
     }
   ]
 }

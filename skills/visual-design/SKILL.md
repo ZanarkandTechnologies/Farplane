@@ -1,6 +1,6 @@
 ---
 name: visual-design
-version: 1.1.0
+version: 1.2.0
 description: "Use for \"make it look good\", \"pick a visual style\", \"it looks generic\" or \"define the design system\": a reference-backed visual system, anti-patterns and a planning handoff."
 department: delivery
 source: local
@@ -20,11 +20,23 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
   `no`; preserve functional requirements, accessibility, and necessary state.
 - [ ] Use [research](../research/SKILL.md) when visual direction needs
   product, brand, or peer grounding (`market`).
-- [ ] **Pull saved taste.** For a new direction or a taste upgrade, run
-  `farplane resource-bank tasty-pack "<surface idea>" --output-type <type> --json`
-  and read each pinned element's recipe as candidate steal-table rows with
-  their exact values. No captures is a stated result, not a blocker. To name
-  the style itself, use [design-styles](../design-styles/SKILL.md).
+- [ ] **Pull the library before any direction.** For a new direction or a
+  taste upgrade, pull both halves of the Resource Bank and look at what comes
+  back before sketching anything:
+  1. **Named styles.** Run
+     `python3 skills/design-styles/scripts/design_styles.py list` and
+     shortlist three `style:<slug>` that fit the surface, audience, and
+     register; run `show <slug> ...` and open each saved board image. An
+     untagged Tasty Pack never returns these
+     ([design-styles](../design-styles/SKILL.md) owns the vocabulary and
+     its house guards).
+  2. **Saved taste.** Run
+     `farplane resource-bank tasty-pack "<2-4 surface keywords>" --timeframe all --limit 20 --json`
+     with no output-type filter (the default window is one week, and few
+     saves carry a `ui` type). Read each pinned element's recipe as
+     candidate steal-table rows with their exact values.
+  Record both in the library receipt. An empty pull is a stated result, not
+  a blocker; skipping the pull is a miss.
 - [ ] When the user provides a strong reference or the surface needs a taste
   upgrade, use its `synthesis` branch to extract what to adopt, adapt,
   reject, or defer before defining the final visual system.
@@ -48,9 +60,12 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
   any concept that would fit an unrelated app. For polish, name the existing
   concept or `none recorded`; do not invent one.
 - [ ] For a new direction, sketch **three materially different directions**
-  (different concepts, not palette swaps) before committing; pick one against
-  the scene sentence, focal action, and dials, and record why the others lost.
-  Skip per the existing-design-system branch below.
+  (different concepts, not palette swaps) before committing, each anchored to
+  a different shortlisted library style (its slug and board path on the card)
+  plus any saved-taste elements it borrows; a direction with no library
+  anchor states why none fit. Pick one against the scene sentence, focal
+  action, and dials, and record why the others lost. Skip per the
+  existing-design-system branch below.
 - [ ] Set numeric taste dials for density, variance, motion, color commitment,
   and materiality; the dials set how loudly the concept is expressed.
 - [ ] Define typography, color roles, spacing rhythm, radius/elevation,
@@ -105,7 +120,7 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 4. **Classify register.** Product UI serves repeated work; brand UI creates memory and desire. Choose the register before taste decisions.
 5. **Write a scene sentence.** Name who uses the surface, where, under what ambient light, and in what mood. Let that force dark/light, density, and contrast.
 6. **Find the visual concept.** One idea from the product's world that typography, layout, color, illustration, and motion can all borrow from. In the brand register it drives the whole surface; in the product register it stays quiet (accent, icons, empty and loading states, one signature moment) and never costs scanability. For polish, name the existing concept or `none recorded`. See `references/concept-and-directions.md`.
-7. **Diverge, then commit.** For a new direction, sketch three directions that differ in concept, not just palette. Compare them and keep one; record the losers as `reject` with a reason.
+7. **Diverge, then commit.** For a new direction, sketch three directions that differ in concept, not just palette, each anchored to a different library style from the pull. Compare them and keep one; record the losers as `reject` with a reason.
 8. **Choose numeric taste dials.** Set visual density, design variance, motion intensity, color commitment, and materiality on a 1-10 scale with one-line rationale for each.
 9. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary, each traceable to the concept.
 10. **Render, critique, refine.** Run the render loop from the Todo List: static HTML mock, in-app Browser screenshot at the target viewport, `critique-audit.md` score, at most two refine passes. Only an independent reviewer or the operator can return `pass`; with operator references, the critique includes a side-by-side shot of each reference.
@@ -120,7 +135,7 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 | AI workflow/chat | clear message hierarchy, strong state visibility, careful empty/loading/error states |
 | Brand/marketing surface | more committed color, image-led composition, stronger typography |
 | Creative/portfolio | higher variance and motion, still readable and responsive |
-| Existing design system or accepted board | preserve tokens and components; skip the three directions and keep the existing concept; improve hierarchy and rhythm before inventing new style |
+| Existing design system or accepted board | preserve tokens and components; skip the three directions, the style shortlist, and the concept; still pull saved taste for steal rows; improve hierarchy and rhythm before inventing new style |
 | Operator-named references, palette, or fonts | approved steal table first; directions vary concept inside the stated values; a tasty pack fills only what the operator left open |
 
 ## Top Gotchas
@@ -128,6 +143,8 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 - Do not use visual polish to hide weak functionality.
 - Do not swap an operator's palette or font for a tasty-pack accent, the
   concept, or your own taste. Ask. Do not promote a mock on your own score.
+- Do not design from memory when the library holds a board for the look:
+  pull it, open it, and cite its slug.
 - Do not commit to the first direction, and do not pass off three palette swaps
   of one layout as three directions.
 - Do not accept an adjective ("clean", "modern", "premium") as a concept.
@@ -164,8 +181,11 @@ Return a concise visual brief with:
 - `Register`
 - `Scene sentence`
 - `Visual concept` and how loudly it shows in this register
-- `Directions considered`: three direction cards with the chosen one and why
-  the others lost, or the skip reason
+- `Library receipt`: the shortlisted `style:<slug>` picks with board paths
+  viewed, and the saved-taste captures and pinned elements used or rejected
+  (or `none matched` for either pull)
+- `Directions considered`: three direction cards, each with its library
+  anchor, the chosen one and why the others lost, or the skip reason
 - `Steve Jobs Focus & Simplicity Pass`: user-facing benefit, visual focal
   action, elements removed or deferred, and deliberate `no`
 - `Taste dials` with 1-10 numeric values
