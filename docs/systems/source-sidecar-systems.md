@@ -3,7 +3,7 @@ title: "Source And Sidecar Systems"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-08-19
+updated_at: 2026-10-14
 tags:
   - farplane
   - systems
@@ -25,7 +25,6 @@ system_record_json: |
     "primary_feature_ref": "FEAT-0011",
     "feature_refs": [
       "FEAT-0011",
-      "FEAT-0025",
       "FEAT-0072",
       "FEAT-0074"
     ],
@@ -57,7 +56,7 @@ source_and_sidecar_systems(change, repo_state?) -> owned_feature_set + boundary_
 - Status: `implemented`
 - Primary feature: `FEAT-0011`
 - Owner spec: `docs/systems/source-sidecar-systems.md`
-- Feature count: `4`
+- Feature count: `3`
 
 ## Role
 
@@ -66,7 +65,6 @@ Source And Sidecar Systems owns outside signal and decoupled capability organs: 
 ## Feature Docs
 
 - [FEAT-0011 Harness scout source ingestion](../features/FEAT-0011-harness-scout-source-ingestion.md)
-- [FEAT-0025 Video-to-skill source reconstruction](../features/FEAT-0025-video-to-skill-source-reconstruction.md)
 - [FEAT-0072 Scout Brief](../features/FEAT-0072-scout-brief.md)
 - [FEAT-0074 Feed Scout source instructions](../features/FEAT-0074-feed-scout-source-instructions.md)
 
@@ -102,7 +100,7 @@ flowchart LR
 
   sources["external sources<br/>repos, videos, feeds, inspiration"]:::keep
   scout["FEAT-0011<br/>feed-scout single-source"]:::changed
-  retired["FEAT-0025<br/>retired video-to-skill reconstruction"]:::retired
+  retired["retired video-to-skill<br/>reconstruction feature"]:::retired
   content["SYS-0012<br/>Content Production<br/>Tasty Pack + Brand Kit"]:::added
   registry["docs/sources/registry.jsonl<br/>source decisions"]:::added
   handoff["adopt / adapt / reject / defer<br/>ticket or skill handoff"]:::added
@@ -133,6 +131,8 @@ Source And Sidecar Systems let Farplane learn from outside material while keepin
 
 ## Change History
 
+- 2026-10-14: Deleted the retired video-to-skill reconstruction feature page;
+  source-ingestion and media skills keep the behavior.
 - 2026-07-24: Added one inherited Feed Scout source-instruction field with
   reviewed, non-recursive source and feature proposal routing.
 - 2026-07-22: Moved Tasty Pack creative reuse ownership to Content Production while keeping raw source and sidecar ownership here.

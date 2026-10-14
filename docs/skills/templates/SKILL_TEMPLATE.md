@@ -1,10 +1,8 @@
 ---
 template_id: skill-template
-template_version: "0.6.6"
+template_version: "0.6.7"
 feature_refs:
   - FEAT-0022
-  - FEAT-0054
-  - FEAT-0057
   - FEAT-0062
 consumer_scope: skill
 applies_to:

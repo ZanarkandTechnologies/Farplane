@@ -1,9 +1,8 @@
 ---
 template_id: human-report-template
-template_version: "0.1.0"
+template_version: "0.1.1"
 feature_refs:
   - FEAT-0060
-  - FEAT-0070
 kind: human-report
 consumer_scope: report-prototype
 applies_to:

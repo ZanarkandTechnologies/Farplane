@@ -3,7 +3,7 @@ title: "Skill System"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-08-03
+updated_at: 2026-10-14
 tags:
   - farplane
   - systems
@@ -24,7 +24,6 @@ system_record_json: |
     "primary_feature_ref": "FEAT-0022",
     "feature_refs": [
       "FEAT-0022",
-      "FEAT-0057",
       "FEAT-0062",
       "FEAT-0064"
     ],
@@ -55,7 +54,7 @@ skill_system(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 - Status: `implemented`
 - Primary feature: `FEAT-0022`
 - Owner spec: `docs/systems/skill-system.md`
-- Feature count: `5`
+- Feature count: `3`
 
 ## Role
 
@@ -72,7 +71,6 @@ canonical in each skill and in the generated skill registry.
 ## Feature Docs
 
 - [FEAT-0022 Capability Map skill composition](../features/FEAT-0022-capability-map-skill-composition.md)
-- [FEAT-0057 Retired skill-local QA checklist artifacts](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md)
 - [FEAT-0062 Capped skill surface budget](../features/FEAT-0062-capped-skill-surface-budget.md)
 - [FEAT-0064 Skill signals](../features/FEAT-0064-skill-signals.md)
 
@@ -110,7 +108,7 @@ flowchart LR
   system["SYS-0006 Skill System<br/>desks, packaging, budgets"]:::changed
   maintenance["harness<br/>registry + graph checks"]:::changed
   registry["docs/skills/registry.jsonl<br/>template intelligence"]:::added
-  features["FEAT-0022 / 0030 / 0057 / 0062 / 0064"]:::keep
+  features["FEAT-0022 / 0062 / 0064"]:::keep
 
   skill --> system
   templates --> system
@@ -138,6 +136,8 @@ The Skill System owns reusable workflow packaging, specialist-desk membership, f
 
 ## Change History
 
+- 2026-10-14: Deleted the retired skill-local QA checklist feature page; the
+  2026-08-24 entry below keeps the decision.
 - 2026-08-24: Retired skill-local QA sidecars; Golden Node assertions, evals,
   validators, and review now own their distinct guards.
 - 2026-08-03: Added the grouped Advisor System index as a human discovery

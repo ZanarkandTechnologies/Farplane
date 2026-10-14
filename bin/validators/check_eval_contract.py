@@ -67,7 +67,7 @@ def lint_eval_manifests(root: Path, paths: list[Path]) -> list[str]:
 def check_generated_schema(root: Path) -> str | None:
     """Return a drift error when the checked-in tooling schema is stale."""
 
-    schema_path = root / "docs" / "contracts" / "farplane-eval-suite-v1.schema.json"
+    schema_path = root / "bin" / "core" / "eval_suite.schema.json"
     if not schema_path.is_file():
         return f"generated schema is missing: {schema_path.relative_to(root)}"
     try:

@@ -10,7 +10,7 @@ tags:
   - sys-0003
 refs:
   - skills/goal-advisor
-  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - tickets/README.md
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - tickets/templates/goal-loop/program.md
   - tickets/templates/goal-loop/hypothesis-tree.json
@@ -23,13 +23,13 @@ category: execution
 public: true
 surfaces:
   - skills/goal-advisor
-  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - tickets/README.md
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - tickets/templates/goal-loop/program.md
   - tickets/templates/goal-loop/hypothesis-tree.json
 source_refs:
   - skills/goal-advisor
-  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - tickets/README.md
   - docs/systems/self-improvement-learning.md
 external_refs:
   - https://developers.openai.com/codex/use-cases/follow-goals
@@ -155,7 +155,7 @@ Gray is the incoming work request, amber is route-selection behavior, green is d
 Owner surfaces:
 
 - `skills/goal-advisor`
-- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
+- `tickets/README.md`
 - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 - `tickets/templates/goal-loop/program.md`
 - `tickets/templates/goal-loop/hypothesis-tree.json`
@@ -163,7 +163,7 @@ Owner surfaces:
 Source context:
 
 - `skills/goal-advisor`
-- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
+- `tickets/README.md`
 - `docs/systems/self-improvement-learning.md`
 
 External context:

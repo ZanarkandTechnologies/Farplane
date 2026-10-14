@@ -8,7 +8,7 @@ refs:
   - docs/fundamentals/harness-engineering-doctrine.md
   - docs/fundamentals/prompt-engineering.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
-  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - docs/features/FEAT-0032-goal-advisor-execution-compilation.md
   - docs/skills/README.md
   - runtimes/AGENTS.md
   - skills/harness/SKILL.md

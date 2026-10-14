@@ -15,7 +15,7 @@ refs:
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/project-files.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
-  - docs/features/FEAT-0065-pulse-and-interval-automation.md
+  - docs/farplane-framework/pulse-and-interval-loop.md
 ---
 
 # Farplane Hooks and Runtime

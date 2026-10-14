@@ -3,7 +3,7 @@ title: "Proof And Review"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-07-25
+updated_at: 2026-10-14
 tags:
   - farplane
   - systems
@@ -24,11 +24,8 @@ system_record_json: |
     "primary_feature_ref": "FEAT-0008",
     "feature_refs": [
       "FEAT-0008",
-      "FEAT-0031",
       "FEAT-0034",
-      "FEAT-0039",
-      "FEAT-0043",
-      "FEAT-0054"
+      "FEAT-0039"
     ],
     "refs": [
       "docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md",
@@ -57,7 +54,7 @@ proof_and_review(change, repo_state?) -> owned_feature_set + boundary_decision +
 - Status: `implemented`
 - Primary feature: `FEAT-0008`
 - Owner spec: `docs/systems/proof-review.md`
-- Feature count: `6`
+- Feature count: `3`
 
 ## Role
 
@@ -68,11 +65,8 @@ the system from self-certification.
 ## Feature Docs
 
 - [FEAT-0008 Artifact-first QA and completion proof](../features/FEAT-0008-artifact-first-qa-and-completion-proof.md)
-- [FEAT-0031 Retired agent behavior test workflow](../features/FEAT-0031-agent-behavior-test-workflow.md)
 - [FEAT-0034 Adversarial agent QA test skill](../features/FEAT-0034-adversarial-agent-qa-test-skill.md)
 - [FEAT-0039 Farplane evals](../features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md)
-- [FEAT-0043 Retired project-level system prompt eval suite](../features/FEAT-0043-project-level-system-prompt-eval-suite.md)
-- [FEAT-0054 Retired modular skill-local eval tasks](../features/FEAT-0054-modular-skill-local-eval-tasks.md)
 
 ## What Belongs Here
 
@@ -115,7 +109,7 @@ flowchart LR
   claim["completion or behavior claim<br/>ticket / skill / agent"]:::keep
   qa["qa (adversarial mode)<br/>evidence capture"]:::changed
   evals["FEAT-0039 Farplane evals<br/>hardcases and rubrics"]:::changed
-  retired["FEAT-0043 + FEAT-0054<br/>retired eval surfaces"]:::retired
+  retired["retired prompt-suite and<br/>skill-local eval features"]:::retired
   review["reviewer lane<br/>TAS verdict + residual risk"]:::changed
   proof["artifacts/<br/>screenshots, logs, reports"]:::added
 
@@ -149,3 +143,5 @@ Proof And Review turns claims into evidence, evals, independent judgment, and du
 - 2026-07-07: Consolidated eval feature ownership under `FEAT-0039`.
 - 2026-07-25: Added expectation-triggered scientific diagnosis and independent
   inference-readiness review to the existing Agent QA capability.
+- 2026-10-14: Deleted the retired agent behavior test, prompt eval suite and
+  skill-local eval task feature pages; Farplane evals (`FEAT-0039`) owns them.

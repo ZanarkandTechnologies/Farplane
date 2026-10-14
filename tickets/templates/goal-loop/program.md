@@ -1,8 +1,7 @@
 ---
 template_id: goal-loop-program
-template_version: "0.3.1"
+template_version: "0.3.2"
 feature_refs:
-  - FEAT-0029
   - FEAT-0032
 kind: goal-program
 title: Goal program section

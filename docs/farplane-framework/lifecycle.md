@@ -20,15 +20,14 @@ refs:
   - docs/farplane-framework/pulse-and-interval-loop.md
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/hooks-and-runtime.md
-  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - docs/features/FEAT-0032-goal-advisor-execution-compilation.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
-  - docs/features/FEAT-0071-project-work-pulse.md
   - docs/MEMORY.md
 ---
 
 # Farplane Lifecycle
 
-Farplane V1 is an operating system for moving an operator-chosen commercial bet
+The Farplane engine is an operating system for moving an operator-chosen commercial bet
 toward money. Its center is deliberately small. Active Daily and Weekly use the
 Company OS file-in/file-out boundary owned by `report-gen` (`daily` and `weekly`
 modes) and the AI Office `farplane/automations/`; Interval is legacy reference only.
@@ -89,14 +88,12 @@ flowchart TD
   H --> I
   I --> J["proof comment<br/>gh issue close"]:::proof
 
-  K["Feed Scout"]:::source --> O
-  L["Daily / Weekly review"]:::source --> O
-  M["Dogfood self-improvement"]:::source --> O
-  N["Maintenance"]:::source --> O
+  K["Intel Digest<br/>Bookmark Recovery + Feed Scout"]:::source --> O
+  L["Morning chain + weekly Report Gen"]:::source --> O
+  M["Session Friction Retro"]:::source --> O
   K --> O["dated reports"]:::source
   L --> O
   M --> O
-  N --> O
   O --> P["morning brief + weekly report<br/>proposals"]:::source
   P --> A
 ```
@@ -110,8 +107,8 @@ work(issue)
   -> one proof comment + gh issue close
 ```
 
-There is no execution heartbeat. Work Pulse, the former heartbeat, is retired
-([FEAT-0071](../features/FEAT-0071-project-work-pulse.md)); no dispatch loop
+There is no execution heartbeat. Work Pulse, the former heartbeat, was retired
+on 2026-10-12; no dispatch loop
 admits, refills, or resumes issues. Work enters as a GitHub issue in the
 project's own repository. Execution starts when the operator, or a session they
 start, runs `goal-advisor` on the issue (native Goal); small work runs
@@ -125,12 +122,12 @@ assign or edit issues and never start agents or runs.
 
 | Source | Reads | Writes | Ticket authority |
 | --- | --- | --- | --- |
-| Feed Scout | configured feeds and prior source reports | source report + candidates | none; candidates reach the operator through reports |
-| Daily / Weekly review | project memory, project configuration, configured metrics, and bounded evidence | current project memory, targeted follow-ups, weekly reports, and operator-visible work proposals | none beyond authorized `gh issue comment` on existing issues; new work stays a proposal for the operator |
-| Dogfood | active and recent archived experiments plus prior report | portfolio learning report + experiment candidates | none; self-improvement competes globally |
-| Maintenance | registries, docs, skills, validators | maintenance report + repair candidates | none unless directly invoked by the operator |
+| Intel Digest (Bookmark Recovery, then Feed Scout) | frozen save caches, configured feeds, and prior source reports | bookmark candidate inbox, source report + candidates | none; candidates reach the operator through reports |
+| Morning chain / weekly Report Gen | project memory, project configuration, configured metrics, and bounded evidence | current project memory, targeted follow-ups, weekly reports, and operator-visible work proposals | none beyond authorized `gh issue comment` on existing issues; new work stays a proposal for the operator |
+| Session Friction Retro | the day's agent sessions | dated friction report, read by the weekly review | none |
+| Profile Refresh, Token Burn | weekly report and local work evidence; leftover usage | operator profile; local-only commits and a dated report | none |
 
-Daily and Weekly do not invent direction, fake momentum, or execute work. Feed Scout and Dogfood do not materialize their candidates.
+Daily and Weekly do not invent direction, fake momentum, or execute work. Feed Scout and Bookmark Recovery do not materialize their candidates.
 A candidate becomes work only when the operator, or a session they start, opens
 a GitHub issue for it.
 

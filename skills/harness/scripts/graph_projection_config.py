@@ -66,7 +66,7 @@ PROJECTION_CONFIGS: dict[str, ProjectionConfig] = {
         default_out=generated_graph_path("harness-graph.json"),
         default_js_out=generated_graph_path("harness-graph.js"),
         js_global="HARNESS_GRAPH",
-        report_out="docs/doc-audit/generated/doc-reference-report.md",
+        report_out=".farplane/generated/doc-reference-report.md",
     ),
     "farplane-framework-core": ProjectionConfig(
         name="farplane-framework-core",

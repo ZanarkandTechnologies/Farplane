@@ -3,17 +3,15 @@ title: "Horizon Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-10-12
+updated_at: 2026-10-14
 tags:
   - farplane
   - systems
   - horizon-loop
 refs:
-  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
-  - docs/features/FEAT-0065-pulse-and-interval-automation.md
-  - docs/features/FEAT-0066-product-scoped-pulse-loops.md
-  - docs/features/FEAT-0071-project-work-pulse.md
+  - docs/features/FEAT-0032-goal-advisor-execution-compilation.md
   - docs/features/FEAT-0067-daily-interval-review-reports.md
+  - docs/farplane-framework/pulse-and-interval-loop.md
 system_record_json: |
   {
     "id": "SYS-0003",
@@ -23,19 +21,13 @@ system_record_json: |
     "owner_spec": "docs/systems/horizon-loop.md",
     "primary_feature_ref": "FEAT-0032",
     "feature_refs": [
-      "FEAT-0029",
       "FEAT-0032",
-      "FEAT-0065",
-      "FEAT-0066",
-      "FEAT-0067",
-      "FEAT-0071"
+      "FEAT-0067"
     ],
     "refs": [
-      "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
-      "docs/features/FEAT-0065-pulse-and-interval-automation.md",
-      "docs/features/FEAT-0066-product-scoped-pulse-loops.md",
+      "docs/features/FEAT-0032-goal-advisor-execution-compilation.md",
       "docs/features/FEAT-0067-daily-interval-review-reports.md",
-      "docs/features/FEAT-0071-project-work-pulse.md"
+      "docs/farplane-framework/pulse-and-interval-loop.md"
     ],
     "last_verified": "2026-10-12"
   }
@@ -59,7 +51,7 @@ horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 - Status: `implemented`
 - Primary feature: `FEAT-0032`
 - Owner spec: `docs/systems/horizon-loop.md`
-- Feature count: `6`
+- Feature count: `2`
 
 ## Role
 
@@ -69,12 +61,8 @@ handoffs from Feed Scout and the operator.
 
 ## Feature Docs
 
-- [FEAT-0029 Retired Goal Packet architecture](../features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md)
 - [FEAT-0032 Goal Advisor execution loop](../features/FEAT-0032-goal-advisor-execution-compilation.md)
-- [FEAT-0065 Pulse and interval automation](../features/FEAT-0065-pulse-and-interval-automation.md)
-- [FEAT-0066 Product-scoped Pulse loops](../features/FEAT-0066-product-scoped-pulse-loops.md)
 - [FEAT-0067 Daily interval review reports](../features/FEAT-0067-daily-interval-review-reports.md)
-- [FEAT-0071 Retired Project Work Pulse](../features/FEAT-0071-project-work-pulse.md)
 
 ## What Belongs Here
 
@@ -116,12 +104,10 @@ flowchart LR
   intent["stable intent<br/>problems + areas + metrics"]:::keep
   automations["automation config<br/>root + project-local"]:::keep
   advisor["FEAT-0032<br/>goal-advisor"]:::changed
-  pulse["FEAT-0071<br/>retired Work Pulse"]:::retired
+  pulse["Work Pulse<br/>retired 2026-10-12, #41"]:::retired
   companyos["FEAT-0067<br/>Company OS Daily + Weekly"]:::changed
   memory["project memory + reports<br/>money movement + commitments"]:::added
   sources["Feed Scout + operator<br/>reports + context"]:::keep
-  old["FEAT-0065<br/>retired umbrella automation"]:::retired
-  productPulse["FEAT-0066<br/>retired product-scoped Pulse"]:::retired
   board["GitHub Issues<br/>priority + proof"]:::added
   outputs["reports + tickets<br/>bounded next work"]:::added
 
@@ -130,9 +116,6 @@ flowchart LR
   automations --> companyos
   sources --> board
   board --> advisor --> outputs
-  old -. "superseded_by" .-> pulse
-  old -. "superseded_by" .-> companyos
-  productPulse -. "superseded_by" .-> pulse
   pulse -. "retired #41" .-> board
 ```
 
@@ -141,11 +124,9 @@ GitHub Issues without giving every source its own strategy ledger or executor.
 
 ## Surfaces
 
-- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
-- `docs/features/FEAT-0065-pulse-and-interval-automation.md`
-- `docs/features/FEAT-0066-product-scoped-pulse-loops.md`
+- `docs/features/FEAT-0032-goal-advisor-execution-compilation.md`
 - `docs/features/FEAT-0067-daily-interval-review-reports.md`
-- `docs/features/FEAT-0071-project-work-pulse.md`
+- `docs/farplane-framework/pulse-and-interval-loop.md`
 
 ## Proof And Maintenance
 
@@ -176,3 +157,6 @@ GitHub Issues without giving every source its own strategy ledger or executor.
 - 2026-10-12: Retired Work Pulse (FEAT-0071) and its refill planner in #41
   when `pulse-update` and `plan-next-wave` were deleted; GitHub Issues hold
   work state.
+- 2026-10-14: Deleted the retired Goal Packet architecture, Pulse umbrella,
+  product-scoped Pulse and Work Pulse feature pages; Goal Advisor and Company
+  OS Daily/Weekly are the remaining features.

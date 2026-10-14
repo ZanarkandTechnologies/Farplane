@@ -12,7 +12,7 @@ refs:
   - tickets/README.md
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - docs/features/FEAT-0068-goal-backed-ticket-execution.md
-  - docs/features/FEAT-0042-lean-global-agent-operating-kernel.md
+  - docs/systems/agent-kernel.md
 system_record_json: |
   {
     "id": "SYS-0002",
@@ -29,7 +29,7 @@ system_record_json: |
       "tickets/README.md",
       "docs/features/FEAT-0007-ticket-as-durable-task-memory.md",
       "docs/features/FEAT-0068-goal-backed-ticket-execution.md",
-      "docs/features/FEAT-0042-lean-global-agent-operating-kernel.md"
+      "docs/systems/agent-kernel.md"
     ],
     "last_verified": "2026-07-07"
   }
@@ -111,7 +111,7 @@ The Work Loop owns the bounded unit of work: intent becomes a durable ticket, ex
 - `tickets/README.md`
 - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 - `docs/features/FEAT-0068-goal-backed-ticket-execution.md`
-- `docs/features/FEAT-0042-lean-global-agent-operating-kernel.md`
+- `docs/systems/agent-kernel.md`
 
 ## Proof And Maintenance
 

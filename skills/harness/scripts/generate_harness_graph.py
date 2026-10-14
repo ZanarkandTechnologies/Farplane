@@ -41,11 +41,8 @@ IGNORE_PARTS = {
 
 IGNORE_PREFIXES = (
     "docs/archive/",
-    "docs/doc-audit/",
     "docs/futureideas/",
 )
-
-GENERATED_PATHS = {"docs/doc-audit/generated/doc-reference-report.md"}
 
 MARKDOWN_LINK_RE = re.compile(r"!?\[[^\]]*]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 LOCAL_PATH_RE = re.compile(
@@ -74,8 +71,6 @@ def should_scan(path: Path, repo_root: Path) -> bool:
     try:
         rel_path = rel(path, repo_root)
     except ValueError:
-        return False
-    if rel_path in GENERATED_PATHS:
         return False
     if ignored_prefix(rel_path):
         return False

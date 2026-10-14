@@ -41,7 +41,7 @@ comparison; the adapter returns success only when every candidate row passes,
 irrespective of expected baseline failures.
 
 The Pydantic model is the schema source of truth. Its checked-in generated
-artifact is [farplane-eval-suite-v1.schema.json](../../docs/contracts/farplane-eval-suite-v1.schema.json);
+artifact is [eval_suite.schema.json](../../bin/core/eval_suite.schema.json);
 inspect the current output with `python3 bin/validators/check_eval_contract.py
 --schema` and verify it has not drifted with `--check-schema`. Do not add a
 root `format` or `schema_version` field because portable Agent-Skills suites

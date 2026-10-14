@@ -21,13 +21,11 @@
       "farplane/automations/",
       "farplane/bindings.yaml",
       ".agents/skills/README.md",
-      "docs/bootstrap-brief.md",
       "docs/prd.md",
       "docs/features/README.md",
       "docs/systems/README.md",
       "docs/HISTORY.md",
       "docs/MEMORY.md",
-      "docs/TASTE.md",
       "tickets/README.md",
       "tickets/templates/ticket.md",
       "tickets/archive/"

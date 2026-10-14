@@ -1,10 +1,9 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.15
+template_version: 0.3.16
 feature_refs:
   - FEAT-0022
-  - FEAT-0042
-  - FEAT-0043
+  - FEAT-0039
 -->
 # Global Agent Guidance
 

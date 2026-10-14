@@ -14,7 +14,6 @@ refs:
   - docs/farplane-framework/README.md
   - docs/prd.md
   - docs/farplane-framework/ticket-execution-loop.md
-  - docs/features/FEAT-0071-project-work-pulse.md
   - docs/features/FEAT-0067-daily-interval-review-reports.md
   - farplane/automations/morning.md
   - farplane/automations/report-gen.md
@@ -22,8 +21,8 @@ refs:
 
 # Morning Chain And Weekly Review
 
-Farplane has no execution heartbeat. Work Pulse, the former heartbeat, is
-retired ([FEAT-0071](../features/FEAT-0071-project-work-pulse.md)). Scheduled
+Farplane has no execution heartbeat. Work Pulse, the former heartbeat, was
+retired on 2026-10-12 (#41). Scheduled
 jobs are cron records in `farplane/automations/` that run as Claude scheduled
 tasks (`runtime: claude`). They collect, report and propose; they never create,
 close, label, assign or edit issues and never start agents or runs.

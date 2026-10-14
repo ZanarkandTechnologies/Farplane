@@ -51,7 +51,7 @@ capability that blocks reliable progress.
 
 ## Criterion Card
 
-Use the canonical [business review contract](../../../docs/contracts/business-strategy-review.md).
+Use the canonical [business review contract](business-strategy-review.md).
 For this rubric, `consequence` must cover audience/customer and business consequences.
 
 ## Ranking Rule

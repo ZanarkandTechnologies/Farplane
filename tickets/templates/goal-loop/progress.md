@@ -4,9 +4,8 @@ status: active
 created_at: 2026-06-12
 updated_at: 2026-10-13
 template_id: goal-loop-progress
-template_version: "0.2.0"
+template_version: "0.2.1"
 feature_refs:
-  - FEAT-0029
   - FEAT-0032
 ---
 

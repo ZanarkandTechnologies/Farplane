@@ -35,7 +35,7 @@ Each line in `registry.jsonl` is one JSON object:
   "local_artifacts": [
     ".farplane/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md"
   ],
-  "feature_refs": ["FEAT-0014"],
+  "feature_refs": ["FEAT-0011"],
   "decision": "adapt",
   "duplicate_of": null,
   "status": "active",

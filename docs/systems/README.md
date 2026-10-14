@@ -86,15 +86,15 @@ higher level than individual feature flows.
 
 | System | Primary feature | Owner file |
 | --- | --- | --- |
-| Agent Kernel | `FEAT-0042` | `agent-kernel.md` |
+| Agent Kernel | none | `agent-kernel.md` |
 | Work Loop | `FEAT-0007` | `work-loop.md` |
-| Horizon Loop | `FEAT-0029` | `horizon-loop.md` |
+| Horizon Loop | `FEAT-0032` | `horizon-loop.md` |
 | Proof And Review | `FEAT-0008` | `proof-review.md` |
 | Skill System | `FEAT-0022` | `skill-system.md` |
-| Self-Improvement And Learning | `FEAT-0039` | `self-improvement-learning.md` |
+| Self-Improvement And Learning | `FEAT-0063` | `self-improvement-learning.md` |
 | Source And Sidecar Systems | `FEAT-0011` | `source-sidecar-systems.md` |
 | Maintenance And Release OS | `FEAT-0061` | `maintenance-release-os.md` |
-| Domain Skill Families | `FEAT-0014` | `domain-skill-families.md` |
+| Domain Skill Families | none | `domain-skill-families.md` |
 | Documentation OS | `FEAT-0060` | `documentation-os.md` |
 | Content Production | `FEAT-0073` | `content-production.md` |
 | Graph Systems | `FEAT-0078` | `graph-systems.md` |

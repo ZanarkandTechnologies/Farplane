@@ -30,7 +30,7 @@ tags:
 # Farplane Framework
 
 This directory contains Farplane's technical framework contracts. The
-[Farplane V1 PRD](../prd.md) owns product requirements; these docs explain how
+[Farplane engine PRD](../prd.md) owns product requirements; these docs explain how
 the project substrate implements them.
 
 ```text
@@ -45,13 +45,14 @@ technical owner for implementation-contract changes.
 
 ## Start Here
 
-Read [Lifecycle](lifecycle.md) first. It summarizes the V1 system:
+Read [Lifecycle](lifecycle.md) first. It summarizes the engine:
 
 ```text
 program files + capability skills
--> one ticket board
+-> GitHub Issues in the project's own repository
 -> Daily/Weekly report-first metric review
--> one Work Pulse
+-> the operator, or a session they start, runs goal-advisor on an issue
+   (no execution heartbeat)
 -> bounded scheduled sources
 -> ticket-local execution, QA, review, and learning
 ```

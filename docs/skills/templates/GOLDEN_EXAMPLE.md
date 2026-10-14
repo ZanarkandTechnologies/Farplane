@@ -1,9 +1,9 @@
 ---
 template_id: golden-example
-template_version: "0.2.0"
+template_version: "0.2.1"
 status: active
 feature_refs:
-  - FEAT-0057
+  - FEAT-0022
 consumer_scope: skills/*/examples/golden/*.md
 ---
 

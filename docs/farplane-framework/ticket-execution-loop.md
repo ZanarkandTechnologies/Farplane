@@ -16,7 +16,6 @@ refs:
   - docs/farplane-framework/lifecycle.md
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
-  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/features/FEAT-0032-goal-advisor-execution-compilation.md
   - docs/MEMORY.md
 ---

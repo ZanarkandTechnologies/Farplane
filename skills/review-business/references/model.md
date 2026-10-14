@@ -31,7 +31,7 @@ more actionable than a low-confidence grade of 1.
 
 ## Criterion Card
 
-Use the canonical [business review contract](../../../docs/contracts/business-strategy-review.md).
+Use the canonical [business review contract](business-strategy-review.md).
 For this rubric, `consequence` must cover customer and business consequences.
 
 ## Ranking Rule

@@ -5,7 +5,7 @@
 Farplane is a local AI operating harness for turning an operator-defined
 commercial bet into one inspectable next commitment at a time.
 
-The current product contract is [Farplane V1](docs/prd.md), implemented by the
+The current product contract is the [Farplane engine PRD](docs/prd.md), implemented by the
 [framework lifecycle](docs/farplane-framework/lifecycle.md) and its linked
 technical contracts.
 

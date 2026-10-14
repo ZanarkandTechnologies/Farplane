@@ -16,10 +16,10 @@ Documentation routing starts in
 and README in sync whenever the public workflow, shipped capability list, or
 whole-system diagram changes.
 
-The canonical product and framework contracts are [Farplane V1](docs/prd.md)
+The canonical product and framework contracts are the [Farplane engine PRD](docs/prd.md)
 and the [framework lifecycle](docs/farplane-framework/lifecycle.md). The
-lifecycle routes to the technical contracts for project files, Pulse,
-ticket execution, hooks, reporting, and graphs.
+lifecycle routes to the technical contracts for project files, the morning
+chain and weekly review, ticket execution, hooks, reporting, and graphs.
 
 ## Purpose
 
@@ -227,9 +227,6 @@ during cleanup unless the replacement carries the same routing information.
 
 - [docs/features/README.md](docs/features/README.md)
   Purpose: index of canonical feature specs and generated registry outputs
-- [docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md](docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md)
-  Purpose: historical record of the removed invocation, board, compute, and
-  ticket-runtime experiment
 - [docs/fundamentals/harness-engineering-doctrine.md](docs/fundamentals/harness-engineering-doctrine.md)
   Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
 - [docs/features/README.md](docs/features/README.md)
@@ -255,8 +252,6 @@ during cleanup unless the replacement carries the same routing information.
   Purpose: append-only change log
 - [docs/MEMORY.md](docs/MEMORY.md)
   Purpose: curated durable invariants and constraints
-- [docs/TASTE.md](docs/TASTE.md)
-  Purpose: shared visual doctrine when a repo has UI work
 - [skills/qa/references/guide.md](skills/qa/references/guide.md)
   Purpose: QA/browser-test entry guidance and runbook policy; a project's own
   runbooks live in its `AGENTS.md` Agent QA section, plus one docs page per long flow
@@ -294,8 +289,6 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 
 - [docs/features/FEAT-0007-ticket-as-durable-task-memory.md](docs/features/FEAT-0007-ticket-as-durable-task-memory.md)
   Purpose: end-to-end execution model, lane roles, and orchestration boundaries
-- [docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md](docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md)
-  Purpose: retired runtime history; it is not an active execution surface
 - [skills/goal-advisor/SKILL.md](skills/goal-advisor/SKILL.md)
   Purpose: canonical execution compiler that turns listed files, trigger mode,
   budget, and proof policy into native Goal, heartbeat, batch, rollout,

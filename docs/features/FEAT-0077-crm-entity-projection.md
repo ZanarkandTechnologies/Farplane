@@ -22,8 +22,7 @@ surfaces:
   - bin/core/farplane_wiki.py
   - docs/farplane-framework/entities.md
   - docs/farplane-framework/entity-markdown-authoring.md
-source_refs:
-  - docs/features/FEAT-0069-taste-loop-human-feedback-optimization.md
+source_refs: []
 external_refs: []
 evidence_refs:
   - bin/tests/test_farplane_wiki.py

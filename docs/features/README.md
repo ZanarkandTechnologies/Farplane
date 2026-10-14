@@ -67,7 +67,7 @@ tags:
   - feature
   - sys-0003
 refs:
-  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - tickets/README.md
 feature_id: FEAT-0032
 system_id: SYS-0003
 category: execution
@@ -75,7 +75,7 @@ public: true
 surfaces:
   - skills/goal-advisor/SKILL.md
 source_refs:
-  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - tickets/README.md
 external_refs: []
 evidence_refs:
   - skills/goal-advisor/evals/evals.json

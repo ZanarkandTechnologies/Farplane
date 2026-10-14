@@ -1,8 +1,8 @@
 ---
 template_id: skill-method-reference
-template_version: "0.2.0"
+template_version: "0.2.1"
 feature_refs:
-  - FEAT-0057
+  - FEAT-0022
 consumer_scope: skill-reference
 applies_to:
   - skills/*/references/*.md

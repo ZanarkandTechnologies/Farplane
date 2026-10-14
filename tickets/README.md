@@ -192,8 +192,8 @@ Goal.
 The `tickets/templates/goal-loop/` templates now describe issue sections and
 comments; in an unbound project, save the same shapes as `program.md` and
 `progress.md` beside `ticket.md`. See
-`docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
-for the full contract.
+`docs/features/FEAT-0032-goal-advisor-execution-compilation.md` and
+`skills/goal-advisor/SKILL.md` for the full contract.
 
 ## Invocation Policy
 
@@ -301,9 +301,8 @@ records the review wait, releases the ticket, and continues safe local work such
 as artifacts, research, proof, QA, packaging, or draft content instead of
 treating human review as board-wide blockage.
 
-Board adapters must satisfy
-`docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
-before they become live ticket sources.
+No board adapter is a live ticket source: the Symphony-compatible invocation
+contract and its board adapter were retired.
 
 ## Invariants
 
@@ -726,5 +725,4 @@ review-output fields in the template or repeating the artifact path under
 
 Canonical policy references:
 
-- [Lean global agent operating kernel](../docs/features/FEAT-0042-lean-global-agent-operating-kernel.md)
-- [Symphony-compatible Farplane invocation contract](../docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md)
+- [Agent Kernel](../docs/systems/agent-kernel.md)

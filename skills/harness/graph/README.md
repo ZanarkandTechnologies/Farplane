@@ -29,7 +29,7 @@ repository diffs.
 - `.farplane/generated/graphs/farplane-lifecycle-graph.js`: generated
   local-file wrapper for the same lifecycle graph
 - `index.html`: static graph viewer
-- `docs/doc-audit/generated/doc-reference-report.md`: generated Markdown audit
+- `.farplane/generated/doc-reference-report.md`: generated Markdown audit
   report for docs cleanup, global-docs bundling, and archive candidates
 
 ## Projection Model

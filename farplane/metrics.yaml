@@ -72,7 +72,7 @@ metrics:
   activated_external_projects:
     refresh_ref: local_project_metrics
     label: Activated external projects
-    description: Count of non-Farplane local projects whose manifest is current and whose Work Pulse recorded a decision after that manifest update.
+    description: Count of non-Farplane local projects whose manifest is current and whose .farplane/automation/decisions.jsonl has a row after that manifest update. Nothing has written that file since Work Pulse was retired (2026-10-12), so the reading stays at zero until a replacement activation signal is chosen.
     pinned: true
     type: stock
     unit: projects

@@ -3,7 +3,7 @@ title: "Domain Skill Families"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-10-14
 tags:
   - farplane
   - systems
@@ -19,10 +19,8 @@ system_record_json: |
     "status": "implemented",
     "summary": "The specialized skill families for frontend, media, content, and future vertical workflows that build on the core Work Loop and Skill System.",
     "owner_spec": "docs/systems/domain-skill-families.md",
-    "primary_feature_ref": "FEAT-0014",
-    "feature_refs": [
-      "FEAT-0014"
-    ],
+    "primary_feature_ref": null,
+    "feature_refs": [],
     "refs": [
       "skills/impl-plan/SKILL.md",
       "skills/prd/SKILL.md",
@@ -46,9 +44,9 @@ domain_skill_families(change, repo_state?) -> owned_feature_set + boundary_decis
 
 - System ID: `SYS-0010`
 - Status: `implemented`
-- Primary feature: `FEAT-0014`
+- Primary feature: none
 - Owner spec: `docs/systems/domain-skill-families.md`
-- Feature count: `1`
+- Feature count: `0`
 
 ## Role
 
@@ -57,7 +55,9 @@ loop, such as frontend, media, content, and future vertical capability stacks.
 
 ## Feature Docs
 
-- [FEAT-0014 Frontend skill parity upgrade](../features/FEAT-0014-frontend-skill-parity-upgrade.md)
+No live feature pages. The frontend skill parity feature was retired as a
+domain skill-family concern and its page deleted on 2026-10-14; the owning
+frontend skills keep that behavior.
 
 ## What Belongs Here
 
@@ -90,7 +90,7 @@ flowchart LR
 
   request["domain work<br/>frontend, media, content"]:::keep
   families["domain skill families<br/>UI facets, media, social"]:::changed
-  retired["FEAT-0014<br/>retired frontend parity feature"]:::retired
+  retired["retired frontend<br/>parity feature"]:::retired
   core["core Work Loop + Skill System<br/>tickets, proof, registries"]:::keep
   artifact["domain artifact<br/>UI, video, content, QA evidence"]:::added
 
@@ -116,4 +116,6 @@ Domain Skill Families package specialized workflows on top of the same ticket, s
 
 ## Change History
 
+- 2026-10-14: Deleted the retired frontend skill parity feature page; the
+  system now has no feature refs.
 - 2026-06-27: Migrated into the reader-first system-spec shape.

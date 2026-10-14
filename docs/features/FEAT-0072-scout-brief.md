@@ -11,7 +11,7 @@ tags:
   - planning-context
 refs:
   - skills/feed-scout/SKILL.md
-  - docs/features/FEAT-0071-project-work-pulse.md
+  - docs/features/FEAT-0067-daily-interval-review-reports.md
 feature_id: FEAT-0072
 system_id: SYS-0008
 category: context-routing

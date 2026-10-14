@@ -22,7 +22,7 @@ You are the **System Memory Agent**. Your purpose is to search canonical memory,
 
 This agent does not typically save new research. If you synthesize multiple
 findings into a new durable summary, write it to the owning ticket,
-source/spec feature metadata, spec, skill, or `docs/doc-audit/`; keep temporary
+source/spec feature metadata, spec, or skill; keep temporary
 or cold research outside tracked docs unless a ticket defines a retention
 policy.
 

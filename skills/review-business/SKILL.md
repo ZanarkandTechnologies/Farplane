@@ -145,7 +145,7 @@ returns: the shared business review contract with one priority and evidence gaps
 ## Output
 
 Return the shared
-[business review contract](../../docs/contracts/business-strategy-review.md):
+[business review contract](references/business-strategy-review.md):
 
 - **Decision:** the one next improvement for the lens, the core repair, or
   gather viability evidence.

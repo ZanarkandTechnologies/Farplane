@@ -3,7 +3,7 @@ title: "Agent Kernel"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-09-20
+updated_at: 2026-10-14
 tags:
   - farplane
   - systems
@@ -20,10 +20,8 @@ system_record_json: |
     "status": "implemented",
     "summary": "The installed agent context, templates, prompt rules, and response conventions that let a Codex enter Farplane with the right operating shape.",
     "owner_spec": "docs/systems/agent-kernel.md",
-    "primary_feature_ref": "FEAT-0042",
-    "feature_refs": [
-      "FEAT-0042"
-    ],
+    "primary_feature_ref": null,
+    "feature_refs": [],
     "refs": [
       "AGENTS.md",
       "runtimes/AGENTS.md",
@@ -48,9 +46,9 @@ agent_kernel(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 
 - System ID: `SYS-0001`
 - Status: `implemented`
-- Primary feature: `FEAT-0042`
+- Primary feature: none
 - Owner spec: `docs/systems/agent-kernel.md`
-- Feature count: `1`
+- Feature count: `0`
 
 ## Role
 
@@ -66,7 +64,9 @@ boundaries without requiring eight top-level policy sections.
 
 ## Feature Docs
 
-- [FEAT-0042 Lean global agent operating kernel](../features/FEAT-0042-lean-global-agent-operating-kernel.md)
+No live feature pages. The lean global kernel feature was retired as system
+policy and its page deleted on 2026-10-14; this page and the AGENTS inventory
+below own that behavior.
 
 ## What Belongs Here
 
@@ -156,7 +156,7 @@ flowchart LR
   global["install template<br/>runtimes/AGENTS.md"]:::keep
   doctrine["harness doctrine<br/>docs/fundamentals/*"]:::keep
   kernel["SYS-0001 Agent Kernel<br/>entry rules and response shape"]:::changed
-  retired["FEAT-0042<br/>retired kernel lean-down feature"]:::retired
+  retired["retired kernel<br/>lean-down feature"]:::retired
   session["Codex session behavior<br/>autonomy, review, artifact-first state"]:::added
 
   repo --> kernel
@@ -189,6 +189,9 @@ The Agent Kernel turns local and install-time policy into the operating shape ev
 - Regenerate registries and commit generated outputs with the source docs.
 
 ## Change History
+
+- 2026-10-14: Deleted the retired lean global kernel feature page; the system
+  now has no feature refs and owns the kernel policy directly.
 
 - 2026-09-20: Reorganized the global template into `Context`, `Behavior`, and
   `Output Formatting`; added example-led output contracts and scan-friendly

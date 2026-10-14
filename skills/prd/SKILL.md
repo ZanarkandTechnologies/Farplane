@@ -50,7 +50,8 @@ returns: PRD | workflow handoff | realism pack, with assumptions and the next ow
   `intent + surfaces -> docs/prd.md draft | prototype gate`
 
   Rule: Ask 6-10 questions tied to implementation decisions, then reduce the
-  request with [FEAT-0042](../../docs/features/FEAT-0042-lean-global-agent-operating-kernel.md)
+  request with the global `reason(problem)` contract in
+  [runtimes/AGENTS.md](../../runtimes/AGENTS.md)
   (objective, need, constraints, root cause, first viable slice, falsifier,
   non-goals). Fill audience, JTBD, user stories, constraints, non-goals, risks,
   first SLC slice, metric candidates, and `Autonomy Readiness` (inputs,

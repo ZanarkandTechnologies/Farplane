@@ -17,7 +17,7 @@ refs:
   - skills/goal-advisor/references/metrics.md
   - skills/goal-advisor/SKILL.md
   - skills/automation-advisor/SKILL.md
-  - docs/features/FEAT-0071-project-work-pulse.md
+  - docs/features/FEAT-0067-daily-interval-review-reports.md
   - docs/farplane-framework/README.md
   - docs/farplane-framework/project-files.md
 ---

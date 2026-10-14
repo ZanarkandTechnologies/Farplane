@@ -1,9 +1,9 @@
 ---
-title: "PRD: Farplane V1"
+title: "Farplane engine PRD"
 status: active
 owner: farplane
 created_at: 2026-05-26
-updated_at: 2026-10-01
+updated_at: 2026-10-14
 version: "1.0"
 refs:
   - docs/farplane-framework/lifecycle.md
@@ -15,7 +15,7 @@ refs:
   - tickets/README.md
 ---
 
-# PRD: Farplane V1
+# Farplane engine PRD
 
 ## Product Thesis
 
@@ -28,7 +28,7 @@ capability skills, automations, and reviewable proof.
 Farplane = commercial intent + execution + evidence
 ```
 
-The V1 product promise is simple:
+The engine's product promise is simple:
 
 > Give Farplane an explicit customer, painful problem, offer, price, and route
 > to sale. It should keep the resulting projects moving, expose the constraint
@@ -45,17 +45,19 @@ next consequential action visible.
 
 This PRD is the accepted product direction. The money-execution boundary and
 lean Daily/Weekly Company OS contract are implemented by the active automation
-prompts and the `report-gen` skill (`daily` and `weekly` modes). The AI Office hierarchy is
-not yet fully implemented. The Interval weekly-draft and broad promotion
-machinery is legacy reference and has no active Daily or Weekly binding.
+prompts and the `report-gen` skill (`daily` and `weekly` modes). The AI Office
+is the Farplane bunker, specified in its own PRD (see AI Office Product Story).
+The Interval weekly-draft and broad promotion machinery is legacy reference and
+has no active Daily or Weekly binding.
 
 Since 2026-10-01, active tasks live in GitHub Issues in each project's own
 repository (`tickets/README.md`); `tickets/TASK-*/` is legacy proof and
 migration history. Scheduled jobs run as Claude Code scheduled tasks over
 `farplane/automations/` records
-(`docs/doc-audit/2026-09-30-automations-v2-plan.md`). Work Pulse is paused
-until its Task Runner redesign; until then no automation executes tickets, and
-Weekly Self-Improvement and Monthly Registry Consolidation are killed.
+([Morning Chain And Weekly Review](farplane-framework/pulse-and-interval-loop.md)).
+There is no execution heartbeat: Work Pulse was retired on 2026-10-12 (#41), and Weekly
+Self-Improvement and Monthly Registry Consolidation are killed. No automation
+executes issues.
 
 ## Problem
 
@@ -98,20 +100,28 @@ metadata, and operator distrust.
 6. When I inspect the system, I want every important claim to lead back to an
    owning ticket, report, metric observation, or durable policy file.
 
-## V1 Operating Model
+## Operating Model
 
 ```text
 project program
--> one ticket board
--> one Work Pulse
-   -> execute admitted ticket
-   -> perform matured ticket check-in
-   -> request worker-free human review
-   -> plan a bounded cross-area wave when no unclaimed executable work exists
--> bounded scheduled report/candidate sources
--> ticket-local QA, review, reward, and closeout
+-> GitHub Issues in the project's own repository
+-> the operator, or a session they start, runs goal-advisor on an issue
+   (native Goal); small work runs directly
+   -> due check-ins (`check-in` issues with `Due: YYYY-MM-DD`) are listed by
+      Daily Collect, surfaced in the morning brief, and resumed the same way
+-> scheduled jobs collect, report, and propose (no execution heartbeat)
+-> issue-local QA, review, and one proof comment + `gh issue close`
 -> durable learning back into metric objectives, policy, skills, docs, or features
 ```
+
+Scheduled jobs are `farplane/automations/*.md` records run as Claude scheduled
+tasks (`runtime: claude`): Morning (Daily Collect, Metrics Refresh, Knowledge
+Update, Daily Operating Update, then the brief), Report Gen (weekly review),
+Intel Digest (Bookmark Recovery, then Feed Scout), Profile Refresh, Session
+Friction Retro, and Token Burn. They never create, close, label, assign, or
+edit issues and never start runs. The business loop for bunker floors (step
+plans, Monday seeding through `farplane loop monday`) is owned by the bunker
+PRD's [The operating loop](../../Farplane-UI-v2/docs/prd.md#the-operating-loop-how-a-business-runs).
 
 Every project uses the same decision rule:
 
@@ -172,12 +182,11 @@ remain in the ticket body, Goal Packet, progress log, or artifacts.
 
 | Source | Authority |
 | --- | --- |
-| Work Pulse next-wave planner | globally ranked tickets when no unclaimed executable or due-check-in work exists |
-| Feed Scout | source report, candidates, recovery candidates, and single-source adopt/adapt/reject/defer verdicts (no tickets) |
+| Feed Scout (in Intel Digest) | source report, candidates, recovery candidates, and single-source adopt/adapt/reject/defer verdicts (no tickets) |
 | Daily/Weekly review | project memory, targeted follow-ups, weekly reports, and operator-visible work proposals; no independent strategy or ticket admission |
-| Operator | explicit direction, feedback, correction, or approval |
+| Operator | explicit direction, feedback, correction, or approval; opens issues |
 
-Only Work Pulse executes tickets and matured check-ins.
+Only the operator, or a session they start, executes issues and due check-ins.
 
 ## Functional Requirements
 
@@ -195,37 +204,38 @@ Only Work Pulse executes tickets and matured check-ins.
 - Ticket state is sufficient for selection, resumption, proof, review, and
   closeout without transcript memory.
 
-### FR-3: One Work Pulse
+### FR-3: Operator-Started Execution
 
-- Pulse reconciles board and worker state before dispatch.
-- Ordinary `todo` work and matured `waiting_signal` check-ins use the same
-  worker path.
-- `awaiting_review`, dormant signals, and blocked tickets do not occupy workers.
-- Human-active tickets remain ineligible for redispatch but do not consume
-  Pulse worker capacity.
-- Pulse plans a bounded cross-area wave only when no unclaimed executable or
-  due-check-in work exists.
-- Wave size, worker capacity, review WIP, and experiment capacity remain
-  separate controls.
+- No heartbeat, dispatcher, or refill planner exists; Work Pulse is retired.
+- Work enters as a GitHub issue in the project's own repository. The operator,
+  or a session they start, runs `goal-advisor` on it (native Goal) or does
+  small work directly.
+- Ordinary issues and due check-ins use the same path: a check-in is an open
+  `check-in` issue with `Due: YYYY-MM-DD`, listed by Daily Collect, surfaced in
+  the morning brief, and resumed through `goal-advisor`'s Delayed Check-In
+  Resume prompt.
+- Review waits, signal waits, and blocked issues hold no session; their state
+  lives in issue labels or body.
 
 ### FR-4: Human Review
 
-- A worker sends one review request, records its Review block, sets
-  `awaiting_review`, clears its claim, and exits.
+- A session that needs human review records it on the issue (label or body)
+  and ends; it does not hold the issue open waiting.
 - Queue size provides backpressure but does not itself trigger chasing.
-- Pulse may send at most one ticket-owned due reminder per beat.
+- The morning brief folds overdue check-ins into one decide-or-kill line; no
+  automation sends reminders on an issue.
 
 ### FR-5: Scheduled Sources
 
-- Feed Scout, Daily/Weekly review, and Dogfood run as bounded cron/manual jobs rather
-  than extra heartbeats.
+- The scheduled jobs in `farplane/automations/` (Morning, Report Gen, Intel
+  Digest, Profile Refresh, Session Friction Retro, Token Burn) run as bounded
+  cron records, not heartbeats.
 - Scheduled sources write bounded reports or context but do not admit proactive
   tickets. Daily/Weekly maintains project memory and may apply only explicitly
-  authorized updates or follow-ups to existing work. Dogfood writes only a
-  checkpoint/context receipt. The one next-wave planner compares opportunities
-  globally.
-- Daily/Weekly does not choose new strategy; Dogfood does not create or execute
-  experiments; Feed Scout does not create or execute opportunities.
+  authorized comments on existing issues. Candidates reach the operator through
+  reports and the morning brief; work starts only when an issue is opened.
+- Daily/Weekly does not choose new strategy; Feed Scout does not create or
+  execute opportunities.
 
 ## AI Office Product Story
 
@@ -241,8 +251,8 @@ engine underneath it.
 - Delayed feedback stays on the original ticket and resumes through its
   Check-In Program.
 - Accepted patterns require transfer evidence before doctrine promotion.
-- Self-improvement is one evidence-gated planning area in the global ranking,
-  not a separate Pulse or guaranteed weekly quota.
+- Self-improvement is one evidence-gated planning area competing for operator
+  attention, not a separate loop or guaranteed weekly quota.
 
 ### FR-7: Capability Boundary
 
@@ -311,7 +321,7 @@ evidenced relationship to the selected money outcome.
 | --- | --- | --- |
 | `github_views` | maximize | builders find the repository; social reach is measured by the media business, not Farplane |
 | `accepted_evidence_cycles` | maximize | ablations, experiments, or proof cycles finish with accepted reusable evidence |
-| `activated_external_projects` | maximize | nearby non-standard projects run the current contract and record a Work Pulse decision after migration |
+| `activated_external_projects` | maximize | nearby non-standard projects run the current contract after migration |
 
 ### System-Health Guards
 
@@ -333,15 +343,16 @@ resumeability, maintenance precision, and experiment-packet completeness remain
 binary feature/test gates until repeated operation justifies registered metric
 cards.
 
-## V1 Acceptance
+## Acceptance
 
-- [x] Product-scoped Pulse controllers and product state are retired.
+- [x] Product-scoped Pulse controllers and product state are retired, and so
+      is Work Pulse (#41); no execution heartbeat exists.
 - [x] `harness.yaml` owns typed identity, planning areas, capabilities, and metric selection.
-- [ ] One project Work Pulse handles ordinary tickets and matured check-ins
-      (implemented over filesystem tickets; paused since 2026-09-30 pending
-      the Task Runner redesign over GitHub Issues).
+- [x] Ordinary issues and due check-ins start through `goal-advisor` (or
+      directly) from the operator or a session they start.
 - [x] Ticket metadata is reduced to lifecycle and sparse routing.
-- [x] Human review and signal waits release workers.
+- [x] Human review and signal waits hold no session; their state lives on
+      the issue.
 - [x] Daily/Weekly uses the project-memory, money-linked review contract and
       does not independently admit tickets or choose strategy.
 - [x] Immediate and delayed self-improvement use ticket Goal Packets.
@@ -354,7 +365,7 @@ cards.
   windows without unacceptable duplicate supply or operator burden.
 
 The remaining acceptance work is representative scheduled operation over
-longer real windows and the AI Office hierarchy described above.
+longer real windows. The AI Office's own acceptance lives in the bunker PRD.
 
 ## Non-Goals
 
@@ -373,8 +384,8 @@ longer real windows and the AI Office hierarchy described above.
 
 | Risk | Backpressure |
 | --- | --- |
-| Planner creates busywork | empty-board gate, bounded wave, ticket-quality review, duplicate detection |
-| Review queue overwhelms operator | review WIP, worker release, one due reminder per beat |
+| Automations create busywork | jobs only report and propose; the operator opens issues; search open issues before creating one |
+| Review queue overwhelms operator | waits hold no session; the morning brief folds overdue check-ins into one decide-or-kill line |
 | Delayed experiments interfere | explicit experiment WIP and delayed-live caps |
 | Reports become alternate planners | source-specific authority and report Problems ledger |
 | Self-improvement bloats the harness | hardening/refinement proof, toy/eval routes, rollback, transfer tests |
@@ -383,12 +394,12 @@ longer real windows and the AI Office hierarchy described above.
 
 ## Release And Change Policy
 
-V1 is the current standard. Future changes must begin from observed operating
+This engine contract is the current standard. Future changes must begin from observed operating
 failures or accepted operator direction, update the smallest owner surface, and
 prove that the change improves the relevant metric without violating quality,
 authority, or proof constraints.
 
-Structural replacements of the V1 kernel require an explicit reviewed PRD or
+Structural replacements of the engine kernel require an explicit reviewed PRD or
 feature decision. Ordinary refinements should update the owning lifecycle doc,
 skill, template, validator, or ticket contract without inventing a new
 framework generation name.

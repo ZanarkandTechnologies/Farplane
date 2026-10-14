@@ -180,7 +180,7 @@ class EvalContractTests(unittest.TestCase):
 
     def test_checked_in_json_schema_matches_the_pydantic_source_of_truth(self) -> None:
         root = Path(__file__).resolve().parents[2]
-        schema_path = root / "docs" / "contracts" / "farplane-eval-suite-v1.schema.json"
+        schema_path = root / "bin" / "core" / "eval_suite.schema.json"
 
         self.assertEqual(json.loads(schema_path.read_text(encoding="utf-8")), suite_json_schema())
         self.assertIsNone(check_generated_schema(root))

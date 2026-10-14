@@ -3,15 +3,13 @@ title: "Self-Improvement And Learning"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-10-12
+updated_at: 2026-10-14
 tags:
   - farplane
   - systems
   - self-improvement-and-learning
 refs:
   - docs/features/FEAT-0063-metric-advisor-cards.md
-  - docs/features/FEAT-0069-taste-loop-human-feedback-optimization.md
-  - docs/features/FEAT-0070-experimental-feature-evaluation-reports.md
   - skills/eval/SKILL.md
   - skills/goal-advisor/SKILL.md
   - skills/goal-advisor/references/choose-next.md
@@ -27,7 +25,7 @@ system_record_json: |
     "summary": "Goal-backed improvement loops that seed a campaign-local hypothesis tree from bounded sources, then use one active-Goal choose-next decision with a conditional choose-next comparison and refine from evidence.",
     "owner_spec": "docs/systems/self-improvement-learning.md",
     "primary_feature_ref": "FEAT-0063",
-    "feature_refs": ["FEAT-0063", "FEAT-0069", "FEAT-0070"],
+    "feature_refs": ["FEAT-0063"],
     "refs": ["skills/eval/SKILL.md", "skills/goal-advisor/SKILL.md", "skills/goal-advisor/references/choose-next.md", "skills/goal-advisor/references/metrics.md", "skills/goal-advisor/references/loop-presets.md", "skills/ml-autoresearch/SKILL.md", "skills/harness/SKILL.md"],
     "last_verified": "2026-10-12"
   }
@@ -236,8 +234,6 @@ flowchart LR
 ## Feature Docs
 
 - [FEAT-0063 Metric cards](../features/FEAT-0063-metric-advisor-cards.md)
-- [FEAT-0069 Retired Taste Loop human-feedback optimization](../features/FEAT-0069-taste-loop-human-feedback-optimization.md)
-- [FEAT-0070 Retired Dogfood portfolio checkpoints](../features/FEAT-0070-experimental-feature-evaluation-reports.md)
 
 ## Proof And Maintenance
 
@@ -265,3 +261,5 @@ flowchart LR
   `.farplane/goal-advisor/issue-<n>/hypothesis-tree.json`.
 - 2026-10-12: Absorbed the metric card and the ML autoresearch entrypoint into
   `goal-advisor` (#41) and retired FEAT-0070 when `dogfood-review` was deleted.
+- 2026-10-14: Deleted the retired Taste Loop and Dogfood portfolio feature
+  pages; human-feedback runs use the `goal-advisor` human-feedback preset.

@@ -401,7 +401,7 @@ def validate_system(
         errors.append(f"{source_path}: id must match SYS-####")
         system_id = str(system_id or source_path)
 
-    for field in ("name", "status", "summary", "owner_spec", "primary_feature_ref", "last_verified"):
+    for field in ("name", "status", "summary", "owner_spec", "last_verified"):
         require_string(system, field, system_id, errors)
     if system.get("status") not in ALLOWED_STATUSES:
         errors.append(f"{system_id}: invalid status {system.get('status')!r}")
@@ -411,6 +411,9 @@ def validate_system(
 
     feature_refs = require_string_list(system, "feature_refs", system_id, errors)
     refs = require_string_list(system, "refs", system_id, errors)
+    # A system whose features were all retired keeps its page with no feature refs.
+    if system.get("primary_feature_ref") is not None or feature_refs:
+        require_string(system, "primary_feature_ref", system_id, errors)
     validate_no_duplicates(system_id, "feature_refs", feature_refs, errors)
     validate_no_duplicates(system_id, "refs", refs, errors)
 
@@ -755,11 +758,12 @@ def render_system_registry_doc(
     for system in rows:
         system_link = md_link(str(system["owner_spec"]), f"{system['id']} {system['name']}")
         primary = feature_by_id.get(str(system["primary_feature_ref"]))
-        primary_text = (
-            md_link(str(primary["_owner_spec"]), f"{primary['id']} {primary['name']}")
-            if primary
-            else f"`{system['primary_feature_ref']}`"
-        )
+        if primary:
+            primary_text = md_link(str(primary["_owner_spec"]), f"{primary['id']} {primary['name']}")
+        elif system["primary_feature_ref"] is None:
+            primary_text = "none"
+        else:
+            primary_text = f"`{system['primary_feature_ref']}`"
         feature_links = []
         for feature_id in system["feature_refs"]:
             feature = feature_by_id.get(str(feature_id))

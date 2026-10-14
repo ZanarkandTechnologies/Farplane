@@ -8,8 +8,7 @@ refs:
   - runtimes/AGENTS.md
   - AGENTS.md
   - docs/systems/agent-kernel.md
-  - docs/features/FEAT-0042-lean-global-agent-operating-kernel.md
-  - docs/features/FEAT-0043-project-level-system-prompt-eval-suite.md
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/fundamentals/prompt-engineering.md
 ---
 
