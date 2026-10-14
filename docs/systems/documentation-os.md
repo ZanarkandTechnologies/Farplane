@@ -11,7 +11,7 @@ tags:
 refs:
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - skills/doc-advisor/SKILL.md
-  - docs/review/rubrics/documentation-quality.md
+  - skills/review/references/rubrics/documentation-quality.md
   - docs/features/README.md
   - docs/systems/README.md
 system_record_json: |
@@ -28,7 +28,7 @@ system_record_json: |
     "refs": [
       "docs/features/FEAT-0060-registry-backed-documentation-os.md",
       "skills/doc-advisor/SKILL.md",
-      "docs/review/rubrics/documentation-quality.md",
+      "skills/review/references/rubrics/documentation-quality.md",
       "docs/features/README.md",
       "docs/systems/README.md"
     ],
@@ -138,7 +138,7 @@ Documentation OS keeps Farplane's durable written truth machine-indexable, human
 - `docs/features/FEAT-0060-registry-backed-documentation-os.md`
 - `skills/doc-advisor/SKILL.md`
 - `skills/doc-advisor/references/*.md`
-- `docs/review/rubrics/documentation-quality.md`
+- `skills/review/references/rubrics/documentation-quality.md`
 - `docs/features/README.md`
 - `docs/systems/README.md`
 

@@ -45,7 +45,7 @@ RULES: tuple[FileRule, ...] = (
             "## Canonical Surfaces",
             "README.md",
             "tickets/README.md",
-            "docs/review/rubrics/review-rubric-index.md",
+            "skills/review/references/rubrics/review-rubric-index.md",
         ),
     ),
     FileRule(

@@ -173,6 +173,7 @@ RETIRED_INSTALL_PATHS=(
   bin/file_growth_hook.py
   hooks/farplane_file_change.py
   hooks/farplane_local_event.py
+  docs/review
 )
 
 if [ "$SKILLS_ONLY" -eq 1 ]; then
@@ -548,7 +549,7 @@ fi
 
 echo "Installing Codex harness from $REPO_DIR to $TARGET_DIR"
 
-mkdir -p "$TARGET_DIR" "$TARGET_DIR/agents" "$TARGET_DIR/skills" "$TARGET_DIR/rules" "$TARGET_DIR/bin" "$TARGET_DIR/hooks" "$TARGET_DIR/docs/review"
+mkdir -p "$TARGET_DIR" "$TARGET_DIR/agents" "$TARGET_DIR/skills" "$TARGET_DIR/rules" "$TARGET_DIR/bin" "$TARGET_DIR/hooks"
 render_skill_profiles
 
 for relative in "${RETIRED_INSTALL_PATHS[@]}"; do
@@ -574,7 +575,6 @@ if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
 fi
 
 copy_path "$REPO_DIR/runtimes/AGENTS.md" "$TARGET_DIR/AGENTS.md"
-link_path "$REPO_DIR/docs/review/rubrics" "$TARGET_DIR/docs/review/rubrics"
 if [ -f "$REPO_DIR/hooks/hooks.json" ]; then
   link_path "$REPO_DIR/hooks/hooks.json" "$TARGET_DIR/hooks.json"
 fi

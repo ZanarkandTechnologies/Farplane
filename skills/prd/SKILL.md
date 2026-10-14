@@ -122,7 +122,9 @@ returns: PRD | workflow handoff | realism pack, with assumptions and the next ow
 - [ ] **N6 — Review, hand off to impl-plan, and stop.**
   `artifact -> reviewed artifact + impl-plan handoff | revise`
 
-  Rule: Tighten a PRD until [review](references/review.md) passes; package
+  Rule: Tighten a PRD until [review](references/review.md) passes, then run
+  `review` with family `spec-contract` until it returns TAS-A (at most three
+  rounds; otherwise stop with the open checks as the blocker); package
   workflow decisions with [implementation-handoff](references/implementation-handoff.md).
   A demo-bearing build or review handoff requires an expectation-check
   artifact: realistic data exercised, workflow exercised, observed result,

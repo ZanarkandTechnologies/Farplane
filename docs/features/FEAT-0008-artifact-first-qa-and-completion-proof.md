@@ -13,7 +13,7 @@ refs:
   - tickets/templates/ticket.md
   - skills/qa
   - skills/review
-  - docs/review/rubrics
+  - skills/review/references/rubrics
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
   - "docs/MEMORY.md#MEM-0048"
   - "docs/MEMORY.md#MEM-0064"
@@ -28,7 +28,7 @@ surfaces:
   - tickets/templates/ticket.md
   - skills/qa
   - skills/review
-  - docs/review/rubrics
+  - skills/review/references/rubrics
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
 source_refs:
   - "docs/MEMORY.md#MEM-0048"
@@ -118,7 +118,7 @@ Proof scales with risk, blast radius, and user-facing impact.
   `gh issue close` (`tickets/README.md`). Material feature tickets attach the
   passing independently reviewed `$qa closeout` MP4. Local supporting files
   stay; nothing is deleted at close.
-- `docs/review/rubrics` owns family definitions, stable checks, TAS calibration,
+- `skills/review/references/rubrics` owns family definitions, stable checks, TAS calibration,
   and evidence limits; tickets and caller workflows own rubric routing.
 - Review keeps neighboring-surface skepticism inside the selected rubric family.
   Suspected implementation bloat routes to the `code-health` lean gate; prose cleanup routes
@@ -164,7 +164,7 @@ Owner surfaces:
 - `tickets/templates/ticket.md`
 - `skills/qa`
 - `skills/review`
-- `docs/review/rubrics`
+- `skills/review/references/rubrics`
 - `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
 
 Source context:

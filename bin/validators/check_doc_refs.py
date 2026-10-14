@@ -29,7 +29,6 @@ ROOT_TEXT_FILES = {"AGENTS.md", "ARCHITECTURE.md", "README.md"}
 DEFAULT_SCAN_PREFIXES = (
     "docs/features/",
     "docs/fundamentals/",
-    "docs/review/",
     "docs/skills/",
     "docs/sources/",
     "docs/systems/",

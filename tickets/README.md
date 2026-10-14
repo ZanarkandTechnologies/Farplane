@@ -637,7 +637,7 @@ qa_strategy:
 For material work, `QA Strategy` should name honest mechanical metrics when
 they exist, `none mechanical` when they do not, reviewer rubric families, TAS
 gates, hard gates, delegated lanes, final checkpoint, and required artifacts.
-Keep full rubric bodies in `docs/review/rubrics/` and full experiment session
+Keep full rubric bodies in `skills/review/references/rubrics/` and full experiment session
 files in the owning experiment artifacts. Tickets carry handles, thresholds,
 and artifact obligations, not duplicate specialist contracts.
 

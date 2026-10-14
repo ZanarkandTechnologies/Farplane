@@ -13,7 +13,7 @@ refs:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - skills/qa/SKILL.md
   - skills/review/SKILL.md
-  - docs/review/rubrics
+  - skills/review/references/rubrics
 system_record_json: |
   {
     "id": "SYS-0005",
@@ -32,7 +32,7 @@ system_record_json: |
       "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
       "skills/qa/SKILL.md",
       "skills/review/SKILL.md",
-      "docs/review/rubrics"
+      "skills/review/references/rubrics"
     ],
     "last_verified": "2026-07-25"
   }
@@ -126,8 +126,8 @@ Proof And Review turns claims into evidence, evals, independent judgment, and du
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 - `skills/qa/SKILL.md`
 - `skills/review/SKILL.md`
-- `docs/review/rubrics`
-- `docs/review/rubrics/scientific-evidence.md`
+- `skills/review/references/rubrics`
+- `skills/review/references/rubrics/scientific-evidence.md`
 
 ## Proof And Maintenance
 

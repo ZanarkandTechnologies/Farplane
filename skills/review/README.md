@@ -16,13 +16,13 @@ and checks metric traceability against linked evidence.
 
 - [`SKILL.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/SKILL.md): thin callable TAS wrapper
 - `SKILL.md` Todo List: example natural-language todo template for review
-- [`docs/review/rubrics/review-rubric-index.md`](/Users/kenjipcx/coding-harness/Farplane/docs/review/rubrics/review-rubric-index.md): family selection map, shared TAS contract, and hard-gate policy
-- [`docs/review/rubrics/reviewer-handoff.md`](/Users/kenjipcx/coding-harness/Farplane/docs/review/rubrics/reviewer-handoff.md): reusable caller-to-reviewer handoff template
+- [`references/rubrics/review-rubric-index.md`](/Users/kenjipcx/coding-harness/Farplane/references/rubrics/review-rubric-index.md): family selection map, shared TAS contract, and hard-gate policy
+- [`references/rubrics/reviewer-handoff.md`](/Users/kenjipcx/coding-harness/Farplane/references/rubrics/reviewer-handoff.md): reusable caller-to-reviewer handoff template
 - [`code-health`](../code-health/SKILL.md): lean gate for unnecessary
   implementation and over-engineering
 - [`copywriting` final pass](../copywriting/references/final-pass.md): prose simplification when writing quality is
   in scope
-- One family file per rubric under `docs/review/rubrics/`
+- One family file per rubric under `references/rubrics/`
 - [`/Users/kenjipcx/coding-harness/Farplane/agents/reviewer.toml`]: independent reviewer agent prompt
 
 ## Minimal Example
@@ -46,12 +46,12 @@ Return a clear `pass|revise|block|invalid` verdict grounded in the provided evid
 - `sed -n '1,120p' skills/review/SKILL.md`
   and expect a marker-delimited `## Todo List` with natural-language
   review steps
-- `rg -n "reviewer-handoff|rubric_families|code-health|final-pass|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md docs/review/rubrics agents/reviewer.toml docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md tickets/templates/ticket.md`
+- `rg -n "reviewer-handoff|rubric_families|code-health|final-pass|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md skills/review/references/rubrics agents/reviewer.toml docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md tickets/templates/ticket.md`
   and expect live matches in the updated review surfaces
 - Run a stale numeric-review-contract scan over `skills/review`,
   `agents/reviewer.toml`, and `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`; expect no live
   review-contract matches outside historical notes or unrelated schema versions.
 - Manually verify that examples and TAS gates in `SKILL.md`,
-  `docs/review/rubrics/review-rubric-index.md`,
+  `references/rubrics/review-rubric-index.md`,
   `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md` all use the same explicit TAS contract and
   search/output expectations

@@ -251,7 +251,7 @@ Boundary examples:
   programs, or proof-bearing plans.
 - `review` is better understood as a review protocol and rubric/TAS contract.
   Keep the callable wrapper while it is useful; rubric bodies live in
-  `docs/review/rubrics/*` and reviewer agents can read those docs directly.
+  `skills/review/references/rubrics/*` and reviewer agents can read those docs directly.
 
 ## Todo-Link Rules
 

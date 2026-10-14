@@ -155,7 +155,7 @@ returns: changed files, proof commands and results, reviewer verdict or blocker
   - owner-surface comparison and material placement scoring.
 - [skill system](../../docs/skills/system.md) and
   [best practices](../../docs/skills/best-practices.md) - every structural change.
-- [skill-contract rubric](../../docs/review/rubrics/skill-contract.md) - review gate.
+- [skill-contract rubric](../review/references/rubrics/skill-contract.md) - review gate.
 - [check skills](scripts/check_skills.py) - registry, template, todo, capability,
   config, eval-query, and doc-reference checks.
 

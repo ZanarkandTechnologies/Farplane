@@ -23,7 +23,7 @@ refs:
   - runtimes/AGENTS.md
   - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/systems/documentation-os.md
-  - docs/review/rubrics/documentation-quality.md
+  - skills/review/references/rubrics/documentation-quality.md
   - skills/doc-advisor/SKILL.md
   - skills/doc-advisor/evals/evals.json
 feature_id: FEAT-0060
@@ -45,14 +45,14 @@ surfaces:
   - runtimes/AGENTS.md
   - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/systems/documentation-os.md
-  - docs/review/rubrics/documentation-quality.md
+  - skills/review/references/rubrics/documentation-quality.md
   - skills/doc-advisor/SKILL.md
   - skills/doc-advisor/evals/evals.json
 source_refs:
   - docs/features/README.md
   - docs/systems/README.md
   - docs/systems/documentation-os.md
-  - docs/review/rubrics/documentation-quality.md
+  - skills/review/references/rubrics/documentation-quality.md
   - skills/doc-advisor/references/feature-system-specs.md
   - docs/templates/registry.jsonl
 external_refs: []
@@ -174,7 +174,7 @@ Owner surfaces:
 - `bin/validators/sync_template_registry.py`
 - `runtimes/AGENTS.md`
 - `docs/systems/documentation-os.md`
-- `docs/review/rubrics/documentation-quality.md`
+- `skills/review/references/rubrics/documentation-quality.md`
 - `skills/doc-advisor/SKILL.md`
 - `skills/doc-advisor/references/doc-architecture.md`
 - `skills/doc-advisor/references/metadata-and-registries.md`
@@ -186,7 +186,7 @@ Source context:
 - `docs/features/README.md`
 - `docs/systems/README.md`
 - `docs/systems/documentation-os.md`
-- `docs/review/rubrics/documentation-quality.md`
+- `skills/review/references/rubrics/documentation-quality.md`
 - `skills/doc-advisor/references/feature-system-specs.md`
 - `docs/templates/registry.jsonl`
 

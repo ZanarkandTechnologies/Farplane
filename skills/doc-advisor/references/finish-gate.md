@@ -34,7 +34,7 @@ input_packet:
     review_required:
   source_refs:
     - skills/doc-advisor/SKILL.md
-    - docs/review/rubrics/documentation-quality.md
+    - skills/review/references/rubrics/documentation-quality.md
 ```
 
 ## Workflow

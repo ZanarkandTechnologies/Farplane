@@ -421,8 +421,12 @@ Use this routing:
 | Repeatable agent, prompt, or skill behavior. | `eval` | `evals/evals.json` or eval suite artifact. |
 | Deterministic file, schema, registry, link, generated state, or syntax invariant. | validator or command | Script, validator, or proof command in `SKILL.md`. |
 | Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality check | `doc-advisor`, the documentation rubric, or an owned reference. |
-| Skill structure, Golden Workflow Nodes, first-load size, reference routing, edge, or compaction risk. | `skill-contract` review | `docs/review/rubrics/skill-contract.md`, plus a skill-local audit for material changes. |
+| Skill structure, Golden Workflow Nodes, first-load size, reference routing, edge, or compaction risk. | `skill-contract` review | `skills/review/references/rubrics/skill-contract.md`, plus a skill-local audit for material changes. |
 | Generated asset or public deliverable presentation. | demo or QA proof | Demo checklist, render artifact, screenshot, or playback proof. |
+
+When the gate is `review`, end with the template's closing node: run `review`
+with the named family until TAS-A, at most three rounds, then stop with the
+open checks as the blocker. Name the family; never link a rubric path.
 | Operator taste, ranking, or approval. | human feedback | Feedback artifact, Telegram request, or explicit approval record. |
 | Tiny deterministic edit. | self-check | One inline final todo or command. |
 
@@ -444,7 +448,7 @@ an eval, validator, QA/review lane, or conditional reference only when its
 proof or loading boundary changes.
 
 For skill creation or material skill restructuring, load and run
-`docs/review/rubrics/skill-contract.md`. Its key threshold is:
+`skills/review/references/rubrics/skill-contract.md`. Its key threshold is:
 
 ```text
 place_skill_detail(detail)
@@ -606,7 +610,7 @@ when one is available. The calling skill owns rubric routing: pass a reviewer
 handoff with the active ticket or task artifact, changed skill files, evidence
 artifacts, review focus, rubric families, required TAS gates, hard gates, and
 expected output path. Use
-`docs/review/rubrics/reviewer-handoff.md` for the template.
+`skills/review/references/rubrics/reviewer-handoff.md` for the template.
 
 For skill-system review, the usual caller-declared families are `skill-contract`,
 `integration-readiness`, and `evidence-quality`. Add task-specific hard gates

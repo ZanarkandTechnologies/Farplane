@@ -139,7 +139,7 @@ source upgrades, automation presets, and review handoff templates.
   registry, and todo contracts; read for structural changes.
 - [skill best practices](../../../docs/skills/best-practices.md) — first-load
   placement, examples, repeatability, and review.
-- [skill-contract rubric](../../../docs/review/rubrics/skill-contract.md) —
+- [skill-contract rubric](../../review/references/rubrics/skill-contract.md) —
   centralized structure, Golden Node, edge, calibration, and proof review.
 - [maintenance modes](maintenance-modes.md) — load after choosing a
   mode for detailed branches and handoff shapes.

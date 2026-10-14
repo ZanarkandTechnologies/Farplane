@@ -15,7 +15,7 @@ refs:
   - skills/eval
   - skills/qa/SKILL.md
   - skills/qa/references/scientific-claim-review.md
-  - docs/review/rubrics/scientific-evidence.md
+  - skills/review/references/rubrics/scientific-evidence.md
   - docs/HISTORY.md
 feature_id: FEAT-0034
 system_id: SYS-0005

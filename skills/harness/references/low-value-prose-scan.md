@@ -35,7 +35,7 @@ input_packet:
     claim: what behavior should remain true after cleanup
     context: target Todo List guardrails, references, recent audit, usage evidence
   source_refs:
-    - docs/review/rubrics/skill-contract.md
+    - skills/review/references/rubrics/skill-contract.md
     - target skill package
 ```
 

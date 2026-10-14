@@ -14,21 +14,21 @@ Own the thin callable review wrapper for Farplane's docs-owned rubric contract.
 - `evidence-quality` and `integration-readiness` are hard gates: if either
   required family is below `TAS-A`, the overall verdict cannot be `pass`.
 - Caller skills or ticket `QA Strategy` own rubric routing.
-  `docs/review/rubrics/*` owns TAS meanings, family definitions, hard gates,
+  `references/rubrics/*` owns TAS meanings, family definitions, hard gates,
   and rubric bodies. This module owns the callable wrapper and output shape.
   See `MEM-0129`.
 - For code, cleanup, integration, or evidence-heavy review, the live review surface must use the anti-slop search playbook, return a compact `search_scope`, and express substantive findings with severity/confidence and concrete file refs. See `MEM-0020`.
 - Review output must contain concrete findings and next actions, not just questions or vibes.
-- The canonical live rubric references are `docs/review/rubrics/*`, not the
+- The canonical live rubric references are `references/rubrics/*`, not the
   retired review-skill reference directory or `skills/code-health/`.
 - Keep the `SKILL.md` Todo List as plain natural-language todo-list text with Markdown links rather than a custom mini-language. See `MEM-0028` and `MEM-0124`.
 
 ## Notes
 
-- Keep the family catalog compact in `docs/review/rubrics/review-rubric-index.md`, but
+- Keep the family catalog compact in `references/rubrics/review-rubric-index.md`, but
   keep caller-owned routing and TAS contract explicit.
-- Keep the reusable reviewer handoff template in `docs/review/rubrics/reviewer-handoff.md`.
-- Keep one reference file per review family in `docs/review/rubrics/`.
+- Keep the reusable reviewer handoff template in `references/rubrics/reviewer-handoff.md`.
+- Keep one reference file per review family in `references/rubrics/`.
 - Keep implementation bloat with the `code-health` lean gate and prose cleanup with the `copywriting` final pass;
   do not recreate a second anti-slop review workflow.
 - Each family file should stay skimmable while still including required checks,

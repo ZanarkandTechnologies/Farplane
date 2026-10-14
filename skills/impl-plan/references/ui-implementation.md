@@ -30,7 +30,7 @@ their default styling automatically; apply the accepted visual constraints.
 
 ## Conditional References
 
-- Chart or dashboard representation: [data visualization guidance](../../../docs/fundamentals/data-visualization.md).
+- Chart or dashboard representation: load the `dataviz` skill.
 - React Flow or another graph library: inspect its current official docs and
   examples after the ticket establishes the node/edge model.
 - Generated or rendered website media: use the owning image, video, or

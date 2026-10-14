@@ -280,7 +280,7 @@ during cleanup unless the replacement carries the same routing information.
   Purpose: QA -> reviewer -> Stop-hook quality gate split
 - [skills/review/README.md](skills/review/README.md)
   Purpose: public entrypoint to the review system
-- [docs/review/rubrics/review-rubric-index.md](docs/review/rubrics/review-rubric-index.md)
+- [skills/review/references/rubrics/review-rubric-index.md](skills/review/references/rubrics/review-rubric-index.md)
   Purpose: canonical scoring map, thresholds, and rubric family selection
 
 The review scoring model is canonical in `skills/review/*`, not in this file.

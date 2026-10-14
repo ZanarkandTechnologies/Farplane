@@ -28,9 +28,8 @@ fails: decorative poster with unclear point; hallucinated data; text-dense
 2. **Choose the job.**
    - `product_state_storyboard`: several product screens or workflow moments.
    - `annotated_dashboard`: UI states with callouts on data, policy, behavior.
-   - `data_story`: charts, metrics, scorecards, tables, comparisons; read the
-     [data-visualization reference](../../../docs/fundamentals/data-visualization.md)
-     before art direction.
+   - `data_story`: charts, metrics, scorecards, tables, comparisons; load the
+     `dataviz` skill before art direction.
    - `process_map`: steps, actors, dependencies, before/after flow; draft the
      Mermaid structure inline before visual polish.
    - `social_infographic`: carousel or post image; copy and platform work go to

@@ -54,8 +54,9 @@ PPTX, slide deck, or screenshot montage.
 
 - `ffprobe` duration, streams, and audible narration; inspect representative
   frames and listen to a sample. Write `media-probe.json`.
-- Send the MP4, evidence map, and sources to an independent `reviewer` with the
-  demo, video, and evidence rubrics; require TAS-A.
+- Send the MP4, evidence map, and sources to an independent `reviewer` running
+  `review` with families `demo-quality`, `video-quality`, and
+  `evidence-quality`; require TAS-A.
 - On a public repository the reviewer also confirms the video shows no private
   data (client names, balances, personal details); anything uploaded there is
   public.

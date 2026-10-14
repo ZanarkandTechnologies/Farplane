@@ -208,7 +208,7 @@ def node_kind(node_id: str) -> str:
         return "spec"
     if path.startswith("docs/skills/"):
         return "skill-doc"
-    if path.startswith("dir:docs/review/rubrics") or path.startswith("docs/review/rubrics/"):
+    if path.startswith("dir:skills/review/references/rubrics") or path.startswith("skills/review/references/rubrics/"):
         return "review-rubric"
     if path.startswith("docs/"):
         return "doc"
@@ -420,8 +420,8 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
         "docs/skills/README.md",
         "docs/skills/system.md",
         "docs/skills/best-practices.md",
-        "docs/review/rubrics/review-rubric-index.md",
-        "docs/review/rubrics/reviewer-handoff.md",
+        "skills/review/references/rubrics/review-rubric-index.md",
+        "skills/review/references/rubrics/reviewer-handoff.md",
         "docs/features/FEAT-0060-registry-backed-documentation-os.md",
     ]:
         global_bundle.append([f"`{path}`", "high leverage for installed skills or harness placement"])
@@ -490,7 +490,7 @@ can still be worth keeping.
 
 1. Reduce unresolved local-looking refs that point to missing active surfaces,
    especially template-era `docs/progress.md` and old external repo paths.
-2. Keep `docs/review/rubrics/*` as canonical docs even when individual family
+2. Keep `skills/review/references/rubrics/*` as canonical docs even when individual family
    files are primarily reached through the directory and rubric index.
 3. Move temporary research and speculative notes to tickets, experiments, or
    `tmp/**`; keep tracked docs for live contracts and generated inventories.

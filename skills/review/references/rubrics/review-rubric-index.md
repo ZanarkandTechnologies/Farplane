@@ -342,14 +342,6 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - whether the result would actually satisfy or impress the user
   - evidence confidence for any stronger value claims
 
-### 10a. Buyer Communication Quality
-- File: `buyer-communication-quality.md`
-- Focus:
-  - one reader and decision
-  - outcome-before-mechanics narrative
-  - claim-proof adjacency and buyer-readable interpretation
-  - objections, scan depth, and unmistakable action
-
 ### 10b. ICP Purchase Conviction
 - File: `icp-purchase-conviction.md`
 - Focus:

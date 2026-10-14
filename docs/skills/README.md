@@ -258,7 +258,7 @@ scores.
   domain skills such as `impl-plan` and `goal-advisor` own
   their specialized plans, tickets, and work programs.
 - `review` is a callable TAS wrapper over docs-owned rubrics in
-  `docs/review/rubrics/*`.
+  `skills/review/references/rubrics/*`.
 
 ## Domain Pipeline Shape
 

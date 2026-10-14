@@ -19,7 +19,7 @@ behaviour, content semantics, and interface basics.
    format the fetched command specifies. State `Grounding:` with the fetch.
 4. Keep raw findings separate from any TAS. `review` converts them into the
    `frontend-guidelines` verdict
-   ([rubric](../../../docs/review/rubrics/frontend-guidelines.md)).
+   ([rubric](../../review/references/rubrics/frontend-guidelines.md)).
 
 A clean guideline audit does not prove the UI is useful or tasteful, and a
 screenshot does not replace the source-level check.

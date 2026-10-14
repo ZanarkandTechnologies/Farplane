@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.6.7"
+template_version: "0.6.8"
 feature_refs:
   - FEAT-0022
   - FEAT-0062
@@ -83,6 +83,21 @@ fit an unrelated skill. Keep Rule and Assert. Keep Example when judgment,
 hidden edge, or a tempting ambiguity changes the route; otherwise omit it.
 Do not add generic bind, inspect, transform, preserve, self-audit, or next
 fields—the signature and assertions carry those obligations.]
+
+- [ ] **N{last} — Review {artifact} until TAS-A.**
+  `{artifact} -> review({family}) -> TAS-A | revise | blocked`
+
+  Rule: Run the `review` skill with family `{family}` (a rubric in
+  `skills/review/references/rubrics/`), as an independent reviewer when one is
+  available. On TAS-B, fix the named checks and review again; after three
+  rounds stop and report the open checks as the blocker. Self-review never
+  counts.
+
+  Assert:
+  - The output names the family, the number of rounds, and the final TAS.
+
+[TODO: Keep this closing node when the skill's output has a matching review
+family; delete it otherwise. Name the family; do not link into `docs/`.]
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 <!-- Optional modules:

@@ -36,7 +36,7 @@ artifact writeback.
 
 ```text
 review_change(change_or_evidence, rubric_requirements?, budget?) -> review_receipt
-state: reads(task context, changed artifacts, evidence, docs/review/rubrics selected rubrics); writes(review artifact?)
+state: reads(task context, changed artifacts, evidence, selected references/rubrics families); writes(review artifact?)
 gates: evidence_inspected; rubric_family_named; TAS_supported; next_action_named
 routes: caller-owned
 fails: approves without evidence; silently changes rubrics; treats TAS-B as pass
@@ -104,7 +104,7 @@ re-plan the same parent task scope.
     rubric- or artifact-bounded review lanes.
   - [ ] Do not externalize or recurse through planning and review at the same
     task size.
-- [ ] 4. Load only the selected docs/review/rubrics family files and apply their
+- [ ] 4. Load only the selected references/rubrics family files and apply their
   required, blocker, and evidence checklist modules.
 - [ ] 5. Apply one TAS verdict per selected family plus the overall verdict; do
   not use numeric scores or per-dimension TAS.
@@ -121,7 +121,7 @@ re-plan the same parent task scope.
    handoff.
 3. Validate the declared families against the actual changed surface and add an
    obvious missing hard-gate family only when needed.
-4. Open `docs/review/rubrics/review-rubric-index.md` only when family choice or
+4. Open `references/rubrics/review-rubric-index.md` only when family choice or
    modular checklist shape is not obvious from the handoff and this file.
 5. Open selected family docs and apply only the checklist modules needed for
    the review claim.
@@ -135,7 +135,7 @@ re-plan the same parent task scope.
 
 The calling skill, workflow, or ticket `QA Strategy` owns rubric routing.
 The review docs own the available families, TAS meanings, and hard gates. Use
-`docs/review/rubrics/reviewer-handoff.md` when creating a durable reviewer
+`references/rubrics/reviewer-handoff.md` when creating a durable reviewer
 handoff.
 
 Common families:
@@ -147,7 +147,6 @@ Common families:
 - `ui-quality`
 - `frontend-guidelines`
 - `user-intent-satisfaction`
-- `buyer-communication-quality`
 - `icp-purchase-conviction`
 - `debloatability`
 - `evidence-quality`
@@ -227,7 +226,7 @@ Return or write:
 
 ## Templates
 
-- [docs/review/rubrics/reviewer-handoff.md](../../docs/review/rubrics/reviewer-handoff.md) -
+- [references/rubrics/reviewer-handoff.md](references/rubrics/reviewer-handoff.md) -
   use when a caller needs a durable reviewer handoff.
 - `Completion Receipt` above - use for ticket or Goal final completion review.
 
@@ -249,7 +248,7 @@ Return or write:
 
 ## Reference Map
 
-- [docs/review/rubrics/review-rubric-index.md](../../docs/review/rubrics/review-rubric-index.md) -
+- [references/rubrics/review-rubric-index.md](references/rubrics/review-rubric-index.md) -
   use when family choice or modular checklist shape is unclear.
 - Lean Check direct-command evidence for unnecessary code, dependencies,
   abstractions, or features.

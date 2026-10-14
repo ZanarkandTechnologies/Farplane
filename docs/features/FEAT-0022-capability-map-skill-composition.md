@@ -13,7 +13,7 @@ refs:
   - docs/skills/system.md
   - skills/research
   - skills/review
-  - docs/review/rubrics
+  - skills/review/references/rubrics
   - docs/skills/README.md
   - bin/validators/sync_skill_registry.py
 feature_id: FEAT-0022
@@ -25,7 +25,7 @@ surfaces:
   - docs/skills/system.md
   - skills/research
   - skills/review
-  - docs/review/rubrics
+  - skills/review/references/rubrics
   - docs/skills/README.md
   - bin/validators/sync_skill_registry.py
 source_refs:

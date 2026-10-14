@@ -136,7 +136,7 @@ behavior_proof: concrete positive example or eval row, never book recall
   todo-link contracts; read for every structural update.
 - [skill best practices](../../../docs/skills/best-practices.md) — placement,
   repeatability, examples, and review; read the relevant anchored section.
-- [skill-contract rubric](../../../docs/review/rubrics/skill-contract.md) — apply
+- [skill-contract rubric](../../review/references/rubrics/skill-contract.md) — apply
   before readiness to node execution, edge, calibration, proof, and ownership.
 - [eval](../../eval/SKILL.md) — run the initial skill suite, grade evidence, and
   compare a candidate with no-skill or previous-skill behavior before readiness.
