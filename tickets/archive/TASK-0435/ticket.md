@@ -6,10 +6,11 @@ feature_refs:
   - FEAT-0008
 ticket_id: TASK-0435
 title: Add a Steve Jobs Focus & Simplicity Pass to UI planning
-status: awaiting_review
+status: rejected
 created_at: 2026-08-14T01:09:29+08:00
-updated_at: 2026-08-14T01:48:00+08:00
+updated_at: 2026-10-14T00:00:00+08:00
 depends_on: []
+rejection_reason: Archived unfinished on 2026-10-14; never migrated to GitHub Issues. Open an issue if the work is still wanted.
 ---
 
 # TASK-0435: Add a Steve Jobs Focus & Simplicity Pass to UI planning

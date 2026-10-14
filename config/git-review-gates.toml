@@ -54,6 +54,18 @@ checks = ["skill_projection"]
 globs = ["skills/**/SKILL.md"]
 checks = ["skill_file_line_count"]
 
+[[pre_commit.path_check]]
+# setup-advisor ships byte copies of these files to new projects; the copy
+# test catches drift when either side changes.
+globs = [
+  "tickets/README.md",
+  "tickets/templates/ticket.md",
+  "skills/setup-advisor/references/TICKETS_README_TEMPLATE.md",
+  "skills/setup-advisor/references/TICKET_TEMPLATE.md",
+  "skills/setup-advisor/tests/test_bootstrap.py",
+]
+checks = ["setup_template_copies"]
+
 [pre_push]
 # Branch-level checks. This is where cross-commit drift, duplicated patterns,
 # stale docs, and heavyweight review belong. They warn for the same reason as
@@ -101,6 +113,18 @@ globs = [
 ]
 checks = ["skill_projection"]
 
+[[pre_push.path_check]]
+# setup-advisor ships byte copies of these files to new projects; the copy
+# test catches drift when either side changes.
+globs = [
+  "tickets/README.md",
+  "tickets/templates/ticket.md",
+  "skills/setup-advisor/references/TICKETS_README_TEMPLATE.md",
+  "skills/setup-advisor/references/TICKET_TEMPLATE.md",
+  "skills/setup-advisor/tests/test_bootstrap.py",
+]
+checks = ["setup_template_copies"]
+
 [checks.large_file_guard]
 mode = "block"
 
@@ -147,6 +171,9 @@ argv = [
   "unittest",
   "skills.harness.scripts.test_generate_skill_graph",
 ]
+
+[checks.setup_template_copies]
+argv = ["python3", "-m", "unittest", "discover", "-s", "skills/setup-advisor/tests", "-p", "test_bootstrap.py"]
 
 [checks.ticket_closure_gate]
 argv = ["python3", "bin/validators/check_ticket_closure_gate.py"]

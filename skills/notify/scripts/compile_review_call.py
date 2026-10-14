@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile bounded Phone Chaser review-call metadata from a Farplane ticket."""
+"""Compile bounded Phone Chaser review-call metadata from a GitHub issue or legacy ticket."""
 
 from __future__ import annotations
 
@@ -7,16 +7,20 @@ import argparse
 import json
 import re
 import secrets
+import subprocess
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[3]
 MAX_FIELD_CHARS = 700
+ISSUE_REF = re.compile(r"^(?P<repo>[\w.-]+/[\w.-]+)#(?P<number>\d+)$")
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--ticket", required=True, help="Path to tickets/TASK-XXXX/ticket.md.")
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--issue", help="GitHub issue as owner/repo#n; its body holds the ticket sections.")
+    source.add_argument("--ticket", help="Legacy tickets/TASK-XXXX/ticket.md, for a project without a GitHub repository.")
     parser.add_argument("--artifact", action="append", default=[], help="Relevant artifact or evidence file.")
     parser.add_argument("--review-id", help="Opaque gateway review id from review-bind.")
     parser.add_argument("--webhook-url", help="Gateway review relay URL.")
@@ -35,6 +39,22 @@ def read_text(path_value: str) -> str:
     if not path.is_absolute():
         path = ROOT / path
     return path.read_text(encoding="utf-8")
+
+
+def read_issue(ref: str) -> tuple[str, str]:
+    match = ISSUE_REF.match(ref.strip())
+    if not match:
+        raise SystemExit(f"--issue must look like owner/repo#n, got {ref!r}")
+    result = subprocess.run(
+        ["gh", "issue", "view", match["number"], "-R", match["repo"], "--json", "title,body"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise SystemExit(f"gh issue view failed for {ref}: {result.stderr.strip()}")
+    payload = json.loads(result.stdout)
+    return payload.get("title", ""), payload.get("body") or ""
 
 
 def frontmatter_value(text: str, key: str) -> str:
@@ -84,13 +104,16 @@ def require_callback(args: argparse.Namespace) -> tuple[str, str, str]:
 
 def main() -> int:
     args = parse_args()
-    ticket_text = read_text(args.ticket)
+    if args.issue:
+        issue_title, ticket_text = read_issue(args.issue)
+    else:
+        issue_title, ticket_text = "", read_text(args.ticket)
     review_id, webhook_url, capability = require_callback(args)
-    title = frontmatter_value(ticket_text, "title") or first_heading(ticket_text)
+    title = issue_title or frontmatter_value(ticket_text, "title") or first_heading(ticket_text)
     summary = section(ticket_text, "Summary")
     scope = section(ticket_text, "Scope")
     done = section(ticket_text, "Done / Proof") or section(ticket_text, "Done")
-    state = section(ticket_text, "State")
+    state = section(ticket_text, "State") or section(ticket_text, "Current Goal state")
     artifact_summary = summarize_artifacts(args.artifact)
     decision_question = args.decision_question or "Do you approve, want revisions, or reject this artifact?"
     approve_effect = args.approve_effect or "Approval returns the decision to the originating Codex task only; it does not publish or mutate accounts."

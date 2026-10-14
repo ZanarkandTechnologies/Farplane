@@ -108,17 +108,19 @@ python3 skills/notify/scripts/dispatch_call.py \
 
 ## Review Calls
 
-For an artifact review call, compile bounded metadata from `ticket.md`, the
-Review/Done block, and artifact summaries (title, objective, artifact, why it
+For an artifact review call, compile bounded metadata from the GitHub issue
+(`--issue owner/repo#n`, read with `gh`: its Summary, Scope, Done and current
+state sections) and artifact summaries (title, objective, artifact, why it
 matters, decision question, approve effect, revision examples, limits), bind a
-gateway-minted `review_id`, then dispatch with `--metadata-file`.
+gateway-minted `review_id`, then dispatch with `--metadata-file`. A project
+without a GitHub repository passes its legacy `--ticket` path instead.
 
 Review-call metadata dry run:
 
 ```bash
 python3 skills/notify/scripts/compile_review_call.py \
-  --ticket tickets/TASK-0351/ticket.md \
-  --artifact tickets/TASK-0351/artifacts/farplane-ui-activation-case-study.md \
+  --issue ZanarkandTechnologies/Farplane#46 \
+  --artifact .farplane/qa/46/report.md \
   --dry-run
 ```
 
@@ -126,7 +128,7 @@ Gateway binding and relay shape:
 
 ```bash
 # In Farplane-UI-v2:
-npm run cli -- gateway telegram review-bind --thread-id <source-thread-id> --title "TASK-0351 review"
+npm run cli -- gateway telegram review-bind --thread-id <source-thread-id> --title "#46 review"
 npm run cli -- gateway telegram review-relay --port 8789
 ```
 

@@ -6,11 +6,11 @@ feature_refs:
   - FEAT-0008
 ticket_id: TASK-9010
 title: Add checkpointed visual reasoning workspaces
-status: active
+status: rejected
 created_at: 2026-08-02T12:00:00+08:00
-updated_at: 2026-08-02T13:00:00+08:00
-claimed_by: codex-visual-reasoning
+updated_at: 2026-10-14T00:00:00+08:00
 priority: high
+rejection_reason: Archived unfinished on 2026-10-14; never migrated to GitHub Issues. Open an issue if the work is still wanted.
 ---
 
 # TASK-9010: Add checkpointed visual reasoning workspaces
