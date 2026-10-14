@@ -57,8 +57,9 @@ that genuinely prevent production or claim support.
 ## 2. Build a causal story
 
 Write one point of view plus stakes. Choose the simplest honest backbone:
-chronology, mechanism, investigation, contrast, transformation, or question and
-answer. Then use only the turns needed by the duration.
+chronology, mechanism, investigation, contrast, transformation, result-first
+(show the end result in the hook, then the steps that got there), or question
+and answer. Then use only the turns needed by the duration.
 
 Required short-form spine:
 
@@ -133,6 +134,10 @@ static composition into nominal scenes.
   tension; do not repeat aspiration without new evidence.
 - Start with action, contradiction, a concrete observation, or a question whose
   answer the video will earn.
+- In reels over 20 s, no more than two beats in a row may share one
+  `viewer_question`; break the run with a re-hook line that opens a new question
+  ("but here's the better way", "this won't work unless...", "it's not A or B,
+  it's C") and pay it off in the next beat.
 - Keep the opening promise visible in the first movement and pay it off.
 - Use active, concrete language: who did what to whom.
 - For claims, show the discovery or mechanism rather than only announce the

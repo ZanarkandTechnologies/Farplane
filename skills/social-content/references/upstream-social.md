@@ -216,6 +216,9 @@ done
 - Hook immediately
 
 ### Instagram
+- Profile pass: name field = real name + niche; bio = who you help + one
+  sourced proof number + one CTA; highlights = client wins, testimonials, offer.
+- Pin 3 posts by job (offer, case study, best-converting post), not by views.
 - High visual quality
 - Carousel for engagement
 - Aesthetic consistency

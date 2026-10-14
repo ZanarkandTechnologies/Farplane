@@ -155,6 +155,9 @@ returns: accepted file paths, spend receipt, adherence or QA notes, and the next
 - Real-person likeness or voice needs a recorded consent note; private voice
   IDs and credentials never go into packets, receipts, or tracked files.
 - A provider job ID, remote URL, or "succeeded" status is not an accepted file.
+- A break-the-frame plate (pop-out band, object over captions) is generated on
+  flat chroma green `#00B140` with the object fully in frame; HyperFrames'
+  remove-background is a person matte and will not cut out a ball or prop.
 - Copied `tools/` docs describe the `belt` fallback; [reference
   overrides](references/reference-overrides.md) and live checks win.
 

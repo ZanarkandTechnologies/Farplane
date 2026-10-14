@@ -28,6 +28,15 @@ belt app run google/veo-3-1-fast --input '{
 [Shot Type] + [Subject] + [Action] + [Setting] + [Lighting] + [Style] + [Technical]
 ```
 
+## Reference-Video Spec Prompt
+
+When the operator supplies a style reference clip, sample it at 3 fps into a
+contact sheet and write a breakdown (duration, resolution, fps, style, beats
+and cuts per second, recurring motif, cut type, any text, logos or characters).
+Compile the prompt as STYLE / TECH SPECS / TYPOGRAPHY / BEAT-BY-BEAT TIMELINE
+(timecodes rescaled to the target duration) / SOUND / FINAL FRAME, and drop
+every text, logo or character the reference shows.
+
 ### Example Breakdown
 
 ```
@@ -165,6 +174,10 @@ belt app run xai/grok-imagine-video --input '{
 | No motion | Static description | Include camera movement or action |
 | Conflicting styles | "Minimalist maximalist" | Choose one aesthetic |
 | No lighting | Undefined mood | Specify lighting conditions |
+
+Exception to one scene per prompt: a continuous morph chain (no hard cuts, one
+recurring hero object) may carry up to 5 timecoded beats in one 8-10 s clip.
+Score every beat and split into chained clips if any beat is absent.
 
 ## Model-Specific Tips
 

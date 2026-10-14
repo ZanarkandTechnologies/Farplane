@@ -62,7 +62,7 @@ returns: the draft with publication_status: approval_required, source gaps, and 
 | `x` | X post, thread, quote-post, reply chain | [x-output](references/x-output.md), [upstream-twitter](references/upstream-twitter.md) |
 | `linkedin` | Founder, B2B, hiring, thought-leadership post | [upstream-linkedin](references/upstream-linkedin.md) |
 | `carousel` | Multi-slide post on Instagram, LinkedIn, X, Facebook | [upstream-carousel](references/upstream-carousel.md), [examples](references/examples.md) |
-| `cross-platform` | Campaign bundle, content calendar, captions, hooks, thumbnails plan | [model](references/model.md), [upstream-social](references/upstream-social.md) |
+| `cross-platform` | Campaign bundle, content calendar, captions, hooks, thumbnails plan, profile pass | [model](references/model.md), [upstream-social](references/upstream-social.md) |
 | `newsletter` | Recurring newsletter issue or newsletter blueprint | [newsletter](references/newsletter.md) |
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -77,7 +77,7 @@ returns: the draft with publication_status: approval_required, source gaps, and 
   issue for subscribers is `newsletter`. A campaign that spans formats takes
   `cross-platform` as primary and the others as supporting modes. Bind
   audience, one concrete reader promise, verified evidence, voice, CTA, and
-  stage. No voice examples means `voice_mode: hypothesis`. Draft on stated
+  [funnel tier](references/model.md#funnel-tiers). No voice examples means `voice_mode: hypothesis`. Draft on stated
   assumptions when the topic is enough; ask for one fact only when its absence
   would force fabrication. Use [method-selection-smoke](references/method-selection-smoke.md)
   when the mode is unclear.

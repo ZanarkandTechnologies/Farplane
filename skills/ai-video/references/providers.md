@@ -41,6 +41,7 @@ treg_route(job) -> catalog_search(<what you want to do, not a vendor>)
 | --- | --- | --- |
 | Text-to-video, image-to-video, start/end-frame chains | Seedance 2.5 | Veo when the shot needs top realism or native dialogue audio; Wan for cheap drafts and many takes |
 | Reference-to-video (several identity or spatial refs) | Seedance reference mode | Veo or Wan reference modes when Seedance rejects the reference set |
+| Copy a reference clip's camera move or effect (e.g. a 3D black-bar pop-out hook) | Seedance 2.5 reference mode: the rights-safe effect clip as `@Video1` (motion and effect only), the subject still as `@Image1`, prompt `recreate @Video1's move and effect with @Image1; keep everything else` | After two failed adherence checks, generate a plate and composite the effect in HyperFrames |
 | Avatar, talking head, lipsync | The listing `catalog_search("talking head lipsync")` ranks first | Fallback `pruna/p-video-avatar`, `bytedance/omnihuman-1-5`, `falai/fabric-1-0`, `falai/pixverse-lipsync` via `belt` |
 | Natural-language video edit | The listing `catalog_search("edit video with a text instruction")` ranks first | Fallback `alibaba/happyhorse-1-0-video-edit` via `belt` |
 | Video upscale | The listing `catalog_search("upscale video")` ranks first | Fallback `falai/topaz-video-upscaler` via `belt` |
@@ -52,6 +53,11 @@ treg_route(job) -> catalog_search(<what you want to do, not a vendor>)
 Observed reference price: a 6 s Seedance 2.5 clip at 480p cost about USD 0.71
 via treg on 2026-10-12. Use it only to sanity-check a live `catalog_get`
 quote, never instead of one.
+
+Not on treg (searched 2026-10-14): Google Flow's Omni Flash is a credit-billed
+web UI, so Flow stays an operator-run manual route and agent runs use the treg
+Veo 3.1 or Seedance 2.5 listing. Higgsfield (MCP or app) bills its own credits;
+use it only as a fallback with a recorded reason.
 
 ## Fallback route: inference.sh (`belt`)
 

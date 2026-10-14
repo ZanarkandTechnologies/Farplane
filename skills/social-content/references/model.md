@@ -22,6 +22,18 @@ MethodSelection(artifact, methods, constraints) :=
 | Artifact | Platform | Format | Message job | Copy payload | Asset carrier | Publish boundary | Proof |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 
+## Funnel Tiers
+
+Stage is the funnel tier, and the tier picks the format, the CTA and the metric:
+
+| Tier | Job | Formats | Judge by |
+| --- | --- | --- | --- |
+| Top | Reach new people | Rankings, tier lists, Q&As anyone can watch | Reach |
+| Middle | Turn viewers into followers | Lessons, personal story, behind the scenes | Follows |
+| Bottom | Turn followers into leads | Niche, deep technical, offer and proof | Leads or DMs, never views |
+
+A content calendar with one tier only is flagged.
+
 ## Method Set
 
 ```text

@@ -17,6 +17,7 @@ Shared workflow for video artifact domain skills such as marketing videos, expla
 | Still images, posters, portraits, storyboard panels, cutouts, image upscale | [ai-image](../../ai-image/SKILL.md) |
 | Model-native video, image-to-video, avatar/lipsync, video edit, upscale, voice, music, SFX | [ai-video](../SKILL.md) |
 | Composition, overlays, captions, charts, deterministic timing, final render | HyperFrames (`/hyperframes`) |
+| Photo-to-collage animation ("Vox style": halftone cut-out, torn paper, stamps, map fill, parallax layers) | storyboard [documentary reel](../../storyboard/references/documentary-reel.md) and [newsprint treatment](../../storyboard/references/newsprint-treatment.md), design-styles `mixed-media`, ai-image cutout, then HyperFrames layers; not a model-native clip |
 | Script, scenes, shot list, asset inventory | [storyboard](../../storyboard/SKILL.md) |
 | Website, landing page, or campaign asset set | [web-surface integration](web-surface-integration.md) |
 
