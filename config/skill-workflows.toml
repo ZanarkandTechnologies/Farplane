@@ -122,9 +122,9 @@ skills = ["ai-image", "design-styles"]
 [specialists.video-producer]
 label = "Video Producer"
 department = "marketing"
-deliverable = "a generated clip, avatar clip or audio file"
+deliverable = "a generated clip, avatar clip, audio file or Vox-style reel"
 primary = "ai-video"
-skills = ["ai-video"]
+skills = ["ai-video", "vox-video"]
 
 [specialists.ads-manager]
 label = "Ads Manager"

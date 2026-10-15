@@ -1,0 +1,108 @@
+{
+  "skill_name": "vox-video",
+  "evals": [
+    {
+      "id": "vox_video_explainer_verified_narration_01",
+      "prompt": "Make a Vox-style explainer, about 15 seconds, vertical: why robots still can't fold laundry. Keep it punchy.",
+      "expected_output": "Infers explainer mode, faceless, 9:16 without asking; does at most three quick searches and records sourced facts (e.g. Laundroid $16,000, bankrupt 2019; Moravec 1988; cloth changes shape on every grab); writes a cold-open script sized near 2.8 words per second with no call to action; records one plain-text TTS take and transcribes it before any video spend, listing must-hear facts; cuts clip windows on sentence boundaries; generates silent Veo clips with no text in frame; inspects raw contact sheets; assembles with scripts/vox_assemble.py; returns final.mp4 with a passing transcript check and logs spend.",
+      "files": [
+        "references/craft.md",
+        "scripts/vox_assemble.py"
+      ],
+      "assertions": [
+        "Does not ask about mode, aspect or faceless when the request already implies them",
+        "Records and transcribes narration before generating any video clip",
+        "Never uses the video model's own narration or on-screen text",
+        "Sets generate_audio false and forbids text in the clip prompts",
+        "Runs vox_assemble.py with must_hear facts and reports the transcript status",
+        "Adds no call to action to the explainer"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Explainer narrated by one checked voice",
+          "tags": [
+            "skill",
+            "vox-video",
+            "explainer"
+          ],
+          "notes": "From the 15 Oct 2026 bake-off: baked Veo narration said $6,000 for $16,000."
+        }
+      }
+    },
+    {
+      "id": "vox_video_product_ad_start_frame_02",
+      "prompt": "Vox ad for our cooling pillow, here's the product photo (pillow.png). 20 seconds, for Reels. Use my face as the host, here's a selfie (me.jpg).",
+      "expected_output": "Ad mode with the pain-first register and one offer line; mascot mode with the operator as host: notes consent from the operator's own request, keeps the person photographic inside a torn paper rim (composited with ai-image), never redrawn; uses the product photo to make start frames with ai-image for clips where the product appears and passes them as the start image; still forbids model-drawn text; quotes price before spend; narration from one TTS voice, verified before video spend.",
+      "files": [
+        "references/craft.md"
+      ],
+      "assertions": [
+        "Keeps the real person photographic in a paper cut-out, never illustrated",
+        "Records consent for the likeness before generating",
+        "Passes product start frames only to clips where the product appears",
+        "Quotes the price before each paid call",
+        "Ends with one offer line, not a feature list",
+        "Does not reject the consented mascot's photographic cut-out at the clip inspection"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Product ad with a real-person host",
+          "tags": [
+            "skill",
+            "vox-video",
+            "ad",
+            "mascot"
+          ],
+          "notes": "Mascot and product handling adapted from the upstream skill's ideas."
+        }
+      }
+    },
+    {
+      "id": "vox_video_boundary_landing_page_03",
+      "prompt": "Make our landing page look like a Vox explainer, paper collage style.",
+      "expected_output": "Recognises this is a page style, not a video: does not run the video workflow or spend on clips; routes to visual-design (and ai-image or design-styles mixed-media for assets).",
+      "files": [],
+      "assertions": [
+        "Does not generate video or narration",
+        "Routes the request to visual-design"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Vox page style routes away",
+          "tags": [
+            "skill",
+            "vox-video",
+            "boundary"
+          ],
+          "notes": "The landing-page Vox work in malaysia-ai-landing used visual-design."
+        }
+      }
+    },
+    {
+      "id": "vox_video_misheard_fact_rerecord_04",
+      "prompt": "Vox explainer, 15 s vertical: why a $16,000 laundry robot went bust. Here is the narration take we already recorded; whisper heard 'A $6,000 laundry robot went bankrupt.' Go ahead and make the clips.",
+      "expected_output": "Treats the misheard figure as a failed narration check: does not generate any video yet; lists $16,000 in must_hear; re-records the narration with plain script text and transcribes again until the figure is heard; only then sizes windows and generates silent clips; plan.json carries script and must_hear so vox_assemble.py would fail a $6,000 take.",
+      "files": [
+        "scripts/vox_assemble.py",
+        "references/recipes.md"
+      ],
+      "assertions": [
+        "Spends nothing on video while a must-hear fact is wrong",
+        "Re-records the narration and re-transcribes it",
+        "Puts $16,000 in must_hear in plan.json",
+        "Does not fall back to the video model's own narration"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Misheard figure blocks video spend",
+          "tags": [
+            "skill",
+            "vox-video",
+            "hard"
+          ],
+          "notes": "The bake-off's upstream arm shipped '$6,000' for $16,000."
+        }
+      }
+    }
+  ]
+}
