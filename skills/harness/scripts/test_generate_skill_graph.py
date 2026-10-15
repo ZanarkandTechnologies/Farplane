@@ -354,7 +354,7 @@ class CapabilityProjectionTests(unittest.TestCase):
         repo_root = Path(__file__).resolve().parents[3]
         departments = generate_skill_graph.load_skill_departments(repo_root)
         specialists = generate_skill_graph.load_skill_specialists(repo_root, departments)
-        rows = generate_skill_graph.load_registry(repo_root / "docs/skills/registry.jsonl")
+        rows = generate_skill_graph.load_registry(repo_root / "skills/registry.jsonl")
         graph = generate_skill_graph.build_capability_graph(
             rows, department_labels=departments, specialists=specialists
         )

@@ -31,7 +31,7 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
     def test_resolves_skill_rollout_payload_for_ui(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            registry = root / "docs" / "skills" / "registry.jsonl"
+            registry = root / "skills" / "registry.jsonl"
             intelligence = root / ".farplane" / "generated" / "graphs" / "skill-template-intelligence.json"
             write_jsonl(
                 registry,
@@ -138,7 +138,7 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
     def test_run_scan_prints_json_payload(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            registry = root / "docs" / "skills" / "registry.jsonl"
+            registry = root / "skills" / "registry.jsonl"
             intelligence = root / ".farplane" / "generated" / "graphs" / "skill-template-intelligence.json"
             write_jsonl(registry, [])
             write_json(
@@ -169,7 +169,7 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
     def test_missing_intelligence_reports_clean_error(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            registry = root / "docs" / "skills" / "registry.jsonl"
+            registry = root / "skills" / "registry.jsonl"
             write_jsonl(registry, [])
 
             with self.assertRaises(rollout.SkillRolloutError) as raised:

@@ -112,7 +112,7 @@ CONSOLIDATE_SKILL_TEXT = """\
 # Consolidate
 
 Load the Agent Kernel inventory at docs/systems/agent-kernel.md and apply the
-Feature Fidelity Gate in docs/templates/global-agents-qa-checklist.md. Keep
+Feature Fidelity Gate in skills/harness/references/global-agents-qa-checklist.md. Keep
 every documented behavior and every surviving or added AGENTS section. Run
 python3 bin/validators/check_harness_invariants.py.
 """
@@ -162,7 +162,7 @@ class CheckHarnessInvariantsTest(unittest.TestCase):
         write_file(root / "runtimes/AGENTS.md", GLOBAL_AGENTS_TEXT)
         write_file(root / "docs/systems/agent-kernel.md", AGENT_KERNEL_TEXT)
         write_file(
-            root / "docs/templates/global-agents-qa-checklist.md",
+            root / "skills/harness/references/global-agents-qa-checklist.md",
             GLOBAL_AGENTS_QA_TEXT,
         )
         write_file(root / "skills/doc-advisor/references/consolidate.md", CONSOLIDATE_SKILL_TEXT)

@@ -74,9 +74,9 @@ class RenderSkillProfilesTests(unittest.TestCase):
     def test_desk_naming_unknown_skill_blocks_render(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
-            (root / "docs/skills").mkdir(parents=True)
+            (root / "skills").mkdir(parents=True)
             (root / "config").mkdir()
-            (root / "docs/skills/registry.jsonl").write_text('{"name":"known"}\n')
+            (root / "skills/registry.jsonl").write_text('{"name":"known"}\n')
             (root / "config/skill-departments.toml").write_text('[departments]\nops = "Ops"\n')
             (root / "config/skill-workflows.toml").write_text(
                 '[specialists.example]\nlabel = "Example"\ndepartment = "ops"\ndeliverable = "a thing"\n'

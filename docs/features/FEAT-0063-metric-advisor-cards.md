@@ -10,7 +10,7 @@ tags:
   - sys-0007
 refs:
   - skills/goal-advisor/SKILL.md
-  - docs/skills/README.md
+  - skills/harness/references/skill-system/README.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
   - skills/goal-advisor/references/metrics.md
@@ -23,7 +23,7 @@ category: skills
 public: true
 surfaces:
   - skills/goal-advisor/references/metrics.md
-  - docs/skills/README.md
+  - skills/harness/references/skill-system/README.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
   - bin/core/farplane_project_snapshot.py
@@ -139,7 +139,7 @@ Legend:
 Owner surfaces:
 
 - `skills/goal-advisor/references/metrics.md`
-- `docs/skills/README.md`
+- `skills/harness/references/skill-system/README.md`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 - `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
 

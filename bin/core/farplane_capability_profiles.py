@@ -190,7 +190,7 @@ def _parse_profile_ref(value: str) -> tuple[Literal["global", "project"], str]:
 
 def _known_skill_ids(codex_home: Path = DEFAULT_CODEX_HOME) -> list[str]:
     skill_ids: set[str] = set()
-    registry_path = CORE_ROOT / "docs" / "skills" / "registry.jsonl"
+    registry_path = CORE_ROOT / "skills" / "registry.jsonl"
     try:
         for line in registry_path.read_text(encoding="utf-8").splitlines():
             row = json.loads(line)

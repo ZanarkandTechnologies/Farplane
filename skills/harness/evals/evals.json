@@ -112,12 +112,12 @@
     {
       "id": "skill_maintenance_registry_sync_01",
       "prompt": "In a sandbox copy of skills/harness/tests/fixtures/bad-skill-repo, assume we shortened bad skill descriptions and changed frontmatter. What does harness maintain mode need to do before saying the fixture repair is done?",
-      "expected_output": "Keeps repair and validation inside the sandbox copy rather than the real skill tree; Runs or names the standard skill-system validation command; Regenerates docs/skills/registry.jsonl rather than hand-editing it; Checks frontmatter description shape and template version promises; Reports any missing checklist or template-version findings honestly; Does not claim completion until validation passes or the blocker is named",
+      "expected_output": "Keeps repair and validation inside the sandbox copy rather than the real skill tree; Runs or names the standard skill-system validation command; Regenerates skills/registry.jsonl rather than hand-editing it; Checks frontmatter description shape and template version promises; Reports any missing checklist or template-version findings honestly; Does not claim completion until validation passes or the blocker is named",
       "files": [],
       "assertions": [
         "Keeps repair and validation inside the sandbox copy rather than the real skill tree",
         "Runs or names the standard skill-system validation command",
-        "Regenerates docs/skills/registry.jsonl rather than hand-editing it",
+        "Regenerates skills/registry.jsonl rather than hand-editing it",
         "Checks frontmatter description shape and template version promises",
         "Reports any missing checklist or template-version findings honestly",
         "Does not claim completion until validation passes or the blocker is named"

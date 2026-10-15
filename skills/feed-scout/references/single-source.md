@@ -14,7 +14,7 @@ scout_source(source, decision_goal?) -> source run + SRC-* record + decision mat
 ## Steps
 
 1. **Bind identity and dedupe.** Record URL or path, title, creator, type,
-   visible date, and visibility. Search `docs/sources/registry.jsonl` and
+   visible date, and visibility. Search `farplane/sources/registry.jsonl` and
    `.farplane/feed-scout/runs/` by canonical URL and key, URL hash, title,
    slug, and linked artifacts; reuse a matching `SRC-*` record and run.
 2. **Extract.** Unless content was supplied, run

@@ -787,7 +787,7 @@ def problem_metric_ids(harness: dict[str, Any]) -> set[str]:
 
 def project_skill_ids(root: Path) -> set[str]:
     ids: set[str] = set()
-    registry = root / "docs" / "skills" / "registry.jsonl"
+    registry = root / "skills" / "registry.jsonl"
     if registry.exists():
         for line in registry.read_text(encoding="utf-8").splitlines():
             try:

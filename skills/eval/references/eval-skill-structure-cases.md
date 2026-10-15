@@ -9,7 +9,7 @@ updated: 2026-06-11
 
 Use this reference only when converting skill-structure standards into eval
 cases for the `eval` skill. The general structure standard lives in
-[`docs/skills/best-practices.md`](../../../docs/skills/best-practices.md#structure-optimization).
+[`skills/harness/references/skill-system/best-practices.md`](../../../skills/harness/references/skill-system/best-practices.md#structure-optimization).
 
 ## Review Skill Upgrade Candidate
 

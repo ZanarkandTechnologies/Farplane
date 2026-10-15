@@ -10,9 +10,9 @@ tags:
   - sys-0006
 refs:
   - docs/features/FEAT-0064-skill-signals.md
-  - docs/skills/system.md
+  - skills/harness/references/skill-system/system.md
   - farplane/automations/
-  - docs/skills/registry.jsonl
+  - skills/registry.jsonl
   - docs/farplane-framework/lifecycle.md
   - skills/harness/graph/README.md
   - skills/harness/SKILL.md
@@ -22,12 +22,12 @@ category: skills
 public: true
 surfaces:
   - docs/features/FEAT-0064-skill-signals.md
-  - docs/skills/system.md
+  - skills/harness/references/skill-system/system.md
   - farplane/automations/
-  - docs/skills/registry.jsonl
+  - skills/registry.jsonl
 source_refs:
   - docs/farplane-framework/lifecycle.md
-  - docs/skills/system.md
+  - skills/harness/references/skill-system/system.md
   - skills/harness/graph/README.md
 external_refs: []
 evidence_refs:
@@ -133,7 +133,7 @@ flowchart LR
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   usage["Skill usage / signal evidence"]:::keep
-  registry["docs/skills/registry.jsonl<br/>graph refs"]:::keep
+  registry["skills/registry.jsonl<br/>graph refs"]:::keep
   heat["graph heat<br/>direct + composition"]:::changed
   burden["maintenance burden<br/>bloat, stale QA, missing evals"]:::changed
   taste["harness input decisions<br/>skill + ticket context"]:::changed
@@ -156,14 +156,14 @@ Gray is evidence input, amber is signal interpretation, green is the maintenance
 Owner surfaces:
 
 - `docs/features/FEAT-0064-skill-signals.md`
-- `docs/skills/system.md`
+- `skills/harness/references/skill-system/system.md`
 - `farplane/automations/`
-- `docs/skills/registry.jsonl`
+- `skills/registry.jsonl`
 
 Source context:
 
 - `docs/farplane-framework/lifecycle.md`
-- `docs/skills/system.md`
+- `skills/harness/references/skill-system/system.md`
 - `skills/harness/graph/README.md`
 
 Evidence:

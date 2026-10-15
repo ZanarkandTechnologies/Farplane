@@ -318,7 +318,7 @@ def resolve_adoption_stats(
     if not isinstance(global_manifest, dict):
         raise AdoptionError(f"invalid_manifest_shape:{global_manifest_path}:expected_object")
     feature_path = feature_registry or standard_root / "docs" / "features" / "registry.jsonl"
-    template_path = template_registry or standard_root / "docs" / "templates" / "registry.jsonl"
+    template_path = template_registry or standard_root / "config" / "template-registry.jsonl"
     features = load_feature_registry(feature_path)
     templates = load_template_registry(template_path)
     roots = unique_paths(project_roots)

@@ -408,7 +408,7 @@ def compile_harness_health(
     graph_path = graph_root / "skill-graph.json"
     docs_path = graph_root / "skill-docs.json"
     intelligence_path = graph_root / "skill-template-intelligence.json"
-    registry_path = standard_root / "docs" / "skills" / "registry.jsonl"
+    registry_path = standard_root / "skills" / "registry.jsonl"
     gaps: list[str] = []
     graph = load_optional(graph_path, gaps)
     docs = load_optional(docs_path, gaps)

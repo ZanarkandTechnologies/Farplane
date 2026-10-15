@@ -29,9 +29,10 @@ ROOT_TEXT_FILES = {"AGENTS.md", "ARCHITECTURE.md", "README.md"}
 DEFAULT_SCAN_PREFIXES = (
     "docs/features/",
     "docs/fundamentals/",
-    "docs/skills/",
-    "docs/sources/",
     "docs/systems/",
+    "farplane/sources/",
+    "skills/harness/references/skill-system/",
+    "skills/harness/templates/",
 )
 SKIP_FILE_PREFIXES = (
     ".git/",

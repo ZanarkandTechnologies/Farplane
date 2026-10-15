@@ -131,7 +131,7 @@ owner's page.
 
 Pages of one role share a shape, kept as templates in
 `docs/farplane-framework/entity-templates/` and registered in
-`docs/templates/registry.jsonl`. `creator.md` is the creator page: a lede, the
+`config/template-registry.jsonl`. `creator.md` is the creator page: a lede, the
 creator's top ideas under fixed `### ` themes in `## Claims` and `## Stories`,
 capped at 100 claims and 50 stories, with each line's citations counting how
 often they repeat it. The YouTube bridge builds new creator pages from it and

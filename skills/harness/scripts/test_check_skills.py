@@ -10,8 +10,8 @@ import check_skills
 
 
 def write_registry(repo: Path, name: str, *, version: str = "0.1.0") -> None:
-    registry_dir = repo / "docs" / "skills"
-    registry_dir.mkdir(parents=True)
+    registry_dir = repo / "skills"
+    registry_dir.mkdir(parents=True, exist_ok=True)
     row = {
         "name": name,
         "path": f"skills/{name}/SKILL.md",
@@ -23,13 +23,13 @@ def write_registry(repo: Path, name: str, *, version: str = "0.1.0") -> None:
 
 def write_skill(repo: Path, name: str, body: str) -> None:
     skill_dir = repo / "skills" / name
-    skill_dir.mkdir(parents=True)
+    skill_dir.mkdir(parents=True, exist_ok=True)
     (skill_dir / "SKILL.md").write_text(body, encoding="utf-8")
 
 
 def write_skill_template(repo: Path, version: str = "0.6.2") -> None:
-    template_dir = repo / "docs" / "skills" / "templates"
-    template_dir.mkdir(parents=True)
+    template_dir = repo / "skills" / "harness" / "templates"
+    template_dir.mkdir(parents=True, exist_ok=True)
     (template_dir / "SKILL_TEMPLATE.md").write_text(
         f'---\ntemplate_id: skill-template\ntemplate_version: "{version}"\n---\n',
         encoding="utf-8",
@@ -144,7 +144,7 @@ class CheckSkillsTemplateStructureTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             check_skills.REPO_ROOT = repo
-            check_skills.SKILL_TEMPLATE_PATH = repo / "docs/skills/templates/SKILL_TEMPLATE.md"
+            check_skills.SKILL_TEMPLATE_PATH = repo / "skills/harness/templates/SKILL_TEMPLATE.md"
             write_skill_template(repo)
             write_skill(
                 repo,
@@ -161,7 +161,7 @@ class CheckSkillsTemplateStructureTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             check_skills.REPO_ROOT = repo
-            check_skills.SKILL_TEMPLATE_PATH = repo / "docs/skills/templates/SKILL_TEMPLATE.md"
+            check_skills.SKILL_TEMPLATE_PATH = repo / "skills/harness/templates/SKILL_TEMPLATE.md"
             write_skill_template(repo)
             write_skill(
                 repo,

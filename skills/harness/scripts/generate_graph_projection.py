@@ -106,7 +106,7 @@ def main() -> int:
     parser.add_argument("--projection", help="projection profile name")
     parser.add_argument("--list", action="store_true", help="list known projection profiles")
     parser.add_argument("--repo-root", default=".")
-    parser.add_argument("--registry", default="docs/skills/registry.jsonl")
+    parser.add_argument("--registry", default="skills/registry.jsonl")
     parser.add_argument("--out")
     parser.add_argument("--js-out")
     parser.add_argument("--docs-out")

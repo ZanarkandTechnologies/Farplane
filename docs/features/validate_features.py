@@ -25,7 +25,7 @@ FEATURE_REGISTRY = FEATURE_ROOT / "registry.jsonl"
 SYSTEM_REGISTRY = SYSTEM_ROOT / "registry.jsonl"
 FEATURE_REGISTRY_DOC = FEATURE_ROOT / "registry.md"
 SYSTEM_REGISTRY_DOC = SYSTEM_ROOT / "registry.md"
-SOURCE_REGISTRY = ROOT / "docs" / "sources" / "registry.jsonl"
+SOURCE_REGISTRY = ROOT / "farplane" / "sources" / "registry.jsonl"
 
 FEATURE_FIELDS = {
     "id",
@@ -101,7 +101,6 @@ ACTIVE_SPEC_REF_SCAN_PATHS = [
     ROOT / "skills",
     ROOT / "docs" / "features",
     ROOT / "docs" / "systems",
-    ROOT / "docs" / "skills",
     ROOT / "docs" / "farplane-framework",
     ROOT / "farplane",
 ]

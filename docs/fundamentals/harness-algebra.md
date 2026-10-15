@@ -9,7 +9,7 @@ refs:
   - docs/fundamentals/prompt-engineering.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - docs/features/FEAT-0032-goal-advisor-execution-compilation.md
-  - docs/skills/README.md
+  - skills/harness/references/skill-system/README.md
   - runtimes/AGENTS.md
   - skills/harness/SKILL.md
   - skills/goal-advisor/SKILL.md
@@ -630,7 +630,7 @@ docs/fundamentals/*.md     = conceptual model and doctrine
 docs/features/FEAT-*.md               = buildable contracts
 docs/MEMORY.md             = durable invariants
 docs/features/registry     = feature inventory
-docs/skills/registry       = skill inventory
+skills/registry       = skill inventory
 issue body ticket sections = task contract and proof target
 issue ## Goal program      = loop configuration when needed
 issue Goal turn comments   = append-only observed progress

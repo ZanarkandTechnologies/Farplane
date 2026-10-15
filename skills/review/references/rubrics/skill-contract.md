@@ -71,10 +71,10 @@ templates, or skill maintenance rules changed.
 
 - [ ] `source-diff-reviewed`: Source `SKILL.md` and relevant references or
   templates were inspected, not only generated registry rows.
-- [ ] `best-practices-checked`: `docs/skills/best-practices.md` was checked
+- [ ] `best-practices-checked`: `skills/harness/references/skill-system/best-practices.md` was checked
   when checklist shape, reference placement, or repeatability changed.
 - [ ] `route-appropriate`: The chosen reasoning route matched
-  `docs/skills/best-practices.md#advice-and-proof-routing`; standards,
+  `skills/harness/references/skill-system/best-practices.md#advice-and-proof-routing`; standards,
   compounding surfaces, behavioral claims, and evidence gaps used the right
   combination of first-principles reasoning, `advise` (including requested
   `ensemble=auto|max` coverage),
@@ -101,8 +101,8 @@ path is `generic`; important domain skills require `differentiated`. Claim
 
 - Source `SKILL.md` diff
 - Relevant reference/template diffs
-- `docs/skills/best-practices.md`
-- `docs/skills/registry.jsonl` and generated graph/plugin sync outputs
+- `skills/harness/references/skill-system/best-practices.md`
+- `skills/registry.jsonl` and generated graph/plugin sync outputs
 - Skill-system validator output
 - Ticket `Done / Proof` and review artifacts
 

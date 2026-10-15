@@ -25,7 +25,7 @@ external_refs:
   - https://www.youtube.com/watch?v=2zhchG0r6iI
 evidence_refs:
   - skills/feed-scout/references/single-source.md
-  - docs/sources/registry.jsonl
+  - farplane/sources/registry.jsonl
   - docs/HISTORY.md
 known_limits: Manual scorecard and dedupe workflow only; no cron polling, OpenClaw integration, or async Codex benchmark runner.
 metrics:
@@ -98,7 +98,7 @@ flowchart TD
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   trigger["Trigger<br/>external source or inspiration target"]:::keep
-  owner["Owner surface<br/>skills/feed-scout<br/>docs/sources/registry.jsonl"]:::changed
+  owner["Owner surface<br/>skills/feed-scout<br/>farplane/sources/registry.jsonl"]:::changed
   readers["Files and fields read<br/>source URL, extraction question<br/>score basis, owner-surface candidates"]:::keep
   decision["Decision record<br/>adopt, adapt, reject, or defer<br/>with rationale"]:::changed
   artifact["Created artifact/evidence<br/>source record, scout report<br/>or ticket handoff"]:::added
@@ -133,7 +133,7 @@ External context:
 Evidence:
 
 - `skills/feed-scout/references/single-source.md`
-- `docs/sources/registry.jsonl`
+- `farplane/sources/registry.jsonl`
 - `docs/HISTORY.md`
 
 ## Proof And Quality

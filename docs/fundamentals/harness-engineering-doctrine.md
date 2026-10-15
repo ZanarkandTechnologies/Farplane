@@ -8,7 +8,7 @@ refs:
   - docs/fundamentals/harness-algebra.md
   - docs/features/FEAT-0032-goal-advisor-execution-compilation.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
-  - docs/skills/README.md
+  - skills/harness/references/skill-system/README.md
 ---
 
 # Harness Engineering Doctrine

@@ -63,6 +63,37 @@ class DocumentFrontmatterLintTests(unittest.TestCase):
         self.assertEqual(checked, {"template": 1})
         self.assertEqual(errors, [])
 
+    def test_moved_skill_templates_keep_template_frontmatter(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            folder = root / "skills" / "harness" / "templates"
+            folder.mkdir(parents=True)
+            (folder / "SKILL_TEMPLATE.md").write_text(
+                "---\n"
+                "template_id: skill-template\n"
+                'template_version: "0.1.0"\n'
+                "feature_refs:\n"
+                "  - FEAT-0022\n"
+                "consumer_scope: skill\n"
+                "---\n",
+                encoding="utf-8",
+            )
+            (folder / "README.md").write_text(
+                "---\n"
+                "title: Templates\n"
+                "status: active\n"
+                "owner: harness\n"
+                "created_at: 2026-01-01\n"
+                "updated_at: 2026-01-01\n"
+                "---\n",
+                encoding="utf-8",
+            )
+
+            checked, errors = check_doc_frontmatter.lint_docs_frontmatter(root)
+
+        self.assertEqual(checked, {"narrative": 1, "template": 1})
+        self.assertEqual(errors, [])
+
     def test_rejects_duplicate_frontmatter_keys(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

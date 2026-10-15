@@ -65,7 +65,7 @@ makes one relevant.
   template, use `harness` place mode to select the smallest owner surface. Root
   prompt text is the last lever, not the default.
 - Before changing this file or `runtimes/AGENTS.md`, apply
-  `docs/templates/global-agents-qa-checklist.md`. Preserve a concrete
+  `skills/harness/references/global-agents-qa-checklist.md`. Preserve a concrete
   before/after/example and name the destination of removed behavior.
 - Put reusable procedure in its skill, task-local decisions and proof in the
   ticket, cross-surface policy in its canonical doc, and deterministic checks
@@ -129,7 +129,7 @@ writes or reads it (usually a skill), not a new top-level folder.
 | `docs/` | Current contracts and references. | tracked |
 | `runtimes/<name>/` | What one runtime (`codex`, `claude`) needs beyond the shared sources, e.g. Codex `default.rules`. | tracked |
 | `runtimes/AGENTS.md` | Install-time global contract shared by both runtimes. | tracked |
-| `farplane/` | This project's committed config only: harness, metrics, bindings, automations. Bunker strategy docs (`farplane/strategy/`) belong only in private business repos, never here. | tracked |
+| `farplane/` | This project's committed config only: harness, metrics, bindings, automations, source registry (`farplane/sources/`). Bunker strategy docs (`farplane/strategy/`) belong only in private business repos, never here. | tracked |
 | `tickets/` | Issue templates and the frozen legacy archive. | tracked |
 | `.agents/skills/` | Project-local skills (Codex convention). | tracked |
 | `.farplane/` | Everything generated or private: runs, output, scratch, caches, media. | ignored |

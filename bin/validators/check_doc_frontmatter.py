@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lint path-owned document frontmatter contracts in docs/."""
+"""Lint path-owned document frontmatter contracts in docs/ and moved doc owners."""
 
 from __future__ import annotations
 
@@ -9,6 +9,14 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
+# Documents that left docs/ but keep their path-owned frontmatter contracts.
+EXTRA_DOC_GLOBS = (
+    "skills/harness/references/skill-system/*.md",
+    "skills/harness/references/global-agents-qa-checklist.md",
+    "skills/harness/templates/*.md",
+    "skills/report-gen/templates/human-report.md",
+    "farplane/sources/*.md",
+)
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
@@ -24,7 +32,10 @@ def lint_docs_frontmatter(root: Path) -> tuple[dict[str, int], list[str]]:
 
     checked: dict[str, int] = {}
     errors: list[str] = []
-    for path in sorted((root / "docs").rglob("*.md")):
+    paths = {*(root / "docs").rglob("*.md")}
+    for pattern in EXTRA_DOC_GLOBS:
+        paths.update(root.glob(pattern))
+    for path in sorted(paths):
         try:
             metadata = parse_markdown_frontmatter(path)
         except (FrontmatterError, OSError, UnicodeDecodeError) as exc:

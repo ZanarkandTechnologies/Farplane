@@ -91,7 +91,7 @@ returns: strategy or updated doc, checks run, loss check, review route, remainin
   exact row from a log or append-only artifact, bind an archive or canonical
   source that keeps its exact wording; none -> block the deletion. For
   `AGENTS.md` or `runtimes/AGENTS.md`, apply the Feature Fidelity Gate in
-  `docs/templates/global-agents-qa-checklist.md` against
+  `skills/harness/references/global-agents-qa-checklist.md` against
   `docs/systems/agent-kernel.md` and run
   `python3 bin/validators/check_harness_invariants.py`. Load
   [consolidate](references/consolidate.md) for the value function, response

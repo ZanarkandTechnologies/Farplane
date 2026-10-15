@@ -18,7 +18,7 @@ fails: invents version fields; edits JSONL registry rows by hand
 ## Use When
 
 - Adding or changing YAML front matter.
-- Editing `docs/features/*`, `docs/systems/*`, `docs/templates/*`, or skill
+- Editing `docs/features/*`, `docs/systems/*`, `skills/harness/templates/*`, or skill
   template metadata.
 - References, status, owner, feature IDs, system IDs, source refs, or registry
   rows may change.

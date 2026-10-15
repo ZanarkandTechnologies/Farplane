@@ -47,7 +47,7 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
     def test_emits_requested_skill_with_registry_and_producer_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            registry_path = project_root / "docs" / "skills" / "registry.jsonl"
+            registry_path = project_root / "skills" / "registry.jsonl"
             registry_path.parent.mkdir(parents=True)
             registry_path.write_text(
                 json.dumps(
@@ -81,7 +81,7 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             (project_root / ".farplane").mkdir()
-            registry_path = project_root / "docs" / "skills" / "registry.jsonl"
+            registry_path = project_root / "skills" / "registry.jsonl"
             registry_path.parent.mkdir(parents=True)
             registry_path.write_text(
                 json.dumps({"name": "code-health", "source": "local"}) + "\n",
@@ -143,7 +143,7 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
     def test_invalid_registry_is_observable(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            registry_path = project_root / "docs" / "skills" / "registry.jsonl"
+            registry_path = project_root / "skills" / "registry.jsonl"
             registry_path.parent.mkdir(parents=True)
             registry_path.write_text("{invalid}\n", encoding="utf-8")
 
@@ -158,7 +158,7 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             (project_root / ".farplane").mkdir()
-            registry_path = project_root / "docs" / "skills" / "registry.jsonl"
+            registry_path = project_root / "skills" / "registry.jsonl"
             registry_path.parent.mkdir(parents=True)
             registry_path.write_text(
                 json.dumps(
@@ -206,7 +206,7 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
     def test_explicit_skill_bypasses_jev_suggestion(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            registry_path = project_root / "docs" / "skills" / "registry.jsonl"
+            registry_path = project_root / "skills" / "registry.jsonl"
             registry_path.parent.mkdir(parents=True)
             registry_path.write_text(
                 json.dumps({"name": "research", "description": "Research evidence."}) + "\n",

@@ -312,7 +312,7 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - Runtime machinery belongs in `bin/`, `hooks/hooks.json`, and runtime feature specs.
 - Reusable workflow detail belongs in `skills/*`.
 - Specialist desks belong in `config/skill-workflows.toml` `[specialists]`;
-  first-load loading rules belong in `docs/skills/README.md`, the generated
+  first-load loading rules belong in `skills/harness/references/skill-system/README.md`, the generated
   skill registry, and direct `SKILL.md` checklist links. The global template carries only the always-loaded
   skill-loading reflex.
 

@@ -34,7 +34,7 @@ from bin.core.lint.source import MarkdownFrontmatterError, parse_markdown_frontm
 REQUIRED_TEMPLATE_HEADINGS = ("Context", "Skill Signature", "Todo List", "Gotchas", "Output")
 REQUIRED_METHOD_REFERENCE_HEADINGS = ("Use When", "Inputs", "Workflow", "Output Shape", "Quality Gates", "Bad Output")
 CURRENT_METHOD_REFERENCE_VERSION = "0.1.0"
-SKILL_TEMPLATE_PATH = REPO_ROOT / "docs/skills/templates/SKILL_TEMPLATE.md"
+SKILL_TEMPLATE_PATH = REPO_ROOT / "skills/harness/templates/SKILL_TEMPLATE.md"
 CURRENT_TEMPLATE_OWNER_SKILLS = ("harness",)
 HEADING_RE = re.compile(r"^## (?P<heading>.+?)\s*$")
 TOP_LEVEL_NUMBERED_TODO_RE = re.compile(r"^\d+\. ")
@@ -88,7 +88,7 @@ def run(command: list[str]) -> None:
 def registry_summary() -> dict[str, object]:
     rows = [
         json.loads(line)
-        for line in (REPO_ROOT / "docs/skills/registry.jsonl").read_text().splitlines()
+        for line in (REPO_ROOT / "skills/registry.jsonl").read_text().splitlines()
         if line.strip()
     ]
     return {
@@ -192,7 +192,7 @@ def marker_counts(text: str) -> tuple[int, int, int]:
 def template_structure_errors(current_version: str) -> list[str]:
     rows = [
         json.loads(line)
-        for line in (REPO_ROOT / "docs/skills/registry.jsonl").read_text().splitlines()
+        for line in (REPO_ROOT / "skills/registry.jsonl").read_text().splitlines()
         if line.strip()
     ]
     errors: list[str] = []
@@ -289,7 +289,7 @@ def template_structure_errors(current_version: str) -> list[str]:
 def validate_template_version(current_version: str, require: bool) -> int:
     rows = [
         json.loads(line)
-        for line in (REPO_ROOT / "docs/skills/registry.jsonl").read_text().splitlines()
+        for line in (REPO_ROOT / "skills/registry.jsonl").read_text().splitlines()
         if line.strip()
     ]
     missing = [
@@ -397,7 +397,7 @@ def skill_template_target_rows(rows: list[dict[str, object]], template_id: str) 
 def validate_skill_template_rollout(template_id: str, current_version: str, require: bool) -> int:
     rows = [
         json.loads(line)
-        for line in (REPO_ROOT / "docs/skills/registry.jsonl").read_text().splitlines()
+        for line in (REPO_ROOT / "skills/registry.jsonl").read_text().splitlines()
         if line.strip()
     ]
     targets = skill_template_target_rows(rows, template_id)
@@ -456,7 +456,7 @@ def main() -> int:
     parser.add_argument(
         "--write",
         action="store_true",
-        help="regenerate docs/skills/registry.jsonl before checking it",
+        help="regenerate skills/registry.jsonl before checking it",
     )
     parser.add_argument(
         "--template-version",

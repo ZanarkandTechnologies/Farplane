@@ -8,10 +8,10 @@ updated_at: 2026-07-13
 
 # Template Registry
 
-`docs/templates/registry.jsonl` tracks high-impact templates whose structure can
+`config/template-registry.jsonl` tracks high-impact templates whose structure can
 materially change harness behavior or framework rollout.
 
-Use `docs/templates/global-agents-qa-checklist.md` before changing
+Use `skills/harness/references/global-agents-qa-checklist.md` before changing
 `runtimes/AGENTS.md`. It is a companion process doc, not a tracked
 template row, unless it later becomes a reusable template with consumers.
 
@@ -19,8 +19,8 @@ template row, unless it later becomes a reusable template with consumers.
 
 The registry is deliberately focused on high-leverage surfaces. The tracked
 paths are listed in `paths` in
-[config/template-registry.toml](../../config/template-registry.toml), the one
-source for that list; `docs/templates/HUMAN_REPORT_TEMPLATE.md` there has a
+[config/template-registry.toml](../../../config/template-registry.toml), the one
+source for that list; `skills/report-gen/templates/human-report.md` there has a
 prototype consumer only.
 
 Each tracked template declares:
@@ -56,7 +56,7 @@ The rollout report lives in
 `.farplane/generated/graphs/skill-template-intelligence.json` under
 `template_rollout_summary` and `template_rollout`.
 
-`HUMAN_REPORT_TEMPLATE.md` is deliberately at prototype scope. It defines the
+`skills/report-gen/templates/human-report.md` is deliberately at prototype scope. It defines the
 shared human reading spine and proof boundary, but no live report-producing
 skill has adopted it yet. Expand `consumer_scope` and `applies_to` only after a
 representative prototype passes review and a rollout wave is accepted.

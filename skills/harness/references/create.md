@@ -16,8 +16,8 @@ node-by-node contract, the book-grounded branch, and the dry-run output.
 Use this skill to create a new stable reusable workflow. If a package or owner
 already exists, use harness maintain mode. Read the target owner
 area, its registry neighbors, and the relevant parts
-of [skill system](../../../docs/skills/system.md) and
-[skill best practices](../../../docs/skills/best-practices.md) before editing.
+of [skill system](skill-system/system.md) and
+[skill best practices](skill-system/best-practices.md) before editing.
 Update an existing owner instead of creating a duplicate skill.
 
 Keep every edited `skills/**/SKILL.md` at or below 200 physical lines. Split
@@ -98,7 +98,7 @@ returns: changed files, validation evidence, and review result or blocker
 
 ## Templates
 
-Use [skill package template](../../../docs/skills/templates/SKILL_TEMPLATE.md) for
+Use [skill package template](../templates/SKILL_TEMPLATE.md) for
 new skills and the method reference template linked above for reusable methods.
 Standalone package helpers remain available under `scripts/` when a concrete
 non-Farplane package artifact is required.
@@ -132,9 +132,9 @@ behavior_proof: concrete positive example or eval row, never book recall
 
 ## Reference Map
 
-- [skill system](../../../docs/skills/system.md) — metadata, desks, registry, and
+- [skill system](skill-system/system.md) — metadata, desks, registry, and
   todo-link contracts; read for every structural update.
-- [skill best practices](../../../docs/skills/best-practices.md) — placement,
+- [skill best practices](skill-system/best-practices.md) — placement,
   repeatability, examples, and review; read the relevant anchored section.
 - [skill-contract rubric](../../review/references/rubrics/skill-contract.md) — apply
   before readiness to node execution, edge, calibration, proof, and ownership.

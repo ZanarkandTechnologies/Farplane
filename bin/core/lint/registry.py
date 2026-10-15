@@ -85,7 +85,6 @@ def build_registry() -> LintRegistry:
     )
     skill_paths = (
         "skills/**",
-        "docs/skills/**",
         "bin/core/skill_contract.py",
         "bin/validators/check_skill_*.py",
         "bin/validators/sync_skill_registry.py",
@@ -96,11 +95,17 @@ def build_registry() -> LintRegistry:
         "docs/**",
         "templates/**",
         "config/template-*.toml",
+        "config/template-registry.jsonl",
+        "farplane/sources/**",
+        "skills/harness/references/skill-system/**",
+        "skills/harness/references/global-agents-qa-checklist.md",
+        "skills/harness/templates/**",
+        "skills/report-gen/templates/human-report.md",
         "bin/validators/check_doc_*.py",
         "bin/validators/check_template_version_metadata.py",
         "bin/validators/sync_template_registry.py",
         "docs/features/validate_features.py",
-        "docs/sources/validate_sources.py",
+        "bin/validators/validate_sources.py",
         *shared_lint_paths,
     )
     eval_paths = (
@@ -149,7 +154,7 @@ def build_registry() -> LintRegistry:
             _check("document_refs", frozenset({"docs", "skills"}), doc_paths, "bin/validators/check_doc_refs.py", "--root", "."),
             _check("document_parity", frozenset({"docs"}), doc_paths, "bin/validators/check_doc_parity.py", "--root", "."),
             _check("feature_and_system_records", frozenset({"docs"}), doc_paths, "docs/features/validate_features.py"),
-            _check("source_registry", frozenset({"docs"}), doc_paths, "docs/sources/validate_sources.py"),
+            _check("source_registry", frozenset({"docs"}), doc_paths, "bin/validators/validate_sources.py"),
             _check("template_registry", frozenset({"docs", "skills"}), doc_paths, "bin/validators/sync_template_registry.py", "--root", ".", "--check"),
             _check("template_metadata", frozenset({"docs"}), doc_paths, "bin/validators/check_template_version_metadata.py", "--root", ".", "--all"),
             _check("project_contract", frozenset({"project"}), project_paths, "bin/validators/check_farplane_project_files.py", "--root", "."),

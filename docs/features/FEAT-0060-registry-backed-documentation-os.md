@@ -15,13 +15,13 @@ refs:
   - docs/features/registry.jsonl
   - docs/systems/README.md
   - docs/systems/registry.jsonl
-  - docs/templates/registry.jsonl
-  - docs/templates/README.md
+  - config/template-registry.jsonl
+  - skills/harness/templates/README.md
   - config/template-registry.toml
   - config/template-version-watch.toml
   - bin/validators/sync_template_registry.py
   - runtimes/AGENTS.md
-  - docs/skills/templates/SKILL_TEMPLATE.md
+  - skills/harness/templates/SKILL_TEMPLATE.md
   - docs/systems/documentation-os.md
   - skills/review/references/rubrics/documentation-quality.md
   - skills/doc-advisor/SKILL.md
@@ -37,13 +37,13 @@ surfaces:
   - docs/features/registry.jsonl
   - docs/systems/README.md
   - docs/systems/registry.jsonl
-  - docs/templates/registry.jsonl
-  - docs/templates/README.md
+  - config/template-registry.jsonl
+  - skills/harness/templates/README.md
   - config/template-registry.toml
   - config/template-version-watch.toml
   - bin/validators/sync_template_registry.py
   - runtimes/AGENTS.md
-  - docs/skills/templates/SKILL_TEMPLATE.md
+  - skills/harness/templates/SKILL_TEMPLATE.md
   - docs/systems/documentation-os.md
   - skills/review/references/rubrics/documentation-quality.md
   - skills/doc-advisor/SKILL.md
@@ -54,7 +54,7 @@ source_refs:
   - docs/systems/documentation-os.md
   - skills/review/references/rubrics/documentation-quality.md
   - skills/doc-advisor/references/feature-system-specs.md
-  - docs/templates/registry.jsonl
+  - config/template-registry.jsonl
 external_refs: []
 evidence_refs:
   - docs/features/validate_features.py
@@ -167,8 +167,8 @@ Owner surfaces:
 - `docs/features/registry.jsonl`
 - `docs/systems/README.md`
 - `docs/systems/registry.jsonl`
-- `docs/templates/registry.jsonl`
-- `docs/templates/README.md`
+- `config/template-registry.jsonl`
+- `skills/harness/templates/README.md`
 - `config/template-registry.toml`
 - `config/template-version-watch.toml`
 - `bin/validators/sync_template_registry.py`
@@ -188,7 +188,7 @@ Source context:
 - `docs/systems/documentation-os.md`
 - `skills/review/references/rubrics/documentation-quality.md`
 - `skills/doc-advisor/references/feature-system-specs.md`
-- `docs/templates/registry.jsonl`
+- `config/template-registry.jsonl`
 
 Evidence:
 

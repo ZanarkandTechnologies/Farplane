@@ -7,7 +7,7 @@ repository diffs.
 ## Files
 
 - `.farplane/generated/graphs/skill-graph.json`: generated graph data from
-  `docs/skills/registry.jsonl`
+  `skills/registry.jsonl`
 - `.farplane/generated/graphs/skill-graph.js`: generated local-file wrapper
   for the same graph data
 - `.farplane/generated/graphs/skill-docs.json`: generated `SKILL.md`

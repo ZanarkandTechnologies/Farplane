@@ -190,7 +190,7 @@ def skill_ids(repo_root: Path) -> list[str]:
 
 
 def skill_heat(repo_root: Path, names: set[str]) -> dict[str, dict[str, Any]]:
-    registry = repo_root / "docs" / "skills" / "registry.jsonl"
+    registry = repo_root / "skills" / "registry.jsonl"
     if not registry.exists() or not names:
         return {}
     config = generate_skill_graph.skill_heat_config_from_env()

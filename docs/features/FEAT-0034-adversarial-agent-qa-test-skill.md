@@ -10,7 +10,7 @@ tags:
   - sys-0005
 refs:
   - skills/qa
-  - docs/skills/registry.jsonl
+  - skills/registry.jsonl
   - docs/fundamentals/harness-engineering-doctrine.md
   - skills/eval
   - skills/qa/SKILL.md
@@ -23,7 +23,7 @@ category: proof
 public: true
 surfaces:
   - skills/qa
-  - docs/skills/registry.jsonl
+  - skills/registry.jsonl
 source_refs:
   - docs/fundamentals/harness-engineering-doctrine.md
   - skills/eval
@@ -107,7 +107,7 @@ flowchart TD
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   trigger["Trigger<br/>agent workflow readiness claim"]:::keep
-  owner["Owner surface<br/>skills/qa<br/>docs/skills/registry.jsonl"]:::changed
+  owner["Owner surface<br/>skills/qa<br/>skills/registry.jsonl"]:::changed
   readers["Files and fields read<br/>claim under test<br/>adversarial case set<br/>behavior-test evidence"]:::keep
   review["Judgment route<br/>tester evidence critique<br/>residual risk and blockers"]:::changed
   artifact["Created artifact/evidence<br/>QA verdict and proof bundle<br/>with follow-up route"]:::added
@@ -129,7 +129,7 @@ Legend:
 Owner surfaces:
 
 - `skills/qa`
-- `docs/skills/registry.jsonl`
+- `skills/registry.jsonl`
 
 Source context:
 

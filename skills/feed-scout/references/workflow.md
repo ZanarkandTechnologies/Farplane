@@ -189,6 +189,6 @@ Compare the viable options inline when these cannot be decided mechanically:
 - Is a profile valuable enough to track daily?
 - Should a profile default to high, medium, or low signal?
 - Should a repeated pattern create one proposal or several narrower proposals?
-- Is an item useful enough to promote into `docs/sources/registry.jsonl`?
+- Is an item useful enough to promote into `farplane/sources/registry.jsonl`?
 - Is live API/Apify spend justified, or should the run stay fixture/dry-run
   only?

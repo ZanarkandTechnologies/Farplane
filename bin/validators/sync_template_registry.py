@@ -20,7 +20,7 @@ if str(ROOT) not in sys.path:
 from bin.core.lint.source import MarkdownFrontmatterError, parse_markdown_frontmatter_document
 
 DEFAULT_CONFIG = ROOT / "config" / "template-registry.toml"
-DEFAULT_REGISTRY = ROOT / "docs" / "templates" / "registry.jsonl"
+DEFAULT_REGISTRY = ROOT / "config" / "template-registry.jsonl"
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
 
 
@@ -259,7 +259,7 @@ def render_jsonl(rows: list[dict[str, Any]]) -> str:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Generate and validate docs/templates/registry.jsonl."
+        description="Generate and validate config/template-registry.jsonl."
     )
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--write", action="store_true", help="Write the generated registry.")
@@ -274,7 +274,7 @@ def main() -> int:
     args = parse_args()
     root = args.root.resolve()
     config = args.config.resolve() if args.config else root / "config" / "template-registry.toml"
-    out = args.out.resolve() if args.out else root / "docs" / "templates" / "registry.jsonl"
+    out = args.out.resolve() if args.out else root / "config" / "template-registry.jsonl"
 
     try:
         rendered = render_jsonl(build_registry(root, config))

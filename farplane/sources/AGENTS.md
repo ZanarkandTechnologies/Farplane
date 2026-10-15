@@ -16,4 +16,4 @@ Rules:
   canonical records.
 - Link to `FEAT-*` records for durable techniques; do not duplicate feature
   registry fields here.
-- Run `python3 docs/sources/validate_sources.py` after edits.
+- Run `python3 bin/validators/validate_sources.py` after edits.

@@ -9,7 +9,7 @@ checks = ["ticket.metadata", "ticket.reward", "ticket.contract-diagram", "ticket
 # Selection is implemented through allowlisted path families. This file is the
 # durable policy surface; ticket Markdown never supplies raw commands.
 [[path_check]]
-globs = ["skills/**", "docs/skills/**"]
+globs = ["skills/**"]
 checks = ["skills.check"]
 
 [[path_check]]
@@ -21,11 +21,11 @@ globs = ["docs/features/**", "docs/systems/**"]
 checks = ["docs.features"]
 
 [[path_check]]
-globs = ["docs/sources/**"]
+globs = ["farplane/sources/**"]
 checks = ["docs.sources"]
 
 [[path_check]]
-globs = ["templates/**", "docs/templates/**"]
+globs = ["templates/**", "skills/harness/templates/**", "config/template-registry.*"]
 checks = ["templates.check"]
 
 [[path_check]]

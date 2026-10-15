@@ -9,10 +9,10 @@ tags:
   - systems
   - skill-system
 refs:
-  - docs/skills/README.md
-  - docs/skills/advisors.md
-  - docs/skills/system.md
-  - docs/skills/templates/SKILL_TEMPLATE.md
+  - skills/harness/references/skill-system/README.md
+  - skills/harness/references/skill-system/advisors.md
+  - skills/harness/references/skill-system/system.md
+  - skills/harness/templates/SKILL_TEMPLATE.md
   - skills/harness/SKILL.md
 system_record_json: |
   {
@@ -28,10 +28,10 @@ system_record_json: |
       "FEAT-0064"
     ],
     "refs": [
-      "docs/skills/README.md",
-      "docs/skills/advisors.md",
-      "docs/skills/system.md",
-      "docs/skills/templates/SKILL_TEMPLATE.md",
+      "skills/harness/references/skill-system/README.md",
+      "skills/harness/references/skill-system/advisors.md",
+      "skills/harness/references/skill-system/system.md",
+      "skills/harness/templates/SKILL_TEMPLATE.md",
       "skills/harness/SKILL.md"
     ],
     "last_verified": "2026-08-24"
@@ -63,7 +63,7 @@ specialist desks, templates, local evals,
 first-load guardrails, registry intelligence, and maintenance constraints. It lets Farplane add
 capability without bloating the agent kernel.
 
-The [Advisor System Index](../skills/advisors.md) is the human discovery view
+The [Advisor System Index](../../skills/harness/references/skill-system/advisors.md) is the human discovery view
 for the cross-cutting advisor family inside this system. It does not create a
 second registry or a separate formal subsystem: advisor package metadata stays
 canonical in each skill and in the generated skill registry.
@@ -107,7 +107,7 @@ flowchart LR
   templates["skill template<br/>Todo List + eval discovery"]:::keep
   system["SYS-0006 Skill System<br/>desks, packaging, budgets"]:::changed
   maintenance["harness<br/>registry + graph checks"]:::changed
-  registry["docs/skills/registry.jsonl<br/>template intelligence"]:::added
+  registry["skills/registry.jsonl<br/>template intelligence"]:::added
   features["FEAT-0022 / 0062 / 0064"]:::keep
 
   skill --> system
@@ -120,10 +120,10 @@ The Skill System owns reusable workflow packaging, specialist-desk membership, f
 
 ## Surfaces
 
-- `docs/skills/README.md`
-- `docs/skills/advisors.md`
-- `docs/skills/system.md`
-- `docs/skills/templates/SKILL_TEMPLATE.md`
+- `skills/harness/references/skill-system/README.md`
+- `skills/harness/references/skill-system/advisors.md`
+- `skills/harness/references/skill-system/system.md`
+- `skills/harness/templates/SKILL_TEMPLATE.md`
 - `skills/harness/SKILL.md`
 
 ## Proof And Maintenance

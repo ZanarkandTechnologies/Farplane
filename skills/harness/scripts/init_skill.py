@@ -187,7 +187,7 @@ def init_skill(
         return None
 
     # Read the canonical docs-owned skill template.
-    template_path = Path(__file__).resolve().parents[3] / 'docs' / 'skills' / 'templates' / 'SKILL_TEMPLATE.md'
+    template_path = Path(__file__).resolve().parents[3] / 'skills' / 'harness' / 'templates' / 'SKILL_TEMPLATE.md'
     if template_path.exists():
         skill_template = strip_template_metadata(template_path.read_text())
         print("📖 Loaded SKILL.md template from file")

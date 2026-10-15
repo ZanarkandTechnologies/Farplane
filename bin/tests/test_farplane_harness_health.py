@@ -88,7 +88,7 @@ def write_fixture(root: Path) -> None:
             ],
         },
     )
-    registry = root / "docs" / "skills" / "registry.jsonl"
+    registry = root / "skills" / "registry.jsonl"
     registry.parent.mkdir(parents=True, exist_ok=True)
     registry.write_text(json.dumps({"name": "alpha", "source": "local"}) + "\n", encoding="utf-8")
     write_json(

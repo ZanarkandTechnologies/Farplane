@@ -41,7 +41,7 @@ class SkillMentionTests(unittest.TestCase):
     def test_mentions_are_case_insensitive_deduped_and_exact(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            registry_path = project_root / "docs" / "skills" / "registry.jsonl"
+            registry_path = project_root / "skills" / "registry.jsonl"
             registry_path.parent.mkdir(parents=True)
             registry_path.write_text(
                 json.dumps({"name": "code-health", "source": "local"}) + "\n",
@@ -64,7 +64,7 @@ class SkillMentionTests(unittest.TestCase):
             self.assertEqual(missing.status, "missing")
             self.assertEqual(extract_skill_mentions("$qa", registry=missing), [])
 
-            registry_path = project_root / "docs" / "skills" / "registry.jsonl"
+            registry_path = project_root / "skills" / "registry.jsonl"
             registry_path.parent.mkdir(parents=True)
             registry_path.write_text("{not-json}\n", encoding="utf-8")
             invalid = load_skill_registry(project_root)

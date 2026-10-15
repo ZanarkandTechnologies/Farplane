@@ -74,7 +74,7 @@ RULES: tuple[HarnessRule, ...] = (
         ),
     ),
     HarnessRule(
-        relative_path="docs/templates/global-agents-qa-checklist.md",
+        relative_path="skills/harness/references/global-agents-qa-checklist.md",
         required_substrings=(
             "## Agent Kernel Feature Fidelity Gate",
             "docs/systems/agent-kernel.md",
@@ -91,7 +91,7 @@ RULES: tuple[HarnessRule, ...] = (
             "Agent Kernel",
             "Feature Fidelity Gate",
             "docs/systems/agent-kernel.md",
-            "docs/templates/global-agents-qa-checklist.md",
+            "skills/harness/references/global-agents-qa-checklist.md",
             "every documented behavior",
             "every surviving or added AGENTS section",
             "python3 bin/validators/check_harness_invariants.py",

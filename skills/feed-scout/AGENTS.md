@@ -13,7 +13,7 @@ This folder owns the feed-scout recipe for tracked-profile monitoring.
   normalization.
 - Do not store raw transcripts, bulky article text, secrets, or customer data
   in tracked docs.
-- Promote only useful/scouted items into `docs/sources/registry.jsonl`.
+- Promote only useful/scouted items into `farplane/sources/registry.jsonl`.
 - Keep Notion as an optional proposal review view, not the only durable source of
   truth.
 - Do not invoke Goal, Pulse, workers, implementation, publication, outreach, or

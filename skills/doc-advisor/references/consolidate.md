@@ -90,7 +90,7 @@ requires promotion to history, a spec, or another canonical owner instead.
    For `AGENTS.md` or `runtimes/AGENTS.md`, first load the Agent Kernel
    canonical feature inventory at `docs/systems/agent-kernel.md` and apply the
    bidirectional Feature Fidelity Gate in
-   `docs/templates/global-agents-qa-checklist.md`: every documented behavior
+   `skills/harness/references/global-agents-qa-checklist.md`: every documented behavior
    group remains implemented, and every surviving or added AGENTS section
    remains documented. Section presence alone does not prove behavior
    preservation; any unexplained loss or weakened high-risk behavior fails the

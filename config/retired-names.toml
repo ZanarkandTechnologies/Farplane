@@ -11,7 +11,7 @@
 # History and records, not guidance: they may name retired surfaces.
 history_paths = [
   "docs/HISTORY.md",
-  "docs/sources/*",
+  "farplane/sources/*",
   "tickets/TASK-*",
   "tickets/archive*",
   "*CHANGELOG*.md",

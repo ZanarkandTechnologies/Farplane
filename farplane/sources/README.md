@@ -12,7 +12,7 @@ operator-provided source needs a durable answer to:
 - which `FEAT-*` records or tickets came from it?
 - did we adopt, adapt, reject, defer, or treat it as a duplicate?
 
-`docs/sources/registry.jsonl` tracks source provenance. `docs/systems/*.md`
+`farplane/sources/registry.jsonl` tracks source provenance. `docs/systems/*.md`
 owns durable system records, feature pages in `docs/features/` own
 first-class feature records, and `docs/features/registry.jsonl` is generated
 output. A single source can inform many features, and a single feature can
@@ -106,7 +106,7 @@ Each line in `registry.jsonl` is one JSON object:
 Run this before claiming registry edits are safe:
 
 ```bash
-python3 docs/sources/validate_sources.py
+python3 bin/validators/validate_sources.py
 ```
 
 The validator checks JSONL shape, ID uniqueness, canonical-key uniqueness,

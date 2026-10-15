@@ -11,7 +11,7 @@ tags:
 refs:
   - docs/features/FEAT-0061-farplane-adoption-tracker-cli.md
   - docs/farplane-framework/harness-maintenance.md
-  - docs/templates/registry.jsonl
+  - config/template-registry.jsonl
 system_record_json: |
   {
     "id": "SYS-0009",
@@ -26,7 +26,7 @@ system_record_json: |
     "refs": [
       "docs/features/FEAT-0061-farplane-adoption-tracker-cli.md",
       "docs/farplane-framework/harness-maintenance.md",
-      "docs/templates/registry.jsonl"
+      "config/template-registry.jsonl"
     ],
     "last_verified": "2026-06-27"
   }
@@ -103,7 +103,7 @@ Maintenance And Release OS checks whether Farplane's shipped surfaces remain coh
 
 - `docs/features/FEAT-0061-farplane-adoption-tracker-cli.md`
 - `docs/farplane-framework/harness-maintenance.md`
-- `docs/templates/registry.jsonl`
+- `config/template-registry.jsonl`
 
 ## Proof And Maintenance
 

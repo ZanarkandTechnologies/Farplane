@@ -8,7 +8,7 @@ representative pass proves the shape.
 
 Keep this file focused on skill authoring and review quality. Do not redefine
 desk, source, template-version, or feature-tracking policy here; link
-`docs/skills/system.md` for stable skill-system rules.
+`skills/harness/references/skill-system/system.md` for stable skill-system rules.
 
 ## Load Policy
 
@@ -45,7 +45,7 @@ Use anchored sections instead of the full file when the task is narrow:
   skill-local checklist gates.
 
 If this file grows past roughly 500 lines, or any one section grows past roughly
-100 lines, split the long section into a topic file under `docs/skills/` or a
+100 lines, split the long section into a topic file under `skills/harness/references/skill-system/` or a
 skill-owned reference and keep this file as the index plus first-load authoring
 standard. Shared policy stays in docs; one-skill conditional detail belongs in
 that skill's references; always-needed runtime behavior belongs in the owning
@@ -582,7 +582,7 @@ the smallest useful upgrade in the same pass:
   into references.
 - When a reference is a reusable subskill or method workflow, declare
   `template_uses.skill-method-reference` and follow
-  `docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md` instead of copying the
+  `skills/harness/templates/METHOD_REFERENCE_TEMPLATE.md` instead of copying the
   full `SKILL.md` template.
 - Remove duplicate workflow prose when the todo list already carries the
   default path.

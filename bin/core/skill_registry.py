@@ -15,7 +15,7 @@ SKILL_MENTION_PATTERN = re.compile(
     r")",
     re.IGNORECASE,
 )
-SKILL_REGISTRY_RELATIVE_PATH = Path("docs/skills/registry.jsonl")
+SKILL_REGISTRY_RELATIVE_PATH = Path("skills/registry.jsonl")
 
 
 class SkillRegistrySnapshot(NamedTuple):

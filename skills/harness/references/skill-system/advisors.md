@@ -10,8 +10,8 @@ tags:
   - advisors
   - routing
 refs:
-  - docs/skills/registry.jsonl
-  - docs/skills/README.md
+  - skills/registry.jsonl
+  - skills/harness/references/skill-system/README.md
   - docs/systems/skill-system.md
   - docs/systems/domain-skill-families.md
 ---
@@ -27,7 +27,7 @@ advisor(goal, context, constraints) -> decision_or_plan + handoff + proof_expect
 ```
 
 This page is the human index. The generated
-[`registry.jsonl`](registry.jsonl) and each linked `SKILL.md` remain the source
+[`registry.jsonl`](../../../registry.jsonl) and each linked `SKILL.md` remain the source
 of truth for which skills exist and what they do.
 
 ## Inventory Rule
@@ -46,24 +46,24 @@ As of 2026-10-12 (after the #41 unit merges), that is 5 named advisor packages p
 
 | Need | Advisor | Produces |
 | --- | --- | --- |
-| Compare viable options and recommend one | [`advise`](../../skills/advise/SKILL.md) | Three options, tradeoffs, one recommendation, and next action, or a phased roadmap (`mode: roadmap`) whose first proof is a completed loop; `ensemble=auto|max` adds independent local perspectives when requested |
-| Define honest success, guardrails, and failure signals | [`goal-advisor` metric card](../../skills/goal-advisor/references/metrics.md) | Metric card, guard metrics, anti-metrics, and route hint |
+| Compare viable options and recommend one | [`advise`](../../../advise/SKILL.md) | Three options, tradeoffs, one recommendation, and next action, or a phased roadmap (`mode: roadmap`) whose first proof is a completed loop; `ensemble=auto|max` adds independent local perspectives when requested |
+| Define honest success, guardrails, and failure signals | [`goal-advisor` metric card](../../../goal-advisor/references/metrics.md) | Metric card, guard metrics, anti-metrics, and route hint |
 
 ### Shape projects and harness execution
 
 | Need | Advisor | Produces |
 | --- | --- | --- |
-| Decide where a Farplane behavior or capability belongs | [`harness`](../../skills/harness/SKILL.md) | Owner-surface recommendation across policy, skills, agents, hooks, tickets, docs, and validators |
-| Compile material work into the right execution loop | [`goal-advisor`](../../skills/goal-advisor/SKILL.md) | Goal architecture, ticket-backed state, and native Goal prompt when warranted |
-| Initialize or migrate a project into Farplane | [`setup-advisor`](../../skills/setup-advisor/SKILL.md) | Substrate/readiness audit, optional scaffold, and harness handoff |
-| Define project-owned recurring Codex work | [`automation-advisor`](../../skills/automation-advisor/SKILL.md) | Automation configuration using Pulse and Interval workflows |
+| Decide where a Farplane behavior or capability belongs | [`harness`](../../SKILL.md) | Owner-surface recommendation across policy, skills, agents, hooks, tickets, docs, and validators |
+| Compile material work into the right execution loop | [`goal-advisor`](../../../goal-advisor/SKILL.md) | Goal architecture, ticket-backed state, and native Goal prompt when warranted |
+| Initialize or migrate a project into Farplane | [`setup-advisor`](../../../setup-advisor/SKILL.md) | Substrate/readiness audit, optional scaffold, and harness handoff |
+| Define project-owned recurring Codex work | [`automation-advisor`](../../../automation-advisor/SKILL.md) | Automation configuration using Pulse and Interval workflows |
 
 ### Plan proof and durable documentation
 
 | Need | Advisor | Produces |
 | --- | --- | --- |
-| Decide how a behavior claim should be proved | [`eval`](../../skills/eval/SKILL.md) | Proof cases, proof-surface choice, and eval rows or a QA/review handoff |
-| Place, write, or revise durable documentation | [`doc-advisor`](../../skills/doc-advisor/SKILL.md) | Docs strategy or grounded doc delta with quality checks |
+| Decide how a behavior claim should be proved | [`eval`](../../../eval/SKILL.md) | Proof cases, proof-surface choice, and eval rows or a QA/review handoff |
+| Place, write, or revise durable documentation | [`doc-advisor`](../../../doc-advisor/SKILL.md) | Docs strategy or grounded doc delta with quality checks |
 
 ### Produce creative assets and video
 
@@ -86,19 +86,19 @@ asset; the generation skills run only after that choice.
 
 | Need | Skill | Produces |
 | --- | --- | --- |
-| Plan a video, reel, or content piece | [`storyboard`](../../skills/storyboard/SKILL.md) | Hook decision, script, scenes, asset plan, edit direction, and HyperFrames handoff |
-| Create, edit, upscale, or cut out images, product shots, infographics, or collages | [`ai-image`](../../skills/ai-image/SKILL.md) | Provider route, prompt, spend quote, and saved image asset |
-| Generate clips, avatar/presenter video, voice, music, or SFX | [`ai-video`](../../skills/ai-video/SKILL.md) | Provider route, prompt, spend quote, and saved clip or audio file |
-| Generate, texture, rig, or animate 3D assets | [`meshy-3d-generation`](../../skills/meshy-3d-generation/SKILL.md) | Meshy model files and credit receipt |
+| Plan a video, reel, or content piece | [`storyboard`](../../../storyboard/SKILL.md) | Hook decision, script, scenes, asset plan, edit direction, and HyperFrames handoff |
+| Create, edit, upscale, or cut out images, product shots, infographics, or collages | [`ai-image`](../../../ai-image/SKILL.md) | Provider route, prompt, spend quote, and saved image asset |
+| Generate clips, avatar/presenter video, voice, music, or SFX | [`ai-video`](../../../ai-video/SKILL.md) | Provider route, prompt, spend quote, and saved clip or audio file |
+| Generate, texture, rig, or animate 3D assets | [`meshy-3d-generation`](../../../meshy-3d-generation/SKILL.md) | Meshy model files and credit receipt |
 
 ### Market and communicate
 
 | Need | Skill | Produces |
 | --- | --- | --- |
-| Plan, launch paused, or report on paid ads | [`ads`](../../skills/ads/SKILL.md) | One-variable campaign plan, paused/draft launch handoff, or read-only report |
-| Write page or SEO article copy, or a final-pass rewrite | [`copywriting`](../../skills/copywriting/SKILL.md) | Page copy, article, or cleaned prose that keeps every fact |
-| Draft posts, threads, carousels, or newsletter issues | [`social-content`](../../skills/social-content/SKILL.md) | Approval-ready drafts; posting stays with `zernio` |
-| Specify a landing page | [`landing-page`](../../skills/landing-page/SKILL.md) | Approved offer, story, section, asset, motion, and proof spec |
+| Plan, launch paused, or report on paid ads | [`ads`](../../../ads/SKILL.md) | One-variable campaign plan, paused/draft launch handoff, or read-only report |
+| Write page or SEO article copy, or a final-pass rewrite | [`copywriting`](../../../copywriting/SKILL.md) | Page copy, article, or cleaned prose that keeps every fact |
+| Draft posts, threads, carousels, or newsletter issues | [`social-content`](../../../social-content/SKILL.md) | Approval-ready drafts; posting stays with `zernio` |
+| Specify a landing page | [`landing-page`](../../../landing-page/SKILL.md) | Approved offer, story, section, asset, motion, and proof spec |
 
 ## Boundaries
 
@@ -161,7 +161,7 @@ flowchart TD
 When an advisor is added, renamed, or removed:
 
 1. Change the owning `skills/<name>/SKILL.md` package first.
-2. Regenerate [`registry.jsonl`](registry.jsonl).
+2. Regenerate [`registry.jsonl`](../../../registry.jsonl).
 3. Update the relevant use-case table on this page.
 4. Verify that every `*-advisor` registry row appears exactly once and that no
    retired advisor remains linked.

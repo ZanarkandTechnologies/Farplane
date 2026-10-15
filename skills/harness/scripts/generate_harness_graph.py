@@ -206,7 +206,7 @@ def node_kind(node_id: str) -> str:
         return "skill"
     if path.startswith("docs/features/"):
         return "spec"
-    if path.startswith("docs/skills/"):
+    if path.startswith("skills/harness/references/skill-system/"):
         return "skill-doc"
     if path.startswith("dir:skills/review/references/rubrics") or path.startswith("skills/review/references/rubrics/"):
         return "review-rubric"
@@ -417,9 +417,9 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
         "docs/fundamentals/harness-algebra.md",
         "docs/fundamentals/harness-engineering-doctrine.md",
         "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
-        "docs/skills/README.md",
-        "docs/skills/system.md",
-        "docs/skills/best-practices.md",
+        "skills/harness/references/skill-system/README.md",
+        "skills/harness/references/skill-system/system.md",
+        "skills/harness/references/skill-system/best-practices.md",
         "skills/review/references/rubrics/review-rubric-index.md",
         "skills/review/references/rubrics/reviewer-handoff.md",
         "docs/features/FEAT-0060-registry-backed-documentation-os.md",

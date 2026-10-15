@@ -11,7 +11,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
-REGISTRY = ROOT / "docs" / "sources" / "registry.jsonl"
+REGISTRY = ROOT / "farplane" / "sources" / "registry.jsonl"
 FEATURE_REGISTRY = ROOT / "docs" / "features" / "registry.jsonl"
 
 REQUIRED_FIELDS = {

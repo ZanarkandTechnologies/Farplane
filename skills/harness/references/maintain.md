@@ -135,9 +135,9 @@ source upgrades, automation presets, and review handoff templates.
 
 ## Reference Map
 
-- [skill system](../../../docs/skills/system.md) — metadata, desks, templates,
+- [skill system](skill-system/system.md) — metadata, desks, templates,
   registry, and todo contracts; read for structural changes.
-- [skill best practices](../../../docs/skills/best-practices.md) — first-load
+- [skill best practices](skill-system/best-practices.md) — first-load
   placement, examples, repeatability, and review.
 - [skill-contract rubric](../../review/references/rubrics/skill-contract.md) —
   centralized structure, Golden Node, edge, calibration, and proof review.

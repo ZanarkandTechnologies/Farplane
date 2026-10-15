@@ -5,8 +5,8 @@ owner: harness
 created_at: 2026-08-07
 updated_at: 2026-08-07
 refs:
-  - docs/skills/system.md
-  - docs/skills/templates/SKILL_TEMPLATE.md
+  - skills/harness/references/skill-system/system.md
+  - skills/harness/templates/SKILL_TEMPLATE.md
   - skills/harness/SKILL.md
 ---
 

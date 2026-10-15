@@ -10,8 +10,8 @@ tags:
   - sys-0006
 refs:
   - docs/features/FEAT-0062-capped-skill-surface-budget.md
-  - docs/skills/system.md
-  - docs/skills/templates/SKILL_TEMPLATE.md
+  - skills/harness/references/skill-system/system.md
+  - skills/harness/templates/SKILL_TEMPLATE.md
   - bin/validators/check_skill_surface_budget.py
   - skills/harness/scripts/minimize_skill_surface.py
   - skills/harness/scripts/check_skills.py
@@ -21,8 +21,8 @@ category: skills
 public: true
 surfaces:
   - docs/features/FEAT-0062-capped-skill-surface-budget.md
-  - docs/skills/system.md
-  - docs/skills/templates/SKILL_TEMPLATE.md
+  - skills/harness/references/skill-system/system.md
+  - skills/harness/templates/SKILL_TEMPLATE.md
   - bin/validators/check_skill_surface_budget.py
   - skills/harness/scripts/minimize_skill_surface.py
   - skills/harness/scripts/check_skills.py
@@ -142,8 +142,8 @@ Owner surfaces:
 
 Supporting surfaces:
 
-- `docs/skills/system.md`
-- `docs/skills/templates/SKILL_TEMPLATE.md`
+- `skills/harness/references/skill-system/system.md`
+- `skills/harness/templates/SKILL_TEMPLATE.md`
 
 ## Proof And Quality
 

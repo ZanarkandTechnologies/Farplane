@@ -86,7 +86,7 @@ or removing a `farplane` command.
 - `validators/check_doc_refs.py` - local reference validator for active docs and registries;
   use `--all` for broader cleanup audits across tickets, experiments, and tests
 - `validators/sync_skill_registry.py` - deterministic generated-registry check
-  for `docs/skills/registry.jsonl`
+  for `skills/registry.jsonl`
 - `validators/check_skill_capabilities.py` - skill capability fixture validator
 - `validators/check_template_version_metadata.py` - staged metadata and
   version-bump guard for template files listed in

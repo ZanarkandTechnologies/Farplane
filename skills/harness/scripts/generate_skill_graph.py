@@ -70,7 +70,7 @@ def load_registry(path: Path) -> list[dict[str, Any]]:
 
 def find_repo_root(start: Path) -> Path:
     for candidate in [start, *start.parents]:
-        if (candidate / "docs" / "skills" / "registry.jsonl").exists() and (candidate / "skills").exists():
+        if (candidate / "skills" / "registry.jsonl").exists() and (candidate / "skills").exists():
             return candidate
     return Path.cwd()
 
@@ -673,7 +673,7 @@ def write_docs(docs: dict[str, Any], output_path: Path, js_path: Path | None) ->
 def main() -> int:
     config = get_projection_config("skill-registry")
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--registry", default="docs/skills/registry.jsonl")
+    parser.add_argument("--registry", default="skills/registry.jsonl")
     parser.add_argument("--out", default=config.default_out)
     parser.add_argument("--js-out", default=config.default_js_out)
     parser.add_argument("--docs-out", default=config.docs_out)

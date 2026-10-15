@@ -76,7 +76,7 @@ returns: per-surface status + evidence + human gates + readiness gaps + next own
   authority, planning areas, capability and metric refs), `metrics.yaml`
   (meaning, direction, freshness, guards, refresh) and `bindings.yaml`
   (non-secret provider coordinates), from the HARNESS/METRICS/BINDINGS
-  templates. Reuse `docs/skills/registry.jsonl`, root and `.agents/skills/`
+  templates. Reuse `skills/registry.jsonl`, root and `.agents/skills/`
   workflows before proposing a local skill. Missing thesis, non-goals or
   authority is one question or a gap in `docs/bootstrap-brief.md`
   ([phase-boundary](references/phase-boundary.md)).

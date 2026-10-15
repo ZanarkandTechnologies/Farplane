@@ -35,7 +35,7 @@ class ProfileRenderError(ValueError):
 
 
 def registry_skill_names(repo: Path) -> set[str]:
-    registry_path = repo / "docs" / "skills" / "registry.jsonl"
+    registry_path = repo / "skills" / "registry.jsonl"
     try:
         rows = [json.loads(line) for line in registry_path.read_text(encoding="utf-8").splitlines() if line]
     except (OSError, json.JSONDecodeError) as exc:

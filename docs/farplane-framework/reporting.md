@@ -46,7 +46,7 @@ not require a compiled index or the Core report-card frontmatter contract.
 Report metadata and report readability are separate contracts. UI-indexed
 reports keep the Core frontmatter below. Analytical report bodies should use
 the decision-first spine in
-`docs/templates/HUMAN_REPORT_TEMPLATE.md` when their producer adopts it:
+`skills/report-gen/templates/human-report.md` when their producer adopts it:
 
 ```text
 decision -> situation map -> material findings -> risks -> next action -> supporting evidence

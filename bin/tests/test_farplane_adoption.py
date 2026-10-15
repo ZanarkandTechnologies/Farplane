@@ -51,7 +51,7 @@ class FarplaneAdoptionTests(unittest.TestCase):
                 [{"id": "FEAT-0061", "name": "Adoption tracker", "status": "implemented"}],
             )
             write_jsonl(
-                standard / "docs" / "templates" / "registry.jsonl",
+                standard / "config" / "template-registry.jsonl",
                 [
                     {
                         "template_id": "farplane-framework",
@@ -81,7 +81,7 @@ class FarplaneAdoptionTests(unittest.TestCase):
             write_manifest(project, spec="1.2.0", template_version="1.2.0")
             write_jsonl(standard / "docs" / "features" / "registry.jsonl", [])
             write_jsonl(
-                standard / "docs" / "templates" / "registry.jsonl",
+                standard / "config" / "template-registry.jsonl",
                 [{"template_id": "farplane-framework", "template_version": "1.3.0"}],
             )
 
@@ -118,7 +118,7 @@ class FarplaneAdoptionTests(unittest.TestCase):
             missing_project = root / "missing-project"
             write_manifest(standard)
             write_jsonl(standard / "docs" / "features" / "registry.jsonl", [])
-            write_jsonl(standard / "docs" / "templates" / "registry.jsonl", [])
+            write_jsonl(standard / "config" / "template-registry.jsonl", [])
 
             result = adoption.resolve_adoption_stats(standard_root=standard, project_roots=[missing_project])
 

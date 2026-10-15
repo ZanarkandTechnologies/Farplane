@@ -114,7 +114,7 @@ def resolve_skill_rollout_stats(
     intelligence_path: Path | None = None,
 ) -> dict[str, Any]:
     standard_root = standard_root.resolve()
-    registry = registry_path or standard_root / "docs" / "skills" / "registry.jsonl"
+    registry = registry_path or standard_root / "skills" / "registry.jsonl"
     intelligence = (
         intelligence_path
         or standard_root / ".farplane" / "generated" / "graphs" / "skill-template-intelligence.json"

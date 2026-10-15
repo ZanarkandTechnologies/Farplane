@@ -35,9 +35,9 @@ globs = [
   "skills/harness/scripts/test_quick_validate.py",
   "config/skill-departments.toml",
   "config/skill-workflows.toml",
-  "docs/skills/system.md",
-  "docs/skills/README.md",
-  "docs/skills/templates/SKILL_TEMPLATE.md",
+  "skills/harness/references/skill-system/system.md",
+  "skills/harness/references/skill-system/README.md",
+  "skills/harness/templates/SKILL_TEMPLATE.md",
 ]
 # Regression coverage is separate from static-contract selection, which is
 # centralized in `lint_changed` above.
@@ -100,9 +100,9 @@ globs = [
   "skills/harness/scripts/test_quick_validate.py",
   "config/skill-departments.toml",
   "config/skill-workflows.toml",
-  "docs/skills/system.md",
-  "docs/skills/README.md",
-  "docs/skills/templates/SKILL_TEMPLATE.md",
+  "skills/harness/references/skill-system/system.md",
+  "skills/harness/references/skill-system/README.md",
+  "skills/harness/templates/SKILL_TEMPLATE.md",
 ]
 checks = ["lint_contract_tests"]
 

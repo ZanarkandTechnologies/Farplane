@@ -110,7 +110,7 @@ family; delete it otherwise. Name the family; do not link into `docs/`.]
   and `max` selects all without changing the skill's output contract.
 - `examples/golden/*`: add when a useful example is too large to sit beside its
   rule. Keep short examples inline.
-Follow docs/skills/best-practices.md and harness for their exact
+Follow skills/harness/references/skill-system/best-practices.md and harness for their exact
 contracts instead of copying setup instructions into every new skill.
 -->
 

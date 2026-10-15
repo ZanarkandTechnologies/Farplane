@@ -148,10 +148,10 @@ flowchart LR
 | `.farplane/` | Ignored project-local runtime, generated, event, and product state. |
 | `.agents/skills/` | Project-local skills used only inside this repo. |
 | `config/` | Farplane's own settings: skill groups and profiles, validation and git-gate checks, template registry. |
-| `farplane/` | This project's committed config: harness, metrics, bindings, automations. |
+| `farplane/` | This project's committed config: harness, metrics, bindings, automations, source registry. |
 | `hooks/` | Shared hook sources; `hooks/hooks.json` is the one hook registration. |
 | `runtimes/` | `runtimes/AGENTS.md` (the install-time global contract shared by both runtimes) plus what `codex` and `claude` each need beyond the shared sources. |
-| `skills/` | Farplane skill packages, references, scripts, and templates. |
+| `skills/` | Farplane skill packages, references, scripts, and templates, plus the generated `registry.jsonl`. |
 | `tickets/` | Issue templates and the frozen legacy local archive. Active tasks live in GitHub Issues. |
 
 ## Start Here
@@ -165,8 +165,8 @@ flowchart LR
 - Prompt engineering: [docs/fundamentals/prompt-engineering.md](docs/fundamentals/prompt-engineering.md)
 - Generated system registry data: [docs/systems/registry.jsonl](docs/systems/registry.jsonl)
 - Generated feature registry data: [docs/features/registry.jsonl](docs/features/registry.jsonl)
-- Skill guide: [docs/skills/README.md](docs/skills/README.md)
-- Skill best practices: [docs/skills/best-practices.md](docs/skills/best-practices.md)
+- Skill guide: [skills/harness/references/skill-system/README.md](skills/harness/references/skill-system/README.md)
+- Skill best practices: [skills/harness/references/skill-system/best-practices.md](skills/harness/references/skill-system/best-practices.md)
 - Ticket and Goal contract (GitHub Issues, close rule, `## Goal program`): [tickets/README.md](tickets/README.md#current-github-issues-workflow)
 - Goal Packet skill: [skills/goal-advisor/SKILL.md](skills/goal-advisor/SKILL.md)
 - QA guide: [skills/qa/references/guide.md](skills/qa/references/guide.md)

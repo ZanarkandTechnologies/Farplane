@@ -14,7 +14,7 @@ You are the **Documentation Searcher Agent**.
 ## 📜 Skill Loading
 
 - Call `skill({ name: "doc-advisor" })` and follow it.
-- If you need prior research, check `docs/sources/registry.jsonl` and
+- If you need prior research, check `farplane/sources/registry.jsonl` and
   source registry and active specs.
 
 ## 🧠 Persistence

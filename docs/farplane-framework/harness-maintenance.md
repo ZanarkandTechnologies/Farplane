@@ -17,9 +17,9 @@ refs:
   - docs/systems/README.md
   - docs/systems/registry.jsonl
   - docs/features/registry.jsonl
-  - docs/templates/registry.jsonl
-  - docs/skills/README.md
-  - docs/templates/README.md
+  - config/template-registry.jsonl
+  - skills/harness/references/skill-system/README.md
+  - skills/harness/templates/README.md
   - skills/harness/graph/README.md
   - bin/README.md
 ---
@@ -53,7 +53,7 @@ same interpretation in each generator, CLI command, or UI route.
 | Shared Service | Owned Logic | Consumers |
 | --- | --- | --- |
 | `bin/validators/template_usage.py` | Parse and validate `template_uses`, including the canonical consumer declaration shape. | Template registry checks, skill registry sync, template intelligence, project adoption CLI. |
-| `bin/validators/sync_skill_registry.py` | Convert `skills/*/SKILL.md` frontmatter, todo links, and Markdown links into `docs/skills/registry.jsonl`. | Skill graph, skill template rollout, skill OS checks, skill rollout CLI. |
+| `bin/validators/sync_skill_registry.py` | Convert `skills/*/SKILL.md` frontmatter, todo links, and Markdown links into `skills/registry.jsonl`. | Skill graph, skill template rollout, skill OS checks, skill rollout CLI. |
 | `skills/harness/scripts/generate_template_intelligence.py` | Compute skill template rollout and high-impact template rollout. | `skill-template-intelligence.json`, graph viewer, `farplane skills rollout scan`. |
 | `skills/harness/scripts/graph_ir.py` | Shared graph node/edge/bundle structs, JSON/JS writers, comparison, and endpoint validation. | Skill graph, harness reference graph, lifecycle graph. |
 | `skills/harness/scripts/graph_projection_config.py` | Named graph projection profiles and output targets. | Graph dispatcher, compatibility graph wrappers, Farplane UI graph routes. |
@@ -82,17 +82,17 @@ UI route or CLI projection
 | Feature metadata | feature pages in `docs/features/` `feature_record_json` | Authored first-class `FEAT-*` feature docs linked from one owning system | `python3 docs/features/validate_features.py --write` | Keep only docs-worthy feature handles with their own surfaces, evidence, limits, and metrics. |
 | System registry | `docs/systems/registry.jsonl` | Generated system rows grouped by ID, primary feature, refs, and limits | `python3 docs/features/validate_features.py` | Queryable public system inventory consumed by docs and future UI. |
 | Feature registry | `docs/features/registry.jsonl` | Generated feature rows grouped by ID, system, status, category, surfaces, refs, evidence, and limits | `python3 docs/features/validate_features.py` | Queryable feature output consumed by adoption, templates, sources, and docs. |
-| Template registry | `docs/templates/registry.jsonl` | `path`-resolved template rows and template rollout rows | `python3 bin/validators/sync_template_registry.py --write` | Track high-impact templates, versions, feature refs, and consumer scopes. |
+| Template registry | `config/template-registry.jsonl` | `path`-resolved template rows and template rollout rows | `python3 bin/validators/sync_template_registry.py --write` | Track high-impact templates, versions, feature refs, and consumer scopes. |
 | Project manifest adoption | `farplane/manifest.json` in each project plus the Farplane standard manifest | `farplane adoption scan --json` | `python3 bin/farplane.py adoption scan --project-root . --json` | Show project spec/template drift, local skill presence, and explicit or implied feature adoption. |
 | Primitive metrics | tickets, `farplane/bindings.yaml`, local Codex stores, `.farplane/mine/runs/**/input.json` | `.farplane/metrics/daily/YYYY-MM-DD.json`, `.farplane/metrics/observations/**` | `python3 bin/farplane.py metrics primitives --project-root . --date YYYY-MM-DD --json` | Produce Core-owned readings for ticket/KPI/product counts, KPI-attributed ticket ratio, Codex thread usage, burn source gaps, and ticket/thread association backfill. |
 | Metric refresh plan | `farplane/metrics.yaml` refreshers plus current observations | agent-owned refresh groups and flat observations | `python3 bin/core/farplane_metric_refresh.py refresh-plan --metrics-file farplane/metrics.yaml --date YYYY-MM-DD --metric-id <id>` | Deduplicate prompt/provider acquisition by refresher ID; the calling workflow executes prompts, while Core remains deterministic. |
 | Project snapshot | canonical project files plus primitive metric outputs | `.farplane/project/ui/latest.json` | `python3 bin/farplane.py project snapshot --project-root . --json` | Give Farplane UI and Company OS one read-only project/company payload without making the snapshot a source of truth. |
-| Skill registry | `skills/*/SKILL.md` front matter, direct todo lists, and Markdown links | `docs/skills/registry.jsonl` | `python3 bin/validators/sync_skill_registry.py --write` | Inventory skills without hand-maintaining a second registry. |
-| Skill template rollout | `docs/skills/registry.jsonl` plus `docs/skills/templates/SKILL_TEMPLATE.md` metadata | `.farplane/generated/graphs/skill-template-intelligence.json` fields `rollout` and `rollout_summary` | `python3 skills/harness/scripts/generate_template_intelligence.py` | Show which skills are current, stale, missing, or external for the current skill template. |
-| Template rollout | `docs/templates/registry.jsonl` plus consumer `template_uses` fields | `skill-template-intelligence.json` fields `template_rollout` and `template_rollout_summary` | `python3 skills/harness/scripts/generate_template_intelligence.py` | Show high-impact template adoption across skills and projects. |
+| Skill registry | `skills/*/SKILL.md` front matter, direct todo lists, and Markdown links | `skills/registry.jsonl` | `python3 bin/validators/sync_skill_registry.py --write` | Inventory skills without hand-maintaining a second registry. |
+| Skill template rollout | `skills/registry.jsonl` plus `skills/harness/templates/SKILL_TEMPLATE.md` metadata | `.farplane/generated/graphs/skill-template-intelligence.json` fields `rollout` and `rollout_summary` | `python3 skills/harness/scripts/generate_template_intelligence.py` | Show which skills are current, stale, missing, or external for the current skill template. |
+| Template rollout | `config/template-registry.jsonl` plus consumer `template_uses` fields | `skill-template-intelligence.json` fields `template_rollout` and `template_rollout_summary` | `python3 skills/harness/scripts/generate_template_intelligence.py` | Show high-impact template adoption across skills and projects. |
 | Skill rollout CLI | Skill registry plus template intelligence artifact | `farplane skills rollout scan --json` | `python3 bin/farplane.py skills rollout scan --json` | Stable UI-facing payload for skill/template rollout without reading graph internals directly. |
 | Harness health projection | Skill graph/docs, skill rollout intelligence, registry, and local eval runs | `.farplane/state/harness-health.json` and `.farplane/metrics/observations/harness_health/YYYY-MM-DD.json` | `python3 bin/farplane.py harness health compile --project-root . --date YYYY-MM-DD` | Give planners and UI one versioned local bundle plus actionable priority-skill and source-integrity readings without promoting weighted health scores into objectives. |
-| Skill graph | `docs/skills/registry.jsonl` plus Convex `skill-invocation-listener` rows (`skill_invoked`, `skill_requested`) | `.farplane/generated/graphs/skill-graph.json` and `skill-docs.json` | `python3 skills/harness/scripts/generate_skill_graph.py` | Visualize skill nodes, skill docs, observed skill heat, Markdown links, todo-chain edges, and common-chain edges. |
+| Skill graph | `skills/registry.jsonl` plus Convex `skill-invocation-listener` rows (`skill_invoked`, `skill_requested`) | `.farplane/generated/graphs/skill-graph.json` and `skill-docs.json` | `python3 skills/harness/scripts/generate_skill_graph.py` | Visualize skill nodes, skill docs, observed skill heat, Markdown links, todo-chain edges, and common-chain edges. |
 | Harness reference graph | Repo Markdown links and literal local paths | `.farplane/generated/graphs/harness-graph.json` and doc audit report | `python3 skills/harness/scripts/generate_harness_graph.py` | Audit local references, backlink cleanup, unresolved docs paths, and navigation sprawl. |
 | Lifecycle graph | Skill signatures, hooks, curated framework files, automations, reports, tickets, and runtime surfaces | `.farplane/generated/graphs/farplane-lifecycle-graph.json` | `python3 skills/harness/scripts/generate_farplane_lifecycle_graph.py` | Provide semantic framework maps and finite-state projections for UI and agent context. |
 | Graph projection dispatcher | Shared GraphIR and projection profiles | selected generated graph JSON/JS | `python3 skills/harness/scripts/generate_graph_projection.py --projection <name>` | Route graph generation through one shared model with named projections. |
@@ -114,7 +114,7 @@ template_rollout(template_registry, consumers.template_uses)
 Template rollout answers: "For each tracked high-impact template, which
 consumers use the current version, a stale version, or no version?"
 
-Tracked templates live in `docs/templates/registry.jsonl`. Consumers declare
+Tracked templates live in `config/template-registry.jsonl`. Consumers declare
 adoption through `template_uses`, for example:
 
 ```yaml
@@ -304,11 +304,11 @@ source declarations
 
 Examples:
 
-- Skill frontmatter changes `docs/skills/registry.jsonl`.
+- Skill frontmatter changes `skills/registry.jsonl`.
 - System or feature metadata changes `docs/systems/registry.jsonl` and
   `docs/features/registry.jsonl` through
   `docs/features/validate_features.py --write`.
-- Template metadata changes `docs/templates/registry.jsonl`.
+- Template metadata changes `config/template-registry.jsonl`.
 - `template_uses` changes template rollout.
 - `skill_template_version` changes skill template rollout.
 - `farplane/manifest.json` changes project adoption.

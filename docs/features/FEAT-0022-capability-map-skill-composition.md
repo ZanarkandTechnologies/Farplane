@@ -10,11 +10,11 @@ tags:
   - sys-0006
 refs:
   - runtimes/AGENTS.md
-  - docs/skills/system.md
+  - skills/harness/references/skill-system/system.md
   - skills/research
   - skills/review
   - skills/review/references/rubrics
-  - docs/skills/README.md
+  - skills/harness/references/skill-system/README.md
   - bin/validators/sync_skill_registry.py
 feature_id: FEAT-0022
 system_id: SYS-0006
@@ -22,11 +22,11 @@ category: skills
 public: true
 surfaces:
   - runtimes/AGENTS.md
-  - docs/skills/system.md
+  - skills/harness/references/skill-system/system.md
   - skills/research
   - skills/review
   - skills/review/references/rubrics
-  - docs/skills/README.md
+  - skills/harness/references/skill-system/README.md
   - bin/validators/sync_skill_registry.py
 source_refs:
   - "docs/MEMORY.md#MEM-0098"
@@ -54,7 +54,7 @@ desk(skill) -> specialist | helper
 
 ## Where the parts live
 
-- The phase protocol and the todo-link guidance: [`docs/skills/system.md`](../skills/system.md).
-- Desks, departments and map topology: [`docs/skills/department-taxonomy.md`](../skills/department-taxonomy.md).
+- The phase protocol and the todo-link guidance: [`skills/harness/references/skill-system/system.md`](../../skills/harness/references/skill-system/system.md).
+- Desks, departments and map topology: [`skills/harness/references/skill-system/department-taxonomy.md`](../../skills/harness/references/skill-system/department-taxonomy.md).
 - Upgrade priority: harness health's priority cohort is each desk's primary skill plus every skill used
   in the last 30 days, and `docs/features/FEAT-0064-skill-signals.md` ranks improvement targets.

@@ -30,7 +30,7 @@ from bin.validators.template_usage import normalize_template_uses, template_targ
 from graph_projection_config import generated_graph_path
 
 
-TEMPLATE_PATH = Path("docs/skills/templates/SKILL_TEMPLATE.md")
+TEMPLATE_PATH = Path("skills/harness/templates/SKILL_TEMPLATE.md")
 DEFAULT_OUT = Path(generated_graph_path("skill-template-intelligence.json"))
 DEFAULT_JS_OUT = Path(generated_graph_path("skill-template-intelligence.js"))
 DEFAULT_ARCHIVE_DIR = Path(".farplane/skill-template-snapshots")
@@ -596,9 +596,9 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
         if write_archive
         else {snapshot.source_commit: str((archive_dir / archive_name(snapshot)).relative_to(repo_root)) for snapshot in snapshots}
     )
-    skill_rows = load_jsonl(repo_root / "docs/skills/registry.jsonl")
+    skill_rows = load_jsonl(repo_root / "skills/registry.jsonl")
     feature_rows = load_jsonl(repo_root / "docs/features/registry.jsonl")
-    template_rows = load_jsonl(repo_root / "docs/templates/registry.jsonl")
+    template_rows = load_jsonl(repo_root / "config/template-registry.jsonl")
     current_version = current_template_version(repo_root)
     rollout = rollout_rows(skill_rows, current_version)
     template_consumers = [
@@ -617,7 +617,7 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
         "source": {
             "repo": str(repo_root),
             "template_path": str(TEMPLATE_PATH),
-            "skill_registry_path": "docs/skills/registry.jsonl",
+            "skill_registry_path": "skills/registry.jsonl",
             "feature_registry_path": "docs/features/registry.jsonl",
         },
         "caveats": [

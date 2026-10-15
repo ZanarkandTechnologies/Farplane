@@ -48,7 +48,7 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
      `docs/systems/registry.jsonl` / `docs/features/registry.jsonl` for an
      existing or partial harness system or feature before proposing a new
      feature.
-   - [ ] Check `docs/skills/registry.jsonl` for an existing skill, method,
+   - [ ] Check `skills/registry.jsonl` for an existing skill, method,
      source owner, or consolidation target before proposing a new skill.
 - [ ] 3. Choose the decision depth.
    - [ ] 1. Normal placement: use doctrine, registries, and
@@ -153,7 +153,7 @@ Next ticket or owner:
 - `docs/systems/README.md`, `docs/features/README.md`,
   `docs/systems/registry.jsonl`, and `docs/features/registry.jsonl` - system
   and capability dedupe, provenance, status, and generated evidence output.
-- `docs/skills/README.md` and `docs/skills/registry.jsonl` - generated skill
+- `skills/harness/references/skill-system/README.md` and `skills/registry.jsonl` - generated skill
   inventory and skill selection guide.
 - `docs/fundamentals/prompt-engineering.md` - shared prompt contract for prompt-like
   templates, examples, output shapes, and proof expectations.

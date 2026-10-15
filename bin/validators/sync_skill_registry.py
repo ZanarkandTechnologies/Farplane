@@ -404,13 +404,13 @@ def render_jsonl(rows: list[dict[str, Any]]) -> str:
 
 
 def write_registry(repo_root: Path, content: str) -> None:
-    target = repo_root / "docs" / "skills" / "registry.jsonl"
+    target = repo_root / "skills" / "registry.jsonl"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(content)
 
 
 def check_registry(repo_root: Path, content: str) -> int:
-    target = repo_root / "docs" / "skills" / "registry.jsonl"
+    target = repo_root / "skills" / "registry.jsonl"
     if not target.exists():
         print(f"{target} is missing; run with --write", file=sys.stderr)
         return 1
@@ -424,7 +424,7 @@ def check_registry(repo_root: Path, content: str) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--write", action="store_true", help="write docs/skills/registry.jsonl")
+    parser.add_argument("--write", action="store_true", help="write skills/registry.jsonl")
     parser.add_argument("--check", action="store_true", help="verify registry is up to date")
     args = parser.parse_args()
 
@@ -438,7 +438,7 @@ def main() -> int:
 
     if args.write:
         write_registry(repo_root, content)
-        print(f"wrote docs/skills/registry.jsonl ({len(content.splitlines())} skill rows)")
+        print(f"wrote skills/registry.jsonl ({len(content.splitlines())} skill rows)")
         return 0
     return check_registry(repo_root, content)
 

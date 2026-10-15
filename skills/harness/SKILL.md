@@ -31,7 +31,7 @@ It does not write eval rows or judges (`eval`), schedule jobs
 ```text
 harness(request, mode?: create | maintain | optimize | place, target?, evidence?, metric?)
   -> mode_receipt { owner + change | placement + proof + validation + review_route } | blocked
-reads: docs/skills/system.md, best-practices.md, docs/skills/registry.jsonl,
+reads: references/skill-system/system.md, references/skill-system/best-practices.md, skills/registry.jsonl,
   harness doctrine, the target package, its evals, tickets and evidence
 does: picks the mode, applies the smallest owner-local change, proves it, syncs generated state
 writes: owner-local skill files, generated registries via scripts/, ticket progress
@@ -48,7 +48,7 @@ returns: changed files, proof commands and results, reviewer verdict or blocker
   quality, taste, or ROI language. A new stable reusable trigger with no owner
   is `create`; an existing package is `maintain`; a measurable gap needing
   several bounded rounds is `optimize`; an unclear owner surface is `place`.
-  Check `docs/skills/registry.jsonl` for an existing owner before `create`.
+  Check `skills/registry.jsonl` for an existing owner before `create`.
 
   Example: "the commit skill keeps forgetting to label other threads' work" ->
   `maintain` on `skills/commit`, not a new skill or a root prompt rule.
@@ -73,7 +73,7 @@ returns: changed files, proof commands and results, reviewer verdict or blocker
   Rule: A node is one n8n-sized operation with inspectable state and a domain
   decision a generic agent would miss; three to seven nodes. Keep source
   knowledge only when it changes a signal, decision, branch, output, or proof.
-  Start from [the skill template](../../docs/skills/templates/SKILL_TEMPLATE.md);
+  Start from [the skill template](templates/SKILL_TEMPLATE.md);
   description per best practices (2-4 operator phrases, then the output).
   Full steps and the book-grounded branch: [create](references/create.md).
 
@@ -153,8 +153,8 @@ returns: changed files, proof commands and results, reviewer verdict or blocker
   writeback order, and turn report; [Goal program](references/goal-program-template.md).
 - [place](references/place.md) and [placement axes](references/placement-axes.md)
   - owner-surface comparison and material placement scoring.
-- [skill system](../../docs/skills/system.md) and
-  [best practices](../../docs/skills/best-practices.md) - every structural change.
+- [skill system](references/skill-system/system.md) and
+  [best practices](references/skill-system/best-practices.md) - every structural change.
 - [skill-contract rubric](../review/references/rubrics/skill-contract.md) - review gate.
 - [check skills](scripts/check_skills.py) - registry, template, todo, capability,
   config, eval-query, and doc-reference checks.

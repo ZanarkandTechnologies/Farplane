@@ -113,7 +113,7 @@ class UserValueResult:
 
 def repo_root(start: Path) -> Path:
     for candidate in [start.resolve(), *start.resolve().parents]:
-        if (candidate / "docs/skills/README.md").exists() and (candidate / "tickets").exists():
+        if (candidate / "skills/harness/references/skill-system/README.md").exists() and (candidate / "tickets").exists():
             return candidate
     raise CapabilityError("could not find Farplane repo root")
 

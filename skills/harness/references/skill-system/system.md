@@ -6,11 +6,11 @@ registry fields, and todo-link rules stay in one place.
 
 ## Ownership
 
-- `docs/skills/system.md` owns the stable skill-system contract.
-- `docs/skills/composition.md` owns cross-skill role, artifact, and todo
+- `skills/harness/references/skill-system/system.md` owns the stable skill-system contract.
+- `skills/harness/references/skill-system/composition.md` owns cross-skill role, artifact, and todo
   composition rules.
-- `docs/skills/README.md` owns human skill selection and registry commands.
-- `docs/skills/best-practices.md` owns skill authoring and maintenance quality,
+- `skills/harness/references/skill-system/README.md` owns human skill selection and registry commands.
+- `skills/harness/references/skill-system/best-practices.md` owns skill authoring and maintenance quality,
   not runtime context for every skill invocation.
 - `skills/harness/` owns creating or updating one reusable skill package,
   bulk upkeep, validation, generated registry sync, and rollout audits.
@@ -21,14 +21,14 @@ registry fields, and todo-link rules stay in one place.
   surviving feature refs.
 - `docs/features/registry.jsonl` is generated feature output, not hand-authored
   truth.
-- `docs/skills/registry.jsonl` is generated inventory, not hand-authored truth.
+- `skills/registry.jsonl` is generated inventory, not hand-authored truth.
 - `skills/<skill-name>/evals/evals.json` owns focused modular eval tasks for one
   skill's behavior when a runnable eval is the right proof surface.
 - Golden Workflow Node `Rule`/`Assert` blocks own normal first-load skill
   guardrails. `qa_checklist.md` is retired and rejected by skill lint.
 
 Keep this file focused on stable system rules. Do not duplicate first-load
-authoring detail here; link `docs/skills/best-practices.md` for checklist
+authoring detail here; link `skills/harness/references/skill-system/best-practices.md` for checklist
 shape, reference placement, repeatability, and finish gates.
 
 Credential-bearing skills should expose one package-local
@@ -277,7 +277,7 @@ These are authoring guidance; no lint check enforces them.
 Keep skill frontmatter small.
 
 The complete runtime schema and parser live in
-[`bin/core/skill_contract.py`](../../bin/core/skill_contract.py).
+[`bin/core/skill_contract.py`](../../../../bin/core/skill_contract.py).
 `python3 bin/validators/check_skill_frontmatter.py` rejects undeclared fields,
 invalid optional ensemble personas, and ambiguous artifact-output ownership
 before graph generation. `farplane lint skills` validates both package files and
@@ -305,7 +305,7 @@ Manual fields:
   debug page, or UI binding.
 - `department`: required on a skill that sits on a specialist desk, where it
   must match the desk's department; optional otherwise. One canonical operating
-  department from [`config/skill-departments.toml`](../../config/skill-departments.toml).
+  department from [`config/skill-departments.toml`](../../../../config/skill-departments.toml).
   The graph uses it as explicit department membership, not as a workflow edge.
   (`tier` is retired and rejected.)
 - `capability`: optional static projection for a package that is ready to be
@@ -432,7 +432,7 @@ applied. A versioned skill promises that its `SKILL.md` follows the current
 template spine and todo-list shape for that version.
 
 Template source edits are release events. When
-`docs/skills/templates/SKILL_TEMPLATE.md` changes, refresh the
+`skills/harness/templates/SKILL_TEMPLATE.md` changes, refresh the
 generated release metadata and archive snapshots through the normal
 harness write path:
 
@@ -464,7 +464,7 @@ template_uses:
   skill-method-reference: "0.1.0"
 ```
 
-Then follow `docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md`. The standard
+Then follow `skills/harness/templates/METHOD_REFERENCE_TEMPLATE.md`. The standard
 harness check validates declared method references.
 
 ## Rollout Policy
@@ -479,7 +479,7 @@ Roll out skill-system standards from the most compound surfaces first:
 4. Broad migration requires a representative sample before a full batch.
 5. Missing `skill_template_version` means not onboarded yet, not invalid.
 
-Use `harness` maintain mode for rollout audits and `docs/skills/best-practices.md`
+Use `harness` maintain mode for rollout audits and `skills/harness/references/skill-system/best-practices.md`
 for the concrete on-contact upgrade checklist.
 
 ## Skill Signatures

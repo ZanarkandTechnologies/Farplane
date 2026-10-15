@@ -9,7 +9,7 @@ tags:
   - systems
   - source-and-sidecar-systems
 refs:
-  - docs/sources/registry.jsonl
+  - farplane/sources/registry.jsonl
   - skills/feed-scout/references/single-source.md
   - skills/feed-scout/SKILL.md
   - docs/features/FEAT-0072-scout-brief.md
@@ -29,7 +29,7 @@ system_record_json: |
       "FEAT-0074"
     ],
     "refs": [
-      "docs/sources/registry.jsonl",
+      "farplane/sources/registry.jsonl",
       "skills/feed-scout/references/single-source.md",
       "skills/feed-scout/SKILL.md",
       "docs/features/FEAT-0072-scout-brief.md",
@@ -102,7 +102,7 @@ flowchart LR
   scout["FEAT-0011<br/>feed-scout single-source"]:::changed
   retired["retired video-to-skill<br/>reconstruction feature"]:::retired
   content["SYS-0012<br/>Content Production<br/>Tasty Pack + Brand Kit"]:::added
-  registry["docs/sources/registry.jsonl<br/>source decisions"]:::added
+  registry["farplane/sources/registry.jsonl<br/>source decisions"]:::added
   handoff["adopt / adapt / reject / defer<br/>ticket or skill handoff"]:::added
 
   sources --> scout --> registry --> handoff
@@ -114,7 +114,7 @@ Source And Sidecar Systems let Farplane learn from outside material while keepin
 
 ## Surfaces
 
-- `docs/sources/registry.jsonl`
+- `farplane/sources/registry.jsonl`
 - `skills/feed-scout/references/single-source.md`
 - `skills/feed-scout/SKILL.md`
 - `docs/features/FEAT-0072-scout-brief.md`
