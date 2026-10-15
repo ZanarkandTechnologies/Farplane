@@ -100,6 +100,7 @@ prompt owners.
 | [Session Friction Retro](../../farplane/automations/session-friction-retro.md) | Review the day's agent sessions for agent and operator interaction friction | Dated correction and friction report, read by the weekly review |
 | [Profile Refresh](../../farplane/automations/profile-refresh.md) | Refresh the operator profile after the weekly report | Updated operator profile |
 | [Token Burn](../../farplane/automations/token-burn.md) | Use leftover usage before the weekly reset | Local-only commits and a dated report |
+| [Thread Sweeper](../../farplane/automations/thread-sweeper.md) | Every 2 hours in waking hours, find agent threads that went quiet unfinished | Nudges to stalled threads, one Telegram list of what waits on Kenji, dated report |
 
 The automation owns provider access, collection, frozen input files, validation,
 rendering, external effects, and readback. Its skill interprets those files and
