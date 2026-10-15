@@ -24,6 +24,8 @@ Work in `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`.
 3. **Knowledge Update:** `farplane/automations/steps/knowledge-update.md`, on the run from step 1.
 4. **Progress Updater:** `farplane/automations/steps/daily-operating-update.md`, on the run from step 1 and the fresh metrics from step 2, including its pace check.
 
+4b. **Prospector Watch:** `farplane/automations/steps/prospector-watch.md`, for each floor with a `prospect_watch` block. It is the one step here allowed to spend, only within its block's `budget_usd` and only while the week's logged spend stays under the cap; otherwise it records that it is waiting.
+
 If a step fails or is blocked, record why in its receipt, then carry on with the later steps where they can still run. Steps 3, 4 and 5 need step 1's completion marker; without it, report them as blocked. Steps 1–4 are plumbing: don't narrate them.
 
 5. **Morning brief.** This is the mancave's job: it serves Kenji's whole life, and each business is
@@ -62,4 +64,4 @@ Runtime notes (they don't change the records' rules):
 - Read Notion (the Plan Week and Life Plan adapter, and call notes) through the Notion connector, read-only.
 - Credentialed commands go through `farplane run -- <command>`; never print secrets.
 - Wiki: anything that is leverage for Kenji's life, career included. It stays local, in the local-only memory repo (`~/.farplane/memory`), never in a pushable repo. No health details.
-- Never send messages, publish, spend, or change settings. Other people's actions and unclear ownership stay proposals.
+- Never send messages, publish, spend (except step 4b within its budget), or change settings. Other people's actions and unclear ownership stay proposals.
