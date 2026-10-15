@@ -94,13 +94,12 @@ prompt owners.
 
 | Record | Purpose | Main result |
 | --- | --- | --- |
-| [Morning](../../farplane/automations/morning.md) | Daily collect, metrics, knowledge, and Project review chain | Dated run, Project Memory, bounded existing-issue comments, morning brief |
+| [Morning](../../farplane/automations/morning.md) | Daily collect, metrics, knowledge, Project review, and [Thread Sweep](../../farplane/automations/steps/thread-sweep.md) chain | Dated run, Project Memory, bounded existing-issue comments, stalled threads sent back to work, morning brief |
 | [Report Gen](../../farplane/automations/report-gen.md) | Compare the full Project portfolio and carry forward commitments | Project and company reports, next-week memory |
 | [Intel Digest](../../farplane/automations/intel-digest.md) | Run [Bookmark Recovery](../../farplane/automations/steps/bookmark-recovery.md), then [Feed Scout](../../farplane/automations/steps/feed-scout.md) | Bookmark candidate inbox, dated Feed Scout report and Scout Brief |
 | [Session Friction Retro](../../farplane/automations/session-friction-retro.md) | Review the day's agent sessions for agent and operator interaction friction | Dated correction and friction report, read by the weekly review |
 | [Profile Refresh](../../farplane/automations/profile-refresh.md) | Refresh the operator profile after the weekly report | Updated operator profile |
 | [Token Burn](../../farplane/automations/token-burn.md) | Use leftover usage before the weekly reset | Local-only commits and a dated report |
-| [Thread Sweeper](../../farplane/automations/thread-sweeper.md) | Every 2 hours in waking hours, find agent threads that went quiet unfinished | Nudges to stalled threads, one Telegram list of what waits on Kenji, dated report |
 
 The automation owns provider access, collection, frozen input files, validation,
 rendering, external effects, and readback. Its skill interprets those files and
