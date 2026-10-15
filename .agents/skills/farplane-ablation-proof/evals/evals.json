@@ -5,7 +5,7 @@
       "id": "ablation_core_system_difference_01",
       "prompt": "Test whether an eval-backed skill beats an instruction-only skill for a representative agent-builder task.",
       "expected_output": "Binds the agent_sdlc bet and Proof And Review or Skill System refs, cites current ICP pain, holds the task stable, changes one eval surface, shows the result, and makes a keep, modify, or delete decision",
-      "files": ["farplane/harness.yaml", "docs/systems/registry.jsonl", ".agents/skills/farplane-ablation-proof/SKILL.md"],
+      "files": ["farplane/harness.yaml", "ARCHITECTURE.md", ".agents/skills/farplane-ablation-proof/SKILL.md"],
       "assertions": [
         "The tested variable is a core harness surface",
         "The baseline is recognizable and the comparison fair",

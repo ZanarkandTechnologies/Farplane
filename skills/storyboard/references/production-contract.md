@@ -13,6 +13,12 @@ Load this reference in the `plan` mode after binding the brief and before
 writing the production action graph on the GitHub issue. It owns Resource Bank interpretation, visual-direction
 composition, creative lock detail, and selected production requirements.
 
+## Admission
+
+Project content skills own eligibility, audience and channel defaults, account
+bindings, cadence, and admission. They may hold or preempt a candidate but do
+not re-author production steps. `plan` mode starts only after project admission.
+
 ## Production Graph
 
 This graph defines the action and dependency requirements that the `plan` mode
@@ -36,7 +42,10 @@ idea + icp + evidence + brand_kit? + tasty_pack? + invocation_policy
   -> review/qa: plan, asset, render, and output evidence
 ```
 
-The Brand Kit supplies approved identity, production policy, and prompt truth.
+The Brand Kit supplies approved identity, production policy, and one kit-wide
+prompt. Provider, model, voice, and format direction stay prose inside that
+prompt; there is no separate advisor-config object. Embedded element snapshots
+are durable inputs, not live Resource Bank pointers.
 The optional Tasty Pack supplies ad-hoc current inspiration. Invocation policy
 still binds the deliverable, but Brand Kit policy wins creative-source conflicts. Compatible
 Tasty elements augment the kit by role; incompatible elements are explicitly

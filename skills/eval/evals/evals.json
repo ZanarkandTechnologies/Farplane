@@ -116,8 +116,7 @@
             "eval",
             "regression"
           ],
-          "notes": "Protects the rule that a reusable regression stays in the runnable suite.",
-          "feature_id": "FEAT-0039"
+          "notes": "Protects the rule that a reusable regression stays in the runnable suite."
         }
       }
     },

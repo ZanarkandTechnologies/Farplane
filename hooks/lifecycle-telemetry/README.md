@@ -36,6 +36,11 @@ Each new Stop payload receives a distinct event key. Farplane UI shows Stop as
 idle / “Codex stop attempted”; newer observed tool activity restores running.
 SubagentStop stops the child, not the parent.
 
+The sender classifies a Stop as `turn_end`: a stop attempt that a continuation
+may follow, so never read it as Goal or ticket completion. For the thread title
+it reads the latest exact-id `thread_name` from Codex `session_index.jsonl`;
+native names outrank ticket display titles, and a rename shows on the next hook.
+
 ## Checks
 
 Run both from the repository root:

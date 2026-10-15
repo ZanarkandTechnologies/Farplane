@@ -12,8 +12,8 @@ tags:
 refs:
   - skills/registry.jsonl
   - skills/harness/references/skill-system/README.md
-  - docs/systems/skill-system.md
-  - docs/systems/domain-skill-families.md
+  - skills/harness/references/skill-system/system.md
+  - skills/harness/references/skill-system/department-taxonomy.md
 ---
 
 # Advisor System Index
@@ -38,7 +38,7 @@ The current family contains:
 - `advise`, the foundational recommendation
   primitive used when no domain-specific advisor owns the decision.
 
-As of 2026-10-12 (after the #41 unit merges), that is 5 named advisor packages plus `advise`: 6 entries.
+As of 2026-10-15 that is 4 named advisor packages (`automation-advisor`, `doc-advisor`, `goal-advisor`, `setup-advisor`) plus `advise`: 5 entries.
 
 ## Choose By Use Case
 

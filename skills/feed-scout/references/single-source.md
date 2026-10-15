@@ -30,8 +30,8 @@ scout_source(source, decision_goal?) -> source run + SRC-* record + decision mat
    [the source-run template](../templates/source-run.md): source summary,
    safety and retention note, feature ledger.
 5. **Find local matches** for each concrete feature, workflow, or guardrail:
-   systems, feature registries, docs, skills, memory, and open issues. Use the
-   explore agent only when docs and registries cannot settle behaviour; use
+   skills, guides, `ARCHITECTURE.md`, memory, and open issues. Use the
+   explore agent only when docs and skills cannot settle behaviour; use
    `research` (code) for repository claims and `doc-advisor` for official API
    behaviour.
 6. **Score and decide** with [the decision matrix](decision-matrix.md): each
@@ -40,8 +40,15 @@ scout_source(source, decision_goal?) -> source run + SRC-* record + decision mat
    Competing implementations get [the manual scorecard](scorecard.md); several
    sources get [the project comparison](project-comparison.md) and one
    coherent candidate, not one per source.
+   Each `adopt`/`adapt` candidate names the Farplane owner surface (skill,
+   doc, config, or code path) it would change; use `harness` place mode when
+   unclear.
 7. **Record.** Update the `SRC-*` record with local artifacts and the final
-   decision, and durable feature docs only when canonical knowledge changed.
+   decision, and the owning skill or guide only when canonical knowledge
+   changed. A new record reads every existing id and takes the next unused
+   `SRC-####`; never reuse or rename a referenced id, and do not fill gaps
+   without checking tickets. A repeat source gets `decision: duplicate` with
+   `duplicate_of: SRC-####`, never a second canonical record.
    Strong `adopt`/`adapt` items are listed in the report as candidates for the
    operator; `impl-plan` writes any ticket after the operator picks one.
 

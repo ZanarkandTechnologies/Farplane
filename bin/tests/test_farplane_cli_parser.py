@@ -103,7 +103,7 @@ class FarplaneCliParserTests(unittest.TestCase):
 
         self.assertIsNone(args.window_start)
         self.assertIsNone(args.window_end)
-        # Dates and windows are this machine's (docs/farplane-framework/cli.md), never UTC by default.
+        # Dates and windows are this machine's (docs/guides/cli.md), never UTC by default.
         with unittest.mock.patch.dict(os.environ, {"TZ": "Asia/Kuala_Lumpur"}):
             local = farplane.build_parser().parse_args(["project", "snapshot"])
         self.assertEqual(local.timezone, "Asia/Kuala_Lumpur")

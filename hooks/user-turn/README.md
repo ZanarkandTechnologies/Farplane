@@ -26,9 +26,14 @@ prompts, empty/invalid input, other events, and requests without a resolved proj
 are ignored. It does not mark tickets complete or invoke suggested skills.
 
 Jev entry-skill suggestion is off unless `FARPLANE_JEV_SKILL_SUGGESTION=1`.
-Explicit skill mentions bypass the suggestion. Provider setup, privacy boundaries,
-and the two-pass selection contract are documented in the
-[runtime guide](../../docs/farplane-framework/hooks-and-runtime.md#optional-jev-entry-skill-suggestion).
+Explicit skill mentions bypass the suggestion. The code lives in
+[`hooks/shared/skill_suggestion.py`](../shared/skill_suggestion.py). Pass 1 runs
+one Choice over the generated skill registry plus three skill-need Noul gates;
+pass 2 reranks the top three using descriptions and bounded `SKILL.md` excerpts,
+and its fit Nouls may reject all three. A winner is injected as one advisory
+`<skill_relevance>` block. The public Jev demo endpoint is not used: its 2k
+context cannot hold the registry. Provider setup and privacy boundaries are in
+the [runtime guide](../../docs/guides/hooks-and-runtime.md#optional-jev-entry-skill-suggestion).
 Missing setup, provider failure, and low-confidence suggestions emit no advice;
 this does not disable normal local turn capture. When enabled, the current prompt
 and bounded skill context go to the provider. Keep API keys outside tracked config.

@@ -54,6 +54,9 @@ none            no honest metric; use judgment questions and write "none mechani
 7. Finish-check: when the primary metric is a proxy, say what it misses and
    which guard catches that miss; keep qualitative metrics qualitative with
    judgment questions instead of a fake score.
+8. `harness.yaml` selects active objectives and guards and owns their
+   priority. Unselected non-guard metrics are tracked observations, not
+   planner context.
 
 ## Card
 
@@ -102,3 +105,5 @@ numeric confidence theater; no expectation block.
 - Store canonical raw observations only; direction-aware movement is a Core
   projection. The definition minimum is `type`, `unit`, `direction`, and one
   `refresh_ref` or inline `refresh`; the projection request owns windows.
+- Changing a metric's meaning, type or direction updates its consumers (Goal
+  program, `harness.yaml` selection, report or eval) in the same change.

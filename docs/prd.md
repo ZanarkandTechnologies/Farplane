@@ -3,13 +3,11 @@ title: "Farplane engine PRD"
 status: active
 owner: farplane
 created_at: 2026-05-26
-updated_at: 2026-10-14
+updated_at: 2026-10-15
 version: "1.0"
 refs:
-  - docs/farplane-framework/lifecycle.md
-  - docs/farplane-framework/project-files.md
-  - docs/farplane-framework/pulse-and-interval-loop.md
-  - docs/farplane-framework/ticket-execution-loop.md
+  - docs/guides/work-loop.md
+  - docs/guides/project-files.md
   - farplane/harness.yaml
   - farplane/metrics.yaml
   - tickets/README.md
@@ -54,7 +52,7 @@ Since 2026-10-01, active tasks live in GitHub Issues in each project's own
 repository (`tickets/README.md`); `tickets/TASK-*/` is legacy proof and
 migration history. Scheduled jobs run as Claude Code scheduled tasks over
 `farplane/automations/` records
-([Morning Chain And Weekly Review](farplane-framework/pulse-and-interval-loop.md)).
+([work loop guide](guides/work-loop.md)).
 There is no execution heartbeat: Work Pulse was retired on 2026-10-12 (#41), and Weekly
 Self-Improvement and Monthly Registry Consolidation are killed. No automation
 executes issues.
@@ -392,6 +390,14 @@ longer real windows. The AI Office's own acceptance lives in the bunker PRD.
 | Generated state becomes canonical | owner-named source files and registry/report links back to owners |
 | Minimal schema hides necessary state | Goal Packet and ticket artifacts retain detail outside frontmatter |
 
+## Not Yet Built
+
+- Conversation-to-Work alignment as a PM evidence source: match conversations
+  to exact Projects and Work by supported identifiers, record coverage and
+  unmatched conversations, and distinguish discussion, decision, deliverable,
+  and verified result. Message volume or chat time alone never proves progress
+  or waste.
+
 ## Release And Change Policy
 
 This engine contract is the current standard. Future changes must begin from observed operating
@@ -400,6 +406,6 @@ prove that the change improves the relevant metric without violating quality,
 authority, or proof constraints.
 
 Structural replacements of the engine kernel require an explicit reviewed PRD or
-feature decision. Ordinary refinements should update the owning lifecycle doc,
+architecture decision. Ordinary refinements should update the owning guide,
 skill, template, validator, or ticket contract without inventing a new
 framework generation name.

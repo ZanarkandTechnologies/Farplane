@@ -16,11 +16,6 @@ registry fields, and todo-link rules stay in one place.
   bulk upkeep, validation, generated registry sync, and rollout audits.
 - `bin/core/skill_contract.py` owns typed skill frontmatter and optional
   package-local ensemble parsing; `check_skill_frontmatter.py` validates both.
-- feature pages in `docs/features/` own skill-applicable harness feature docs
-  with `category: "skills"`, and `docs/systems/skill-system.md` links the
-  surviving feature refs.
-- `docs/features/registry.jsonl` is generated feature output, not hand-authored
-  truth.
 - `skills/registry.jsonl` is generated inventory, not hand-authored truth.
 - `skills/<skill-name>/evals/evals.json` owns focused modular eval tasks for one
   skill's behavior when a runnable eval is the right proof surface.
@@ -98,7 +93,7 @@ describe domain work only. The phase-protocol lifecycle,
 generic local-QA procedure, ticket writeback, and broad review routing are
 inherited system behavior, so repeating them in every leaf is duplication. Keep
 one real domain branch and provider-specific instructions behind conditional
-references. The default shape is three to five top-level stages: bind the real
+references. The default shape is three to seven top-level nodes: bind the real
 input, inspect domain signals, perform the transformation while naming what
 must survive, handle a meaningful branch or gate when needed, then self-audit
 and return. Exceed it only for a separately owned artifact or an independent
@@ -116,19 +111,24 @@ and other skills dispatch; the map omits it. See
 [`department-taxonomy.md`](department-taxonomy.md) for desks and map topology.
 
 Upgrade priority comes from evidence:
-harness health keeps each desk's primary skill and every skill used in the last
-30 days in its priority cohort, and the signals below rank improvement targets.
+[harness health](../../../../bin/core/farplane_harness_health.py) keeps each
+desk's primary skill and every skill used in the last 30 days in its priority
+cohort, and the signals below rank improvement targets.
 
 ```text
 desk(skill) -> specialist | helper
 upgrade_priority(skill, evidence) -> rollout_order
 ```
 
-When a loop must rank skills as improvement targets, use the signal contract in
-`docs/features/FEAT-0064-skill-signals.md`: direct heat, composition
-heat, maintenance burden, and uniqueness. The output is a maintenance
-recommendation such as `keep`, `harden`, `refine`, `merge`, `watch`, or
-`retire_review`, not an eval score or skill quality grade.
+When a loop must rank skills as improvement targets, use the skill signals
+that [`generate_skill_graph.py`](../../scripts/generate_skill_graph.py) puts on
+every graph node ([contract](../../graph/README.md#skill-signals)): direct heat
+(observed invocations), composition heat (deduped incoming refs from recently
+used skills), maintenance burden (missing evals, stale template), and
+uniqueness (desk, methods, outgoing refs, skill UI). Raw values come before the
+recommendation, which is `keep`, `harden`, `refine`, `merge`, `watch`, or
+`retire_review`: a flag for harness maintain-mode review, not an eval score,
+quality grade, or automatic edit; destructive edits still need owner review.
 
 ## Phase Ownership And Recursion
 
@@ -297,8 +297,9 @@ Manual fields:
   catalogs, examples, model/provider maps, routing policy, and detailed caveats
   in the skill body or references.
 - `source`: required, `local` or `external`.
-- `skill_template_version`: optional structural baseline for skills onboarded
-  to a known Farplane skill template version; absence means not onboarded yet.
+- `skill_template_version`: do not author it; the registry derives it from
+  `template_uses.skill-template` (absence means not onboarded yet). The parser
+  still accepts the raw field for old packages.
 - `template_uses`: optional versioned template adoption records.
 - `version`: optional skill-local semantic version.
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
@@ -356,27 +357,23 @@ capability:
   consumes: [x-thread-draft]
 ```
 
-Plugin bundles are projections of capability metadata, not a second curated
-catalog: skills without a declared capability produce `farplane-core`, and
-`capability.kind: shortcut` produces `farplane-shortcuts`. Artifact and
-integration skills remain individually installable; runtime capability profiles
-own their independent restrictions. Every skill still gets its individual
-plugin.
-Structural feature IDs belong to the versioned skill template metadata, not
-per-skill frontmatter. Derive generated fields from source files instead of
+Skills are not split into per-capability plugins. The Claude runtime installs
+one local `farplane` plugin (hooks and subagents,
+`bin/core/farplane_claude_install.py`) and links every skill directory; runtime
+capability profiles own their independent restrictions.
+Derive generated fields from source files instead of
 duplicating them in frontmatter: `evals/evals.json` produces the generated
 `eval` registry field, while `skill_ui` is the only optional local surface field.
 
 Skills that opt into capped surface enforcement declare the structural marker in
-`template_uses`, not raw `feature_refs`:
+`template_uses`:
 
 ```yaml
 template_uses:
   skill-surface-budget: "0.1.0"
 ```
 
-This marker is backed by `FEAT-0062` and checked by
-`bin/validators/check_skill_surface_budget.py`. Subscribed skills must fit the
+This marker is checked by `bin/validators/check_skill_surface_budget.py`. Subscribed skills must fit the
 default `10 / 5` budget: 10 top-level `SKILL.md` todos and 5 skill-local eval
 tasks. Before adding item N+1,
 run `harness maintain refine_skill` with
@@ -495,8 +492,9 @@ writes: files changed, or none
 returns: files, artifacts, result, or verdict
 ```
 
-Use `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` for the full grammar and the
-self-improvement workflow contracts.
+The [skill template](../../templates/SKILL_TEMPLATE.md) owns the full
+signature shape; the [`eval`](../../../eval/SKILL.md) skill owns turning a
+miss into a runnable regression case.
 
 When invoking a skill, check the signature before execution:
 
@@ -528,37 +526,29 @@ There is no shared budget router, mode inheritance, or public persona-allocation
 schema. Do not add an `ensemble` parameter to a skill that has no local persona
 contract or clear operator need.
 
-## Feature Tracking
+## Capability Tracking
 
-Skill-applicable features belong in first-class feature docs under
-`docs/features/`, linked from `docs/systems/skill-system.md`:
-
-```json
-{"category": "skills"}
-```
-
-Use feature docs for supported optional capabilities such as eval support,
-skill fixtures, template-owned metadata, or experiment support, then regenerate
-`docs/features/registry.jsonl`.
-Use versioned template metadata for structural `FEAT-####` adoption handles,
-derive eval presence from `evals/evals.json`, and use skill frontmatter only for
-an optional skill UI surface path. Use `skill_template_version` for structural
-template onboarding.
+Track skill capabilities with versioned template metadata (`template_uses`) and
+the generated skill registry, not separate feature docs. Derive eval presence
+from `evals/evals.json`; use skill frontmatter only for an optional skill UI
+surface path; use `template_uses.skill-template` for structural template
+onboarding.
 
 Do not store long applied-migration histories in skill frontmatter. If a
 migration needs rollout tracking, let `harness` maintain mode compare the generated
-skill inventory, template version report, local surface fields, template
-metadata, and relevant feature docs.
+skill inventory, template version report, local surface fields, and template
+metadata.
 
 ## Installed Rendering
 
-Source `SKILL.md` files own the first-load todo list. Installed skill packages
-are rendered artifacts. After editing source skills, reinstall before judging
-live Codex behavior:
+Source `SKILL.md` files own the first-load todo list. Installed skills are
+directory symlinks into `skills/`, so source edits are live in
+`~/.codex/skills` and `~/.claude/skills` without reinstalling; rerun install
+only after adding or removing a skill:
 
 ```bash
 bash install.sh --skills-only --skills <names> --target ~/.codex
 ```
 
-Then inspect `~/.codex/skills/<name>/SKILL.md` when the user is checking the
-installed experience.
+A package whose `tests/` holds fixture `SKILL.md` files is copied instead (minus
+`tests/` and `todos.md`), so reinstall that package after editing it.

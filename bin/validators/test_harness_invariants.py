@@ -82,8 +82,10 @@ GLOBAL_AGENTS_TEXT = """\
 ### Blocked work
 """
 
-AGENT_KERNEL_TEXT = """\
-# Agent Kernel
+GLOBAL_AGENTS_QA_TEXT = """\
+## Agent Kernel Feature Fidelity Gate
+
+Read the AGENTS Feature Inventory below. Then every documented behavior group must remain implemented.
 
 <!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->
 | ID | Surface | Required section | Behavior group |
@@ -102,17 +104,11 @@ AGENT_KERNEL_TEXT = """\
 global_independent_reasoning_before_agreement_01
 """
 
-GLOBAL_AGENTS_QA_TEXT = """\
-## Agent Kernel Feature Fidelity Gate
-
-Read docs/systems/agent-kernel.md. Then every documented behavior group must remain implemented.
-"""
-
 CONSOLIDATE_SKILL_TEXT = """\
 # Consolidate
 
-Load the Agent Kernel inventory at docs/systems/agent-kernel.md and apply the
-Feature Fidelity Gate in skills/harness/references/global-agents-qa-checklist.md. Keep
+Load the Agent Kernel inventory and apply the Feature Fidelity Gate in
+skills/harness/references/global-agents-qa-checklist.md. Keep
 every documented behavior and every surviving or added AGENTS section. Run
 python3 bin/validators/check_harness_invariants.py.
 """
@@ -160,7 +156,6 @@ class CheckHarnessInvariantsTest(unittest.TestCase):
     def build_repo(self, root: Path) -> None:
         write_file(root / "AGENTS.md", ROOT_AGENTS_TEXT)
         write_file(root / "runtimes/AGENTS.md", GLOBAL_AGENTS_TEXT)
-        write_file(root / "docs/systems/agent-kernel.md", AGENT_KERNEL_TEXT)
         write_file(
             root / "skills/harness/references/global-agents-qa-checklist.md",
             GLOBAL_AGENTS_QA_TEXT,
@@ -194,6 +189,15 @@ developer_instructions = "review"
             result = self.run_validator(root)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertIn("harness invariants OK", result.stdout)
+
+    def test_validator_fails_when_agent_kernel_inventory_owner_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.build_repo(root)
+            (root / "skills/harness/references/global-agents-qa-checklist.md").unlink()
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("inventory owner is missing", result.stdout)
 
     def test_validator_fails_when_root_agents_loses_global_boundary(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

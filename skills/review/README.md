@@ -46,12 +46,12 @@ Return a clear `pass|revise|block|invalid` verdict grounded in the provided evid
 - `sed -n '1,120p' skills/review/SKILL.md`
   and expect a marker-delimited `## Todo List` with natural-language
   review steps
-- `rg -n "reviewer-handoff|rubric_families|code-health|final-pass|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md skills/review/references/rubrics agents/reviewer.toml docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md tickets/templates/ticket.md`
+- `rg -n "reviewer-handoff|rubric_families|code-health|final-pass|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md skills/review/references/rubrics agents/reviewer.toml tickets/README.md tickets/templates/ticket.md`
   and expect live matches in the updated review surfaces
 - Run a stale numeric-review-contract scan over `skills/review`,
-  `agents/reviewer.toml`, and `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`; expect no live
+  and `agents/reviewer.toml`; expect no live
   review-contract matches outside historical notes or unrelated schema versions.
 - Manually verify that examples and TAS gates in `SKILL.md`,
-  `references/rubrics/review-rubric-index.md`,
-  `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md` all use the same explicit TAS contract and
+  `references/rubrics/review-rubric-index.md`, and the `tickets/README.md`
+  close rule all use the same explicit TAS contract and
   search/output expectations

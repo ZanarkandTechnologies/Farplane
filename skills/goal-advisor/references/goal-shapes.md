@@ -10,6 +10,16 @@ created_at: 2026-06-13
 Load this reference when the one-line classifier in `SKILL.md` is not enough to
 decide or explain the selected Goal shape.
 
+## What each shape evaluates against
+
+- Active Goal: the issue's Done / Proof, tests, QA, and review.
+- Skill improvement: the frozen skill eval plus behavior QA.
+- ML autoresearch (a Goal Mode via its preset): the frozen metric; diagnose a
+  surprising result before trusting it.
+- Feedback: a structured human verdict.
+- Delayed reward (Check-In Program): matured evidence against the acceptance rule.
+- Rollout: sample evidence against the promotion and rollback rules.
+
 ## Active Goal
 
 ```text

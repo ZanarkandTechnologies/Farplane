@@ -1,8 +1,7 @@
 {
   "_template_metadata": {
     "template_id": "skill-eval-task",
-    "template_version": "0.2.1",
-    "feature_refs": ["FEAT-0039"],
+    "template_version": "0.2.2",
     "consumer_scope": "skill",
     "applies_to": ["skills/*/evals/evals.json"]
   },

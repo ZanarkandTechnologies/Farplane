@@ -197,6 +197,12 @@ generated audio.
 
 ## Tasty Pack Shape
 
+A Tasty Pack is a retrieval view computed per request over Resource Bank
+captures; there is no saved Tasty Pack table or row. It is optional
+inspiration, never approved identity: the Brand Kit owns approved snapshots and
+wins conflicts. Resource Bank stays candidate storage, not a production-profile
+system.
+
 Tasty Pack / Inspiration Pack retrieval should return clean captures:
 
 ```text

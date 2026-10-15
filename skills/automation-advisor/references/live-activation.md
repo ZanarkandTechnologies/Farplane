@@ -29,6 +29,9 @@ activate_farplane_automations(project_root, desired_records,
    ID in `farplane/pm.json`; never store automation runtime IDs there.
 6. Do not activate when goals are placeholders or the request is planning only.
    If app automation tools are unavailable, return `needs_automation_setup`.
+7. After activation, compare desired and live state: no execution heartbeat,
+   only the expected cron jobs, the correct project target, and no duplicate
+   executor for the same record.
 
 Never create an extra scheduler thread, automation JSON manifest, cadence env
 vars, or thread rows merely to make cron jobs look persistent.

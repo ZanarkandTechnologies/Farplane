@@ -345,7 +345,7 @@ def build_fsa_projection(projection_id: str, label: str, state_labels: list[str]
                     "target": state_id,
                     "type": "transition",
                     "label": f"{state_labels[index - 1]} -> {state_label}",
-                    "evidence_ref": "docs/farplane-framework/graph-contract.md",
+                    "evidence_ref": "docs/guides/graphs.md",
                     "confidence": "curated",
                 }
             )

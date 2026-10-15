@@ -2,38 +2,38 @@
   "skill_name": "doc-advisor",
   "evals": [
     {
-      "id": "doc_advisor_system_vs_feature_01",
-      "prompt": "Our feature page for a docs capability has grown into broad policy for where all docs live, how feature and system specs work, and how generated registries are maintained. Some of that policy also got copied into docs skill references, and I am not sure what should live where or what checks prove the split. How should we reshape it?",
-      "expected_output": "Recognizes that broad documentation governance is system-shaped rather than only a single feature slice; Recommends a system spec such as Documentation OS for product-layer boundaries and long-lived documentation architecture; Keeps the feature doc as a narrower capability slice with behavior, surfaces, proof, limits, and maintenance path; Explains why a skill reference should own executable branch workflow rather than canonical lore; Names registry validation or doc reference checks as proof after moving the boundary",
+      "id": "doc_advisor_scope_decision_01",
+      "prompt": "Our doc-advisor skill reference has grown into broad policy for where all docs live, how guides and fundamentals work, and how generated registries are maintained. Some of that policy also got copied into a guide, and I am not sure what should live where or what checks prove the split. How should we reshape it?",
+      "expected_output": "Applies the scope decision: skill reference, guide, PRD or MEMORY, ARCHITECTURE systems row, ticket, or delete; Moves broad cross-cutting documentation policy into a guide rather than a skill reference; Keeps only the executable branch workflow in the skill reference, since installed skills cannot reach the repo docs; Deletes or folds the duplicate copy instead of keeping two sources of truth; Names doc reference checks or skill validation as proof after moving the boundary",
       "files": [],
       "assertions": [
-        "Recognizes that broad documentation governance is system-shaped rather than only a single feature slice",
-        "Recommends a system spec such as Documentation OS for product-layer boundaries and long-lived documentation architecture",
-        "Keeps the feature doc as a narrower capability slice with behavior, surfaces, proof, limits, and maintenance path",
-        "Explains why a skill reference should own executable branch workflow rather than canonical lore",
-        "Names registry validation or doc reference checks as proof after moving the boundary"
+        "Applies the scope decision: skill reference, guide, PRD or MEMORY, ARCHITECTURE systems row, ticket, or delete",
+        "Moves broad cross-cutting documentation policy into a guide rather than a skill reference",
+        "Keeps only the executable branch workflow in the skill reference, since installed skills cannot reach the repo docs",
+        "Deletes or folds the duplicate copy instead of keeping two sources of truth",
+        "Names doc reference checks or skill validation as proof after moving the boundary"
       ],
       "metadata": {
         "farplane": {
-          "title": "Doc Advisor routes broad subsystem lore to a system spec",
+          "title": "Doc Advisor routes cross-cutting lore to a guide",
           "tags": [
             "skill",
             "doc-advisor",
-            "system-vs-feature"
+            "scope-decision"
           ],
-          "notes": "Covers the FEAT-0060 promotion failure mode that triggered the Documentation OS split."
+          "notes": "Covers the failure mode where durable policy grows inside a skill reference or is duplicated across owners."
         }
       }
     },
     {
       "id": "doc_advisor_branch_reference_01",
-      "prompt": "I need to update a system spec and a feature page, but I am not sure what front matter and registry sync rules apply. What should the documentation workflow do first?",
-      "expected_output": "Binds the reader, target surfaces, source of truth, and proof route before editing; Loads the metadata/registry branch reference because front matter and generated registries are in scope; Loads the feature/system spec branch reference because both FEAT and SYS boundaries are in scope; Does not expand every documentation architecture rule into the first-load workflow; Names generated registries as outputs and says not to hand-edit JSONL rows",
+      "prompt": "I need to update a guide and a registered template, but I am not sure what front matter and registry sync rules apply. What should the documentation workflow do first?",
+      "expected_output": "Binds the reader, target surfaces, source of truth, and proof route before editing; Loads the metadata/registry branch reference because front matter and generated registries are in scope; Loads the doc architecture branch reference only if placement or scope is unclear; Does not expand every documentation architecture rule into the first-load workflow; Names generated registries as outputs and says not to hand-edit JSONL rows",
       "files": [],
       "assertions": [
         "Binds the reader, target surfaces, source of truth, and proof route before editing",
         "Loads the metadata/registry branch reference because front matter and generated registries are in scope",
-        "Loads the feature/system spec branch reference because both FEAT and SYS boundaries are in scope",
+        "Loads the doc architecture branch reference only if placement or scope is unclear",
         "Does not expand every documentation architecture rule into the first-load workflow",
         "Names generated registries as outputs and says not to hand-edit JSONL rows"
       ],
@@ -150,7 +150,7 @@
     },
     {
       "id": "doc_advisor_consolidate_constraints_vs_value_function_01",
-      "prompt": "Consolidate a feature registry to fewer rows, but preserve FEAT IDs and generated-registry compatibility. Can we just sort by usage and delete the bottom half?",
+      "prompt": "Consolidate the source registry to fewer rows, but preserve SRC IDs and generated-registry compatibility. Can we just sort by usage and delete the bottom half?",
       "expected_output": "Treats preserve_ids and generated compatibility as hard constraints; Rejects deleting solely by low usage or row count; Names a value function that includes proof, routing, reuse, memory, and user value; Requires source-owner or consumer checks before retire/delete decisions; Returns keep/merge/retire or handoff decisions with evidence; Requires validator or generated-output proof before claiming completion",
       "files": [],
       "assertions": [
@@ -257,10 +257,10 @@
     {
       "id": "doc_advisor_consolidate_agents_feature_fidelity_01",
       "prompt": "Use the consolidate workflow to explain the loss-check contract we must follow before shortening runtimes/AGENTS.md so it does not lose behavior. Do not edit files; I only want the guardrail.",
-      "expected_output": "Names docs/systems/agent-kernel.md as the canonical AGENTS feature inventory; Requires skills/harness/references/global-agents-qa-checklist.md before editing; Requires an inventory of material behavior rules instead of relying only on section headings; Checks every documented behavior group remains implemented; Checks every surviving or added AGENTS section remains documented; Preserves independent reasoning before agreement and the non-sycophantic response opening; Requires check_harness_invariants.py plus affected behavior evals before completion; Treats any unexplained loss or weakened high-risk behavior as a failed consolidation",
+      "expected_output": "Names the AGENTS Feature Inventory in skills/harness/references/global-agents-qa-checklist.md as the canonical Agent Kernel feature inventory; Requires skills/harness/references/global-agents-qa-checklist.md before editing; Requires an inventory of material behavior rules instead of relying only on section headings; Checks every documented behavior group remains implemented; Checks every surviving or added AGENTS section remains documented; Preserves independent reasoning before agreement and the non-sycophantic response opening; Requires check_harness_invariants.py plus affected behavior evals before completion; Treats any unexplained loss or weakened high-risk behavior as a failed consolidation",
       "files": [],
       "assertions": [
-        "Names docs/systems/agent-kernel.md as the canonical AGENTS feature inventory",
+        "Names the AGENTS Feature Inventory in skills/harness/references/global-agents-qa-checklist.md as the canonical Agent Kernel feature inventory",
         "Requires skills/harness/references/global-agents-qa-checklist.md before editing",
         "Requires an inventory of material behavior rules instead of relying only on section headings",
         "Checks every documented behavior group remains implemented",

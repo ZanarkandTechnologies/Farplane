@@ -56,7 +56,6 @@ OPTIONAL_FIELDS = {
     # participate in board routing and is never required.
     "template_id",
     "template_version",
-    "feature_refs",
 }
 RETIRED_FIELDS = {
     "phase",

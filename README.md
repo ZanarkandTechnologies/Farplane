@@ -6,7 +6,7 @@ Farplane is a local AI operating harness for turning an operator-defined
 commercial bet into one inspectable next commitment at a time.
 
 The current product contract is the [Farplane engine PRD](docs/prd.md), implemented by the
-[framework lifecycle](docs/farplane-framework/lifecycle.md) and its linked
+[framework lifecycle](docs/guides/work-loop.md) and its linked
 technical contracts.
 
 Clone this repo when you want to build and maintain your own operating harness
@@ -35,7 +35,7 @@ without turning their repo into a haze of prompts, chat memory, and
 unverifiable claims.
 
 1. **A local control plane for agent work.** Farplane keeps plans, runtime
-   state, memories, feature specs, and proof in files that developers can diff,
+   state, memories, guides, and proof in files that developers can diff,
    review, and repair; tasks live in the project's own GitHub Issues.
 2. **Objective loops that do not drift.** Project metric objectives live in
    `farplane/metrics.yaml` with explicit direction, and Core derives movement
@@ -76,7 +76,7 @@ local delegation all route through this Core-owned command.
 
 Each project's scheduled jobs live in its committed `farplane/automations/`,
 one file per live routine; the steps those jobs call live in
-`farplane/automations/steps/`. See the [automation ownership contract](docs/farplane-framework/project-files.md#farplaneautomations).
+`farplane/automations/steps/`. See the [automation ownership contract](docs/guides/project-files.md#farplaneautomations).
 
 Other app ideas should graduate into Core contracts, bunker modules, skill-owned
 viewers, or archived experiments instead of becoming new centers of gravity.
@@ -108,7 +108,7 @@ Farplane turns each material request into a visible loop:
 ask -> ground -> choose the owner -> act -> prove -> learn
 ```
 
-The global prompt stays lean; durable behavior lives in skills, feature specs, tickets,
+The global prompt stays lean; durable behavior lives in skills, guides, tickets,
 validators, subagents, evals, and review gates. When work fails, the correction
 can become a lesson, hardcase, eval row, skill update, or harness-placement
 decision instead of disappearing into chat history.
@@ -141,9 +141,8 @@ flowchart LR
 | `assets/` | Repo-level media and generated assets. |
 | `bin/` | The `farplane` CLI, runtime helpers, validator wrappers, launchers, and sync scripts. |
 | `bin/validators/` | Testable repo-wide validators for docs, harness invariants, skills, and registries. |
-| `docs/` | Systems, feature specs, generated registries, history, memory, and durable research. |
-| `docs/systems/` | Authored public system docs plus generated system registry. |
-| `docs/features/` | Authored first-class feature specs plus generated feature registry output. |
+| `docs/` | Product PRD, guides, fundamentals, history, and memory. |
+| `docs/guides/` | How a Farplane project works: work loop, project files, CLI, hooks, Wiki, reporting, graphs. |
 | `docs/fundamentals/` | Harness theory, doctrine, and cross-surface best practices. |
 | `.farplane/` | Ignored project-local runtime, generated, event, and product state. |
 | `.agents/skills/` | Project-local skills used only inside this repo. |
@@ -159,12 +158,10 @@ flowchart LR
 - Install / onboarding: [Local CLI Onboarding](#local-cli-onboarding)
 - Architecture map: [ARCHITECTURE.md](ARCHITECTURE.md)
 - Fundamentals: [docs/fundamentals/README.md](docs/fundamentals/README.md)
-- Systems stack: [docs/systems/README.md](docs/systems/README.md)
-- Feature specs and registry contract: [docs/features/README.md](docs/features/README.md)
+- Systems: [ARCHITECTURE.md#systems](ARCHITECTURE.md#systems)
+- Guides: [docs/guides/README.md](docs/guides/README.md)
 - Harness algebra: [docs/fundamentals/harness-algebra.md](docs/fundamentals/harness-algebra.md)
 - Prompt engineering: [docs/fundamentals/prompt-engineering.md](docs/fundamentals/prompt-engineering.md)
-- Generated system registry data: [docs/systems/registry.jsonl](docs/systems/registry.jsonl)
-- Generated feature registry data: [docs/features/registry.jsonl](docs/features/registry.jsonl)
 - Skill guide: [skills/harness/references/skill-system/README.md](skills/harness/references/skill-system/README.md)
 - Skill best practices: [skills/harness/references/skill-system/best-practices.md](skills/harness/references/skill-system/best-practices.md)
 - Ticket and Goal contract (GitHub Issues, close rule, `## Goal program`): [tickets/README.md](tickets/README.md#current-github-issues-workflow)

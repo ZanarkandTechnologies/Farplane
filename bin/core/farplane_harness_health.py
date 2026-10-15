@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Compile filesystem-backed skill, rollout, and eval health projections."""
+"""Compile filesystem-backed skill, rollout, and eval health projections.
+
+Writes .farplane/state/harness-health.json and
+.farplane/metrics/observations/harness_health/<date>.json: skill, rollout and
+latest-eval readings plus priority-skill and source-gap findings. Weighted
+health scores are readings, never planner objectives.
+"""
 
 from __future__ import annotations
 
@@ -180,8 +186,6 @@ def build_skill_rows(
         references = heading_section(body, r"reference|source|link")
         if not references:
             references = "\n".join(match[1] for match in re.findall(r"\[([^\]]+)\]\(([^)]+)\)", body))
-        if not references and isinstance(frontmatter.get("feature_refs"), list):
-            references = "\n".join(str(ref) for ref in frontmatter["feature_refs"] if ref)
         template_status = str(rollout_row.get("status") or "unknown")
 
         burden = 0
@@ -270,13 +274,6 @@ def weighted_skill_health(
     graph: dict[str, Any], docs: dict[str, Any], intelligence: dict[str, Any]
 ) -> dict[str, Any]:
     nodes = {str(row.get("id") or ""): row for row in graph.get("nodes", []) if isinstance(row, dict)}
-    docs_by_id = docs.get("skills") if isinstance(docs.get("skills"), dict) else {}
-    features = {str(row.get("id")) for row in intelligence.get("features", []) if isinstance(row, dict) and row.get("id")}
-    template_refs = {
-        str(row.get("version") or ""): {str(ref) for ref in ((row.get("template_metadata") or {}).get("feature_refs") or [])}
-        for row in intelligence.get("template_versions", [])
-        if isinstance(row, dict)
-    }
     weighted_rows: list[tuple[float, float]] = []
     for rollout_row in intelligence.get("rollout", []):
         if not isinstance(rollout_row, dict) or rollout_row.get("source") == "external":
@@ -284,17 +281,12 @@ def weighted_skill_health(
         skill_id = str(rollout_row.get("skill_id") or "")
         node = nodes.get(skill_id, {})
         heat = node.get("heat") if isinstance(node.get("heat"), dict) else {}
-        doc = docs_by_id.get(skill_id) if isinstance(docs_by_id.get(skill_id), dict) else {}
-        frontmatter = doc.get("frontmatter") if isinstance(doc.get("frontmatter"), dict) else {}
-        refs = set(template_refs.get(str(rollout_row.get("template_version") or ""), set()))
-        refs.update(str(ref) for ref in rollout_row.get("feature_refs", []) if ref)
-        refs.update(str(ref) for ref in frontmatter.get("feature_refs", []) if ref)
         weight = max(
             1,
             numeric(heat.get("invocation_count_30d", heat.get("invocation_count_window"))),
             numeric(heat.get("heat_score")),
         )
-        coverage = len(refs & features) / len(features) if features else 0
+        coverage = 1.0 if rollout_row.get("status") == "current" else 0.0
         weighted_rows.append((weight, coverage))
     total_weight = sum(weight for weight, _ in weighted_rows)
     score = sum(weight * coverage for weight, coverage in weighted_rows) / total_weight * 100 if total_weight else 0
@@ -302,8 +294,7 @@ def weighted_skill_health(
         "score": clamp_score(score),
         "totalSkills": len(weighted_rows),
         "weightedSkills": sum(1 for weight, _ in weighted_rows if weight > 1),
-        "featureCount": len(features),
-        "method": "feature coverage weighted by local invocation or heat, minimum weight one",
+        "method": "share of local skills on the current skill template, weighted by local invocation or heat, minimum weight one",
     }
 
 
@@ -513,7 +504,7 @@ def build_metric_readings(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
         "anti_metrics": [
             "changing desk membership or source only to escape the priority cohort",
             "removing eval requirements to erase a gap",
-            "adding meaningless feature refs to inflate a score",
+            "bumping template_uses pins without upgrading the skill to inflate a score",
             "retiring or splitting skills only to reduce the count",
         ],
         "source_ref": ".farplane/state/harness-health.json",

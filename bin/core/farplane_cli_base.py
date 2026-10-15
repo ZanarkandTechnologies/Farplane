@@ -395,7 +395,7 @@ def write_config(next_config: CliConfig) -> None:
     tmp.replace(CONFIG_PATH)
 
 
-# `farplane --help` as a map of jobs (docs/farplane-framework/cli.md): an agent reads it once and knows
+# `farplane --help` as a map of jobs (docs/guides/cli.md): an agent reads it once and knows
 # which command does the job. Keep it in step with that doc's map.
 JOBS = """jobs:
   daily       farplane run -- farplane metrics refresh   every project's readings and snapshot, then Convex
@@ -407,5 +407,5 @@ JOBS = """jobs:
   inspect     farplane skills rollout | harness health | lint
   secrets     farplane run -- <command>                  anything that needs the project's credentials
 
-dates default to today on this machine's clock. Rules for changing a command: docs/farplane-framework/cli.md
+dates default to today on this machine's clock. Rules for changing a command: docs/guides/cli.md
 """

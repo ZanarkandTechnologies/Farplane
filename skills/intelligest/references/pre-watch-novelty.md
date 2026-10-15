@@ -6,8 +6,8 @@ Answer before watching: what in this video is new from this creator?
 
 - One Wiki page per creator: `.farplane/entities/<creator-id>.md`, `kind: person` with `roles: [creator]`,
   at the company Wiki root (nearest ancestor whose `.farplane/entities/` holds pages).
-- The page follows the creator page template
-  (`docs/farplane-framework/entity-templates/creator.md`): a 3–5 sentence lede, then
+- The page follows the `creator-page` template (listed in the Farplane template
+  registry): a 3–5 sentence lede, then
   `## Claims` and `## Stories` under its fixed `### ` themes (plus at most two
   niche claim themes), each with a one-line summary.
   Every line is one idea ending in its `[video@m:ss](https://youtu.be/<id>?t=<seconds>)`

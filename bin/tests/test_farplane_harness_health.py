@@ -57,9 +57,8 @@ def write_fixture(root: Path) -> None:
                     "frontmatter": {
                         "name": "alpha",
                         "description": "Alpha workflow",
-                        "feature_refs": ["FEAT-1"],
                     },
-                    "body": "# Alpha\n\n## Todo List\n- [ ] act\n\n## QA\nRun proof.\n",
+                    "body": "# Alpha\n\n## Todo List\n- [ ] act\n\n## QA\nRun proof.\n\n## References\n- [Guide](references/guide.md)\n",
                 }
             }
         },
@@ -82,10 +81,7 @@ def write_fixture(root: Path) -> None:
             ],
             "template_rollout": [],
             "template_rollout_summary": {},
-            "features": [{"id": "FEAT-1"}],
-            "template_versions": [
-                {"version": "1.0.0", "template_metadata": {"feature_refs": ["FEAT-1"]}}
-            ],
+            "template_versions": [{"version": "1.0.0", "template_metadata": {}}],
         },
     )
     registry = root / "skills" / "registry.jsonl"

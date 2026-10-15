@@ -10,7 +10,7 @@ owner-surface choice is unclear.
 
 ```text
 doc_architecture(doc_delta, repo_state?) -> owner_surface + doc_type + disposition + evidence
-state: reads(target doc?, nearest index/README, docs/systems/documentation-os.md, relevant owner docs); writes(decision note or target doc)
+state: reads(target doc?, nearest index/README, docs/AGENTS.md, ARCHITECTURE.md, relevant owner docs); writes(decision note or target doc)
 gates: owner_surface_named; duplicate_truth_checked; reader_path_clear
 fails: creates a new doc for content with an existing owner; archives stale lore by default
 ```
@@ -32,10 +32,27 @@ input_packet:
     nearest_owner:
     evidence_refs:
   source_refs:
-    - docs/systems/documentation-os.md
-    - docs/features/README.md
-    - docs/systems/README.md
+    - docs/AGENTS.md
+    - ARCHITECTURE.md
 ```
+
+## Scope Decision
+
+```text
+doc_scope_decision(change)
+  -> skill_reference | guide | prd/MEMORY | ARCHITECTURE systems row | ticket | delete
+```
+
+- Skill reference: the executable branch of one skill, loaded conditionally.
+  Installed skills run where the repo `docs/` does not exist, so anything a
+  skill loads to do its task lives in the skill.
+- Guide or fundamental: durable cross-cutting policy or theory a person reads.
+- PRD or `MEMORY.md`: product intent, or a current invariant worth retrieving
+  outside its owner.
+- `ARCHITECTURE.md` systems row: the system map; one row per system.
+- Ticket: task-local plan, proof, or research not yet durable.
+- Delete or fold: anything that duplicates a stronger owner or exists only
+  because a registry row once did.
 
 ## Workflow
 

@@ -2,7 +2,7 @@
 
 Zernio is the one source of a business's social numbers: it reads every account connected to it,
 including posts published natively on the platform, so Farplane connects no platform itself
-(docs/farplane-framework/cli.md). It gives the Distribution step `posts_published`, how many posts went out
+(docs/guides/cli.md). It gives the Distribution step `posts_published`, how many posts went out
 each day (the input a step plan paces), and `views_per_post`, the average views of the posts published in
 the seven days to that day (an output to hill-climb). For each connected account it also fills the
 `<platform>_followers` and `<platform>_views` metrics the project defines (views of the posts published in

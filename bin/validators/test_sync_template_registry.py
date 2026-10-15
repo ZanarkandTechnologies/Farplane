@@ -19,15 +19,6 @@ sys.modules[SPEC.name] = sync_template_registry
 SPEC.loader.exec_module(sync_template_registry)
 
 
-def write_feature_registry(root: Path) -> None:
-    path = root / "docs" / "features" / "registry.jsonl"
-    path.parent.mkdir(parents=True)
-    path.write_text(
-        '{"id":"FEAT-0001","name":"Test","status":"implemented","category":"test","surfaces":[],"source_refs":[],"external_refs":[],"evidence_refs":[],"known_limits":"","metrics":[],"last_verified":"2026-06-16"}\n',
-        encoding="utf-8",
-    )
-
-
 def write_config(root: Path, *paths: str) -> Path:
     path = root / "config" / "template-registry.toml"
     path.parent.mkdir(parents=True)
@@ -40,7 +31,6 @@ class TemplateRegistryTests(unittest.TestCase):
     def test_builds_registry_from_yaml_frontmatter(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_feature_registry(root)
             template = root / "templates" / "prompt.md"
             template.parent.mkdir()
             template.write_text(
@@ -49,8 +39,6 @@ class TemplateRegistryTests(unittest.TestCase):
                     ---
                     template_id: prompt-template
                     template_version: "1.2.3"
-                    feature_refs:
-                      - FEAT-0001
                     consumer_scope: skill
                     applies_to:
                       - skills/*/SKILL.md
@@ -67,14 +55,12 @@ class TemplateRegistryTests(unittest.TestCase):
 
         self.assertEqual(rows[0]["template_id"], "prompt-template")
         self.assertEqual(rows[0]["template_version"], "1.2.3")
-        self.assertEqual(rows[0]["feature_refs"], ["FEAT-0001"])
         self.assertEqual(rows[0]["consumer_scope"], "skill")
         self.assertEqual(rows[0]["applies_to"], ["skills/*/SKILL.md"])
 
     def test_builds_registry_from_html_comment_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_feature_registry(root)
             template = root / "templates" / "AGENTS.md"
             template.parent.mkdir()
             template.write_text(
@@ -83,8 +69,6 @@ class TemplateRegistryTests(unittest.TestCase):
                     <!--
                     template_id: global-agents-template
                     template_version: 0.2.2
-                    feature_refs:
-                      - FEAT-0001
                     -->
                     Body
                     """
@@ -96,39 +80,20 @@ class TemplateRegistryTests(unittest.TestCase):
             rows = sync_template_registry.build_registry(root, config)
 
         self.assertEqual(rows[0]["template_id"], "global-agents-template")
-        self.assertEqual(rows[0]["feature_refs"], ["FEAT-0001"])
 
-    def test_rejects_unknown_feature_refs(self) -> None:
+    def test_requires_template_version(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_feature_registry(root)
             template = root / "templates" / "prompt.md"
             template.parent.mkdir()
             template.write_text(
-                "---\ntemplate_id: prompt\ntemplate_version: 1.0.0\nfeature_refs:\n  - FEAT-MISSING\n---\n",
+                "---\ntemplate_id: prompt\n---\n",
                 encoding="utf-8",
             )
             config = write_config(root, "templates/prompt.md")
 
             with self.assertRaisesRegex(
-                sync_template_registry.TemplateRegistryError, "unknown feature_refs"
-            ):
-                sync_template_registry.build_registry(root, config)
-
-    def test_requires_feature_refs(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            write_feature_registry(root)
-            template = root / "templates" / "prompt.md"
-            template.parent.mkdir()
-            template.write_text(
-                "---\ntemplate_id: prompt\ntemplate_version: 1.0.0\n---\n",
-                encoding="utf-8",
-            )
-            config = write_config(root, "templates/prompt.md")
-
-            with self.assertRaisesRegex(
-                sync_template_registry.TemplateRegistryError, "feature_refs"
+                sync_template_registry.TemplateRegistryError, "missing template_version"
             ):
                 sync_template_registry.build_registry(root, config)
 

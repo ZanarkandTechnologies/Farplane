@@ -29,11 +29,22 @@ unrelated hooks. Temporary installed-only migration links keep old flat command
 paths working for active Codex sessions with cached registrations. Source files
 live only in the new folders; `hooks/hooks.json` uses their new paths. Remove the
 migration links only after old sessions have retired or reloaded. Review/trust changed
-command paths in Codex `/hooks`; installation does not grant trust. One Stop gate
+command paths in Codex `/hooks`; installation does not grant trust.
+`farplane hooks list` shows only Farplane-managed commands, not Codex's effective
+trust decisions or plugin hooks; Codex `/hooks` owns trust and enable/disable. One Stop gate
 blocks; `FARPLANE_STOP_CHECKS` selects its checks. The continuation and
 response-length entrypoints stay installed for sessions with cached commands. Hook code lives in its hook's folder;
 code two hooks share lives once in [`shared/`](shared/README.md), and code the CLI
 also uses lives in `bin/core/`.
 
-See the [runtime guide](../docs/farplane-framework/hooks-and-runtime.md) for
+## Rules for a new hook
+
+- Detect or capture cheaply; stay path-scoped and deterministic.
+- Write only small, bounded runtime records; route judgment to skills, tickets,
+  or reviewers.
+- Never auto-rewrite durable memory or context files from a hook.
+- Stop hooks never do completion review; that lives in the issue's
+  `Done / Proof`.
+
+See the [runtime guide](../docs/guides/hooks-and-runtime.md) for
 cross-hook contracts, configuration precedence, and telemetry state boundaries.

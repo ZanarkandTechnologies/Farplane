@@ -264,7 +264,6 @@ def build_registry() -> CheckRegistry:
         CheckSpec("skills.check", command_check("skills.check", ("python3", "skills/harness/scripts/check_skills.py"))),
         CheckSpec("docs.refs", command_check("docs.refs", ("python3", "bin/validators/check_doc_refs.py"))),
         CheckSpec("docs.contracts", command_check("docs.contracts", ("python3", "bin/validators/check_doc_parity.py"))),
-        CheckSpec("docs.features", command_check("docs.features", ("python3", "docs/features/validate_features.py"))),
         CheckSpec("docs.sources", command_check("docs.sources", ("python3", "bin/validators/validate_sources.py"))),
         CheckSpec("templates.check", command_check("templates.check", ("python3", "bin/validators/sync_template_registry.py", "--check"))),
         CheckSpec("project.check", command_check("project.check", ("python3", "bin/validators/check_farplane_project_files.py"))),

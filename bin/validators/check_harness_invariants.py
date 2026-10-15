@@ -25,6 +25,9 @@ except ImportError:  # pragma: no cover - package import path for tests
 
 ROOT = Path(__file__).resolve().parents[2]
 RETIRED_NAMES_PATH = "config/retired-names.toml"
+# The Agent Kernel feature inventory lives in the global AGENTS QA checklist,
+# between its BEGIN/END AGENT_KERNEL_FEATURE_INVENTORY markers.
+AGENT_KERNEL_INVENTORY_PATH = "skills/harness/references/global-agents-qa-checklist.md"
 
 
 @dataclass(frozen=True)
@@ -62,26 +65,17 @@ RULES: tuple[HarnessRule, ...] = (
         ),
     ),
     HarnessRule(
-        relative_path="docs/systems/agent-kernel.md",
+        relative_path=AGENT_KERNEL_INVENTORY_PATH,
         required_substrings=(
+            "## Agent Kernel Feature Fidelity Gate",
+            "every documented behavior group must remain",
             "<!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->",
             "<!-- END AGENT_KERNEL_FEATURE_INVENTORY -->",
             "global_independent_reasoning_before_agreement_01",
         ),
         remediation=(
-            "keep the canonical bidirectional AGENTS feature inventory and its "
-            "high-risk behavior proof route in the Agent Kernel system owner"
-        ),
-    ),
-    HarnessRule(
-        relative_path="skills/harness/references/global-agents-qa-checklist.md",
-        required_substrings=(
-            "## Agent Kernel Feature Fidelity Gate",
-            "docs/systems/agent-kernel.md",
-            "every documented behavior group must remain",
-        ),
-        remediation=(
-            "restore the bidirectional Agent Kernel feature-fidelity gate for "
+            "restore the bidirectional Agent Kernel feature-fidelity gate, its "
+            "AGENTS feature inventory, and its high-risk behavior proof route for "
             "every AGENTS edit, rewrite, or consolidation"
         ),
     ),
@@ -90,7 +84,6 @@ RULES: tuple[HarnessRule, ...] = (
         required_substrings=(
             "Agent Kernel",
             "Feature Fidelity Gate",
-            "docs/systems/agent-kernel.md",
             "skills/harness/references/global-agents-qa-checklist.md",
             "every documented behavior",
             "every surviving or added AGENTS section",
@@ -317,9 +310,12 @@ def active_markdown_section(text: str, heading: str) -> str:
 def validate_agent_kernel_inventory(root: Path) -> list[str]:
     """Keep the Agent Kernel inventory and both AGENTS surfaces bidirectional."""
 
-    owner_path = root / "docs" / "systems" / "agent-kernel.md"
+    owner_path = root / AGENT_KERNEL_INVENTORY_PATH
     if not owner_path.is_file():
-        return []
+        return [
+            f"{AGENT_KERNEL_INVENTORY_PATH}: Agent Kernel feature inventory owner is missing | "
+            "remediation: restore the inventory or update AGENT_KERNEL_INVENTORY_PATH to its new owner"
+        ]
 
     text = owner_path.read_text(encoding="utf-8")
     start_marker = "<!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->"
@@ -328,7 +324,7 @@ def validate_agent_kernel_inventory(root: Path) -> list[str]:
     end = text.find(end_marker)
     if start == -1 or end == -1 or end <= start:
         return [
-            "docs/systems/agent-kernel.md: invalid Agent Kernel feature inventory "
+            f"{AGENT_KERNEL_INVENTORY_PATH}: invalid Agent Kernel feature inventory "
             "markers | remediation: preserve one ordered BEGIN/END inventory block"
         ]
 
@@ -342,14 +338,14 @@ def validate_agent_kernel_inventory(root: Path) -> list[str]:
         cells = [cell.strip().strip("`") for cell in line.strip().strip("|").split("|")]
         if len(cells) != 4:
             errors.append(
-                "docs/systems/agent-kernel.md: malformed feature inventory row: "
+                f"{AGENT_KERNEL_INVENTORY_PATH}: malformed feature inventory row: "
                 f"{line!r} | remediation: keep ID, surface, required section, and behavior group"
             )
             continue
         feature_id, surface, section, _behavior = cells
         if feature_id in seen_ids:
             errors.append(
-                f"docs/systems/agent-kernel.md: duplicate feature ID {feature_id!r} | "
+                f"{AGENT_KERNEL_INVENTORY_PATH}: duplicate feature ID {feature_id!r} | "
                 "remediation: keep each Agent Kernel behavior group unique"
             )
             continue
@@ -357,7 +353,7 @@ def validate_agent_kernel_inventory(root: Path) -> list[str]:
         section_key = (surface, section)
         if section_key in seen_sections:
             errors.append(
-                f"docs/systems/agent-kernel.md: duplicate feature section {section!r} "
+                f"{AGENT_KERNEL_INVENTORY_PATH}: duplicate feature section {section!r} "
                 f"for {surface} | remediation: keep one behavior-group row per AGENTS section"
             )
             continue
@@ -366,7 +362,7 @@ def validate_agent_kernel_inventory(root: Path) -> list[str]:
 
     if not rows:
         errors.append(
-            "docs/systems/agent-kernel.md: Agent Kernel feature inventory has no rows | "
+            f"{AGENT_KERNEL_INVENTORY_PATH}: Agent Kernel feature inventory has no rows | "
             "remediation: document every level-two section in both AGENTS surfaces"
         )
         return errors
@@ -376,7 +372,7 @@ def validate_agent_kernel_inventory(root: Path) -> list[str]:
     for _feature_id, surface, _section in rows:
         if surface not in tracked_surfaces:
             errors.append(
-                f"docs/systems/agent-kernel.md: unsupported AGENTS surface {surface!r} | "
+                f"{AGENT_KERNEL_INVENTORY_PATH}: unsupported AGENTS surface {surface!r} | "
                 "remediation: inventory only the root and global-template AGENTS surfaces"
             )
 
@@ -390,14 +386,14 @@ def validate_agent_kernel_inventory(root: Path) -> list[str]:
 
     for surface, section in sorted(documented - implemented):
         errors.append(
-            f"docs/systems/agent-kernel.md: documented feature section {section!r} "
+            f"{AGENT_KERNEL_INVENTORY_PATH}: documented feature section {section!r} "
             f"is missing from {surface} | remediation: restore the section or record an "
             "accepted feature removal before updating the inventory"
         )
     for surface, section in sorted(implemented - documented):
         errors.append(
             f"{surface}: undocumented Agent Kernel section {section!r} | remediation: "
-            "add it to docs/systems/agent-kernel.md or move the behavior to an existing owner"
+            f"add it to {AGENT_KERNEL_INVENTORY_PATH} or move the behavior to an existing owner"
         )
     return errors
 

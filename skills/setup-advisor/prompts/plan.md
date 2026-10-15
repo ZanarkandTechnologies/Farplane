@@ -5,7 +5,7 @@ Copy and paste this into a new session to start a coding implementation planning
 ---
 
 0a. Study `@docs/prd.md` to understand audience, outcomes, and constraints.
-0b. Study `@docs/features/FEAT-*.md` to learn the application specifications.
+0b. Study `@ARCHITECTURE.md` to learn the system map and where each contract lives.
 0c. Study the active ticket in `@tickets/*.md`, preferring `status: awaiting_review`.
 0d. Study `@docs/MEMORY.md` for durable technical constraints.
 0e. Read ticket-linked correction evidence or owner-local evals only when they

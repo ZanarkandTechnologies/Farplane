@@ -24,17 +24,17 @@ class LintGitGateTests(unittest.TestCase):
         expected = {"pre_commit": "lint_changed", "pre_push": "lint_branch"}
         for stage_name, check_id in expected.items():
             with self.subTest(stage=stage_name):
-                checks = select_checks(stage_config(self.config, stage_name), ["docs/features/FEAT-0039.md"])
+                checks = select_checks(stage_config(self.config, stage_name), ["docs/guides/work-loop.md"])
                 self.assertIn(check_id, checks)
 
     def test_python_checks_run_under_the_gate_interpreter(self) -> None:
         argv = configured_argv(self.config, "lint_changed", base="main")
         self.assertEqual(argv[0], sys.executable)
 
-    def test_registry_selects_feature_project_skill_eval_and_ticket_contracts(self) -> None:
+    def test_registry_selects_document_project_skill_eval_and_ticket_contracts(self) -> None:
         registry = build_registry()
         cases = {
-            "docs/features/FEAT-0039.md": "feature_and_system_records",
+            "docs/guides/work-loop.md": "document_frontmatter",
             "farplane/harness.yaml": "project_contract",
             "skills/eval/evals/evals.json": "eval_contract",
             "skills/eval/SKILL.md": "skill_contract",

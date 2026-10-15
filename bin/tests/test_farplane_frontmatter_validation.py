@@ -39,20 +39,19 @@ class FarplaneLintTests(unittest.TestCase):
         self.assertTrue(
             {
                 "document_frontmatter",
-                "feature_and_system_records",
                 "template_registry",
                 "template_metadata",
                 "source_registry",
             }.issubset(self.selected_check_ids("docs"))
         )
 
-    def test_changed_feature_selects_its_semantic_document_contract(self) -> None:
+    def test_changed_guide_selects_its_document_contracts(self) -> None:
         checks = build_registry().select(
             scope="all",
-            changed_paths=("docs/features/FEAT-0039.md",),
+            changed_paths=("docs/guides/work-loop.md",),
         )
 
-        self.assertIn("feature_and_system_records", {check.check_id for check in checks})
+        self.assertTrue({"document_frontmatter", "document_refs"}.issubset({check.check_id for check in checks}))
 
     def test_validate_command_is_retired(self) -> None:
         with self.assertRaises(SystemExit):

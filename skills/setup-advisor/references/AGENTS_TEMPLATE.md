@@ -50,7 +50,7 @@ reads it, not to a new top-level folder.
 | `[src/]` | Main source code | tracked |
 | `[tests/]` | Test files | tracked |
 | `[src/lib/]` | Shared utilities, once a second real caller exists | tracked |
-| `docs/` | `prd.md`, `features/`, `systems/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, review docs | tracked |
+| `docs/` | `prd.md`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, review docs | tracked |
 | `farplane/` | Committed Farplane config: harness, metrics, bindings, automations | tracked |
 | `docs/qa/` | One page per long repeatable QA flow; created only when the first exists | tracked |
 | `tickets/` | Ticket templates and the archive | tracked |
@@ -67,8 +67,6 @@ reads it, not to a new top-level folder.
 
 - Architecture: `ARCHITECTURE.md`
 - PRD: `docs/prd.md`
-- Specs index: `docs/features/README.md`
-- Specs: `docs/features/FEAT-*.md`
 - History: `docs/HISTORY.md`
 - Memory: `docs/MEMORY.md`
 - Taste: `docs/TASTE.md`

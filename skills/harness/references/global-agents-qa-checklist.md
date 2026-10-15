@@ -7,8 +7,8 @@ updated_at: 2026-08-29
 refs:
   - runtimes/AGENTS.md
   - AGENTS.md
-  - docs/systems/agent-kernel.md
-  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
+  - bin/validators/check_harness_invariants.py
+  - skills/eval/SKILL.md
   - docs/fundamentals/prompt-engineering.md
 ---
 
@@ -53,8 +53,8 @@ is asserted without examples.
 Run this gate for every edit, rewrite, or consolidation of `AGENTS.md` or
 `runtimes/AGENTS.md`:
 
-1. Read the `AGENTS Feature Inventory` in
-   `docs/systems/agent-kernel.md` before changing either AGENTS surface.
+1. Read the AGENTS Feature Inventory below before changing either AGENTS
+   surface.
 2. Inventory the target's sections and material behavior rules before editing;
    do not treat section headings alone as the behavior inventory.
 3. Compare inventory to AGENTS: every documented behavior group must remain
@@ -63,10 +63,35 @@ Run this gate for every edit, rewrite, or consolidation of `AGENTS.md` or
    be documented in the Agent Kernel inventory.
 5. Run `python3 bin/validators/check_harness_invariants.py` and the narrowest
    affected behavior evals. A passing section-presence check does not replace a
-   behavior eval for high-risk semantics.
+   behavior eval for high-risk semantics such as independent reasoning before
+   agreement: run `global_independent_reasoning_before_agreement_01`,
+   `global_warranted_agreement_after_reasoning_01`,
+   `global_question_shaped_install_correction_01` and
+   `global_genuine_install_question_01`
+   (`skills/eval/examples/farplane-global-harness/tasks.json`).
 
 Any unexplained loss, undocumented addition, or weakened high-risk behavior is
 a failed consolidation and must be restored before completion.
+
+### AGENTS Feature Inventory
+
+One row per level-two section of the two AGENTS surfaces; individual rules
+stay in their section. Every listed section must exist, and every level-two
+section in either file must be listed.
+
+<!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->
+| ID | Surface | Required section | Behavior group |
+| --- | --- | --- | --- |
+| `AK-G01` | `runtimes/AGENTS.md` | `## Context` | User collaboration, current task state, verified evidence, and smallest-owner routing |
+| `AK-G02` | `runtimes/AGENTS.md` | `## Behavior` | Authority, reasoning, grounding, execution, task state, thread notes, skills, delegation, and workspace safety |
+| `AK-G03` | `runtimes/AGENTS.md` | `## Output Formatting` | Conditional long-horizon progress ledger, route tables, examples, visuals, proof, absolute file paths, and completion handoff |
+| `AK-P01` | `AGENTS.md` | `## Operating model` | Farplane's visible ticket, skill, Goal Packet, and proof model |
+| `AK-P02` | `AGENTS.md` | `## Context budget` | Project-local context budget and owner routing |
+| `AK-P03` | `AGENTS.md` | `## Local boundaries` | Farplane placement, browser proof, checkout, credential, and runtime boundaries |
+| `AK-P04` | `AGENTS.md` | `## Durable truth` | Canonical state and documentation ownership |
+| `AK-P05` | `AGENTS.md` | `## Where files go` | One home per job: folder ownership, output in `.farplane/`, checks |
+| `AK-P06` | `AGENTS.md` | `## Stop and surface a decision` | Architectural conflict and rollback decision gates |
+<!-- END AGENT_KERNEL_FEATURE_INVENTORY -->
 
 ## Disposition Rules
 
@@ -120,11 +145,12 @@ ticket when the ticket body would get too large.
 
 ### Farplane Lifecycle Path
 
-`Before:` Global template names a Farplane-only file path:
-`docs/features/FEAT-0060-registry-backed-documentation-os.md`.
+`Before:` Global template names a Farplane-only file path, such as the ticket
+close rule in `tickets/README.md`.
 
-`After:` Global says to follow the project lifecycle or documentation spec when
-present. Farplane project `AGENTS.md` carries the exact `FEAT-0060` path.
+`After:` Global says to follow the project's task system and close route when
+present. Farplane project `AGENTS.md` carries the exact `tickets/README.md`
+path.
 
 `Decision:` `move_to_project`.
 

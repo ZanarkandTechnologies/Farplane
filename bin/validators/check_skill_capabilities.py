@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Validate skill capability fixtures and route broken skills to repair tickets."""
+"""Validate skill capability fixtures and route broken skills to repair tickets.
+
+Fixtures live in skills/<skill>/tests/*.json and name the operation, expected
+behaviour, sanitized observed failure, recovery decision, forbidden actions,
+connector fallbacks and evidence refs. No bulky payloads, secrets, raw
+transcripts or full expected results. A failing fixture opens a visible repair
+ticket against a local wrapper, never an upstream or installed skill body.
+"""
 
 from __future__ import annotations
 

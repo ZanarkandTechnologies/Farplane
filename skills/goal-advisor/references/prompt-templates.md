@@ -211,6 +211,11 @@ approval again.
 
 ## Goal Turn Receipt
 
+Evaluation is its own step before this receipt: use the provider the issue or
+domain skill declares, and let that owner define what counts as evidence. Then
+append observation, evidence, learning, and next action, drift-check when the
+program requires it, and continue, complete, or block.
+
 ```yaml
 observation:
 evidence: []

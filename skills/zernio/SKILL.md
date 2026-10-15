@@ -20,7 +20,7 @@ Zernio is the one source of a business's social accounts (TikTok, Instagram,
 YouTube, X and more): posting, drafts, comments, DMs, comment-to-DM
 automations and analytics. Use its hosted MCP (`https://mcp.zernio.com/mcp`);
 signing in to it is the auth. Farplane connects no platform itself
-(`docs/farplane-framework/cli.md`). `social-content` writes the
+(the Farplane CLI guide). `social-content` writes the
 copy; this skill owns the account boundary.
 
 ## Skill Signature

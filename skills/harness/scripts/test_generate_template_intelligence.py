@@ -75,13 +75,11 @@ returns: output.md and a receipt
                 {
                     "template_id": "skill-template",
                     "template_version": "0.3.1",
-                    "feature_refs": ["FEAT-0001"],
                     "consumer_scope": "skill",
                 },
                 {
                     "template_id": "farplane-framework",
                     "template_version": "1.2.0",
-                    "feature_refs": ["FEAT-0002"],
                     "consumer_scope": "project",
                 },
             ],
@@ -107,16 +105,6 @@ returns: output.md and a receipt
 
         self.assertEqual(by_template["skill-template"]["status"], "current")
         self.assertEqual(by_template["farplane-framework"]["status"], "stale")
-
-    def test_feature_summaries_only_include_skill_category(self) -> None:
-        features = generator.feature_summaries(
-            [
-                {"id": "FEAT-0001", "category": "skills", "name": "Skill feature"},
-                {"id": "FEAT-0002", "category": "planning", "name": "Planning feature"},
-            ]
-        )
-
-        self.assertEqual([feature["id"] for feature in features], ["FEAT-0001"])
 
     def test_template_version_summary_groups_snapshots_by_version(self) -> None:
         snapshots = [

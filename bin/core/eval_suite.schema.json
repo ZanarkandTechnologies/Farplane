@@ -95,19 +95,6 @@
           "title": "Extensions",
           "type": "object"
         },
-        "feature_id": {
-          "anyOf": [
-            {
-              "pattern": "^FEAT-\\d{4}$",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Feature Id"
-        },
         "notes": {
           "anyOf": [
             {

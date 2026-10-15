@@ -15,6 +15,9 @@ charter, and external-service setup. Editing rules for this folder:
   the theme plan, tooltip-over-explainer rule and visual QA path recorded;
   plain HTML only for static/throwaway artifacts or operator opt-out
   (`MEM-0116`, `MEM-0118`).
+- Never scaffold a product catalog, per-category strategy or worker policy, or
+  a controller index. A clean bootstrap creates no retired project file and
+  needs none to validate; run an old-reference sweep after scaffolding.
 - Never auto-enable git hooks; generated push gates must not depend on
   Farplane-owned helper paths; duplication heuristics stay advisory.
 - `references/TICKETS_README_TEMPLATE.md` and `references/TICKET_TEMPLATE.md`

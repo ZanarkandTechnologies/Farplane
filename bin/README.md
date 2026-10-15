@@ -24,7 +24,7 @@ ping records the turn. Native Goal mode owns persistence; completion is the
 issue's proof comment plus `gh issue close` (`tickets/README.md`).
 
 Run `farplane hooks list` for the managed commands, events, timeouts, and source
-owners. See [Stop behavior](../docs/farplane-framework/hooks-and-runtime.md#inspecting-stop-behavior)
+owners. See [Stop behavior](../docs/guides/hooks-and-runtime.md#inspecting-stop-behavior)
 for what each handler reads, sends, and can block. `--json` preserves the
 structured inventory; this is not an inventory of all Codex plugin hooks.
 
@@ -54,7 +54,7 @@ runtime helpers instead of symlinking every script, validator, and test.
 ## Entrypoints
 
 The agent-facing command map and the rules for changing a command live in
-[`docs/farplane-framework/cli.md`](../docs/farplane-framework/cli.md). Read it before adding, renaming
+[`docs/guides/cli.md`](../docs/guides/cli.md). Read it before adding, renaming
 or removing a `farplane` command.
 
 - `farplane ticket check <ticket.md> --phase planning|complete` - canonical

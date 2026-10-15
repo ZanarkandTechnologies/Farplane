@@ -14,8 +14,7 @@ Bootstrap copies the templates in this folder (inventory:
 [reference-map.md](reference-map.md)) and never overwrites an existing file
 unless `--force` is passed for an explicit scaffold replacement. It writes:
 
-- `AGENTS.md`, `ARCHITECTURE.md`, `docs/{prd,HISTORY,MEMORY,TASTE,bootstrap-brief,code_review,review-agent}.md`,
-  `docs/features/README.md`, `docs/systems/README.md`;
+- `AGENTS.md`, `ARCHITECTURE.md`, `docs/{prd,HISTORY,MEMORY,TASTE,bootstrap-brief,code_review,review-agent}.md`;
 - tracked `farplane/{README.md,manifest.json,harness.yaml,metrics.yaml,bindings.yaml,pm.json}`
   plus an empty `farplane/automations/` (jobs come from `automation-advisor`);
 - `.agents/skills/README.md` for project-local capability skills;

@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Validate Farplane's source provenance registry."""
+"""Validate Farplane's source provenance registry.
+
+farplane/sources/registry.jsonl holds one JSONL row per external or
+operator-provided source that shaped the harness, answering: seen before?
+canonical identity? where are the local scout artifacts? what did it inform?
+adopt, adapt, reject, defer, duplicate, or reference-only?
+
+canonical_url is the public URL, or `user-provided:<slug>` /
+`local-research:<slug>` when none exists; canonical_key is the lowercase,
+hyphen-joined dedupe key. The record contract lives in
+farplane/sources/README.md.
+"""
 
 from __future__ import annotations
 
@@ -12,7 +23,6 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = ROOT / "farplane" / "sources" / "registry.jsonl"
-FEATURE_REGISTRY = ROOT / "docs" / "features" / "registry.jsonl"
 
 REQUIRED_FIELDS = {
     "id",
@@ -24,7 +34,6 @@ REQUIRED_FIELDS = {
     "visibility",
     "captured_at",
     "local_artifacts",
-    "feature_refs",
     "decision",
     "duplicate_of",
     "status",
@@ -52,23 +61,8 @@ ALLOWED_DECISIONS = {
 }
 ALLOWED_STATUSES = {"active", "archived", "superseded", "sensitive-redacted"}
 SOURCE_ID_RE = re.compile(r"^SRC-\d{4}$")
-FEATURE_ID_RE = re.compile(r"^FEAT-\d{4}$")
 KEY_RE = re.compile(r"^[a-z0-9][a-z0-9._:-]*[a-z0-9]$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-
-
-def load_feature_ids() -> set[str]:
-    ids: set[str] = set()
-    if not FEATURE_REGISTRY.exists():
-        return ids
-    for line in FEATURE_REGISTRY.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        record = json.loads(line)
-        feature_id = record.get("id")
-        if isinstance(feature_id, str):
-            ids.add(feature_id)
-    return ids
 
 
 def local_ref_exists(ref: str) -> bool:
@@ -94,7 +88,6 @@ def require_string_list(
 
 def validate() -> list[str]:
     errors: list[str] = []
-    feature_ids = load_feature_ids()
     source_ids: set[str] = set()
     canonical_keys: set[str] = set()
     records: list[dict[str, Any]] = []
@@ -167,12 +160,6 @@ def validate() -> list[str]:
         for ref in require_string_list(record, "local_artifacts", source_id, errors):
             if not local_ref_exists(ref):
                 errors.append(f"{source_id}: local artifact does not exist: {ref}")
-
-        for ref in require_string_list(record, "feature_refs", source_id, errors):
-            if not FEATURE_ID_RE.match(ref):
-                errors.append(f"{source_id}: feature_refs entry must match FEAT-####: {ref}")
-            elif feature_ids and ref not in feature_ids:
-                errors.append(f"{source_id}: unknown feature ref {ref}")
 
         duplicate_of = record.get("duplicate_of")
         if duplicate_of is not None:

@@ -28,10 +28,14 @@ integrations:
     write_policy: local_first
   kanban:
     provider: filesystem_tickets
+    # exclude is a hard no-fallback gate: a provider access failure becomes a
+    # source gap, never permission to read tickets/**.
     filesystem_ticket_policy: include
     tickets_dir: tickets
     archive_dir: tickets/archive
-    task_source_handle: null # for provider: notion; named private handle only, never a raw ID or URL
+    # Notion bindings store only a named private-handle alias, never a resolved
+    # database ID, URL, or credential.
+    task_source_handle: null # for provider: notion
     write_policy: read_only_ui
     poll_seconds: 60
   posthog:

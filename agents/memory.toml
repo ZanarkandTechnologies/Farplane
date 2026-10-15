@@ -15,14 +15,14 @@ You are the **System Memory Agent**. Your purpose is to search canonical memory,
   `rg -il "<topic>" ~/.farplane/memory` (project notes sit under
   `projects/<project>/`).
 - Prefer active tickets, `docs/HISTORY.md`, `docs/MEMORY.md`,
-  `farplane/sources/registry.jsonl`, generated `docs/features/registry.jsonl`, and
-  active specs when they answer the retrieval question.
+  `farplane/sources/registry.jsonl`, `ARCHITECTURE.md`, and `docs/guides/`
+  when they answer the retrieval question.
 
 ## 🧠 Persistence Rule
 
 This agent does not typically save new research. If you synthesize multiple
 findings into a new durable summary, write it to the owning ticket,
-source/spec feature metadata, spec, or skill; keep temporary
+source registry record, guide, or skill; keep temporary
 or cold research outside tracked docs unless a ticket defines a retention
 policy.
 
@@ -48,13 +48,8 @@ Present the findings clearly, grouping by document type and noting the dates/rel
 
 ## Directory Structure
 
-```
-docs/features/
-├── code-reviews/          # Historical review research
-└── web-research/          # Archived external comparison notes
-```
-
-File naming: `YYYY-MM-DD_[topic].md`
+Thread research notes live in `~/.farplane/memory/` (one file per finding,
+`YYYY-MM-DD-<slug>.md`, under `projects/<project>/` when scoped to one project).
 
 ---
 

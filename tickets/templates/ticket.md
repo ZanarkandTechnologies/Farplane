@@ -1,9 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.5.0"
-feature_refs:
-  - FEAT-0007
-  - FEAT-0008
+template_version: "0.5.1"
 ticket_id: TASK-XXXX
 title: title
 status: todo

@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Compile a read-only Farplane project snapshot for UI and intervals."""
+"""Compile a read-only Farplane project snapshot for UI and intervals.
+
+The snapshot materializes Distribution and Edge leverage cards in
+`.farplane/project/ui/latest.json` as a read-only handoff. Company Capital is
+Finance-owned state outside the project metric store.
+"""
 
 from __future__ import annotations
 
@@ -894,7 +899,13 @@ def load_highlights(
     *,
     history_limit: int = HIGHLIGHT_HISTORY_LIMIT_PER_KIND,
 ) -> tuple[dict[str, Any], list[SourceGap]]:
-    """Project minimal append-only highlight rows into render-ready cards."""
+    """Project minimal append-only highlight rows into render-ready cards.
+
+    Ledgers are `.farplane/highlights/{wins,failures}.jsonl`. A win row is
+    `{team, report, summary, links?}`; a failure row adds `lesson`. Identity is
+    `(kind, team, report)`. Core resolves the source report and derives the IDs,
+    project, cadence, period, and labels; the UI never parses report prose.
+    """
 
     by_ref = report_registry.get("by_ref") if isinstance(report_registry.get("by_ref"), dict) else {}
     projected: dict[str, list[dict[str, Any]]] = {"wins": [], "failures": []}

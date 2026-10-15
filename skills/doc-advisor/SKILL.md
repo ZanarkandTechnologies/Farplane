@@ -14,11 +14,11 @@ allowed-tools: Read, Glob, Grep, Bash
 ## Context
 
 Use this for a ticket's docs decision, for writing or revising durable repo docs
-(feature and system specs, runbooks, templates, registry companions, public
+(guides, fundamentals, runbooks, templates, registry companions, public
 guidance), and for consolidating any artifact into its smallest owner-correct
-form without losing behaviour, evidence, IDs or decisions. Documentation
-architecture lore lives in [Documentation OS](../../docs/systems/documentation-os.md);
-this skill owns the executable workflow. It does not edit skill packages
+form without losing behaviour, evidence, IDs or decisions. Guides and
+fundamentals own durable cross-cutting policy, skills own procedure, and
+`ARCHITECTURE.md` owns the system map; this skill owns the executable workflow. It does not edit skill packages
 (`harness` maintain mode), Wiki entities (`manage-wiki`), or code (`code-health`).
 
 ## Skill Signature
@@ -61,12 +61,12 @@ returns: strategy or updated doc, checks run, loss check, review route, remainin
   claims; use `research` when one source will not do. Put the current
   definition or task path near the top, one canonical term per concept, and
   link to the owner instead of copying doctrine. Load
-  [doc architecture](references/doc-architecture.md) for placement and
-  [feature/system specs](references/feature-system-specs.md) for `FEAT-*` or
-  `SYS-*` boundaries.
+  [doc architecture](references/doc-architecture.md) for placement and the
+  scope decision (skill reference, guide, PRD or MEMORY, ARCHITECTURE row,
+  ticket, or delete).
 
-  Example: broad docs governance grown inside one feature page -> a system spec
-  owns the policy; the feature page keeps behaviour, surfaces, proof, limits.
+  Example: broad docs governance grown inside one skill reference -> a guide
+  owns the policy; the skill keeps only its executable branch.
 
   Assert:
   - No second source of truth; task-local proof stays in the ticket.
@@ -74,7 +74,7 @@ returns: strategy or updated doc, checks run, loss check, review route, remainin
   `doc_delta -> front matter + regenerated registries | validator failure`
 
   Rule: Load [metadata](references/metadata-and-registries.md) before changing
-  front matter, feature or system refs, or template metadata. Generated JSONL
+  front matter, refs, or template metadata. Generated JSONL
   registries are outputs: edit the source, then run the generator.
 
   Assert:
@@ -91,8 +91,8 @@ returns: strategy or updated doc, checks run, loss check, review route, remainin
   exact row from a log or append-only artifact, bind an archive or canonical
   source that keeps its exact wording; none -> block the deletion. For
   `AGENTS.md` or `runtimes/AGENTS.md`, apply the Feature Fidelity Gate in
-  `skills/harness/references/global-agents-qa-checklist.md` against
-  `docs/systems/agent-kernel.md` and run
+  `skills/harness/references/global-agents-qa-checklist.md` against the
+  AGENTS Feature Inventory in that checklist, and run
   `python3 bin/validators/check_harness_invariants.py`. Load
   [consolidate](references/consolidate.md) for the value function, response
   frame and Tidy Report.
@@ -105,8 +105,8 @@ returns: strategy or updated doc, checks run, loss check, review route, remainin
   `finished work -> doc_quality_result + review route`
 
   Rule: Load [finish gate](references/finish-gate.md) before material
-  closeout. Run only relevant validators (`docs/features/validate_features.py`,
-  `bin/validators/check_doc_refs.py`, `check_skills.py --write` when those
+  closeout. Run only relevant validators (`bin/validators/check_doc_refs.py`,
+  `check_skills.py --write`, a registry generator when those
   surfaces changed). Route canonical, public, cross-surface or policy-bearing
   docs to [review](../review/SKILL.md) with `documentation-quality`.
 
@@ -119,8 +119,8 @@ returns: strategy or updated doc, checks run, loss check, review route, remainin
 
 - Creating a new doc when an existing owner has the same audience, lifecycle
   and retrieval path.
-- Treating skill references as canonical lore; system and feature docs own
-  durable policy.
+- Treating a skill reference as cross-cutting lore; guides and fundamentals own
+  durable policy, skills own procedure, `ARCHITECTURE.md` owns the system map.
 - Citing external best practice as Farplane policy without labelling it.
 - Compacting an exact log into a summary without the archive gate, or keeping a
   true fact in memory when another surface retrieves it better.
@@ -129,12 +129,10 @@ returns: strategy or updated doc, checks run, loss check, review route, remainin
 
 ## Reference Map
 
-- [doc architecture](references/doc-architecture.md) - owner surface, doc type,
-  split, merge or delete, density, lifecycle.
+- [doc architecture](references/doc-architecture.md) - scope decision, owner
+  surface, doc type, split, merge or delete, density, lifecycle.
 - [metadata and registries](references/metadata-and-registries.md) - front
-  matter, feature and system refs, generated registries.
-- [feature/system specs](references/feature-system-specs.md) - feature vs system
-  vs local reference vs ticket artifact.
+  matter, template metadata, generated registries.
 - [finish gate](references/finish-gate.md) - material docs closeout.
 - [consolidate](references/consolidate.md) - value function, knowledge scoring,
   archive gate, response frame, Tidy Report.

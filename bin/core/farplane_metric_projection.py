@@ -1,4 +1,19 @@
-"""Metric-observation normalization and window projections for Farplane snapshots."""
+"""Metric-observation normalization and window projections for Farplane snapshots.
+
+Windows: the caller supplies an inclusive calendar window and a timezone. Core
+derives the window value, the delta against the preceding equal window
+(absolute and percent), a direction-normalized improving/flat/worsening trend,
+and a cumulative total for flows only. Flows sum within a window; stocks take
+the latest reading at each boundary and never accumulate. Formula, cadence and
+window settings are never stored, and growth is never kept as a second metric.
+
+`type: markdown` holds one current qualitative paragraph, with no unit,
+direction, target, guard, display, or trend. Core picks the latest valid
+paragraph as of the window end; identical same-day repeats dedupe; a
+conflicting or malformed refresh becomes a source gap and keeps the last valid
+paragraph. A project has at most one `leverage: edge` markdown metric, which is
+`pinned: true` but not selected.
+"""
 
 from __future__ import annotations
 
@@ -204,7 +219,15 @@ def distribution_account_for_current_metric(
     observations: list[dict[str, Any]],
     current_observed_at: str | None,
 ) -> dict[str, str] | None:
-    """Keep an observed owned-account identity on distribution cards without inferring it."""
+    """Keep an observed owned-account identity on distribution cards without inferring it.
+
+    `leverage: distribution` only labels flow or stock evidence. Collectors
+    attach `distribution_account {platform, account_id, label}` to the ignored
+    observation payload; the global Leverage view groups only by platform plus
+    account_id, never by metric name, label, or project. Account IDs never enter
+    tracked `metrics.yaml` or browser responses; a missing identity is a source
+    gap, so this returns None rather than guessing.
+    """
     if metric_def.get("leverage") != "distribution" or not current_observed_at:
         return None
     for row in reversed(observations):

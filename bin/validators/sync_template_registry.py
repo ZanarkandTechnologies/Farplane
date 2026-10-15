@@ -154,7 +154,7 @@ def extract_metadata(path: Path) -> dict[str, Any]:
         raise TemplateRegistryError(f"{path}: {exc}") from exc
     if metadata is None:
         raise TemplateRegistryError(
-            f"{path}: missing template metadata with template_id, template_version, and feature_refs"
+            f"{path}: missing template metadata with template_id and template_version"
         )
     return metadata
 
@@ -178,25 +178,8 @@ def load_config(path: Path) -> list[str]:
     return [item.replace("\\", "/").lstrip("./") for item in paths]
 
 
-def load_feature_ids(root: Path) -> set[str]:
-    path = root / "docs" / "features" / "registry.jsonl"
-    ids: set[str] = set()
-    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
-        if not line.strip():
-            continue
-        try:
-            row = json.loads(line)
-        except json.JSONDecodeError as exc:
-            raise TemplateRegistryError(f"{path}:{line_number}: invalid JSON") from exc
-        feature_id = row.get("id")
-        if isinstance(feature_id, str):
-            ids.add(feature_id)
-    return ids
-
-
 def build_registry(root: Path = ROOT, config_path: Path | None = None) -> list[dict[str, Any]]:
     config = config_path or root / "config" / "template-registry.toml"
-    feature_ids = load_feature_ids(root)
     rows: list[dict[str, Any]] = []
     seen_ids: dict[str, str] = {}
 
@@ -207,7 +190,6 @@ def build_registry(root: Path = ROOT, config_path: Path | None = None) -> list[d
         metadata = extract_metadata(path)
         template_id = metadata.get("template_id") or metadata.get("template_name")
         template_version = metadata.get("template_version") or metadata.get("version")
-        feature_refs = normalize_string_list(metadata.get("feature_refs"), "feature_refs", path)
 
         if not isinstance(template_id, str) or not template_id:
             raise TemplateRegistryError(f"{relative_path}: missing template_id")
@@ -224,17 +206,10 @@ def build_registry(root: Path = ROOT, config_path: Path | None = None) -> list[d
                 f"{relative_path}: template_version {template_version!r} is not semver-like x.y.z"
             )
 
-        missing_refs = [ref for ref in feature_refs if ref not in feature_ids]
-        if missing_refs:
-            raise TemplateRegistryError(
-                f"{relative_path}: unknown feature_refs: {', '.join(missing_refs)}"
-            )
-
         row: dict[str, Any] = {
             "template_id": template_id,
             "template_version": template_version,
             "path": relative_path,
-            "feature_refs": feature_refs,
         }
         kind = metadata.get("kind")
         if isinstance(kind, str) and kind:

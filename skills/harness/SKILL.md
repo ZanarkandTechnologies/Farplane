@@ -4,7 +4,7 @@ description: "Use for \"make a skill\", \"fix this skill\", \"improve the harnes
 source: local
 department: operations
 template_uses:
-  skill-template: "0.6.6"
+  skill-template: "0.6.9"
   skill-eval-task: "0.2.0"
 skill_ui: skills/harness/graph/index.html
 allowed-tools: Read, Write, Glob, Grep, Bash
@@ -144,11 +144,11 @@ returns: changed files, proof commands and results, reviewer verdict or blocker
 
 - [create](references/create.md) - create mode nodes, book-to-skill branch
   ([book-to-skill](references/book-to-skill.md)), workflows, output patterns.
-- [maintain](references/maintain.md) - maintain nodes; then
+- [maintain](references/maintain.md) - maintain nodes; by sub-mode
   [maintenance modes](references/maintenance-modes.md),
   [low-value prose scan](references/low-value-prose-scan.md),
-  [source upgrade](references/upgrade-skill-from-sources.md), and
-  [eval fixture sandbox](references/eval-fixture-sandbox.md) by sub-mode.
+  [source upgrade](references/upgrade-skill-from-sources.md), [eval fixture sandbox](references/eval-fixture-sandbox.md);
+  [harness maintenance](references/harness-maintenance.md) for registries, rollout, graphs and health.
 - [optimize](references/optimize.md) - the Goal-backed loop, budgets, choose-next,
   writeback order, and turn report; [Goal program](references/goal-program-template.md).
 - [place](references/place.md) and [placement axes](references/placement-axes.md)

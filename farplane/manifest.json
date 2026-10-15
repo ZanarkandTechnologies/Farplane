@@ -1,8 +1,8 @@
 {
   "schema": "farplane_project",
-  "spec_version": "2.0.17",
+  "spec_version": "2.0.18",
   "template_uses": {
-    "farplane-framework": "2.0.17"
+    "farplane-framework": "2.0.18"
   },
   "project": {
     "name": "Farplane",
@@ -22,8 +22,6 @@
       "farplane/bindings.yaml",
       ".agents/skills/README.md",
       "docs/prd.md",
-      "docs/features/README.md",
-      "docs/systems/README.md",
       "docs/HISTORY.md",
       "docs/MEMORY.md",
       "tickets/README.md",
@@ -62,17 +60,16 @@
   "farplane_graph": {
     "framework_core": {
       "include": [
-        "docs/farplane-framework/README.md",
-        "docs/farplane-framework/lifecycle.md",
-        "docs/farplane-framework/setup-advisor-critical-path.md",
-        "docs/farplane-framework/project-files.md",
-        "docs/farplane-framework/graph-contract.md",
-        "docs/farplane-framework/hooks-and-runtime.md",
-        "docs/farplane-framework/harness-maintenance.md",
-        "docs/farplane-framework/entities.md",
-        "docs/farplane-framework/entity-markdown-authoring.md",
-        "docs/farplane-framework/entity-view-projection-standard.md",
-        "docs/farplane-framework/reporting.md"
+        "docs/guides/README.md",
+        "docs/guides/work-loop.md",
+        "skills/setup-advisor/references/critical-path.md",
+        "docs/guides/project-files.md",
+        "docs/guides/graphs.md",
+        "docs/guides/hooks-and-runtime.md",
+        "skills/harness/references/harness-maintenance.md",
+        "docs/guides/wiki-and-entities.md",
+        "docs/guides/reporting.md",
+        "docs/guides/cli.md"
       ],
       "exclude": [
         "tickets/archive/**",
@@ -83,11 +80,7 @@
   },
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "2.0.17",
-    "feature_refs": [
-      "FEAT-0060",
-      "FEAT-0063"
-    ],
+    "template_version": "2.0.18",
     "consumer_scope": "project",
     "applies_to": [
       "farplane/manifest.json"

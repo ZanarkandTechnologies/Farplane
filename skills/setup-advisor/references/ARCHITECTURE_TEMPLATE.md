@@ -14,7 +14,7 @@ Describe what this repo is for and what the main moving parts are.
 - `AGENTS.md`: operational map loaded every loop
 - `ARCHITECTURE.md`: top-level system map
 - `README.md`: product story and setup
-- `docs/features/README.md`: index of deeper behavior specs
+- `docs/prd.md`: product requirements and current slice
 - `tickets/README.md`: execution contract and ticket lifecycle
 
 ## Main Surfaces
@@ -25,12 +25,20 @@ Describe what this repo is for and what the main moving parts are.
 - `tests/`: verification surface
 - `scripts/`, `bin/`, or equivalent: operational helpers
 
+## Systems
+
+One row per durable system; there is no separate systems or feature-spec
+folder. The owner column names where each contract lives.
+
+| System | Purpose | Boundary (what belongs elsewhere) | Owning code / docs |
+| --- | --- | --- | --- |
+
 ## Read Order
 
 1. `AGENTS.md`
 2. `ARCHITECTURE.md`
 3. `README.md`
-4. `docs/features/README.md`
+4. `docs/prd.md`
 5. active ticket and `tickets/README.md`
 
 ## Current Limits

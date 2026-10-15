@@ -9,7 +9,7 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 planner_contract:
-  required_arguments: ["problem_ref", "system_ref", "feature_refs", "question", "audience", "decision"]
+  required_arguments: ["problem_ref", "system_ref", "question", "audience", "decision"]
 ---
 
 # Farplane Market Learning
@@ -24,9 +24,9 @@ generic market report.
 ## Skill Signature
 
 ```text
-farplane_market_learning(problem_ref, system_ref, feature_refs, question, audience, decision, source_refs?, ticket?, audience_context?)
+farplane_market_learning(problem_ref, system_ref, question, audience, decision, source_refs?, ticket?, audience_context?)
   -> learning_brief + implication + next_action
-state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, current source refs, ticket context); writes(ticket artifact)
+state: reads(farplane/harness.yaml stable problems, ARCHITECTURE.md Systems table, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, current source refs, ticket context); writes(ticket artifact)
 gates: strategic_ref_bound; canonical_icp_bound; current_complaint_evidence; baseline_named; decision_named; source_quality_named; implication_not_generic; outreach_requires_approval
 routes: root skill `research` | root skill `feed-scout` | ../farplane-content-creation/SKILL.md
 fails: generic_market_report; repo_activity_as_customer_pain; stale_or_unsourced_complaints; produces broad notes with no decision; changes direction without evidence; contacts users without approval
@@ -35,7 +35,7 @@ fails: generic_market_report; repo_activity_as_customer_pain; stale_or_unsourced
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind one configured stable `problem_ref`, one canonical `system_ref`, and its relevant `feature_refs`; state the exact ablation or content decision this research can change.
+- [ ] 1. Bind one configured stable `problem_ref`, and one canonical `system_ref` (an `ARCHITECTURE.md` Systems row); state the exact ablation or content decision this research can change.
 - [ ] 2. Resolve the canonical ICP and baseline, then gather current direct complaint, workaround, and alternative evidence from places such as X, Reddit, GitHub, and technical discussions. Record recency, frequency, confidence, and source gaps; repo activity alone is not ICP pain.
 - [ ] 3. Preserve the audience's own pain language and connect each finding to the named system/feature claim.
 - [ ] 4. Write the decision brief with sources, implication, and one candidate ablation or explicit no-action result; keep external actions gated.

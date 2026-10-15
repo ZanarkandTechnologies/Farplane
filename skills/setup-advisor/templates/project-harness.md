@@ -4,9 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.3.9"
-feature_refs:
-  - FEAT-0007
+template_version: "0.3.10"
 project_id: TODO
 automation_status: preview
 framework_template_version: "0.3.0"

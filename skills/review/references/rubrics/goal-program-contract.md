@@ -32,8 +32,9 @@ Required TAS: `TAS-A`
 - [ ] `stop-soundness`: `complete` is impossible while closure rows are pending,
   unsupported, stale, or contradicted by stronger evidence.
 - [ ] `reconstructability`: A fresh agent can name current state, next eligible
-  move, why it is eligible, and what will prove it from the issue body, latest
-  Goal turn comments, and listed files alone.
+  move, why it is eligible, and what will prove it from the issue body, the
+  newest Goal turn comments within 80 lines, and listed files alone; a
+  reviewer can rebuild the change from the issue without chat.
 - [ ] `ownership-consistency`: Ticket sections own scope/proof, `## Goal
   program` owns instantiated loop policy, Goal turn comments own observations,
   `## Current Goal state` holds only the latest checkpoint, and the launcher

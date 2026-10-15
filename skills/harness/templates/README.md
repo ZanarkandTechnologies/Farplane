@@ -27,7 +27,6 @@ Each tracked template declares:
 
 - `template_id`
 - `template_version`
-- `feature_refs`
 - optional `consumer_scope`
 - optional `applies_to`
 
@@ -52,7 +51,8 @@ JSON consumers use the same shape:
 }
 ```
 
-The rollout report lives in
+`skills/harness/scripts/generate_template_intelligence.py` reports each
+consumer/template pair as `current`, `stale`, or `missing` in
 `.farplane/generated/graphs/skill-template-intelligence.json` under
 `template_rollout_summary` and `template_rollout`.
 

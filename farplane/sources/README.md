@@ -9,14 +9,13 @@ operator-provided source needs a durable answer to:
 - have we already seen this source?
 - what is its canonical identity?
 - where are the local scout or research artifacts?
-- which `FEAT-*` records or tickets came from it?
+- which tickets, skills, or docs did it inform?
 - did we adopt, adapt, reject, defer, or treat it as a duplicate?
 
-`farplane/sources/registry.jsonl` tracks source provenance. `docs/systems/*.md`
-owns durable system records, feature pages in `docs/features/` own
-first-class feature records, and `docs/features/registry.jsonl` is generated
-output. A single source can inform many features, and a single feature can
-synthesize many sources.
+`farplane/sources/registry.jsonl` tracks source provenance only. A single
+source can inform many changes, and a single change can synthesize many
+sources. Feed Scout single-source mode (`skills/feed-scout/references/single-source.md`)
+writes and dedupes these records.
 
 ## Record Shape
 
@@ -35,7 +34,6 @@ Each line in `registry.jsonl` is one JSON object:
   "local_artifacts": [
     ".farplane/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md"
   ],
-  "feature_refs": ["FEAT-0011"],
   "decision": "adapt",
   "duplicate_of": null,
   "status": "active",
@@ -59,7 +57,6 @@ Each line in `registry.jsonl` is one JSON object:
 - `captured_at`: date the source was first captured in `YYYY-MM-DD` form.
 - `local_artifacts`: local research memos, scout runs, summaries, scorecards,
   or handoffs that preserve the source decision.
-- `feature_refs`: `FEAT-*` IDs influenced by this source.
 - `decision`: `adopt`, `adapt`, `reject`, `defer`, `duplicate`, or
   `reference-only`.
 - `duplicate_of`: `null` for canonical records or a `SRC-*` ID for duplicates.
@@ -73,15 +70,13 @@ Each line in `registry.jsonl` is one JSON object:
    before adding a new record.
 2. Add a new `SRC-*` record only when the source identity is genuinely new.
 3. If the source is a duplicate, add or update a record with `decision:
-   duplicate` and `duplicate_of` instead of opening new feature tickets.
+   duplicate` and `duplicate_of` instead of opening new tickets.
 4. Keep raw transcripts, bulky source extracts, customer details, and secrets
    out of this registry. Link to redacted scout artifacts instead.
-5. Link source records to `FEAT-*` records only when a durable feature doc
-   exists; link to tickets or research artifacts when a source is still only
-   inspiration.
-6. Keep feature records focused on Farplane behavior. Do not copy source
-   identity fields into feature records, and regenerate
-   `docs/features/registry.jsonl` instead of hand-editing it.
+5. Link source records to the tickets, skills, or research artifacts they
+   shaped through `local_artifacts` and `notes`.
+6. Do not copy source identity fields into tickets or skills; cite the
+   `SRC-*` id instead.
 
 ## ID Allocation
 
@@ -89,8 +84,7 @@ Each line in `registry.jsonl` is one JSON object:
 2. Pick the next unused numeric ID in `SRC-####` form.
 3. Do not fill gaps without checking tickets and archived branches that may
    already reference the missing ID.
-4. Do not rename or reuse an ID after another doc, ticket, or feature record
-   references it.
+4. Do not rename or reuse an ID after another doc or ticket references it.
 
 ## Retention Rules
 
@@ -110,5 +104,5 @@ python3 bin/validators/validate_sources.py
 ```
 
 The validator checks JSONL shape, ID uniqueness, canonical-key uniqueness,
-allowed enum values, local artifact existence, `FEAT-*` references, duplicate
-links, and date formats.
+allowed enum values, local artifact existence, duplicate links, and date
+formats.

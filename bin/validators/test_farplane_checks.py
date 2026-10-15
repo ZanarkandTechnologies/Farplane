@@ -20,7 +20,6 @@ class FarplaneChecksTest(unittest.TestCase):
             registry.ids(),
             (
                 "docs.contracts",
-                "docs.features",
                 "docs.refs",
                 "docs.sources",
                 "harness.check",

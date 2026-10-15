@@ -1,8 +1,6 @@
 ---
 template_id: human-report-template
-template_version: "0.1.1"
-feature_refs:
-  - FEAT-0060
+template_version: "0.1.2"
 kind: human-report
 consumer_scope: report-prototype
 applies_to:
@@ -24,6 +22,8 @@ human_report(source_evidence, report_kind, template)
 
 Start with the answer. A reader should understand the decision, current state,
 main risk, and next action without opening supporting evidence.
+The body owns the conclusion; structured receipts own ledgers, mutations,
+validation, and stop state, and are linked, not repeated.
 
 ```markdown
 ---
@@ -90,6 +90,12 @@ Report-producing skills may add a small domain section only when it changes the
 decision, such as an experiment result, ranked candidate table, or failure
 reproduction. Domain-specific machine fields belong in the receipt or source
 artifact unless a human must read them to act.
+
+## Adoption
+
+This template has no live adopter yet; its only consumer is the archived
+prototype in `applies_to`. Widen `consumer_scope` only after a representative
+prototype passes review and a rollout wave is accepted.
 
 ## Quality examples
 

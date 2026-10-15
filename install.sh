@@ -526,7 +526,7 @@ install_rendered_skill_profiles() {
   done
 }
 
-# Memory repo: thread notes and Wiki pages, local-only (docs/farplane-framework/notes.md).
+# Memory repo: thread notes and Wiki pages, local-only (docs/guides/wiki-and-entities.md).
 ensure_memory_repo() {
   local memory_dir="${FARPLANE_MEMORY_DIR:-$HOME/.farplane/memory}"
   if [ ! -d "$memory_dir/.git" ]; then

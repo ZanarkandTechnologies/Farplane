@@ -15,11 +15,11 @@ class LintRegistryTests(unittest.TestCase):
     def test_changed_paths_select_only_their_contracts_plus_source_syntax(self) -> None:
         checks = build_registry().select(
             scope="all",
-            changed_paths=("docs/features/FEAT-0039.md",),
+            changed_paths=("docs/guides/work-loop.md",),
         )
         ids = {check.check_id for check in checks}
 
-        self.assertIn("feature_and_system_records", ids)
+        self.assertIn("document_frontmatter", ids)
         self.assertIn("source_yaml_json_syntax", ids)
         self.assertNotIn("skill_contract", ids)
         self.assertNotIn("project_contract", ids)

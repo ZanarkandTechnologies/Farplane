@@ -33,4 +33,4 @@ Own the thin callable review wrapper for Farplane's docs-owned rubric contract.
   do not recreate a second anti-slop review workflow.
 - Each family file should stay skimmable while still including required checks,
   blocker checks, evidence checks, and finding cues.
-- If the review contract changes, update `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md` and the ticket/evidence artifact contract in the same change.
+- If the review contract changes, update the `tickets/README.md` close rule, `skills/review/SKILL.md`, and the ticket/evidence artifact contract in the same change.

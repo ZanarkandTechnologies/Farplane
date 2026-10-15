@@ -17,10 +17,6 @@ globs = ["README.md", "ARCHITECTURE.md", "docs/**"]
 checks = ["docs.refs", "docs.contracts"]
 
 [[path_check]]
-globs = ["docs/features/**", "docs/systems/**"]
-checks = ["docs.features"]
-
-[[path_check]]
 globs = ["farplane/sources/**"]
 checks = ["docs.sources"]
 

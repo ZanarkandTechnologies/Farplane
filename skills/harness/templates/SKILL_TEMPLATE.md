@@ -1,9 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.6.8"
-feature_refs:
-  - FEAT-0022
-  - FEAT-0062
+template_version: "0.6.9"
 consumer_scope: skill
 applies_to:
   - skills/*/SKILL.md
@@ -25,7 +22,7 @@ source: local
 #   kind: integration
 #   consumes: ["input-artifact-id"]
 template_uses:
-  skill-template: "0.6.2"
+  skill-template: "0.6.9"
 # Add only after the skill fits 10 top-level todos and 5 evals.
 # skill-surface-budget: "0.1.0"
 # Required when the skill sits on a specialist desk in the Capability Map

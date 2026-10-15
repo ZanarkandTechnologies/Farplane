@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-"""Resolve Farplane project adoption pins across local project manifests."""
+"""Resolve Farplane project adoption pins across local project manifests.
+
+`farplane adoption scan` reads only explicit `--project-root` values, a
+`--roots-file`, or the first known `~/.farplane` state file that lists roots.
+It never crawls the computer and never writes or mutates project manifests.
+
+For each project it reports manifest presence, `spec_version` and template
+version drift against the standard `farplane/manifest.json`, unknown
+templates, and local `.agents/skills` presence. A release claim cites this scan together with the
+validators.
+"""
 
 from __future__ import annotations
 
@@ -34,7 +44,6 @@ class RegistryTemplate:
     template_id: str
     version: str
     path: str
-    feature_refs: tuple[str, ...]
 
 
 def read_json(path: Path) -> Any:
@@ -121,27 +130,16 @@ def unique_paths(paths: list[Path]) -> list[Path]:
     return unique
 
 
-def load_feature_registry(path: Path) -> dict[str, dict[str, Any]]:
-    rows = read_jsonl(path)
-    return {str(row["id"]): row for row in rows if isinstance(row.get("id"), str)}
-
-
 def load_template_registry(path: Path) -> dict[str, RegistryTemplate]:
     templates: dict[str, RegistryTemplate] = {}
     for row in read_jsonl(path):
         template_id = row.get("template_id")
         if not isinstance(template_id, str):
             continue
-        feature_refs = tuple(
-            str(item)
-            for item in row.get("feature_refs", [])
-            if isinstance(item, str) and item.strip()
-        )
         templates[template_id] = RegistryTemplate(
             template_id=template_id,
             version=str(row.get("template_version") or ""),
             path=str(row.get("path") or ""),
-            feature_refs=feature_refs,
         )
     return templates
 
@@ -167,17 +165,6 @@ def local_skill_names(project_root: Path) -> list[str]:
     return names
 
 
-def explicit_feature_pins(manifest: dict[str, Any]) -> dict[str, str]:
-    raw = manifest.get("feature_pins") or manifest.get("featurePins") or {}
-    if not isinstance(raw, dict):
-        return {}
-    pins: dict[str, str] = {}
-    for key, value in raw.items():
-        if isinstance(key, str) and key.strip():
-            pins[key] = str(value)
-    return pins
-
-
 def template_uses(manifest: dict[str, Any]) -> dict[str, str]:
     try:
         return normalize_template_uses(manifest, "<manifest>", include_legacy=False)
@@ -189,7 +176,6 @@ def resolve_project(
     project_root: Path,
     *,
     global_manifest: dict[str, Any],
-    features: dict[str, dict[str, Any]],
     templates: dict[str, RegistryTemplate],
 ) -> dict[str, Any]:
     manifest_path = project_root / "farplane" / "manifest.json"
@@ -203,8 +189,6 @@ def resolve_project(
             "issues": ["manifest_missing"],
             "localSkills": [],
             "templateUses": {},
-            "featurePins": {},
-            "impliedFeaturePins": {},
             "drift": [],
         }
     manifest_value = read_json(manifest_path)
@@ -213,8 +197,6 @@ def resolve_project(
 
     project_templates = template_uses(manifest_value)
     global_templates = template_uses(global_manifest)
-    explicit_features = explicit_feature_pins(manifest_value)
-    implied_features: dict[str, list[str]] = {}
     drift: list[dict[str, str]] = []
 
     spec_status = compare_version(
@@ -246,18 +228,10 @@ def resolve_project(
             )
 
     for template_id, pinned in sorted(project_templates.items()):
-        template = templates.get(template_id)
-        if template is None:
+        if template_id not in templates:
             issues.append(f"unknown_template:{template_id}")
             drift.append({"type": "template", "template_id": template_id, "status": "unknown", "pinned": pinned, "expected": ""})
-            continue
-        for feature_id in template.feature_refs:
-            implied_features.setdefault(feature_id, []).append(template_id)
 
-    for feature_id in explicit_features:
-        if feature_id not in features:
-            issues.append(f"unknown_feature:{feature_id}")
-            drift.append({"type": "feature", "feature_id": feature_id, "status": "unknown"})
 
     skills = local_skill_names(project_root)
     return {
@@ -270,8 +244,6 @@ def resolve_project(
         "specVersion": str(manifest_value.get("spec_version") or ""),
         "expectedSpecVersion": str(global_manifest.get("spec_version") or ""),
         "templateUses": project_templates,
-        "featurePins": explicit_features,
-        "impliedFeaturePins": {key: sorted(value) for key, value in sorted(implied_features.items())},
         "localSkills": skills,
         "usesLocalSkills": bool(skills),
         "skillSourcePolicy": "local-if-present" if skills else "global",
@@ -280,36 +252,10 @@ def resolve_project(
     }
 
 
-def adoption_graph(projects: list[dict[str, Any]], features: dict[str, dict[str, Any]]) -> dict[str, Any]:
-    graph: dict[str, Any] = {}
-    for feature_id, row in sorted(features.items()):
-        explicit: list[str] = []
-        implied: list[str] = []
-        for project in projects:
-            project_id = str(project.get("projectId") or project.get("root"))
-            if feature_id in project.get("featurePins", {}):
-                explicit.append(project_id)
-            if feature_id in project.get("impliedFeaturePins", {}):
-                implied.append(project_id)
-        total = sorted(set(explicit) | set(implied))
-        if not total:
-            continue
-        graph[feature_id] = {
-            "id": feature_id,
-            "name": row.get("name", feature_id),
-            "status": row.get("status", ""),
-            "explicitProjects": sorted(explicit),
-            "impliedProjects": sorted(implied),
-            "projectCount": len(total),
-        }
-    return graph
-
-
 def resolve_adoption_stats(
     *,
     standard_root: Path,
     project_roots: list[Path],
-    feature_registry: Path | None = None,
     template_registry: Path | None = None,
 ) -> dict[str, Any]:
     standard_root = standard_root.resolve()
@@ -317,13 +263,11 @@ def resolve_adoption_stats(
     global_manifest = read_json(global_manifest_path)
     if not isinstance(global_manifest, dict):
         raise AdoptionError(f"invalid_manifest_shape:{global_manifest_path}:expected_object")
-    feature_path = feature_registry or standard_root / "docs" / "features" / "registry.jsonl"
     template_path = template_registry or standard_root / "config" / "template-registry.jsonl"
-    features = load_feature_registry(feature_path)
     templates = load_template_registry(template_path)
     roots = unique_paths(project_roots)
     projects = [
-        resolve_project(root, global_manifest=global_manifest, features=features, templates=templates)
+        resolve_project(root, global_manifest=global_manifest, templates=templates)
         for root in roots
     ]
     drift_count = sum(len(project.get("drift", [])) for project in projects)
@@ -335,7 +279,6 @@ def resolve_adoption_stats(
         "globalManifestPath": str(global_manifest_path),
         "globalSpecVersion": str(global_manifest.get("spec_version") or ""),
         "globalTemplateUses": template_uses(global_manifest),
-        "featureRegistryPath": str(feature_path),
         "templateRegistryPath": str(template_path),
         "counts": {
             "projects": len(projects),
@@ -344,7 +287,6 @@ def resolve_adoption_stats(
             "driftItems": drift_count,
         },
         "projects": projects,
-        "features": adoption_graph(projects, features),
     }
 
 
@@ -380,7 +322,7 @@ def print_summary(payload: dict[str, Any]) -> None:
         local = "local-skills" if project.get("usesLocalSkills") else "global-skills"
         print(f"- {marker}: {project.get('projectId', project['root'])} ({local})")
         for drift in project.get("drift", [])[:5]:
-            label = drift.get("template_id") or drift.get("feature_id") or drift.get("type")
+            label = drift.get("template_id") or drift.get("type")
             print(f"  - {drift.get('type')}:{label} {drift.get('status')}")
         for issue in project.get("issues", [])[:5]:
             print(f"  - issue:{issue}")
@@ -395,7 +337,6 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--roots-file", help="JSON file containing project roots.")
     scan.add_argument("--no-state", action="store_true", help="Do not read ~/.farplane global state project roots.")
     scan.add_argument("--include-standard", action="store_true", help="Scan the standard root when no project roots are found.")
-    scan.add_argument("--feature-registry", help="Feature registry JSONL path.")
     scan.add_argument("--template-registry", help="Template registry JSONL path.")
     scan.add_argument("--json", action="store_true")
     scan.set_defaults(func=run_scan)
@@ -409,7 +350,6 @@ def run_scan(args: argparse.Namespace) -> int:
     payload = resolve_adoption_stats(
         standard_root=Path(args.standard_root).expanduser().resolve(),
         project_roots=roots,
-        feature_registry=Path(args.feature_registry).expanduser().resolve() if args.feature_registry else None,
         template_registry=Path(args.template_registry).expanduser().resolve() if args.template_registry else None,
     )
     payload["rootSources"] = sources

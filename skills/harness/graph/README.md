@@ -60,6 +60,12 @@ Current projection profiles:
 - `farplane-lifecycle-core`: compact lifecycle graph for UI and agent context
 - `farplane-lifecycle-full`: audit lifecycle graph with optional detail nodes
 
+Maintenance rules: add a primitive to `graph_ir.py` only when several builders
+need it. Keep source extraction in the owning builder and filtering in
+`graph_projection.py`. Add a named profile to `graph_projection_config.py` only
+when a stable consumer needs a distinct selection or detail contract.
+Regenerate after registry, link, manifest, or lifecycle changes.
+
 ## Regenerate
 
 ```bash
@@ -116,6 +122,36 @@ bunker Convex (`hookName: skill-invocation-listener`), read through
 same stream as `skill_requested` and show only as `requested_count_*`. Without
 Convex settings (`CONVEX_URL`) heat is zero and generation prints the gap.
 
+Backlinks are derived, never authored: `incoming_ref_count` and top referrers
+come from reversing the generated outgoing edges, so no skill keeps a backlink
+list. They can miss references written in syntax the scanner does not
+recognise.
+
+## Skill signals
+
+Each skill node carries `signals`, built by `build_skill_signals` in
+`skills/harness/scripts/generate_skill_graph.py`, to rank which skill to improve
+next without one opaque score:
+
+- `direct_heat`: observed invocations in the heat window.
+- `composition_heat`: weaker indirect use, from deduped incoming refs whose
+  referrers were invoked in the window.
+- `maintenance_burden`: `low | moderate | high` from findings such as
+  `missing_eval` and `stale_template`.
+- `uniqueness`: desk membership, methods, outgoing refs, or a skill UI.
+
+`maintenance_recommendation` is one of `keep`, `harden`, `refine`, `merge`,
+`watch`, or `retire_review`. Today the generator emits `refine` for heat with
+high burden, `harden` for heat with moderate burden, `retire_review` for an
+unused, unreferenced, non-unique skill, `watch` for an unused but referenced
+one, and `keep` otherwise; `merge` is reserved for overlap evidence the
+generator does not measure yet. Signals rank work; they never edit, merge, or
+delete a skill. Raw values are shown before the recommendation, `merge` and
+`retire_review` are prompts for harness maintain-mode review, and any
+destructive edit needs owner review. Harness health
+(`bin/core/farplane_harness_health.py`) separately keeps each desk's primary
+skill and every skill used in the last 30 days in its priority cohort.
+
 The harness graph is currently a data/report surface rather than a rendered UI
 view. It detects local Markdown links and literal repo paths, resolves them to
 repo files when possible, and keeps unresolved local-looking references visible
@@ -131,8 +167,8 @@ core workflows instead of rendering every reachable maintenance file.
 
 The lifecycle graph is a semantic framework surface. It combines conservative
 `SKILL.md` signature parsing, `hooks.json` commands, curated framework-critical
-edges, and finite state projections described in
-`docs/farplane-framework/graph-contract.md`.
+edges, and finite state projections. Its node, edge, confidence, extraction,
+and FSA contract lives in [the graphs guide](../../../docs/guides/graphs.md).
 
 The default output is the compact core graph for UI and agent context use. Run
 with `--full` when reviewing parser internals such as gates, FSA state nodes,

@@ -30,7 +30,7 @@ RULES: tuple[FileRule, ...] = (
         relative_path="README.md",
         required_substrings=(
             "Architecture map: [ARCHITECTURE.md]",
-            "Feature specs and registry contract: [docs/features/README.md]",
+            "Guides: [docs/guides/README.md]",
             "Review scoring: [skills/review/README.md]",
             "Active queue: GitHub Issues in each project's own repo",
         ),
@@ -43,34 +43,10 @@ RULES: tuple[FileRule, ...] = (
         relative_path="ARCHITECTURE.md",
         required_substrings=(
             "## Canonical Surfaces",
+            "## Systems",
             "README.md",
             "tickets/README.md",
             "skills/review/references/rubrics/review-rubric-index.md",
-        ),
-    ),
-    FileRule(
-        relative_path="docs/features/README.md",
-        required_substrings=(
-            "Farplane feature docs are the spec files",
-            "This folder is the authored source for feature specs",
-            "Do not create a second spec-folder truth shelf",
-            "python3 docs/features/validate_features.py --write",
-        ),
-    ),
-    FileRule(
-        relative_path="docs/features/README.md",
-        required_substrings=(
-            "Delete a `FEAT-*` handle when it no longer earns a feature spec page.",
-            "Do not keep a retired alias just to preserve noise.",
-        ),
-    ),
-    FileRule(
-        relative_path="docs/features/FEAT-0060-registry-backed-documentation-os.md",
-        required_substrings=(
-            "Feature docs are the spec files.",
-            "python3 bin/validators/check_doc_parity.py",
-            "No parallel spec-folder truth shelf.",
-            "No compatibility feature rows for capabilities that do not earn their own feature spec.",
         ),
     ),
     FileRule(

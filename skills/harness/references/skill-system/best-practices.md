@@ -7,7 +7,7 @@ context for every skill invocation. Apply it to `harness` create mode and
 representative pass proves the shape.
 
 Keep this file focused on skill authoring and review quality. Do not redefine
-desk, source, template-version, or feature-tracking policy here; link
+desk, source, template-version, or capability-tracking policy here; link
 `skills/harness/references/skill-system/system.md` for stable skill-system rules.
 
 ## Load Policy
@@ -423,12 +423,12 @@ Use this routing:
 | Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality check | `doc-advisor`, the documentation rubric, or an owned reference. |
 | Skill structure, Golden Workflow Nodes, first-load size, reference routing, edge, or compaction risk. | `skill-contract` review | `skills/review/references/rubrics/skill-contract.md`, plus a skill-local audit for material changes. |
 | Generated asset or public deliverable presentation. | demo or QA proof | Demo checklist, render artifact, screenshot, or playback proof. |
+| Operator taste, ranking, or approval. | human feedback | Feedback artifact, Telegram request, or explicit approval record. |
+| Tiny deterministic edit. | self-check | One inline final todo or command. |
 
 When the gate is `review`, end with the template's closing node: run `review`
 with the named family until TAS-A, at most three rounds, then stop with the
 open checks as the blocker. Name the family; never link a rubric path.
-| Operator taste, ranking, or approval. | human feedback | Feedback artifact, Telegram request, or explicit approval record. |
-| Tiny deterministic edit. | self-check | One inline final todo or command. |
 
 First-load `SKILL.md` should usually say which gate to run and when to load the
 detail. Keep the detailed checklist in a reference when it is only needed after
@@ -448,7 +448,8 @@ an eval, validator, QA/review lane, or conditional reference only when its
 proof or loading boundary changes.
 
 For skill creation or material skill restructuring, load and run
-`skills/review/references/rubrics/skill-contract.md`. Its key threshold is:
+`skills/review/references/rubrics/skill-contract.md`. When placing any detail,
+apply this threshold (it is this file's rule, not the rubric's):
 
 ```text
 place_skill_detail(detail)

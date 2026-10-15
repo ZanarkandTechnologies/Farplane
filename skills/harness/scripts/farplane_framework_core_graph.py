@@ -25,13 +25,13 @@ from graph_ir import GraphBundle, edge_counts, node_kind_counts, validate_edge_e
 
 
 DEFAULT_INCLUDE = [
-    "docs/farplane-framework/README.md",
-    "docs/farplane-framework/lifecycle.md",
-    "docs/farplane-framework/setup-advisor-critical-path.md",
-    "docs/farplane-framework/project-files.md",
-    "docs/farplane-framework/graph-contract.md",
-    "docs/farplane-framework/hooks-and-runtime.md",
-    "docs/farplane-framework/harness-maintenance.md",
+    "docs/guides/README.md",
+    "docs/guides/work-loop.md",
+    "skills/setup-advisor/references/critical-path.md",
+    "docs/guides/project-files.md",
+    "docs/guides/graphs.md",
+    "docs/guides/hooks-and-runtime.md",
+    "skills/harness/references/harness-maintenance.md",
 ]
 
 DEFAULT_EXCLUDE = [
@@ -51,8 +51,7 @@ KNOWN_LINKED_KINDS = {
 }
 
 DIRECT_FILE_PREFIXES = (
-    "docs/farplane-framework/",
-    "docs/features/",
+    "docs/guides/",
     "farplane/",
 )
 
@@ -65,49 +64,49 @@ WORKFLOWS = [
         "id": "workflow:lifecycle",
         "label": "Farplane lifecycle",
         "description": "Top-level lifecycle spine from init through metric objectives, proof, autonomy loops, and improvement.",
-        "doc": "docs/farplane-framework/lifecycle.md",
+        "doc": "docs/guides/work-loop.md",
         "skills": [],
     },
     {
         "id": "workflow:bootstrap",
         "label": "Bootstrap",
         "description": "Create the project substrate and first usable harness state.",
-        "doc": "docs/farplane-framework/setup-advisor-critical-path.md",
+        "doc": "skills/setup-advisor/references/critical-path.md",
         "skills": ["setup-advisor", "prd", "impl-plan"],
     },
     {
         "id": "workflow:strategy",
         "label": "Strategy",
         "description": "Shape measurable objectives, guards, proposal trajectories, and executable frontier choices.",
-        "doc": "docs/farplane-framework/lifecycle.md",
+        "doc": "docs/guides/work-loop.md",
         "skills": ["advise", "harness", "goal-advisor"],
     },
     {
         "id": "workflow:goal-execution",
         "label": "Goal execution",
         "description": "Compile a goal into a ticket-backed program, execute it, and produce proof.",
-        "doc": "docs/farplane-framework/lifecycle.md",
+        "doc": "docs/guides/work-loop.md",
         "skills": ["goal-advisor", "impl-plan", "qa", "review"],
     },
     {
         "id": "workflow:autonomy-loops",
         "label": "Autonomy loops",
         "description": "Run Company OS Daily and Weekly for operating review.",
-        "doc": "docs/farplane-framework/hooks-and-runtime.md",
+        "doc": "docs/guides/work-loop.md",
         "skills": ["automation-advisor", "report-gen"],
     },
     {
         "id": "workflow:proof",
         "label": "Proof",
         "description": "Select and run proof paths for claims, tickets, skills, and workflows.",
-        "doc": "docs/farplane-framework/lifecycle.md",
+        "doc": "docs/guides/work-loop.md",
         "skills": ["eval", "qa", "review"],
     },
     {
         "id": "workflow:improvement",
         "label": "Improvement",
         "description": "Route outcomes into project docs, Wiki entities, skill maintenance, and future evals.",
-        "doc": "docs/farplane-framework/lifecycle.md",
+        "doc": "docs/guides/work-loop.md",
         "skills": ["doc-advisor", "manage-wiki", "eval"],
     },
 ]
@@ -254,7 +253,7 @@ def add_workflow_edges(
 ) -> set[str]:
     linked_ids: set[str] = set()
     root = "workflow:lifecycle"
-    lifecycle_doc = "file:docs/farplane-framework/lifecycle.md"
+    lifecycle_doc = "file:docs/guides/work-loop.md"
     for index, workflow in enumerate(WORKFLOWS):
         workflow_id = str(workflow["id"])
         if workflow_id not in node_ids:
@@ -265,7 +264,7 @@ def add_workflow_edges(
                 "target": workflow_id,
                 "type": "workflow-stage",
                 "label": f"stage.{index}",
-                "from_file": "docs/farplane-framework/lifecycle.md",
+                "from_file": "docs/guides/work-loop.md",
                 "raw_ref": workflow_id,
                 "confidence": "curated",
                 "order": index,
@@ -289,7 +288,7 @@ def add_workflow_edges(
                 "target": workflow_id,
                 "type": "lifecycle-workflow",
                 "label": workflow["label"],
-                "from_file": "docs/farplane-framework/lifecycle.md",
+                "from_file": "docs/guides/work-loop.md",
                 "raw_ref": workflow_id,
                 "confidence": "curated",
             }

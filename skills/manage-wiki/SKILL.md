@@ -26,9 +26,9 @@ Markdown under `.farplane/entities/<id>.md` is canonical. Generated
 `.farplane/entities/graph.json`, `.farplane/entities/crm.json`, and typed views
 are disposable projections. Use
 `farplane wiki search` for candidate retrieval, then read candidate Markdown
-before making a contextual identity decision. Follow the shared
-[Wiki storage contract](../../docs/farplane-framework/entities.md) and
-[authoring notation](../../docs/farplane-framework/entity-markdown-authoring.md).
+before making a contextual identity decision. Follow the
+[Wiki storage contract](references/wiki-contract.md) and
+[authoring notation](references/notation.md).
 
 ## Skill Signature
 
@@ -75,8 +75,9 @@ need `impl-plan`; use that only for a software or schema change to the system.
   - [ ] Bind `publication_intent`. Explicit save, add, update, write, or publish
         **to Wiki**, or “apply these Wiki changes,” means `apply`; explicit
         preview, propose, draft, or do-not-write means `preview`. Missing Wiki
-        write direction defaults to `preview`; conflicting directions block
-        publication and return a preview with the conflict named.
+        write direction defaults to `preview`; approving a report, offer, or
+        outreach draft alone is not Wiki-write intent. Conflicting directions
+        block publication and return a preview with the conflict named.
   - [ ] Run `farplane wiki doctor --project-root <project_root>` before any
         canonical write. Return `skip_source_gap` when no readable source or
         selected facts exist; do not search unrelated calls or notes.
@@ -159,10 +160,12 @@ changeset contains update, create, link, ambiguity, and question provenance.
 
 ## Reference Map
 
-- [Wiki storage contract](../../docs/farplane-framework/entities.md) — read on
-  every invocation for canonical fields, search state, and projection behavior.
-- [Wiki authoring notation](../../docs/farplane-framework/entity-markdown-authoring.md)
-  — read before staging or reviewing Markdown.
+- [Wiki storage contract](references/wiki-contract.md) — read on every
+  invocation for commands, search state, and projection behavior.
+- [Wiki authoring notation](references/notation.md) — read before staging or
+  reviewing Markdown; holds the complete notation table and a worked page.
+- [creator page template](templates/creator-page.md) — read when creating or
+  reshaping a page with `roles: [creator]`.
 - [mixed resolution example](examples/supply-call/example.md) — read for a
   multi-outcome changeset or ambiguity review.
 

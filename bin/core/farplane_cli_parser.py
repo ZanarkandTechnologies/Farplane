@@ -185,7 +185,6 @@ def build_parser() -> argparse.ArgumentParser:
     adoption_scan.add_argument("--roots-file", help="JSON file containing project roots.")
     adoption_scan.add_argument("--no-state", action="store_true", help="Do not read ~/.farplane global state project roots.")
     adoption_scan.add_argument("--include-standard", action="store_true", help="Scan the standard root when no project roots are found.")
-    adoption_scan.add_argument("--feature-registry", help="Feature registry JSONL path.")
     adoption_scan.add_argument("--template-registry", help="Template registry JSONL path.")
     adoption_scan.add_argument("--json", action="store_true")
     adoption_scan.set_defaults(func=run_adoption_scan_cli)

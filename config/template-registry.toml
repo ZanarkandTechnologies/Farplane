@@ -1,6 +1,10 @@
 [template_registry]
 # Focused registry of the highest-impact unstructured prompt templates. Broader
 # document/version tracking is intentionally deferred.
+# Consumers declare adoption with one field, `template_uses: {<template_id>:
+# "x.y.z"}`, in YAML frontmatter or JSON. The rollout report lands in
+# .farplane/generated/graphs/skill-template-intelligence.json
+# (template_rollout_summary, template_rollout).
 paths = [
   "runtimes/AGENTS.md",
   "skills/harness/templates/SKILL_TEMPLATE.md",
@@ -13,5 +17,5 @@ paths = [
   "skills/setup-advisor/templates/project-harness.md",
   "skills/setup-advisor/references/MANIFEST_TEMPLATE.json",
   "skills/report-gen/templates/human-report.md",
-  "docs/farplane-framework/entity-templates/creator.md",
+  "skills/manage-wiki/templates/creator-page.md",
 ]

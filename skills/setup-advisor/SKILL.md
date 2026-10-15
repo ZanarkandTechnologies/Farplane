@@ -153,6 +153,8 @@ returns: per-surface status + evidence + human gates + readiness gaps + next own
 
 ## Reference Map
 
+- [critical-path](references/critical-path.md) - end-to-end init/migrate path
+  from target binding to verified readiness and automation handoff.
 - [reference-map](references/reference-map.md) - every template, its target,
   and which mode loads it.
 - [migration](references/migration.md) - bootstrap inventory, brownfield

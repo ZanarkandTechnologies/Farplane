@@ -9,7 +9,7 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 planner_contract:
-  required_arguments: ["problem_ref", "system_ref", "feature_refs", "claim", "surface", "task_case", "baseline"]
+  required_arguments: ["problem_ref", "system_ref", "claim", "surface", "task_case", "baseline"]
 ---
 
 # Farplane Ablation Proof
@@ -27,9 +27,9 @@ versus absent, and whether the claim should remain part of the harness.
 ## Skill Signature
 
 ```text
-farplane_ablation_proof(problem_ref, system_ref, feature_refs, claim, surface, task_case, baseline, with_surface?, without_surface?, expectation?, ticket?, audience_context?)
+farplane_ablation_proof(problem_ref, system_ref, claim, surface, task_case, baseline, with_surface?, without_surface?, expectation?, ticket?, audience_context?)
   -> ablation_report + trust_decision + follow_up
-state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, current ICP complaint evidence, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, target surface, task/eval evidence); writes(ticket artifact)
+state: reads(farplane/harness.yaml stable problems, ARCHITECTURE.md Systems table, current ICP complaint evidence, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, target surface, task/eval evidence); writes(ticket artifact)
 gates: strategic_ref_bound; compounding_difference; one_main_variable; claim_is_specific; canonical_icp_bound; current_pain_grounded; recognizable_baseline; comparison_is_fair; visible_result; evidence_cites_both_conditions; no_proof_theater
 routes: root skill `eval` | root skill `qa` adversarial mode | ../farplane-productization/SKILL.md
 fails: random_feature; generic_internal_test; multiple_main_variables; uses only intuition; compares different tasks; keeps a surface because it sounds good
@@ -38,7 +38,7 @@ fails: random_feature; generic_internal_test; multiple_main_variables; uses only
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind one stable `problem_ref`, canonical `system_ref`, relevant `feature_refs`, and the current ICP complaint evidence that makes this a consequential Farplane difference.
+- [ ] 1. Bind one stable `problem_ref`, canonical `system_ref` (an `ARCHITECTURE.md` Systems row), and the current ICP complaint evidence that makes this a consequential Farplane difference.
 - [ ] 2. Bind the trust claim.
   - [ ] State the claim in falsifiable language.
   - [ ] Before reading the comparison, preregister the expected observation,

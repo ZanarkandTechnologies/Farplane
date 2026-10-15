@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Resolve Farplane skill rollout status for UI-facing CLI consumers."""
+"""Resolve Farplane skill rollout status for UI-facing CLI consumers.
+
+Read-only: classifies each skill current | stale | missing | external against
+the current skill template, from the generated registry and
+skill-template-intelligence.json. Never regenerates graph files, edits skill
+frontmatter, or updates templates (`farplane skills rollout scan --json`).
+"""
 
 from __future__ import annotations
 
@@ -68,7 +74,6 @@ def normalized_template_row(row: dict[str, Any]) -> dict[str, Any]:
     return {
         "templateId": str(row.get("template_id") or ""),
         "currentVersion": str(row.get("current_version") or ""),
-        "featureRefs": list(row.get("feature_refs") or []),
         "targetBasis": str(row.get("target_basis") or ""),
         "consumerId": str(row.get("consumer_id") or ""),
         "consumerScope": str(row.get("consumer_scope") or ""),

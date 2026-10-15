@@ -17,7 +17,7 @@ Image models and designers respond to style names, not mood words: "Art Deco"
 pulls a precise look where "elegant and premium" pulls a generic one. This
 skill owns that vocabulary: the named styles and their families
 ([styles.json](references/styles.json)), each stored in the bunker's Resource
-Bank as one Tasty Pack capture with its example board image and a recipe,
+Bank as one capture with its example board image and a recipe,
 tagged `style:<slug>` and `style-family:<family>`. `styles.json` is where the
 style text is written; `seed` syncs it into the Resource Bank, which is what
 agents and Tasty Packs read. It picks named styles for an image, poster, page

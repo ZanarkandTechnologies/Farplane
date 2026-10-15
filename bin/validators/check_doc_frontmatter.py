@@ -14,6 +14,7 @@ EXTRA_DOC_GLOBS = (
     "skills/harness/references/skill-system/*.md",
     "skills/harness/references/global-agents-qa-checklist.md",
     "skills/harness/templates/*.md",
+    "skills/manage-wiki/templates/*.md",
     "skills/report-gen/templates/human-report.md",
     "farplane/sources/*.md",
 )

@@ -87,7 +87,7 @@ class PromptfooAdapterTests(unittest.TestCase):
             with self.assertRaisesRegex(runner.AdapterError, "eval IDs must be unique"):
                 runner.load_manifest(path)
 
-    def test_manifest_preflight_rejects_unknown_feature_before_workspace_creation(self) -> None:
+    def test_manifest_preflight_rejects_invalid_metadata_before_workspace_creation(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "sample-skill" / "evals" / "evals.json"
             path.parent.mkdir(parents=True)
@@ -100,14 +100,14 @@ class PromptfooAdapterTests(unittest.TestCase):
                                 "id": "case-a",
                                 "prompt": "A",
                                 "expected_output": "A out",
-                                "metadata": {"farplane": {"feature_id": "FEAT-9999"}},
+                                "metadata": {"farplane": {"workspace_fixture": "../escape"}},
                             }
                         ],
                     }
                 ),
                 encoding="utf-8",
             )
-            with self.assertRaisesRegex(runner.AdapterError, "unknown feature_id"):
+            with self.assertRaisesRegex(runner.AdapterError, "workspace paths must stay relative"):
                 runner.load_manifest(path)
 
     def test_resolve_under_rejects_path_escape(self) -> None:

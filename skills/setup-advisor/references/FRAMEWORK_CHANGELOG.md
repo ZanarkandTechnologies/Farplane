@@ -3,10 +3,43 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-10-09
+updated_at: 2026-10-15
 ---
 
 # Farplane Framework Changelog
+
+## 2.0.18
+
+Date: 2026-10-15
+
+Primary change: retire the `docs/systems` and `docs/features` scaffolds and the
+`FEAT-`/`SYS-` record system. Product/system grouping and boundaries live in
+`ARCHITECTURE.md` systems rows; behavior contracts live in the owning code,
+skill, guide, or `docs/prd.md`. Templates no longer carry `feature_refs`.
+
+Changed surfaces:
+
+- `bootstrap.sh` no longer creates `docs/systems/` or `docs/features/`, and
+  `SYSTEMS_README_TEMPLATE.md` and `FEATURES_README_TEMPLATE.md` are deleted;
+- `MANIFEST_TEMPLATE.json` drops `docs/systems/README.md` and
+  `docs/features/README.md` from `standard.tracked` and `feature_refs` from
+  `_template_metadata`;
+- `AGENTS_TEMPLATE.md` and `ARCHITECTURE_TEMPLATE.md` stop naming a specs
+  folder; the Architecture systems table names owning code or docs instead;
+- ticket, Goal program/progress and project-harness templates drop
+  `feature_refs` (patch version bumps).
+
+Migration steps:
+
+1. Fold each `docs/systems/*.md` boundary into an `ARCHITECTURE.md` systems row,
+   and each still-current `docs/features/FEAT-*.md` rule into its owning code,
+   skill, guide, or `docs/prd.md`; then delete both folders and any
+   `validate_features.py` step in the project's checks.
+2. Run `python3 skills/setup-advisor/scripts/migrate_framework.py --project-root <repo>`
+   to preview, then add `--force`; it rewrites `standard.tracked` and
+   `_template_metadata` in `farplane/manifest.json`.
+3. Remove `feature_refs` from local ticket templates and project-local skill
+   frontmatter.
 
 ## 2.0.17
 

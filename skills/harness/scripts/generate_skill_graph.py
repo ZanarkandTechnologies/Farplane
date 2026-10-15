@@ -283,6 +283,7 @@ def maintenance_recommendation(
     maintenance_burden: dict[str, Any],
     uniqueness: dict[str, Any],
 ) -> str:
+    """Flag a skill for review; never a mutation. Contract: skills/harness/graph/README.md#skill-signals."""
     direct_count = int(direct_heat.get("invocation_count_window") or 0)
     composed_count = int(composition_heat.get("window_referrer_invocations") or 0)
     incoming_refs = int(composition_heat.get("incoming_ref_count") or 0)

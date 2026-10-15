@@ -9,7 +9,7 @@ tags:
   - fundamentals
   - harness
 refs:
-  - docs/features/README.md
+  - docs/AGENTS.md
   - README.md
 ---
 
@@ -34,7 +34,8 @@ themselves implementation specs, schemas, runtime contracts, or ticket flows.
 
 - Put foundational thinking, reusable doctrine, and cross-surface best
   practices here.
-- Put buildable behavior contracts, schemas, lifecycle specs, execution loops,
-  runtime adapters, and proof gates in `docs/features/`.
+- Put buildable behavior contracts, schemas, runtime adapters, and proof gates
+  in their owning skill or next to the code that enforces them; put lifecycle
+  and execution-loop narrative in `docs/guides/`.
 - Put operational workflows in `skills/`.
 - Put machine-readable harness settings in `config/`; runtime-only files go in `runtimes/<name>/`.

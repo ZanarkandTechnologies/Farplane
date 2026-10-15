@@ -3,7 +3,7 @@
 This folder owns Farplane's structured source provenance registry.
 
 Use `registry.jsonl` for stable `SRC-####` source IDs, canonical source keys,
-local artifact links, feature links, dedupe decisions, and verification dates.
+local artifact links, dedupe decisions, and verification dates.
 Use `README.md` for the record contract and validation command.
 
 Rules:
@@ -14,6 +14,6 @@ Rules:
 - Allocate the next unused `SRC-####` ID after reading all existing IDs.
 - Use `duplicate_of` when a source is a duplicate instead of creating competing
   canonical records.
-- Link to `FEAT-*` records for durable techniques; do not duplicate feature
-  registry fields here.
+- Link the tickets, skills, or research artifacts a source shaped; do not
+  copy their fields here.
 - Run `python3 bin/validators/validate_sources.py` after edits.

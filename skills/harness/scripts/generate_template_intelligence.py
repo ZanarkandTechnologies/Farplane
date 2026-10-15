@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate skill-template history, rollout, feature, and eval signals.
+"""Generate skill-template history, rollout, and eval signals.
 
 Ownership: harness owns this generated governance artifact. Inputs are
 local Farplane files plus git history; outputs are UI-ready JSON/JS graph assets
@@ -148,7 +148,6 @@ def template_metadata_summary(text: str) -> dict[str, Any]:
     return {
         "template_id": metadata.get("template_id", ""),
         "template_version": metadata.get("template_version", ""),
-        "feature_refs": metadata.get("feature_refs", []),
         "surface_fields": metadata.get("surface_fields", {}),
     }
 
@@ -307,26 +306,6 @@ def summarize_template_versions(
     return summaries
 
 
-def feature_summaries(feature_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    summaries = []
-    for row in feature_rows:
-        if row.get("category") != "skills":
-            continue
-        summaries.append(
-            {
-                "id": row.get("id", ""),
-                "name": row.get("name", ""),
-                "status": row.get("status", ""),
-                "surfaces": row.get("surfaces", []),
-                "evidence_refs": row.get("evidence_refs", []),
-                "metrics": row.get("metrics", []),
-                "known_limits": row.get("known_limits", ""),
-                "last_verified": row.get("last_verified", ""),
-            }
-        )
-    return sorted(summaries, key=lambda row: row["id"])
-
-
 def rollout_rows(skill_rows: list[dict[str, Any]], current_version: str) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for row in skill_rows:
@@ -457,7 +436,6 @@ def template_rollout_rows(
                 {
                     "template_id": template_id,
                     "current_version": current_version,
-                    "feature_refs": template.get("feature_refs", []),
                     "target_basis": template_target_basis(template_id),
                     "consumer_id": consumer.get("consumer_id", ""),
                     "consumer_scope": consumer.get("consumer_scope", ""),
@@ -485,7 +463,6 @@ def template_rollout_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
             template_id,
             {
                 "current_version": row["current_version"],
-                "feature_refs": row["feature_refs"],
                 "target_basis": row["target_basis"],
                 "total_consumers": 0,
                 "by_status": {},
@@ -597,7 +574,6 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
         else {snapshot.source_commit: str((archive_dir / archive_name(snapshot)).relative_to(repo_root)) for snapshot in snapshots}
     )
     skill_rows = load_jsonl(repo_root / "skills/registry.jsonl")
-    feature_rows = load_jsonl(repo_root / "docs/features/registry.jsonl")
     template_rows = load_jsonl(repo_root / "config/template-registry.jsonl")
     current_version = current_template_version(repo_root)
     rollout = rollout_rows(skill_rows, current_version)
@@ -618,17 +594,15 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
             "repo": str(repo_root),
             "template_path": str(TEMPLATE_PATH),
             "skill_registry_path": "skills/registry.jsonl",
-            "feature_registry_path": "docs/features/registry.jsonl",
         },
         "caveats": [
             "Template evals are hidden research signals until real eval-run artifacts can be joined to template release windows.",
             "Git mining is a recovery path; template snapshots are temporary generated artifacts under tmp/ by default.",
-            "Skill-applicable features are owned by feature pages under docs/features/ and linked from docs/systems/skill-system.md; generated system and feature registries are output.",
+            "The skill-system contract lives in skills/harness/references/skill-system/; generated registries are output.",
             "Template-level features are declared by the versioned skill template; skill rows expose derived eval and optional UI surfaces.",
         ],
         "epochs": summarize_epochs(snapshots, archive_paths),
         "template_versions": summarize_template_versions(snapshots, archive_paths),
-        "features": feature_summaries(feature_rows),
         "rollout_summary": rollout_summary(rollout),
         "rollout": rollout,
         "template_consumers": template_consumers,

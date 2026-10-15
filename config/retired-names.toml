@@ -41,9 +41,24 @@ use_instead = "a proof comment and gh issue close (tickets/README.md); lessons g
 [[retired]]
 pattern = '(?i)\bskill tiers?\b|\bTier [0-3] (?:phase|primitive|interface|domain|skill|workflow)'
 retired = 2026-10-10
-use_instead = "the Capability Map's specialist desks (FEAT-0022)"
+use_instead = "the Capability Map's specialist desks (skills/harness/references/skill-system/system.md)"
 
 [[retired]]
 pattern = 'self-improve/program\.md|Self-Improve Program'
 retired = 2026-10-13
 use_instead = "a ticket's Goal Packet through goal-advisor"
+
+[[retired]]
+pattern = 'docs/(?:features|systems)\b|validate_features'
+retired = 2026-10-15
+use_instead = "an ARCHITECTURE.md Systems row, a docs/guides/ page, or the owning skill or code"
+
+[[retired]]
+pattern = '\b(?:FEAT|SYS)-\d{4}\b|\bfeature_refs\b'
+retired = 2026-10-15
+use_instead = "the owning skill, guide, or ARCHITECTURE.md Systems row (templates carry template_id and template_version only)"
+
+[[retired]]
+pattern = 'docs/farplane-framework\b'
+retired = 2026-10-15
+use_instead = "docs/guides/"

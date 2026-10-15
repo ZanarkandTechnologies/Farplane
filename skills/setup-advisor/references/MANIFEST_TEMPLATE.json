@@ -1,15 +1,14 @@
 {
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "2.0.17",
-    "feature_refs": ["FEAT-0060", "FEAT-0063"],
+    "template_version": "2.0.18",
     "consumer_scope": "project",
     "applies_to": ["farplane/manifest.json"]
   },
   "schema": "farplane_project",
-  "spec_version": "2.0.17",
+  "spec_version": "2.0.18",
   "template_uses": {
-    "farplane-framework": "2.0.17"
+    "farplane-framework": "2.0.18"
   },
   "project": {
     "name": "TODO",
@@ -30,8 +29,6 @@
       ".agents/skills/README.md",
       "docs/bootstrap-brief.md",
       "docs/prd.md",
-      "docs/features/README.md",
-      "docs/systems/README.md",
       "docs/HISTORY.md",
       "docs/MEMORY.md",
       "docs/TASTE.md",

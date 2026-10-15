@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Named projection profiles for Farplane graph generation."""
+"""Named projection profiles for Farplane graph generation.
+
+Profiles stay small named Python configs (typed, testable, next to the
+generator) until a non-Python consumer needs an external JSON/YAML file. Add a
+profile only when a stable consumer needs a distinct selection or detail
+contract.
+"""
 
 from __future__ import annotations
 

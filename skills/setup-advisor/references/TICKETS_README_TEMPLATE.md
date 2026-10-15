@@ -191,9 +191,8 @@ Goal.
 
 The `tickets/templates/goal-loop/` templates now describe issue sections and
 comments; in an unbound project, save the same shapes as `program.md` and
-`progress.md` beside `ticket.md`. See
-`docs/features/FEAT-0032-goal-advisor-execution-compilation.md` and
-`skills/goal-advisor/SKILL.md` for the full contract.
+`progress.md` beside `ticket.md`. See `skills/goal-advisor/SKILL.md` for the
+full contract.
 
 ## Invocation Policy
 
@@ -725,4 +724,5 @@ review-output fields in the template or repeating the artifact path under
 
 Canonical policy references:
 
-- [Agent Kernel](../docs/systems/agent-kernel.md)
+- Agent Kernel: the installed global contract (`AGENTS.md` in the runtime home,
+  sourced from Farplane's `runtimes/AGENTS.md`)

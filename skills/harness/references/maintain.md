@@ -96,7 +96,8 @@ returns: updated skill, validation evidence, and review result or blocker
 
   Rule: Regenerate registries and run focused JSON, link, config, fixture, and
   eval checks; when an eval changes, run `farplane lint evals --changed` before
-  behavior proof. Never hand-edit generated state.
+  behavior proof. Never hand-edit generated state. The full upkeep command
+  set is in [harness maintenance](harness-maintenance.md#maintenance-command-set).
 
   Assert:
   - Template versions match actual structure.
@@ -127,6 +128,11 @@ source upgrades, automation presets, and review handoff templates.
 - Do not treat a shorter skill as better without behavior-preservation proof.
 - Do not hand-edit generated registries or graphs, bulk-edit without sample
   proof, auto-promote every eval point, or skip material proof/review.
+- A wrong rollout or graph row is fixed at its declaring surface (template
+  registry, skill frontmatter, consumer `template_uses`, project manifest) and
+  regenerated; never edit rollout or graph output.
+- Human-feedback outcomes count as maintenance evidence only when recorded
+  with a comparable scenario and artifact refs.
 - An eval or line-count comparison does not replace skill-system validation.
   After structural edits, run `python3 skills/harness/scripts/check_skills.py --write` and
   report its result.
@@ -149,6 +155,8 @@ source upgrades, automation presets, and review handoff templates.
   external-source upgrades.
 - [eval fixture sandbox](eval-fixture-sandbox.md) — load before eval
   or fixture work that must not mutate the real skill tree.
+- [harness maintenance](harness-maintenance.md) — registries, rollout layers,
+  graph projections, health readings, and the upkeep command set.
 - [check skills](../scripts/check_skills.py) — standard registry, template, todo,
   capability, config, eval-query, and doc-reference checks.
 

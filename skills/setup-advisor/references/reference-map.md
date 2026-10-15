@@ -26,7 +26,6 @@
 | `HARNESS_TEMPLATE.yaml`, `METRICS_TEMPLATE.yaml`, `BINDINGS_TEMPLATE.yaml` | the split charter in `farplane/` |
 | `PM_TEMPLATE.json`, `LOCAL_SKILLS_README_TEMPLATE.md` | `farplane/pm.json`, `.agents/skills/README.md` |
 | `BOOTSTRAP_BRIEF_TEMPLATE.md`, `TASTE_TEMPLATE.md` | `docs/bootstrap-brief.md`, `docs/TASTE.md` |
-| `FEATURES_README_TEMPLATE.md`, `SYSTEMS_README_TEMPLATE.md` | `docs/features/README.md`, `docs/systems/README.md` |
 | `CODE_REVIEW_TEMPLATE.md`, `REVIEW_AGENT_TEMPLATE.md` | `docs/code_review.md`, `docs/review-agent.md` |
 | `TICKETS_README_TEMPLATE.md`, `TICKET_TEMPLATE.md` | byte copies of the repo's `tickets/README.md` and `tickets/templates/ticket.md` |
 | `FOUNDATION_*_TICKET_TEMPLATE.md` | `tickets/TASK-0001..0003` foundation drafts |
@@ -46,7 +45,7 @@
   a selected ticket ready for Goal Advisor.
 - [goal-advisor metric card](../../goal-advisor/references/metrics.md) - deep
   metric or guard design.
-- [project-files contract](../../../docs/farplane-framework/project-files.md) -
+- The project-files guide (`docs/guides/project-files.md` in the Farplane repo) -
   why a Farplane project has these files.
 
 ## Deploy (`deploy` mode)

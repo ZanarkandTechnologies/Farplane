@@ -6,9 +6,8 @@ created_at: 2026-04-24
 updated_at: 2026-06-13
 refs:
   - docs/fundamentals/harness-algebra.md
-  - docs/features/FEAT-0032-goal-advisor-execution-compilation.md
-  - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - skills/harness/references/skill-system/README.md
+  - skills/goal-advisor/SKILL.md
 ---
 
 # Harness Engineering Doctrine
@@ -138,7 +137,7 @@ For material harness changes, compare these surfaces:
 
 1. repo-local `AGENTS.md`
 2. `runtimes/AGENTS.md`
-3. `docs/fundamentals/*` or feature docs under `docs/features/`
+3. `docs/fundamentals/*` or a guide under `docs/guides/`
 4. `skills/*`
 5. `agents/*.toml`
 6. hooks, validators, or `bin/*`

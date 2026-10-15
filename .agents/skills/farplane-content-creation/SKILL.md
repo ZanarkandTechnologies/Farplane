@@ -10,7 +10,7 @@ template_uses:
 qa_checklist: qa_checklist.md
 eval: evals/evals.json
 planner_contract:
-  required_arguments: ["problem_ref", "system_ref", "feature_refs", "source_or_idea", "audience", "content_goal", "channels"]
+  required_arguments: ["problem_ref", "system_ref", "source_or_idea", "audience", "content_goal", "channels"]
 ---
 
 # Farplane Content Creation
@@ -30,9 +30,9 @@ filming, external generation, and account mutation remain separately gated.
 ## Skill Signature
 
 ```text
-farplane_content_creation(problem_ref, system_ref, feature_refs, source_or_idea, audience, content_goal, channels=all_configured, brand_kit?, tasty_pack_ref?, content_kind?, video_method?, ticket?, audience_context?, variation_count=10)
+farplane_content_creation(problem_ref, system_ref, source_or_idea, audience, content_goal, channels=all_configured, brand_kit?, tasty_pack_ref?, content_kind?, video_method?, ticket?, audience_context?, variation_count=10)
   -> best_bet_proposals + approved_skeleton + optimized_exemplar + format_transformations + variation_matrix + ranked_shortlist + distribution_handoff + proof_refs
-state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, source/evidence refs, resolved Brand Kit, optional computed Tasty Pack, ticket Goal Packet); writes(ticket-local proposals, frozen creative-input bundle, skeleton, exemplar, variants, review evidence, and feedback state)
+state: reads(farplane/harness.yaml stable problems, ARCHITECTURE.md Systems table, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, source/evidence refs, resolved Brand Kit, optional computed Tasty Pack, ticket Goal Packet); writes(ticket-local proposals, frozen creative-input bundle, skeleton, exemplar, variants, review evidence, and feedback state)
 gates: strategic_ref_bound; source_ref_preserved; audience_problem_named; canonical_icp_bound; baseline_named; intended_belief_or_behavior_delta_named; audience_named; content_goal_named; claim_strength_matches_proof; planning_approval_before_execution; exemplar_approval_before_variations; publish_requires_separate_approval
 routes: root skill `storyboard` | root skill `goal-advisor` (human-feedback preset) | root skill `social-content` | external `hyperframes` | root skill `qa` | root skill `review`
 fails: unreferenced_random_feature; internal_name_as_hook; executes before skeleton approval; asks a human to judge an undifferentiated batch; generates random rewrites; varies the proof spine; publishes all variants; treats feedback as publication authority
@@ -68,8 +68,7 @@ content_pipeline_state:
   phase: planning | execution | variation | distribution_handoff
   route: storyboard -> goal-advisor(human-feedback)
   problem_ref: configured stable problem
-  system_ref: canonical system
-  feature_refs: [canonical feature refs]
+  system_ref: canonical ARCHITECTURE.md Systems row
   audience: named audience
   content_goal: intended effect
   channel: format or undecided
@@ -115,7 +114,7 @@ silently broaden into another action class.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind one stable `problem_ref`, canonical `system_ref`, relevant `feature_refs`, audience, recognizable problem, content goal, channels, accepted source evidence, resolved Brand Kit, optional computed Tasty Pack, rights, proof limits, and authority. Freeze those inputs in one Creative Input Bundle and preserve them through every format. Lead with the audience's pain and visible result—not an internal Farplane feature name.
+- [ ] 1. Bind one stable `problem_ref`, canonical `system_ref` (an `ARCHITECTURE.md` Systems row), audience, recognizable problem, content goal, channels, accepted source evidence, resolved Brand Kit, optional computed Tasty Pack, rights, proof limits, and authority. Freeze those inputs in one Creative Input Bundle and preserve them through every format. Lead with the audience's pain and visible result—not an internal Farplane feature name.
 - [ ] 2. Use `storyboard` plan mode to shape one Best Bet by default and no more than three genuinely distinct proposals for planning feedback; for video, bind content kind and method. Do not introduce a `style_profile` as a third composition source on the Brand Kit/Tasty path.
 - [ ] 3. Run the `goal-advisor` human-feedback preset in `phase: planning`; revise or reject locally until the human approves one proposal, then write its frozen skeleton and `approved_plan_ref`.
 - [ ] 4. Route the skeleton to the smallest faithful artifact-producing skill and build one exemplar before any batch expansion. Dispatch video through `/hyperframes` with the storyboard handoff and pass the frozen Brand Kit/Tasty visual direction instead of forcing every video through explainer.

@@ -324,11 +324,6 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
                 raise RegistryError(
                     f"{skill_path}: specialist {specialist!r} requires department {desk['department']!r}"
                 )
-        if metadata.get("feature_refs") not in (None, "", []):
-            raise RegistryError(
-                f"{skill_path}: feature_refs moved to versioned skill template metadata; "
-                "use skill_ui only for an optional skill-local surface"
-            )
         canonical_eval = skill_dir / "evals" / "evals.json"
 
         has_checklist = bool(checklist_source_text(skill_dir))

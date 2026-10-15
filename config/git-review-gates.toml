@@ -130,9 +130,7 @@ mode = "block"
 
 [large_file_guard]
 max_bytes = 1048576
-skip_globs = [
-  "docs/features/*.md",
-]
+skip_globs = []
 
 [checks.staged_diff_check]
 argv = ["git", "diff", "--cached", "--check"]

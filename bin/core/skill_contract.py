@@ -196,9 +196,6 @@ class SkillFrontmatter(StrictContract):
     upstream_url: NonEmptyText | None = None
     argument_hint: NonEmptyText | None = Field(default=None, alias="argument-hint")
     planner_contract: PlannerContract | None = None
-    # Kept only long enough for the existing registry validator to issue its
-    # targeted retirement message instead of a generic unknown-field error.
-    feature_refs: list[NonEmptyText] | NonEmptyText | None = None
     workflow: Any | None = None
 
 

@@ -3,13 +3,13 @@ title: "Farplane Project Memory"
 status: active
 owner: doc-governance
 created_at: 2026-03-26
-updated_at: 2026-08-20
+updated_at: 2026-10-15
 tags:
   - farplane
   - memory
   - promoted-decisions
 refs:
-  - docs/features/FEAT-0060-registry-backed-documentation-os.md
+  - docs/AGENTS.md
   - skills/doc-advisor/references/consolidate.md
   - docs/HISTORY.md
 ---
@@ -230,9 +230,9 @@ MEM-0135, MEM-0136, MEM-0137.
   factual, important, and worth remembering outside the owner surface.
 - Correction evidence stays in ticket artifacts, owner-local skills, evals, or
   validators. Promote only durable project invariants here.
-- Active `docs/features/` files should map to one current feature, contract, or
-  doctrine surface. Completed migration plans and superseded milestone notes
-  belong in archives or owning skill surfaces.
+- Behavior contracts live in their owning skill; `docs/guides/` explains how a
+  project works and `ARCHITECTURE.md` maps the systems. Completed migration plans and
+  superseded milestone notes belong in git history or owning skill surfaces.
 - Durable Markdown artifacts should use compact YAML front matter for routing
   metadata while keeping the body focused on the human contract, explanation,
   evidence, or narrative.

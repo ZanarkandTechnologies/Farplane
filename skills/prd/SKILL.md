@@ -24,7 +24,7 @@ or review of finished UI (`code-health` review mode).
 
 ```text
 prd(intent, mode?: spec | workflow | realism) -> product_artifact + impl-plan handoff
-reads: docs/prd.md, active ticket, docs/features/, docs/bootstrap-brief.md, current UI or demo data, supplied receipts
+reads: docs/prd.md, active ticket, ARCHITECTURE.md, docs/bootstrap-brief.md, current UI or demo data, supplied receipts
 does: grounds the product decision, operates comparables or sources real artifacts, recommends one path
 writes: docs/prd.md (spec), else the caller's ticket or response; no tickets
 returns: PRD | workflow handoff | realism pack, with assumptions and the next owner
@@ -36,7 +36,7 @@ returns: PRD | workflow handoff | realism pack, with assumptions and the next ow
 - [ ] **N1 — Read the current product surfaces and pick the mode.**
   `request -> mode + known audience, jobs, constraints | prospect | research`
 
-  Rule: Read `docs/prd.md`, the active ticket, and `docs/features/` before
+  Rule: Read `docs/prd.md`, the active ticket, and `ARCHITECTURE.md` before
   asking anything; read `docs/MEMORY.md` only for a named question. Mode:
   new or changed product intent is `spec`; "how should this work", a broken
   screen, or an open IA/state question is `workflow`; a demo or MVP that feels

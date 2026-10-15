@@ -27,9 +27,8 @@ TEXT_SUFFIXES = {
 }
 ROOT_TEXT_FILES = {"AGENTS.md", "ARCHITECTURE.md", "README.md"}
 DEFAULT_SCAN_PREFIXES = (
-    "docs/features/",
     "docs/fundamentals/",
-    "docs/systems/",
+    "docs/guides/",
     "farplane/sources/",
     "skills/harness/references/skill-system/",
     "skills/harness/templates/",

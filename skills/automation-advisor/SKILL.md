@@ -123,6 +123,11 @@ fails: logs in tracked config; provider access inside pm skills; generated
   Multica run or invent a new company strategy.
 - Local report writes do not grant deploy, publish, spend, account, customer
   contact, or destructive authority.
+- A scheduled run may end with a no-op receipt when no safe, valuable action
+  exists; it never invents work to look busy.
+- Split automation (access, effects) from skill (judgment on frozen files) when
+  the judgment may be rerun on frozen evidence, audited, or withheld from
+  provider effects. A small deterministic mapping needs no new skill.
 
 ## Output
 

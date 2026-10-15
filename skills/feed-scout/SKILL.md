@@ -118,7 +118,12 @@ returns: report and feed refs, Scout Brief receipt, candidates and verdicts, gap
   through configuration and both ledgers, propose once, and never fetch or add
   them in the same run.
 - Scout Brief is compact evidence, not authority. Harness ICPs, issue history,
-  metrics, and review gates stay canonical.
+  metrics, and review gates stay canonical. Area `icp` in `harness.yaml` is the
+  human meaning: render it into the Brief and add observed context, but
+  external evidence never silently rewrites it.
+- A ticket built from a candidate copies the selected Scout Brief facts (label,
+  claim, `use=`, refs) into its own body, never a Brief path or hash. A
+  citation that changes no premise does not count as grounding.
 - A successful CLI exit is not source truth; numeric scores carry confidence
   and anti-metrics.
 - Single-source mode never edits a skill; accepted skill changes go through

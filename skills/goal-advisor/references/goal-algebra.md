@@ -14,6 +14,9 @@ The job of `goal-advisor` is to choose the Goal Packet architecture and compile
 the operator's intent into one native Goal contract, not to run each named skill
 as a separate top-level workflow.
 
+Grounding: OpenAI Codex native Goals,
+https://developers.openai.com/codex/use-cases/follow-goals
+
 ```text
 GoalPacket := Files + Task + Program + Progress + Prompt + Drift
 

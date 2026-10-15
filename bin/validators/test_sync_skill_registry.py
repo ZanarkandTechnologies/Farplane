@@ -23,7 +23,6 @@ def write_skill(
     *,
     department: str | None = None,
     template_version: str | None = None,
-    feature_refs: list[str] | None = None,
     with_eval: bool = False,
     skill_ui: str | None = None,
     capability: str | None = None,
@@ -37,11 +36,6 @@ def write_skill(
         if template_version is not None
         else ""
     )
-    feature_lines = ""
-    if feature_refs:
-        feature_lines = "feature_refs:\n" + "".join(
-            f"  - {feature_ref}\n" for feature_ref in feature_refs
-        )
     common_chain_lines = ""
     if common_chain_after:
         common_chain_lines = f"common_chains:\n  after: {common_chain_after!r}\n"
@@ -56,7 +50,6 @@ def write_skill(
                 capability or "",
                 common_chain_lines.rstrip(),
                 template_line.rstrip(),
-                feature_lines.rstrip(),
                 f"skill_ui: {skill_ui}" if skill_ui else "",
                 "---",
                 "",
@@ -98,14 +91,6 @@ class SyncSkillRegistryTests(unittest.TestCase):
             rows = sync_skill_registry.build_registry(repo)
 
             self.assertNotIn("skill_template_version", rows[0])
-
-    def test_rejects_skill_level_feature_refs(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            repo = Path(tmp)
-            write_skill(repo, "example", feature_refs=["FEAT-0001"])
-
-            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "template metadata"):
-                sync_skill_registry.build_registry(repo)
 
     def test_projects_derived_eval_and_declared_skill_ui_when_present(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

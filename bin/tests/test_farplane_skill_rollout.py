@@ -93,7 +93,6 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
                         {
                             "template_id": "skill-template",
                             "current_version": "0.3.2",
-                            "feature_refs": ["FEAT-0048"],
                             "target_basis": "local skills that declare skill-template usage",
                             "consumer_id": "alpha",
                             "consumer_scope": "skill",
@@ -104,7 +103,6 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
                         {
                             "template_id": "skill-template",
                             "current_version": "0.3.2",
-                            "feature_refs": ["FEAT-0048"],
                             "target_basis": "local skills that declare skill-template usage",
                             "consumer_id": "gamma",
                             "consumer_scope": "skill",

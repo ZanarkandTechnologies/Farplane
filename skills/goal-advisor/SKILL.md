@@ -174,18 +174,18 @@ fails: hidden_loop; prompt_only_material_goal; full_history_first_load;
 - A listed file is context or evidence unless the ticket grants scope. Honest
   review/human/market signals beat fake numeric metrics.
 - A Stop hook does not repair proof, review, closeout, or packet drift.
+- A Goal lands the whole selected issue; split only when the issue, proof route,
+  safety boundary, external dependency, or a reviewer finding forces it.
 
 ## Reference Map
 
-- [Prompt templates](references/prompt-templates.md) — launcher, setup, verdict
-  block, and Goal turn receipt.
+- [Prompt templates](references/prompt-templates.md) — launcher, setup, verdict, turn receipt.
 - [Goal shapes](references/goal-shapes.md) — heartbeat, batch, rollout, project goals.
-- [Goal algebra](references/goal-algebra.md) — composed workflows, retired routes;
-  [choose next](references/choose-next.md) — several eligible moves.
+- [Goal algebra](references/goal-algebra.md) — composed workflows, retired routes,
+  grounding; [choose next](references/choose-next.md) — several eligible moves.
 - [Human feedback](references/human-feedback.md), [metric card](references/metrics.md),
   [loop presets](references/loop-presets.md) — provider, metric, rollout or ML.
-- [Golden material packet](examples/golden/material-goal-packet.md) — with QA for
-  judgment-heavy planning; [feature](../../docs/features/FEAT-0032-goal-advisor-execution-compilation.md).
+- [Golden material packet](examples/golden/material-goal-packet.md) — QA'd judgment-heavy plan.
 - [Goal program](../../tickets/templates/goal-loop/program.md) and
   [state and turn comment](../../tickets/templates/goal-loop/progress.md) templates.
 

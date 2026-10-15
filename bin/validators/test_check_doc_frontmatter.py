@@ -42,14 +42,12 @@ class DocumentFrontmatterLintTests(unittest.TestCase):
     def test_entity_page_templates_use_template_frontmatter(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            folder = root / "docs" / "farplane-framework" / "entity-templates"
+            folder = root / "skills" / "manage-wiki" / "templates"
             folder.mkdir(parents=True)
-            (folder / "creator.md").write_text(
+            (folder / "creator-page.md").write_text(
                 "---\n"
                 "template_id: creator-page\n"
                 'template_version: "0.1.0"\n'
-                "feature_refs:\n"
-                "  - FEAT-0075\n"
                 "kind: entity-page\n"
                 "consumer_scope: wiki\n"
                 "applies_to:\n"
@@ -72,8 +70,6 @@ class DocumentFrontmatterLintTests(unittest.TestCase):
                 "---\n"
                 "template_id: skill-template\n"
                 'template_version: "0.1.0"\n'
-                "feature_refs:\n"
-                "  - FEAT-0022\n"
                 "consumer_scope: skill\n"
                 "---\n",
                 encoding="utf-8",
@@ -130,44 +126,6 @@ class DocumentFrontmatterLintTests(unittest.TestCase):
 
         self.assertEqual(len(errors), 1)
         self.assertIn("title: Input should be a valid string", errors[0])
-        self.assertIn("unowned: Extra inputs are not permitted", errors[0])
-
-    def test_rejects_unknown_fields_in_feature_frontmatter(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            features = root / "docs" / "features"
-            features.mkdir(parents=True)
-            (features / "FEAT-0001-example.md").write_text(
-                "---\n"
-                "title: Example\n"
-                "status: designed\n"
-                "owner: feature-registry\n"
-                "created_at: 2026-01-01\n"
-                "updated_at: 2026-01-01\n"
-                "tags: []\n"
-                "refs: []\n"
-                "feature_id: FEAT-0001\n"
-                "system_id: SYS-0001\n"
-                "category: example\n"
-                "public: true\n"
-                "surfaces: []\n"
-                "source_refs: []\n"
-                "external_refs: []\n"
-                "evidence_refs: []\n"
-                "known_limits: Example only\n"
-                "metrics: []\n"
-                "last_verified: 2026-01-01\n"
-                "experimental: false\n"
-                "superseded_by: false\n"
-                "unowned: true\n"
-                "---\n",
-                encoding="utf-8",
-            )
-
-            _checked, errors = check_doc_frontmatter.lint_docs_frontmatter(root)
-
-        self.assertEqual(len(errors), 1)
-        self.assertIn("invalid feature frontmatter", errors[0])
         self.assertIn("unowned: Extra inputs are not permitted", errors[0])
 
 

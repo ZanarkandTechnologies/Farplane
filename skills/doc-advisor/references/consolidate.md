@@ -88,8 +88,8 @@ requires promotion to history, a spec, or another canonical owner instead.
    metric, owner boundary, or future action. A shorter artifact is insufficient
    unless it remains at least as useful and more owner-correct.
    For `AGENTS.md` or `runtimes/AGENTS.md`, first load the Agent Kernel
-   canonical feature inventory at `docs/systems/agent-kernel.md` and apply the
-   bidirectional Feature Fidelity Gate in
+   canonical feature inventory (the AGENTS Feature Inventory) and apply the
+   bidirectional Feature Fidelity Gate, both in
    `skills/harness/references/global-agents-qa-checklist.md`: every documented behavior
    group remains implemented, and every surviving or added AGENTS section
    remains documented. Section presence alone does not prove behavior

@@ -64,7 +64,12 @@ doppler run -- python3 /absolute/path/to/skill/scripts/check_config.py
 ```
 
 Readiness tools print key names and booleans only. They must never print secret
-values. OAuth refreshes may be used in memory for the active operation, but
+values. A credential-bearing skill exposes one `scripts/check_config.py` that
+checks every credential branch in one run and prints only
+`{skill, ready, read_ready, publish_ready, redacted}`, plus `missing` key names
+when blocked. It exits 0 when ready and 1 when blocked; it takes no capability
+selector, and optional credentials never block. Credential names stay out of
+skill frontmatter. `skills/ads/scripts/check_config.py` is the reference. OAuth refreshes may be used in memory for the active operation, but
 Farplane does not write rotated tokens into local TOML; rotate the Doppler
 value through the human-owned credential flow when the result reports that
 rotation is required.

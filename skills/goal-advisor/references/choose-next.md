@@ -14,7 +14,9 @@ choose_next(objective, evidence, eligible_moves, remaining_budget)
 ## Inputs
 
 Program policy, eligible pending leaves of `hypothesis-tree.json` when present
-(derive leaves from parent and status; never store ranks or a second frontier),
+(derive leaves from parent and status; never store ranks or a second frontier;
+the tree is the sole research-state owner for experiment-backed Goals, and this
+file owns its search semantics, never copied into ordinary Goal Packets),
 the latest Goal turn comments' learnings and receipts, current evaluator evidence, and
 remaining budget. When any is absent, return a source gap: list the presence or
 exact absence of each input, render a comparison labelled `conditional`, and
@@ -55,7 +57,8 @@ mechanisms, and variables, then write each initial node with `hypothesis`,
 `mechanism`, `expected_observation`, `falsifier`, `expected_reward`,
 `reward_basis`, and `source_refs`. Admit an externally sourced candidate only
 with an `adopt | adapt | reject | defer` disposition. Return a source gap
-rather than inventing candidates.
+rather than inventing candidates. Guard against seed anchoring: keep credible sibling
+branches and widen sources only for a named coverage gap.
 
 ## Output
 

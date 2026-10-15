@@ -204,8 +204,6 @@ def node_kind(node_id: str) -> str:
     path = node_id.removeprefix("file:").removeprefix("skill:")
     if node_id.startswith("skill:"):
         return "skill"
-    if path.startswith("docs/features/"):
-        return "spec"
     if path.startswith("skills/harness/references/skill-system/"):
         return "skill-doc"
     if path.startswith("dir:skills/review/references/rubrics") or path.startswith("skills/review/references/rubrics/"):
@@ -400,7 +398,6 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
     skill_inbound = skill_doc_counts(graph)
     doc_paths = local_doc_paths(repo_root)
     unreferenced = [path for path in doc_paths if inbound[path] == 0]
-    spec_paths = [path for path in doc_paths if path.startswith("docs/features/") and path.endswith(".md")]
     generated_at = graph["generated_at"]
     harness_math = "docs/fundamentals/harness-algebra.md"
 
@@ -408,21 +405,16 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
     for path, count in inbound.most_common(20):
         top_docs.append([f"`{path}`", str(count), str(skill_inbound[path])])
 
-    specs = [["Spec", "All refs", "Skill refs", "Suggested status"]]
-    for path in sorted(spec_paths):
-        specs.append([f"`{path}`", str(inbound[path]), str(skill_inbound[path]), "keep active"])
-
     global_bundle = [["Doc", "Why"]]
     for path in [
         "docs/fundamentals/harness-algebra.md",
         "docs/fundamentals/harness-engineering-doctrine.md",
-        "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
         "skills/harness/references/skill-system/README.md",
         "skills/harness/references/skill-system/system.md",
         "skills/harness/references/skill-system/best-practices.md",
         "skills/review/references/rubrics/review-rubric-index.md",
         "skills/review/references/rubrics/reviewer-handoff.md",
-        "docs/features/FEAT-0060-registry-backed-documentation-os.md",
+        "docs/guides/README.md",
     ]:
         global_bundle.append([f"`{path}`", "high leverage for installed skills or harness placement"])
 
@@ -470,9 +462,6 @@ The harness math doc is `{harness_math}`.
 ## Most Referenced Docs
 
 {markdown_table(top_docs)}
-## Spec Status Preview
-
-{markdown_table(specs)}
 ## Suggested Global Docs Bundle
 
 These are the first docs to ship or copy alongside installed skills if a skill

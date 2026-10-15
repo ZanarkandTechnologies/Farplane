@@ -1,7 +1,7 @@
 # Documentation Quality
 
 Use this family when reviewing durable documentation changes: README updates,
-feature specs, system specs, fundamentals, runbooks, checklists, registry
+guides, fundamentals, the architecture map, runbooks, checklists, registry
 companions, and public guidance.
 
 Required TAS: `TAS-A` for canonical, public, cross-surface, or policy-bearing

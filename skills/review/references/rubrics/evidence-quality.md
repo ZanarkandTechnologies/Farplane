@@ -30,6 +30,9 @@ Hard gate: required for any overall `pass`
   logs, screenshots, tests, or QA notes.
 - [ ] `auditable-organization`: The packet is organized enough for a skeptical
   reviewer to verify the result quickly.
+- [ ] `readiness-backed`: Every readiness claim has independent evidence or a
+  stated residual risk; unrelated validator failures are named separately as
+  residual risk, not folded into the verdict.
 
 ### Blocker Checks
 

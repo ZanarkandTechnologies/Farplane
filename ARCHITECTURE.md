@@ -16,10 +16,11 @@ Documentation routing starts in
 and README in sync whenever the public workflow, shipped capability list, or
 whole-system diagram changes.
 
-The canonical product and framework contracts are the [Farplane engine PRD](docs/prd.md)
-and the [framework lifecycle](docs/farplane-framework/lifecycle.md). The
-lifecycle routes to the technical contracts for project files, the morning
-chain and weekly review, ticket execution, hooks, reporting, and graphs.
+The canonical product contract is the [Farplane engine PRD](docs/prd.md). The
+[guides](docs/guides/README.md) explain how a Farplane project works: project
+files, the [work loop](docs/guides/work-loop.md) (morning chain, weekly review,
+ticket execution), the CLI, hooks, the Wiki, reporting, and graphs. The
+[Systems](#systems) table below names every live system and its owner.
 
 ## Purpose
 
@@ -49,7 +50,7 @@ The repo is organized around five concerns:
 
 - `AGENTS.md`: project-local operating map loaded every loop
 - `ARCHITECTURE.md`: top-level system map and canonical surface guide
-- `docs/`: durable knowledge and feature specs
+- `docs/`: durable knowledge: PRD, guides, doctrine, history, and memory
 - `tickets/`: issue templates, compact closed-issue locators, and readable
   legacy local archive history (active tasks live in GitHub Issues)
 - `skills/`, `agents/`, `bin/`: reusable workflows, bounded specialists, and
@@ -78,9 +79,9 @@ flowchart LR
   end
 
   subgraph Knowledge["Durable Knowledge"]
-    specs[(docs/features<br/>feature specs)]:::surface
-    techniques[(docs/features/README.md<br/>registry contract)]:::surface
-    featureRegistry[(docs/features<br/>generated feature index)]:::surface
+    specs[(skills/*/SKILL.md<br/>behavior contracts)]:::surface
+    techniques[(docs/guides<br/>how a project works)]:::surface
+    featureRegistry[(skills/registry.jsonl<br/>generated skill index)]:::surface
     doctrine[(harness-engineering-doctrine.md<br/>surface routing)]:::surface
     memories[(HISTORY.md<br/>MEMORY.md)]:::memory
     notes[(~/.farplane/memory<br/>thread notes + Wiki pages, local git)]:::memory
@@ -130,7 +131,6 @@ flowchart LR
   architecture --> specs
   architecture --> techniques
   specs --> featureRegistry
-  techniques --> featureRegistry
   doctrine -. placement decisions .-> intake
   globalAgents -. skill-loading reflex .-> primitives
   primitives -. base checks .-> interfaces
@@ -170,12 +170,61 @@ flowchart LR
 Legend:
 
 - `blue` = incoming operator surface
-- `gray` = durable docs, feature specs, and ticket files
+- `gray` = durable docs, skill contracts, guides, and ticket files
 - `amber/yellow` = skill contracts and highlighted handoff skills
 - `cyan` = runtime helpers and specialist process surfaces
 - `red` = proof, review, and Stop-hook gates
 - `teal` = memory/writeback
 - `dashed purple` = future scale boundary, not shipped behavior
+
+## Systems
+
+One row per live system. The owner column names where the contract lives; read
+that skill or file for detail. A skill named bare is `skills/<name>/`.
+
+| System | What it does | Owning skills / code |
+| --- | --- | --- |
+| Agent Kernel | Always-loaded operating shape: autonomy, act/plan/answer mode, reading discipline, skill routing, proof expectations | `runtimes/AGENTS.md`, `AGENTS.md`, `docs/fundamentals/harness-engineering-doctrine.md`, `bin/README.md` |
+| Work Loop | Turns intent into one bounded issue contract, does the work through skills, and proves completion with visible artifacts | `tickets/README.md`, `impl-plan`, `goal-advisor`, `qa`, `commit`; [work-loop guide](docs/guides/work-loop.md) |
+| Horizon Loop | Recurring and long-running autonomy: Goal Packets, Company OS Daily/Weekly project memory and reports, backoff, PR watching | `goal-advisor`, `report-gen`, `pm`, `farplane/automations/` |
+| Automations | Scheduled jobs (listed under [Automation ownership](#automation-ownership)); each record owns its schedule and prompt | `automation-advisor`, `farplane/automations/*.md`, `farplane/automations/steps/` |
+| Proof And Review | QA evidence, review rubrics, adversarial tests and completion proof, so work is never self-certified | `qa`, `review`, `hooks/stop-gate/`, `agents/reviewer.toml` |
+| Evals | Turns misses, regressions and skill behavior claims into runnable eval rows, Promptfoo skill comparisons, behavior traces and reliability verdicts | `eval` (`scripts/run_evals.py`, `scripts/run_promptfoo.py`), `harness` (owner placement), `skills/goal-advisor/references/metrics.md` (metric card) |
+| Skill System | Skill packages, the Capability Map's specialist desks, templates, first-load guardrails, and registry intelligence | `harness` (`references/skill-system/`), `config/skill-workflows.toml`, `skills/registry.jsonl` (built by `bin/validators/sync_skill_registry.py`) |
+| Self-Improvement And Learning | Bounded, measurable improvement campaigns over skills, ML systems or human-judged artifacts, driven by one hypothesis tree per issue | `goal-advisor` (`references/choose-next.md`, `references/loop-presets.md`), `eval`, `ml-autoresearch`, `harness` |
+| Source And Sidecar | Outside signal: source scouting and media reconstruction that let Farplane adapt patterns without taking live dependencies | `feed-scout`, `intelligest`, `bookmark-recovery`, `farplane/sources/registry.jsonl` |
+| Maintenance And Release | Adoption scan plus validators; a release claim cites both | `bin/core/farplane_adoption.py` (`farplane adoption scan`), `bin/validators/`, `config/template-registry.jsonl`, the shared service modules below |
+| Domain Skill Families | Specialized frontend, media and content workflows built on the Work Loop and Skill System | `prd`, `visual-design`, `landing-page`, `storyboard`, `ai-image`, `ai-video`, `hyperframes` |
+| Documentation | Decides where durable docs belong, how they are shaped, and which check proves them | `doc-advisor`, `review` (documentation-quality rubric), [docs/AGENTS.md](docs/AGENTS.md), `bin/validators/check_doc_refs.py` |
+| Content Production | Composes an idea with an approved Brand Kit and an optional Tasty Pack into a reviewable issue-owned plan and proof trail (status: designed) | `storyboard`, `ai-image`, `ai-video`; Brand Kit storage in the bunker (`convex/modules/resourceBank/brandKits.ts`) |
+| Resource Bank And Tasty Pack | Saved creative captures with selected elements, and per-request inspiration packs for production | `intelligest` (`references/resource-bank/`), `storyboard` (composition with Brand Kit), `design-styles`; storage in the bunker's Convex |
+| Graph Systems | Harness graph vocabulary and GraphIR projections: skill, backlink, Framework Core and lifecycle graphs | `harness` (`graph/README.md`, `scripts/graph_ir.py`, `scripts/graph_projection.py`, `scripts/graph_projection_config.py`, `scripts/generate_*_graph.py`); [graphs guide](docs/guides/graphs.md) |
+| Wiki | Project-local knowledge: Markdown entity articles, explicit entity links, and disposable search, graph, CRM and view projections | `manage-wiki`, `bin/core/farplane_wiki.py`, `bin/core/farplane_wiki_store.py`, `bin/core/farplane_entities.py`; [Wiki guide](docs/guides/wiki-and-entities.md) |
+
+Brand Kit rules (Content Production): a Brand Kit is approved identity, made of
+embedded element snapshots plus one kit prompt; it has no prompt variants,
+recipe or profile tables. Constraints live in the kit prompt or policy, not as
+elements; hooks and copy stay in `storyboard`, captions in editing. A Tasty Pack
+augments a kit only when compatible or when the conflict is explicitly
+resolved. Every output records the kit and prompt revisions and the element ids
+it used.
+
+### Shared service modules
+
+UI routes and CLI projections read the shared payload or generated artifact and
+only normalize it for display; they never recompute registry, rollout, or graph
+semantics. Each interpretation lives once, in its service module:
+
+| Module | Owns |
+| --- | --- |
+| `bin/validators/template_usage.py` | parsing `template_uses` |
+| `bin/validators/sync_skill_registry.py` | building `skills/registry.jsonl` |
+| `skills/harness/scripts/generate_template_intelligence.py` | skill and template rollout |
+| `skills/harness/scripts/graph_ir.py`, `graph_projection.py`, `graph_projection_config.py` | the shared graph model |
+| `bin/core/farplane_adoption.py` | project manifest drift |
+| `bin/core/farplane_skill_rollout.py` | the read-only rollout payload |
+| `bin/core/farplane_harness_health.py` | the harness health bundle |
+| `bin/core/farplane_primitive_metrics.py`, `farplane_metric_refresh.py`, `farplane_project_snapshot.py` | metric and snapshot read models |
 
 ## Canonical Surfaces
 
@@ -185,10 +234,10 @@ The public docs are intentionally split by job:
 
 | Surface | Owns | Must Stay In Sync With |
 | --- | --- | --- |
-| [README.md](README.md) | reader routing, setup, current-state summary, roadmap cap | this file, `docs/features/README.md` |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | system diagram, surface ownership, read order, current limits | README, `docs/features/README.md` |
-| [docs/features/README.md](docs/features/README.md) | canonical feature-spec index and doc-gardening loop | README, this file |
-| [tickets/README.md](tickets/README.md) | ticket state machine, invocation policy, metadata contract | ticket template, invocation feature spec |
+| [README.md](README.md) | reader routing, setup, current-state summary, roadmap cap | this file, `docs/guides/README.md` |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | system diagram, Systems table, surface ownership, read order, current limits | README, `docs/guides/README.md` |
+| [docs/guides/README.md](docs/guides/README.md) | how a Farplane project works, one guide per concern | README, this file |
+| [tickets/README.md](tickets/README.md) | ticket state machine, invocation policy, metadata contract | ticket template, `goal-advisor` skill |
 | [docs/HISTORY.md](docs/HISTORY.md) / [docs/MEMORY.md](docs/MEMORY.md) | durable timeline and project invariants | closeout tickets and nearest module docs |
 
 If a public harness claim changes, update the relevant row's surfaces in the
@@ -223,31 +272,37 @@ during cleanup unless the replacement carries the same routing information.
   schedule (currently Claude scheduled tasks); `.farplane/` owns ignored run data.
 - Skills own file-to-file business logic; automation records own integrations.
 
+Live jobs (each record owns its schedule and prompt):
+
+| Job | Does |
+| --- | --- |
+| Morning | collect, metrics refresh, knowledge update, project review, prospector watch, then one brief |
+| Report Gen | weekly portfolio review |
+| Intel Digest | Bookmark Recovery, then Feed Scout |
+| Session Friction Retro | daily friction report, read weekly |
+| Profile Refresh | operator profile refresh after the weekly report |
+| Token Burn | parallel backlog jobs before the weekly usage reset |
+| Thread Sweeper | two-hourly nudges to stalled threads |
+
 ### Knowledge surfaces
 
-- [docs/features/README.md](docs/features/README.md)
-  Purpose: index of canonical feature specs and generated registry outputs
+- [Systems](#systems)
+  Purpose: one row per live system, with what it does and its owning skills
+  and code
+- [docs/guides/README.md](docs/guides/README.md)
+  Purpose: how a Farplane project works, routed to one guide per concern
 - [docs/fundamentals/harness-engineering-doctrine.md](docs/fundamentals/harness-engineering-doctrine.md)
   Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
-- [docs/features/README.md](docs/features/README.md)
-  Purpose: current-state technique inventory, with implemented versus proposed
-  techniques kept explicit
-- [docs/systems/README.md](docs/systems/README.md)
-  Purpose: public system stack and authored source for `SYS-*` systems
-- [docs/features/FEAT-0060-registry-backed-documentation-os.md](docs/features/FEAT-0060-registry-backed-documentation-os.md)
-  Purpose: lifecycle, read defaults, drain flows, and keep/delete rules for
-  durable filesystem state
-- [docs/features/README.md](docs/features/README.md)
-  Purpose: first-class `FEAT-*` feature docs plus generated registry output for
-  surfaces, source references, evidence, limits, and metrics
+- [docs/AGENTS.md](docs/AGENTS.md)
+  Purpose: docs layout, the doc-or-skill test, and keep/delete rules for
+  durable written state
 - [skills/feed-scout/SKILL.md](skills/feed-scout/SKILL.md)
   Purpose: tracked-profile monitoring recipe for discovering X, YouTube, and
   blog content, deduping canonical URLs in a content/proposal ledger,
   scouting single sources for adopt/adapt/reject/defer verdicts, and routing
   convergent items to research synthesis
-- [docs/features/FEAT-0060-registry-backed-documentation-os.md](docs/features/FEAT-0060-registry-backed-documentation-os.md)
-  Purpose: structural versus narrative doc-audit policy and the doc-gardening
-  workflow
+- [skills/doc-advisor/SKILL.md](skills/doc-advisor/SKILL.md)
+  Purpose: doc strategy, grounded doc updates, and loss-checked consolidation
 - [docs/HISTORY.md](docs/HISTORY.md)
   Purpose: append-only change log
 - [docs/MEMORY.md](docs/MEMORY.md)
@@ -276,7 +331,7 @@ during cleanup unless the replacement carries the same routing information.
 
 ### Review and proof surfaces
 
-- [docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md](docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md)
+- [skills/qa/SKILL.md](skills/qa/SKILL.md) and [hooks/stop-gate/README.md](hooks/stop-gate/README.md)
   Purpose: QA -> reviewer -> Stop-hook quality gate split
 - [skills/review/README.md](skills/review/README.md)
   Purpose: public entrypoint to the review system
@@ -287,7 +342,7 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 
 ### Runtime and orchestration surfaces
 
-- [docs/features/FEAT-0007-ticket-as-durable-task-memory.md](docs/features/FEAT-0007-ticket-as-durable-task-memory.md)
+- [docs/guides/work-loop.md](docs/guides/work-loop.md)
   Purpose: end-to-end execution model, lane roles, and orchestration boundaries
 - [skills/goal-advisor/SKILL.md](skills/goal-advisor/SKILL.md)
   Purpose: canonical execution compiler that turns listed files, trigger mode,
@@ -302,14 +357,16 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 ## Ownership Boundaries
 
 - Root docs should stay map-like.
-- Detailed behavior belongs in feature docs under `docs/features/`.
+- Detailed behavior belongs in the owning skill; how-a-project-works narrative
+  belongs in `docs/guides/`.
 - Active task state belongs in the project's GitHub issue and its comments,
   not in chat. Repository files may hold structured proof or migration snapshots.
 - Reusable QA shortcuts and deterministic browser-entry guidance belong in
   the project's `AGENTS.md` Agent QA section (plus one docs page per long flow,
   made when the first one exists), not in ticket prose or transient chat.
 - Review scoring belongs in `skills/review/*`.
-- Runtime machinery belongs in `bin/`, `hooks/hooks.json`, and runtime feature specs.
+- Runtime machinery belongs in `bin/`, `hooks/hooks.json`, and
+  `docs/guides/hooks-and-runtime.md`.
 - Reusable workflow detail belongs in `skills/*`.
 - Specialist desks belong in `config/skill-workflows.toml` `[specialists]`;
   first-load loading rules belong in `skills/harness/references/skill-system/README.md`, the generated
@@ -323,10 +380,10 @@ When orienting on the repo:
 1. Read [AGENTS.md](AGENTS.md).
 2. Read [ARCHITECTURE.md](ARCHITECTURE.md).
 3. Read [README.md](README.md) for product/setup context.
-4. Read [docs/features/README.md](docs/features/README.md).
+4. Read the [Systems](#systems) table, then [docs/guides/README.md](docs/guides/README.md).
 5. Read [docs/fundamentals/harness-engineering-doctrine.md](docs/fundamentals/harness-engineering-doctrine.md) when the task changes the harness itself.
 6. Read the active ticket and [tickets/README.md](tickets/README.md).
-7. Follow links into the specific feature spec, skill, or runtime surface you actually need.
+7. Follow links into the specific skill, guide, or runtime surface you actually need.
 
 ## Current Limits
 

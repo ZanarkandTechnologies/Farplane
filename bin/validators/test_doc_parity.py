@@ -19,7 +19,7 @@ README_TEXT = """\
 # Farplane
 
 - Architecture map: [ARCHITECTURE.md](/abs/ARCHITECTURE.md)
-- Feature specs and registry contract: [docs/features/README.md](/abs/docs/features/README.md)
+- Guides: [docs/guides/README.md](/abs/docs/guides/README.md)
 - Review scoring: [skills/review/README.md](/abs/skills/review/README.md)
 - Active queue: GitHub Issues in each project's own repo (`tickets/README.md`).
 """
@@ -32,35 +32,11 @@ ARCHITECTURE_TEXT = """\
 - `README.md`
 - `tickets/README.md`
 - `skills/review/references/rubrics/review-rubric-index.md`
-"""
 
-FEATURES_README_TEXT = """\
-# Feature Docs
+## Systems
 
-Farplane feature docs are the spec files for first-class capabilities.
-This folder is the authored source for feature specs and generated feature records.
-Do not create a second spec-folder truth shelf for feature behavior.
-
-Run:
-
-```bash
-python3 docs/features/validate_features.py --write
-```
-
-Delete a `FEAT-*` handle when it no longer earns a feature spec page.
-Do not keep a retired alias just to preserve noise.
-"""
-
-REGISTRY_OS_TEXT = """\
-# Registry-backed documentation OS
-
-Feature docs are the spec files.
-
-Run `python3 bin/validators/check_doc_parity.py`.
-
-No parallel spec-folder truth shelf.
-
-No compatibility feature rows for capabilities that do not earn their own feature spec.
+| System | What it does | Owning skills / code |
+| --- | --- | --- |
 """
 
 TICKETS_README_TEXT = """\
@@ -96,8 +72,6 @@ class CheckDocParityTest(unittest.TestCase):
     def build_repo(self, root: Path) -> None:
         write_file(root / "README.md", README_TEXT)
         write_file(root / "ARCHITECTURE.md", ARCHITECTURE_TEXT)
-        write_file(root / "docs/features/README.md", FEATURES_README_TEXT)
-        write_file(root / "docs/features/FEAT-0060-registry-backed-documentation-os.md", REGISTRY_OS_TEXT)
         write_file(root / "tickets/README.md", TICKETS_README_TEXT)
 
     def run_validator(self, root: Path) -> subprocess.CompletedProcess[str]:
@@ -129,7 +103,7 @@ class CheckDocParityTest(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("contains forbidden stale text", result.stdout)
 
-    def test_validator_fails_when_feature_inventory_pointer_is_missing(self) -> None:
+    def test_validator_fails_when_guides_pointer_is_missing(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             self.build_repo(root)
@@ -143,7 +117,7 @@ class CheckDocParityTest(unittest.TestCase):
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("Feature specs and registry contract", result.stdout)
+            self.assertIn("Guides: [docs/guides/README.md]", result.stdout)
 
 
 if __name__ == "__main__":

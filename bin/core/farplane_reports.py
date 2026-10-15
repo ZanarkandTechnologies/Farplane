@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Build the Core-owned Farplane report registry."""
+"""Build the Core-owned Farplane report registry.
+
+`ref` is the only hierarchy field: parent and children derive from its slash
+prefixes. `kind` stays explicit so a report survives path moves. `ui_summary`
+stays under 100 words. Files missing any required field are skipped and listed
+in `issues`; other frontmatter passes through unchanged. Do not add
+`parent_id`, `group_id`, or `role` fields.
+"""
 
 from __future__ import annotations
 
@@ -126,6 +133,11 @@ def add_missing_ref(path: Path, project_root: Path, *, dry_run: bool = False) ->
 
 
 def repair_missing_refs(project_root: Path, *, dry_run: bool = False) -> list[ReportRepair]:
+    """Add only `ref`, derived from the path under `.farplane/` without `.md`.
+
+    It never invents `kind`, `created_at`, or `ui_summary`, so files missing
+    those stay excluded from the registry.
+    """
     root = project_root / REPORTS_ROOT
     repairs: list[ReportRepair] = []
     if not root.exists():

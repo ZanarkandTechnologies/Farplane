@@ -4,9 +4,7 @@ status: active
 created_at: 2026-06-12
 updated_at: 2026-10-13
 template_id: goal-loop-progress
-template_version: "0.2.1"
-feature_refs:
-  - FEAT-0032
+template_version: "0.2.2"
 ---
 
 <!-- Two shapes for a Goal on a GitHub issue. Only a project without a GitHub
@@ -16,7 +14,9 @@ repository saves them as local files (`tickets/README.md`, legacy section). -->
 
 <!-- Last section of the issue body. After every Goal turn replace only this
 section (goal-advisor Issue commands, Writeback); everything above stays
-byte-identical so the freshness hash holds. History lives in Goal turn comments. -->
+byte-identical so the freshness hash holds. History lives in Goal turn comments.
+Only an optimization Goal whose candidates compare records its best-so-far
+result; feature work records completed proof and the remaining next_action. -->
 
 ```yaml
 updated_at:

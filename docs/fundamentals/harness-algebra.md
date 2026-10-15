@@ -7,8 +7,6 @@ updated_at: 2026-08-01
 refs:
   - docs/fundamentals/harness-engineering-doctrine.md
   - docs/fundamentals/prompt-engineering.md
-  - docs/features/FEAT-0060-registry-backed-documentation-os.md
-  - docs/features/FEAT-0032-goal-advisor-execution-compilation.md
   - skills/harness/references/skill-system/README.md
   - runtimes/AGENTS.md
   - skills/harness/SKILL.md
@@ -627,10 +625,10 @@ Core Farplane state variables:
 README.md                  = public routing variable
 ARCHITECTURE.md            = whole-system map
 docs/fundamentals/*.md     = conceptual model and doctrine
-docs/features/FEAT-*.md               = buildable contracts
+docs/guides/*.md           = how a project works
+skills/*/SKILL.md          = buildable behavior contracts
 docs/MEMORY.md             = durable invariants
-docs/features/registry     = feature inventory
-skills/registry       = skill inventory
+skills/registry            = skill inventory
 issue body ticket sections = task contract and proof target
 issue ## Goal program      = loop configuration when needed
 issue Goal turn comments   = append-only observed progress

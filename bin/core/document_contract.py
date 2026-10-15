@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from datetime import date
 from pathlib import Path
 from typing import Annotated, Any, Literal
@@ -10,11 +9,7 @@ from typing import Annotated, Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 
-FEATURE_ID_RE = re.compile(r"^FEAT-\d{4}$")
-SYSTEM_ID_RE = re.compile(r"^SYS-\d{4}$")
 NonEmptyText = Annotated[str, Field(min_length=1)]
-FeatureId = Annotated[str, Field(pattern=FEATURE_ID_RE.pattern)]
-SystemId = Annotated[str, Field(pattern=SYSTEM_ID_RE.pattern)]
 
 
 class DocumentContractError(ValueError):
@@ -54,63 +49,11 @@ class GeneratedDocumentFrontmatter(StrictDocumentModel):
     refs: list[NonEmptyText] = Field(default_factory=list)
 
 
-class FeatureDocumentFrontmatter(NarrativeDocumentFrontmatter):
-    """Typed source header for one authored FEAT page."""
-
-    feature_id: FeatureId
-    system_id: SystemId
-    category: NonEmptyText
-    public: bool
-    surfaces: list[NonEmptyText]
-    source_refs: list[NonEmptyText]
-    external_refs: list[NonEmptyText]
-    evidence_refs: list[NonEmptyText]
-    known_limits: NonEmptyText
-    metrics: list[NonEmptyText]
-    last_verified: date
-    experimental: bool
-    superseded_by: bool | FeatureId | list[FeatureId]
-    track: bool | NonEmptyText = False
-
-
-class SystemDocumentFrontmatter(NarrativeDocumentFrontmatter):
-    """Typed source header for one authored system page."""
-
-    system_record_json: NonEmptyText
-
-
-class FeatureTemplateFrontmatter(StrictDocumentModel):
-    """Typed literal template for authored FEAT pages, including placeholders."""
-
-    title: NonEmptyText
-    status: NonEmptyText
-    owner: NonEmptyText
-    created_at: Literal["YYYY-MM-DD"]
-    updated_at: Literal["YYYY-MM-DD"]
-    tags: list[NonEmptyText]
-    refs: list[NonEmptyText]
-    feature_id: Literal["FEAT-####"]
-    system_id: Literal["SYS-####"]
-    category: NonEmptyText
-    public: bool
-    surfaces: list[NonEmptyText]
-    source_refs: list[NonEmptyText]
-    external_refs: list[NonEmptyText]
-    evidence_refs: list[NonEmptyText]
-    known_limits: NonEmptyText
-    metrics: list[NonEmptyText]
-    last_verified: Literal["YYYY-MM-DD"]
-    experimental: bool
-    superseded_by: bool | FeatureId | list[FeatureId]
-    track: bool | NonEmptyText = False
-
-
 class TemplateDocumentFrontmatter(StrictDocumentModel):
     """Typed metadata shared by the registered Markdown template surfaces."""
 
     template_id: NonEmptyText
     template_version: NonEmptyText
-    feature_refs: list[FeatureId]
     consumer_scope: NonEmptyText
     applies_to: list[NonEmptyText] = Field(default_factory=list)
     status: NonEmptyText | None = None
@@ -129,15 +72,9 @@ def document_contract_name(path: Path, root: Path) -> str:
     """Return the explicit frontmatter family selected by a document path."""
 
     relative = path.resolve().relative_to(root.resolve()).as_posix()
-    if relative == "docs/features/TEMPLATE.md":
-        return "feature_template"
-    if re.fullmatch(r"docs/features/FEAT-\d{4}-.+\.md", relative):
-        return "feature"
-    if relative.startswith("docs/systems/") and path.name not in {"README.md", "registry.md"}:
-        return "system"
     if (
         (relative.startswith("skills/harness/templates/") and path.name != "README.md")
-        or relative.startswith("docs/farplane-framework/entity-templates/")
+        or relative.startswith("skills/manage-wiki/templates/")
         or relative == "skills/report-gen/templates/human-report.md"
     ):
         return "template"
@@ -149,9 +86,6 @@ def validate_document_frontmatter(metadata: dict[str, Any], path: Path, root: Pa
 
     contract_name = document_contract_name(path, root)
     contract = {
-        "feature_template": FeatureTemplateFrontmatter,
-        "feature": FeatureDocumentFrontmatter,
-        "system": SystemDocumentFrontmatter,
         "template": TemplateDocumentFrontmatter,
         "generated": GeneratedDocumentFrontmatter,
         "narrative": NarrativeDocumentFrontmatter,

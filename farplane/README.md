@@ -94,13 +94,13 @@ Report producers persist Markdown under `.farplane/reports/` with `ref`,
 defining report hierarchy locally. Use `farplane reports repair-refs` to add
 path-derived `ref` frontmatter to existing report Markdown before rebuilding
 the index. The standard lives in
-[docs/farplane-framework/reporting.md](../docs/farplane-framework/reporting.md).
+[docs/guides/reporting.md](../docs/guides/reporting.md).
 
 Issues close with one proof comment and `gh issue close`
 ([tickets/README.md](../tickets/README.md)); Core has no close command or
 completion mining.
 
-See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).
+See [docs/guides/project-files.md](../docs/guides/project-files.md).
 
 ## Official Automation Presets
 

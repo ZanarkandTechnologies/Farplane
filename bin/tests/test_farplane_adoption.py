@@ -24,14 +24,12 @@ def write_jsonl(path: Path, rows: list[dict[str, object]]) -> None:
     path.write_text("\n".join(json.dumps(row, sort_keys=True) for row in rows) + "\n", encoding="utf-8")
 
 
-def write_manifest(root: Path, spec: str = "1.3.0", template_version: str = "1.3.0", features: dict[str, str] | None = None) -> None:
+def write_manifest(root: Path, spec: str = "1.3.0", template_version: str = "1.3.0") -> None:
     payload: dict[str, object] = {
         "schema": "farplane_project",
         "spec_version": spec,
         "template_uses": {"farplane-framework": template_version},
     }
-    if features is not None:
-        payload["feature_pins"] = features
     write_json(root / "farplane" / "manifest.json", payload)
 
 
@@ -41,22 +39,17 @@ class FarplaneAdoptionTests(unittest.TestCase):
             root = Path(tmp)
             standard = root / "standard"
             project = root / "project"
-            write_manifest(standard, features={"FEAT-0061": "adopted"})
-            write_manifest(project, features={"FEAT-0061": "adopted"})
+            write_manifest(standard)
+            write_manifest(project)
             skill_dir = project / ".agents" / "skills" / "client-report"
             skill_dir.mkdir(parents=True)
             (skill_dir / "SKILL.md").write_text("---\nname: client-report\n---\n", encoding="utf-8")
-            write_jsonl(
-                standard / "docs" / "features" / "registry.jsonl",
-                [{"id": "FEAT-0061", "name": "Adoption tracker", "status": "implemented"}],
-            )
             write_jsonl(
                 standard / "config" / "template-registry.jsonl",
                 [
                     {
                         "template_id": "farplane-framework",
                         "template_version": "1.3.0",
-                        "feature_refs": ["FEAT-0061"],
                         "path": "skills/setup-advisor/references/MANIFEST_TEMPLATE.json",
                     }
                 ],
@@ -69,8 +62,8 @@ class FarplaneAdoptionTests(unittest.TestCase):
         self.assertEqual(result["counts"]["projectsWithLocalSkills"], 1)
         self.assertEqual(result["projects"][0]["localSkills"], ["client-report"])
         self.assertEqual(result["projects"][0]["skillSourcePolicy"], "local-if-present")
-        self.assertIn("FEAT-0061", result["features"])
-        self.assertEqual(result["features"]["FEAT-0061"]["projectCount"], 1)
+        self.assertTrue(result["projects"][0]["ok"])
+        self.assertEqual(result["projects"][0]["drift"], [])
 
     def test_reports_template_and_spec_drift(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -79,7 +72,6 @@ class FarplaneAdoptionTests(unittest.TestCase):
             project = root / "project"
             write_manifest(standard, spec="1.3.0", template_version="1.3.0")
             write_manifest(project, spec="1.2.0", template_version="1.2.0")
-            write_jsonl(standard / "docs" / "features" / "registry.jsonl", [])
             write_jsonl(
                 standard / "config" / "template-registry.jsonl",
                 [{"template_id": "farplane-framework", "template_version": "1.3.0"}],
@@ -117,7 +109,6 @@ class FarplaneAdoptionTests(unittest.TestCase):
             standard = root / "standard"
             missing_project = root / "missing-project"
             write_manifest(standard)
-            write_jsonl(standard / "docs" / "features" / "registry.jsonl", [])
             write_jsonl(standard / "config" / "template-registry.jsonl", [])
 
             result = adoption.resolve_adoption_stats(standard_root=standard, project_roots=[missing_project])

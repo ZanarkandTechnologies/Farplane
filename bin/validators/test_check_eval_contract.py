@@ -35,7 +35,6 @@ class EvalContractTests(unittest.TestCase):
                         "farplane": {
                             "title": "Visible case title",
                             "workspace_fixture": "evals/files/workspace",
-                            "feature_id": "FEAT-0007",
                             "extensions": {"acme.preview": {"enabled": True}},
                         }
                     },
@@ -43,27 +42,10 @@ class EvalContractTests(unittest.TestCase):
             ],
         }
 
-    def write_feature_registry(self, root: Path, *ids: str) -> None:
-        path = root / "docs" / "features" / "registry.jsonl"
-        path.parent.mkdir(parents=True)
-        feature_docs = root / "docs" / "features"
-        for value in ids:
-            (feature_docs / f"{value}.md").write_text(f"# {value}\n", encoding="utf-8")
-        rows = [
-            {
-                "id": value,
-                "owner_spec": f"docs/features/{value}.md",
-                "surfaces": ["skills/sample-skill"],
-            }
-            for value in ids
-        ]
-        path.write_text("\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8")
-
     def test_typed_suite_accepts_consumer_fields_and_extension_map(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             path = self.write_suite(root, self.valid_payload())
-            self.write_feature_registry(root, "FEAT-0007")
 
             suite = lint_agent_skills_eval_suite(path, root=root)
 
@@ -126,7 +108,7 @@ class EvalContractTests(unittest.TestCase):
 
         self.assertEqual(suite.evals[0].metadata.farplane.context, "")
 
-    def test_rejects_path_escape_duplicate_ids_and_unknown_feature(self) -> None:
+    def test_rejects_path_escape_and_duplicate_ids(self) -> None:
         payload = self.valid_payload()
         payload["evals"].append({
             "id": "case-1",
@@ -134,49 +116,21 @@ class EvalContractTests(unittest.TestCase):
             "expected_output": "Other result",
             "files": ["../escape.txt"],
         })
-        payload["evals"][0]["metadata"]["farplane"]["feature_id"] = "FEAT-9999"
 
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             path = self.write_suite(root, payload)
-            self.write_feature_registry(root, "FEAT-0007")
             with self.assertRaisesRegex(EvalContractError, "file paths must stay relative"):
                 lint_agent_skills_eval_suite(path, root=root)
 
-    def test_unknown_feature_id_is_rejected_after_shape_validation(self) -> None:
+    def test_retired_feature_id_is_rejected(self) -> None:
         payload = self.valid_payload()
-        payload["evals"][0]["metadata"]["farplane"]["feature_id"] = "FEAT-9999"
+        payload["evals"][0]["metadata"]["farplane"]["feature_id"] = "unbound"
 
         with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            path = self.write_suite(root, payload)
-            self.write_feature_registry(root, "FEAT-0007")
-            with self.assertRaisesRegex(EvalContractError, "unknown feature_id"):
-                lint_agent_skills_eval_suite(path, root=root)
-
-    def test_feature_id_requires_resolvable_document_and_owning_skill_surface(self) -> None:
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            path = self.write_suite(root, self.valid_payload())
-            self.write_feature_registry(root, "FEAT-0007")
-            registry = root / "docs" / "features" / "registry.jsonl"
-            registry.write_text(
-                json.dumps(
-                    {
-                        "id": "FEAT-0007",
-                        "owner_spec": "docs/features/missing.md",
-                        "surfaces": ["skills/other-skill"],
-                    }
-                )
-                + "\n",
-                encoding="utf-8",
-            )
-            with self.assertRaisesRegex(EvalContractError, "owner_spec does not exist"):
-                lint_agent_skills_eval_suite(path, root=root)
-
-            (root / "docs" / "features" / "missing.md").write_text("# Feature\n", encoding="utf-8")
-            with self.assertRaisesRegex(EvalContractError, "skills/sample-skill"):
-                lint_agent_skills_eval_suite(path, root=root)
+            path = self.write_suite(Path(temp), payload)
+            with self.assertRaisesRegex(EvalContractError, "Extra inputs are not permitted"):
+                load_agent_skills_eval_suite(path)
 
     def test_checked_in_json_schema_matches_the_pydantic_source_of_truth(self) -> None:
         root = Path(__file__).resolve().parents[2]

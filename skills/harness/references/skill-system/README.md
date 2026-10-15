@@ -34,21 +34,18 @@ the registry into a second place to maintain skill truth.
   owning registry correctness and generated audits, while `harness` place mode
   consumes the broader map for placement decisions instead of owning the
   generator or UI.
-- Skill-applicable harness capabilities are authored in
-  [`docs/systems/skill-system.md`](../../../../docs/systems/skill-system.md) with
-  `category: "skills"` and generated into
-  [`docs/features/registry.jsonl`](../../../../docs/features/registry.jsonl). Versioned skill
-  templates declare structural feature IDs; individual skills declare only an
-  optional skill UI surface. Eval presence is derived from `evals/evals.json`.
-  `skills/registry.jsonl` is the generated
-  skill inventory, not a second hand-authored skill feature registry.
+- Skill capabilities are tracked by versioned template metadata
+  (`template_uses`) and the generated registry; individual skills declare only
+  an optional skill UI surface. Eval presence is derived from
+  `evals/evals.json`. `skills/registry.jsonl` is the generated skill inventory,
+  not a second hand-authored skill feature registry.
 - `qa_checklist.md` is retired. Normal skill guardrails live in first-load Todo
   List `Rule`/`Assert` blocks; behavior cases, deterministic invariants, and
   material judgment belong to evals, validators, and QA or review respectively.
 
 ## Skill UI And Feature Progression
 
-Skill-owned UI is the incubation layer for Farplane UI product surfaces. Use it
+Skill-owned UI is the incubation layer for bunker (Farplane-UI-v2) product surfaces. Use it
 when a workflow benefits from a focused viewer, form, graph, dashboard, or URL
 binding before the workflow is stable enough to become a first-class product
 module.
@@ -61,7 +58,7 @@ Progression:
    URL helps the operator run or inspect the workflow.
 3. Skill UI proves repeated value: the workflow is used often, clarifies
    decisions, or exposes a product pattern.
-4. Farplane UI absorbs it: the main product shell owns the route, navigation,
+4. The bunker absorbs it: the main product shell owns the route, navigation,
    shared state, and visual system.
 5. The skill keeps the binding: the route still points back to the owning skill,
    proof surface, or workflow contract.
@@ -70,7 +67,7 @@ Default ownership:
 
 - The skill owns workflow semantics, required data, proof expectations,
   scripts, and any early UI binding metadata.
-- Farplane UI owns product navigation, shared components, global project/thread
+- The bunker owns product navigation, shared components, global project/thread
   context, and polished routes once the surface graduates.
 - `harness` maintain mode owns generated skill inventory and registry correctness.
 - A future harness map surface may own cross-skill or repo-wide UI discovery
@@ -79,8 +76,8 @@ Default ownership:
 Use this rule of thumb:
 
 - unproven workflow -> skill-owned UI
-- repeated useful workflow -> Farplane UI route backed by the skill
-- core product workflow -> first-class Farplane UI module
+- repeated useful workflow -> bunker route backed by the skill
+- core product workflow -> first-class bunker module
 - niche or deprecated workflow -> keep as a skill UI or remove it
 
 ## Human Selection Guide
@@ -143,9 +140,9 @@ Manual fields:
   references.
 - `source`: required, `local` for Farplane-owned skills or `external` for
   upstream-backed skills that should stay syncable with an outside source
-- `skill_template_version`: optional structural baseline for skills onboarded
-  to a known Farplane skill template version; absence means the skill has not
-  been onboarded yet
+- `skill_template_version`: not authored; the registry derives it from
+  `template_uses.skill-template` (absence means the skill has not been
+  onboarded yet)
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding
 - `department`: required on a skill that sits on a specialist desk (it must match
@@ -170,9 +167,9 @@ Manual fields:
   nodes.
 - `common_chains`: optional one-way adjacency hints, on a skill with a department
 - `upstream_url`: optional for `source: external`
-- `template_uses.skill-surface-budget`: optional opt-in marker for
-  `FEAT-0062` capped skill surfaces; subscribed skills must fit 10 top-level
-  todos and 5 eval tasks
+- `template_uses.skill-surface-budget`: optional opt-in marker for capped
+  skill surfaces (`check_skill_surface_budget.py`); subscribed skills must fit
+  10 top-level todos and 5 eval tasks
 
 Generated fields:
 
@@ -233,7 +230,8 @@ Use the lower-level commands when debugging one specific failure.
 Use `--template-version <version>` as a non-failing rollout report for skill
 template onboarding. Versioned skills are structurally checked even in report
 mode: the current template rejects generic `## Job` sections, requires the
-template spine, and requires numbered top-level todo items. Add
+template spine, and (from template 0.5.0) requires Golden Workflow Nodes
+`- [ ] **N1 — ...**`, each with an inline signature, `Rule`, and `Assert`. Add
 `--require-template-version` only when a migration is intentionally ready to
 fail missing or non-current skills.
 
@@ -243,8 +241,8 @@ Which skills are entrypoints comes from the Capability Map's specialist desks (s
 authoring guidance, not a lint rule. Phase-protocol steps are not skill links;
 they are inherited from `runtimes/AGENTS.md`.
 
-When ranking which skill to improve next, use
-[`docs/features/FEAT-0064-skill-signals.md`](../../../../docs/features/FEAT-0064-skill-signals.md).
+When ranking which skill to improve next, use the
+[skill signals](../../graph/README.md#skill-signals).
 It exposes direct heat, composition heat, maintenance burden, uniqueness, and a
 maintenance recommendation. Do not confuse those signals with skill-local eval
 scores.
@@ -285,17 +283,16 @@ Repo source packages keep first-load todo truth in `SKILL.md`:
 - `SKILL.md` owns the workflow contract, trigger conditions, and references.
 - `SKILL.md` must include a direct marker-delimited `## Todo List` section when
   a skill has required every-invocation todo items. This section is the
-  first-load todo list, not a final review list. Use numbered markdown todos
-  for sequential work and branch choices; use plain `- [ ]` todos only as
-  embedded verification/detail checks under a numbered todo.
+  first-load todo list, not a final review list. Write it as sequential Golden
+  Workflow Nodes (`- [ ] **N1 — ...**` with signature, `Rule`, and `Assert`);
+  branch choices live inside a node.
 - Skill-local `todos.md` sidecars are unsupported. Move any useful checklist
   content into the marker-delimited `## Todo List` in `SKILL.md`, then delete
   the sidecar.
 
-`install.sh` and `skills/harness/scripts/install_selected_skills.py` render installed skill
-packages instead of symlinking skill directories directly. Installed packages
-copy the source `SKILL.md` first-load contract as-is and do not embed or copy
-skill-local `todos.md` sidecars.
+`install.sh` and `skills/harness/scripts/install_selected_skills.py` link each
+skill directory; only a package whose `tests/` holds fixture `SKILL.md` files is
+copied, without `tests/` or `todos.md` sidecars.
 
 This makes the first-load todo list visible on first skill load without a second
 todo file. Installed skills are directory symlinks into `skills/`, so source
@@ -310,11 +307,10 @@ the `description`, `source` and (for a desk skill) `department` frontmatter, the
 ## Skill Self-Healing
 
 Skill repair starts from a grounded failure packet and then uses existing
-surfaces instead of creating hidden repair work. The canonical contract lives in
-[`docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`](../../../../docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md).
+surfaces instead of creating hidden repair work. The [`eval`](../../../eval/SKILL.md)
+skill owns turning a miss into a runnable regression case.
 
-- repo-owned skill capability fixtures live under `skills/<skill>/tests/`
-- installed or external skill mirrors live under `tests/<skill>/`
+- skill capability fixtures live under `skills/<skill>/tests/`
 - deterministic fixture validation lives in `bin/validators/check_skill_capabilities.py`
 - local repairs should target repo-owned wrappers, fixtures, registry rows,
   docs, or visible repair tickets
@@ -362,16 +358,14 @@ consolidation work. Keep this module's docs as the registry contract; keep the
 step-by-step maintenance workflow in that skill.
 
 When skill standards or optional skill capabilities change, update
-[`docs/systems/skill-system.md`](../../../../docs/systems/skill-system.md) and regenerate
-[`docs/features/registry.jsonl`](../../../../docs/features/registry.jsonl) as the supported
-feature catalog. Skill template versions carry structural `FEAT-####` handles;
-skill packages carry only the optional skill UI field while eval presence is
-derived from the canonical path. `harness` maintain mode should report stale or missing adoption from template
-version rollout, generated skill inventory, local surface fields, and feature
-rows rather than requiring long per-skill migration histories.
+[`system.md`](system.md) and the versioned template metadata. Skill packages
+carry only the optional skill UI field while eval presence is derived from the
+canonical path. `harness` maintain mode should report stale or missing adoption
+from template version rollout, generated skill inventory, and local surface
+fields rather than requiring long per-skill migration histories.
 
 Use `harness` place mode before maintain mode when the question is
-broader than skills: it compares root policy, global templates, feature docs,
+broader than skills: it compares root policy, global templates, docs,
 skills, subagents, hooks/scripts, ticket contracts, validators, and registry
 metadata before recommending the owning surface.
 
@@ -381,13 +375,9 @@ High-value skills may publish small JSON sanity fixtures for operations that
 must keep working. Use these for external API, MCP, generated-registry, file
 contract, or local script behavior that callers rely on.
 
-Fixture locations:
-
-- repo-owned skills: `skills/<skill>/tests/*.json`
-- installed or external skills mirrored by this repo: `tests/<skill>/*.json`
-
-Fixtures for installed or external skills are mirrors and diagnostics, not
-authorization to patch the upstream or installed skill body. A failing fixture
+Fixtures live in `skills/<skill>/tests/*.json`, the only path
+`check_skill_capabilities.py` reads. A fixture for an external skill is a
+diagnostic, not authorization to patch the upstream or installed skill body. A failing fixture
 should create or update a visible repair ticket that targets a local wrapper,
 registry/test metadata, or an explicitly approved external-skill edit.
 
