@@ -43,14 +43,18 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    transcript with `list_events` (limit 15) and give one verdict:
    - `done`: the thread reports its work finished or verified, or ends with a
      line starting `Done:`, and nothing it promised is still pending.
-   - `waiting`: it ends on a decision, approval, input, physical action, or a
-     platform-only step (password, account creation, CAPTCHA, OAuth, payment)
-     that only Kenji can give, or with a line starting `Waiting on Kenji:`.
+   - `waiting`: it needs something only Kenji can give: spend over the weekly
+     cap, a password, login, account, CAPTCHA, OAuth grant or payment detail,
+     a physical action, posting or messaging under his name, or a taste or
+     product choice he has to make; or it ends with a line starting
+     `Waiting on Kenji:`.
    - `stopped`: it ended mid-work: it says it will continue or names a next
      step it could run itself, it hit an error, tool failure, interrupt or
      context limit, it was waiting on a background job, or its last turn is
-     only a progress update. A question the thread could answer itself under
-     the standing permissions in `~/.farplane/USER.md` counts as `stopped`.
+     only a progress update. A request for a go-ahead ("say go", "want me
+     to build it?") on reversible work within the cap is `stopped`: the
+     standing permissions in `~/.farplane/USER.md` already grant it, and the
+     nudge should say so.
    Write a one-line reason in plain words for each verdict.
 
 3. **Act on the verdict.**
@@ -58,7 +62,9 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    - `stopped` with `state.nudges < max_nudges`: send the thread one message
      with `send_message`, then add 1 to `nudges`:
      `Thread Sweeper: this thread has been quiet for <h> hours and its last
-     turn looks unfinished (<reason>). Continue from where you stopped. If you
+     turn looks unfinished (<reason>). Continue from where you stopped; a
+     go-ahead for reversible work within the spend cap is already granted
+     by the standing permissions in ~/.farplane/USER.md. If you
      are truly blocked on Kenji, end your turn with one line "Waiting on Kenji:
      <exact question>"; if the work is finished, end with "Done: <result>".`
    - `stopped` with `nudges >= max_nudges`: treat it as `waiting`, with the
