@@ -310,7 +310,10 @@ Skill repair starts from a grounded failure packet and then uses existing
 surfaces instead of creating hidden repair work. The [`eval`](../../../eval/SKILL.md)
 skill owns turning a miss into a runnable regression case.
 
-- skill capability fixtures live under `skills/<skill>/tests/`
+- skill capability fixtures live under `skills/<skill>/tests/*.json` and name the
+  operation, expected behaviour, sanitized observed failure, recovery decision,
+  forbidden actions, connector fallbacks and evidence refs; never bulky payloads,
+  secrets, raw transcripts or full expected results
 - deterministic fixture validation lives in `bin/validators/check_skill_capabilities.py`
 - local repairs should target repo-owned wrappers, fixtures, registry rows,
   docs, or visible repair tickets
