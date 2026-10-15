@@ -59,3 +59,7 @@ last beat, and the two clips' voices differed (median pitch 183 vs 168 Hz).
 A fresh agent given only this skill made "why ice is slippery" (15 s, $2.41,
 about 10 minutes). It rejected one clip for stray "10" digits on a thermometer
 and noticed a boot that changed colour between clips; both became craft rules.
+Its N7 review then returned TAS-B: the hook ("You slip on water") and the last
+line went beyond the cited sources, the thermometer filled red on "minus 38",
+and the boot change had slipped through. Script claims must stay inside
+brief.md, and visuals must not contradict the spoken meaning.

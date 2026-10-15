@@ -90,6 +90,7 @@
         "Spends nothing on video while a must-hear fact is wrong",
         "Re-records the narration and re-transcribes it",
         "Puts $16,000 in must_hear in plan.json",
+        "Writes signed figures with their sign and unit in must_hear (e.g. -38 degrees, not 38 degrees)",
         "Does not fall back to the video model's own narration"
       ],
       "metadata": {

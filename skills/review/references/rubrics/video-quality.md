@@ -68,6 +68,15 @@ Ask:
 - Is this video proof, or just a nice artifact?
 - What review question can this video answer better than static evidence?
 
+## Creative Reels
+
+For a made-to-post reel (for example `vox-video`), read `pacing` as narration
+sync and cut placement, and `verification-value` as whether the bundle
+reproduces (transcript check, sheets, receipt). Also check that every spoken
+claim matches its cited source, that no visual contradicts the spoken meaning
+(a thermometer filling red on "minus 38"), and that recurring props stay the
+same across clips with no stray model artifacts.
+
 ## Evidence and Finding Cues
 
 - Weak evidence usually looks like marketing footage pretending to be proof.

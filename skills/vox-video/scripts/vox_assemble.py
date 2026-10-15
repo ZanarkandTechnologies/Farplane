@@ -94,6 +94,12 @@ def validate(plan, base):
     errors = []
     if not plan.get("script") or not plan.get("must_hear"):
         errors.append("plan needs 'script' and a non-empty 'must_hear' list")
+    if not plan.get("clips") or not plan.get("vo"):
+        errors.append("plan needs 'clips' and 'vo'")
+    paths = [plan.get("vo"), plan.get("script")] + [c.get("file") for c in plan.get("clips", [])]
+    errors += [f"missing file: {p}" for p in paths if p and not os.path.exists(os.path.join(base, p))]
+    if errors:
+        fail_plan(errors)
     cursor = 0.0
     for clip in plan["clips"]:
         if abs(clip["start"] - cursor) > 0.01:
@@ -106,8 +112,12 @@ def validate(plan, base):
         if seg["at"] + seg["to"] - seg["from"] > cursor + 0.01:
             errors.append(f"narration segment at {seg['at']} runs past the last clip end {cursor}")
     if errors:
-        print("plan errors:\n- " + "\n- ".join(errors), file=sys.stderr)
-        sys.exit(3)
+        fail_plan(errors)
+
+
+def fail_plan(errors):
+    print("plan errors:\n- " + "\n- ".join(errors), file=sys.stderr)
+    sys.exit(3)
 
 
 def contact_sheet(video, out, fps=1):
@@ -124,7 +134,7 @@ def build_command(plan, base, work):
     total = plan["clips"][-1]["end"]
     font = next((f for f in [plan.get("font")] + FONTS if f and os.path.exists(f)), None)
     if not font:
-        sys.exit("no usable font: set plan.font to a .ttf path")
+        fail_plan(["no usable font: set 'font' to a .ttf path"])
 
     cmd = ["ffmpeg", "-v", "error", "-y"]
     for clip in plan["clips"]:
@@ -172,7 +182,8 @@ def build_command(plan, base, work):
 
 def words(text):
     # Whisper writes "minus 38" and "-38" interchangeably; keep the sign.
-    text = re.sub(r"\bminus\s+(?=\d)", "-", text.lower()).replace(",", "")
+    text = text.lower().replace("\u2212", "-")  # Unicode minus sign
+    text = re.sub(r"\bminus\s+(?=\d)", "-", text).replace(",", "")
     text = text.replace("°", " degrees ")
     return re.findall(r"-?[a-z0-9$]+", text)
 
