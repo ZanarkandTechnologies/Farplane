@@ -49,7 +49,7 @@ headline sentence `**<n> correction episodes across <m> operator turns (<x>%)**`
 coverage receipt, exclusions, correction register, contribution split, time
 allocation table, ranked friction patterns, recurring taste/preferences, and the
 smallest evidence-backed improvement candidates. Compare with the previous dated
-report when present. Treat cloud-only sessions as a named source gap; never
+report when present. Skip what the operator stopped: before proposing for a floor, run `.agent-office/bin/office-queue denied --floor Farplane` (from the Farplane checkout) and drop any proposal whose key it lists. A proposal's key is its `Proposal: <key>` line, else its title in lower-case words joined by hyphens; write a `Proposal:` line on anything you file. Treat cloud-only sessions as a named source gap; never
 imply full coverage from the local stores.
 
 This run is report-only. Do not mutate skills, prompts, policies, issues, Goals,

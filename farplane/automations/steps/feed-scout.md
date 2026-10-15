@@ -26,6 +26,7 @@ synthesis in place—do not append daily snapshots or a monthly timeline. Report
 most one direct recovery candidate, only for an evidenced existing failure with
 known fix, KPI/guard, proof, and no experiment debt; never create the issue.
 Opportunities remain report candidates for the operator to pick. Create and execute no tickets.
+Skip what the operator stopped: before proposing for a floor, run `.agent-office/bin/office-queue denied --floor <floor>` (from the Farplane checkout) and drop any proposal whose key it lists. A proposal's key is its `Proposal: <key>` line, else its title in lower-case words joined by hyphens; write a `Proposal:` line on anything you file.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"

@@ -52,6 +52,8 @@ Brief format:
    oldest, and decide or kill.
 7. **Questions for Kenji:** at most 3.
 
+Skip what the operator stopped: before proposing for a floor, run `.agent-office/bin/office-queue denied --floor <floor>` (from the Farplane checkout) and drop any proposal whose key it lists. A proposal's key is its `Proposal: <key>` line, else its title in lower-case words joined by hyphens; write a `Proposal:` line on anything you file.
+
 Brief style: insights, never a list of what each step did. A pipeline problem shows only as a
 footer line, and only when it weakens a claim above (e.g. "Calls: 1 of 3 readable"). Every claim
 names its source; inferences go in *italics*. Absolute dates. Never a value without its maths.

@@ -218,6 +218,8 @@ bunker PRD's "The operating loop"); that tick is the only authorization here.
    EOF
    ```
 
+   Skip what the operator stopped: before proposing for a floor, run `.agent-office/bin/office-queue denied --floor <floor>` (from the Farplane checkout) and drop any proposal whose key it lists. A proposal's key is its `Proposal: <key>` line, else its title in lower-case words joined by hyphens; write a `Proposal:` line on anything you file.
+
    A changed plan (a new target or routine) is `--system step-plan` with the plan
    as its config. Posting the same config id again is a no-op. Propose nothing
    for `better`, `one week only`, or `no readings`.
