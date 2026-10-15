@@ -1,7 +1,7 @@
 ---
 name: visual-design
-version: 1.2.0
-description: "Use for \"make it look good\", \"pick a visual style\", \"it looks generic\" or \"define the design system\": a reference-backed visual system, anti-patterns and a planning handoff."
+version: 1.2.1
+description: "Use for \"design this page\", \"make it look good\", \"it looks generic\" or \"define the design system\", or before building any page, screen or component: a reference-backed visual system, anti-patterns and a planning handoff."
 department: delivery
 source: local
 allowed-tools: Read, Write, Glob, Grep, Bash, web_search

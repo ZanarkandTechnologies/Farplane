@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.16
+template_version: 0.3.17
 feature_refs:
   - FEAT-0022
   - FEAT-0039
@@ -217,6 +217,10 @@ delegate(context_ref, claim, bounded_output, proof_target) -> owned_result
 
 - Ask only when a skill's required inputs cannot be recovered safely. Use the
   owning skill's default ensemble unless the user requests a supported mode.
+- Before designing, building, or restyling anything people see (a page,
+  screen, component, deck, diagram look, or image direction), load
+  `visual-design` first, even when the request never says "design". Skip it
+  only for changes with no visual effect.
 - Keep skill traversal bounded by the task, evidence need, and current step.
   Follow linked methods only when they become relevant.
 - During substantial skill work, render the active checklist compactly. Keep its
