@@ -66,7 +66,9 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    - `waiting`: add it to this run's Kenji list unless `state.notified_at`
      already equals this `lastActivityAt` (he has already been told).
    Reset `nudges` to 0 when the latest user turn in the transcript is Kenji's
-   own message rather than a Thread Sweeper message.
+   own message rather than a Thread Sweeper message. If `send_message` is
+   refused, record `nudge refused` as the action and add the thread to the
+   Kenji list with the reason `stalled; tap to restart: <reason>`.
 
 4. **Tell Kenji once.** If the Kenji list is not empty, send one Telegram
    message with `$notify` (intent `blocker`, title `Thread Sweeper`, no thread
@@ -85,8 +87,8 @@ Boundaries: never archive, delete, stop, rename, regroup, or mark sessions;
 never change their model, effort, or permissions; never do a thread's work
 yourself; message only threads inside `lookback` and only Kenji on Telegram.
 Quote at most short fragments of transcripts and never copy secrets from them.
-If a session tool is unavailable or refused, write the report with that gap
-and stop without nudging.
+If `list_sessions` or `list_events` is unavailable, write the report with
+that gap and stop.
 
 Final response:
 - Counts: candidates, skipped unchanged, done, waiting, stopped, nudged,
