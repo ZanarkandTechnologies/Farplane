@@ -13,8 +13,8 @@ hand-edited; run their generator.
 - `HISTORY.md`: meaningful milestones and migrations.
 - `MEMORY.md`: current project invariants worth retrieving outside their owner.
 - `prd.md`: the engine PRD.
-- `guides/`: how a Farplane project works (project files, work loop, CLI,
-  hooks and runtime, Wiki and entities, reporting, graphs).
+- `guides/`: how a Farplane project works (work loop, skills, project files,
+  CLI, hooks and runtime, Wiki and entities, reporting, graphs).
 - `fundamentals/`: doctrine — reusable theory and background.
 
 Removed on 2026-10-14: `docs/contracts/` (its files moved to their owning

@@ -28,8 +28,10 @@ requirements; these guides explain how the project substrate implements them.
 Start with the work loop, then open only the guide your question needs.
 
 - [Work Loop](work-loop.md): how work enters as a GitHub issue, runs through
-  `goal-advisor`, resumes at check-ins, completes, and what the scheduled jobs
-  do around it.
+  `goal-advisor`, resumes at check-ins, completes, what the scheduled jobs do
+  around it, and the Monday business loop that seeds floor queues.
+- [Skills](skills.md): how skills are organized into desks, installed, called,
+  and proved, and where the rules for making them live.
 - [Project Files](project-files.md): which tracked and ignored files a project
   has, and what each may and may not hold.
 - [Command Line](cli.md): which `farplane` command does a job, and the rules a

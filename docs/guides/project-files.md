@@ -3,7 +3,7 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-10-15
+updated_at: 2026-10-16
 framework_template_version: "0.4.0"
 source_of_truth:
   - docs/guides/README.md
@@ -72,8 +72,7 @@ ignored paths and carries `project.name`, `project.description`, and
 
 Typed human charter: identity with stable problems, planning areas with canonical per-area ICPs, feature meaning,
 operating principles, non-tradeoffs, durable leverage commitments, allocation
-guardrails, authority, stable capability references, selected metric refs, and
-planner skill allowlists.
+guardrails, authority, stable capability references, and selected metric refs.
 
 This is the owner for the human idea the system must preserve. Agents may
 propose changes with evidence, but protected charter changes require explicit
@@ -84,8 +83,8 @@ referenced skills own their procedures.
 
 Mutable strategy does not live in `harness.yaml`. Project-level dated goals and
 product-bet portfolios are retired active surfaces. Stable intent constrains
-review and refill through problems, areas, authority, selected metrics, and
-configured skills; chosen interventions live on tickets with priority,
+review through problems, areas, authority, selected metrics, and configured
+skills; chosen interventions live on tickets with priority,
 optional `due_at`, dependencies, proof, Reward, and Goal Packets when needed.
 
 Each area is passive planning context, never a planner, quota, budget, or
@@ -101,10 +100,12 @@ the evidence bar that would change their belief or workflow. This is canonical
 human meaning. Feed Scout may render it into Scout Brief and add observed
 current context, but external evidence cannot silently rewrite it.
 
-`planning.skill_refs` is the allowlist of skills a planner may call. Each skill's
-`planner_contract` owns its required arguments, while its skill body owns the
-workflow. A planner may use areas to ground audience and metrics but may not derive
-new work types from area prose.
+Areas give reports, the project snapshot, and Feed Scout's Scout Brief their
+audience and metric context; nothing derives new work types from area prose.
+`planning.skill_refs` lists the project's capability skills. No planner reads it
+any more (Work Pulse and plan-next-wave are retired, and no skill declares a
+`planner_contract`); only the project-file validator and setup-advisor's
+migration still require it, so it is a retirement candidate.
 
 Use typed YAML. Do not add a custom harness DSL, live backlog, worker
 allocation table, mutable goal status, product-bet portfolio, project strategy
@@ -288,7 +289,7 @@ owner:
   project/ui/
   automation/
   events/
-  mine/
+  mine/          # historical completion-mining runs; read only by a metrics backfill
   state/
   evals/runs/
   logs/

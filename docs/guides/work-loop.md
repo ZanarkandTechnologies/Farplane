@@ -3,7 +3,7 @@ title: "Work Loop"
 status: active
 owner: harness
 created_at: 2026-06-23
-updated_at: 2026-10-15
+updated_at: 2026-10-16
 framework_template_version: "0.4.0"
 tags:
   - farplane
@@ -52,7 +52,7 @@ flowchart TD
   C --> D["GitHub issues"]
   D --> E["operator or a session they start"]
   E --> F{"material issue?"}
-  F -->|yes| G["goal-advisor<br/>native Goal runs program / progress"]
+  F -->|yes| G["goal-advisor<br/>native Goal runs the Goal program"]
   F -->|no| H["direct execution"]
   G --> I["QA + review evidence on the issue"]
   H --> I
@@ -69,8 +69,8 @@ flowchart TD
 
 1. Run `setup-advisor` to create or migrate the project substrate
    ([critical path](../../skills/setup-advisor/references/critical-path.md)).
-2. Read `farplane/harness.yaml` for identity, the `planning.skill_refs`
-   allowlist, passive area context, authority, and selected objectives/guards.
+2. Read `farplane/harness.yaml` for identity, capability skills, passive area
+   context, authority, and selected objectives/guards.
 3. Read `farplane/metrics.yaml` for metric meaning, direction, freshness, and
    guard rules; read generated observations for current values.
 4. Read the project's open GitHub issues for executable commitments and proof.
@@ -334,11 +334,12 @@ routine, run as Claude scheduled tasks (`runtime: claude`, `runtime_task`).
 The steps they call live in `farplane/automations/steps/` and are never
 scheduled on their own. Jobs collect, report and propose; they are not
 heartbeats or worker authorities. They never create, close, label, assign or
-edit issues and never start new work. Two bounded exceptions are written into
-their records: Thread Sweeper sends a nudge message to an existing agent
-thread that stalled mid-work, and the Morning chain's Prospector Watch step
+edit issues and never start engineering work. Three bounded exceptions are
+written into their records: Thread Sweeper sends a nudge message to an existing
+agent thread that stalled mid-work; the Morning chain's Prospector Watch step
 may spend within its floor's `budget_usd` while the week's logged spend stays
-under the cap.
+under the cap; and on Mondays the business loop below seeds routine tasks that
+the operator authorized by ticking a step plan.
 
 Farplane's own `farplane/automations/` holds the portfolio Morning and weekly
 records. Each managed repository is an ordinary project with a thin `farplane/`
@@ -391,6 +392,28 @@ once over that set. Missing Project coverage blocks effects. The automation
 validates and renders the Project and company reports, folds in the week's
 Session Friction Retro reports, applies authorized comments on existing issues,
 and reads back every effect.
+
+### Business loop (Mondays)
+
+Farplane runs two loops. The engineering loop above moves GitHub issues. The
+business loop moves a business floor's weekly targets in the bunker office:
+
+```text
+operator ticks a step plan on a floor's board   # front matter of farplane/strategy/<step>.md
+  -> Monday: farplane loop monday (Daily Operating Update, after Metrics Refresh)
+     -> review: last week's output reading vs the week before (Convex history)
+     -> seed: quota = ceil((input target - done) / weeks left) routine tasks
+        on the floor's queue, keyed by step + ISO week so a rerun adds nothing
+  -> office agents work the queue; gated tasks (post, publish, send, spend)
+     stop at a draft for the operator's review
+  -> a worse or flat output gets one tickable suggestion, usually an A/B test
+```
+
+A step with no input reading, or a failed Convex read, is `blocked`, never
+seeded on a guess. The step plan tick is the only authorization. The office side
+(boards, floors, queues, step plans) is owned by the bunker's PRD, "The operating
+loop"; [Daily Operating Update](../../farplane/automations/steps/daily-operating-update.md)
+owns the exact Monday procedure.
 
 ### Automation and skill boundary
 
@@ -467,7 +490,7 @@ readable legacy records and are not migrated.
 | Goal/check-in loop policy | issue body `## Goal program` |
 | Append-only task or experiment observations | Goal turn comments on the issue |
 | Closed-work identity and archive location | the closed GitHub issue and its proof comment; `tickets/archive-index.jsonl` holds historical locator rows read by `farplane tickets history` (no new rows are written); `tickets/archive/TASK-*` for readable legacy archives |
-| Portfolio Morning and weekly prompts | AI Office `farplane/automations/` |
+| Portfolio Morning and weekly prompts | Farplane's own `farplane/automations/` |
 | Project-local automation topology and prompts | project `farplane/automations/` |
 | Provider coordinates | `farplane/bindings.yaml` |
 | Runtime receipts and derived context | `.farplane/reports/**` and other generated `.farplane/**` projections |
