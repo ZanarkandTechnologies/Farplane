@@ -61,7 +61,7 @@ a primary skill, its default verb:
 
 A few skills sit on no desk because every desk uses them: thinking aids
 (`advise`, `brainstorm`, `problem-framing`, `feasible-roadmap`, `lean-check`,
-`recap-idea`, `recap-task`), writing and drawing aids (`unslop`,
+`recap-task`), writing and drawing aids (`unslop`,
 `diagramming`), and workspace tools (`commit`, `pm`).
 
 To see the current map:

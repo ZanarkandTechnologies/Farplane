@@ -1,6 +1,6 @@
 interface:
   display_name: "Recap Task"
-  short_description: "Recover a paused task from durable evidence"
-  default_prompt: "Use $recap-task to reconstruct this paused task from durable artifacts and available task context."
+  short_description: "Problem, goal, and where a task stands"
+  default_prompt: "Use $recap-task to recap this task: problem and goal first, then the idea playback or the sourced task state."
 policy:
   allow_implicit_invocation: true

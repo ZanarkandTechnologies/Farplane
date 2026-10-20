@@ -62,3 +62,8 @@ use_instead = "the owning skill, guide, or ARCHITECTURE.md Systems row (template
 pattern = 'docs/farplane-framework\b'
 retired = 2026-10-15
 use_instead = "docs/guides/"
+
+[[retired]]
+pattern = 'recap-idea'
+retired = 2026-10-21
+use_instead = "recap-task, which states the problem and goal first and plays the idea back while a task is still being shaped"

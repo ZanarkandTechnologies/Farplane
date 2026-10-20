@@ -280,8 +280,8 @@ generic program references them rather than copying them.
 Each skill owns a different failure boundary:
 
 - `problem-framing` splits the symptom from the real problem, `brainstorm`
-  widens fuzzy directions, and `recap-idea` plays the idea back for correction
-  before it becomes an issue.
+  widens fuzzy directions, and `recap-task` states the problem and goal and
+  plays the idea back for correction before it becomes an issue.
 - `advise` chooses among real options and preserves the accepted tradeoff;
   `ensemble=auto|max` adds independent local personas only when requested.
 - `prd` or `impl-plan` turns accepted product or system intent into

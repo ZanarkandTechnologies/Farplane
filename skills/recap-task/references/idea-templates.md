@@ -1,6 +1,6 @@
-# Recap Idea Visual Templates
+# Recap Task Idea Templates
 
-Load this only after `SKILL.md` has classified the product shape. Choose one
+Load this only at N3, when the task is still being shaped. Choose one
 template, replace every placeholder with discussion-grounded content, and
 remove irrelevant branches. The template is scaffolding, never visible filler.
 

@@ -6,20 +6,51 @@ with task facts.
 
 ## Selector
 
+Every template opens with this block, filled from N2:
+
+```md
+### Problem & goal
+- **Problem:** <who hurts, and how, in the user's terms> [confirmed / inferred / open]
+- **Goal:** <the change in their experience or the outcome reached> [confirmed / inferred / open]
+- **Drift:** <only when the work has moved away from the original problem>
+```
+
 | Template | Use when | Required shape |
 | --- | --- | --- |
-| `quick` | The packet is coherent and the operator needs orientation | Now, Delta, Risks & action |
+| `idea` | Shaping stage, or the operator asks to see the idea played back | Problem & goal, one proposed visual, correction questions |
+| `quick` | The work packet is coherent and the operator needs orientation | Problem & goal, Now, Delta, Risks & action |
 | `full` | Requested, or a conflict, failed attempt, or evidence gap changes the safe response | Quick card plus sourced history and ledger |
 | `source-gap` | No reliable task boundary or durable source can be read | Known limit, missing source, safe request |
+
+## `idea`
+
+```md
+## <task> — proposed model (shaping)
+
+<Problem & goal block>
+
+**Confirm:** <the one thing the operator is being asked to verify>
+
+<one filled template from idea-templates.md, rendered inline>
+
+**Assumptions and open choices:** <inferences and contradictions the visual must not resolve>
+
+**Questions:**
+1. <riskiest mismatch>
+```
+
+Ask one to three questions. Do not add a status card, plan, or second view.
 
 ## `quick`
 
 ```md
 ## <task> — <state / confidence>
 
+<Problem & goal block>
+
 ### Now
 - **Reply now:** <safe posture>
-- **Goal:** <immediate operator need; underlying success condition when useful>
+- **Need now:** <what the operator must answer or decide next>
 - **Since you left:** <most decision-relevant update>
 
 ### Delta
@@ -66,9 +97,11 @@ time-only entries or group source paths with commas, braces, or shorthand.
 ```md
 ## <task label if known> — source gap
 
+<Problem & goal block, marked open where unknown>
+
 ### Now
 - **Reply now:** I cannot reconstruct this task reliably from the available context.
-- **Goal:** <what the operator is trying to answer or decide>
+- **Need now:** <what the operator is trying to answer or decide>
 
 ### Delta
 - **Before:** Unknown — no authoritative task record is available.
