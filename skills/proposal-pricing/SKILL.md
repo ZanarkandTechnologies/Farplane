@@ -71,6 +71,10 @@ independent judgment. This skill never sends the proposal or writes contracts.
   - [ ] First require a proposed outcome. If none exists, return `not_ready` in
         one sentence even when the transcript contains cost evidence; never
         invent the service being proposed.
+  - [ ] Require priority. A recurring cost in the anchor, a deadline, or a
+        dated trigger counts as a reason to act now. When the source says the
+        problem can wait (no rush, revisit next year, nice to have), return
+        `not_ready: no reason to act now` instead of pricing it.
   - [ ] Treat an anchor as complete only when its annual money value can be
         calculated: people, time, and loaded rate; consequence frequency and
         cost; or one direct annual money amount.

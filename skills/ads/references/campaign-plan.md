@@ -19,7 +19,14 @@ Write it before any setting:
   shows it (never a personal attribute);
 - offer promise and the proof that supports it;
 - channel reason (why paid, why this platform);
-- conversion event and its source of truth;
+- conversion event and its source of truth; for a book-a-call funnel the
+  optimisation event is the post-qualifier event (lead passed the fit
+  questions) sent back to Meta, and raw form submits stay a monitoring metric;
+- when a lead funnel "doesn't convert", the stage counts (click, page
+  conversion, qualified, booked, showed, closed, revenue) and the first stage
+  that leaks; the test aims there, and with no show or close counts the plan is
+  blocked on measurement. Show-stage fixes (fast confirm call, proof sent
+  before the call) go to the operator as non-ad work;
 - creative angle families, market awareness and sophistication, category entry
   point, distinctive brand asset;
 - one primary hypothesis and what would make the campaign obviously wrong.

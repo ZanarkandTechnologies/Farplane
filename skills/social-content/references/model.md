@@ -34,6 +34,23 @@ Stage is the funnel tier, and the tier picks the format, the CTA and the metric:
 
 A content calendar with one tier only is flagged.
 
+A bottom-tier CTA may be "comment <ONE WORD> and I'll DM you <named asset>" only
+when the asset already exists and is linked in the draft. The comment-to-DM
+automation is a `zernio` handoff (approval-gated), never promised in copy before
+it is set up. Judge it by DMs delivered and replies, not comment count; never
+gate the asset behind a follow.
+
+### Metric levers
+
+When `zernio` metrics show one weak engagement metric, change only its lever in
+the next post:
+
+| Weak metric | Lever |
+| --- | --- |
+| Skip rate | Open on the result or the tension (`storyboard` hook lab, lenses 3, 4, 6, 11) |
+| Comments | End on one specific question answerable in one word, not "thoughts?" |
+| Shares | Name one specific person the viewer knows ("the founder who still books demos by email") |
+
 ## Method Set
 
 ```text

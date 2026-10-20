@@ -61,7 +61,9 @@ frame, not only the wording:
 7. familiar comparison;
 8. surprising scale translated into an ordinary object or outcome;
 9. rule change and who it affects;
-10. unanswered `how can that be true?` claim.
+10. unanswered `how can that be true?` claim;
+11. first-hand claim only this creator can make (own number, own build, own
+    failure), stated as a tangible object or result.
 
 Keep uncertainty words such as `may`, `could`, or `reportedly` when the evidence
 requires them. Do not compensate for uncertainty with legal or financial jargon.

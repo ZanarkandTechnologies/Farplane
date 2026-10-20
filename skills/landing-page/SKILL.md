@@ -282,6 +282,7 @@ handoffs, implementation packets, and downstream QA.
 | Venue/place/object | real first-viewport signal of the place/object, not generic atmosphere |
 | Cinematic scrolltelling | story beats, pinned viewport, scene layers, scroll checkpoints |
 | Simple launch page | sharp offer, strong proof, fast CTA, minimal sections |
+| Paid-ad lead page (book a call) | one promise headline, a short problem-to-solution video, one book button; no nav, blog or careers links; a 3-question fit form (size, industry, problem) gates the calendar |
 
 ## Registry Route
 

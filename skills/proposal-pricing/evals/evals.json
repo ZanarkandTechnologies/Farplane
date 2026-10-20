@@ -131,6 +131,17 @@
         "Does not produce a priced proposal",
         "Stops after the single clarification"
       ]
+    },
+    {
+      "id": "proposal_pricing_no_priority_01",
+      "prompt": "Price a proposal from this call. Their two schedulers spend about six hours a week each rebuilding the delivery roster, at a loaded cost of $35 an hour. We discussed auto-building the roster from orders. Near the end the ops lead said it is a nice-to-have, there is no rush, and they would rather revisit it next year after the warehouse move.",
+      "expected_output": "Recognizes that the customer explicitly deferred the problem, so the priority door is open. Returns not_ready with a one-sentence reason that there is no reason to act now. Does not produce a priced proposal, even though a complete people-time-cost anchor exists.",
+      "assertions": [
+        "Returns not_ready citing no reason to act now",
+        "Does not produce a price",
+        "Does not ignore the customer's explicit deferral",
+        "Does not invent urgency"
+      ]
     }
   ]
 }
