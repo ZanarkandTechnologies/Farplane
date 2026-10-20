@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import subprocess
 import sys
@@ -26,7 +27,7 @@ def read_message(args: argparse.Namespace) -> str:
     raise SystemExit("Provide --text, --file, or stdin")
 
 
-def send(token: str, chat_id: str, text: str, parse_mode: str, disable_preview: bool) -> None:
+def send(token: str, chat_id: str, text: str, parse_mode: str, disable_preview: bool) -> int | None:
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     payload = {
         "chat_id": chat_id,
@@ -41,6 +42,10 @@ def send(token: str, chat_id: str, text: str, parse_mode: str, disable_preview: 
         body = response.read().decode("utf-8", errors="replace")
         if response.status >= 300:
             raise RuntimeError(f"Telegram HTTP {response.status}: {body}")
+    try:
+        return json.loads(body)["result"]["message_id"]
+    except (ValueError, KeyError, TypeError):
+        return None
 
 
 def keychain_token() -> str | None:
@@ -140,8 +145,8 @@ def main() -> int:
         )
         return 2
 
-    send(token, chat_id, message, args.parse_mode, args.disable_preview)
-    print("Telegram message sent without reply routing")
+    message_id = send(token, chat_id, message, args.parse_mode, args.disable_preview)
+    print(f"Telegram message sent without reply routing (message_id={message_id})")
     return 0
 
 

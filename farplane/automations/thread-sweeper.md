@@ -26,6 +26,7 @@ Work in `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`.
 Params:
 idle_after = 3h
 lookback = 72h (threads quiet longer than this are left alone)
+waiting_hold = 7d (a thread waiting on Kenji stays tracked this long)
 max_nudges = 2
 state = `.farplane/thread-sweeper/state.json`
 report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run)
@@ -35,9 +36,13 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    `lastActivityAt` is between `lookback` and `idle_after` ago. Drop this run's
    own session, any session whose `get_session` shows a `scheduledTaskId`
    (routine runs, including earlier sweeper runs), and any session in a sidebar
-   group named `Parked`. Load `state` (missing file = empty). Skip a session
-   whose `lastActivityAt` equals its `state.last_seen`: nothing has happened
-   since the last verdict.
+   group named `Parked`. Load `state` (missing file = empty). Also keep any
+   thread whose `state.verdict` is `waiting`, up to `waiting_hold` idle, even
+   past `lookback`. Skip a session whose `lastActivityAt` equals its
+   `state.last_seen`: nothing has happened since the last verdict. The app
+   also bumps `lastActivityAt` without a new turn (artifact or notification
+   writes); when `list_events` shows no turn after the one last judged, keep
+   the earlier verdict and set `last_seen` to the new time.
 
 2. **Classify the last turn.** For each remaining session read the end of its
    transcript with `list_events` (limit 15) and give one verdict:
@@ -69,8 +74,8 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
      <exact question>"; if the work is finished, end with "Done: <result>".`
    - `stopped` with `nudges >= max_nudges`: treat it as `waiting`, with the
      reason `still stalled after <n> nudges: <reason>`.
-   - `waiting`: add it to this run's Kenji list unless `state.notified_at`
-     already equals this `lastActivityAt` (he has already been told).
+   - `waiting`: add it to this run's Kenji list unless its question is the
+     one in `state.notified_question` (he has already been told).
    Reset `nudges` to 0 when the latest user turn in the transcript is Kenji's
    own message rather than a Thread Sweeper message. If `send_message` is
    refused, record `nudge refused` as the action and add the thread to the
@@ -80,18 +85,28 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    message with `$notify` (intent `blocker`, title `Thread Sweeper`, no thread
    route). For each thread: its title, hours idle, the exact question or
    blocker in at most 25 words, and its `link`. End with: `Reply in the
-   thread itself (tap its link).` Then set `notified_at` for those threads.
-   Send nothing when the list is empty.
+   thread itself (tap its link).` Then set `notified_at` and
+   `notified_question` for those threads. Send nothing when the list is empty.
+   Record the message id the script prints as the delivery receipt.
+
+   **Daily reminder.** On the first run of each local day, if any tracked
+   thread is still `waiting` and was told on an earlier day, add one
+   `Still waiting on you` section to that run's message (or send it alone),
+   oldest first: title, days waiting, the question in at most 15 words, its
+   `link`. A thread reaching `waiting_hold` gets a last line `dropping after
+   today` and then leaves `state`.
 
 5. **Write state and report.** Save `state` as
-   `{session_id: {title, last_seen, verdict, nudges, notified_at}}`, dropping
-   sessions outside `lookback`. Append a run section to `report`: the run time,
+   `{session_id: {title, last_seen, verdict, nudges, notified_at,
+   notified_question}}`, dropping sessions outside `lookback`, except
+   `waiting` threads inside `waiting_hold`. Append a run section to `report`: the run time,
    then a table `thread | idle h | verdict | action | reason`, with each thread
    linked by its `link`, then the counts.
 
 Boundaries: never archive, delete, stop, rename, regroup, or mark sessions;
 never change their model, effort, or permissions; never do a thread's work
-yourself; message only threads inside `lookback` and only Kenji on Telegram.
+yourself; nudge only threads inside `lookback` and message only Kenji on
+Telegram.
 Quote at most short fragments of transcripts and never copy secrets from them.
 If `list_sessions` or `list_events` is unavailable, write the report with
 that gap and stop.
