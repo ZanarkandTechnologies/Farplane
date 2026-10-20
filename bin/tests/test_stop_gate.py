@@ -124,10 +124,13 @@ class StopGateTests(unittest.TestCase):
     def test_every_nudge_carries_its_shape_template(self):
         for shape in response_format.SHAPES:
             with self.subTest(shape=shape):
-                text = response_format.feedback(["cold_read"], shape)
+                text = response_format.feedback(["before_after_example"], shape)
                 self.assertIn(str(response_format.SHAPES[shape]["skeleton"]), text)
                 self.assertNotIn("**Context:**", text)
-        text = response_format.feedback(["cold_read"], "completed_change", long_turn=True)
+                # An in-place fix keeps the answer's own form: no template.
+                self.assertNotIn("````markdown", response_format.feedback(["unanswered"], shape))
+                self.assertIn("tables, diagrams", response_format.feedback(["unanswered"], shape))
+        text = response_format.feedback(["before_after_example"], "completed_change", long_turn=True)
         self.assertTrue(response_format.has_context_line(text.split("````markdown\n")[1]))
         self.assertIn("**Before:**", text)
 

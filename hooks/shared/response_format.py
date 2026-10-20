@@ -19,7 +19,7 @@ TAG = "<!-- farplane-response-format:v1 -->"
 # Each shape names the AGENTS.md template heading it mirrors; a test keeps them in step.
 SHAPES: dict[str, dict[str, object]] = {
     "simple_answer": {
-        "skeleton": '**<The answer in one plain sentence.>**\n\n- <Supporting point, one per bullet.>\n- <Supporting point.>',
+        "skeleton": '**<The answer in one plain sentence.>**\n\n<Supporting detail: bullets, a table, or a diagram, whichever fits.>',
         "template": "Default shape",
         "description": "Answers a question, explains something, reviews, or reports findings; a one-line suggested fix inside an explanation still belongs here.",
         "gaps": ["conclusion_first"],
@@ -272,19 +272,27 @@ def skeleton(shape: str | None, *, long_turn: bool = False) -> str:
     return "\n".join(lines)
 
 
+# Gaps that mean the answer's structure is wrong; only these carry the shape
+# template. Every other gap is an in-place edit, so the answer keeps its form.
+STRUCTURAL_GAPS = {"before_after_example", "proof_planned", "blocker_recovery",
+                   "decision_choice", "progress_ledger"}
+
+
 def feedback(gaps: list[str], shape: str | None = None, *, long_turn: bool = False) -> str:
     fixes = {"proof": PROOF_FIX, "video_proof": VIDEO_FIX}
     lines = "\n".join(
         f"- **Add:** {fixes.get(name) or GAPS[name]['fix']}" for name in gaps
     )
-    template = skeleton(shape, long_turn=long_turn)
-    shown = (f"Rewrite the answer in this shape ({SHAPES[shape]['template']}), "
-             f"keeping only the parts the dialogue supports:\n\n````markdown\n{template}\n````\n\n"
+    structural = any(name in STRUCTURAL_GAPS for name in gaps)
+    template = skeleton(shape, long_turn=long_turn) if structural else ""
+    shown = (f"Use this order ({SHAPES[shape]['template']}); it sets the order, not "
+             f"the form, and keeps only the parts the dialogue supports:\n\n````markdown\n{template}\n````\n\n"
              if template else "")
     return (
         f"#### Response format\n\n{TAG}\n\n{shown}{lines}\n"
-        "- **Keep:** The answer's facts and proof; fill only what the dialogue "
-        "already supports and add no empty headings.\n"
+        "- **Keep:** The answer's facts and proof, and its tables, diagrams, code "
+        "blocks and images as they are; change only what the lines above ask, fill "
+        "only what the dialogue already supports, and add no empty headings.\n"
         "- **Return:** The revised final answer only; do not mention this gate."
     )
 
