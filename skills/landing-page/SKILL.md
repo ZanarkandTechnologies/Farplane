@@ -268,9 +268,8 @@ generated-media pages, encode the spec-first gate from
 user asks to build in the same turn, return the approved spec to `impl-plan`,
 which owns the later assets, implementation, and visual-review phases.
 For modern scroll-scrub or Terminal/Terminus-level work, follow the Important
-Checklist as the active planning recipe: competitor/inspiration analysis, user
-story, ASCII page flow, section exploration, hero-media requirements, asset
-handoffs, implementation packets, and downstream QA.
+Checklist as the planning recipe: inspiration analysis, user story, ASCII page
+flow, sections, hero-media needs, asset handoffs, implementation packets, QA.
 
 ## Decision Branches
 
