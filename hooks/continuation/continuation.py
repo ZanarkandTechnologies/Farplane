@@ -66,7 +66,15 @@ NUDGE = (
     "- **Stop only when:** The request is complete or genuinely blocked; then give "
     "the result or specific blocker with evidence."
 )
-KNOWN_NUDGES = {LEGACY_NUDGE_V1, LEGACY_NUDGE_V2, NUDGE}
+BLOCKER_NUDGE = (
+    f"#### Farplane continuation\n\n{TAG}\n\n"
+    "- **Fix the blocker:** Your answer stops on a blocker you can clear yourself "
+    "with your own tools. Clear it now, then finish the request.\n"
+    "- **Respect:** Pauses, scope limits, approvals, safety boundaries, and budgets.\n"
+    "- **Stop only when:** The request is complete, or what remains needs the user: "
+    "a password, login, approval, payment, or decision. Then name it with evidence."
+)
+KNOWN_NUDGES = {LEGACY_NUDGE_V1, LEGACY_NUDGE_V2, NUDGE, BLOCKER_NUDGE}
 TAG_PATTERN = re.compile(
     r"(?:\[farplane-continuation:v\d+\]|<!-- farplane-continuation:v\d+ -->)"
 )
@@ -506,7 +514,9 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
             questions.update(response_format.questions())
         with ThreadPoolExecutor(max_workers=1) as pool:
             facts_future = None
-            if ask_format and full_format:
+            # The reader also spots blockers the agent can clear, so it runs for
+            # continuation too.
+            if (ask_format and full_format) or ask_nudge:
                 if reader is None:
                     def reader(request: str, answer: str) -> dict[str, bool] | None:
                         return reader_check.judge(request, answer, environ=environ)
@@ -519,6 +529,13 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
         answers = result["answers"]
         if facts_future:
             trace["reader"] = facts if facts else "unavailable"
+        # A plan or a question to the user waits on the user by design.
+        awaits_user = response_format._value(answers.get("shape"), "choice") in {
+            "proposed_change", "decision_needed"}
+        if ask_nudge and facts and facts.get("fixable_blocker") and not awaits_user:
+            trace["status"] = "blocker_nudge"
+            print(json.dumps({"hook": "continuation", "status": "blocker_nudge"}), file=sys.stderr)
+            return {"decision": "block", "reason": BLOCKER_NUDGE}
         if ask_nudge:
             value = answers["nudge"]["noul"]
             if isinstance(value, bool) or not isinstance(value, (float, int)):

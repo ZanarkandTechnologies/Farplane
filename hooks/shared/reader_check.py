@@ -1,7 +1,7 @@
 """Reader check: Claude Haiku reads the whole final answer the way the user will.
 
 Jev scores template sections but cannot tell when a busy reader is lost. Haiku
-returns four facts and fixed rules turn them into at most one gap. Missing
+returns five facts and fixed rules turn them into at most one gap. Missing
 credentials, timeouts and bad replies return None, so the stop is never held up.
 """
 from __future__ import annotations
@@ -25,11 +25,15 @@ Return JSON only:
 {"answers_latest": true|false,
  "status_first": true|false,
  "process_narration": true|false,
- "unexplained_names": ["name", ...]}
+ "unexplained_names": ["name", ...],
+ "blocker": "short description" | "",
+ "agent_can_clear_now": true|false}
 - answers_latest: does it directly answer or report on what the latest message asked? A progress line while work is still running counts only if it also answers what can be answered now.
 - status_first: do the first two lines say plainly where the request stands?
 - process_narration: is most of it the agent's process or latest fix rather than the result?
-- unexplained_names: the internal names the answer's main point depends on that the user did not use and would not know, left unexplained: ticket or session codes, commit hashes, branch names, internal tool or model names, metric jargon. Leave out file paths and links, commands to run, names from the user's message, names the answer explains in a few words, and everyday words. Usually empty."""
+- unexplained_names: the internal names the answer's main point depends on that the user did not use and would not know, left unexplained: ticket or session codes, commit hashes, branch names, internal tool or model names, metric jargon. Leave out file paths and links, commands to run, names from the user's message, names the answer explains in a few words, and everyday words. Usually empty.
+- blocker: the thing the answer says stops the work or is left to do, in a few words; "" when nothing is.
+- agent_can_clear_now: true only if the agent could clear that blocker itself right now with its own tools (rerun or fix a failing command or test, start a server, install a package, read a file or log, retry another way, fix a small bug it found) and nothing else must happen first. False when it needs the user (password, login, account, approval, payment, spend, a decision, a plan to approve, hardware) or is waiting on another person, session or running job."""
 
 
 def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
@@ -38,7 +42,7 @@ def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
     if not key:
         return None
     body = {
-        "model": environ.get(MODEL_ENV) or DEFAULT_MODEL, "max_tokens": 200,
+        "model": environ.get(MODEL_ENV) or DEFAULT_MODEL, "max_tokens": 300,
         "temperature": 0, "reasoning": {"enabled": False},
         "messages": [
             {"role": "system", "content": PROMPT},
@@ -55,12 +59,16 @@ def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
     except Exception:
         return None
     fields = ("answers_latest", "status_first", "process_narration")
-    names = facts.get("unexplained_names")
-    if not all(isinstance(facts.get(name), bool) for name in fields) or not isinstance(names, list):
+    names, blocker = facts.get("unexplained_names"), facts.get("blocker", "")
+    clear = facts.get("agent_can_clear_now", False)
+    if (not all(isinstance(facts.get(name), bool) for name in fields)
+            or not isinstance(names, list) or not isinstance(blocker, str)
+            or not isinstance(clear, bool)):
         return None
     # Haiku over-reports single names; two or more means the reader is lost.
     return {**{name: facts[name] for name in fields},
-            "unexplained_names": len(names) >= MIN_NAMES}
+            "unexplained_names": len(names) >= MIN_NAMES,
+            "fixable_blocker": bool(blocker.strip()) and clear}
 
 
 def gaps(facts: Mapping[str, bool] | None) -> list[str]:

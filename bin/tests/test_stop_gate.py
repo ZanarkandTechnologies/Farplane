@@ -54,9 +54,10 @@ def hook(text):
             "message": {"role": "user", "content": "Stop hook feedback:\n" + text}}
 
 
-def facts(answers=True, status_first=True, narration=False, names=False):
+def facts(answers=True, status_first=True, narration=False, names=False, blocker=False):
     return lambda request, final: {"answers_latest": answers, "status_first": status_first,
-                                   "process_narration": narration, "unexplained_names": names}
+                                   "process_narration": narration, "unexplained_names": names,
+                                   "fixable_blocker": blocker}
 
 
 class StopGateTests(unittest.TestCase):
@@ -106,6 +107,19 @@ class StopGateTests(unittest.TestCase):
                        "Done.\n- **Unverified:** no display to record on this host."):
             with self.subTest(final=proved):
                 self.assertIsNone(self.evaluate(rows, proved, Client(feature=0.9)))
+
+    def test_fixable_blocker_gets_a_fix_it_nudge(self):
+        result = self.evaluate([human("Run the eval.")], "Blocked: the dev server is not running.",
+                               Client(shape="blocked"), reader=facts(blocker=True))
+        self.assertEqual(result["reason"], continuation.BLOCKER_NUDGE)
+        self.assertEqual(self.logged[-1]["status"], "blocker_nudge")
+        self.assertNotEqual(self.evaluate([human("Plan it.")], "Plan: retry by hash.",
+                                          Client(shape="proposed_change"), reader=facts(blocker=True)),
+                            {"decision": "block", "reason": continuation.BLOCKER_NUDGE})
+        rows = [human("Run the eval."), assistant("Blocked."), hook(continuation.BLOCKER_NUDGE)]
+        state = continuation.read_dialogue(str(self.path), "x") if self.path.write_text(
+            "\n".join(json.dumps(r) for r in rows)) else None
+        self.assertEqual(state["own_nudges_this_user_turn"], 1)
 
     def test_every_nudge_carries_its_shape_template(self):
         for shape in response_format.SHAPES:

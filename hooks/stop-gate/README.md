@@ -8,7 +8,7 @@
 | Order | Check | How | Blocks when |
 | --- | --- | --- | --- |
 | 1 | Length | Deterministic ([`farplane_response.py`](../../bin/core/farplane_response.py)) | Prose is over the word or line limit |
-| 2 | Continuation | Jev `nudge` score ([`continuation.py`](../continuation/continuation.py)) | Score ≥ 0.5 and fewer than three continuation nudges this user turn |
+| 2 | Continuation | Haiku reader's blocker facts, then Jev `nudge` score ([`continuation.py`](../continuation/continuation.py)) | The answer stops on a blocker the agent can clear itself (not on a plan or decision question), or score ≥ 0.5; fewer than three continuation nudges this user turn |
 | 3 | Response format | Jev `shape`, `gap::<section>` and `visible_feature` scores, the Haiku reader check ([`reader_check.py`](../shared/reader_check.py)), and fixed rules ([`response_format.py`](../shared/response_format.py)) | The reader says the answer misses the user, a gap of the chosen shape scores ≥ 0.6, a file is named by a relative path, a new feature has no video, or a completed change that edited files cites nothing |
 
 Continuation and format share one Jev request. Format nudges at most once per
@@ -56,6 +56,13 @@ unexplained internal names. Fixed rules turn them into at most one gap:
 
 The reader runs beside the Jev request with a 2.5-second timeout. A timeout,
 missing key or bad reply skips it and logs `"reader": "unavailable"`.
+
+The reader also names the blocker the answer stops on and says whether the
+agent could clear it now with its own tools (rerun, start a server, install,
+read a log, retry, fix a small bug). If so, and the answer is not a plan or a
+decision question, the gate sends the fixed "fix the blocker" continuation
+nudge. Anything needing the user (password, login, approval, payment, a
+decision) or waiting on another session or job does not count.
 
 Every shape also gets one deterministic check: a relative file link or a
 backticked relative path with an extension (`docs/plan.md`) gets
