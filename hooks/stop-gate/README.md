@@ -23,6 +23,11 @@ blocked, decision needed, progress), then scores only that shape's missing
 sections. A plan is never asked for `Verified:`, and an explanation is never
 asked for Before/After.
 
+A long turn (10+ minutes since the user's message, or 15+ tool calls) must
+open with one `**Context:** You asked …; I …` sentence, so a user returning
+hours later knows what the thread was doing. It is fixed, not scored, and a
+Context line of 30 words or fewer is outside the length budget.
+
 Before/After is a fixed rule, not a score: any answer of 40 words or more
 that reports edited files, or proposes a change, must carry `Before:` and
 `After:` (or `Now:`) labels, as lines or table columns. It outranks the
@@ -73,7 +78,7 @@ plain rewrite does not count), up to three format nudges a user turn. Proof
 keeps its own nudge: when no earlier format nudge asked for proof, the gate
 asks once more for the proof or video only.
 
-Short `Verified:`, `Unverified:`, `Limit:` and `Grounding:` lines (at most 30
+Short `Verified:`, `Unverified:`, `Limit:`, `Grounding:` and `Context:` lines (at most 30
 words) are outside the length budget, so adding proof does not re-trigger the
 length check.
 

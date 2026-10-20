@@ -107,6 +107,21 @@ class StopGateTests(unittest.TestCase):
             with self.subTest(final=proved):
                 self.assertIsNone(self.evaluate(rows, proved, Client(feature=0.9)))
 
+    def test_long_turn_opens_with_context(self):
+        from datetime import datetime, timezone
+        now = datetime(2026, 10, 20, 12, 0, tzinfo=timezone.utc)
+        self.assertTrue(continuation.long_turn(15, "", now))
+        self.assertTrue(continuation.long_turn(1, "2026-10-20T11:45:00Z", now))
+        self.assertFalse(continuation.long_turn(3, "2026-10-20T11:55:00Z", now))
+        answer = {"shape": {"choice": "simple_answer"}}
+        _, gaps = response_format.select_gaps(answer, files_changed=False, final="All six found.", long_turn=True)
+        self.assertEqual(gaps, ["context_line"])
+        recalled = "### Openings\n**Context:** You asked me to rescore the openings; I reran the scorer.\nAll six found."
+        _, gaps = response_format.select_gaps(answer, files_changed=False, final=recalled, long_turn=True)
+        self.assertEqual(gaps, [])
+        _, gaps = response_format.select_gaps(answer, files_changed=False, final="All six found.")
+        self.assertEqual(gaps, [])
+
     def test_change_always_shows_before_after(self):
         long = "Done. " + "The importer now skips blank rows and keeps the valid ones in order. " * 4 + "Verified: tests pass."
         for shape in ("completed_change", "progress"):

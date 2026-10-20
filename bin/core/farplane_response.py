@@ -27,10 +27,10 @@ _MEDIA_EMBED = re.compile(
 )
 _FENCE_OPEN_ANY = re.compile(r"^ {0,3}(`{3,}|~{3,}).*$")
 _BLOCKQUOTE_SPACER = re.compile(r"^ {0,3}(?:>\s*)+$")
-# A short labeled proof line cites evidence; long ones stay prose so the label
+# A short labeled proof or context line cites evidence or recalls the task; long ones stay prose so the label
 # cannot hide a paragraph from the budget.
 _PROOF_LINE = re.compile(
-    r"^ {0,3}(?:[-*+]\s+)?[*_]{0,2}(?:verified|unverified|limit|grounding)"
+    r"^ {0,3}(?:[-*+]\s+)?[*_]{0,2}(?:verified|unverified|limit|grounding|context)"
     r"[*_]{0,2}\s*:[*_]{0,2}\s+\S",
     re.IGNORECASE,
 )

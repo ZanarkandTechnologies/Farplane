@@ -69,6 +69,9 @@ GAPS: dict[str, dict[str, str]] = {
     "plain_names": {
         "fix": "Say in a few words what each name the user did not use is (ticket or session codes, commit hashes, branches, internal tools, files), or drop it.",
     },
+    "context_line": {
+        "fix": "Open with one sentence, **Context:** You asked …; I …, reminding the user what they asked and what this thread did, because they may come back hours later.",
+    },
     "absolute_paths": {
         "fix": "Name every file by its absolute path (for example /Users/…/file.md), in links and in text, so it opens from any folder or a phone. Write the path exactly as it is, spaces included, [a](/Users/me/My Docs/a.png); never %20 or angle brackets.",
     },
@@ -161,6 +164,15 @@ def needs_before_after(shape: str, *, files_changed: bool, final: str) -> bool:
     return len(final.split()) >= BEFORE_AFTER_MIN_WORDS and not has_before_after(final)
 
 
+_CONTEXT_LINE = re.compile(r"^\W{0,6}context\W{0,4}:", re.IGNORECASE)
+
+
+def has_context_line(final: str) -> bool:
+    """A Context: line among the first three non-blank lines, under any heading."""
+    lines = [line for line in final.splitlines() if line.strip() and not line.lstrip().startswith("#")]
+    return any(_CONTEXT_LINE.match(line.strip()) for line in lines[:3])
+
+
 def has_citation(final: str) -> bool:
     return bool(_CITATION.search(final))
 
@@ -202,7 +214,7 @@ def questions() -> dict[str, object]:
 
 def select_gaps(answers: Mapping[str, object], *, files_changed: bool, final: str,
                 reader_gaps: list[str] | None = None,
-                proof_only: bool = False) -> tuple[str, list[str]]:
+                proof_only: bool = False, long_turn: bool = False) -> tuple[str, list[str]]:
     """Return the chosen shape and at most MAX_GAPS gaps, most important first.
 
     Order: proof, then the reader's gaps, absolute paths, and the shape's scored gaps.
@@ -223,7 +235,8 @@ def select_gaps(answers: Mapping[str, object], *, files_changed: bool, final: st
         # and it outranks the progress ledger.
         ranked = ["before_after_example",
                   *(n for n in ranked if n not in ("before_after_example", "progress_ledger"))]
-    gaps = [*(reader_gaps or []),
+    gaps = [*(["context_line"] if long_turn and not has_context_line(final) else []),
+            *(reader_gaps or []),
             *(["absolute_paths"] if has_relative_path(final) else []),
             *ranked]
     # A run's last progress update can report a new feature too. The video fix
