@@ -145,6 +145,22 @@ _CITATION = re.compile(
 _EDIT_TOOLS = {"Edit", "Write", "MultiEdit", "NotebookEdit", "apply_patch"}
 
 
+_BEFORE = re.compile(r"(?i)\bbefore\b\**\s*[:|]")
+_AFTER = re.compile(r"(?i)\b(?:after|now)\b\**\s*[:|]")
+BEFORE_AFTER_MIN_WORDS = 40
+
+
+def has_before_after(final: str) -> bool:
+    return bool(_BEFORE.search(final) and _AFTER.search(final))
+
+
+def needs_before_after(shape: str, *, files_changed: bool, final: str) -> bool:
+    """Any answer reporting or proposing a change shows Before / After, unless tiny."""
+    if not (files_changed or shape == "proposed_change"):
+        return False
+    return len(final.split()) >= BEFORE_AFTER_MIN_WORDS and not has_before_after(final)
+
+
 def has_citation(final: str) -> bool:
     return bool(_CITATION.search(final))
 
@@ -201,9 +217,15 @@ def select_gaps(answers: Mapping[str, object], *, files_changed: bool, final: st
         score = _score(answers.get(f"gap::{name}"))
         if score >= GAP_THRESHOLD:
             scored.append((score, name))
+    ranked = [name for _, name in sorted(scored, reverse=True)]
+    if needs_before_after(shape, files_changed=files_changed, final=final):
+        # A fixed rule, not a score: a change always shows its Before / After,
+        # and it outranks the progress ledger.
+        ranked = ["before_after_example",
+                  *(n for n in ranked if n not in ("before_after_example", "progress_ledger"))]
     gaps = [*(reader_gaps or []),
             *(["absolute_paths"] if has_relative_path(final) else []),
-            *(name for _, name in sorted(scored, reverse=True))]
+            *ranked]
     # A run's last progress update can report a new feature too. The video fix
     # also covers citing proof, so it replaces the generic proof nudge.
     if (files_changed and shape in VIDEO_SHAPES and not has_video_proof(final)

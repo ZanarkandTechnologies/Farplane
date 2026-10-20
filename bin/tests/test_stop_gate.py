@@ -107,6 +107,19 @@ class StopGateTests(unittest.TestCase):
             with self.subTest(final=proved):
                 self.assertIsNone(self.evaluate(rows, proved, Client(feature=0.9)))
 
+    def test_change_always_shows_before_after(self):
+        long = "Done. " + "The importer now skips blank rows and keeps the valid ones in order. " * 4 + "Verified: tests pass."
+        for shape in ("completed_change", "progress"):
+            with self.subTest(shape=shape):
+                _, gaps = response_format.select_gaps({"shape": {"choice": shape}}, files_changed=True, final=long)
+                self.assertEqual(gaps[0], "before_after_example")
+                self.assertNotIn("progress_ledger", gaps)
+        shown = long + "\n> **Before:** blank rows stopped it.\n> **After:** they are skipped."
+        _, gaps = response_format.select_gaps({"shape": {"choice": "completed_change"}}, files_changed=True, final=shown)
+        self.assertNotIn("before_after_example", gaps)
+        _, gaps = response_format.select_gaps({"shape": {"choice": "simple_answer"}}, files_changed=False, final=long)
+        self.assertNotIn("before_after_example", gaps)
+
     def test_nonvisual_change_keeps_any_citation_as_proof(self):
         rows = [human("Bump the timeout."), edit_call()]
         self.assertIsNone(self.evaluate(rows, "Done. Verified: config test passes.", Client(feature=0.2)))

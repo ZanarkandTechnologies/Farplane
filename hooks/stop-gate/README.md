@@ -23,6 +23,11 @@ blocked, decision needed, progress), then scores only that shape's missing
 sections. A plan is never asked for `Verified:`, and an explanation is never
 asked for Before/After.
 
+Before/After is a fixed rule, not a score: any answer of 40 words or more
+that reports edited files, or proposes a change, must carry `Before:` and
+`After:` (or `Now:`) labels, as lines or table columns. It outranks the
+Goal/Track/Progress ask.
+
 Every shape also gets the reader check. Claude Haiku 5.5 (OpenRouter,
 `FARPLANE_READER_MODEL`) reads the user's latest message and the whole answer,
 not the 2,400-character cut Jev sees, and returns three facts plus a list of

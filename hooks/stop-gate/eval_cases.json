@@ -272,7 +272,9 @@
     "files_changed": true,
     "proposed_final": "**You can now ask the robot to do a chore and it walks to the right spot in the room, working from a phone video alone. Tested on one room so far.**\n\n- **Works:** the map marks where each chore happens (make the bed, wipe the table, put clothes in the wardrobe) and where the robot can stand to reach it. It matches a hand-made map on 6 of 7 spots.\n- **Doesn't yet:** thin tall things such as an open wardrobe door are missed, so the robot thinks it can reach that wardrobe when it can't.\n- **You:** film one room of your own with an iPhone app that saves the camera path (for example Polycam). That is the only thing blocking a second test.\n\n![Asking for \"tidy the bed\" and the robot walking to it](/Users/dev/home-sim/proof/chore-walkthrough.mp4)\n\nVerified: zone-by-zone comparison with the hand-made map, [task_maps_compare.json](/Users/dev/home-sim/proof/task_maps_compare.json).",
     "expected_shape": "completed_change",
-    "expected_fixes": []
+    "expected_fixes": [
+      "before_after_example"
+    ]
   },
   {
     "id": "built-feature-video",
@@ -288,7 +290,9 @@
     "files_changed": true,
     "proposed_final": "**Partial: the pick-and-place demo runs in the sim, but I have no recording of it.**\n\n- **Works:** `run_demo.py --task pick_place` picks the red cube and places it in the bin in 9 of 10 seeded runs.\n- **Unverified:** no video, because this host has no display for the sim viewer; run `python run_demo.py --task pick_place --record` on the GPU box to capture one.",
     "expected_shape": "completed_change",
-    "expected_fixes": []
+    "expected_fixes": [
+      "before_after_example"
+    ]
   },
   {
     "id": "built-feature-screenshot-only",
