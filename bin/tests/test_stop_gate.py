@@ -121,6 +121,18 @@ class StopGateTests(unittest.TestCase):
                                        Client(shape=shape), reader=facts(status_first=False, narration=True))
                 self.assertIn("overall state in plain words", result["reason"])
 
+    def test_session_started_threads_are_checked(self):
+        started = {"type": "user", "turnOrigin": "sdk", "promptSource": "sdk",
+                   "message": {"role": "user", "content": "Build piece 8."}}
+        scheduled = {**started, "turnOrigin": "scheduled", "promptSource": "system",
+                     "origin": {"kind": "task-notification"}}
+        result = self.evaluate([started], "Waiting on the fixers.", Client(shape="simple_answer"),
+                               reader=facts(answers=False))
+        self.assertIn("Answer what the user's latest message asked", result["reason"])
+        self.assertIsNone(self.evaluate([scheduled], "Waiting.", Client(shape="simple_answer"),
+                                        reader=facts(answers=False)))
+        self.assertEqual(self.logged[-1]["status"], "ambiguous_transcript")
+
     def test_unexplained_names_need_plain_words(self):
         result = self.evaluate([human("Status?")], "Rescored with T2's scorer at ab006f9; 6/6 found.",
                                Client(shape="simple_answer"), reader=facts(status_first=False, names=True))

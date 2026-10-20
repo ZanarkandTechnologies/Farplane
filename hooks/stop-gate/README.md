@@ -81,7 +81,8 @@ then review/trust the changed command in Codex `/hooks`.
 `FARPLANE_STOP_CHECKS` selects checks (default `length,continuation,format`);
 unknown names are ignored. Provider settings and credential scope are shared with
 continuation: missing credentials, provider errors and unknown transcript
-provenance allow the stop silently.
+provenance allow the stop silently. A thread another session started counts as the user's:
+its prompt is an SDK turn, not a human one. Scheduled tasks are skipped.
 
 Every decision, allows included, is appended to
 `~/.farplane/state/stop-gate/decisions.jsonl` (metadata only: status, shape,

@@ -152,7 +152,8 @@ CLAUDE_STOP_FEEDBACK = "Stop hook feedback:\n"
 def claude_entry(row: Mapping[str, object]) -> tuple[str, str] | None:
     """Classify a Claude Code transcript row as a real request, reply, or Stop feedback.
 
-    Real requests carry origin.kind "human". Stop feedback is a runtime-authored
+    Real requests carry origin.kind "human", or are an SDK turn from a session
+    another session started. Stop feedback is a runtime-authored
     isMeta row, which users cannot produce. Tool results, notifications, sidechains,
     compaction summaries, and other injections are skipped.
     """
@@ -176,7 +177,14 @@ def claude_entry(row: Mapping[str, object]) -> tuple[str, str] | None:
         if isinstance(content, str) and text.startswith(CLAUDE_STOP_FEEDBACK):
             return "hook", text[len(CLAUDE_STOP_FEEDBACK):]
         return None
-    if isinstance(origin, dict) and origin.get("kind") == "human" and not row.get("isCompactSummary"):
+    if row.get("isCompactSummary"):
+        return None
+    if isinstance(origin, dict) and origin.get("kind") == "human":
+        return "user", text
+    # A session started by another session (desktop start_session or a
+    # cross-session message) carries the prompt as an SDK turn, not "human".
+    # The user still reads its answers, so it counts as the request.
+    if origin is None and row.get("turnOrigin") == "sdk" and row.get("promptSource") == "sdk":
         return "user", text
     return None
 
