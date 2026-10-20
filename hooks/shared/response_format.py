@@ -19,31 +19,37 @@ TAG = "<!-- farplane-response-format:v1 -->"
 # Each shape names the AGENTS.md template heading it mirrors; a test keeps them in step.
 SHAPES: dict[str, dict[str, object]] = {
     "simple_answer": {
+        "skeleton": '**<The answer in one plain sentence.>**\n\n- <Supporting point, one per bullet.>\n- <Supporting point.>',
         "template": "Default shape",
         "description": "Answers a question, explains something, reviews, or reports findings; a one-line suggested fix inside an explanation still belongs here.",
         "gaps": ["conclusion_first"],
     },
     "proposed_change": {
+        "skeleton": '**<What will change, in one plain sentence.>**\n\n> **Before:** <how it behaves now>\n>\n> **After:** <how it will behave>\n>\n> **Example:** <one concrete case>\n\n- **Proof planned:** <how it will be checked>',
         "template": "Proposed change",
         "description": "Proposes a design, plan, or change for the user to approve; nothing has been changed yet (files_changed is false).",
         "gaps": ["before_after_example", "proof_planned"],
     },
     "completed_change": {
+        "skeleton": '### <Change name>\n\n**<Worked | Partial | Did not work>: <what works now, in plain words>.**\n\n> **Before:** <old behaviour>\n>\n> **After:** <new behaviour>\n>\n> **Example:** <one concrete case>\n\n- **Verified:** <check and result> (or **Unverified:** <why>)\n- **Limit:** <what remains, or the one thing the user must do>',
         "template": "Completed change",
         "description": "Reports changes the agent made in this turn, however small (files_changed is true).",
         "gaps": ["before_after_example"],
     },
     "blocked": {
+        "skeleton": '**Partial: <what works>, but <what is blocked>.**\n\n- **Blocker:** <what stops it>\n- **Evidence:** <what shows it>\n- **Recovery:** <the next step and who takes it>',
         "template": "Blocked work",
         "description": "Reports that requested work could not be finished because something blocks it.",
         "gaps": ["blocker_recovery"],
     },
     "decision_needed": {
+        "skeleton": '**Recommendation: <option>, because <reason>.**\n\n- **Choice needed:** <the exact choice>\n- **Consequence:** <what each option changes>\n- **Default:** <what happens if the user does not answer>',
         "template": "Default shape",
         "description": "Asks the user to choose between options before work continues.",
         "gaps": ["decision_choice"],
     },
     "progress": {
+        "skeleton": '**<Where it stands, in plain words.>**\n\n- **Goal:** <the outcome the user asked for>\n- **Progress:** <done so far; what is running now>\n- **Next:** <next step and when it lands>',
         "template": "Long-horizon progress",
         "description": "A mid-run status update on long multi-step work that continues afterwards.",
         "gaps": ["progress_ledger"],
@@ -251,13 +257,32 @@ def select_gaps(answers: Mapping[str, object], *, files_changed: bool, final: st
     return shape, gaps[:MAX_GAPS]
 
 
-def feedback(gaps: list[str]) -> str:
+CONTEXT_SKELETON = "**Context:** You asked <the request>; I <what this thread did>."
+
+
+def skeleton(shape: str | None, *, long_turn: bool = False) -> str:
+    """The fixed template for one reply shape, with the Context line on long turns."""
+    if shape not in SHAPES:
+        return ""
+    lines = str(SHAPES[shape]["skeleton"]).split("\n")
+    if long_turn:
+        # Status stays first; the reminder sits right under it.
+        heading = 2 if lines[0].startswith("#") else 0
+        lines[heading + 1:heading + 1] = ["", CONTEXT_SKELETON]
+    return "\n".join(lines)
+
+
+def feedback(gaps: list[str], shape: str | None = None, *, long_turn: bool = False) -> str:
     fixes = {"proof": PROOF_FIX, "video_proof": VIDEO_FIX}
     lines = "\n".join(
         f"- **Add:** {fixes.get(name) or GAPS[name]['fix']}" for name in gaps
     )
+    template = skeleton(shape, long_turn=long_turn)
+    shown = (f"Rewrite the answer in this shape ({SHAPES[shape]['template']}), "
+             f"keeping only the parts the dialogue supports:\n\n````markdown\n{template}\n````\n\n"
+             if template else "")
     return (
-        f"#### Response format\n\n{TAG}\n\n{lines}\n"
+        f"#### Response format\n\n{TAG}\n\n{shown}{lines}\n"
         "- **Keep:** The answer's facts and proof; fill only what the dialogue "
         "already supports and add no empty headings.\n"
         "- **Return:** The revised final answer only; do not mention this gate."

@@ -107,6 +107,16 @@ class StopGateTests(unittest.TestCase):
             with self.subTest(final=proved):
                 self.assertIsNone(self.evaluate(rows, proved, Client(feature=0.9)))
 
+    def test_every_nudge_carries_its_shape_template(self):
+        for shape in response_format.SHAPES:
+            with self.subTest(shape=shape):
+                text = response_format.feedback(["cold_read"], shape)
+                self.assertIn(str(response_format.SHAPES[shape]["skeleton"]), text)
+                self.assertNotIn("**Context:**", text)
+        text = response_format.feedback(["cold_read"], "completed_change", long_turn=True)
+        self.assertTrue(response_format.has_context_line(text.split("````markdown\n")[1]))
+        self.assertIn("**Before:**", text)
+
     def test_long_turn_opens_with_context(self):
         from datetime import datetime, timezone
         now = datetime(2026, 10, 20, 12, 0, tzinfo=timezone.utc)

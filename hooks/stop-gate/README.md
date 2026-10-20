@@ -33,6 +33,11 @@ that reports edited files, or proposes a change, must carry `Before:` and
 `After:` (or `Now:`) labels, as lines or table columns. It outranks the
 Goal/Track/Progress ask.
 
+Every format nudge carries the full template for the chosen shape (the
+`skeleton` in [`response_format.py`](../shared/response_format.py)), with the
+Context line added on long turns, then the specific additions. The agent
+rewrites into that one shape instead of patching lines.
+
 Every shape also gets the reader check. Claude Haiku 5.5 (OpenRouter,
 `FARPLANE_READER_MODEL`) reads the user's latest message and the whole answer,
 not the 2,400-character cut Jev sees, and returns three facts plus a list of

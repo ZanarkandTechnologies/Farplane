@@ -542,7 +542,8 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
                 trace["status"] = "format_nudge"
                 print(json.dumps({"hook": "response-format", "status": "nudge",
                                   "shape": shape, "gaps": gaps}), file=sys.stderr)
-                return {"decision": "block", "reason": response_format.feedback(gaps)}
+                return {"decision": "block", "reason": response_format.feedback(
+                    gaps, shape, long_turn=bool(state["long_turn"]))}
     except Exception:
         return allow_stop("unavailable", trace)
     return allow_stop("allow", trace)
