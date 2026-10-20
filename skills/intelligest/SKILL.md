@@ -83,6 +83,8 @@ time-bounded development or discussion, never sources sharing a broad subject
   `source + instruction? -> bound intake + visible job | reused job`
 
   Rule: Bind `source`, `instruction`, optional project, horizon, and Wiki
+  intent. Saves stay global wherever intelligest is called: a project never
+  becomes the save's `projectId`, only a `useful-for:<project>` tag. Wiki
   intent: save/add/update/write/publish **to Wiki** selects `apply`;
   preview, draft, or no direction selects `preview`; a conflict blocks.
   Canonicalize and dedupe the source, then create or reuse the visible Content

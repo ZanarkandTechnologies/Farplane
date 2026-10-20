@@ -63,7 +63,9 @@ Phase detail lives in [phase router](phase-router.md); storage fields in
    real thumbnail, contact sheet, or frame with the bunker's
    `resource-bank:upload-thumbnail` script (`assetRole: "thumbnail"`,
    `parentAssetId` = primary asset). Promote to `brand_kit_id` in the same
-   action when supplied.
+   action when supplied. Never set `projectId`: saves are global, so the
+   Mancave sees them all; a project the save helps gets a
+   `useful-for:<project>` tag, and that floor's Mood board shows it.
 7. Tickets: save-only creates none. `future_creation` creates one thin
    source-addressable ticket, "Repurpose <idea> from <source URL or asset ID>
    into <output>", whose first operation is `storyboard`; dedupe on

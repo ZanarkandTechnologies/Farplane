@@ -60,8 +60,9 @@ Use a mix of these buckets when source context supports them:
 - Style: for a visual reference, the closest `style:<slug>` and
   `style-family:<family>` from the
   [design-styles vocabulary](../../../design-styles/references/styles.json).
-- Retrieval: project name, campaign name, client/product, output type, or
-  platform.
+- Retrieval: campaign name, client/product, output type, or platform.
+- Useful for: `useful-for:<project>` for each project the save would help (the
+  floor it was saved from, or a clear project match); one save can carry several.
 
 ## Creative Element Kinds
 
