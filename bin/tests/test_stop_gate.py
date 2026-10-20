@@ -54,9 +54,9 @@ def hook(text):
             "message": {"role": "user", "content": "Stop hook feedback:\n" + text}}
 
 
-def facts(answers=True, status_first=True, narration=False):
+def facts(answers=True, status_first=True, narration=False, names=False):
     return lambda request, final: {"answers_latest": answers, "status_first": status_first,
-                                   "process_narration": narration}
+                                   "process_narration": narration, "unexplained_names": names}
 
 
 class StopGateTests(unittest.TestCase):
@@ -120,6 +120,14 @@ class StopGateTests(unittest.TestCase):
                 result = self.evaluate([human("Status?")], "Reach strip fixed; 6/7 agree.",
                                        Client(shape=shape), reader=facts(status_first=False, narration=True))
                 self.assertIn("overall state in plain words", result["reason"])
+
+    def test_unexplained_names_need_plain_words(self):
+        result = self.evaluate([human("Status?")], "Rescored with T2's scorer at ab006f9; 6/6 found.",
+                               Client(shape="simple_answer"), reader=facts(status_first=False, names=True))
+        self.assertIn("overall state in plain words", result["reason"])
+        result = self.evaluate([human("Status?")], "All six found. Rescored with T2's scorer at ab006f9.",
+                               Client(shape="simple_answer"), reader=facts(names=True))
+        self.assertIn("what each name the user did not use is", result["reason"])
 
     def test_process_with_status_first_passes_the_reader(self):
         self.assertIsNone(self.evaluate([human("Status?")], "Works. I then tuned X.", Client(shape="simple_answer"),

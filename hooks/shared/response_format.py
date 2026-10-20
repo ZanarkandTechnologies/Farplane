@@ -66,6 +66,9 @@ GAPS: dict[str, dict[str, str]] = {
     "cold_read": {
         "fix": "Lead with the overall state in plain words: what works, what does not, and the one thing the user must do. Drop internal terms and fix history.",
     },
+    "plain_names": {
+        "fix": "Say in a few words what each name the user did not use is (ticket or session codes, commit hashes, branches, internal tools, files), or drop it.",
+    },
     "absolute_paths": {
         "fix": "Name every file by its absolute path (for example /Users/…/file.md), in links and in text, so it opens from any folder or a phone. Write the path exactly as it is, spaces included, [a](/Users/me/My Docs/a.png); never %20 or angle brackets.",
     },

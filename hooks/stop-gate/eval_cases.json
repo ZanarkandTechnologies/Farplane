@@ -366,5 +366,16 @@
     ],
     "latest_user_request": "Fix the blank-record export bug.",
     "proposed_final": "**Worked. Blank records are now skipped and valid rows export.**\n\n> **Before:** A blank first record stopped the export.\n>\n> **After:** Blank records are skipped.\n>\n> **Example:** `[blank, Alice]` exports Alice.\n\n- **Verified:** `test_export` blank-first, blank-middle and all-blank cases pass.\n- **Changed:** [exporter.py](src/export/exporter.py) and `tests/test_export.py`."
+  },
+  {
+    "id": "rescore-internal-names",
+    "latest_user_request": "ok rescore it once the other session fixes the scorer",
+    "files_changed": true,
+    "proposed_final": "I rescored the run with T2's new scorer (ab006f9). It now agrees with my own scorer: 6/6 openings found and 6/6 types right, including the balcony door. Median centre error is 0.065 m.\n\nThe scorecard is rewritten at /Users/me/runs/scorecard.json, and notes.md is updated to match. The code didn't change; the branch is level with origin/feature/scan-demo at ab006f9.\n\nOnly 1 of 6 openings is within 15 cm of the truth. T2 makes a fair point: truth here is the hand-measured plan, not the LiDAR. RoomPlan's windows come out narrower and the two mesh openings come out wider. Which source is right still needs a check against the depth or photos.",
+    "expected_shape": "completed_change",
+    "expected_fixes": [
+      "cold_read",
+      "plain_names"
+    ]
   }
 ]

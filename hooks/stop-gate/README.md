@@ -25,14 +25,19 @@ asked for Before/After.
 
 Every shape also gets the reader check. Claude Haiku 5.5 (OpenRouter,
 `FARPLANE_READER_MODEL`) reads the user's latest message and the whole answer,
-not the 2,400-character cut Jev sees, and returns three facts. Fixed rules
-turn them into at most one gap:
+not the 2,400-character cut Jev sees, and returns three facts plus a list of
+unexplained internal names. Fixed rules turn them into at most one gap:
 
 - `answers_latest` false → `unanswered`: "answer what you can now, then say
   what you are waiting for". This catches turns that end on a one-line status
   such as "The simulator finished; the runner is fetching them."
-- `process_narration` true and `status_first` false → `cold_read`: lead with
+- `process_narration` true, or two or more unexplained names (ticket or
+  session codes, commit hashes, branches, internal tools; paths, links and
+  commands do not count), with `status_first` false → `cold_read`: lead with
   the overall state in plain words.
+- Two or more unexplained names with the status first → `plain_names`: say
+  what each is in a few words, or drop it. One name alone passes, because
+  Haiku over-reports single names.
 
 The reader runs beside the Jev request with a 2.5-second timeout. A timeout,
 missing key or bad reply skips it and logs `"reader": "unavailable"`.

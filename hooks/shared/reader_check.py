@@ -1,7 +1,7 @@
 """Reader check: Claude Haiku reads the whole final answer the way the user will.
 
 Jev scores template sections but cannot tell when a busy reader is lost. Haiku
-returns three facts and fixed rules turn them into at most one gap. Missing
+returns four facts and fixed rules turn them into at most one gap. Missing
 credentials, timeouts and bad replies return None, so the stop is never held up.
 """
 from __future__ import annotations
@@ -18,19 +18,22 @@ KEY_ENV = "OPENROUTER_API_KEY"
 TIMEOUT = 2.5
 MAX_REQUEST = 3000
 MAX_FINAL = 12000
+MIN_NAMES = 2
 
 PROMPT = """You check a coding agent's final answer for a busy founder who saw only their own latest message, not the agent's work.
 Return JSON only:
 {"answers_latest": true|false,
  "status_first": true|false,
- "process_narration": true|false}
+ "process_narration": true|false,
+ "unexplained_names": ["name", ...]}
 - answers_latest: does it directly answer or report on what the latest message asked? A progress line while work is still running counts only if it also answers what can be answered now.
 - status_first: do the first two lines say plainly where the request stands?
-- process_narration: is most of it the agent's process or latest fix rather than the result?"""
+- process_narration: is most of it the agent's process or latest fix rather than the result?
+- unexplained_names: the internal names the answer's main point depends on that the user did not use and would not know, left unexplained: ticket or session codes, commit hashes, branch names, internal tool or model names, metric jargon. Leave out file paths and links, commands to run, names from the user's message, names the answer explains in a few words, and everyday words. Usually empty."""
 
 
 def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
-          timeout: float = TIMEOUT) -> dict[str, bool] | None:
+          timeout: float = TIMEOUT) -> dict | None:
     key = environ.get(KEY_ENV, "").strip()
     if not key:
         return None
@@ -52,17 +55,23 @@ def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
     except Exception:
         return None
     fields = ("answers_latest", "status_first", "process_narration")
-    if not all(isinstance(facts.get(name), bool) for name in fields):
+    names = facts.get("unexplained_names")
+    if not all(isinstance(facts.get(name), bool) for name in fields) or not isinstance(names, list):
         return None
-    return {name: facts[name] for name in fields}
+    # Haiku over-reports single names; two or more means the reader is lost.
+    return {**{name: facts[name] for name in fields},
+            "unexplained_names": len(names) >= MIN_NAMES}
 
 
 def gaps(facts: Mapping[str, bool] | None) -> list[str]:
-    """An unanswered message outranks a buried status."""
+    """An unanswered message outranks a buried status, which outranks jargon."""
     if not facts:
         return []
     if not facts["answers_latest"]:
         return ["unanswered"]
-    if facts["process_narration"] and not facts["status_first"]:
+    lost = facts["process_narration"] or facts["unexplained_names"]
+    if lost and not facts["status_first"]:
         return ["cold_read"]
+    if facts["unexplained_names"]:
+        return ["plain_names"]
     return []
