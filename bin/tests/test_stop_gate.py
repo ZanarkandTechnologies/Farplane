@@ -129,9 +129,18 @@ class StopGateTests(unittest.TestCase):
         result = self.evaluate([started], "Waiting on the fixers.", Client(shape="simple_answer"),
                                reader=facts(answers=False))
         self.assertIn("Answer what the user's latest message asked", result["reason"])
-        self.assertIsNone(self.evaluate([scheduled], "Waiting.", Client(shape="simple_answer"),
-                                        reader=facts(answers=False)))
-        self.assertEqual(self.logged[-1]["status"], "ambiguous_transcript")
+        result = self.evaluate([scheduled], "Waiting.", Client(shape="simple_answer"),
+                               reader=facts(answers=False))
+        self.assertIn("Answer what the user's latest message asked", result["reason"])
+
+    def test_wrap_up_stop_reads_the_turn_answer(self):
+        wrap = {"type": "assistant", "message": {"role": "assistant", "content": [
+            {"type": "tool_use", "name": "mcp__ccd_turn__wrap_up", "input": {}}]}}
+        self.path.write_text("\n".join(json.dumps(row) for row in [
+            human("Status?"), assistant("Old turn."), human("Now?"), assistant("Rooms load."), wrap]))
+        self.assertEqual(continuation.last_turn_answer(str(self.path)), "Rooms load.")
+        self.path.write_text("\n".join(json.dumps(row) for row in [human("Now?"), wrap]))
+        self.assertEqual(continuation.last_turn_answer(str(self.path)), "")
 
     def test_unexplained_names_need_plain_words(self):
         result = self.evaluate([human("Status?")], "Rescored with T2's scorer at ab006f9; 6/6 found.",

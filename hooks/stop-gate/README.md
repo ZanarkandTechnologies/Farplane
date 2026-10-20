@@ -81,8 +81,9 @@ then review/trust the changed command in Codex `/hooks`.
 `FARPLANE_STOP_CHECKS` selects checks (default `length,continuation,format`);
 unknown names are ignored. Provider settings and credential scope are shared with
 continuation: missing credentials, provider errors and unknown transcript
-provenance allow the stop silently. A thread another session started counts as the user's:
-its prompt is an SDK turn, not a human one. Scheduled tasks are skipped.
+provenance allow the stop silently. Every thread is checked: one another session started (its prompt is an SDK
+turn) and a scheduled task's run count as the user's turn. A stop whose last
+block is a tool call (the desktop wrap_up) is judged on the turn's last text.
 
 Every decision, allows included, is appended to
 `~/.farplane/state/stop-gate/decisions.jsonl` (metadata only: status, shape,

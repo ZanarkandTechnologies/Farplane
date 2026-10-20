@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 for directory in (ROOT / "hooks" / "shared", ROOT / "hooks" / "continuation", ROOT / "bin" / "core"):
     sys.path.insert(0, str(directory))
 
-from continuation import evaluate_stop  # noqa: E402
+from continuation import evaluate_stop, last_turn_answer  # noqa: E402
 from runtime_config import load_runtime_env  # noqa: E402
 from hook_delivery import report_gate_block  # noqa: E402
 from skill_suggestion import _provider_config  # noqa: E402
@@ -63,6 +63,9 @@ def jev_gate(payload: dict, checks: frozenset[str], env: dict[str, str], *,
 
 
 def run_gate(payload: dict, *, credential_child: bool = False) -> dict | None:
+    final, path = payload.get("last_assistant_message"), payload.get("transcript_path")
+    if isinstance(path, str) and not (isinstance(final, str) and final.strip()):
+        payload = {**payload, "last_assistant_message": last_turn_answer(path)}
     env = load_runtime_env()
     checks = configured_checks(env)
     if "length" in checks and not credential_child:

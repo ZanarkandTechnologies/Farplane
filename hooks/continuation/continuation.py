@@ -186,7 +186,25 @@ def claude_entry(row: Mapping[str, object]) -> tuple[str, str] | None:
     # The user still reads its answers, so it counts as the request.
     if origin is None and row.get("turnOrigin") == "sdk" and row.get("promptSource") == "sdk":
         return "user", text
+    # A scheduled task's prompt starts its run; the user reads that output too.
+    if (row.get("turnOrigin") == "scheduled" and isinstance(origin, dict)
+            and origin.get("kind") == "task-notification"):
+        return "user", text
     return None
+
+
+def last_turn_answer(path: str) -> str:
+    """The turn's last assistant text, for a stop whose final block was a tool
+    call (the desktop wrap_up), which leaves last_assistant_message empty."""
+    lines, _ = bounded_rollout_lines(Path(path))
+    for line in reversed(lines):
+        row = json.loads(line)
+        entry = claude_entry(row) if isinstance(row, dict) else None
+        if entry and entry[0] == "user":
+            return ""
+        if entry and entry[0] == "assistant":
+            return entry[1]
+    return ""
 
 
 def bounded_rollout_lines(source: Path) -> tuple[list[str], bool]:
