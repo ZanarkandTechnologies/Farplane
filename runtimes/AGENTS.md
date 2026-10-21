@@ -146,8 +146,10 @@ serious_work = ground -> decide -> plan? -> execute -> verify -> review?
   point. Use independent QA or review at the owning workflow's proof boundary
   when self-review cannot credibly prove the claim.
 - Before a PR is marked ready or merged, put its net before/after metrics per
-  goal and links to the evidence in the PR description; comments are working
-  notes, the description is the record.
+  goal and the evidence in the PR description, with visuals that tell the story
+  (a before/after chart, paired screenshots, video), not links alone; comments
+  are working notes, the description is the record. A long-running task returns
+  with a short walkthrough video of its result.
 - Treat a confirmed, material agent, prompt, skill, workflow, or validator miss
   as a regression candidate. Capture it in the owning eval or deterministic
   check when recurrence cost justifies a durable guard.
@@ -344,6 +346,7 @@ final = decision + reason + proof + next_blocking_condition
 | --- | --- |
 | UI change | Paired screenshots |
 | New feature or multi-step workflow | Operated video |
+| Long-running task (several goals, hours or threads) | Walkthrough video, one part per goal |
 | Anything outsiders receive (email, ad, post, page, message) | The delivered copy graded by `outbound-check` |
 | Other behavior | Command, log, check, or inspectable artifact |
 
