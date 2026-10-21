@@ -32,8 +32,8 @@ class ResponseMeasureTests(unittest.TestCase):
             "> **After:** two"
         )
         result = measure_response(markdown)
-        self.assertEqual(result.prose_nonblank_lines, 2)
-        self.assertEqual(result.prose_words, 6)
+        self.assertEqual(result.prose_nonblank_lines, 0)  # labelled Before/After lines are excluded
+        self.assertEqual(result.prose_words, 0)
         self.assertEqual(result.blockquote_spacers, 3)
         self.assertEqual(result.blockquote_spacer_words, 4)
         self.assertEqual(result.blockquote_spacer_nonblank_lines, 3)
@@ -48,8 +48,18 @@ class ResponseMeasureTests(unittest.TestCase):
             "```text\n"
             ">"
         )
-        self.assertEqual(result.prose_nonblank_lines, 7)
+        self.assertEqual(result.prose_nonblank_lines, 4)  # the closed block is excluded
         self.assertEqual(result.blockquote_spacers, 0)
+
+    def test_tables_are_excluded_and_total_is_capped(self) -> None:
+        table = "| Option | Cost |\n| --- | --- |\n| A | low |\n| B | high |"
+        result = measure_response("Pick A.\n\n" + table)
+        self.assertEqual(result.prose_words, 2)
+        self.assertEqual(result.table_rows, 4)
+        self.assertNotIn("total_words", result.violations(500, 50))
+        huge = measure_response("Pick A.\n\n" + table + "\n| C | " + "word " * 1300 + "|")
+        self.assertIn("total_words", huge.violations(500, 50))
+        self.assertEqual(measure_response("a | b").table_rows, 0)
 
     def test_closed_mermaid_block_is_excluded(self) -> None:
         markdown = "Result.\n```mermaid\nflowchart LR\nA --> B\n```"
@@ -86,7 +96,8 @@ class ResponseMeasureTests(unittest.TestCase):
         ordinary = measure_response("```less\nbody { color: red; }\n```")
         unclosed = measure_response("```mermaid\nflowchart LR\nA --> B")
         unclosed_wireframe = measure_response("```wireframe\nPROJECT\n+---+")
-        self.assertEqual(ordinary.prose_nonblank_lines, 3)
+        self.assertEqual(ordinary.prose_nonblank_lines, 0)  # closed blocks are excluded
+        self.assertEqual(ordinary.block_words, 7)
         self.assertEqual(ordinary.mermaid_blocks, 0)
         self.assertEqual(unclosed.prose_nonblank_lines, 3)
         self.assertEqual(unclosed.mermaid_blocks, 0)
@@ -126,7 +137,7 @@ class ResponseMeasureTests(unittest.TestCase):
         self.assertEqual(result.prose_nonblank_lines, 1)
 
     def test_long_unlabeled_or_fenced_proof_lines_count(self) -> None:
-        long_line = "Verified: " + " ".join(["word"] * 30)
+        long_line = "Verified: " + " ".join(["word"] * 40)
         markdown = (
             f"{long_line}\n"
             "I verified: the tests pass.\n"
@@ -134,7 +145,7 @@ class ResponseMeasureTests(unittest.TestCase):
         )
         result = measure_response(markdown)
         self.assertEqual(result.proof_lines, 0)
-        self.assertEqual(result.prose_nonblank_lines, 5)
+        self.assertEqual(result.prose_nonblank_lines, 2)  # the closed block is excluded
 
     def test_final_link_only_references_are_excluded(self) -> None:
         markdown = (
@@ -150,7 +161,7 @@ class ResponseMeasureTests(unittest.TestCase):
     def test_reference_like_sections_inside_fences_remain_prose(self) -> None:
         closed = measure_response("```text\nReferences:\n- [Proof](/tmp/p.md)\n```")
         unclosed = measure_response("```text\nReferences:\n- [Proof](/tmp/p.md)")
-        self.assertEqual(closed.prose_nonblank_lines, 4)
+        self.assertEqual(closed.prose_nonblank_lines, 0)  # closed blocks are excluded
         self.assertEqual(closed.reference_entries, 0)
         self.assertEqual(unclosed.prose_nonblank_lines, 3)
         self.assertEqual(unclosed.reference_entries, 0)
@@ -158,7 +169,7 @@ class ResponseMeasureTests(unittest.TestCase):
     def test_media_like_lines_inside_fences_remain_prose(self) -> None:
         closed = measure_response("```text\n![demo](/tmp/demo.png)\n```")
         unclosed = measure_response("```text\n![demo](/tmp/demo.png)")
-        self.assertEqual(closed.prose_nonblank_lines, 3)
+        self.assertEqual(closed.prose_nonblank_lines, 0)  # closed blocks are excluded
         self.assertEqual(closed.media_embeds, 0)
         self.assertEqual(unclosed.prose_nonblank_lines, 2)
         self.assertEqual(unclosed.media_embeds, 0)

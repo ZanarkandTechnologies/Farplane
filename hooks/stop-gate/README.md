@@ -26,7 +26,7 @@ asked for Before/After.
 A long turn (10+ minutes since the user's message, or 15+ tool calls) must
 open with one `**Context:** You asked …; I …` sentence, so a user returning
 hours later knows what the thread was doing. It is fixed, not scored, and a
-Context line of 30 words or fewer is outside the length budget.
+Context line of 40 words or fewer is outside the length budget.
 
 Before/After is a fixed rule, not a score: any answer of 40 words or more
 that reports edited files, or proposes a change, must carry `Before:` and
@@ -94,9 +94,11 @@ plain rewrite does not count), up to three format nudges a user turn. Proof
 keeps its own nudge: when no earlier format nudge asked for proof, the gate
 asks once more for the proof or video only.
 
-Short `Verified:`, `Unverified:`, `Limit:`, `Grounding:` and `Context:` lines (at most 30
-words) are outside the length budget, so adding proof does not re-trigger the
-length check.
+Everything the format check asks for is outside the length budget: labelled
+`Before:`, `After:`, `Example:`, `Context:`, `Verified:`, `Unverified:`,
+`Limit:` and `Grounding:` lines (at most 40 words), and tables and fenced
+blocks. So a format nudge never re-triggers the length check, and length nudges
+stop after two per user turn.
 
 ## Install and control
 

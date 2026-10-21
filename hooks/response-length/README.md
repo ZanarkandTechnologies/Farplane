@@ -23,12 +23,16 @@ Defaults are 500 prose words and 50 nonblank prose lines. Override with
 `FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS` and
 `FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES` using Farplane runtime configuration.
 Invalid/nonpositive settings use defaults. Missing, malformed, irrelevant, or
-empty hook input produces no feedback. Over-limit retries remain subject to the
-same caps; this gate has no retry limit and makes no network requests.
+empty hook input produces no feedback. Each nudge asks for about 90% of the
+word cap so one rewrite clears it. The Stop gate stops length nudges after two
+in one user turn; the answer then stands as it is. No network requests.
 
-Supported diagram blocks, exact media embed lines, marker-only blockquote spacers,
-labeled proof lines (`Verified:`, `Unverified:`, `Limit:`, `Grounding:`) of at
-most 30 words, and a final link-only References/Citations section are excluded by the shared
+Tables, closed fenced blocks (Mermaid, wireframe, ASCII diagrams, code), exact
+media embed lines, marker-only blockquote spacers, labelled lines (`Before:`,
+`After:`, `Example:`, `Context:`, `Verified:`, `Unverified:`, `Limit:`,
+`Grounding:`) of at most 40 words, and a final link-only References/Citations
+section are outside the prose budget. A 1,200-word ceiling on the whole answer
+stops prose hiding in tables or blocks. These are counted by the shared
 [`response accountant`](../../bin/core/farplane_response.py). Inspect a draft with
 `farplane response check --stdin --json`.
 

@@ -21,6 +21,7 @@ if str(CORE_DIR) not in sys.path:
 from farplane_response import (  # noqa: E402
     DEFAULT_MAX_PROSE_LINES,
     DEFAULT_MAX_PROSE_WORDS,
+    MAX_TOTAL_WORDS,
     measure_response,
 )
 from runtime_config import load_runtime_env  # noqa: E402
@@ -32,6 +33,10 @@ from hook_delivery import report_gate_block  # noqa: E402
 ENV_MAX_PROSE_WORDS = "FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS"
 ENV_MAX_PROSE_LINES = "FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES"
 FORMAT_MARKER = "<!-- farplane-response-length:v2 -->"
+# After this many length nudges in one user turn the answer stands as it is:
+# repeated trimming loses content and fights the format check.
+MAX_LENGTH_NUDGES = 2
+LENGTH_CAPPED_KEY = "farplane_length_capped"
 
 
 def configured_max_prose_words(env: dict[str, str] | None = None) -> int:
@@ -98,12 +103,17 @@ def gate_response(
     message = payload.get("last_assistant_message")
     if not isinstance(message, str) or not message.strip():
         return None
+    # The Stop gate sets this after MAX_LENGTH_NUDGES length nudges this turn.
+    if payload.get(LENGTH_CAPPED_KEY):
+        return None
 
     measure = measure_response(message)
     words_over = measure.prose_words > max_prose_words
     lines_over = measure.prose_nonblank_lines > max_prose_lines
-    if not words_over and not lines_over:
+    total_over = measure.total_words > MAX_TOTAL_WORDS
+    if not words_over and not lines_over and not total_over:
         return None
+    target = int(max_prose_words * 0.9)
 
     retry_line = (
         "- **Retry:** The previous compression attempt is still over the ceiling.\n"
@@ -113,20 +123,22 @@ def gate_response(
     reason = (
         f"#### Response length\n\n{FORMAT_MARKER}\n\n"
         f"{retry_line}"
-        f"- **Limit:** Rewrite the user-facing final answer to at most "
-        f"{max_prose_words} prose words (current: {measure.prose_words}) and "
-        f"at most {max_prose_lines} nonblank prose lines "
-        f"(current: {measure.prose_nonblank_lines}).\n"
+        f"- **Limit:** Rewrite the user-facing final answer to about {target} prose "
+        f"words, at most {max_prose_words} (current: {measure.prose_words}), at most "
+        f"{max_prose_lines} nonblank prose lines (current: {measure.prose_nonblank_lines}), "
+        f"and at most {MAX_TOTAL_WORDS} words in all (current: {measure.total_words}). "
+        "Cut once, decisively.\n"
         "- **Keep:** Preserve only the outcome, decisive evidence, required action "
         "or blocker, verification pointers, and safety-critical qualifications.\n"
         "- **Remove:** Process narration, repeated context, generic advice, and "
         "unasked follow-up offers.\n"
         "- **Prefer:** Links to durable artifacts over copied detail.\n"
-        "- **Budget exclusions:** Closed Mermaid and `wireframe` blocks, exact "
-        "image/video embed lines, marker-only Markdown blockquote spacer lines, "
-        "`Verified:`/`Unverified:`/`Limit:`/`Grounding:` lines of at most 30 "
-        "words, and a final link-only References/Citations section are outside the prose "
-        "budget, but must not introduce new topic breadth.\n"
+        "- **Budget exclusions:** Tables, closed fenced blocks (Mermaid, diagrams, "
+        "code), exact image/video embed lines, marker-only blockquote spacer lines, "
+        "labelled `Before:`/`After:`/`Example:`/`Context:`/`Verified:`/`Unverified:`/"
+        "`Limit:`/`Grounding:` lines of at most 40 words, and a final link-only "
+        "References/Citations section are outside the prose budget. Keep tables and "
+        "diagrams; cut prose.\n"
         "- **Return:** The revised final answer only; do not mention this gate."
     )
     return {"decision": "block", "reason": reason}

@@ -202,6 +202,28 @@ def claude_entry(row: Mapping[str, object]) -> tuple[str, str] | None:
     return None
 
 
+def length_nudges_this_turn(path: str) -> int:
+    """Length nudges since the latest real user message (Claude or Codex)."""
+    lines, _ = bounded_rollout_lines(Path(path))
+    count = 0
+    for line in reversed(lines):
+        row = json.loads(line)
+        if not isinstance(row, dict):
+            continue
+        entry = claude_entry(row)
+        if entry and entry[0] == "user":
+            break
+        item = row.get("payload")
+        if (isinstance(item, dict) and item.get("type") == "message" and item.get("role") == "user"):
+            meta = item.get("internal_chat_message_metadata_passthrough")
+            kinds = meta.get("content_item_kinds", []) if isinstance(meta, dict) else []
+            if isinstance(kinds, list) and "user.text" in kinds:
+                break
+        if LENGTH_MARKER in line:
+            count += 1
+    return count
+
+
 def last_turn_answer(path: str) -> str:
     """The turn's last assistant text, for a stop whose final block was a tool
     call (the desktop wrap_up), which leaves last_assistant_message empty."""

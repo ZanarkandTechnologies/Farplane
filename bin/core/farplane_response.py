@@ -30,11 +30,16 @@ _BLOCKQUOTE_SPACER = re.compile(r"^ {0,3}(?:>\s*)+$")
 # A short labeled proof or context line cites evidence or recalls the task; long ones stay prose so the label
 # cannot hide a paragraph from the budget.
 _PROOF_LINE = re.compile(
-    r"^ {0,3}(?:[-*+]\s+)?[*_]{0,2}(?:verified|unverified|limit|grounding|context)"
+    r"^ {0,3}(?:>\s*)?(?:[-*+]\s+)?[*_]{0,2}"
+    r"(?:verified|unverified|limit|grounding|context|before|after|example)"
     r"[*_]{0,2}\s*:[*_]{0,2}\s+\S",
     re.IGNORECASE,
 )
-MAX_PROOF_LINE_WORDS = 30
+MAX_PROOF_LINE_WORDS = 40
+# Tables and fenced blocks sit outside the prose budget; this ceiling on the
+# whole answer stops prose from hiding in them.
+MAX_TOTAL_WORDS = 1200
+_TABLE_ROW = re.compile(r"^ {0,3}\|.*\|\s*$")
 _MEDIA_EXTENSIONS = (
     ".avif",
     ".gif",
@@ -72,9 +77,14 @@ class ResponseMeasure:
     reference_entries: int
     reference_words: int
     reference_nonblank_lines: int
+    table_rows: int = 0
+    table_words: int = 0
+    block_words: int = 0
 
     def violations(self, max_prose_words: int, max_prose_lines: int) -> list[str]:
         violations: list[str] = []
+        if self.total_words > MAX_TOTAL_WORDS:
+            violations.append("total_words")
         if self.prose_words > max_prose_words:
             violations.append("prose_words")
         if self.prose_nonblank_lines > max_prose_lines:
@@ -100,6 +110,9 @@ class ResponseMeasure:
                 "wireframe_blocks": self.wireframe_blocks,
                 "wireframe_words": self.wireframe_words,
                 "wireframe_nonblank_lines": self.wireframe_nonblank_lines,
+                "table_rows": self.table_rows,
+                "table_words": self.table_words,
+                "block_words": self.block_words,
                 "media_embeds": self.media_embeds,
                 "media_words": self.media_words,
                 "media_nonblank_lines": self.media_nonblank_lines,
@@ -208,6 +221,12 @@ def measure_response(markdown: str) -> ResponseMeasure:
     wireframe_indices, wireframe_blocks = _closed_fence_indices(
         lines, _WIREFRAME_FENCE_OPEN
     )
+    block_indices, _ = _closed_fence_indices(lines, _FENCE_OPEN_ANY)
+    block_indices -= mermaid_indices | wireframe_indices
+    rows = {index for index, line in enumerate(lines)
+            if index not in fence_indices and _TABLE_ROW.fullmatch(line)}
+    # A table is at least a header and a separator row.
+    table_indices = {index for index in rows if index - 1 in rows or index + 1 in rows}
     blockquote_spacer_indices = {
         index
         for index, line in enumerate(lines)
@@ -244,6 +263,8 @@ def measure_response(markdown: str) -> ResponseMeasure:
         - blockquote_spacer_indices
         - media_indices
         - proof_indices
+        - block_indices
+        - table_indices
     )
 
     def selected(indices: set[int]) -> list[str]:
@@ -278,6 +299,9 @@ def measure_response(markdown: str) -> ResponseMeasure:
         reference_entries=reference_entries,
         reference_words=_word_count(reference_lines),
         reference_nonblank_lines=_nonblank_count(reference_lines),
+        table_rows=len(table_indices),
+        table_words=_word_count(selected(table_indices)),
+        block_words=_word_count(selected(block_indices)),
     )
 
 

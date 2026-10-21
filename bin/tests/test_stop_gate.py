@@ -14,7 +14,8 @@ ROOT = Path(__file__).resolve().parents[2]
 for directory in (ROOT / "hooks/shared", ROOT / "hooks/continuation", ROOT / "bin/core"):
     sys.path.insert(0, str(directory))
 import continuation  # noqa: E402
-import response_format  # noqa: E402
+import response_format
+import final_response_gate  # noqa: E402
 
 spec = importlib.util.spec_from_file_location("stop_gate", ROOT / "hooks/stop-gate/stop_gate.py")
 stop_gate = importlib.util.module_from_spec(spec)
@@ -107,6 +108,19 @@ class StopGateTests(unittest.TestCase):
                        "Done.\n- **Unverified:** no display to record on this host."):
             with self.subTest(final=proved):
                 self.assertIsNone(self.evaluate(rows, proved, Client(feature=0.9)))
+
+    def test_length_nudges_stop_after_two(self):
+        long = "word " * 600
+        rows = [human("Explain."), assistant(long), hook(final_response_gate.gate_response(
+            {"hook_event_name": "Stop", "last_assistant_message": long}, 500, 50)["reason"])]
+        self.path.write_text("\n".join(json.dumps(r) for r in rows))
+        self.assertEqual(continuation.length_nudges_this_turn(str(self.path)), 1)
+        rows += [assistant(long), rows[-1]]
+        self.path.write_text("\n".join(json.dumps(r) for r in rows))
+        self.assertEqual(continuation.length_nudges_this_turn(str(self.path)), 2)
+        capped = {"hook_event_name": "Stop", "last_assistant_message": long,
+                  final_response_gate.LENGTH_CAPPED_KEY: True}
+        self.assertIsNone(final_response_gate.gate_response(capped, 500, 50))
 
     def test_fixable_blocker_gets_a_fix_it_nudge(self):
         result = self.evaluate([human("Run the eval.")], "Blocked: the dev server is not running.",

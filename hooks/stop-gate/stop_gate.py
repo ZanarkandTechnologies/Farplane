@@ -16,14 +16,15 @@ ROOT = Path(__file__).resolve().parents[2]
 for directory in (ROOT / "hooks" / "shared", ROOT / "hooks" / "continuation", ROOT / "bin" / "core"):
     sys.path.insert(0, str(directory))
 
-from continuation import evaluate_stop, last_turn_answer  # noqa: E402
+from continuation import evaluate_stop, last_turn_answer, length_nudges_this_turn  # noqa: E402
 from runtime_config import load_runtime_env  # noqa: E402
 from hook_delivery import report_gate_block  # noqa: E402
 from skill_suggestion import _provider_config  # noqa: E402
 
 sys.path.insert(0, str(ROOT / "hooks" / "response-length"))
 from final_response_gate import (  # noqa: E402
-    configured_max_prose_lines, configured_max_prose_words, gate_response,
+    LENGTH_CAPPED_KEY, MAX_LENGTH_NUDGES, configured_max_prose_lines,
+    configured_max_prose_words, gate_response,
 )
 import response_format  # noqa: E402
 
@@ -66,6 +67,12 @@ def run_gate(payload: dict, *, credential_child: bool = False) -> dict | None:
     final, path = payload.get("last_assistant_message"), payload.get("transcript_path")
     if isinstance(path, str) and not (isinstance(final, str) and final.strip()):
         payload = {**payload, "last_assistant_message": last_turn_answer(path)}
+    if isinstance(path, str):
+        try:
+            if length_nudges_this_turn(path) >= MAX_LENGTH_NUDGES:
+                payload = {**payload, LENGTH_CAPPED_KEY: True}
+        except (OSError, ValueError):
+            pass
     env = load_runtime_env()
     checks = configured_checks(env)
     if "length" in checks and not credential_child:

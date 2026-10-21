@@ -42,11 +42,11 @@ class FinalResponseGateTests(unittest.TestCase):
         self.assertIn("\n- **Keep:**", result["reason"])
         self.assertIn("\n- **Remove:**", result["reason"])
         self.assertIn("\n- **Return:**", result["reason"])
-        self.assertIn("at most 3 prose words", result["reason"])
+        self.assertIn("at most 3 (current: 4)", result["reason"])
         self.assertIn("current: 4", result["reason"])
         self.assertIn("safety-critical", result["reason"])
-        self.assertIn("marker-only Markdown blockquote spacer lines", result["reason"])
-        self.assertIn("`wireframe` blocks", result["reason"])
+        self.assertIn("marker-only blockquote spacer lines", result["reason"])
+        self.assertIn("Tables, closed fenced blocks", result["reason"])
         self.assertNotIn("truncate", result["reason"].lower())
 
     def test_over_line_cap_requests_compression(self) -> None:
