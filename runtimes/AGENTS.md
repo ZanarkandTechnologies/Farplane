@@ -145,6 +145,9 @@ serious_work = ground -> decide -> plan? -> execute -> verify -> review?
   only when evidence or risk justifies it. Record the result and next inspection
   point. Use independent QA or review at the owning workflow's proof boundary
   when self-review cannot credibly prove the claim.
+- Before a PR is marked ready or merged, put its net before/after metrics per
+  goal and links to the evidence in the PR description; comments are working
+  notes, the description is the record.
 - Treat a confirmed, material agent, prompt, skill, workflow, or validator miss
   as a regression candidate. Capture it in the owning eval or deterministic
   check when recurrence cost justifies a durable guard.
