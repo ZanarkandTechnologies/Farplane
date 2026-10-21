@@ -98,9 +98,15 @@ returns: updated skill, validation evidence, and review result or blocker
   eval checks; when an eval changes, run `farplane lint evals --changed` before
   behavior proof. Never hand-edit generated state. The full upkeep command
   set is in [harness maintenance](harness-maintenance.md#maintenance-command-set).
+  When the change applies accepted level-up lines (an intelligest proposal or
+  a Content-panel Add), append one row per line to `skills/levelups.jsonl` in
+  the same commit: `{at, skill, stat, detail, source, commit}`, one shared `at`
+  for the batch, `stat` a name of six words at most, `commit` null until known.
+  The bunker shows each new batch once as a LEVEL UP card.
 
   Assert:
   - Template versions match actual structure.
+  - Every applied level-up line has its ledger row.
 - [ ] **N8 — Close with independent contract review.**
   `validated package -> reviewed maintenance receipt | revision`
 
