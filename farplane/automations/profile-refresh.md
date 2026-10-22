@@ -39,3 +39,5 @@ Write policy:
 - If the evidence doesn't justify a real profile change, keep the profile text intact and only refresh its date, plus a short evidence note.
 
 Finish with the profile path, whether it changed, and a one-sentence evidence summary.
+
+Close: run `farplane/automations/steps/close-run.md`.

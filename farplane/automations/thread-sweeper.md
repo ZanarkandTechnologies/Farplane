@@ -31,6 +31,30 @@ max_nudges = 2
 state = `.farplane/thread-sweeper/state.json`
 report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run)
 
+0. **Clear finished automation runs.** Each run should archive itself
+   (`farplane/automations/steps/close-run.md`); this pass catches the ones
+   that failed or could not. For each task from `list_scheduled_tasks`, call
+   `list_task_runs` (limit 20) and take runs that are not archived and not
+   this run. Skip any session whose `get_session` group is `Automations: needs
+   you`.
+   - `succeeded` or `failed`, last activity over 15 minutes ago, and its last
+     turn (`list_events`, limit 3) has no line starting `Waiting on Kenji:`:
+     `archive_session` with reason `finished <task> run`. When the task's two
+     newest runs both `failed`, archive the older one and instead
+     `move_sessions` the newest into `Automations: needs you` (create the
+     group if missing) with the reason `<task> failed twice: <error>`, and add
+     it to this run's Kenji list.
+   - a last turn with `Waiting on Kenji:` outside that group: `move_sessions`
+     it into `Automations: needs you`; it is the run's own question.
+   - every run in `Automations: needs you`: add it to the Kenji list with its
+     `Waiting on Kenji:` question, unless `state` shows that question was
+     already told; track it in `state` like a `waiting` thread. Kenji archives
+     these himself once answered.
+   - `running` with no activity for 60 minutes: leave it, and add it to the
+     Kenji list as `<task> run stuck since <time>; it blocks the schedule:
+     open it and answer or stop it`, once per session.
+   If an archive or move is refused, record `refused` and go on.
+
 1. **List candidates.** Call `list_sessions` (session management tools) with
    limit 100. Keep sessions that are not archived, not running, and whose
    `lastActivityAt` is between `lookback` and `idle_after` ago. Drop this run's
@@ -103,8 +127,9 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    then a table `thread | idle h | verdict | action | reason`, with each thread
    linked by its `link`, then the counts.
 
-Boundaries: never archive, delete, stop, rename, regroup, or mark sessions;
-never change their model, effort, or permissions; never do a thread's work
+Boundaries: archive or regroup only scheduled-task runs, as in step 0; never
+archive, delete, stop, rename, regroup, or mark any other session; never
+change their model, effort, or permissions; never do a thread's work
 yourself; nudge only threads inside `lookback` and message only Kenji on
 Telegram.
 Quote at most short fragments of transcripts and never copy secrets from them.
@@ -115,8 +140,12 @@ Final response:
 - Counts: candidates, skipped unchanged, done, waiting, stopped, nudged,
   escalated, Telegram sent or not (with the delivery receipt).
 - The report path.
-- Receipt: no session archived, stopped, or changed; no work done on a
-  thread's behalf.
+- Automation runs: archived, filed in `Automations: needs you`, stuck,
+  refused.
+- Receipt: no working thread archived, stopped, or changed; no work done on
+  a thread's behalf.
+
+Close: run `farplane/automations/steps/close-run.md`.
 
 Config source:
 farplane/automations/thread-sweeper.md id="farplane-thread-sweeper"

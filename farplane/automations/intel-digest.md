@@ -35,3 +35,5 @@ Claude runtime notes:
 - Never send messages, publish, spend, or change settings.
 
 End with both records' final responses: the bookmarks read, who each could help and the inbox path; then Feed Scout's summary, candidates and report path.
+
+Close: run `farplane/automations/steps/close-run.md`.

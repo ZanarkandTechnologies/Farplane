@@ -177,5 +177,7 @@ Add two sections to the same company report:
 - Source gaps and blockers without hidden partial success.
 - `github_writes: <n comments | none>`.
 
+Close: run `farplane/automations/steps/close-run.md`.
+
 Config source:
 farplane/automations/report-gen.md id="farplane-weekly-interval"

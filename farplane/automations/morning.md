@@ -67,3 +67,5 @@ Runtime notes (they don't change the records' rules):
 - Credentialed commands go through `farplane run -- <command>`; never print secrets.
 - Wiki: anything that is leverage for Kenji's life, career included. It stays local, in the local-only memory repo (`~/.farplane/memory`), never in a pushable repo. No health details.
 - Never send messages, publish, spend (except step 4b within its budget), or change settings. Other people's actions and unclear ownership stay proposals.
+
+Close: run `farplane/automations/steps/close-run.md`.

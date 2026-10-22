@@ -78,5 +78,7 @@ Final response:
 - Include the no-mutation receipt: no skill, prompt, policy, issue, Goal,
   automation, source-history, or execution changes.
 
+Close: run `farplane/automations/steps/close-run.md`.
+
 Config source:
 farplane/automations/session-friction-retro.md id="farplane-weekly-thread-friction-audit"

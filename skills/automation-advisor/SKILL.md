@@ -95,6 +95,10 @@ fails: logs in tracked config; provider access inside pm skills; generated
   - [ ] Keep the Zanarkand source template and version in automation front matter.
   - [ ] Make provider access and effects automation-owned. Make skill inputs and
         its single JSON output exact.
+  - [ ] End every Claude record with `Close: run
+        farplane/automations/steps/close-run.md`: a run delivers to its home,
+        then archives its own thread; one needing Kenji stays open in
+        `Automations: needs you`.
   - [ ] Restrict Company OS actions to authorized existing issues; forbid task
         admission, strategy invention, broad promotion, and execution.
 - [ ] 5. Activate when the accepted task includes live integration.
