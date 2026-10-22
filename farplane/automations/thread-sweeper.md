@@ -35,7 +35,10 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    (`farplane/automations/steps/close-run.md`); this pass catches the ones
    that failed or could not. For each task from `list_scheduled_tasks`, call
    `list_task_runs` (limit 20) and take runs that are not archived and not
-   this run. Skip any session whose `get_session` group is `Automations: needs
+   this run. Older runs fall outside that limit, so also take every
+   unarchived session from `list_sessions` (limit 100) whose `get_session`
+   shows a `scheduledTaskId`; it is `running` when `isRunning`, otherwise
+   finished. Skip any session whose `get_session` group is `Automations: needs
    you`.
    - `succeeded` or `failed`, last activity over 15 minutes ago, and its last
      turn (`list_events`, limit 3) has no line starting `Waiting on Kenji:`:
