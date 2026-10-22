@@ -13,7 +13,9 @@ target:
 schedule:
   type: weekly
   timezone: local
-  cron: "0 9 * * 1"
+  days:
+  - Mon
+  time: "09:00"
 ---
 Review this Mac's disk and app usage once a week and propose what Kenji can
 delete. Never delete, move, trash, empty or clean anything yourself. On 22 Oct

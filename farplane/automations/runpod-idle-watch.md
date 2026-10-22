@@ -11,9 +11,10 @@ runtime_task: farplane-runpod-idle-watch
 target:
   workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 schedule:
-  type: interval
+  type: active_hours_interval
   timezone: local
-  cron: "0 9,21 * * *"
+  active_hours: "09:00-21:00"
+  interval_minutes: 720
 ---
 Stop RunPod GPU pods that sit idle, and tell Kenji about anything on RunPod
 that bills while nothing runs. Idle GPUs, stopped-pod disks and an unused
