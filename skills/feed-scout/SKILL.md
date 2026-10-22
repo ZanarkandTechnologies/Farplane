@@ -21,6 +21,13 @@ mode** takes one external video, article, repository, or thread the operator
 hands over and returns an adopt/adapt/reject/defer verdict against what
 Farplane already has.
 
+**Customer subscriptions.** An entity with `kind: customer` or
+`kind: prospect` in the bindings is an account the operator follows. Each new
+dated event on it (a hire, launch, funding round, post, or release) becomes a
+`customer_event` in the report: entity, event, source link, date, and its
+canonical key. The running automation opens one `prospect` thread per new
+event; Feed Scout itself still starts nothing.
+
 Feed Scout creates no tickets, issues, or tasks and starts no work: every
 opportunity, recovery item, and adopted feature stays a candidate in the report
 for the operator to pick. It is not a crawler platform or daemon. Fetched
@@ -105,7 +112,8 @@ returns: report and feed refs, Scout Brief receipt, candidates and verdicts, gap
   Reward, proof, stop, and authority; keep omissions as report findings. An
   evidenced existing failure with a known fix is a `recovery_candidate`, up to
   the cap. Source additions go to proposal review, entity and thesis deltas to
-  promotion review.
+  promotion review. List every new `customer_event` separately, deduped by
+  canonical key against the ledger, so the automation can hand each one on.
 
   Assert:
   - No ticket, issue, Notion task, Goal, worker, publication, outreach, or
@@ -132,7 +140,7 @@ returns: report and feed refs, Scout Brief receipt, candidates and verdicts, gap
 ## Output
 
 Return validated feed, report, and ledger refs, one Scout Brief update receipt,
-ranked complete candidates with verdicts (`candidate`, `recovery_candidate`,
+new `customer_events`, ranked complete candidates with verdicts (`candidate`, `recovery_candidate`,
 `adopt`, `adapt`, `reject`, `defer`, or a rejection reason), source gaps, and a
 no-execution receipt. [The data model](references/data-model.md) holds field
 schemas. Never return raw transcript dumps, live spend, or Notion writes.

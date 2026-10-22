@@ -1,6 +1,6 @@
 ---
 name: approach
-description: "Use for \"how should I approach them\", \"what should we offer\", \"write the outreach\" or \"shape a solution for them\": pick one approach and contribution or offer, return an unsent message."
+description: "Use for \"how should I approach them\", \"write the outreach\", \"shape a solution for them\" or \"write a solution brief\": one chosen approach with an unsent message, or a solution brief with its proof model."
 source: local
 department: sales
 template_uses:
@@ -19,6 +19,11 @@ asks how to approach them, what to offer, or what to send. It compares the
 approaches the evidence supports, picks one, builds the contribution or offer
 behind it, and drafts one unsent message. One pass returns one approach packet.
 
+**Brief mode** shapes a solution for a client or internal complaint with no
+outreach: N1 binds the complaint, its owner and the evidence instead of a
+person and signal, N2 runs with its proof model, and the pass returns the
+solution brief; N3 to N5 are skipped.
+
 It does not find or research targets (`prospect`), price a proposal
 (`proposal-pricing`), polish final copy (`copywriting`), or send
 anything. It uses an existing problem frame when the operator supplies one.
@@ -26,12 +31,12 @@ anything. It uses an existing problem frame when the operator supplies one.
 ## Skill Signature
 
 ```text
-approach(target_ref, signal_ref, relationship_class?, accepted_usecase_or_proof?, channel?, budget?)
+approach(mode?: outreach | brief, target_ref, signal_ref, relationship_class?, accepted_usecase_or_proof?, channel?, budget?)
   -> approach_packet { approach frontier + chosen approach + contribution | offer + unsent message + learning contract } + next_owner
 reads: the OpportunityCase or research, entity bodies, proof packages, frame output, supplied relationship context
 does: frames the problem when an offer needs it, compares approaches on four axes, builds the contribution or offer, drafts the message
 writes: the caller's artifact, else .farplane/approach/reports/YYYY-MM-DD-<person>-<slug>.md; inline for answer-only requests
-returns: the approach packet, readiness send | revise | stop, the approval still needed, and the next owner
+returns: the approach packet (or, in brief mode, the solution brief and proof model), readiness send | revise | stop, the approval still needed, and the next owner
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -46,7 +51,8 @@ returns: the approach packet, readiness send | revise | stop, the approval still
   the channel, and the effort cap. Default to micro effort, a five-minute
   recipient budget, and zero spend. With no research or no traceable signal,
   stop with a `prospect` handoff naming the missing inputs; draft no
-  placeholder message.
+  placeholder message. In brief mode, bind the complaint in the owner's
+  words, who owns the decision, and the evidence supplied; skip to N2.
 
   Assert:
   - Career prestige never stands in for a signal or a problem.
@@ -63,13 +69,17 @@ returns: the approach packet, readiness send | revise | stop, the approval still
   deferred V2, non-goals, risks, and, for system-heavy work, decision rights
   and permissions. An operational MVP gets a walkthrough (inputs, steps,
   mechanism, outputs, how actuals feed the next run) covering an ordinary
-  case, a binding constraint, and changed demand.
+  case, a binding constraint, and changed demand. Close with the proof model:
+  the success signal, guard metrics, anti-metrics, and the observation that
+  would disprove V1, written as metric cards per
+  [goal-advisor metrics](../goal-advisor/references/metrics.md).
 
   Example: `three mining problems -> one lot-allocation loop beside ERP and
   mine planning; cases: ordinary quarter, labour shortage, premium spike`
 
   Assert:
   - The requested artifact is evidence, not automatically the V1.
+  - A shaped solution names what would prove it wrong.
   - A small tool stays the V1 when the facts make it sufficient.
 - [ ] **N3 — Compare the approaches the evidence supports.**
   `case + resources -> approach frontier + one selected approach`
@@ -160,6 +170,7 @@ returns: the approach packet, readiness send | revise | stop, the approval still
 ```yaml
 target: <person, company, relationship class, dated signal>
 frame: <frame ref or skipped; V1 / V2 / non-goals / walkthrough when shaped>
+proof_model: <success signal, guard metrics, anti-metrics, disproving observation; when shaped>
 frontier: <option -> movement, relationship value, ask burden, risk; why each lost>
 chosen: <approach>
 contribution_or_offer: <artifact brief + effort caps | offer + proof and limit>

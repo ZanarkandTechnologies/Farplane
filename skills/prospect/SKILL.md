@@ -1,6 +1,6 @@
 ---
 name: prospect
-description: "Use for \"prep me for this call\", \"who should we sell to\", \"find me leads\" or \"look into this company\": research the people and companies, qualify them on a sourced trigger, return one OpportunityCase."
+description: "Use for \"prep me for this call\", \"find me leads\", \"look into this company\" or \"research this customer event\": qualify people and companies on a sourced trigger, return one OpportunityCase or a ranked lead list."
 source: local
 department: sales
 template_uses:
@@ -16,7 +16,13 @@ allowed-tools: Read, Glob, Grep, Bash, web_search
 Use this when the operator names an industry, a company, or a person or call
 and wants to know whom to approach, why them, why now, and how. It finds and
 qualifies targets, grounds the people who pass, and matches the case to proof
-the agency already has. One pass returns one `OpportunityCase`.
+the agency already has. One pass returns one `OpportunityCase`, or a ranked
+lead list when the operator asks for leads in bulk ("find me 20 leads").
+
+An `event` intake is one new dated event on a customer or prospect the
+operator subscribes to (a hire, launch, funding round, post, or release), handed
+over by the Feed Scout automation as its own thread. It researches what the
+event changes for that account and returns the case for that one entity.
 
 It does not write the message or offer (`approach`), price a proposal
 (`proposal-pricing`), run a market-wide competitor study (`research` market),
@@ -26,12 +32,14 @@ Nothing is sent, enriched with paid data, or written to a CRM here.
 ## Skill Signature
 
 ```text
-prospect(target: industry | company | person | call, filter?, geography?, depth?: quick | deep, budget?)
-  -> opportunity_case { relationship map + signal cards + proof class + rejection ledger + gaps } + next_owner
+prospect(target: industry | company | person | call | event, filter?, geography?, depth?: quick | deep,
+         output?: case | leads, count?, budget?)
+  -> opportunity_case { relationship map + signal cards + proof class + rejection ledger + gaps + call_plan? }
+     | lead_list { ranked rows + rejection ledger } ; next_owner
 reads: .farplane/entities/*.md, earlier cases, supplied links and notes, public sources, an operator-authorized read-only session
 does: binds the intake, scouts and qualifies on why-them/why-now, grounds shortlisted people, matches proof
 writes: the caller's artifact, else .farplane/prospect/reports/YYYY-MM-DD-<slug>.md; inline for answer-only requests
-returns: the OpportunityCase, decision approach | research_more | stop, and the next owner
+returns: the OpportunityCase or lead list, decision approach | research_more | stop, and the next owner
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -40,7 +48,9 @@ returns: the OpportunityCase, decision approach | research_more | stop, and the 
 - [ ] **N1 — Bind the intake and read what is already known.**
   `target -> intake type + boundary + local state | archetypes-only | one narrow question`
 
-  Rule: Classify the intake as `industry`, `company`, `person`, or `call`.
+  Rule: Classify the intake as `industry`, `company`, `person`, `call`, or
+  `event`; an event binds its entity, the event, its source link and date, and
+  skips discovery (N2) to qualify that one entity.
   Record the objective, value-chain boundary, geography, exclusions, and
   evidence budget. Read `.farplane/entities/*.md` and earlier cases first and
   reuse their IDs. With no geography and no safe default, map archetypes only
@@ -85,6 +95,12 @@ returns: the OpportunityCase, decision approach | research_more | stop, and the 
   inbound/referral). A persona-only match with no timely trigger goes to the
   rejection ledger.
 
+  With `output: leads`, stop after this node and return the ranked list:
+  one row per shortlisted candidate with relationship class, why them, why now,
+  the source link and date, and the filter field it ranked on, up to `count`
+  (default 20), plus the rejection ledger. Ground people (N4) only for rows
+  the operator then picks.
+
   Example: `founder fits the persona, no post, hire, launch, or referral in
   the last quarter -> rejected near-miss, "no trigger"`
 
@@ -126,7 +142,9 @@ returns: the OpportunityCase, decision approach | research_more | stop, and the 
 - [ ] **N6 — Return the OpportunityCase and the next owner.**
   `case -> opportunity_case + decision + next_owner`
 
-  Rule: Render [the template](templates/opportunity-case.md) and decide
+  Rule: For a `call` intake, add the call plan: warm openers tied to the
+  Signal Card, two or three useful topics, risks to avoid, follow-up hooks,
+  and the recommended first move. Render [the template](templates/opportunity-case.md) and decide
   `approach`, `research_more`, or `stop`. Hand `approach` one selected target,
   its relationship class, Signal Card, and proof class. Send durable sourced
   facts to `manage-wiki` with the operator's intent. Anything external (send,
@@ -165,13 +183,16 @@ returns: the OpportunityCase, decision approach | research_more | stop, and the 
 ## Output
 
 ```yaml
-intake: industry | company | person | call
+intake: industry | company | person | call | event
+output: case | leads
 boundary: <objective, value chain, geography, exclusions>
 relationship_map: <entity -> sell_to | partner_or_jv | channel | data_or_delivery | learn_from | uncertain, why them, why now, source>
 signal_cards: <per shortlisted person: paragraph + <=3 rows per section with falsifiers>
 rejection_ledger: <candidate -> failed or unknown field>
 proof: existing_skill | adapted_variant | new_usecase_experiment | report_or_analysis | no_proof_yet
 gaps: <research gaps, unsearched sources, correction questions>
+call_plan: <call intake only: openers, topics, risks, follow-up hooks, first move>
+lead_list: <leads output only: ranked rows with class, why them, why now, source and date>
 decision: approach | research_more | stop
 next_owner: approach | research | manage-wiki | none
 ```

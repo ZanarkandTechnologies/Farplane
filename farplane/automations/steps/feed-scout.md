@@ -26,6 +26,7 @@ synthesis in place—do not append daily snapshots or a monthly timeline. Report
 most one direct recovery candidate, only for an evidenced existing failure with
 known fix, KPI/guard, proof, and no experiment debt; never create the issue.
 Opportunities remain report candidates for the operator to pick. Create and execute no tickets.
+Customer events: for each new `customer_event` in the report (an event on an entity with `kind: customer` or `kind: prospect`), open its own research thread on the office queue: `.agent-office/bin/office-queue add --floor <floor> --routine customer-event-<canonical key> --title "Research <entity>: <event>"`, with the brief on stdin: "Use $prospect with intake `event`: <entity>, <event>, <source link>, <date>. Return the OpportunityCase; send nothing." The routine id keeps a rerun from opening the same event twice. These queue tasks are the one exception to creating no tasks; never file issues for them.
 Skip what the operator stopped: before proposing for a floor, run `.agent-office/bin/office-queue denied --floor <floor>` (from the Farplane checkout) and drop any proposal whose key it lists. A proposal's key is its `Proposal: <key>` line, else its title in lower-case words joined by hyphens; write a `Proposal:` line on anything you file.
 
 Params:
@@ -43,6 +44,7 @@ Final response:
 - List candidate interventions and their admission result:
   `recovery_candidate`, `candidate`, `source_gap`, `blocked_by_gate`, or `not_actionable`.
 - Name source gaps, external side-effect gates, and next owner.
+- List each customer event and the queue task id it opened, or why none.
 - Include the no-execution receipt.
 
 Config source:
