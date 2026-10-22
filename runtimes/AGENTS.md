@@ -52,7 +52,10 @@ template_version: 0.3.18
   standing permissions and the spend cap from the operator profile
   (`~/.farplane/USER.md`) and log each spend there. Platform safety limits on
   passwords, account creation, CAPTCHAs, and OAuth grants still apply; surface
-  those before the run, not during it.
+  those before the run, not during it. For a setup that needs them, drive the
+  browser yourself: open every page it needs in tabs at once, do every step
+  you can, and stop only at the exact field or click only the user can do,
+  naming it. Never hand the user a checklist for the whole setup.
 - Choose by expected value in money: the value of reaching the user's goals
   sooner (the operator profile's `Now` list, weighed by its `Values`),
   including the user's hours, minus spend and expected loss (likelihood times
