@@ -234,9 +234,9 @@ def scan_temp() -> tuple[dict[str, int], list[dict], dict]:
 
 
 def find_creator(pattern: str) -> list[str]:
-    """Search code for the literal prefix of a temp-folder name."""
+    """Search code for the prefix of a temp-folder name as written: opening a string literal ('snap-')."""
     prefix = pattern.rstrip("*")
-    if len(prefix.strip("-_.")) < 5 or prefix.lower().startswith(("tmp", "temp", "com.", "org.")):
+    if len(prefix.strip("-_.")) < 3 or prefix.lower().startswith(("tmp", "temp", "com.", "org.")):
         return []
     roots = [p for p in (HOME / "Eddison", HOME / "Zanarkand Technologies/projects", HOME / ".claude/skills")
              if p.exists()]
@@ -244,9 +244,9 @@ def find_creator(pattern: str) -> list[str]:
         return []
     code = ["*.mjs", "*.js", "*.cjs", "*.ts", "*.tsx", "*.py", "*.sh", "*.go", "*.rs", "*.swift"]
     globs = [a for g in code for a in ("-g", g)]
-    out = run(["rg", "-l", "-F", "--max-count", "1", *globs, "-g", "!node_modules", "-g", "!*.min.js",
-               "-g", "!dist", "-g", "!.farplane", prefix, *map(str, roots)], timeout=120)
-    hits = [l for l in out.splitlines() if l.strip()]
+    out = run(["rg", "-l", "--max-count", "1", *globs, "-g", "!node_modules", "-g", "!*.min.js",
+               "-g", "!dist", "-g", "!.farplane", "-e", "['\"`]" + re.escape(prefix), *map(str, roots)], timeout=120)
+    hits = [l for l in out.splitlines() if l.strip() and Path(l).resolve() != Path(__file__).resolve()]
     hits.sort(key=lambda p: (".test." in p or "/tests/" in p, len(p)))
     return hits[:3]
 
