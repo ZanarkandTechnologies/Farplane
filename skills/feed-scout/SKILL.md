@@ -21,9 +21,10 @@ mode** takes one external video, article, repository, or thread the operator
 hands over and returns an adopt/adapt/reject/defer verdict against what
 Farplane already has.
 
-**Customer subscriptions.** An entity with `kind: customer` or
-`kind: prospect` in the bindings is an account the operator follows. Each new
-dated event on it (a hire, launch, funding round, post, or release) becomes a
+**Customer subscriptions.** The accounts followed are the Wiki CRM's: every
+entity in the workspace's `.farplane/entities/*.md` whose `funnel.status` is
+`active` (any stage, lead to customer), read through its `links`. No separate
+list is kept. Each new dated event on one (a hire, launch, funding round, post, or release) becomes a
 `customer_event` in the report: entity, event, source link, date, and its
 canonical key. The running automation opens one `prospect` thread per new
 event; Feed Scout itself still starts nothing.

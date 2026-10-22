@@ -26,7 +26,7 @@ synthesis in place—do not append daily snapshots or a monthly timeline. Report
 most one direct recovery candidate, only for an evidenced existing failure with
 known fix, KPI/guard, proof, and no experiment debt; never create the issue.
 Opportunities remain report candidates for the operator to pick. Create and execute no tickets.
-Customer events: for each new `customer_event` in the report (an event on an entity with `kind: customer` or `kind: prospect`), open its own research thread on the office queue: `.agent-office/bin/office-queue add --floor <floor> --routine customer-event-<canonical key> --title "Research <entity>: <event>"`, with the brief on stdin: "Use $prospect with intake `event`: <entity>, <event>, <source link>, <date>. Return the OpportunityCase; send nothing." The routine id keeps a rerun from opening the same event twice. These queue tasks are the one exception to creating no tasks; never file issues for them.
+Customer events: the followed accounts are the Wiki CRM entities in `crm_root` whose `funnel.status` is `active`; check each one's `links` in the window. For each new `customer_event` in the report, open its own research thread on the office queue: `.agent-office/bin/office-queue add --floor <floor> --routine customer-event-<canonical key> --title "Research <entity>: <event>"`, with the brief on stdin: "Use $prospect with intake `event`: <entity>, <event>, <source link>, <date>. Return the OpportunityCase; send nothing." The routine id keeps a rerun from opening the same event twice. These queue tasks are the one exception to creating no tasks; never file issues for them.
 Skip what the operator stopped: before proposing for a floor, run `.agent-office/bin/office-queue denied --floor <floor>` (from the Farplane checkout) and drop any proposal whose key it lists. A proposal's key is its `Proposal: <key>` line, else its title in lower-case words joined by hyphens; write a `Proposal:` line on anything you file.
 
 Params:
@@ -34,6 +34,7 @@ project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 config_ref = "farplane/bindings.yaml#feed_scout"
 window = "last_24h"
 recovery_candidate_limit = 1
+crm_root = "/Users/kenjipcx/Zanarkand Technologies/.farplane/entities"
 write_policy = "no task-record writes; recovery and opportunity candidates stay in the report"
 
 Final response:
