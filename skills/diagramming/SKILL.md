@@ -25,8 +25,9 @@ owns interaction models and wireflows, `visual-design` owns look and feel.
 diagramming(request_or_ticket, approval_question?) -> diagram_pack
 reads: the request, ticket or spec; the target renderer
 does: picks one form for one reader question and draws the smallest version
-writes: inline diagram, or diagrams.md for an impl-plan companion (never ticket.md)
-returns: diagram intent, primary diagram, optional second view, legend, short notes
+writes: inline diagram, or diagrams.md for an impl-plan companion (never ticket.md);
+  in Claude, a published Artifact for every Mermaid diagram
+returns: diagram intent, primary diagram (or its Artifact link), optional second view, legend, short notes
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -73,6 +74,18 @@ returns: diagram intent, primary diagram, optional second view, legend, short no
 
   Assert:
   - The pack passes the checklist or is simplified until it does.
+- [ ] **N5 — Render Mermaid where the reader can see it.**
+  `Mermaid pack + Artifact tool? -> artifact link | inline Mermaid`
+
+  Rule: Claude chat and Markdown files show Mermaid as raw source. When the
+  Artifact tool exists, run `python3 scripts/mermaid_artifact.py <file.md|.mmd|->`
+  (from this skill's folder; it keeps headings, prose and tables and writes
+  `.farplane/diagramming/<name>.html`), publish that path with the Artifact
+  tool, and link it in the reply. Keep the Mermaid source in its Markdown
+  owner; republish the same path after edits. Without the tool, write it inline.
+
+  Assert:
+  - In Claude, no reply or handoff leaves a Mermaid diagram visible only as source.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Gotchas
@@ -88,6 +101,8 @@ returns: diagram intent, primary diagram, optional second view, legend, short no
 - [patterns](references/patterns.md) - form selector with essential content,
   the Mermaid capability catalog, and worked examples per form.
 - [review](references/review.md) - pre-handoff checklist.
+- [mermaid_artifact.py](scripts/mermaid_artifact.py) - Markdown or `.mmd` to
+  an Artifact page that renders Mermaid in Claude.
 - [impl-plan visual companion](../impl-plan/references/visual-companion-template.md).
 
 ## Output

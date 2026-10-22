@@ -360,6 +360,10 @@ final = decision + reason + proof + next_blocking_condition
   prose. Use the smallest supported form that materially improves understanding;
   call `diagramming` for material visual packs and its current Mermaid catalog.
   Verify official syntax and renderer support for uncommon or evolving forms.
+- Claude chat and Markdown files show Mermaid as raw source. Where the Artifact
+  tool exists, publish every Mermaid diagram as an Artifact through
+  `diagramming` and link it; keep the Mermaid source in its Markdown owner.
+  Elsewhere, write Mermaid inline.
 - Lead with a compact diagram when a decision depends on relationships,
   ownership, data flow, chronology, hierarchy, or failure states. Use numbered
   steps for a simple sequence and a table for exact mappings or comparisons.

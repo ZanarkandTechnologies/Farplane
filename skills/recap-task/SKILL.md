@@ -70,7 +70,8 @@ returns: problem and goal, a proposed visual model or a source-linked recap, gap
   and pick one view from that question: `journey`, `ui-screen-flow`,
   `lifecycle`, `system-boundary`, `before-after-example`, or
   `comparison-table`. Fill it with discussion-grounded nouns, actions, states,
-  and uncertainty; render Mermaid inline. No ASCII duplicate, second view, or
+  and uncertainty; draw it in Mermaid, published as a linked Artifact in
+  Claude and inline elsewhere. No ASCII duplicate, second view, or
   implementation plan.
 
   Example: `dashboard redesign + "what will the lead see?" -> ui-screen-flow`,

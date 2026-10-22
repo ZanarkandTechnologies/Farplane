@@ -13,7 +13,8 @@
 - Keep this skill about system-design diagrams, not visual illustration.
 - Choose the semantic form before the rendering language: Mermaid is preferred
   for standalone system packs, compact ASCII for ticket contracts, and a table
-  for mappings or comparisons.
+  for mappings or comparisons. In Claude every Mermaid diagram ships as an
+  Artifact built by `scripts/mermaid_artifact.py`; keep its test passing.
 - Keep the skill compact; detailed patterns belong in references.
 - Treat `skills/diagramming/SKILL.md` as the owner of Farplane diagram-first
   conventions when updating the repo.
