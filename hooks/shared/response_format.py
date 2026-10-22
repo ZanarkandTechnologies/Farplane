@@ -21,7 +21,7 @@ SHAPES: dict[str, dict[str, object]] = {
     "simple_answer": {
         "skeleton": '**<The answer in one plain sentence.>**\n\n<Supporting detail: bullets, a table, or a diagram, whichever fits.>',
         "template": "Default shape",
-        "description": "Answers a question, explains something, reviews, or reports findings; a one-line suggested fix inside an explanation still belongs here.",
+        "description": "Answers a question, explains something, reviews, or reports findings; a one-line suggested fix or a short list of next steps after the answer still belongs here.",
         "gaps": ["conclusion_first"],
     },
     "proposed_change": {
@@ -100,6 +100,10 @@ GAPS: dict[str, dict[str, str]] = {
     "decision_choice": {
         "fix": "State the recommendation, the exact choice needed, and the safe default.",
         "question": "Does the answer ask for a decision without a recommendation, the exact choice, or a safe default?" + _SCOPE,
+    },
+    "proposal_gain": {
+        "fix": "Title each proposed next step by its gain, not its work: what it unlocks, the metric it moves and by about how much, or the time or money it saves (\"Exports keep every valid row: 0 lost rows, was 12%\", not \"Add blank-record handling\"); then one line on the work.",
+        "question": "Does the answer propose or offer next steps or options whose titles or lead words name only the work to do (\"add X\", \"build the Y feature\", \"refactor Z\") without saying what each unlocks, which metric it improves, or what it gains, so the reader cannot judge its value at a glance? Score low when there are no proposed next steps or each already leads with its gain." + _SCOPE,
     },
     "progress_ledger": {
         "fix": "Add Goal, Track, and Progress lines.",
@@ -241,6 +245,9 @@ def select_gaps(answers: Mapping[str, object], *, files_changed: bool, final: st
         # and it outranks the progress ledger.
         ranked = ["before_after_example",
                   *(n for n in ranked if n not in ("before_after_example", "progress_ledger"))]
+    # Next steps can close any shape, so their gain line is scored for every shape.
+    if "proposal_gain" not in ranked and _score(answers.get("gap::proposal_gain")) >= GAP_THRESHOLD:
+        ranked.append("proposal_gain")
     gaps = [*(["context_line"] if long_turn and not has_context_line(final) else []),
             *(reader_gaps or []),
             *(["absolute_paths"] if has_relative_path(final) else []),

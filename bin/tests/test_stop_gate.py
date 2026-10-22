@@ -25,8 +25,9 @@ ALL = frozenset({"continuation", "format"})
 
 
 class Client:
-    def __init__(self, nudge=0.1, shape="completed_change", gaps=None, feature=0.1):
-        self.answers = {"nudge": {"noul": nudge}, "shape": {"choice": shape},
+    def __init__(self, nudge=0.1, shape="completed_change", gaps=None, feature=0.1, proposal=0.1):
+        self.answers = {"nudge": {"noul": nudge}, "proposal": {"noul": proposal},
+                        "shape": {"choice": shape},
                         "visible_feature": {"noul": feature}}
         for name in response_format.GAPS:
             self.answers[f"gap::{name}"] = {"noul": (gaps or {}).get(name, 0.1)}
@@ -270,6 +271,24 @@ class StopGateTests(unittest.TestCase):
         result = self.evaluate([human("Fix it."), edit_call()], "I'll test next.", Client(nudge=0.9))
         self.assertEqual(result["reason"], continuation.NUDGE)
 
+    def test_valuable_proposal_gets_a_do_it_nudge(self):
+        final = "Done. Next I could cache the scan crops to halve rebuild time. Want me to?"
+        result = self.evaluate([human("Speed up rebuilds.")], final, Client(proposal=0.8))
+        self.assertEqual(result["reason"], continuation.PROPOSAL_NUDGE)
+        self.assertEqual(self.logged[-1]["status"], "proposal_nudge")
+        self.assertIsNone(self.evaluate([human("Speed up rebuilds.")], "Done. Verified: 2x.",
+                                        Client(proposal=0.2)))
+        rows = [human("Speed up rebuilds."), assistant(final), hook(continuation.PROPOSAL_NUDGE)]
+        self.path.write_text("\n".join(json.dumps(r) for r in rows))
+        self.assertEqual(continuation.read_dialogue(str(self.path), "x")["own_nudges_this_user_turn"], 1)
+
+    def test_proposals_titled_by_work_get_a_gain_line_in_any_shape(self):
+        for shape in ("simple_answer", "proposed_change"):
+            with self.subTest(shape=shape):
+                result = self.evaluate([human("Why is it slow?")], "Next: add a cache layer.",
+                                       Client(shape=shape, gaps={"proposal_gain": 0.9}))
+                self.assertIn("Title each proposed next step by its gain", result["reason"])
+
     def test_only_gaps_of_the_chosen_shape_count(self):
         client = Client(shape="simple_answer", gaps={"decision_choice": 0.95, "conclusion_first": 0.65})
         result = self.evaluate([human("Why?")], "Because the loop exits early.", client)
@@ -315,7 +334,7 @@ class StopGateTests(unittest.TestCase):
     def test_continuation_only_checks_ask_only_the_nudge(self):
         client = Client()
         self.evaluate([human("Fix it."), edit_call()], "Done.", client, checks=frozenset({"continuation"}))
-        self.assertEqual(list(client.calls[0]["questions"]), ["nudge"])
+        self.assertEqual(list(client.calls[0]["questions"]), ["nudge", "proposal"])
 
     def test_gaps_capped_at_two_and_feedback_never_adds_headings(self):
         client = Client(shape="proposed_change", gaps={"before_after_example": 0.9, "proof_planned": 0.8})

@@ -8,7 +8,7 @@
 | Order | Check | How | Blocks when |
 | --- | --- | --- | --- |
 | 1 | Length | Deterministic ([`farplane_response.py`](../../bin/core/farplane_response.py)) | Prose is over the word or line limit |
-| 2 | Continuation | Haiku reader's blocker facts, then Jev `nudge` score ([`continuation.py`](../continuation/continuation.py)) | The answer stops on a blocker the agent can clear itself (not on a plan or decision question), or score ≥ 0.5; fewer than three continuation nudges this user turn |
+| 2 | Continuation | Haiku reader's blocker facts, then Jev `nudge` and `proposal` scores ([`continuation.py`](../continuation/continuation.py)) | The answer stops on a blocker the agent can clear itself (not on a plan or decision question), `nudge` ≥ 0.5, or `proposal` ≥ 0.5: it offers a next step it could take itself that adds value to the user's goal and needs nothing from the user; fewer than three continuation nudges this user turn |
 | 3 | Response format | Jev `shape`, `gap::<section>` and `visible_feature` scores, the Haiku reader check ([`reader_check.py`](../shared/reader_check.py)), and fixed rules ([`response_format.py`](../shared/response_format.py)) | The reader says the answer misses the user, a gap of the chosen shape scores ≥ 0.6, a file is named by a relative path, a new feature has no video, or a completed change that edited files cites nothing |
 
 Continuation and format share one Jev request. Format nudges at most once per
@@ -22,6 +22,8 @@ Output Formatting templates (simple answer, proposed change, completed change,
 blocked, decision needed, progress), then scores only that shape's missing
 sections. A plan is never asked for `Verified:`, and an explanation is never
 asked for Before/After.
+In every shape, proposed next steps titled by their work ("add caching")
+rather than their gain ("rebuilds 35 s faster") get the `proposal_gain` fix.
 
 A long turn (10+ minutes since the user's message, or 15+ tool calls) must
 open with one `**Context:** You asked …; I …` sentence, so a user returning

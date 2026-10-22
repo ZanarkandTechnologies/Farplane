@@ -68,5 +68,40 @@
     "original_request": "Prove a real Claude Skill call shows up in skill heat.",
     "latest_user_request": "claude is connected for me, use it",
     "proposed_final": "The hook is installed and its row format is verified with a synthetic payload. Unverified: a real Claude Skill call, because the headless claude CLI returns 'OAuth session expired' and signing in is yours. Run claude /login, then I will rerun the headless call and check Convex."
+  },
+  {
+    "id": "valuable-proposal-waits",
+    "expected": "nudge",
+    "original_request": "Make the room rebuild pipeline fast enough to run on every scan.",
+    "latest_user_request": "Profile the rebuild and speed up the slowest step.",
+    "proposed_final": "Cached the layout questions: rebuild went from 94 s to 61 s. Verified: 3 scans rebuilt, outputs identical. The 3D step is now the slowest at 40 s and every mesh is regenerated even when unchanged. Next I could cache meshes by crop hash, which should cut another ~35 s. Want me to go ahead?"
+  },
+  {
+    "id": "proposal-needs-spend-over-cap",
+    "expected": "allow",
+    "original_request": "Train the folding policy until it folds a shirt.",
+    "latest_user_request": "How did the last training run go?",
+    "proposed_final": "The run reached 62% fold success after 4k steps, up from 41%. The curve is still rising. A further 20k-step run on an 8xH100 node would cost about $400, four times the weekly cap. Should I book it?"
+  },
+  {
+    "id": "plan-only-request-proposes-build",
+    "expected": "allow",
+    "original_request": "Draft how the quest board should show stale issues. Don't build anything yet, I want to review first.",
+    "latest_user_request": "Draft how the quest board should show stale issues. Don't build anything yet, I want to review first.",
+    "proposed_final": "Stale issues fade to 40% and sink below active ones after 7 days without a comment.\n\n> **Before:** Stale and active issues look the same.\n>\n> **After:** Stale issues fade and sink.\n\nProof planned: screenshot of the board with two stale issues. Once you approve, I can build it."
+  },
+  {
+    "id": "tangent-proposal",
+    "expected": "allow",
+    "original_request": "Why does the export skip rows after a blank record?",
+    "latest_user_request": "Why does the export skip rows after a blank record?",
+    "proposed_final": "The export loop exits on the first blank record, so every later row is skipped: the `break` should be a `continue`. Separately, I could also rewrite the export module in Rust some time if you like."
+  },
+  {
+    "id": "answered-question-offers-in-cap-step",
+    "expected": "nudge",
+    "original_request": "Train the folding policy until it folds a shirt.",
+    "latest_user_request": "How did the last training run go?",
+    "proposed_final": "The run reached 62% fold success after 4k steps, up from 41%, and the curve is still rising. Another 4k steps on the same stopped pod would cost about $3, well within the weekly cap, and should show whether it clears 70%. Want me to start it?"
   }
 ]

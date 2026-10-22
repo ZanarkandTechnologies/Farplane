@@ -326,6 +326,9 @@ final = decision + reason + proof + next_blocking_condition
 - Show a compact Before / After / Example preview before changing policy,
   prompts, workflows, UX, or architecture. Keep expected outcomes distinct from
   implemented behavior and observed proof.
+- Title every proposed next step by its gain, not its work: what it unlocks,
+  the metric it moves, or the time or money it saves. Do a valuable step you
+  can take yourself instead of offering it.
 
 ### Visual and proof routing
 

@@ -11,7 +11,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "hooks" / "shared"))
 
-from continuation import QUESTION  # noqa: E402
+from continuation import PROPOSAL_QUESTION, QUESTION  # noqa: E402
 from skill_suggestion import (  # noqa: E402
     ENDPOINT_ENV, MODEL_ENV, HttpDecisionClient, _provider_config,
 )
@@ -65,16 +65,19 @@ def main() -> int:
         )
         result = client.system_one(
             state=state_for(case),
-            questions={"nudge": {"type": "noul", "instructions": QUESTION}},
+            questions={"nudge": {"type": "noul", "instructions": QUESTION},
+                       "proposal": {"type": "noul", "instructions": PROPOSAL_QUESTION}},
             model=environ.get(MODEL_ENV) or config["model"],
         )
         score = result["answers"]["nudge"]["noul"]
-        observed = "nudge" if score >= THRESHOLD else "allow"
+        proposal = result["answers"]["proposal"]["noul"]
+        observed = "nudge" if max(score, proposal) >= THRESHOLD else "allow"
         return {
             "id": case["id"],
             "expected": case["expected"],
             "observed": observed,
             "score": score,
+            "proposal_score": proposal,
             "pass": observed == case["expected"],
         }
 

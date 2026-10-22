@@ -381,5 +381,23 @@
       "cold_read",
       "plain_names"
     ]
+  },
+  {
+    "id": "proposals-named-by-work",
+    "latest_user_request": "Why are scan rebuilds slow?",
+    "proposed_final": "The 3D step takes 40 of the 61 seconds because every mesh is regenerated, even when its crop has not changed.\n\nNext steps:\n- Add mesh caching.\n- Refactor the opening forms module.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": [
+      "proposal_gain"
+    ]
+  },
+  {
+    "id": "proposals-named-by-gain",
+    "latest_user_request": "Why are scan rebuilds slow?",
+    "proposed_final": "The 3D step takes 40 of the 61 seconds because every mesh is regenerated, even when its crop has not changed.\n\nNext steps:\n- **Rebuilds about 35 s faster:** cache meshes by crop hash.\n- **Opening forms 2x cheaper per scan:** reuse forms when the openings are unchanged.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": []
   }
 ]
