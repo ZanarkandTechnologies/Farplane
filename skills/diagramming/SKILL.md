@@ -96,7 +96,7 @@ returns: diagram intent, primary diagram (or its Artifact link), optional second
   fast helper (Sonnet in Claude) writes only the JSON spec, and
   `scripts/explainer_page.py` wraps it in the fixed shell. One slider, one
   canvas, about 2 minutes; on failure or overrun, answer with a diagram.
-  Video explainers run only when the user asks (`vox-video`, `hyperframes`).
+  Video explainers run only when the user asks, through the video skills.
 
   Assert:
   - The page has exactly one control, publishes, and its link says what to try.
