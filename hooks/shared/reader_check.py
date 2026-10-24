@@ -20,7 +20,7 @@ MAX_REQUEST = 3000
 MAX_FINAL = 12000
 MIN_NAMES = 2
 
-PROMPT = """You check a coding agent's final answer for a busy founder who saw only their own latest message, not the agent's work.
+PROMPT = """You check a coding agent's final answer for a busy founder who saw only their own messages, not the agent's work.
 Return JSON only:
 {"answers_latest": true|false,
  "status_first": true|false,
@@ -32,14 +32,14 @@ Return JSON only:
 - answers_latest: does it directly answer or report on what the latest message asked? A progress line while work is still running counts only if it also answers what can be answered now.
 - status_first: do the first two lines say plainly where the request stands?
 - process_narration: is most of it the agent's process or latest fix rather than the result?
-- unexplained_names: the internal names the answer's main point depends on that the user did not use and would not know, left unexplained: ticket or session codes, commit hashes, branch names, internal tool or model names, metric jargon. Leave out file paths and links, commands to run, names from the user's message, names the answer explains in a few words, and everyday words. Usually empty.
+- unexplained_names: the internal names the answer's main point depends on that the user did not use and would not know, left unexplained: ticket or session codes, commit hashes, branch names, internal tool or model names, metric jargon. Leave out file paths and links, commands to run, names from the user's latest or earlier messages, names the answer explains in a few words, and everyday words. Usually empty.
 - name_drift: does the answer call one thing by two or more different names (the matcher, then the retriever, then the ranker for the same part), so a reader could take them for different things? Plain pronouns and a name plus its short explanation do not count. Usually false.
 - blocker: the thing the answer says stops the work or is left to do, in a few words; "" when nothing is.
 - agent_can_clear_now: true only if the agent could clear that blocker itself right now with its own tools (rerun or fix a failing command or test, start a server, install a package, read a file or log, retry another way, fix a small bug it found) and nothing else must happen first. False when it needs the user (password, login, account, approval, payment, spend, a decision, a plan to approve, hardware) or is waiting on another person, session or running job."""
 
 
 def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
-          timeout: float = TIMEOUT) -> dict | None:
+          timeout: float = TIMEOUT, known: str = "") -> dict | None:
     key = environ.get(KEY_ENV, "").strip()
     if not key:
         return None
@@ -48,7 +48,9 @@ def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
         "temperature": 0, "reasoning": {"enabled": False},
         "messages": [
             {"role": "system", "content": PROMPT},
-            {"role": "user", "content": f"LATEST USER MESSAGE:\n{latest_user_request[:MAX_REQUEST]}"
+            {"role": "user", "content": (f"EARLIER USER MESSAGES (their names are known):\n{known[-MAX_REQUEST:]}\n\n"
+                                         if known.strip() else "")
+                                        + f"LATEST USER MESSAGE:\n{latest_user_request[:MAX_REQUEST]}"
                                         f"\n\nFINAL ANSWER:\n{final[:MAX_FINAL]}"},
         ],
     }

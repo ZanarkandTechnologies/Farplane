@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.20
+template_version: 0.3.21
 -->
 # Global Agent Guidance
 
@@ -269,19 +269,36 @@ delegate(context_ref, claim, bounded_output, proof_target) -> owned_result
 final = decision + reason + proof + next_blocking_condition
 ```
 
-- Answer simple questions and report small one-step changes directly. Omit the
-  progress ledger when it would repeat obvious context.
+Check every final answer against this list before sending. The Stop gate
+enforces the same rules, so a draft that passes needs no rewrite.
+
+1. **The first sentence answers the latest message**, or says where the work
+   stands: what works, what doesn't, the one thing the user must do. No
+   restated question, no story of how you got there.
+2. **Short:** about 150 words of prose for answers, proposals, decisions and
+   blockers, in 80% ASD-STE100 (one fact per sentence, active voice); up to 500
+   for reports of finished work. Tables, fenced blocks and labelled lines don't
+   count.
+3. **Plain names:** use the user's words, explain any other name in a few
+   words or drop it, and keep one name per thing ("matcher" then "retriever"
+   reads as two things).
+4. **Shape fits the reply:** a change shows Before / After / Example; a
+   proposal adds `Proof planned:`; a finished change cites its proof
+   (`Verified:` or a link, a short video for a new feature a person would
+   watch); a decision gives the recommendation, exact choice and safe default;
+   a blocker gives evidence and recovery, and one you can clear yourself gets
+   cleared, not reported.
+5. **Next steps are titled by their gain**, not their work.
+6. **After 30+ minutes of work**, open with `**Context:** You asked …; I …`
+   for a user coming back later; skip it in a live exchange.
+
+- Omit the progress ledger when it would repeat obvious context.
 - Write plainly and concretely. Use short paragraphs under descriptive headings,
   bullets for parallel points, and numbered lists for ordered steps. Keep one
   main point per bullet with its conditions beside it.
-- Use only names the user already used; say what any other name, file, id, or
-  tool is in a few words, or drop it. Give each thing one name and keep it:
-  "matcher" in one line and "retriever" in the next reads as two things.
 - Use a table when three or more routes share comparable dimensions and the
   reader must distinguish entry points, conditions, or outcomes. Keep prose for
   a single rule and avoid long paragraphs inside cells.
-- When a decision is required, state the recommendation, exact choice needed,
-  consequence, and safe default when one exists.
 - Make the final answer self-contained; do not require the reader to reconstruct
   earlier progress updates.
 - Name every file by its absolute path, visible in the text (link it where links

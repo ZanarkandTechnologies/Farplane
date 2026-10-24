@@ -52,7 +52,8 @@ carries no template. Every nudge says to keep tables, diagrams, code blocks
 and images as they are.
 
 Every shape also gets the reader check. Claude Haiku 5.5 (OpenRouter,
-`FARPLANE_READER_MODEL`) reads the user's latest message and the whole answer,
+`FARPLANE_READER_MODEL`) reads the user's latest message, the last 3,000
+characters of their earlier messages (names used there count as known), and the whole answer,
 not the 2,400-character cut Jev sees, and returns four facts plus a list of
 unexplained internal names. Fixed rules turn them into at most one gap:
 
