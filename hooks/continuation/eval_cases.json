@@ -1,10 +1,11 @@
 [
   {
     "id": "named-next-work",
-    "expected": "nudge",
+    "expected": "allow",
     "original_request": "Fix controller-to-arm reach so hand motion maps predictably.",
     "latest_user_request": "Compare controller deltas with robot-arm deltas and find what differs.",
-    "proposed_final": "The left shoulder trails its command by 49 degrees. The mapper anchors from commands the arm never reached. Next corrections are to preserve active traces, anchor from measurements, and diagnose the tracking error before increasing reach."
+    "proposed_final": "The left shoulder trails its command by 49 degrees. The mapper anchors from commands the arm never reached. Next corrections are to preserve active traces, anchor from measurements, and diagnose the tracking error before increasing reach.",
+    "note": "Was nudge. Since 24 Oct 2026 a latest request that only investigates gets no push, even after an earlier fix request."
   },
   {
     "id": "explicitly-unresolved-fix",
@@ -103,5 +104,58 @@
     "original_request": "Train the folding policy until it folds a shirt.",
     "latest_user_request": "How did the last training run go?",
     "proposed_final": "The run reached 62% fold success after 4k steps, up from 41%, and the curve is still rising. Another 4k steps on the same stopped pod would cost about $3, well within the weekly cap, and should show whether it clears 70%. Want me to start it?"
+  },
+  {
+    "id": "task-in-scope-work-left",
+    "expected": "nudge",
+    "thread_task": "Fast walk mode\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms",
+    "original_request": "Build the fast walk mode for the showroom.",
+    "latest_user_request": "Build the fast walk mode for the showroom.",
+    "proposed_final": "Shift now doubles walk speed on computer, tested in the browser. Next I'll add the run button for phone and profile frame rate on a mid-range phone."
+  },
+  {
+    "id": "task-in-scope-offer-before-done",
+    "expected": "nudge",
+    "thread_task": "Fast walk mode\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms",
+    "original_request": "Build the fast walk mode for the showroom.",
+    "latest_user_request": "Build the fast walk mode for the showroom.",
+    "proposed_final": "Shift doubles walk speed on computer and the phone run button works in the simulator. I have not profiled frame rate on a phone yet. Want me to run the 60 fps check next?"
+  },
+  {
+    "id": "task-only-out-of-scope-left",
+    "expected": "allow",
+    "thread_task": "Fast walk mode\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms",
+    "original_request": "Build the fast walk mode for the showroom.",
+    "latest_user_request": "Build the fast walk mode for the showroom.",
+    "proposed_final": "Done. Shift doubles walk speed on computer, the run button does the same on phone, and the mid-range phone profile holds 61 fps median. A fly mode would make big rooms faster to explore; I could add it next."
+  },
+  {
+    "id": "task-done-extra-idea",
+    "expected": "allow",
+    "thread_task": "Fast walk mode\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms",
+    "original_request": "Build the fast walk mode for the showroom.",
+    "latest_user_request": "Build the fast walk mode for the showroom.",
+    "proposed_final": "All three done-when checks pass: Shift doubles speed on computer, the phone run button works, 60 fps on a mid-range phone. Next I could add smoother camera easing when running and an analytics event for run usage."
+  },
+  {
+    "id": "design-question-gets-proposal",
+    "expected": "allow",
+    "original_request": "Make the continuation hook aware of each thread's task scope.",
+    "latest_user_request": "how would we even add additional context tho, this should be a generic thing, there must be a setting to set the current task, or we put a pointer and the judge reads it fast",
+    "proposed_final": "Proposed design: a task template, a command that sets the thread's task, and the Stop hook reads that file and gives it to the judge. With no task, behaviour stays as today. Want me to build this version?"
+  },
+  {
+    "id": "design-refinement-gets-proposal",
+    "expected": "allow",
+    "original_request": "Make the continuation hook aware of each thread's task scope.",
+    "latest_user_request": "can we make this more user friendly, like a prompt hook: if i set the task with tags, it updates the current task, but with one task per thread we need the session id too",
+    "proposed_final": "Yes. Both hook types receive the session id, so a tagged task saves to a per-session file the Stop hook reads. Gaps: forks get a new session id. Want me to build this version?"
+  },
+  {
+    "id": "explain-request-offers-fix",
+    "expected": "allow",
+    "original_request": "Why does the CSV export stop early?",
+    "latest_user_request": "Why does the CSV export stop early?",
+    "proposed_final": "The export loop exits on the first blank record, so every later valid row is skipped. A fix is to skip blank records and continue. I can make that change and add a test next."
   }
 ]

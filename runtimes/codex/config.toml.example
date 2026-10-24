@@ -27,6 +27,9 @@ FARPLANE_IMPL_HOOK = "1"
 FARPLANE_CONVEX_SITE_URL = "__FARPLANE_CONVEX_SITE_URL__"
 FARPLANE_TELEMETRY_TOKEN = "__FARPLANE_TELEMETRY_TOKEN__"
 FARPLANE_CONSOLE_KEY = "__FARPLANE_CONSOLE_KEY__"
+# Projects whose threads need a <task> (In scope, Out of scope, Done when,
+# Design link) before building; path-separated. See hooks/user-turn/README.md.
+# FARPLANE_TASK_REQUIRED_PATHS = "/path/to/project"
 # Optional explicit Codex hook telemetry endpoint. Normally leave this unset:
 # hooks/farplane_console_ping.py posts to FARPLANE_CONVEX_SITE_URL/telemetry/hooks.
 # Optional hook telemetry endpoint. Prefer runtime env or Farplane UI-managed

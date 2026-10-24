@@ -26,7 +26,7 @@ ALL = frozenset({"continuation", "format"})
 
 class Client:
     def __init__(self, nudge=0.1, shape="completed_change", gaps=None, feature=0.1, proposal=0.1):
-        self.answers = {"nudge": {"noul": nudge}, "proposal": {"noul": proposal},
+        self.answers = {"nudge": {"noul": nudge}, "proposal": {"noul": proposal}, "user_deciding": {"noul": 0.1},
                         "shape": {"choice": shape},
                         "visible_feature": {"noul": feature}}
         for name in response_format.GAPS:
@@ -334,7 +334,7 @@ class StopGateTests(unittest.TestCase):
     def test_continuation_only_checks_ask_only_the_nudge(self):
         client = Client()
         self.evaluate([human("Fix it."), edit_call()], "Done.", client, checks=frozenset({"continuation"}))
-        self.assertEqual(list(client.calls[0]["questions"]), ["nudge", "proposal"])
+        self.assertEqual(list(client.calls[0]["questions"]), ["nudge", "proposal", "user_deciding"])
 
     def test_gaps_capped_at_two_and_feedback_never_adds_headings(self):
         client = Client(shape="proposed_change", gaps={"before_after_example": 0.9, "proof_planned": 0.8})
