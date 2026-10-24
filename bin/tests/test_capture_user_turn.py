@@ -18,6 +18,14 @@ import capture_user_turn
 
 
 class CaptureUserTurnTelemetryTests(unittest.TestCase):
+    def setUp(self) -> None:
+        # Keep the thread-notes marker out of the real home.
+        notes = tempfile.TemporaryDirectory()
+        self.addCleanup(notes.cleanup)
+        marker = patch.object(capture_user_turn.thread_notes, "NOTES_DIR", Path(notes.name))
+        marker.start()
+        self.addCleanup(marker.stop)
+
     def run_hook(self, project_root: Path, prompt: str) -> list[dict[str, object]]:
         (project_root / ".farplane").mkdir(parents=True, exist_ok=True)
         payload = {
