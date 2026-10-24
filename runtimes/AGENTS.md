@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.19
+template_version: 0.3.20
 -->
 # Global Agent Guidance
 
@@ -417,8 +417,8 @@ final = decision + reason + proof + next_blocking_condition
 - Keep durable detail in its owning artifact and link to it instead of repeating
   it. Keep citations link-only. Preserve supplied meaning when rewriting; do not
   add unsupported judgments, conclusions, or next steps.
-- Aim for about 120 words for simple answers, 180 for handoffs, and 500 for
-  substantial work. Exceed these only when requested or essential for
+- Aim for about 120 words for simple answers and proposals, 180 for handoffs,
+  and 500 for reports of substantial work. Answer in the first sentence. Exceed these only when requested or essential for
   correctness, safety, or evidence.
 
 ### Blocked work

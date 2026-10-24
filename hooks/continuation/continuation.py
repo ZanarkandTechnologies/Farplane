@@ -36,7 +36,7 @@ MAX_MESSAGES = 20
 MAX_TEXT = 2400
 MAX_NUDGES = 3
 # Format may nudge again only after new tool work, up to this many times a turn.
-MAX_FORMAT_NUDGES = 3
+MAX_FORMAT_NUDGES = 1
 LEGACY_NUDGE_V1 = (
     "[farplane-continuation:v1] Continue useful unfinished work within the user's "
     "existing request, including requests carried forward from earlier turns. "
@@ -361,14 +361,14 @@ def calls_tool(row: Mapping[str, object]) -> bool:
             and item.get("type") in {"function_call", "custom_tool_call", "local_shell_call"})
 
 
-LONG_TURN_TOOL_CALLS = 15
-LONG_TURN_MINUTES = 10
+LONG_TURN_MINUTES = 30
 
 
-def long_turn(tool_calls: int, started: str, now: datetime | None = None) -> bool:
-    """A turn long enough that the user may have walked away and forgotten it."""
-    if tool_calls >= LONG_TURN_TOOL_CALLS:
-        return True
+def long_turn(started: str, now: datetime | None = None) -> bool:
+    """A turn long enough that the user walked away (overnight runs) and needs reminding.
+
+    Wall time only: a busy live exchange with many tool calls gets no Context line.
+    """
     try:
         begun = datetime.fromisoformat(started.replace("Z", "+00:00"))
     except ValueError:
@@ -392,7 +392,6 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
     files_changed = False
     length_feedback = False
     previous_assistant = ""
-    tool_calls = 0
     turn_started = ""
     for line in lines:
         row = json.loads(line)
@@ -400,7 +399,6 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
             return None
         files_changed = files_changed or edits_files(row)
         work_since_format = work_since_format or calls_tool(row)
-        tool_calls += calls_tool(row)
         if row.get("type") in {"user", "assistant"} and "message" in row:
             entry = claude_entry(row)
             if entry is None:
@@ -409,7 +407,6 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
             if role == "user":
                 if TAG_PATTERN.search(text):
                     return None
-                tool_calls = 0
                 turn_started = str(row.get("timestamp") or "")
                 actual_requests.append(text)
                 last_user_text = text
@@ -452,7 +449,6 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         if role == "user" and isinstance(kinds, list) and "user.text" in kinds:
             if TAG_PATTERN.search(text) or not metadata.get("turn_id"):
                 return None
-            tool_calls = 0
             turn_started = str(row.get("timestamp") or "")
             actual_requests.append(text)
             last_user_text = text
@@ -517,7 +513,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         "proof_nudges_this_user_turn": proof_nudges,
         "work_since_format_nudge": work_since_format,
         "files_changed": files_changed,
-        "long_turn": long_turn(tool_calls, turn_started),
+        "long_turn": long_turn(turn_started),
         "recognized_length_feedback_this_user_turn": length_feedback,
         "source_truncated": rollout_truncated or len(messages) > MAX_MESSAGES or any(
             len(redact(m["text"])) > MAX_TEXT for m in messages
@@ -587,7 +583,7 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
         full_format = format_count == 0 or (
             bool(state["work_since_format_nudge"]) and format_count < MAX_FORMAT_NUDGES)
         proof_only = (not full_format and not state["proof_nudges_this_user_turn"]
-                      and format_count < MAX_FORMAT_NUDGES)
+                      and format_count <= MAX_FORMAT_NUDGES)
         ask_format = "format" in checks and (full_format or proof_only)
         if not ask_nudge and not ask_format:
             return allow_stop("nudge_cap", trace)

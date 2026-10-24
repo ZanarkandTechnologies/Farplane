@@ -9,11 +9,21 @@ not forget, except that a new feature a person would watch needs a video or
 """
 from __future__ import annotations
 
+from pathlib import Path
 import re
+import sys
 from typing import Mapping
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "bin" / "core"))
+from farplane_response import measure_response  # noqa: E402
 
 GAP_THRESHOLD = 0.6
 MAX_GAPS = 2
+# Answers, proposals, decisions and blockers stay short; reports of finished or
+# running work keep the full length budget. Tables, fenced blocks and labelled
+# lines (Before/After/Example/Verified...) don't count.
+SHORT_ANSWER_WORDS = 180
+SHORT_SHAPES = {"simple_answer", "proposed_change", "decision_needed", "blocked"}
 TAG = "<!-- farplane-response-format:v1 -->"
 
 # Each shape names the AGENTS.md template heading it mirrors; a test keeps them in step.
@@ -83,6 +93,9 @@ GAPS: dict[str, dict[str, str]] = {
     },
     "absolute_paths": {
         "fix": "Name every file by its absolute path (for example /Users/…/file.md), in links and in text, so it opens from any folder or a phone. Write the path exactly as it is, spaces included, [a](/Users/me/My Docs/a.png); never %20 or angle brackets.",
+    },
+    "short_answer": {
+        "fix": "Cut the prose to about 150 words in 80% ASD-STE100: the answer or decision in the first sentence, one fact per sentence, active voice, no restated question, no recap of earlier turns. Keep labelled lines and tables.",
     },
     "conclusion_first": {
         "fix": "Lead with the conclusion in the first sentence.",
@@ -251,7 +264,9 @@ def select_gaps(answers: Mapping[str, object], *, files_changed: bool, final: st
     # Next steps can close any shape, so their gain line is scored for every shape.
     if "proposal_gain" not in ranked and _score(answers.get("gap::proposal_gain")) >= GAP_THRESHOLD:
         ranked.append("proposal_gain")
+    too_long = shape in SHORT_SHAPES and measure_response(final).prose_words > SHORT_ANSWER_WORDS
     gaps = [*(["context_line"] if long_turn and not has_context_line(final) else []),
+            *(["short_answer"] if too_long else []),
             *(reader_gaps or []),
             *(["absolute_paths"] if has_relative_path(final) else []),
             *ranked]

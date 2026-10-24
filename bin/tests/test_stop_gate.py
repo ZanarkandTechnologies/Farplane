@@ -152,9 +152,9 @@ class StopGateTests(unittest.TestCase):
     def test_long_turn_opens_with_context(self):
         from datetime import datetime, timezone
         now = datetime(2026, 10, 20, 12, 0, tzinfo=timezone.utc)
-        self.assertTrue(continuation.long_turn(15, "", now))
-        self.assertTrue(continuation.long_turn(1, "2026-10-20T11:45:00Z", now))
-        self.assertFalse(continuation.long_turn(3, "2026-10-20T11:55:00Z", now))
+        self.assertFalse(continuation.long_turn("", now))
+        self.assertTrue(continuation.long_turn("2026-10-20T11:25:00Z", now))
+        self.assertFalse(continuation.long_turn("2026-10-20T11:45:00Z", now))
         answer = {"shape": {"choice": "simple_answer"}}
         _, gaps = response_format.select_gaps(answer, files_changed=False, final="All six found.", long_turn=True)
         self.assertEqual(gaps, ["context_line"])
@@ -226,7 +226,7 @@ class StopGateTests(unittest.TestCase):
 
     def test_reader_sees_the_whole_answer_and_failure_allows(self):
         seen = []
-        final = "Start. " + "middlemiddlemiddlemiddle " * 200 + "End."  # 5,000+ chars, under 500 words
+        final = "Start. " + "middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle " * 120 + "End."  # 5,000+ chars, under 180 words
         self.evaluate([human("Explain.")], final, Client(shape="simple_answer"),
                       reader=lambda request, answer: seen.append(answer))
         self.assertEqual(seen, [final])
@@ -246,15 +246,26 @@ class StopGateTests(unittest.TestCase):
             with self.subTest(final=final):
                 self.assertIsNone(self.evaluate([human("Where?")], final, Client(shape="simple_answer")))
 
-    def test_new_tool_work_earns_a_fresh_format_nudge(self):
+    def test_one_format_rewrite_per_user_turn_even_after_more_work(self):
         rows = [human("Fix it."), edit_call(), assistant("Done."),
                 hook(response_format.feedback(["conclusion_first"]))]
         client = Client(shape="simple_answer", gaps={"conclusion_first": 0.9})
         self.assertIsNone(self.evaluate(rows, "Rewritten.", client, active=True))
         rows += [edit_call("Bash"), assistant("More work.")]
-        result = self.evaluate(rows, "Done after more work.", client, active=True)
-        self.assertIn("Lead with the conclusion", result["reason"])
-        self.assertEqual(self.logged[-1]["status"], "format_nudge")
+        self.assertIsNone(self.evaluate(rows, "Done after more work.", client, active=True))
+
+    def test_long_plain_answer_gets_cut_to_a_short_one(self):
+        answer = {"shape": {"choice": "simple_answer"}}
+        long = "The matcher misses because the crop is cut. " * 25
+        _, gaps = response_format.select_gaps(answer, files_changed=False, final=long)
+        self.assertEqual(gaps, ["short_answer"])
+        self.assertIn("ASD-STE100", response_format.feedback(gaps, "simple_answer"))
+        table = long[:200] + "\n\n| a | b |\n| --- | --- |\n" + "| x y z w | v u t s |\n" * 60
+        _, gaps = response_format.select_gaps(answer, files_changed=False, final=table)
+        self.assertEqual(gaps, [])
+        report = {"shape": {"choice": "completed_change"}}
+        _, gaps = response_format.select_gaps(report, files_changed=False, final=long)
+        self.assertNotIn("short_answer", gaps)
 
     def test_format_nudges_stop_at_the_turn_ceiling(self):
         rows = [human("Fix it.")]

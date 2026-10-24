@@ -25,10 +25,17 @@ asked for Before/After.
 In every shape, proposed next steps titled by their work ("add caching")
 rather than their gain ("rebuilds 35 s faster") get the `proposal_gain` fix.
 
-A long turn (10+ minutes since the user's message, or 15+ tool calls) must
+A long turn (30+ minutes since the user's message, wall time only) must
 open with one `**Context:** You asked …; I …` sentence, so a user returning
-hours later knows what the thread was doing. It is fixed, not scored, and a
-Context line of 40 words or fewer is outside the length budget.
+from an overnight run knows what the thread was doing. A live exchange with
+many tool calls gets none. It is fixed, not scored, and a Context line of 40
+words or fewer is outside the length budget.
+
+Short answers are a fixed rule too: a simple answer, proposed change,
+decision or blocker with more than 180 prose words gets `short_answer` (about
+150 words in "80% ASD-STE100", the named plain-English standard). Labelled
+lines, tables and fenced blocks don't count. Completed changes and progress
+reports keep the 500-word budget.
 
 Before/After is a fixed rule, not a score: any answer of 40 words or more
 that reports edited files, or proposes a change, must carry `Before:` and
@@ -93,8 +100,7 @@ code that changes how bunker workers behave counts.
 
 Edits are Claude `Edit`/`Write`/`MultiEdit`/`NotebookEdit` or Codex
 `apply_patch` calls this user turn. A format nudge names at most two additions.
-After one, the gate asks again only when new tool work has happened since (a
-plain rewrite does not count), up to three format nudges a user turn. Proof
+One format nudge per user turn, even after more tool work. Proof
 keeps its own nudge: when no earlier format nudge asked for proof, the gate
 asks once more for the proof or video only.
 
