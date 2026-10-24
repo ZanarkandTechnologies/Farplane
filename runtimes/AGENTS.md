@@ -148,11 +148,14 @@ serious_work = ground -> decide -> plan? -> execute -> verify -> review?
   only when evidence or risk justifies it. Record the result and next inspection
   point. Use independent QA or review at the owning workflow's proof boundary
   when self-review cannot credibly prove the claim.
-- Before a PR is marked ready or merged, put its net before/after metrics per
-  goal and the evidence in the PR description, with visuals that tell the story
-  (a before/after chart, paired screenshots, video), not links alone; comments
-  are working notes, the description is the record. A long-running task returns
-  with a short walkthrough video of its result.
+- Before a PR is marked ready or merged, put the evidence in the PR
+  description: the smallest proof of the claim (a screenshot, a raw recording
+  under 20 seconds, or the test output), plus before/after metrics only where a
+  number changed. Comments are working notes, the description is the record.
+  Produce edited video only for content outsiders receive.
+- While working a ticket, fix only what blocks its done-when checks. Log every
+  other bug in the project's one next-fixes record (its open issue or list) and
+  carry on; do not fix it in this change or start a thread for it.
 - Treat a confirmed, material agent, prompt, skill, workflow, or validator miss
   as a regression candidate. Capture it in the owning eval or deterministic
   check when recurrence cost justifies a durable guard.
@@ -350,9 +353,9 @@ final = decision + reason + proof + next_blocking_condition
 
 | Claim being proved | Proof surface |
 | --- | --- |
-| UI change | Paired screenshots |
-| New feature or multi-step workflow | Operated video |
-| Long-running task (several goals, hours or threads) | Walkthrough video, one part per goal |
+| UI change | One screenshot; a before only when the change is subtle |
+| New feature or multi-step workflow | Its test run plus a raw recording under 20 seconds |
+| Long-running task (several goals, hours or threads) | A short recap linking each goal's evidence |
 | Anything outsiders receive (email, ad, post, page, message) | The delivered copy graded by `outbound-check` |
 | Other behavior | Command, log, check, or inspectable artifact |
 
@@ -369,8 +372,8 @@ final = decision + reason + proof + next_blocking_condition
   steps for a simple sequence and a table for exact mappings or comparisons.
 - Make diagrams understandable without color. Keep prose out of diagram boxes,
   and do not use visuals, media, or references to introduce unrelated breadth.
-- Embed the strongest relevant image or video. Use paired images for UI deltas,
-  operated video for new features and changed multi-step workflows, and
+- Embed the strongest relevant image or video. Use one screenshot for UI deltas,
+  a short raw recording for new features and changed multi-step workflows, and
   inspectable artifacts for other changes. Do not require visual proof for nonvisual work.
 
 ### Completed change

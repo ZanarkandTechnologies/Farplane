@@ -672,12 +672,12 @@
   },
   {
     "id": "global_workflow_completion_video_evidence_01",
-    "title": "Showcase a material workflow change with operated video evidence",
+    "title": "Showcase a material workflow change with a short raw recording",
     "query": "Implement the toy-store returns approval flow across request submission, manager approval, and refund confirmation, then hand it off.",
     "reference_points": [
       "Completion handoff renders Before, After, and Example as one indented Markdown blockquote rather than flattened prose",
-      "Captures and embeds or links a short operated video covering the changed multi-step workflow",
-      "Uses the video as inspectable evidence alongside applicable checks and durable proof artifacts",
+      "Captures and embeds or links a raw recording under 20 seconds covering the changed multi-step workflow, with no produced edit (title cards, charts, stitching)",
+      "Uses the recording as inspectable evidence alongside the workflow's test run",
       "Does not substitute a single static UI screenshot for the required workflow capture"
     ],
     "tags": [
@@ -686,7 +686,7 @@
       "workflow-proof",
       "video"
     ],
-    "notes": "Regression for mandatory video evidence on a material multi-step workflow change."
+    "notes": "Regression for a short raw recording, not a produced video, on a material multi-step workflow change."
   },
   {
     "id": "global_nonvisual_completion_artifact_evidence_01",
@@ -714,7 +714,7 @@
       "Uses a normal ### Markdown heading for each material change",
       "Renders one indented Before, After, and Example blockquote directly beneath each heading",
       "Keeps the two changes' evidence and examples separate rather than flattening them into one combined prose summary",
-      "Provides paired screenshots for the UI panel and an operated video for the material multi-step returns workflow"
+      "Provides one screenshot for the UI panel and a short raw recording for the material multi-step returns workflow"
     ],
     "tags": [
       "system-prompt",
@@ -733,7 +733,7 @@
       "Uses one normal level-three heading for each material change",
       "Renders each change's Before, After, and Example delta as one Markdown blockquote",
       "Keeps the two changes and their proof separate",
-      "Uses the paired screenshots for the UI-only panel and the operated video for the multi-step returns flow",
+      "Uses the supplied screenshots for the UI-only panel and the supplied recording for the multi-step returns flow",
       "Does not invent implementation details, checks, links, or proof beyond the supplied context"
     ],
     "tags": [
