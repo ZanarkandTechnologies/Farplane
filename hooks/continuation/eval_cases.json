@@ -106,36 +106,36 @@
     "proposed_final": "The run reached 62% fold success after 4k steps, up from 41%, and the curve is still rising. Another 4k steps on the same stopped pod would cost about $3, well within the weekly cap, and should show whether it clears 70%. Want me to start it?"
   },
   {
-    "id": "task-in-scope-work-left",
+    "id": "notes-in-scope-work-left",
     "expected": "nudge",
-    "thread_task": "Fast walk mode\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms",
     "original_request": "Build the fast walk mode for the showroom.",
     "latest_user_request": "Build the fast walk mode for the showroom.",
-    "proposed_final": "Shift now doubles walk speed on computer, tested in the browser. Next I'll add the run button for phone and profile frame rate on a mid-range phone."
+    "proposed_final": "Shift now doubles walk speed on computer, tested in the browser. Next I'll add the run button for phone and profile frame rate on a mid-range phone.",
+    "thread_notes": "# Thread notes\n\n## Task\nFast walk mode\n\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms\n\n## Progress\n- started"
   },
   {
-    "id": "task-in-scope-offer-before-done",
+    "id": "notes-in-scope-offer-before-done",
     "expected": "nudge",
-    "thread_task": "Fast walk mode\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms",
     "original_request": "Build the fast walk mode for the showroom.",
     "latest_user_request": "Build the fast walk mode for the showroom.",
-    "proposed_final": "Shift doubles walk speed on computer and the phone run button works in the simulator. I have not profiled frame rate on a phone yet. Want me to run the 60 fps check next?"
+    "proposed_final": "Shift doubles walk speed on computer and the phone run button works in the simulator. I have not profiled frame rate on a phone yet. Want me to run the 60 fps check next?",
+    "thread_notes": "# Thread notes\n\n## Task\nFast walk mode\n\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms\n\n## Progress\n- started"
   },
   {
-    "id": "task-only-out-of-scope-left",
+    "id": "notes-only-out-of-scope-left",
     "expected": "allow",
-    "thread_task": "Fast walk mode\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms",
     "original_request": "Build the fast walk mode for the showroom.",
     "latest_user_request": "Build the fast walk mode for the showroom.",
-    "proposed_final": "Done. Shift doubles walk speed on computer, the run button does the same on phone, and the mid-range phone profile holds 61 fps median. A fly mode would make big rooms faster to explore; I could add it next."
+    "proposed_final": "Done. Shift doubles walk speed on computer, the run button does the same on phone, and the mid-range phone profile holds 61 fps median. A fly mode would make big rooms faster to explore; I could add it next.",
+    "thread_notes": "# Thread notes\n\n## Task\nFast walk mode\n\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms\n\n## Progress\n- started"
   },
   {
-    "id": "task-done-extra-idea",
+    "id": "notes-done-extra-idea",
     "expected": "allow",
-    "thread_task": "Fast walk mode\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms",
     "original_request": "Build the fast walk mode for the showroom.",
     "latest_user_request": "Build the fast walk mode for the showroom.",
-    "proposed_final": "All three done-when checks pass: Shift doubles speed on computer, the phone run button works, 60 fps on a mid-range phone. Next I could add smoother camera easing when running and an analytics event for run usage."
+    "proposed_final": "All three done-when checks pass: Shift doubles speed on computer, the phone run button works, 60 fps on a mid-range phone. Next I could add smoother camera easing when running and an analytics event for run usage.",
+    "thread_notes": "# Thread notes\n\n## Task\nFast walk mode\n\nIn scope:\n- hold Shift to walk at double speed\n- works on phone and computer\nOut of scope:\n- fly mode\n- new camera controls\nDone when:\n- Shift doubles walk speed on computer\n- a run button does the same on phone\n- 60 fps on a mid-range phone\nDesign: https://www.figma.com/design/EXAMPLE/Rooms\n\n## Progress\n- started"
   },
   {
     "id": "design-question-gets-proposal",
@@ -157,5 +157,23 @@
     "original_request": "Why does the CSV export stop early?",
     "latest_user_request": "Why does the CSV export stop early?",
     "proposed_final": "The export loop exits on the first blank record, so every later valid row is skipped. A fix is to skip blank records and continue. I can make that change and add a test next."
+  },
+  {
+    "id": "child-parent-out-of-scope-idea",
+    "expected": "allow",
+    "thread_notes": "# Thread notes\n\nparent: 6f1c2a9e-0000-4000-8000-00000000abcd\n\n## Task\nProfile walking frame rate on a mid-range phone.\nDone when:\n- a frame-rate number for walking and running",
+    "parent_notes": "# Thread notes\n\n## Task\nFast walk mode\nIn scope:\n- hold Shift to walk at double speed\n- run button on phone\nOut of scope:\n- fly mode\nDone when:\n- 60 fps on a mid-range phone\n\n## V2 candidates\n- smoother camera easing",
+    "original_request": "Profile the walk mode frame rate on a mid-range phone.",
+    "latest_user_request": "Profile the walk mode frame rate on a mid-range phone.",
+    "proposed_final": "Walking holds 62 fps and running 58 fps on the mid-range phone profile. Since running dips, I could add a fly mode that skips collision checks, which would also help big rooms. Want me to build it?"
+  },
+  {
+    "id": "child-in-scope-left",
+    "expected": "nudge",
+    "thread_notes": "# Thread notes\n\nparent: 6f1c2a9e-0000-4000-8000-00000000abcd\n\n## Task\nProfile walking frame rate on a mid-range phone.\nDone when:\n- a frame-rate number for walking and running",
+    "parent_notes": "# Thread notes\n\n## Task\nFast walk mode\nIn scope:\n- hold Shift to walk at double speed\n- run button on phone\nOut of scope:\n- fly mode\nDone when:\n- 60 fps on a mid-range phone\n\n## V2 candidates\n- smoother camera easing",
+    "original_request": "Profile the walk mode frame rate on a mid-range phone.",
+    "latest_user_request": "Profile the walk mode frame rate on a mid-range phone.",
+    "proposed_final": "Walking holds 62 fps on the mid-range phone profile. I have not profiled running yet; next I'll run the same profile while holding the run button."
   }
 ]

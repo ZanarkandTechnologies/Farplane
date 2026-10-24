@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "hooks" / "shared"))
 
 from continuation import (  # noqa: E402
-    PROPOSAL_QUESTION, PROPOSAL_TASK_QUESTION, QUESTION, TASK_QUESTION, DECIDING_QUESTION,
+    DECIDING_QUESTION, NOTES_QUESTION, PROPOSAL_NOTES_QUESTION, PROPOSAL_QUESTION, QUESTION,
 )
 from skill_suggestion import (  # noqa: E402
     ENDPOINT_ENV, MODEL_ENV, HttpDecisionClient, _provider_config,
@@ -36,8 +36,8 @@ def load_cases() -> list[dict[str, str]]:
 
 
 def state_for(case: dict[str, str]) -> dict[str, object]:
-    task = {"thread_task": case["thread_task"]} if case.get("thread_task") else {}
-    return {**task,
+    notes = {key: case[key] for key in ("thread_notes", "parent_notes") if case.get(key)}
+    return {**notes,
         "original_request": case["original_request"],
         "latest_user_request": case["latest_user_request"],
         "recent_dialogue": [
@@ -52,11 +52,11 @@ def state_for(case: dict[str, str]) -> dict[str, object]:
 
 
 def questions_for(case: dict[str, str]) -> dict[str, object]:
-    """The hook's continuation questions, with the task rules when the case has a task."""
-    task = bool(case.get("thread_task"))
-    return {"nudge": {"type": "noul", "instructions": QUESTION + (TASK_QUESTION if task else "")},
+    """The hook's continuation questions, with the notes rules when the case has notes."""
+    task = bool(case.get("thread_notes") or case.get("parent_notes"))
+    return {"nudge": {"type": "noul", "instructions": QUESTION + (NOTES_QUESTION if task else "")},
             "proposal": {"type": "noul",
-                         "instructions": PROPOSAL_QUESTION + (PROPOSAL_TASK_QUESTION if task else "")},
+                         "instructions": PROPOSAL_QUESTION + (PROPOSAL_NOTES_QUESTION if task else "")},
             "user_deciding": {"type": "noul", "instructions": DECIDING_QUESTION}}
 
 

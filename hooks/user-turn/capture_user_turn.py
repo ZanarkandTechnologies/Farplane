@@ -13,16 +13,13 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-for directory in (ROOT / "hooks" / "user-turn", ROOT / "hooks" / "shared", ROOT / "bin" / "core",
-                  ROOT / "hooks" / "continuation"):
+for directory in (ROOT / "hooks" / "user-turn", ROOT / "hooks" / "shared", ROOT / "bin" / "core"):
     if str(directory) not in sys.path:
         sys.path.insert(0, str(directory))
 
 from runtime_telemetry import emit_hook_telemetry
 from skill_events import post_skill_event, skill_event_row
 from skill_suggestion import suggest_entry_skill, suggestion_context
-import thread_task
-from runtime_config import load_runtime_env
 from user_turn import (
     append_conversation_user_turn,
     capture_user_turn,
@@ -48,25 +45,6 @@ def read_payload() -> dict[str, object]:
     return payload if isinstance(payload, dict) else {}
 
 
-def task_context(payload: dict[str, object], prompt: str) -> str:
-    """Save a <task> the user set, or ask for one where the project requires it. Fails quiet."""
-    try:
-        from continuation import user_text
-
-        transcript = payload.get("transcript_path")
-        return thread_task.prompt_context(
-            str(payload.get("session_id") or ""), prompt, str(payload.get("cwd") or ""),
-            transcript if isinstance(transcript, str) else None, load_runtime_env(), user_text)
-    except Exception:
-        return ""
-
-
-def emit_context(lines: list[str]) -> None:
-    if lines:
-        print(json.dumps({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit",
-                                                 "additionalContext": "\n\n".join(lines)}}))
-
-
 def main() -> int:
     payload = read_payload()
     if payload.get("hook_event_name") != "UserPromptSubmit":
@@ -78,10 +56,8 @@ def main() -> int:
     if is_internal_user_prompt(prompt):
         return 0
 
-    context = [line for line in [task_context(payload, prompt)] if line]
     project_root = project_root_from_payload(payload)
     if project_root is None:
-        emit_context(context)
         return 0
     runtime = runtime_metadata_from_payload(payload, prompt)
 
@@ -192,8 +168,16 @@ def main() -> int:
                 "registry_skill_path": registry_record.get("path", ""),
             },
         )
-        context.append(suggestion_context(suggested_skill))
-    emit_context(context)
+        print(
+            json.dumps(
+                {
+                    "hookSpecificOutput": {
+                        "hookEventName": "UserPromptSubmit",
+                        "additionalContext": suggestion_context(suggested_skill),
+                    }
+                }
+            )
+        )
     return 0
 
 

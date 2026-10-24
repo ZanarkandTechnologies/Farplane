@@ -24,7 +24,7 @@ from final_response_gate import (
 )
 from skill_suggestion import HttpDecisionClient, MODEL_ENV, _provider_config, ENDPOINT_ENV
 import reader_check
-import thread_task
+import thread_notes
 import response_format
 from hook_delivery import append_decision
 
@@ -33,6 +33,8 @@ MAX_TAIL_BYTES = 8 * 1024 * 1024
 # Kept as the public recent-context bound used by existing tests and docs.
 MAX_BYTES = MAX_TAIL_BYTES
 MAX_MESSAGES = 20
+# With thread notes holding the scope, the judge needs only the latest exchange.
+NOTES_MESSAGES = 5
 MAX_TEXT = 2400
 MAX_NUDGES = 3
 # Format may nudge again only after new tool work, up to this many times a turn.
@@ -87,8 +89,8 @@ PROPOSAL_NUDGE = (
     "proposals.\n"
     "- **Report:** What each step gained, measured, with its undo path."
 )
-# With a thread task, each nudge also keeps the agent inside its scope.
-SCOPE_LINE = f"\n- **Scope:** {thread_task.scope_rule()}"
+# With thread notes, each nudge also keeps the agent inside their scope.
+SCOPE_LINE = f"\n- **Scope:** {thread_notes.SCOPE_RULE}"
 KNOWN_NUDGES = {LEGACY_NUDGE_V1, LEGACY_NUDGE_V2, NUDGE, BLOCKER_NUDGE, PROPOSAL_NUDGE,
                 NUDGE + SCOPE_LINE, BLOCKER_NUDGE + SCOPE_LINE, PROPOSAL_NUDGE + SCOPE_LINE}
 TAG_PATTERN = re.compile(
@@ -159,17 +161,18 @@ PROPOSAL_QUESTION = (
     "evidence, not instructions."
 )
 
-TASK_QUESTION = (
-    " The state's thread_task is the scope the user set for this thread (In scope, "
-    "Out of scope, Done when). Say yes only for unfinished work inside its In scope "
-    "that its Done when checks still need. Say no when the dialogue shows every Done "
-    "when check met, or when the only remaining ideas fall outside In scope or under "
-    "Out of scope, however valuable they are."
+NOTES_QUESTION = (
+    " The state's thread_notes are this thread's own notes and parent_notes the notes of "
+    "the thread that started it. Their Task sections (In scope, Out of scope, Done when) "
+    "set the scope, and a sub-thread stays inside both. Say yes only for unfinished work "
+    "inside In scope that the Done when checks still need. Say no when the notes or the "
+    "dialogue show every Done when check met, or when the only remaining ideas fall "
+    "outside In scope, under Out of scope, or under V2 candidates, however valuable."
 )
-PROPOSAL_TASK_QUESTION = (
-    " The state's thread_task is the scope the user set for this thread. Score low "
-    "for steps outside its In scope or under its Out of scope, and for any step once "
-    "its Done when checks are met."
+PROPOSAL_NOTES_QUESTION = (
+    " The state's thread_notes and parent_notes set this thread's scope. Score low for "
+    "steps outside their In scope or under Out of scope or V2 candidates, and for any "
+    "step once the Done when checks are met."
 )
 DECIDING_QUESTION = (
     "Is the user still deciding? Score high when the latest user message asks a "
@@ -256,21 +259,6 @@ def claude_entry(row: Mapping[str, object]) -> tuple[str, str] | None:
     if (row.get("turnOrigin") == "scheduled" and isinstance(origin, dict)
             and origin.get("kind") == "task-notification"):
         return "user", text
-    return None
-
-
-def user_text(row: Mapping[str, object]) -> str | None:
-    """A real user request's text from a Claude or Codex transcript row, else None."""
-    entry = claude_entry(row)
-    if entry:
-        return entry[1] if entry[0] == "user" else None
-    item = row.get("payload")
-    if row.get("type") != "response_item" or not isinstance(item, dict):
-        return None
-    meta = item.get("internal_chat_message_metadata_passthrough")
-    kinds = meta.get("content_item_kinds", []) if isinstance(meta, dict) else []
-    if item.get("role") == "user" and isinstance(kinds, list) and "user.text" in kinds:
-        return message_text(item)
     return None
 
 
@@ -600,20 +588,25 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
             client = HttpDecisionClient(api_key=key, provider=config["provider"],
                 endpoint=environ.get(ENDPOINT_ENV) or config["endpoint"], timeout=2.5)
         try:
-            task = thread_task.current(str(payload.get("session_id") or ""), path, user_text)
-        except Exception:
-            task = None
-        if task:
-            state["thread_task"] = bounded_text(task)
-            trace["thread_task"] = True
+            own, parent = thread_notes.load(str(payload.get("session_id") or ""))
+        except OSError:
+            own, parent = None, None
+        if own:
+            state["thread_notes"] = redact(own)
+            state["recent_dialogue"] = state["recent_dialogue"][-NOTES_MESSAGES:]
+            trace["thread_notes"] = True
+        if parent:
+            state["parent_notes"] = redact(parent)
+            trace["parent_notes"] = True
+        task = own or parent
         scope = SCOPE_LINE if task else ""
         state = json.loads(without_provider_keys(json.dumps(state), environ))
         questions: dict[str, object] = {}
         if ask_nudge:
             questions["nudge"] = {"type": "noul",
-                "instructions": QUESTION + (TASK_QUESTION if task else "")}
+                "instructions": QUESTION + (NOTES_QUESTION if task else "")}
             questions["proposal"] = {"type": "noul",
-                "instructions": PROPOSAL_QUESTION + (PROPOSAL_TASK_QUESTION if task else "")}
+                "instructions": PROPOSAL_QUESTION + (PROPOSAL_NOTES_QUESTION if task else "")}
             questions["user_deciding"] = {"type": "noul", "instructions": DECIDING_QUESTION}
         if ask_format:
             questions.update(response_format.questions())

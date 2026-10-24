@@ -26,21 +26,25 @@ the configured provider. Oversized responses defer to the response-length hook. 
 provenance and provider failures allow stopping; there is no persistent completion
 ledger.
 
-## Thread task
+## Thread notes
 
-When the thread has a task (set with `<task>...</task>`, see
-[user turn](../user-turn/README.md#thread-task)), the judge also gets it as
-`thread_task` and pushes only for unfinished work inside its In scope that its
-Done when checks still need. Ideas outside it, and anything after the checks pass,
-let the turn end; the nudge then adds a Scope line telling the agent to list them
-as v2 candidates. A thread with no saved file (a fork, or one another session
-started) uses the latest `<task>` in a real user message of its transcript. Agent
-text never sets a task.
+Each thread keeps its own notes at `~/.farplane/memory/notes/<session-id>.md`
+(the global contract tells it how; Claude Code exposes the id as
+`$CLAUDE_CODE_SESSION_ID`, the same id this hook receives). A `parent:
+<session-id>` line links a sub-thread to the thread that started it. When the
+thread has notes, the judge gets them as `thread_notes`, its parent's as
+`parent_notes`, plus the original request and the last five messages instead of
+twenty. It pushes only for unfinished work inside the notes' Task that its Done
+when checks still need; ideas outside it, under V2 candidates, or after the
+checks pass let the turn end, and a nudge adds a Scope line. The hook only reads
+these files (own up to 4 KB, parent up to 2 KB); it fetches nothing and runs no
+model of its own. Missing or unreadable notes behave as today. Code:
+[`hooks/shared/thread_notes.py`](../shared/thread_notes.py).
 
 Every continuation request also asks whether the user is still deciding: a
 question, an explanation, review or proposal request, or a rethink of the design.
-Then neither continuation nudge fires, with or without a task. With no task and an
-action request, behaviour is unchanged. Errors reading the task fall back to no task.
+Then neither continuation nudge fires, with or without notes. With no notes and an
+action request, behaviour is unchanged.
 
 ## Install and control
 
@@ -81,8 +85,8 @@ farplane run -- python3 hooks/continuation/sanity_check.py
 
 The sanitized cases cover premature stops (including asking to confirm an in-cap,
 regenerable delete), legitimate stops (including deleting the only copy of data
-and waiting on an approval click only the operator can make), thread-task cases
-(in-scope work left, only out-of-scope ideas left) and investigate, explain or
+and waiting on an approval click only the operator can make), thread-notes cases
+(in-scope work left, only out-of-scope ideas left, a sub-thread with its parent's notes) and investigate, explain or
 propose requests. A case pushes when continuation or proposal scores at least 0.5
 and the user is not still deciding. The command exits nonzero on any wrong
 decision.

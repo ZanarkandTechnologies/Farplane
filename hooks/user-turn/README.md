@@ -3,27 +3,7 @@
 - **Event:** `UserPromptSubmit` (30-second timeout).
 - **Entrypoint:** `capture_user_turn.py`.
 - **Purpose:** Normalize current user intent, capture local conversation windows,
-  emit lightweight intent telemetry, save the thread's task, and optionally suggest
-  one entry skill.
-
-## Thread task
-
-A prompt containing `<task>...</task>` sets this thread's task: the text between
-the tags is saved to `.farplane/tasks/<session_id>.md` in the Farplane checkout.
-A new tag replaces it; an empty `<task></task>` clears it. The agent is told the
-task's title, its file path, and any missing section (In scope, Out of scope,
-Done when, Design link), and asks the user once for what is missing before
-building. The continuation judge reads the same file at stop
-([continuation](../continuation/README.md#thread-task)).
-
-For projects listed in `FARPLANE_TASK_REQUIRED_PATHS` (path-separated; set it in
-the runtime env, e.g. the `env` map of `~/.claude/settings.json` or the `[env]`
-table of `~/.codex/config.toml`), the first prompt of a thread with no
-task tells the agent to fill the file from a linked source (a tracker task, an
-issue) or ask the user once for one before building. Questions, reviews and
-proposals need no task. Other projects are never asked. This runs even when the
-project has no Farplane root, and fails quiet. Code:
-[`hooks/shared/thread_task.py`](../shared/thread_task.py).
+  emit lightweight intent telemetry, and optionally suggest one entry skill.
 
 ## Install and control
 
