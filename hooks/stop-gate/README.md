@@ -58,7 +58,8 @@ not the 2,400-character cut Jev sees, and returns four facts plus a list of
 unexplained internal names. Fixed rules turn them into at most one gap:
 
 - `answers_latest` false → `unanswered`: "answer what you can now, then say
-  what you are waiting for". This catches turns that end on a one-line status
+  what you are waiting for". A turn started by another session's message or
+  an app notice (no words of the user's own) never gets `unanswered`. This catches turns that end on a one-line status
   such as "The simulator finished; the runner is fetching them."
 - `process_narration` true, or two or more unexplained names (ticket or
   session codes, commit hashes, branches, internal tools; paths, links and

@@ -258,6 +258,15 @@ class StopGateTests(unittest.TestCase):
         noisy = "<system-reminder>\nLinked sessions now: fast-walk.\n</system-reminder>\nshould i use the shadow lite?"
         self.assertEqual(continuation.own_words(noisy), "should i use the shadow lite?")
 
+    def test_relaying_another_sessions_news_is_not_unanswered(self):
+        news = human("<cross-session-message from=\"local_x\">FYI: the canvas has a new layout.</cross-session-message>")
+        final = "The v2 page has a new layout, version 31. Waiting on you: your review."
+        self.assertIsNone(self.evaluate([news], final, Client(shape="simple_answer"),
+                                        reader=facts(answers=False)))
+        result = self.evaluate([human("Is the canvas updated?")], final,
+                               Client(shape="simple_answer"), reader=facts(answers=False))
+        self.assertIn("latest message asked", result["reason"])
+
     def test_long_plain_answer_gets_cut_to_a_short_one(self):
         answer = {"shape": {"choice": "simple_answer"}}
         long = "The matcher misses because the crop is cut. " * 25

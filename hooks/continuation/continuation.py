@@ -505,6 +505,8 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         "latest_user_request": bounded_text(last_user_text),
         # The reader treats names from earlier user messages as words the user knows.
         "earlier_requests": "\n".join(own_words(t) for t in actual_requests[:-1])[-MAX_KNOWN:],
+        # A turn started by another session or an app notice has no words of the user's own.
+        "event_turn": not own_words(last_user_text),
         "recent_dialogue": [{"role": m["role"], "text": bounded_text(m["text"])} for m in tail],
         "proposed_final": bounded_text(final),
         "own_nudges_this_user_turn": nudges,
@@ -670,7 +672,10 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
         if ask_format:
             shape, gaps = response_format.select_gaps(
                 answers, files_changed=bool(state["files_changed"]), final=final,
-                reader_gaps=reader_check.gaps(facts), proof_only=proof_only,
+                reader_gaps=[gap for gap in reader_check.gaps(facts)
+                             # A relay of another session's news answers no question.
+                             if not (state["event_turn"] and gap == "unanswered")],
+                proof_only=proof_only,
                 long_turn=bool(state["long_turn"]))
             trace.update(shape=shape, gaps=gaps, scores={
                 key.removeprefix("gap::"): value.get("noul") for key, value in answers.items()
