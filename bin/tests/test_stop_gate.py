@@ -254,6 +254,10 @@ class StopGateTests(unittest.TestCase):
         rows += [edit_call("Bash"), assistant("More work.")]
         self.assertIsNone(self.evaluate(rows, "Done after more work.", client, active=True))
 
+    def test_reader_knows_only_the_users_own_earlier_words(self):
+        noisy = "<system-reminder>\nLinked sessions now: fast-walk.\n</system-reminder>\nshould i use the shadow lite?"
+        self.assertEqual(continuation.own_words(noisy), "should i use the shadow lite?")
+
     def test_long_plain_answer_gets_cut_to_a_short_one(self):
         answer = {"shape": {"choice": "simple_answer"}}
         long = "The matcher misses because the crop is cut. " * 25

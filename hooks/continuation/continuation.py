@@ -353,6 +353,14 @@ LONG_TURN_MINUTES = 30
 MAX_KNOWN = 3000
 
 
+_TAGGED_BLOCK = re.compile(r"<([a-z][\w-]*)\b[^>]*>.*?</\1>", re.S)
+
+
+def own_words(text: str) -> str:
+    """The user's own words: app notices and other tagged blocks removed."""
+    return _TAGGED_BLOCK.sub("", text).strip()
+
+
 def long_turn(started: str, now: datetime | None = None) -> bool:
     """A turn long enough that the user walked away (overnight runs) and needs reminding.
 
@@ -496,7 +504,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         "original_request": bounded_text(actual_requests[0]),
         "latest_user_request": bounded_text(last_user_text),
         # The reader treats names from earlier user messages as words the user knows.
-        "earlier_requests": "\n".join(actual_requests[:-1])[-MAX_KNOWN:],
+        "earlier_requests": "\n".join(own_words(t) for t in actual_requests[:-1])[-MAX_KNOWN:],
         "recent_dialogue": [{"role": m["role"], "text": bounded_text(m["text"])} for m in tail],
         "proposed_final": bounded_text(final),
         "own_nudges_this_user_turn": nudges,
