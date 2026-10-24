@@ -3,7 +3,15 @@
 - **Event:** `UserPromptSubmit` (30-second timeout).
 - **Entrypoint:** `capture_user_turn.py`.
 - **Purpose:** Normalize current user intent, capture local conversation windows,
-  emit lightweight intent telemetry, and optionally suggest one entry skill.
+  emit lightweight intent telemetry, name the thread's notes file once, and
+  optionally suggest one entry skill.
+
+On a thread's first prompt, before it has notes, the hook adds one fixed line:
+the thread's notes path (`~/.farplane/memory/notes/<session-id>.md`) and the rule
+to write a ticket's Task there before building and to ask once for a missing In
+scope, Done when or design link. It parses nothing; a marker under
+`notes/.reminded/` keeps it to once per thread, in every project. The Stop hook
+reads the notes ([continuation](../continuation/README.md#thread-notes)).
 
 ## Install and control
 

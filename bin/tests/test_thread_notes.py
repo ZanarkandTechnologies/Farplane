@@ -8,7 +8,8 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
-for directory in (ROOT / "hooks/shared", ROOT / "hooks/continuation", ROOT / "bin/core"):
+for directory in (ROOT / "hooks/shared", ROOT / "hooks/continuation", ROOT / "hooks/user-turn",
+                  ROOT / "bin/core"):
     sys.path.insert(0, str(directory))
 import continuation as gate
 import thread_notes
@@ -131,6 +132,29 @@ class ThreadNotesTests(unittest.TestCase):
         self.assertEqual(thread_notes.load("child-session-1")[1], None)
         self.note("child-session-1", "parent: missing-session-9\n## Task\nx")
         self.assertEqual(thread_notes.load("child-session-1")[1], None)
+
+    def test_first_prompt_names_the_notes_path_once(self):
+        first = thread_notes.first_prompt_reminder("fresh-session-1")
+        self.assertIn(str(self.dir / "notes" / "fresh-session-1.md"), first)
+        self.assertIn("ask the user once and wait instead of building", first)
+        self.assertEqual(thread_notes.first_prompt_reminder("fresh-session-1"), "")
+
+    def test_no_reminder_once_the_thread_has_notes(self):
+        self.note("child-session-1", PARENT)
+        self.assertEqual(thread_notes.first_prompt_reminder("child-session-1"), "")
+
+    def test_prompt_hook_emits_the_reminder_outside_a_farplane_project(self):
+        import io
+        import capture_user_turn
+
+        payload = {"hook_event_name": "UserPromptSubmit", "session_id": "fresh-session-2",
+                   "cwd": str(self.dir), "prompt": "This is the ticket. Build it."}
+        out = io.StringIO()
+        with patch("sys.stdin", io.StringIO(json.dumps(payload))), patch("sys.stdout", out), \
+                patch.object(capture_user_turn, "project_root_from_payload", lambda _: None):
+            capture_user_turn.main()
+        context = json.loads(out.getvalue())["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("fresh-session-2.md", context)
 
 
 if __name__ == "__main__":

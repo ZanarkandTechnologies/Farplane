@@ -20,6 +20,7 @@ for directory in (ROOT / "hooks" / "user-turn", ROOT / "hooks" / "shared", ROOT 
 from runtime_telemetry import emit_hook_telemetry
 from skill_events import post_skill_event, skill_event_row
 from skill_suggestion import suggest_entry_skill, suggestion_context
+import thread_notes
 from user_turn import (
     append_conversation_user_turn,
     capture_user_turn,
@@ -45,6 +46,21 @@ def read_payload() -> dict[str, object]:
     return payload if isinstance(payload, dict) else {}
 
 
+def emit_context(lines: list[str]) -> None:
+    if lines:
+        print(json.dumps({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit",
+                                                 "additionalContext": "\n\n".join(lines)}}))
+
+
+def notes_reminder(payload: dict[str, object]) -> list[str]:
+    """The thread-notes path and rule on a thread's first prompt; quiet on any error."""
+    try:
+        line = thread_notes.first_prompt_reminder(str(payload.get("session_id") or ""))
+    except OSError:
+        line = ""
+    return [line] if line else []
+
+
 def main() -> int:
     payload = read_payload()
     if payload.get("hook_event_name") != "UserPromptSubmit":
@@ -56,8 +72,11 @@ def main() -> int:
     if is_internal_user_prompt(prompt):
         return 0
 
+    # Every project gets the notes reminder, with or without a Farplane root.
+    context = notes_reminder(payload)
     project_root = project_root_from_payload(payload)
     if project_root is None:
+        emit_context(context)
         return 0
     runtime = runtime_metadata_from_payload(payload, prompt)
 
@@ -168,16 +187,8 @@ def main() -> int:
                 "registry_skill_path": registry_record.get("path", ""),
             },
         )
-        print(
-            json.dumps(
-                {
-                    "hookSpecificOutput": {
-                        "hookEventName": "UserPromptSubmit",
-                        "additionalContext": suggestion_context(suggested_skill),
-                    }
-                }
-            )
-        )
+        context.append(suggestion_context(suggested_skill))
+    emit_context(context)
     return 0
 
 
