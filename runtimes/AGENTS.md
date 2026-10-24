@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.22
+template_version: 0.3.23
 -->
 # Global Agent Guidance
 
@@ -195,7 +195,7 @@ goal = ticket + program + progress + artifacts
   and References. When the user names a ticket ("this is the ticket", "work on
   #507"), copy its scope into Task before building and ask once for a missing
   In scope, Done when, or design link; a link shared only for reference goes
-  under References. Put `parent: <your session id>` in a sub-thread's brief; the
+  under References. Put `parent: <your $CLAUDE_CODE_SESSION_ID>` (or your desktop `local_` id) in a sub-thread's brief; the
   sub-thread copies it into its notes and stays inside both Tasks. Record ideas
   outside Task under V2 candidates instead of building them. The Stop hook
   reads these notes to scope its push.

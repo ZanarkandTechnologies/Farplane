@@ -32,7 +32,8 @@ Each thread keeps its own notes at `~/.farplane/memory/notes/<session-id>.md`
 (the prompt hook names the path on the thread's first prompt and the global
 contract says how to keep it; Claude Code exposes the id as
 `$CLAUDE_CODE_SESSION_ID`, the same id this hook receives). A `parent:
-<session-id>` line links a sub-thread to the thread that started it. When the
+<session-id>` line links a sub-thread to the thread that started it; a
+desktop `local_` id works too, mapped by the prompt hook under `notes/.desktop/`. When the
 thread has notes, the judge gets them as `thread_notes`, its parent's as
 `parent_notes`, plus the original request and the last five messages instead of
 twenty. It pushes only for unfinished work inside the notes' Task that its Done

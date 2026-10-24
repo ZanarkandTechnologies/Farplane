@@ -54,8 +54,10 @@ def emit_context(lines: list[str]) -> None:
 
 def notes_reminder(payload: dict[str, object]) -> list[str]:
     """The thread-notes path and rule on a thread's first prompt; quiet on any error."""
+    session_id = str(payload.get("session_id") or "")
     try:
-        line = thread_notes.first_prompt_reminder(str(payload.get("session_id") or ""))
+        thread_notes.remember_desktop_id(session_id, os.environ.get("CLAUDE_CODE_HOST_SESSION_ID", ""))
+        line = thread_notes.first_prompt_reminder(session_id)
     except OSError:
         line = ""
     return [line] if line else []

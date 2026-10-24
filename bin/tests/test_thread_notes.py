@@ -156,6 +156,16 @@ class ThreadNotesTests(unittest.TestCase):
         context = json.loads(out.getvalue())["hookSpecificOutput"]["additionalContext"]
         self.assertIn("fresh-session-2.md", context)
 
+    def test_parent_named_by_desktop_id_resolves_to_its_notes(self):
+        self.note(PARENT_ID, PARENT)
+        thread_notes.remember_desktop_id(PARENT_ID, "local_f54127db-801a-4ef6-9443-c089a334a11c")
+        self.note("child-session-1", "## Parent\nlocal_f54127db-801a-4ef6-9443-c089a334a11c (v2 thread)\n\n## Task\nx")
+        self.assertIn("fly mode", thread_notes.load("child-session-1")[1])
+
+    def test_unknown_desktop_parent_fails_open(self):
+        self.note("child-session-1", "parent: local_00000000-dead\n## Task\nx")
+        self.assertEqual(thread_notes.load("child-session-1"), ("parent: local_00000000-dead\n## Task\nx", None))
+
 
 if __name__ == "__main__":
     unittest.main()
