@@ -46,7 +46,7 @@ and images as they are.
 
 Every shape also gets the reader check. Claude Haiku 5.5 (OpenRouter,
 `FARPLANE_READER_MODEL`) reads the user's latest message and the whole answer,
-not the 2,400-character cut Jev sees, and returns three facts plus a list of
+not the 2,400-character cut Jev sees, and returns four facts plus a list of
 unexplained internal names. Fixed rules turn them into at most one gap:
 
 - `answers_latest` false → `unanswered`: "answer what you can now, then say
@@ -59,6 +59,8 @@ unexplained internal names. Fixed rules turn them into at most one gap:
 - Two or more unexplained names with the status first → `plain_names`: say
   what each is in a few words, or drop it. One name alone passes, because
   Haiku over-reports single names.
+- `name_drift` true (one thing called by two or more names, "matcher" then
+  "retriever") with no earlier reader gap → `one_name`: keep one name per thing.
 
 The reader runs beside the Jev request with a 2.5-second timeout. A timeout,
 missing key or bad reply skips it and logs `"reader": "unavailable"`.

@@ -75,6 +75,9 @@ GAPS: dict[str, dict[str, str]] = {
     "plain_names": {
         "fix": "Say in a few words what each name the user did not use is (ticket or session codes, commit hashes, branches, internal tools, files), or drop it.",
     },
+    "one_name": {
+        "fix": "Give each thing one name and keep it throughout; replace the synonyms that make one part read as several.",
+    },
     "context_line": {
         "fix": "Open with one sentence, **Context:** You asked …; I …, reminding the user what they asked and what this thread did, because they may come back hours later.",
     },

@@ -15,8 +15,10 @@ template_uses:
 
 Use this when a plan, ticket, or explanation is clearer as an explicit flow,
 state, boundary, decision, UI journey, or system delta, or when `impl-plan`
-hands off a non-blocking visual companion. Skip it when a few lines of prose or
-a table say it better. It owns system-design diagrams only: `prd` workflow mode
+hands off a non-blocking visual companion, or when the reader asks how one
+value changes another (a one-control explainer page). Skip it when a few lines
+of prose or a table say it better. It owns system-design diagrams and explainer
+pages only: `prd` workflow mode
 owns interaction models and wireflows, `visual-design` owns look and feel.
 
 ## Skill Signature
@@ -26,7 +28,7 @@ diagramming(request_or_ticket, approval_question?) -> diagram_pack
 reads: the request, ticket or spec; the target renderer
 does: picks one form for one reader question and draws the smallest version
 writes: inline diagram, or diagrams.md for an impl-plan companion (never ticket.md);
-  in Claude, a published Artifact for every Mermaid diagram
+  in Claude, a published Artifact for every Mermaid diagram or explainer page
 returns: diagram intent, primary diagram (or its Artifact link), optional second view, legend, short notes
 ```
 
@@ -42,7 +44,8 @@ returns: diagram intent, primary diagram (or its Artifact link), optional second
   renderer supports the type before using it.
 
   Example: "what happens when the webhook retries?" -> state transition, not a
-  Before/After map.
+  Before/After map; "how do wrong picks change as the threshold drops?" ->
+  one-control explainer page (N6).
 
   Assert:
   - One question, one form; a Before/After pair only for a system delta.
@@ -86,6 +89,17 @@ returns: diagram intent, primary diagram (or its Artifact link), optional second
 
   Assert:
   - In Claude, no reply or handoff leaves a Mermaid diagram visible only as source.
+- [ ] **N6 — Build a one-control page when one value drives another.**
+  `question + value range + data? -> explainer page | diagram fallback`
+
+  Rule: Follow [the explainer page reference](references/interactive.md): a
+  fast helper (Sonnet in Claude) writes only the JSON spec, and
+  `scripts/explainer_page.py` wraps it in the fixed shell. One slider, one
+  canvas, about 2 minutes; on failure or overrun, answer with a diagram.
+  Video explainers run only when the user asks (`vox-video`, `hyperframes`).
+
+  Assert:
+  - The page has exactly one control, publishes, and its link says what to try.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Gotchas
@@ -103,6 +117,9 @@ returns: diagram intent, primary diagram (or its Artifact link), optional second
 - [review](references/review.md) - pre-handoff checklist.
 - [mermaid_artifact.py](scripts/mermaid_artifact.py) - Markdown or `.mmd` to
   an Artifact page that renders Mermaid in Claude.
+- [interactive](references/interactive.md) and
+  [explainer_page.py](scripts/explainer_page.py) - one-control explainer page:
+  helper brief, budget and the fixed page shell.
 - [impl-plan visual companion](../impl-plan/references/visual-companion-template.md).
 
 ## Output

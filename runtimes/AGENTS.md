@@ -275,7 +275,8 @@ final = decision + reason + proof + next_blocking_condition
   bullets for parallel points, and numbered lists for ordered steps. Keep one
   main point per bullet with its conditions beside it.
 - Use only names the user already used; say what any other name, file, id, or
-  tool is in a few words, or drop it.
+  tool is in a few words, or drop it. Give each thing one name and keep it:
+  "matcher" in one line and "retriever" in the next reads as two things.
 - Use a table when three or more routes share comparable dimensions and the
   reader must distinguish entry points, conditions, or outcomes. Keep prose for
   a single rule and avoid long paragraphs inside cells.
@@ -350,6 +351,7 @@ final = decision + reason + proof + next_blocking_condition
 | Exact mapping or comparison | Table |
 | Quantitative pattern | Chart |
 | UI behavior | Wireflow |
+| How one value changes another | One-control explainer page |
 
 | Claim being proved | Proof surface |
 | --- | --- |
@@ -370,6 +372,10 @@ final = decision + reason + proof + next_blocking_condition
 - Lead with a compact diagram when a decision depends on relationships,
   ownership, data flow, chronology, hierarchy, or failure states. Use numbered
   steps for a simple sequence and a table for exact mappings or comparisons.
+- Escalate only as far as the question needs: prose, then a diagram, then a
+  one-control explainer page; an explainer video only on request. Build the
+  page through `diagramming` with its fixed shell and a fast helper model
+  (Sonnet in Claude) in about 2 minutes; fall back to a diagram on failure.
 - Make diagrams understandable without color. Keep prose out of diagram boxes,
   and do not use visuals, media, or references to introduce unrelated breadth.
 - Embed the strongest relevant image or video. Use one screenshot for UI deltas,

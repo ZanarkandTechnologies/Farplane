@@ -399,5 +399,31 @@
     "files_changed": false,
     "expected_shape": "simple_answer",
     "expected_fixes": []
+  },
+  {
+    "id": "explain-name-drift",
+    "latest_user_request": "Why does the sofa match come back wrong on the London scan?",
+    "proposed_final": "The matcher picks the wrong sofa because the crop it receives cuts off the armrests. The retriever then compares that partial crop against full product photos, so the ranker scores a loveseat higher than the real three-seater. Once the selector sees the low score gap it keeps the loveseat. Widening the crop by 20% before the lookup fixes it on the London scan.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": [
+      "one_name"
+    ]
+  },
+  {
+    "id": "explain-one-name-clean",
+    "latest_user_request": "Why does the sofa match come back wrong on the London scan?",
+    "proposed_final": "The matcher picks the wrong sofa because its input crop cuts off the armrests. The matcher then compares that partial crop against full product photos, so a loveseat scores higher than the real three-seater. Widening the crop by 20% before matching fixes it on the London scan.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": []
+  },
+  {
+    "id": "explain-slider-page-clean",
+    "latest_user_request": "How does the match threshold change how many wrong sofas we pick?",
+    "proposed_final": "Wrong picks stay near 1 in 10 down to a threshold of 0.4, then climb fast: at 0.3 about 4 in 10 picks are wrong. Above 0.6 the matcher refuses most rooms instead.\n\n- Explore: [threshold vs wrong picks](https://claude.ai/code/artifact/example) — drag the slider below 0.4 to watch the wrong picks rise.\n\nVerified: frozen evaluator run on the 10 test rooms.",
+    "files_changed": false,
+    "expected_shape": "simple_answer",
+    "expected_fixes": []
   }
 ]
