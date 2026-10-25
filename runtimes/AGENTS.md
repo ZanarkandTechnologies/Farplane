@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.23
+template_version: 0.3.24
 -->
 # Global Agent Guidance
 
