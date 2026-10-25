@@ -149,6 +149,16 @@ class StopGateTests(unittest.TestCase):
         self.assertTrue(response_format.has_context_line(text.split("````markdown\n")[1]))
         self.assertIn("**Before:**", text)
 
+    def test_name_nudge_lists_the_names(self):
+        import reader_check
+        facts_ = {"answers_latest": True, "status_first": False, "process_narration": False,
+                  "unexplained_names": True, "names": ["dev", "Blacksmith"]}
+        self.assertEqual(reader_check.gaps(facts_), ["plain_names"])
+        self.assertEqual(reader_check.gaps({**facts_, "process_narration": True}),
+                         ["cold_read", "plain_names"])
+        text = response_format.feedback(["plain_names"], "simple_answer", names=["dev", "Blacksmith"])
+        self.assertIn("“dev”, “Blacksmith”", text)
+
     def test_long_turn_opens_with_context(self):
         from datetime import datetime, timezone
         now = datetime(2026, 10, 20, 12, 0, tzinfo=timezone.utc)
@@ -215,7 +225,9 @@ class StopGateTests(unittest.TestCase):
     def test_unexplained_names_need_plain_words(self):
         result = self.evaluate([human("Status?")], "Rescored with T2's scorer at ab006f9; 6/6 found.",
                                Client(shape="simple_answer"), reader=facts(status_first=False, names=True))
-        self.assertIn("overall state in plain words", result["reason"])
+        # Jargon alone asks for the names, not a vague "lead with the state".
+        self.assertIn("what each name the user did not use is", result["reason"])
+        self.assertNotIn("overall state in plain words", result["reason"])
         result = self.evaluate([human("Status?")], "All six found. Rescored with T2's scorer at ab006f9.",
                                Client(shape="simple_answer"), reader=facts(names=True))
         self.assertIn("what each name the user did not use is", result["reason"])

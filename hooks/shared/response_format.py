@@ -303,8 +303,12 @@ STRUCTURAL_GAPS = {"before_after_example", "proof_planned", "blocker_recovery",
                    "decision_choice", "progress_ledger"}
 
 
-def feedback(gaps: list[str], shape: str | None = None, *, long_turn: bool = False) -> str:
+def feedback(gaps: list[str], shape: str | None = None, *, long_turn: bool = False,
+             names: list[str] | None = None) -> str:
     fixes = {"proof": PROOF_FIX, "video_proof": VIDEO_FIX}
+    if names:
+        fixes["plain_names"] = (GAPS["plain_names"]["fix"]
+                                + " Here: " + ", ".join(f"“{name}”" for name in names) + ".")
     lines = "\n".join(
         f"- **Add:** {fixes.get(name) or GAPS[name]['fix']}" for name in gaps
     )

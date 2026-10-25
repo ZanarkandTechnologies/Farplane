@@ -637,7 +637,8 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
             facts = facts_future.result() if facts_future else None
         answers = result["answers"]
         if facts_future:
-            trace["reader"] = facts if facts else "unavailable"
+            trace["reader"] = ({k: v for k, v in facts.items() if k != "names"}
+                               if facts else "unavailable")
         # A plan or a question to the user waits on the user by design.
         awaits_user = response_format._value(answers.get("shape"), "choice") in {
             "proposed_change", "decision_needed"}
@@ -685,7 +686,8 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
                 print(json.dumps({"hook": "response-format", "status": "nudge",
                                   "shape": shape, "gaps": gaps}), file=sys.stderr)
                 return {"decision": "block", "reason": response_format.feedback(
-                    gaps, shape, long_turn=bool(state["long_turn"]))}
+                    gaps, shape, long_turn=bool(state["long_turn"]),
+                    names=(facts or {}).get("names"))}
     except Exception:
         return allow_stop("unavailable", trace)
     return allow_stop("user_deciding" if trace.get("status") == "user_deciding"

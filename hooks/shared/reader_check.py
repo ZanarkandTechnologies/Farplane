@@ -19,6 +19,7 @@ TIMEOUT = 2.5
 MAX_REQUEST = 3000
 MAX_FINAL = 12000
 MIN_NAMES = 2
+MAX_NAMES_SHOWN = 8
 
 PROMPT = """You check a coding agent's final answer for a busy founder who saw only their own messages, not the agent's work.
 Return JSON only:
@@ -72,6 +73,8 @@ def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
     # Haiku over-reports single names; two or more means the reader is lost.
     return {**{name: facts[name] for name in fields},
             "unexplained_names": len(names) >= MIN_NAMES,
+            # Quoted back in the nudge so the agent knows which names; never logged.
+            "names": [str(name)[:40] for name in names][:MAX_NAMES_SHOWN],
             "fixable_blocker": bool(blocker.strip()) and clear,
             "name_drift": facts.get("name_drift") is True}
 
@@ -82,11 +85,15 @@ def gaps(facts: Mapping[str, bool] | None) -> list[str]:
         return []
     if not facts["answers_latest"]:
         return ["unanswered"]
-    lost = facts["process_narration"] or facts["unexplained_names"]
-    if lost and not facts["status_first"]:
-        return ["cold_read"]
+    # A buried status and unexplained names are separate fixes: naming the
+    # names tells the agent exactly what to explain, "lead with the state" does not.
+    found = []
+    if facts["process_narration"] and not facts["status_first"]:
+        found.append("cold_read")
     if facts["unexplained_names"]:
-        return ["plain_names"]
+        found.append("plain_names")
+    if found:
+        return found
     if facts.get("name_drift"):
         return ["one_name"]
     return []
