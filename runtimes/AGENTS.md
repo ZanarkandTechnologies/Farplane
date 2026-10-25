@@ -153,9 +153,10 @@ serious_work = ground -> decide -> plan? -> execute -> verify -> review?
   under 20 seconds, or the test output), plus before/after metrics only where a
   number changed. Comments are working notes, the description is the record.
   Produce edited video only for content outsiders receive.
-- While working a ticket, fix only what blocks its done-when checks. Log every
-  other bug in the project's one next-fixes record (its open issue or list) and
-  carry on; do not fix it in this change or start a thread for it.
+- While working a ticket, fix every bug that blocks it or belongs to its scope,
+  in the same change. Log only bugs outside its scope in the project's one
+  next-fixes record (its open issue or list), each with what is wrong, where,
+  and how to reproduce, and carry on; do not start a thread for them.
 - Treat a confirmed, material agent, prompt, skill, workflow, or validator miss
   as a regression candidate. Capture it in the owning eval or deterministic
   check when recurrence cost justifies a durable guard.
