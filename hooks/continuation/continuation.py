@@ -349,10 +349,9 @@ def calls_tool(row: Mapping[str, object]) -> bool:
             and item.get("type") in {"function_call", "custom_tool_call", "local_shell_call"})
 
 
-LONG_TURN_MINUTES = 30
+LONG_TURN_MINUTES = 15
+LONG_TURN_TOOL_CALLS = 15
 MAX_KNOWN = 3000
-
-
 _TAGGED_BLOCK = re.compile(r"<([a-z][\w-]*)\b[^>]*>.*?</\1>", re.S)
 
 
@@ -361,11 +360,14 @@ def own_words(text: str) -> str:
     return _TAGGED_BLOCK.sub("", text).strip()
 
 
-def long_turn(started: str, now: datetime | None = None) -> bool:
-    """A turn long enough that the user walked away (overnight runs) and needs reminding.
+def long_turn(started: str, tool_calls: int = 0, now: datetime | None = None) -> bool:
+    """A turn long enough that the user may walk away and come back to it later.
 
-    Wall time only: a busy live exchange with many tool calls gets no Context line.
+    The gate cannot see when the user returns, so it uses the turn's own size:
+    15+ minutes or 15+ tool calls. Quick back-and-forth gets no Context line.
     """
+    if tool_calls >= LONG_TURN_TOOL_CALLS:
+        return True
     try:
         begun = datetime.fromisoformat(started.replace("Z", "+00:00"))
     except ValueError:
@@ -390,12 +392,14 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
     length_feedback = False
     previous_assistant = ""
     turn_started = ""
+    tool_calls = 0
     for line in lines:
         row = json.loads(line)
         if not isinstance(row, dict):
             return None
         files_changed = files_changed or edits_files(row)
         work_since_format = work_since_format or calls_tool(row)
+        tool_calls += calls_tool(row)
         if row.get("type") in {"user", "assistant"} and "message" in row:
             entry = claude_entry(row)
             if entry is None:
@@ -405,6 +409,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
                 if TAG_PATTERN.search(text):
                     return None
                 turn_started = str(row.get("timestamp") or "")
+                tool_calls = 0
                 actual_requests.append(text)
                 last_user_text = text
                 last_user_index = len(messages)
@@ -447,6 +452,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
             if TAG_PATTERN.search(text) or not metadata.get("turn_id"):
                 return None
             turn_started = str(row.get("timestamp") or "")
+            tool_calls = 0
             actual_requests.append(text)
             last_user_text = text
             last_user_index = len(messages)
@@ -514,7 +520,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         "proof_nudges_this_user_turn": proof_nudges,
         "work_since_format_nudge": work_since_format,
         "files_changed": files_changed,
-        "long_turn": long_turn(turn_started),
+        "long_turn": long_turn(turn_started, tool_calls),
         "recognized_length_feedback_this_user_turn": length_feedback,
         "source_truncated": rollout_truncated or len(messages) > MAX_MESSAGES or any(
             len(redact(m["text"])) > MAX_TEXT for m in messages

@@ -300,7 +300,7 @@ enforces the same rules, so a draft that passes needs no rewrite.
    a blocker gives evidence and recovery, and one you can clear yourself gets
    cleared, not reported.
 5. **Next steps are titled by their gain**, not their work.
-6. **After 30+ minutes of work**, open with `**Context:** You asked …; I …`
+6. **After 15+ minutes or 15+ tool calls of work**, open with `**Context:** You asked …; I …`
    for a user coming back later; skip it in a live exchange.
 
 - Omit the progress ledger when it would repeat obvious context.

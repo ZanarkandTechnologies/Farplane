@@ -25,10 +25,10 @@ asked for Before/After.
 In every shape, proposed next steps titled by their work ("add caching")
 rather than their gain ("rebuilds 35 s faster") get the `proposal_gain` fix.
 
-A long turn (30+ minutes since the user's message, wall time only) must
-open with one `**Context:** You asked …; I …` sentence, so a user returning
-from an overnight run knows what the thread was doing. A live exchange with
-many tool calls gets none. It is fixed, not scored, and a Context line of 40
+A long turn (15+ minutes since the user's message, or 15+ tool calls) must
+open with one `**Context:** You asked …; I …` sentence, so a user coming back
+an hour later knows what the thread was doing. The gate cannot see when the
+user returns, so the turn's own size stands in; a quick exchange gets none. It is fixed, not scored, and a Context line of 40
 words or fewer is outside the length budget.
 
 Short answers are a fixed rule too: a simple answer, proposed change,
