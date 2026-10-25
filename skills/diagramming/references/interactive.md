@@ -40,6 +40,8 @@ slider move: ctx is a 2D canvas context already cleared and scaled, v the
 slider value, w and h the size in CSS pixels, c the colours {fg, muted, line,
 accent, warn, surface}. Use only these colours. Draw axes with labels in
 c.muted, the main curve or object in c.accent, the failure region in c.warn.
-Leave 32 px margins for labels. Return a short string for the readout, such as
+Leave a 48 px left margin and 32 px on the other sides. Write axis names
+horizontally (the y-axis name above its top tick), never rotated, and keep
+every label clear of the others. Return a short string for the readout, such as
 "overshoots after 3 steps". No external libraries, no DOM access, no timers.
 ```
