@@ -3,7 +3,7 @@ title: Edit Direction
 owner: storyboard
 status: active
 kind: reference
-updated_at: 2026-10-12
+updated_at: 2026-10-26
 ---
 
 # Edit Direction
@@ -146,6 +146,12 @@ an executable request with only a missing-input list or an empty schema.
   without pretending they came from a stored pattern.
 - Every recipe row repeats `renderer_owner: hyperframes`; a global note is not
   a substitute.
+- A rewrite during the edit that needs a new on-screen shot (filmed monitor,
+  projector, headset view) fakes it from a clean screen recording, matched to
+  that medium, instead of asking for a reshoot. When a filmed screen is
+  unreadable, overlay the clean recording at low opacity in the screen's
+  perspective. Precedent: [Joma](https://x.com/jomatech/status/2110549495939518524),
+  posts 6-7.5.
 
 ## Proof handoff
 

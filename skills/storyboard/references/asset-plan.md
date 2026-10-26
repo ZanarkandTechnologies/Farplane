@@ -3,7 +3,7 @@ title: Asset Plan
 owner: storyboard
 status: active
 kind: reference
-updated_at: 2026-10-12
+updated_at: 2026-10-26
 ---
 
 # Asset Plan
@@ -143,6 +143,13 @@ enough; only an explicit `semantic_storyboard_only` downgrade allows it.
   scratches, light artifacts, mattes, and shadows, own provenance, rights,
   dimensions, alpha or black-background suitability, level/edge/loop cleanup,
   expected blend, accepted file, and acceptance check.
+- Live-action or skit shoots: give every shot a previs frame (a 3D blockout or
+  an `ai-image` still) and add an on-set shot checklist, so every shot is
+  captured on shoot day. Precedent: [Joma's previs from the reference
+  ad](https://x.com/jomatech/status/2110549507469672733), posts 10-11.
+- Screen props: anything shown on a screen, monitor, projector, or headset is a
+  working app the agents built, never a mockup. Precedent: [Joma's
+  props](https://x.com/jomatech/status/2110549514620920076), post 12.
 
 ## Routes
 
