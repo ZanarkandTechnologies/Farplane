@@ -19,6 +19,19 @@
         ]
       }
     ],
+    "PreToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.codex/hooks/foreground-wait/foreground_wait.sh\"",
+            "statusMessage": "Foreground wait — denies a Bash call that sleeps or polls in the foreground; rerun it in the background",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "^(apply_patch|Edit|Write)$",

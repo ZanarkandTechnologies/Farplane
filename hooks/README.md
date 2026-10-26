@@ -12,6 +12,7 @@ explain behavior without maintaining duplicate registration snippets.
 | [lifecycle-telemetry](lifecycle-telemetry/README.md) | UserPromptSubmit, Stop, SubagentStart, SubagentStop | Classified lifecycle observations |
 | [skill-length](skill-length/README.md) | PostToolUse | Repair feedback for oversized edited skills |
 | [skill-invocation](skill-invocation/README.md) | PostToolUse | Records real skill invocations for skill heat |
+| [foreground-wait](foreground-wait/README.md) | PreToolUse | Denies a Claude Bash call that sleeps or polls in the foreground, with the background rerun to use |
 | [user-turn](user-turn/README.md) | UserPromptSubmit | User-intent capture and optional skill suggestion |
 
 ## Install and inspect

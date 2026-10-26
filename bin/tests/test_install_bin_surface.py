@@ -49,6 +49,7 @@ class InstallBinSurfaceTests(unittest.TestCase):
                 "lifecycle-telemetry",
                 "skill-length",
                 "skill-invocation",
+                "foreground-wait",
                 "user-turn",
                 "shared",
             ),
@@ -67,7 +68,7 @@ class InstallBinSurfaceTests(unittest.TestCase):
             for groups in hook_config["hooks"].values()
             for group in groups
             for hook in group["hooks"]
-            if (match := re.search(r"\.codex/hooks/([^\" ]+\.py)", hook.get("command", "")))
+            if (match := re.search(r"\.codex/hooks/([^\" ]+\.(?:py|sh))", hook.get("command", "")))
         }
         self.assertTrue(referenced.issubset(managed), referenced - managed)
 

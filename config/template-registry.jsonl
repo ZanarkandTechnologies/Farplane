@@ -1,6 +1,6 @@
 {"applies_to":[".farplane/entities/*.md (pages with roles [creator])"],"consumer_scope":"wiki","kind":"entity-page","path":"skills/manage-wiki/templates/creator-page.md","template_id":"creator-page","template_version":"0.1.1"}
 {"applies_to":["farplane/manifest.json"],"consumer_scope":"project","path":"skills/setup-advisor/references/MANIFEST_TEMPLATE.json","template_id":"farplane-framework","template_version":"2.0.18"}
-{"path":"runtimes/AGENTS.md","template_id":"global-agents-template","template_version":"0.3.24"}
+{"path":"runtimes/AGENTS.md","template_id":"global-agents-template","template_version":"0.3.25"}
 {"kind":"goal-program","path":"tickets/templates/goal-loop/program.md","template_id":"goal-loop-program","template_version":"0.3.3"}
 {"kind":"goal-progress","path":"tickets/templates/goal-loop/progress.md","template_id":"goal-loop-progress","template_version":"0.2.2"}
 {"consumer_scope":"skills/*/examples/golden/*.md","path":"skills/harness/templates/GOLDEN_EXAMPLE.md","template_id":"golden-example","template_version":"0.2.2"}

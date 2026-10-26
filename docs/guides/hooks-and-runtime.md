@@ -42,7 +42,8 @@ owns entrypoint usage, configuration, failure behavior, and focused checks:
 [response length](../../hooks/response-length/README.md),
 [lifecycle telemetry](../../hooks/lifecycle-telemetry/README.md),
 [skill length](../../hooks/skill-length/README.md),
-[skill invocation](../../hooks/skill-invocation/README.md), and
+[skill invocation](../../hooks/skill-invocation/README.md),
+[foreground wait](../../hooks/foreground-wait/README.md), and
 [user turn](../../hooks/user-turn/README.md).
 `farplane hooks install` links these complete folders. Temporary installed-only
 migration links keep old flat command paths usable by active Codex sessions with
@@ -54,6 +55,7 @@ cached registrations; remove them only after those sessions retire or reload.
 | Event | Commands | Purpose |
 | --- | --- | --- |
 | `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
+| `PreToolUse` (`Bash`) | `foreground_wait.sh` | Claude only: deny a foreground Bash call that sleeps 30 s or more or polls in an `until`/`while`/`for` sleep loop, with the reason naming `run_in_background`, Monitor, or `timeout` ≤ 30000 for a short wait |
 | `PostToolUse` (`apply_patch`, `Edit`, `Write`) | `skill_file_line_gate.py` | return repair feedback when a touched `skills/**/SKILL.md` exceeds 200 physical lines; the edit remains applied |
 | `PostToolUse` (`Skill`, `Bash`) | `skill_invocation.py` | record each real skill invocation as one `skill_invoked` row on the telemetry stream (a Claude `Skill` call, or Codex's first `Bash` read of an installed `SKILL.md` in a turn); observation only, never blocks |
 | `Stop` | `stop_gate.py`, `farplane_console_ping.py --expect-event Stop` | one blocking gate checks length, then continuation, then response format (at most one nudge per stop), and telemetry observes stop attempts; neither certifies task completion |

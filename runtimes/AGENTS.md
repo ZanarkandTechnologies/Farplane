@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.24
+template_version: 0.3.25
 -->
 # Global Agent Guidance
 
@@ -264,9 +264,17 @@ delegate(context_ref, claim, bounded_output, proof_target) -> owned_result
 - Treat nested agent or CLI launches as delegated work with an owner, bounded
   output, and expected artifact. Do not interpolate untrusted text into shell
   commands or expose credentials in command output.
-- Poll with adaptive backoff, honor service hints, widen intervals while state
-  is unchanged, and reset after progress. Keep long-running work visible in a
-  durable record, wait, reminder, or monitor.
+- Never hold a turn in a foreground wait. For a wait over about 30 seconds (a
+  job, pod, build, or log line), start it in the background (Claude:
+  `run_in_background`) and keep working or end the turn; its completion
+  notice resumes you. Wait on a condition with Monitor or a background
+  until-loop, never a foreground `sleep` or `until`/`while … sleep` loop.
+  Honor service hints and widen intervals while state is unchanged. Keep
+  long-running work visible in a durable record, reminder, or monitor.
+- Never end a turn waiting on a `start_session` offer card; it holds the turn
+  until the user answers. Start work the user asked to split off
+  (`user_asked`), propose your own follow-ups as `own_initiative` cards, or
+  end the turn.
 - Edit repository-owned source and use its install or sync route. Do not patch
   installed copies unless requested. Do not commit secrets, private runtime
   state, generated scratch, or unsanitized data. Do not expand global prompts

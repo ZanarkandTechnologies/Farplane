@@ -157,6 +157,7 @@ INSTALL_HOOK_DIRS=(
   lifecycle-telemetry
   skill-length
   skill-invocation
+  foreground-wait
   user-turn
   shared
 )
