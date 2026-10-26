@@ -247,6 +247,11 @@ delegate(context_ref, claim, bounded_output, proof_target) -> owned_result
   becomes the current step.
 - Keep the visible task responsible for the full lifecycle. Do not create hidden
   queues or background autonomy.
+- Inside T3 Code (its `t3-code` MCP server is present), a visible sub-thread is
+  `delegate_task`, a new top-level thread the user asked for is
+  `t3_thread_launch`, and an automation is `schedule_task`; the Claude app's
+  session, sidebar, and Remote Control tools and the skills built on them
+  (`reconnect`, `goal-sections`) do not exist there.
 
 ### Operate the workspace safely
 
