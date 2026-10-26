@@ -149,6 +149,15 @@ class StopGateTests(unittest.TestCase):
                                Client(nudge=0.9), checks=checks)
         self.assertEqual(result["reason"], continuation.NUDGE)
 
+    def test_no_continuation_push_when_the_answer_waits_on_the_user(self):
+        checks = frozenset({"continuation"})
+        rows = [human("Finish the importer.")]
+        self.assertIsNone(self.evaluate(rows, "The parser fix is ready.\n\nWaiting on you: approve the merge.",
+                                        Client(nudge=0.9), checks=checks))
+        self.assertTrue(self.logged[-1]["waits_on_user"])
+        self.assertEqual(self.evaluate(rows, "Next I'll fix the parser.", Client(nudge=0.9),
+                                       checks=checks)["reason"], continuation.NUDGE)
+
     def test_every_nudge_carries_its_shape_template(self):
         for shape in response_format.SHAPES:
             with self.subTest(shape=shape):

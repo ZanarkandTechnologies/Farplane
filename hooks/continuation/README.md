@@ -8,7 +8,8 @@
   at most three identifiable own nudges are allowed per real user turn, and a
   repeat nudge only after at least two tool calls since the last one: an agent
   that answered a nudge by restating its status gets no second one (that repeat
-  was churn 3 times in 4 in Claude transcripts, 22-26 Oct 2026).
+  was churn 3 times in 4 in Claude transcripts, 22-26 Oct 2026), and none when
+  the answer closes "Waiting on you" (17 of 20 such pushes only restated it).
 
 The classifier looks for concrete completion gaps: naming the next correction
 instead of doing it, admitting that a requested fix remains incomplete, or

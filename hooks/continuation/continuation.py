@@ -359,6 +359,19 @@ def calls_tool(row: Mapping[str, object]) -> bool:
             and item.get("type") in {"function_call", "custom_tool_call", "local_shell_call"})
 
 
+# An answer that closes by handing the next move to the user needs no push: 17
+# of 20 such pushes since 23 Oct only restated the wait. (Skipping pushes while
+# a background job or started session runs was tested and dropped: 79 of 131
+# of those pushes led to work.)
+_WAITS_ON_USER = re.compile(r"(?i)\bwaiting (?:on|for) (?:you|your)\b")
+
+
+def ends_waiting_on_user(final: str) -> bool:
+    """The answer closes by handing the next move to the user."""
+    tail = [line for line in final.splitlines() if line.strip()][-3:]
+    return bool(_WAITS_ON_USER.search("\n".join(tail)))
+
+
 LONG_TURN_MINUTES = 15
 LONG_TURN_TOOL_CALLS = 15
 MAX_KNOWN = 3000
@@ -605,8 +618,11 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
         idle_after_nudge = nudges > 0 and int(state["tool_calls_since_nudge"]) < MIN_TOOLS_AFTER_NUDGE
         if idle_after_nudge:
             trace["idle_after_nudge"] = True
+        waits_on_user = ends_waiting_on_user(final)
+        if waits_on_user:
+            trace["waits_on_user"] = True
         ask_nudge = ("continuation" in checks and nudges < MAX_NUDGES
-                     and not idle_after_nudge)
+                     and not idle_after_nudge and not waits_on_user)
         # A format nudge is spent until new tool work happens; proof keeps its own.
         full_format = format_count == 0 or (
             bool(state["work_since_format_nudge"]) and format_count < MAX_FORMAT_NUDGES)
