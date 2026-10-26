@@ -18,11 +18,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "bin" / "core"))
 from farplane_response import measure_response  # noqa: E402
 
 GAP_THRESHOLD = 0.6
+# Haiku alone called 3 in 4 answered replies "unanswered" (replay of 245 real
+# answers, 24-26 Oct 2026); Jev must agree.
+UNANSWERED_THRESHOLD = 0.5
 MAX_GAPS = 2
 # Answers, proposals, decisions and blockers stay short; reports of finished or
 # running work keep the full length budget. Tables, fenced blocks and labelled
-# lines (Before/After/Example/Verified...) don't count.
-SHORT_ANSWER_WORDS = 180
+# lines (Before/After/Example/Verified...) don't count. The target is about 150
+# words; the gate sends back only clear misses (two in three nudges at 180 were
+# answers of 181-250 words, 24-26 Oct 2026).
+SHORT_ANSWER_WORDS = 250
 SHORT_SHAPES = {"simple_answer", "proposed_change", "decision_needed", "blocked"}
 TAG = "<!-- farplane-response-format:v1 -->"
 
@@ -78,6 +83,8 @@ VIDEO_SHAPES = {"completed_change", "progress"}
 GAPS: dict[str, dict[str, str]] = {
     "unanswered": {
         "fix": "Answer what the user's latest message asked in the first lines. If work is still running, answer what you can now, then say what you are waiting for and when it lands.",
+        # Scored as a second opinion on the reader's claim, never on its own.
+        "question": "Does the final answer leave the user's latest message unanswered: it asks a question or requests something, and the final neither answers it, does it, nor says why not, for example a one-line status of running work in reply to a question? Score low when the latest message is a statement, report, complaint or approval and the final responds to it, or when the final answers what can be answered now and says what it is waiting for.",
     },
     "cold_read": {
         "fix": "Lead with the overall state in plain words: what works, what does not, and the one thing the user must do. Drop internal terms and fix history.",
@@ -183,9 +190,14 @@ def has_before_after(final: str) -> bool:
     return bool(_BEFORE.search(final) and _AFTER.search(final))
 
 
+# Only change reports carry the delta; a status relay or an answer in a turn
+# that also edited files is not one.
+BEFORE_AFTER_SHAPES = {"completed_change", "proposed_change"}
+
+
 def needs_before_after(shape: str, *, files_changed: bool, final: str) -> bool:
-    """Any answer reporting or proposing a change shows Before / After, unless tiny."""
-    if not (files_changed or shape == "proposed_change"):
+    """A completed or proposed change shows Before / After, unless tiny."""
+    if shape not in BEFORE_AFTER_SHAPES or not (files_changed or shape == "proposed_change"):
         return False
     return len(final.split()) >= BEFORE_AFTER_MIN_WORDS and not has_before_after(final)
 
@@ -265,9 +277,11 @@ def select_gaps(answers: Mapping[str, object], *, files_changed: bool, final: st
     if "proposal_gain" not in ranked and _score(answers.get("gap::proposal_gain")) >= GAP_THRESHOLD:
         ranked.append("proposal_gain")
     too_long = shape in SHORT_SHAPES and measure_response(final).prose_words > SHORT_ANSWER_WORDS
+    reader_gaps = [gap for gap in reader_gaps or [] if gap != "unanswered"
+                   or _score(answers.get("gap::unanswered")) >= UNANSWERED_THRESHOLD]
     gaps = [*(["context_line"] if long_turn and not has_context_line(final) else []),
             *(["short_answer"] if too_long else []),
-            *(reader_gaps or []),
+            *reader_gaps,
             *(["absolute_paths"] if has_relative_path(final) else []),
             *ranked]
     # A run's last progress update can report a new feature too. The video fix

@@ -5,12 +5,17 @@
 - **Purpose:** Ask Jev whether a gentle nudge would advance useful work within
   the user's existing request. It cannot certify Goal or ticket completion.
 - **Decision:** A probability of at least 0.5 returns scoped continuation feedback;
-  at most three identifiable own nudges are allowed per real user turn.
+  at most three identifiable own nudges are allowed per real user turn, and a
+  repeat nudge only after at least two tool calls since the last one: an agent
+  that answered a nudge by restating its status gets no second one (that repeat
+  was churn 3 times in 4 in Claude transcripts, 22-26 Oct 2026).
 
 The classifier looks for concrete completion gaps: naming the next correction
 instead of doing it, admitting that a requested fix remains incomplete, or
 stopping at diagnosis after a fix/finish request. A completed bounded request
-does not continue merely because separate validation or an older issue remains.
+does not continue merely because separate validation or an older issue remains,
+nor when the answer already reports that the rest runs in another session, job
+or CI run that will report back, or waits on the user.
 The feedback uses a level-four Markdown heading plus labeled instruction bullets.
 It asks Codex to take one concrete action, using tools when the task requires
 them, while retaining the existing scope, approval, safety, and budget boundaries.

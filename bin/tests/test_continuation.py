@@ -39,6 +39,10 @@ def user(text):
     return [row]
 
 
+# Two tool calls: the work a repeat continuation nudge needs since the last one.
+WORK = [{"type": "response_item", "payload": {"type": "function_call", "name": "shell"}}] * 2
+
+
 def claude(kind, text, **extra):
     if kind == "user":
         row = {"type": "user", "origin": {"kind": "human"}, "message": {"role": "user", "content": text}}
@@ -146,14 +150,14 @@ class ContinuationTests(unittest.TestCase):
         self.assertEqual(state["own_nudges_this_user_turn"], 0)
 
     def test_previous_nudge_version_still_counts_within_same_user_turn(self):
-        self.rows += [self.desktop_hook(gate.LEGACY_NUDGE_V1),
+        self.rows += [self.desktop_hook(gate.LEGACY_NUDGE_V1), *WORK,
                       message("assistant", "I will test next.")]
 
         self.assertIsNotNone(self.run_gate(final="I will test next.", active=True))
         self.assertEqual(self.client.calls[-1]["state"]["own_nudges_this_user_turn"], 1)
 
     def test_previous_v2_nudge_still_counts_within_same_user_turn(self):
-        self.rows += [self.desktop_hook(gate.LEGACY_NUDGE_V2),
+        self.rows += [self.desktop_hook(gate.LEGACY_NUDGE_V2), *WORK,
                       message("assistant", "I will test next.")]
 
         self.assertIsNotNone(self.run_gate(final="I will test next.", active=True))
@@ -167,7 +171,7 @@ class ContinuationTests(unittest.TestCase):
         return row
 
     def test_desktop_hook_envelope_counts_and_caps_nudges(self):
-        self.rows += [self.desktop_hook(gate.NUDGE)]
+        self.rows += [self.desktop_hook(gate.NUDGE), *WORK]
         self.assertIsNotNone(self.run_gate(active=True))
         self.assertEqual(self.client.calls[-1]["state"]["own_nudges_this_user_turn"], 1)
         self.rows += [self.desktop_hook(gate.NUDGE) for _ in range(2)]
@@ -212,7 +216,7 @@ class ContinuationTests(unittest.TestCase):
         self.assertEqual(self.client.calls, [])
 
     def test_one_prior_nudge_allows_progress_sensitive_reassessment(self):
-        self.rows += [message("user", gate.NUDGE), message("assistant", "Tests found a bug; I'll fix it.")]
+        self.rows += [message("user", gate.NUDGE), *WORK, message("assistant", "Tests found a bug; I'll fix it.")]
         self.assertIsNotNone(self.run_gate(active=True))
         self.assertEqual(self.client.calls[0]["state"]["own_nudges_this_user_turn"], 1)
 

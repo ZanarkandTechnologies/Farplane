@@ -3,6 +3,11 @@
 Jev scores template sections but cannot tell when a busy reader is lost. Haiku
 returns six facts and fixed rules turn them into at most one gap. Missing
 credentials, timeouts and bad replies return None, so the stop is never held up.
+
+Haiku over-reports, so fixed rules check its claims: a bold opening line counts
+as the status, and a name the user used, a number, path, link or a name the
+answer explains is not unexplained. "Unanswered" also needs Jev's agreement
+(`response_format.select_gaps`).
 """
 from __future__ import annotations
 
@@ -39,6 +44,40 @@ Return JSON only:
 - agent_can_clear_now: true only if the agent could clear that blocker itself right now with its own tools (rerun or fix a failing command or test, start a server, install a package, read a file or log, retry another way, fix a small bug it found) and nothing else must happen first. False when it needs the user (password, login, account, approval, payment, spend, a decision, a plan to approve, hardware) or is waiting on another person, session or running job."""
 
 
+_EXPLAINED_AFTER = re.compile(r"^[`*_\"”’)]*\s*(?:\(|:|—|–| - |, (?:a|an|the|our|which|where|i\.e\.)\b| is\b| means\b| \()")
+_LINK_TEXT = re.compile(r"\[([^\]]+)\]\(")
+_NOT_A_NAME = re.compile(r"^[\W\d_]+$|/|^[-`~.]|\.\w{1,5}$|#\d+|^https?:")
+
+
+def known_name(name: str, final: str, known: str) -> bool:
+    """True for a name a reader can follow: the user used it, it is a number,
+    path, flag, link or issue number, or the answer explains it where it appears."""
+    name = name.strip().strip("`*\"'“”")
+    if not name or _NOT_A_NAME.search(name) or name.lower() in known.lower():
+        return True
+    if any(name.lower() in text.lower() for text in _LINK_TEXT.findall(final)):
+        return True
+    return any(_EXPLAINED_AFTER.match(final[match.end():match.end() + 16])
+               for match in re.finditer(re.escape(name), final, re.IGNORECASE))
+
+
+def clip_request(text: str) -> str:
+    """Keep the opening and the end of a long message: a long brief asks at the end."""
+    if len(text) <= MAX_REQUEST:
+        return text
+    return text[:MAX_REQUEST // 3] + "\n[…]\n" + text[-2 * MAX_REQUEST // 3:]
+
+
+def opens_with_status(final: str) -> bool:
+    """A bold first line (after any heading or Context line) states the status."""
+    for line in final.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or re.match(r"^\W{0,6}context\W{0,4}:", line, re.I):
+            continue
+        return line.startswith("**")
+    return False
+
+
 def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
           timeout: float = TIMEOUT, known: str = "") -> dict | None:
     key = environ.get(KEY_ENV, "").strip()
@@ -51,7 +90,7 @@ def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
             {"role": "system", "content": PROMPT},
             {"role": "user", "content": (f"EARLIER USER MESSAGES (their names are known):\n{known[-MAX_REQUEST:]}\n\n"
                                          if known.strip() else "")
-                                        + f"LATEST USER MESSAGE:\n{latest_user_request[:MAX_REQUEST]}"
+                                        + f"LATEST USER MESSAGE:\n{clip_request(latest_user_request)}"
                                         f"\n\nFINAL ANSWER:\n{final[:MAX_FINAL]}"},
         ],
     }
@@ -70,8 +109,11 @@ def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
             or not isinstance(names, list) or not isinstance(blocker, str)
             or not isinstance(clear, bool)):
         return None
+    names = [str(name) for name in names
+             if not known_name(str(name), final, f"{latest_user_request}\n{known}")]
     # Haiku over-reports single names; two or more means the reader is lost.
     return {**{name: facts[name] for name in fields},
+            "status_first": facts["status_first"] or opens_with_status(final),
             "unexplained_names": len(names) >= MIN_NAMES,
             # Quoted back in the nudge so the agent knows which names; never logged.
             "names": [str(name)[:40] for name in names][:MAX_NAMES_SHOWN],

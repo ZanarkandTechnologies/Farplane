@@ -136,6 +136,19 @@ class StopGateTests(unittest.TestCase):
             "\n".join(json.dumps(r) for r in rows)) else None
         self.assertEqual(state["own_nudges_this_user_turn"], 1)
 
+    def test_no_repeat_continuation_nudge_after_an_idle_reply(self):
+        bash = {"type": "assistant", "message": {"role": "assistant", "content": [
+            {"type": "tool_use", "name": "Bash", "input": {"command": "make test"}}]}}
+        nudged = [human("Finish the importer."), assistant("Next I'll fix the parser."),
+                  hook(continuation.NUDGE)]
+        checks = frozenset({"continuation"})
+        # Restating the status after a nudge earns no second nudge.
+        self.assertIsNone(self.evaluate(nudged, "The parser fix is next.", Client(nudge=0.9), checks=checks))
+        self.assertTrue(self.logged[-1]["idle_after_nudge"])
+        result = self.evaluate([*nudged, bash, bash], "Parser fixed; the writer is next.",
+                               Client(nudge=0.9), checks=checks)
+        self.assertEqual(result["reason"], continuation.NUDGE)
+
     def test_every_nudge_carries_its_shape_template(self):
         for shape in response_format.SHAPES:
             with self.subTest(shape=shape):
@@ -159,6 +172,18 @@ class StopGateTests(unittest.TestCase):
         text = response_format.feedback(["plain_names"], "simple_answer", names=["dev", "Blacksmith"])
         self.assertIn("“dev”, “Blacksmith”", text)
 
+    def test_reader_claims_are_checked(self):
+        import reader_check
+        final = ("**Merged.** [eddison-io/oures#654](https://x.test/654) is in. P0 (cloud depth) "
+                 "wins. tmux, a background terminal, keeps it alive. The carve step runs.")
+        for name in ("oures#654", "38", "--fp-scale", "P0", "tmux", "Chairhorse", "`tokens.css`"):
+            with self.subTest(name=name):
+                self.assertTrue(reader_check.known_name(name, final, "coding chairhorse issues"))
+        self.assertFalse(reader_check.known_name("carve", final, ""))
+        self.assertTrue(reader_check.opens_with_status("### Fix\n**Context:** You asked x.\n\n**Partial: y.**"))
+        self.assertFalse(reader_check.opens_with_status("I reran the scorer, then the parser."))
+        self.assertTrue(reader_check.clip_request("a" * 4000 + "ASK").endswith("ASK"))
+
     def test_long_turn_opens_with_context(self):
         from datetime import datetime, timezone
         now = datetime(2026, 10, 20, 12, 0, tzinfo=timezone.utc)
@@ -178,11 +203,13 @@ class StopGateTests(unittest.TestCase):
 
     def test_change_always_shows_before_after(self):
         long = "Done. " + "The importer now skips blank rows and keeps the valid ones in order. " * 4 + "Verified: tests pass."
-        for shape in ("completed_change", "progress"):
+        _, gaps = response_format.select_gaps({"shape": {"choice": "completed_change"}}, files_changed=True, final=long)
+        self.assertEqual(gaps[0], "before_after_example")
+        # A status relay or an answer in a turn that also edited files is not a change report.
+        for shape in ("progress", "simple_answer", "blocked"):
             with self.subTest(shape=shape):
                 _, gaps = response_format.select_gaps({"shape": {"choice": shape}}, files_changed=True, final=long)
-                self.assertEqual(gaps[0], "before_after_example")
-                self.assertNotIn("progress_ledger", gaps)
+                self.assertNotIn("before_after_example", gaps)
         shown = long + "\n> **Before:** blank rows stopped it.\n> **After:** they are skipped."
         _, gaps = response_format.select_gaps({"shape": {"choice": "completed_change"}}, files_changed=True, final=shown)
         self.assertNotIn("before_after_example", gaps)
@@ -197,7 +224,7 @@ class StopGateTests(unittest.TestCase):
         for shape in response_format.SHAPES:
             with self.subTest(shape=shape):
                 result = self.evaluate([human("Can graph syntax render?")], "Waiting on the fixers.",
-                                       Client(shape=shape), reader=facts(answers=False))
+                                       Client(shape=shape, gaps={"unanswered": 0.8}), reader=facts(answers=False))
                 self.assertIn("Answer what the user's latest message asked", result["reason"])
                 result = self.evaluate([human("Status?")], "Reach strip fixed; 6/7 agree.",
                                        Client(shape=shape), reader=facts(status_first=False, narration=True))
@@ -208,10 +235,10 @@ class StopGateTests(unittest.TestCase):
                    "message": {"role": "user", "content": "Build piece 8."}}
         scheduled = {**started, "turnOrigin": "scheduled", "promptSource": "system",
                      "origin": {"kind": "task-notification"}}
-        result = self.evaluate([started], "Waiting on the fixers.", Client(shape="simple_answer"),
+        result = self.evaluate([started], "Waiting on the fixers.", Client(shape="simple_answer", gaps={"unanswered": 0.8}),
                                reader=facts(answers=False))
         self.assertIn("Answer what the user's latest message asked", result["reason"])
-        result = self.evaluate([scheduled], "Waiting.", Client(shape="simple_answer"),
+        result = self.evaluate([scheduled], "Waiting.", Client(shape="simple_answer", gaps={"unanswered": 0.8}),
                                reader=facts(answers=False))
         self.assertIn("Answer what the user's latest message asked", result["reason"])
 
@@ -275,15 +302,18 @@ class StopGateTests(unittest.TestCase):
     def test_relaying_another_sessions_news_is_not_unanswered(self):
         news = human("<cross-session-message from=\"local_x\">FYI: the canvas has a new layout.</cross-session-message>")
         final = "The v2 page has a new layout, version 31. Waiting on you: your review."
-        self.assertIsNone(self.evaluate([news], final, Client(shape="simple_answer"),
+        self.assertIsNone(self.evaluate([news], final, Client(shape="simple_answer", gaps={"unanswered": 0.8}),
                                         reader=facts(answers=False)))
         result = self.evaluate([human("Is the canvas updated?")], final,
-                               Client(shape="simple_answer"), reader=facts(answers=False))
+                               Client(shape="simple_answer", gaps={"unanswered": 0.8}), reader=facts(answers=False))
         self.assertIn("latest message asked", result["reason"])
+        # Haiku alone over-reports; Jev must agree the message went unanswered.
+        self.assertIsNone(self.evaluate([human("Is the canvas updated?")], final,
+                                        Client(shape="simple_answer"), reader=facts(answers=False)))
 
     def test_long_plain_answer_gets_cut_to_a_short_one(self):
         answer = {"shape": {"choice": "simple_answer"}}
-        long = "The matcher misses because the crop is cut. " * 25
+        long = "The matcher misses because the crop is cut. " * 32  # 256 words
         _, gaps = response_format.select_gaps(answer, files_changed=False, final=long)
         self.assertEqual(gaps, ["short_answer"])
         self.assertIn("ASD-STE100", response_format.feedback(gaps, "simple_answer"))

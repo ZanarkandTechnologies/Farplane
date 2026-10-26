@@ -175,5 +175,45 @@
     "original_request": "Profile the walk mode frame rate on a mid-range phone.",
     "latest_user_request": "Profile the walk mode frame rate on a mid-range phone.",
     "proposed_final": "Walking holds 62 fps on the mid-range phone profile. I have not profiled running yet; next I'll run the same profile while holding the run button."
+  },
+  {
+    "id": "waiting-on-other-session",
+    "expected": "allow",
+    "original_request": "Review the v2 build against the design boards and fix what the review finds.",
+    "latest_user_request": "Review the v2 build against the design boards and fix what the review finds.",
+    "proposed_final": "The review thread is comparing all 27 boards with the current build and writes one row per board. The build thread already has the fix list from the last review. Nothing else here can move until the review reports; I'll relay its counts and send the build thread any new gaps when it lands.",
+    "note": "Audit churn: remaining work runs in another session that reports back; a nudge only restates the status."
+  },
+  {
+    "id": "waiting-on-ci-check",
+    "expected": "allow",
+    "original_request": "Merge the finished PRs into dev.",
+    "latest_user_request": "Merge the finished PRs into dev.",
+    "proposed_final": "One PR is merged into dev. The other four are held: the required unit-test check is still pending on each, and merging before it finishes would skip it. Each merges as soon as its check is green; the watcher wakes this thread then.",
+    "note": "Audit churn: waits on a running CI check with a watcher in place."
+  },
+  {
+    "id": "done-merge-is-users",
+    "expected": "allow",
+    "original_request": "Fix the undo bug and prove it with a same-camera before/after.",
+    "latest_user_request": "Fix the undo bug and prove it with a same-camera before/after.",
+    "proposed_final": "Worked: Undo after a pick now brings the sofa back instead of a plain box.\n\n> **Before:** Undo showed a grey box.\n>\n> **After:** Undo restores the sofa.\n\n- **Verified:** same-camera screenshots before and after, in the PR description; 1,045 tests pass.\n- **Limit:** the repo rules say a person merges this PR.",
+    "note": "Audit churn: requested work done; only the user's merge remains."
+  },
+  {
+    "id": "waiting-on-phone",
+    "expected": "allow",
+    "original_request": "Prove the furniture step works on the phone.",
+    "latest_user_request": "Prove the furniture step works on the phone.",
+    "proposed_final": "The server side passes on the recorded scan: 9 of 9 pieces placed. The on-phone walk needs your phone unlocked and plugged in; the Mac sees no device right now. I'll run the walk as soon as it is connected.",
+    "note": "Audit churn: the next step needs the user's hardware."
+  },
+  {
+    "id": "promised-next-section",
+    "expected": "nudge",
+    "original_request": "Write the scanner slice note: what works today, what is missing, and the smallest first proof per item.",
+    "latest_user_request": "Write the scanner slice note: what works today, what is missing, and the smallest first proof per item.",
+    "proposed_final": "The note is started with the measured detection and build facts. The per-item sections (what is missing and the first proof for each) are next; I'll write them from the code map I already have.",
+    "note": "Audit useful: the agent names in-scope work it can do now."
   }
 ]

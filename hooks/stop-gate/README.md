@@ -32,14 +32,16 @@ user returns, so the turn's own size stands in; a quick exchange gets none. It i
 words or fewer is outside the length budget.
 
 Short answers are a fixed rule too: a simple answer, proposed change,
-decision or blocker with more than 180 prose words gets `short_answer` (about
-150 words in "80% ASD-STE100", the named plain-English standard). Labelled
+decision or blocker with more than 250 prose words gets `short_answer` (about
+150 words in "80% ASD-STE100", the named plain-English standard). The target
+stays 150; the trigger sits at 250 so only clear misses come back. Labelled
 lines, tables and fenced blocks don't count. Completed changes and progress
 reports keep the 500-word budget.
 
-Before/After is a fixed rule, not a score: any answer of 40 words or more
-that reports edited files, or proposes a change, must carry `Before:` and
-`After:` (or `Now:`) labels, as lines or table columns. It outranks the
+Before/After is a fixed rule, not a score: a completed change (files edited)
+or proposed change of 40 words or more must carry `Before:` and `After:` (or
+`Now:`) labels, as lines or table columns. A status update or an answer in a
+turn that also edited files is not a change report. It outranks the
 Goal/Track/Progress ask.
 
 A format nudge whose gap is structural (missing Before/After, planned proof,
@@ -55,10 +57,20 @@ Every shape also gets the reader check. Claude Haiku 5.5 (OpenRouter,
 `FARPLANE_READER_MODEL`) reads the user's latest message, the last 3,000
 characters of their earlier messages (names used there count as known), and the whole answer,
 not the 2,400-character cut Jev sees, and returns four facts plus a list of
-unexplained internal names. Fixed rules turn them into at most one gap:
+unexplained internal names. Haiku sees only the user's own words of the latest
+message (app notices and session reminders removed) and, for a long brief, its
+opening and its end. Haiku over-reports, so fixed rules check its claims first:
+a bold opening line (after any heading or Context line) counts as the status;
+a name the user used, a number, path, flag, link text or issue number, or a
+name the answer explains where it appears (`name (…)`, `name: …`, `name, a …`)
+is dropped from the unexplained list. Then fixed rules turn them into at most
+one gap:
 
-- `answers_latest` false → `unanswered`: "answer what you can now, then say
-  what you are waiting for". A turn started by another session's message or
+- `answers_latest` false and Jev's `gap::unanswered` ≥ 0.5 → `unanswered`:
+  "answer what you can now, then say what you are waiting for". Haiku alone
+  called three in four answered replies unanswered; Jev agreeing keeps the
+  real misses (a one-line status, or "No response requested.", in reply to a
+  question). A turn started by another session's message or
   an app notice (no words of the user's own) never gets `unanswered`. This catches turns that end on a one-line status
   such as "The simulator finished; the runner is fetching them."
 - `process_narration` true, or two or more unexplained names (ticket or
