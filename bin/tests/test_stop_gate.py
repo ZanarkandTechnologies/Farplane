@@ -174,11 +174,11 @@ class StopGateTests(unittest.TestCase):
 
     def test_reader_claims_are_checked(self):
         import reader_check
-        final = ("**Merged.** [eddison-io/oures#654](https://x.test/654) is in. P0 (cloud depth) "
+        final = ("**Merged.** [acme/shop#654](https://x.test/654) is in. P0 (cloud depth) "
                  "wins. tmux, a background terminal, keeps it alive. The carve step runs.")
-        for name in ("oures#654", "38", "--fp-scale", "P0", "tmux", "Chairhorse", "`tokens.css`"):
+        for name in ("shop#654", "38", "--fp-scale", "P0", "tmux", "Widgetry", "`tokens.css`"):
             with self.subTest(name=name):
-                self.assertTrue(reader_check.known_name(name, final, "coding chairhorse issues"))
+                self.assertTrue(reader_check.known_name(name, final, "coding widgetry issues"))
         self.assertFalse(reader_check.known_name("carve", final, ""))
         self.assertTrue(reader_check.opens_with_status("### Fix\n**Context:** You asked x.\n\n**Partial: y.**"))
         self.assertFalse(reader_check.opens_with_status("I reran the scorer, then the parser."))
