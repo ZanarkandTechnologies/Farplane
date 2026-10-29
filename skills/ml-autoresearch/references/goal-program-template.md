@@ -112,8 +112,49 @@ after_each_turn:
   - read the issue body, hypothesis-tree.json, and the newest Goal turn comments within 80 lines
   - choose execute | diagnose | report_now | request_feedback | stop from pending leaves, evidence, and budget; use the choose-next comparison only when several moves need judgment
   - execute at most one selected experiment
-  - update the tree, then post one Goal turn comment with receipt ref, learning, tree mutation, decision, and next action; rewrite ## Current Goal state
+  - update the tree, store the receipt below at a linked ref under .farplane/goal-advisor/issue-<n>/receipts/, then post one compact Goal turn comment with that ref, learning, tree mutation, decision, and next action; rewrite ## Current Goal state
   - continue, replan, block, or complete from the declared rules
+
+turn_report: # the operator response for a loop policy, packet draft, or active turn; not turn-comment content
+  packet: ticket sections, Goal program, tree, turn comments, compile state
+  tree: source synthesis, eligible leaves, branch state
+  progress: turn-comment learnings, current receipt refs
+  selector: direct or choose-next, outside options
+  experiment: hypothesis, target misses, falsifier, boundary, guards, cost
+  expectation: observation, horizon, confidence, surprise trigger
+  writeback: receipt ref, decision, constraint, tree mutation, next step
+
+receipt: # stored at the linked ref, never pasted into the turn comment
+  experiment_id:
+  parent_candidate:
+  selected_tree_node:
+  progress_evidence_refs: []
+  hypothesis:
+  target_misses: []
+  mechanism:
+  expected_observation:
+  observation_horizon:
+  confidence: low | medium | high
+  falsifier:
+  kill_rule:
+  surprise_trigger:
+  expected_reward:
+  reward_basis:
+  source_refs: []
+  changed_boundary:
+  config_code_data_evaluator_hashes: {}
+  command_environment:
+  smoke_result:
+  full_metrics: {}
+  guards: {}
+  runtime_compute_cost: {}
+  decision: keep | discard | repair_once | failed | defer
+  failure_or_learning:
+  causal_status: supported | unresolved | not_required
+  supported_cause_or_next_discriminator:
+  causal_evidence_refs: []
+  tree_mutation:
+  next_action:
 
 drift:
   - stale when ticket scope, mutable/frozen surfaces, data/splits, evaluator, metric, guards, budget, or approval changes

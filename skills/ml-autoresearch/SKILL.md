@@ -1,10 +1,10 @@
 ---
 name: ml-autoresearch
-description: "Optimize a measurable ML system through bounded Goal-backed experiments selected from roadmap and progress evidence."
+description: "Use for \"set up an ML improvement campaign\", \"plan the next round\", \"what should we try next\" or \"why did this run miss\": an ML experiment loop that picks bets from today's misses and keeps verified gains."
 department: operations
 source: local
 template_uses:
-  skill-template: "0.3.9"
+  skill-template: "0.6.9"
   skill-eval-task: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash
 ---
@@ -14,309 +14,186 @@ allowed-tools: Read, Glob, Grep, Bash
 ## Context
 
 Use this when an ML training or inference system has a frozen evaluator, a
-measurable objective, a bounded mutable surface, and enough compute authority
-for repeated experiments. Use one campaign ticket for one stable objective,
-evaluator, data boundary, and budget; experiments are receipts, not tickets.
-
-This adapts Karpathy's minimal Autoresearch loop—baseline, one code experiment,
-evaluate, keep or discard, repeat—into Farplane's visible Goal Packet. Native
-Goal is the sole continuation engine.
+measurable objective, a bounded mutable surface, and compute authority for
+repeated experiments. One ticket holds one stable objective, evaluator, data
+boundary, and budget; experiments are receipts, not tickets. It adapts
+Karpathy's Autoresearch loop to Farplane's Goal Packet: native Goal alone
+continues it, and Goal Advisor compiles the packet but never selects techniques.
 
 ## Skill Signature
 
 ```text
-ml_autoresearch(target_system, owning_ticket, mutable_surface,
-                frozen_evaluator, primary_metric, guards?,
-                technique_catalog?, budgets?)
-  -> approved_goal_packet + best_verified_candidate + experiment_evidence
-
-state:
-  reads(target code/docs, immutable data/evaluator contract, owning issue,
-        Goal program policy, hypothesis-tree.json, Goal turn comment learnings, experiment receipts,
-        optional technique catalog, current compute/budget state)
-  writes(issue ## Goal program, hypothesis-tree.json, Goal turn comments,
-         native Goal prompt, linked experiment receipts,
-         accepted mutable-surface change)
-
-gates:
-  target_exists; owning_ticket_exists; mutable_surface_bounded;
-  evaluator_frozen; metric_and_direction_named; baseline_recorded;
-  guards_and_budget_named; misses_split; source_stage_grounded;
-  hypothesis_tree_bound; packet_approved
-
-routes:
-  goal-advisor | research |
-  eval | qa | review
-
-fails:
-  evaluator_or_data_boundary_mutation; experiment_before_baseline;
-  fixed_ladder_ignoring_progress; multiple_confounding_deltas;
-  unbounded_compute_or_spend; result_cherry_pick; receipt_overwrite;
-  ticket_per_attempt; second_runner_or_continuation_owner; self_approved_claim;
-  invented_budget_or_guard_threshold; swap_before_add
+ml_autoresearch(target_system, owning_ticket, mutable_surface, frozen_evaluator,
+                primary_metric, guards?, technique_catalog?, budgets?)
+  -> approved Goal Packet + best verified candidate + experiment receipts
+reads: target code/docs, evaluator and data contract, owning issue, tree, receipts
+does: picks bets from a decision tree over misses; one experiment at a time
+writes: ## Goal program, hypothesis-tree.json, turn comments, receipts, kept change
+returns: packet state, best candidate or a negative/blocked result, residual risks
 ```
-
-## Decision Backbone
-
-Every campaign plan, policy, packet, and active-turn decision must make this
-named composition explicit:
-
-```text
-source_stage(today's misses + limiting stage + catalog + Feed Scout/research?)
-  -> techniques + mechanisms + variables
-campaign.initialize_tree(initial hypothesis candidates)
-goal_advisor(issue ticket sections + program preset + hypothesis-tree.json)
-  -> approved Goal Packet
-observe(issue body + tree + Goal turn comments within 80 lines + current receipts)
-choose_next(eligible leaves + remaining budget)
-  -> execute | diagnose | report_now | request_feedback | stop
-choose_next_comparison(eligible leaves + evidence + outside options)? -> selected move
-domain_executor(next experiment) -> receipt + tree update + Goal turn comment
-native_goal(updated packet state) -> continue | replan | block | complete
-```
-
-The campaign Goal Packet always contains the issue's ticket sections, `## Goal
-program` (owns source/search policy), `hypothesis-tree.json` (owns current
-hypotheses, results, and insights), and Goal turn comments (own append-only
-selections and mutation receipts). Goal Advisor is only the packet/native-Goal
-compiler; Metric Advisor is setup/repair only. Use choose-next only when several
-experiments need judgment; otherwise the Goal executes the implied move directly.
-
-## Phase Boundary
-
-Keep setup and cheap local grounding inline. Route uncertain metrics to Goal
-Advisor [metrics](../goal-advisor/references/metrics.md). Route a missing, stale,
-or evidence-thin technique frontier to bounded research or Best Of Worlds before
-ranking. Use Agent QA or review when the agent, evaluator integrity, leakage
-boundary, or final scientific claim needs independent judgment. External compute,
-spend, uploads, or services still need the authority named by the ticket.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the campaign contract.
-  - [ ] Read the owning ticket, target code/docs, mutable surface, frozen
-    evaluator and data boundary, primary metric and direction, guards, budget.
-  - [ ] Route an obvious deterministic bug to direct implementation instead of
-    opening an experiment campaign.
-  - [ ] Do not invent a GPU/time/spend/attempt ceiling, metric threshold, guard
-    threshold, or repeatability band. When a cap is fixed but its value is
-    omitted, preserve it as unresolved and block packet approval while still
-    returning the non-numeric hypothesis/tree plan.
-- [ ] 2. Prove the baseline and evaluator boundary.
-  - [ ] Hash or otherwise identify the frozen evaluator, data/split inputs,
-    environment, and baseline candidate before mutation.
-  - [ ] Run the baseline through the exact full evaluator; use smokes only for
-    correctness, never promotion.
-- [ ] 3. Run the source stage and seed the hypothesis tree from today's misses.
-  - [ ] Score today's best on every set; only its misses go forward, one row per
-    miss, and a held-out set is scored, never mined. Split them by questions
-    answerable without the truth (is the wall glass?) into a decision tree over
-    case kinds: each kind gets the technique that wins on all its cases, handled
-    and missed, and the shipped pipeline routes every case down that tree. Give
-    one stage the truth; the largest end-score move names the limiting stage.
-    Look at missed cases before naming a cause.
-  - [ ] Per case kind, ask why against the target docs: what does a technique
-    see that today's method does not? Search local failures, the optional
-    technique catalog, supplied refs, and Feed Scout signals by case kind; route
-    bounded [research](../research/SKILL.md) when coverage is missing or stale.
-    Extract techniques, mechanisms, variables, failure conditions, source refs,
-    and ablation-table gains; record source dispositions before use.
-  - [ ] Generate hypotheses: add B to today's A (union, vote, median, per-case
-    pick) so A's wins stay, keeping any swap of A `defer` until A + B is kept and
-    A's own misses are the limit; combine methods whose misses differ, ending in
-    a per-case pick down that tree; add permutation, transfer, ablation, or new
-    direction. Card each in `hypothesis-tree.json`: `target_misses`, expected
-    observation as a predicted number (ablation tables when sourced), falsifier,
-    kill rule, cost, expected compounding reward, and reward basis; rank or
-    select only once every eligible initial node has the whole card. An unlabeled
-    or merely implied reward basis is an incomplete node. Each `reward_basis`
-    must say what compounds—reusable capability, information that prunes the
-    tree, options unlocked, or proof accelerated—not merely restate expected
-    metric lift. An uncovered case kind stays open, not a node, naming its need.
-  - [ ] When several credible initial hypotheses need judgment, use
-    [choose-next](../goal-advisor/references/choose-next.md) for one ordinal comparison
-    including outside options. Skip this hop when one move is mechanically
-    implied. No tournament, persistent rank, or uncalibrated numeric lift.
-- [ ] 4. Use [Goal Advisor](../goal-advisor/SKILL.md) to instantiate
-  [the ML Goal program preset](references/goal-program-template.md) into the
-  owning issue's `## Goal program`, create or update `hypothesis-tree.json` and
-  `## Current Goal state`, compile the Files-listed native Goal prompt, and obtain
-  required approval.
-- [ ] 5. Select the next experiment from current evidence.
-  - [ ] Apply `choose_next` to `## Goal program` policy, eligible pending tree
-    leaves, recent Goal turn comment learnings, current full-evaluator receipts,
-    and remaining budget. Do not continue a fixed roadmap order.
-  - [ ] Before scoring, preregister the selected node's card plus observation
-    horizon, named confidence, surprise trigger, changed boundary, expected
-    information, and guards. Label `falsifier` and `surprise_trigger`
-    separately; one failure threshold cannot silently stand in for both.
-- [ ] 6. Execute and record one bounded experiment.
-  - [ ] Modify only the allowed surface, run correctness smokes, then run the
-    exact full frozen evaluator when valid.
-  - [ ] Update the selected tree node with the result, evidence, and insight,
-    then post the receipt link, learned constraint, keep/discard/repair-once
-    decision, tree mutation, and next action as one Goal turn comment; include
-    rejected alternatives or a budget checkpoint only when they materially
-    affect the selection or a ceiling. Never overwrite a failed attempt.
-  - [ ] When the observation materially misses its expectation or is
-        implausibly strong, route the immutable receipt through
-        `eval:experiment` before rejecting the method or promoting the
-        candidate. The domain executor owns every repair/rerun and must keep it
-        inside the campaign's remaining time, compute, spend, and attempt budget.
-  - [ ] For a surprising, invalid, prerequisite-uncertain, or causally
-    ambiguous result, add only program-bounded diagnostic children before
-    rejecting the method. Expected negatives may close directly; after
-    diagnosis, repair, reject, defer, or backtrack to a credible sibling.
-  - [ ] Separate claim failure from causal resolution. A missed score may
-    falsify the parent performance claim, but it does not establish why. Mark
-    the parent cause `supported` only when completed diagnostic children carry
-    discriminating evidence against credible alternatives; otherwise keep the
-    cause `unresolved` and select the highest-information discriminator within
-    budget.
-  - [ ] State what each clue can and cannot prove. Target-local success shows
-    that the target contains learnable signal, not which source-to-target
-    difference broke transfer. Background research makes a mechanism
-    plausible, but does not isolate it from live experimental confounds. Treat
-    both as diagnostic inputs until a controlled comparison discriminates among
-    credible causes.
-  - [ ] When a diagnostic cause becomes supported, write the resulting causal
-    insight and concrete diagnostic `evidence_refs` into the parent node before
-    appending the progress receipt. Render that updated parent state in the
-    response: `<intervention> failed because <supported cause> within <tested
-    boundary>`. Never substitute “score was bad” or an unisolated correlation
-    for a root-cause report.
-  - [ ] Reserve `failed because` for `causal_status: supported`. When causal
-    status is unresolved, conclude only: `<intervention> failed within <tested
-    boundary>; cause unresolved.` Do not describe an “unresolved combination”
-    as what the intervention failed because of; that wording still invents a
-    causal explanation.
-  - [ ] Before causal use, match each diagnostic receipt's evaluator, split,
-    config, code, data, and metric to the frozen campaign. On drift, preserve
-    the receipt append-only but remove it from all causal evidence; change the
-    diagnostic and parent cause to `unresolved` while keeping performance
-    falsified; stale the packet; and allow only Goal Advisor regeneration.
-- [ ] 7. Continue, replan, or stop mechanically.
-  - [ ] Keep only candidates that improve the primary objective while every
-    guard passes (several test sets: a gain on most, e.g. 2 of 3, none worse
-    beyond its named noise band); prefer the simpler one when materially tied.
-  - [ ] Replan after every valid full result; the new best's misses re-enter
-    step 3. Stop on success, supported negative conclusion, exhausted useful
-    frontier, stale packet, blocker, or budget before silently expanding scope.
-  - [ ] Treat evaluator or split drift as an execution-eligibility failure,
-    not a reporting caveat. Preserve the drifted receipt append-only, mark the
-    packet stale, and do not select, preregister, repair, rerun, or recommend a
-    current-packet experiment—even when attempts remain—until Goal Advisor
-    regenerates an approved packet with a comparable boundary.
-  - [ ] In any negative-stop or surprise response, explicitly echo the
-        preregistered `expected_observation`, `observation_horizon`,
-        `confidence`, `falsifier`, and `surprise_trigger`; do not collapse them
-        into one generic failure threshold. Explicitly say the domain executor
-        owns any repair/rerun within the remaining campaign budget. Keep the
-        Goal Packet active for an in-contract repair; mark it stale only when a
-        frozen surface, scope, metric, data boundary, budget, or approval changes.
-- [ ] 8. Finish with independent evidence review.
-  - [ ] Re-run the full evaluator on the frozen best candidate, verify receipt
-    and budget integrity, apply the relevant Todo List guardrails, obtain required QA/reviewer
-    judgment, write residual risks, and close the owning ticket canonically.
+- [ ] **N1 — Bind the campaign contract and prove the baseline.**
+  `ticket + target -> frozen contract + baseline receipt | direct fix | blocked`
+
+  Rule: Bind the mutable surface, frozen evaluator and data boundary, metric and
+  direction, guards, and budget; send an obvious bug to direct implementation
+  and an unclear metric to Goal Advisor
+  [metrics](../goal-advisor/references/metrics.md). Never invent a
+  GPU/time/spend/attempt ceiling, metric or guard threshold, or repeatability
+  band: an omitted value stays unresolved and blocks packet approval, but the
+  non-numeric tree plan is still returned. Hash evaluator, splits, environment,
+  and baseline; run the exact full evaluator; smokes never promote.
+
+  Assert:
+  - All of the above is named before any mutation, or the gap is the blocker;
+    mutating it to manufacture a gain stales the packet.
+  - External compute, spend, uploads, or services carry the ticket's authority.
+- [ ] **N2 — Grow a decision tree over today's misses.**
+  `per-case baseline scores -> case kinds + limiting stage | open kinds`
+
+  Rule: Score today's best on every set; only its misses go forward, one row
+  each; a held-out set is scored, never mined. Split misses by questions
+  answerable without the truth into a decision tree over case kinds: each kind
+  gets the technique that wins on all its cases, handled and missed, and the
+  shipped pipeline routes every case down that tree. Give each stage the truth
+  in turn; the one that moves the end score most is the limit. Read misses
+  before naming a cause.
+
+  Example: `true depth +3, true boxes +20 -> the box detector is the limit`
+
+  Assert:
+  - Every split is answerable at run time; "how wrong the output was" is not.
+  - The limiting stage comes from a truth swap, or is marked not measured yet.
+- [ ] **N3 — Source techniques and card the hypotheses.**
+  `case kinds + sources -> carded hypothesis-tree.json | research | open kinds`
+
+  Rule: Per case kind, ask why against the target docs: what does a technique
+  see that today's method does not? Search local failures, supplied refs, Feed
+  Scout signals, and the optional [efficient-inference
+  catalog](references/technique-catalog-efficient-inference.md) (latency or size
+  goals) by case kind; route bounded [research](../research/SKILL.md) or Best Of
+  Worlds when coverage is missing or stale. Extract techniques, mechanisms,
+  variables, failure conditions, source refs, and ablation-table gains,
+  recording dispositions before use. Generate: add B to today's A (union, vote,
+  median, per-case pick) so A's wins stay, keeping any swap of A `defer` until A
+  + B is kept and A's own misses are the limit; combine methods whose misses
+  differ, ending in a per-case pick; add permutation, transfer, ablation, or new
+  direction. Card each node: `target_misses`, expected observation as a
+  predicted number (ablation tables when sourced), falsifier, kill rule, cost,
+  expected compounding reward, and `reward_basis`.
+
+  Assert:
+  - Nothing is ranked until every eligible node has the whole card; an unlabeled
+    or implied reward basis is an incomplete node.
+  - `reward_basis` names what compounds (reusable capability, information that
+    prunes the tree, options unlocked, proof accelerated), not metric lift.
+  - An uncovered case kind stays open, not a node, naming its need.
+- [ ] **N4 — Select and preregister the next experiment.**
+  `policy + eligible leaves + receipts + budget -> one preregistered move | approval pending | stop`
+
+  Rule: Apply `choose_next` (execute, diagnose, report_now, request_feedback, or
+  stop) to the program policy, eligible leaves, turn-comment learnings,
+  full-evaluator receipts, and remaining budget; never follow a fixed roadmap
+  order. When several credible moves need judgment, make one ordinal
+  [choose-next](../goal-advisor/references/choose-next.md) comparison with
+  outside options; it returns a decision and stores nothing. No tournament,
+  persistent rank, or uncalibrated numeric lift. Preregister the card plus
+  observation horizon, named confidence, surprise trigger, changed boundary,
+  expected information, and guards. On the first round, `goal-advisor` puts the
+  [ML Goal program preset](references/goal-program-template.md) into the issue's
+  `## Goal program` with this selection, updates `## Current Goal state`,
+  compiles the native Goal prompt, and gets approval before execution.
+
+  Assert:
+  - `falsifier` and `surprise_trigger` are separate labels, never one threshold.
+  - The experiment is one attributable delta on the allowed surface.
+  - One packet, runner, and ticket; split only for a new objective, evaluator,
+    owner, approval or spend boundary, or parallel proof surface.
+- [ ] **N5 — Run one experiment and diagnose a miss.**
+  `preregistered experiment -> receipt + tree update | diagnostic children`
+
+  Rule: Change only the allowed surface, run smokes, then the exact full
+  evaluator. Update the tree node (result, evidence, insight) first, then post
+  one compact Goal turn comment linking the receipt (preset `receipt` fields);
+  never overwrite a failed attempt. A material miss or an implausibly strong
+  result goes through `eval:experiment` before rejection or promotion; the
+  domain executor owns any repair or rerun within the budget, and
+  evaluator-integrity or leakage doubts go to `qa` or `review`. For a
+  surprising, invalid, prerequisite-uncertain, or causally ambiguous result, add
+  only program-bounded diagnostic children (expected negatives may close), then
+  repair, reject, defer, or backtrack to a credible sibling.
+
+  Assert:
+  - A missed score can falsify the parent claim but never says why.
+  - A cause is `supported` only when completed diagnostics discriminate against
+    credible alternatives; target-local success shows learnable signal and
+    research shows plausibility, but neither isolates a cause.
+  - Supported: the parent gets the insight and diagnostic `evidence_refs` first;
+    conclude `<intervention> failed because <cause> within <tested boundary>`.
+  - Unresolved: pick the highest-information discriminator within budget and
+    conclude only `<intervention> failed within <tested boundary>; cause
+    unresolved.`, never "failed because" of an unresolved combination.
+  - A receipt whose evaluator, split, config, code, data, or metric drifted
+    stays append-only but leaves all causal evidence: its diagnostic and parent
+    cause turn `unresolved`, performance stays falsified, the packet goes stale,
+    and nothing is selected, preregistered, repaired, rerun, or recommended,
+    even with attempts left, until Goal Advisor regenerates an approved packet.
+- [ ] **N6 — Keep, replan, or stop mechanically.**
+  `receipt + tree -> keep | discard | replan | stop | stale`
+
+  Rule: Keep only a candidate that improves the primary objective with every
+  guard passing (several test sets: a gain on most, e.g. 2 of 3, none worse
+  beyond its named noise band); prefer the simpler one when materially tied, and
+  never cherry-pick a run. Replan after every valid full result; the new best's
+  misses re-enter N2. Stop on success, supported negative conclusion, exhausted
+  frontier, stale packet, blocker, or budget, never by silently expanding scope.
+
+  Assert:
+  - A negative stop or surprise echoes its preregistered expected observation,
+    horizon, confidence, falsifier, and surprise trigger and keeps the packet
+    active unless the frozen contract or approval changed.
+- [ ] **N7 — Review the final claim until TAS-A.**
+  `best candidate + receipts -> review(scientific-evidence) -> TAS-A | revise | blocked`
+
+  Rule: Re-run the full evaluator on the frozen best candidate and check receipt
+  and budget integrity. Run the `review` skill with family `scientific-evidence`
+  (an independent reviewer when available; `qa` when evaluator integrity or
+  leakage needs it). On TAS-B, fix the named checks and review again; after
+  three rounds report the open checks as the blocker. Close the ticket
+  canonically only at TAS-A. Self-review never counts.
+
+  Assert:
+  - The output names the family, rounds, final TAS, and residual risks.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
-
-## Templates
-
-Compact experiment receipt:
-
-```yaml
-experiment_id:
-parent_candidate:
-selected_tree_node:
-progress_evidence_refs: []
-hypothesis:
-mechanism:
-expected_observation:
-observation_horizon:
-confidence: low | medium | high
-falsifier:
-surprise_trigger:
-expected_reward:
-reward_basis:
-source_refs: []
-changed_boundary:
-config_code_data_evaluator_hashes: {}
-command_environment:
-smoke_result:
-full_metrics: {}
-guards: {}
-runtime_compute_cost: {}
-decision: keep | discard | repair_once | failed | defer
-failure_or_learning:
-causal_status: supported | unresolved | not_required
-supported_cause_or_next_discriminator:
-causal_evidence_refs: []
-tree_mutation:
-next_action:
-```
 
 ## Gotchas
 
-- Do not let the choose-next comparison become an ML executor or state store. It returns
-  a decision; the campaign tree and receipts preserve state.
-- Do not mutate the evaluator, split, primary metric, or prohibited inputs to
-  manufacture improvement. Such changes stale the packet and require a new
-  campaign decision.
-- Do not make one ticket per trial. Split only for a changed objective or
-  evaluator, independent owner/deliverable, separate approval/spend boundary,
-  or genuinely parallel proof surface.
-
-## Reference Map
-
-- [ML Goal program preset](references/goal-program-template.md) — instantiate
-  for every material campaign; it owns source/search and tree writeback policy.
-- [Choose-next](../goal-advisor/references/choose-next.md) — conditional comparison when
-  several eligible experiments need judgment.
-- [Goal Advisor](../goal-advisor/SKILL.md) — packet and native Goal compiler;
-  never the technique selector.
-- [Karpathy Autoresearch program](https://github.com/karpathy/autoresearch/blob/master/program.md)
-  — source pattern only; Farplane's bounded local contract is authoritative.
+- Replacing today's method with a paper's higher-scoring one before testing it
+  added loses the cases today's method already wins.
 
 ## Output
 
-- one approved campaign Goal Packet and compact native Goal prompt;
-- baseline and append-only experiment receipts linked from Goal turn comments;
-- evidence-updated tree decisions with material selection rationale;
-- best verified candidate or an evidence-backed no-improvement/blocked result;
-- independent final evidence review and residual-risk statement.
-
-For any requested loop policy, packet draft, or active turn, explicitly report:
-
-```text
-Packet: issue ticket sections + ## Goal program + hypothesis-tree.json + Goal turn comments + Goal Advisor compilation state
-Tree: source synthesis + eligible pending leaves + current branch state
-Progress: Goal turn comment learnings + current full-evaluator receipt refs
-Selector: eligible moves + direct or choose-next rationale + outside-option comparison
-Experiment: hypothesis + target misses + falsifier + changed boundary + guards + cost
-Expectation: expected observation + horizon + confidence + surprise trigger
-Writeback: receipt ref + decision + learned constraint + tree mutation + next action
-```
+Return the baseline, the approved packet and Goal prompt, linked receipts, tree
+decisions, and the best verified candidate or a negative or blocked result. For
+any loop policy, packet draft, or active turn, report one line each: `Packet`
+(ticket sections, Goal program, tree, turn comments, compile state), `Tree`
+(source synthesis, eligible leaves, branch state), `Progress` (turn-comment
+learnings, current receipt refs), `Selector` (direct or choose-next, outside
+options), `Experiment` (hypothesis, target misses, falsifier, boundary, guards,
+cost), `Expectation` (observation, horizon, confidence, surprise trigger), and
+`Writeback` (receipt ref, decision, constraint, tree mutation, next step).
 
 For a source-stage or next-round request with concrete inputs, also render the
 `Decision tree`, `Limiting stage`, extracted `Source refs`, `Techniques`,
-`Mechanisms`, `Variables`, and `Failure conditions`, then concrete initial
-nodes. Every node includes `hypothesis`, `target_misses`, `mechanism`,
-`expected_observation`, `falsifier`, `kill_rule`, `cost`, `expected_reward`,
-`reward_basis`, and `source_refs`; render those labels for every node before one
-ordinal choose-next selection. Do not replace these outputs with a setup
-checklist or infer a shared reward basis across nodes. Label the comparison
-`Choose-next comparison`, apply it through `choose_next`, and name the selected
-node or blocking input explicitly.
-
-For a surprise request, explicitly render the bounded diagnostic children,
-credible sibling leaves preserved for breadth, outcome branches (`repair |
-reject | defer | backtrack`), and literal writeback order:
-`hypothesis-tree.json` first, then the immutable Goal turn comment receipt.
-
-For a causal-resolution request, explicitly distinguish the parent claim
-disposition from its causal status. If diagnostics isolate a cause, render the
-updated parent `insight` and concrete `evidence_refs`, followed by the bounded
-failed-because conclusion. If credible causes remain confounded, render
-`causal_status: unresolved` and the next discriminating child instead of a
-confident explanation. Never use `failed because` in that unresolved branch.
+`Mechanisms`, `Variables`, and `Failure conditions`, then every node's
+`hypothesis`, `target_misses`, `mechanism`, `expected_observation`, `falsifier`,
+`kill_rule`, `cost`, `expected_reward`, `reward_basis`, and `source_refs` (never
+a setup checklist or a shared reward basis), then the `Choose-next comparison`
+through `choose_next`, naming the selected node or blocking input. For a
+surprise or causal request, render the diagnostic children, sibling leaves kept
+for breadth, the outcome branch (`repair | reject | defer | backtrack`), the
+claim disposition apart from its causal status, the parent's new `insight` and
+`evidence_refs`, and the N5 conclusion, writing the tree before the receipt.
