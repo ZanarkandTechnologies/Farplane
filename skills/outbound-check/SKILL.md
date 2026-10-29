@@ -75,10 +75,10 @@ returns: verdict, each failing row with evidence and fix, each row to check by h
   <copy...> --context "<facts>"` (or `--context-file`). Pass the ad, page, and
   every email of one flow together so the judge can compare the promise across
   them. Two judge passes run in parallel and each row keeps its worst grade
-  (about USD 0.15 and a minute for a two-page flow). Text in hidden elements
+  (about a minute for a two-page flow, on the subscription). Text in hidden elements
   is a warning and still reaches the judge, since a script may reveal it.
   Fixed-rule blockers fail their row whatever the judge says. Without
-  `OPENROUTER_API_KEY` or a headless browser, the affected rows come back
+  a signed-in `claude` CLI (the judge runs on the Claude Code subscription) or a headless browser, the affected rows come back
   `NOT_PROVABLE`, never passed. `--offline` skips following links.
 
   Assert:

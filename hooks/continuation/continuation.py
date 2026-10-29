@@ -737,7 +737,7 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
 
 def without_provider_keys(encoded: str, environ: Mapping[str, str]) -> str:
     """Remove exact configured provider keys from JSON text, even if their format is unknown."""
-    for key_name in ("OPENROUTER_API_KEY", "FEATHERLESS_API_KEY"):
+    for key_name in ("TYPESAFE_API_KEY", "OPENROUTER_API_KEY", "FEATHERLESS_API_KEY"):
         secret = environ.get(key_name, "")
         if secret:
             encoded = encoded.replace(json.dumps(secret)[1:-1], "[REDACTED PROVIDER KEY]")

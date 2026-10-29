@@ -1,7 +1,7 @@
 """Suggests one entry skill with TypeSafe's official two-pass JEV recipe.
 
 The generated registry owns the broad roster. Detailed reranking reads bounded
-excerpts from the registry-recorded `SKILL.md` paths. OpenRouter or Featherless
+excerpts from the registry-recorded `SKILL.md` paths. TypeSafe (default), OpenRouter or Featherless
 provides the decision endpoint; every provider or response failure is fail-open.
 """
 
@@ -20,7 +20,13 @@ PROVIDER_ENV = "FARPLANE_JEV_PROVIDER"
 ENDPOINT_ENV = "FARPLANE_JEV_ENDPOINT"
 OPENROUTER_API_KEY_ENV = "OPENROUTER_API_KEY"
 FEATHERLESS_API_KEY_ENV = "FEATHERLESS_API_KEY"
+TYPESAFE_API_KEY_ENV = "TYPESAFE_API_KEY"
 PROVIDERS = {
+    "typesafe": {
+        "endpoint": "https://api.typesafe.ai/v1/systemone",
+        "model": "jev-1.13.0",
+        "api_key_env": TYPESAFE_API_KEY_ENV,
+    },
     "openrouter": {
         "endpoint": "https://openrouter.ai/api/alpha/decisions",
         "model": "typesafe/jev-1.13",
@@ -79,7 +85,7 @@ def _skill_excerpt(project_root: Path, record: Mapping[str, object]) -> str:
 
 
 def _provider_config(environ: Mapping[str, str]) -> Mapping[str, str] | None:
-    provider = str(environ.get(PROVIDER_ENV, "openrouter")).strip().lower()
+    provider = str(environ.get(PROVIDER_ENV, "typesafe")).strip().lower()
     config = PROVIDERS.get(provider)
     if config is None:
         return None
@@ -102,7 +108,7 @@ def _build_client(environ: Mapping[str, str]) -> object | None:
 
 
 class HttpDecisionClient:
-    """Minimal adapter for compatible OpenRouter and Featherless endpoints."""
+    """Minimal adapter for compatible TypeSafe, OpenRouter and Featherless endpoints."""
 
     def __init__(self, *, api_key: str, endpoint: str, provider: str, timeout: float) -> None:
         self.api_key = api_key

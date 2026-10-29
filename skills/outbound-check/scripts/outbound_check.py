@@ -25,17 +25,22 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.request import Request, urlopen
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from mechanical import Piece, load_piece, scan
 
 
 CHECKLIST = Path(__file__).resolve().parent.parent / "references" / "checklist.md"
-ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
-KEY_ENV = "OPENROUTER_API_KEY"
 MODEL_ENV = "OUTBOUND_JUDGE_MODEL"
-DEFAULT_MODEL = "anthropic/claude-sonnet-5.5"
+DEFAULT_MODEL = "sonnet"
+# The judge is `claude -p` on the Claude Code subscription, never a paid API key:
+# no tools, settings, MCP or hooks, and paid-key variables removed from its env.
+CLAUDE_ARGS = ("-p", "--input-format", "stream-json", "--output-format", "stream-json", "--verbose",
+               "--no-session-persistence", "--tools", "", "--strict-mcp-config",
+               "--disable-slash-commands", "--setting-sources", "",
+               "--settings", '{"disableAllHooks":true}')
+PAID_KEYS = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CODE_USE_BEDROCK",
+             "CLAUDE_CODE_USE_VERTEX")
 BROWSER_ENV = "OUTBOUND_BROWSER"
 BROWSER_GLOB = "Library/Caches/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-*/chrome-headless-shell"
 MAX_TEXT = 20_000
@@ -225,37 +230,50 @@ def judge_request(rows, pieces, findings, context, images, model) -> dict:
     for image in images[:MAX_IMAGES]:
         kind = "jpeg" if image.suffix.lower() in {".jpg", ".jpeg"} else image.suffix.lower().lstrip(".")
         data = base64.b64encode(image.read_bytes()).decode()
-        content.append({"type": "image_url", "image_url": {"url": f"data:image/{kind};base64,{data}"}})
-    # The judge reasons first; cap that so the graded rows always fit in the reply.
-    return {"model": model, "max_tokens": 12000, "reasoning": {"max_tokens": 4000},
-            "temperature": 0, "usage": {"include": True},
-            "messages": [{"role": "system", "content": PROMPT}, {"role": "user", "content": content}]}
+        content.append({"type": "image", "source": {"type": "base64", "media_type": f"image/{kind}",
+                                                    "data": data}})
+    return {"model": model, "system": PROMPT, "messages": [{"role": "user", "content": content}]}
 
 
-def post_openrouter(body: dict, key: str) -> dict:
-    request = Request(ENDPOINT, data=json.dumps(body).encode(),
-                      headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
-    with urlopen(request, timeout=180) as response:
-        return json.load(response)
+def claude_binary(environ) -> str | None:
+    local = Path(environ.get("HOME", str(Path.home()))) / ".local/bin/claude"
+    return shutil.which("claude", path=environ.get("PATH")) or (str(local) if local.exists() else None)
 
 
-def judge(body: dict, environ=os.environ, post=post_openrouter) -> tuple[dict[int, dict], str | None, float | None]:
-    """Return graded rows by id, the reason the judge is unavailable, and its cost."""
-    key = environ.get(KEY_ENV, "").strip()
-    if not key:
-        return {}, f"{KEY_ENV} is not set; run through farplane run or doppler run", None
-    cost, error, content = 0.0, None, None
+def post_claude(body: dict, binary: str, environ=os.environ) -> dict:
+    """One judge reply from `claude -p`; earlier turns are folded into the one user message."""
+    content = list(body["messages"][0]["content"])
+    for message in body["messages"][1:]:
+        content.append({"type": "text", "text": f"[{message['role'].upper()}]\n{message['content']}"})
+    line = json.dumps({"type": "user", "message": {"role": "user", "content": content}})
+    env = {key: value for key, value in environ.items() if key not in PAID_KEYS}
+    env["CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC"] = "1"
+    done = subprocess.run([binary, *CLAUDE_ARGS, "--model", body["model"], "--system-prompt", body["system"]],
+                          input=line + "\n", capture_output=True, text=True, timeout=600, env=env,
+                          cwd=env.get("HOME") or None)
+    events = [json.loads(line) for line in done.stdout.splitlines() if line.startswith("{")]
+    reply = next(event for event in reversed(events) if event.get("type") == "result")
+    if reply.get("is_error"):
+        raise RuntimeError(str(reply.get("result"))[:300])
+    return reply
+
+
+def judge(body: dict, environ=os.environ, post=post_claude) -> tuple[dict[int, dict], str | None, float | None]:
+    """Return graded rows by id and the reason the judge is unavailable (cost is always None:
+    the subscription bills nothing per call)."""
+    binary = claude_binary(environ)
+    if not binary:
+        return {}, "the claude CLI is not installed; install Claude Code and sign in", None
+    error, content = None, None
     for _ in range(2):  # one retry, told what was wrong with the last reply
         try:
-            reply = post(body, key)
-            cost += reply.get("usage", {}).get("cost") or 0
-            choice = reply["choices"][0]
-            content = choice["message"].get("content")
+            reply = post(body, binary, environ)
+            content = reply.get("result")
             if not content:
-                raise ValueError(f"no text in the reply (finish_reason={choice.get('finish_reason')})")
+                raise ValueError(f"no text in the reply (stop_reason={reply.get('stop_reason')})")
             graded = json.loads(re.search(r"\{.*\}", content, re.S).group(0))["rows"]
             rows = {int(r["id"]): r for r in graded if str(r.get("verdict")) in VERDICTS}
-            return rows, None, cost or None
+            return rows, None, None
         except Exception as caught:  # a judge failure must never read as a pass
             error = caught
             if content is not None:
@@ -263,7 +281,7 @@ def judge(body: dict, environ=os.environ, post=post_openrouter) -> tuple[dict[in
                     {"role": "assistant", "content": content},
                     {"role": "user", "content": f"That reply was not valid JSON ({caught}). Return the same "
                                                 "grades as valid JSON only; escape double quotes inside strings."}]}
-    return {}, f"judge call failed: {error}", cost or None
+    return {}, f"judge call failed: {error}", None
 
 
 def worst_of(passes: list[dict[int, dict]]) -> dict[int, dict]:

@@ -225,12 +225,16 @@ class SkillSuggestionTests(unittest.TestCase):
         self.assertEqual(client.provider, "featherless")
         self.assertEqual(client.endpoint, "https://api.featherless.ai/v1/classifier")
 
-    def test_openrouter_remains_default_and_requires_doppler_key(self) -> None:
+    def test_typesafe_is_default_and_requires_doppler_key(self) -> None:
         self.assertIsNone(skill_suggestion._build_client({}))
-        client = skill_suggestion._build_client(
+        self.assertIsNone(skill_suggestion._build_client(
             {skill_suggestion.OPENROUTER_API_KEY_ENV: "secret"}
+        ))
+        client = skill_suggestion._build_client(
+            {skill_suggestion.TYPESAFE_API_KEY_ENV: "secret"}
         )
-        self.assertEqual(client.provider, "openrouter")
+        self.assertEqual(client.provider, "typesafe")
+        self.assertEqual(client.endpoint, "https://api.typesafe.ai/v1/systemone")
 
 
 if __name__ == "__main__":

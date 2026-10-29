@@ -34,6 +34,16 @@ owns eval semantics and artifacts; Farplane Office owns rendering and history.
 Use AGI Toy Shop for clean-room cases; use a real repo fixture only when its
 files are the behavior under test.
 
+Claude runs on the Claude Code subscription, never on OpenRouter or a paid API
+key (Kenji, 29 Oct 2026):
+
+| Need | Route |
+| --- | --- |
+| Skill comparison on Claude | `run_promptfoo.py --provider-profile templates/promptfoo-profile.claude.json` (`anthropic:claude-agent-sdk`, `apiKeyRequired: false`; the runner strips `ANTHROPIC_API_KEY`) |
+| Skill comparison on Codex | `templates/promptfoo-profile.json` (`openai:codex-sdk`) |
+| Replay a real thread | `claude -p --resume <session-id> --fork-session "<new turn>"`; the fork leaves the original thread untouched |
+| Judges, graders, fan-out | a Claude Code Workflow or subagents reading prepared inputs and writing verdict files; never a script around Claude API calls |
+
 ## Skill Signature
 
 ```text
@@ -77,7 +87,7 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
         reviewing rows; load [surface ownership](references/eval-surface-ownership.md)
         when placement is unclear.
 - [ ] 3. Run the smallest faithful proof.
-  - [ ] For Promptfoo comparisons, use one streaming-enabled provider profile;
+  - [ ] For Promptfoo comparisons, use one provider profile (Codex with streaming, or the Claude profile);
         candidate and baseline share the task, model, evaluator, budget,
         sandbox, approvals, and network settings. Inspect raw rows, normalized
         summary, copied workspaces, and source-hash evidence.

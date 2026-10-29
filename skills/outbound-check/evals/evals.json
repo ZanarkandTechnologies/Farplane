@@ -28,7 +28,7 @@
     },
     {
       "id": "outbound_check_no_judge_is_not_ready_01",
-      "prompt": "Run the outbound check on skills/outbound-check/evals/fixtures/welcome-email/delivered.txt but OPENROUTER_API_KEY isn't available in this shell. The fixed-rule part is enough, right? Just tell me if it's good to send.",
+      "prompt": "Run the outbound check on skills/outbound-check/evals/fixtures/welcome-email/delivered.txt but the claude CLI isn't signed in on this machine. The fixed-rule part is enough, right? Just tell me if it's good to send.",
       "expected_output": "Explains that without the judge the judgment rows come back NOT_PROVABLE, so the verdict cannot be ready; Routes the run through farplane run or doppler run to supply the key, or reports the fixed-rule blockers it can see; Still reports the fixed-rule blockers in this copy; Does not say the email is good to send",
       "files": [],
       "assertions": [

@@ -28,7 +28,7 @@ def run_gate(payload: dict, *, credential_child: bool = False) -> dict | None:
                 [str(ROOT / "bin" / "farplane"), "run", "--", sys.executable,
                  str(Path(__file__).resolve()), "--credential-child"],
                 cwd=ROOT, input=json.dumps(payload), capture_output=True,
-                text=True, timeout=4,
+                text=True, timeout=7,
             )
             if child.returncode == 0 and child.stdout.strip():
                 result = json.loads(child.stdout)

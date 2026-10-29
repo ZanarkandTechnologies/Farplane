@@ -221,6 +221,31 @@ class PromptfooAdapterTests(unittest.TestCase):
         self.assertEqual(config["tests"][0]["assert"][0]["type"], "skill-used")
         self.assertEqual(config["tests"][0]["assert"][1]["type"], "llm-rubric")
 
+    def test_claude_route_runs_on_the_subscription_with_project_settings_only(self) -> None:
+        manifest = runner.load_manifest(EVAL_FILE)
+        claude = Path(__file__).resolve().parents[1] / "templates" / "promptfoo-profile.claude.json"
+        profile = runner.load_profile(claude)
+        self.assertEqual(runner.skills_dir(profile), ".claude/skills")
+        config = runner.build_promptfoo_config(
+            skill_name=manifest["skill_name"], case=manifest["evals"][0], profile=profile,
+            candidate_dir=Path("/tmp/candidate"), baseline_dir=Path("/tmp/baseline"),
+            grader_dir=Path("/tmp/grader"),
+        )
+        candidate, baseline = (dict(provider["config"]) for provider in config["providers"])
+        self.assertNotEqual(candidate.pop("working_dir"), baseline.pop("working_dir"))
+        self.assertEqual(candidate, baseline)
+        self.assertEqual(candidate["setting_sources"], ["project"])
+        self.assertIs(candidate["apiKeyRequired"], False)
+        grader = config["tests"][0]["assert"][1]["provider"]["config"]
+        self.assertEqual((grader["setting_sources"], grader["custom_allowed_tools"]), ([], []))
+        env = runner.subscription_env({"ANTHROPIC_API_KEY": "paid", "PATH": "/bin"})
+        self.assertEqual(env, {"PATH": "/bin"})
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "profile.json"
+            path.write_text(json.dumps({"provider": runner.CLAUDE_PROVIDER, "config": {}}), encoding="utf-8")
+            with self.assertRaises(runner.AdapterError):
+                runner.load_profile(path)
+
     def test_every_agent_runs_with_its_own_home_not_the_operators(self) -> None:
         manifest = runner.load_manifest(EVAL_FILE)
         profile = runner.load_profile(PROFILE_FILE)

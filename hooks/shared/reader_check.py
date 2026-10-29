@@ -3,6 +3,7 @@
 Jev scores template sections but cannot tell when a busy reader is lost. Haiku
 returns six facts and fixed rules turn them into at most one gap. Missing
 credentials, timeouts and bad replies return None, so the stop is never held up.
+Haiku runs through `claude -p` on the Claude subscription, never a paid API key.
 
 Haiku over-reports, so fixed rules check its claims: a bold opening line counts
 as the status, and a name the user used, a number, path, link or a name the
@@ -13,14 +14,21 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
+import subprocess
+from pathlib import Path
 from typing import Mapping
-from urllib.request import Request, urlopen
 
 MODEL_ENV = "FARPLANE_READER_MODEL"
-DEFAULT_MODEL = "anthropic/claude-haiku-5.5"
-ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
-KEY_ENV = "OPENROUTER_API_KEY"
-TIMEOUT = 2.5
+DEFAULT_MODEL = "haiku"
+# A bare child: no tools, MCP, skills, settings or hooks (a child Stop hook would loop).
+CLAUDE_ARGS = ("-p", "--output-format", "json", "--no-session-persistence", "--tools", "",
+               "--strict-mcp-config", "--disable-slash-commands", "--setting-sources", "",
+               "--settings", '{"disableAllHooks":true}')
+# Removed so the child signs in with the subscription, not a paid key.
+PAID_KEYS = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CODE_USE_BEDROCK",
+             "CLAUDE_CODE_USE_VERTEX")
+TIMEOUT = 4.0
 MAX_REQUEST = 3000
 MAX_FINAL = 12000
 MIN_NAMES = 2
@@ -38,7 +46,7 @@ Return JSON only:
 - answers_latest: does it directly answer or report on what the latest message asked? A progress line while work is still running counts only if it also answers what can be answered now.
 - status_first: do the first two lines say plainly where the request stands?
 - process_narration: is most of it the agent's process or latest fix rather than the result?
-- unexplained_names: the internal names the answer's main point depends on that the user did not use and would not know, left unexplained: ticket or session codes, commit hashes, branch names, internal tool or model names, metric jargon. Leave out file paths and links, commands to run, names from the user's latest or earlier messages, names the answer explains in a few words, public product names and common tech terms (SSD, CI, API, FiveM), and everyday words. Usually empty.
+- unexplained_names: the internal names the answer's main point depends on that the user did not use and would not know, left unexplained: ticket or session codes, commit hashes, branch names, internal tool or model names, metric jargon. Leave out file paths and links, commands to run, names from the user's latest or earlier messages, names the answer explains in a few words, public product names and common tech terms (SSD, CI, API, FiveM), and everyday words, including a part of the work described in plain words (the parser, the upload route). Usually empty.
 - name_drift: does the answer call one thing by two or more different names (the matcher, then the retriever, then the ranker for the same part), so a reader could take them for different things? Plain pronouns and a name plus its short explanation do not count. Usually false.
 - blocker: the thing the answer says stops the work or is left to do, in a few words; "" when nothing is.
 - agent_can_clear_now: true only if the agent could clear that blocker itself right now with its own tools (rerun or fix a failing command or test, start a server, install a package, read a file or log, retry another way, fix a small bug it found) and nothing else must happen first. False when it needs the user (password, login, account, approval, payment, spend, a decision, a plan to approve, hardware) or is waiting on another person, session or running job."""
@@ -78,28 +86,33 @@ def opens_with_status(final: str) -> bool:
     return False
 
 
+def claude_binary(environ: Mapping[str, str]) -> str | None:
+    found = shutil.which("claude", path=environ.get("PATH"))
+    local = Path(environ.get("HOME", str(Path.home()))) / ".local/bin/claude"
+    return found or (str(local) if local.exists() else None)
+
+
 def judge(latest_user_request: str, final: str, *, environ: Mapping[str, str],
           timeout: float = TIMEOUT, known: str = "") -> dict | None:
-    key = environ.get(KEY_ENV, "").strip()
-    if not key:
+    binary = claude_binary(environ)
+    if not binary:
         return None
-    body = {
-        "model": environ.get(MODEL_ENV) or DEFAULT_MODEL, "max_tokens": 300,
-        "temperature": 0, "reasoning": {"enabled": False},
-        "messages": [
-            {"role": "system", "content": PROMPT},
-            {"role": "user", "content": (f"EARLIER USER MESSAGES (their names are known):\n{known[-MAX_REQUEST:]}\n\n"
-                                         if known.strip() else "")
-                                        + f"LATEST USER MESSAGE:\n{clip_request(latest_user_request)}"
-                                        f"\n\nFINAL ANSWER:\n{final[:MAX_FINAL]}"},
-        ],
-    }
-    request = Request(ENDPOINT, data=json.dumps(body).encode("utf-8"),
-                      headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+    message = ((f"EARLIER USER MESSAGES (their names are known):\n{known[-MAX_REQUEST:]}\n\n"
+                if known.strip() else "")
+               + f"LATEST USER MESSAGE:\n{clip_request(latest_user_request)}"
+               f"\n\nFINAL ANSWER:\n{final[:MAX_FINAL]}")
+    env = {key: value for key, value in environ.items() if key not in PAID_KEYS}
+    env["CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC"] = "1"
     try:
-        with urlopen(request, timeout=timeout) as response:
-            content = json.load(response)["choices"][0]["message"]["content"]
-        facts = json.loads(re.search(r"\{.*\}", content, re.S).group(0))
+        done = subprocess.run(
+            [binary, *CLAUDE_ARGS, "--model", environ.get(MODEL_ENV) or DEFAULT_MODEL,
+             "--system-prompt", PROMPT],
+            input=message, capture_output=True, text=True, timeout=timeout, env=env,
+            cwd=env.get("HOME") or None)
+        reply = json.loads(done.stdout)
+        if reply.get("is_error"):
+            return None
+        facts = json.loads(re.search(r"\{.*\}", reply["result"], re.S).group(0))
     except Exception:
         return None
     fields = ("answers_latest", "status_first", "process_narration")

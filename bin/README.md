@@ -98,8 +98,8 @@ or removing a `farplane` command.
   grow. `config/source-line-baseline.toml` is the one-time Python adoption
   ceiling until the comparison base contains the guard.
 - `hooks/user-turn/capture_user_turn.py` - turn-start user-intent writer for the hook surface
-- `hooks/shared/skill_suggestion.py` - optional dependency-free OpenRouter or
-  Featherless JEV adapter using TypeSafe's official two-pass skill-suggestion
+- `hooks/shared/skill_suggestion.py` - optional dependency-free TypeSafe (default),
+  OpenRouter or Featherless JEV adapter using TypeSafe's official two-pass skill-suggestion
   recipe to inject one advisory entry skill when no explicit `$skill` was requested
 - `farplane.py adoption scan` - local adoption resolver for project
   `farplane/manifest.json` pins, optional project `.agents/skills/`, feature/template

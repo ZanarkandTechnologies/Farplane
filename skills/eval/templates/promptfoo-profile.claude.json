@@ -1,0 +1,10 @@
+{
+  "provider": "anthropic:claude-agent-sdk",
+  "config": {
+    "model": "sonnet",
+    "apiKeyRequired": false,
+    "permission_mode": "dontAsk",
+    "custom_allowed_tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "Skill"],
+    "max_turns": 30
+  }
+}

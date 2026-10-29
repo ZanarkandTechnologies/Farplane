@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from contextlib import contextmanager
 import sys
 import unittest
 from email.message import EmailMessage
@@ -128,7 +129,7 @@ class MechanicalTest(unittest.TestCase):
         findings = scan(piece.text, piece.links, follow=False, hidden=piece.hidden)
         self.assertEqual([level for level, *_ in findings], ["WARN"])
         body = judge_request(load_rows(), [piece], [], "", [], "m")
-        self.assertIn("HIDDEN ON LOAD", body["messages"][1]["content"][0]["text"])
+        self.assertIn("HIDDEN ON LOAD", body["messages"][0]["content"][0]["text"])
 
 
 class VerdictTest(unittest.TestCase):
@@ -146,10 +147,10 @@ class VerdictTest(unittest.TestCase):
         self.assertEqual(overall(merged), "hold")
 
     def test_missing_judge_is_never_ready(self):
-        merged = merge(self.rows, [], {}, "OPENROUTER_API_KEY is not set")
+        merged = merge(self.rows, [], {}, "the claude CLI is not installed")
         self.assertEqual({row["verdict"] for row in merged}, {"NOT_PROVABLE"})
         self.assertEqual(overall(merged), "check")
-        self.assertIn("OPENROUTER_API_KEY", merged[0]["evidence"])
+        self.assertIn("claude CLI", merged[0]["evidence"])
 
     def test_worst_grade_across_passes_wins(self):
         first = {7: {"id": 7, "verdict": "FAIL", "evidence": "plan is generic"},
@@ -166,34 +167,43 @@ class VerdictTest(unittest.TestCase):
 
     def test_judge_parses_fenced_json_and_reports_gaps(self):
         body = judge_request(self.rows, [load_piece_text(CLEAN_WELCOME)], [], "Sender: Acme", [], "m")
-        self.assertIn("CHECKLIST:", body["messages"][1]["content"][0]["text"])
-        reply = {"choices": [{"message": {"content": "```json\n" + json.dumps(
+        self.assertIn("CHECKLIST:", body["messages"][0]["content"][0]["text"])
+        reply = {"result": "```json\n" + json.dumps(
             {"rows": [{"id": 5, "verdict": "FAIL", "evidence": "Seattle address", "fix": "use ours"},
-                      {"id": 6, "verdict": "MAYBE", "evidence": "?"}]}) + "\n```"}}],
-                 "usage": {"cost": 0.02}}
-        rows, gap, cost = judge(body, {"OPENROUTER_API_KEY": "k"}, post=lambda b, k: reply)
-        self.assertEqual((list(rows), gap, cost), ([5], None, 0.02))
-        self.assertIn("not set", judge(body, {}, post=lambda b, k: reply)[1])
-        failing = judge(body, {"OPENROUTER_API_KEY": "k"}, post=lambda b, k: {"choices": []})
-        self.assertEqual(failing[0], {})
-        self.assertIn("judge call failed", failing[1])
+                      {"id": 6, "verdict": "MAYBE", "evidence": "?"}]}) + "\n```"}
+        with fake_claude() as environ:
+            rows, gap, cost = judge(body, environ, post=lambda b, c, e: reply)
+            self.assertEqual((list(rows), gap, cost), ([5], None, None))
+            failing = judge(body, environ, post=lambda b, c, e: {"is_error": True})
+            self.assertEqual(failing[0], {})
+            self.assertIn("judge call failed", failing[1])
+        self.assertIn("not installed", judge(body, {"PATH": "/nonexistent", "HOME": "/nonexistent"},
+                                             post=lambda b, c, e: reply)[1])
 
     def test_judge_retries_once_on_invalid_json(self):
         body = judge_request(self.rows, [load_piece_text(CLEAN_WELCOME)], [], "", [], "m")
         good = json.dumps({"rows": [{"id": 1, "verdict": "PASS", "evidence": "ok"}]})
-        replies = [{"choices": [{"message": {"content": '{"rows": [{"id": 1, "evidence": "say "hi""}]}'}}],
-                    "usage": {"cost": 0.01}},
-                   {"choices": [{"message": {"content": good}}], "usage": {"cost": 0.02}}]
+        replies = [{"result": '{"rows": [{"id": 1, "evidence": "say "hi""}]}'}, {"result": good}]
         sent = []
 
-        def post(request_body, key):
+        def post(request_body, binary, environ):
             sent.append(request_body)
             return replies[len(sent) - 1]
 
-        rows, gap, cost = judge(body, {"OPENROUTER_API_KEY": "k"}, post=post)
-        self.assertEqual((list(rows), gap, round(cost, 2)), ([1], None, 0.03))
+        with fake_claude() as environ:
+            rows, gap, cost = judge(body, environ, post=post)
+        self.assertEqual((list(rows), gap, cost), ([1], None, None))
         self.assertEqual(sent[1]["messages"][-1]["role"], "user")
         self.assertIn("not valid JSON", sent[1]["messages"][-1]["content"])
+
+
+@contextmanager
+def fake_claude():
+    with TemporaryDirectory() as tmp:
+        binary = Path(tmp) / "claude"
+        binary.write_text("#!/bin/sh\n")
+        binary.chmod(0o755)
+        yield {"PATH": tmp, "HOME": tmp}
 
 
 def load_piece_text(text):

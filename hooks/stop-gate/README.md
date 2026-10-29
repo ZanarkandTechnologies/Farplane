@@ -54,8 +54,8 @@ long turns. The template sets the order, not the form. Every other gap
 carries no template. Every nudge says to keep tables, diagrams, code blocks
 and images as they are.
 
-Every shape also gets the reader check. Claude Haiku 5.5 (OpenRouter,
-`FARPLANE_READER_MODEL`) reads the user's latest message, the last 3,000
+Every shape also gets the reader check. Claude Haiku 5.5 (`claude -p` on the
+Claude Code subscription, never a paid key; `FARPLANE_READER_MODEL`) reads the user's latest message, the last 3,000
 characters of their earlier messages (names used there count as known), and the whole answer,
 not the 2,400-character cut Jev sees, and returns four facts plus a list of
 unexplained internal names. Haiku sees only the user's own words of the latest
@@ -84,8 +84,11 @@ one gap:
 - `name_drift` true (one thing called by two or more names, "matcher" then
   "retriever") with no earlier reader gap → `one_name`: keep one name per thing.
 
-The reader runs beside the Jev request with a 2.5-second timeout. A timeout,
-missing key or bad reply skips it and logs `"reader": "unavailable"`.
+The reader runs beside the Jev request with a 4-second timeout (about 1 s in
+practice). It runs `claude -p` with no tools, settings, MCP or hooks, and with
+`ANTHROPIC_API_KEY` removed, so it bills the subscription. A timeout, missing
+`claude` binary or bad reply skips it and logs `"reader": "unavailable"`.
+Jev itself goes straight to TypeSafe (`TYPESAFE_API_KEY`), not OpenRouter.
 
 The reader also names the blocker the answer stops on and says whether the
 agent could clear it now with its own tools (rerun, start a server, install,

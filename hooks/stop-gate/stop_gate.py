@@ -50,7 +50,7 @@ def jev_gate(payload: dict, checks: frozenset[str], env: dict[str, str], *,
                 [str(ROOT / "bin" / "farplane"), "run", "--", sys.executable,
                  str(Path(__file__).resolve()), "--credential-child"],
                 cwd=ROOT, input=json.dumps(payload), capture_output=True,
-                text=True, timeout=4, env={**os.environ, CHECKS_ENV: ",".join(sorted(checks))},
+                text=True, timeout=7, env={**os.environ, CHECKS_ENV: ",".join(sorted(checks))},
             )
             if child.returncode == 0 and child.stdout.strip():
                 result = json.loads(child.stdout)

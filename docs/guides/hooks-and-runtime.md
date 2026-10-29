@@ -146,7 +146,7 @@ agent-hours accounting retains Stop as a measured turn boundary.
 ### Optional JEV entry-skill suggestion
 
 `capture_user_turn.py` may apply TypeSafe's official two-pass Skill suggestion
-cookbook through OpenRouter or Featherless before the model starts. The first request runs one `Choice` across the
+cookbook through TypeSafe, OpenRouter or Featherless before the model starts. The first request runs one `Choice` across the
 generated registry plus three skill-need `Noul` gates. When the gate passes, a
 second request reranks the top three using each skill's description and a
 bounded opening excerpt from its `SKILL.md`; independent fit Nouls may reject
@@ -155,8 +155,10 @@ the entire shortlist. A surviving Choice winner is injected as one advisory
 never invokes a skill itself.
 
 The integration is off unless `FARPLANE_JEV_SKILL_SUGGESTION=1`.
-`FARPLANE_JEV_PROVIDER` defaults to `openrouter`, which requires Doppler to
-inject `OPENROUTER_API_KEY` and defaults to `typesafe/jev-1.13` at
+`FARPLANE_JEV_PROVIDER` defaults to `typesafe`, which requires Doppler to
+inject `TYPESAFE_API_KEY` and defaults to `jev-1.13.0` at
+`https://api.typesafe.ai/v1/systemone`. Selecting `openrouter` uses
+`OPENROUTER_API_KEY` and `typesafe/jev-1.13` at
 `https://openrouter.ai/api/alpha/decisions`. Selecting `featherless` requires
 Doppler to inject `FEATHERLESS_API_KEY` and defaults to
 `featherless-ai/gemma-4-26B-A4B-classifier` at

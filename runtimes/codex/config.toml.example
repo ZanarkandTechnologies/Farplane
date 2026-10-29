@@ -42,8 +42,9 @@ FARPLANE_SKILL_HEAT_TOP_N = "25"
 # current prompt plus bounded skill descriptions/excerpts to the selected
 # provider. Store provider credentials in Doppler and inject them at runtime.
 # FARPLANE_JEV_SKILL_SUGGESTION = "1"
-# FARPLANE_JEV_PROVIDER = "openrouter" # or "featherless"
+# FARPLANE_JEV_PROVIDER = "typesafe" # default; or "openrouter", "featherless"
 # Optional provider-specific override; normally leave unset.
+# TypeSafe: jev-1.13.0
 # OpenRouter: typesafe/jev-1.13
 # Featherless: featherless-ai/gemma-4-26B-A4B-classifier
 # FARPLANE_JEV_MODEL = "..."

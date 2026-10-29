@@ -3,6 +3,8 @@
 
 Farplane owns source validation, isolated workspaces, and a normalized receipt.
 Promptfoo owns agent execution, skill-use detection, assertions, and raw export.
+Two agent routes: Codex (`openai:codex-sdk`) and Claude (`anthropic:claude-agent-sdk`),
+which runs on the Claude Code subscription login and never on a paid API key.
 """
 
 from __future__ import annotations
@@ -31,8 +33,14 @@ from bin.core.eval_contract import EvalContractError, lint_agent_skills_eval_sui
 SCHEMA_VERSION = 2
 DEFAULT_PROMPTFOO_VERSION = "0.122.0"
 DEFAULT_CODEX_SDK_VERSION = "0.148.0"
+# The version Promptfoo 0.122.0 pins as its optional dependency.
+DEFAULT_CLAUDE_AGENT_SDK_VERSION = "0.3.220"
+CLAUDE_PROVIDER = "anthropic:claude-agent-sdk"
+# Removed from the Claude route's environment so it signs in with the subscription.
+PAID_CLAUDE_KEYS = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDE_CODE_USE_BEDROCK",
+                    "CLAUDE_CODE_USE_VERTEX")
 COMPLETED_EXIT_CODES = {0, 100}
-IGNORED_WORKSPACE_PARTS = {".agents", ".git", ".promptfoo", "node_modules", "__pycache__"}
+IGNORED_WORKSPACE_PARTS = {".agents", ".claude", ".git", ".promptfoo", "node_modules", "__pycache__"}
 
 
 class AdapterError(RuntimeError):
@@ -103,9 +111,22 @@ def load_profile(path: Path) -> dict[str, Any]:
     forbidden = {"working_dir", "workingDir"}.intersection(config)
     if forbidden:
         raise AdapterError("working_dir belongs to the adapter, not the shared provider profile")
-    if config.get("enable_streaming") is not True:
+    if provider == CLAUDE_PROVIDER:
+        # Promptfoo reads Claude Skill tool calls directly; no streaming flag exists.
+        if config.get("apiKeyRequired") is not False:
+            raise AdapterError("the Claude profile must set apiKeyRequired=false to run on the subscription")
+    elif config.get("enable_streaming") is not True:
         raise AdapterError("provider profile must set enable_streaming=true for skill-use evidence")
     return {"provider": provider, "config": copy.deepcopy(config)}
+
+
+def is_claude(profile: dict[str, Any]) -> bool:
+    return profile["provider"] == CLAUDE_PROVIDER
+
+
+def skills_dir(profile: dict[str, Any]) -> str:
+    """Where each runtime discovers a workspace skill."""
+    return ".claude/skills" if is_claude(profile) else ".agents/skills"
 
 
 def _is_ignored(path: Path) -> bool:
@@ -154,6 +175,7 @@ def materialize_workspace(
     destination: Path,
     installed_skill: Path | None,
     skill_name: str,
+    skills_home: str = ".agents/skills",
 ) -> dict[str, str]:
     metadata = case.get("metadata", {})
     farplane = metadata.get("farplane", {}) if isinstance(metadata, dict) else {}
@@ -183,7 +205,7 @@ def materialize_workspace(
 
     fixture_snapshot = snapshot_tree(destination, ignore_runtime=True)
     if installed_skill is not None:
-        _copy_skill(installed_skill, destination / ".agents" / "skills" / skill_name)
+        _copy_skill(installed_skill, destination / skills_home / skill_name)
     return fixture_snapshot
 
 
@@ -235,6 +257,10 @@ def build_promptfoo_config(
     baseline_dir: Path,
     grader_dir: Path,
 ) -> dict[str, Any]:
+    if is_claude(profile):
+        return _claude_config(skill_name=skill_name, case=case, profile=profile,
+                              candidate_dir=candidate_dir, baseline_dir=baseline_dir,
+                              grader_dir=grader_dir)
     providers = []
     for label, working_dir in (("candidate", candidate_dir), ("baseline", baseline_dir)):
         config = copy.deepcopy(profile["config"])
@@ -276,6 +302,50 @@ def build_promptfoo_config(
             }
         ],
     }
+
+
+def _claude_config(
+    *,
+    skill_name: str,
+    case: dict[str, Any],
+    profile: dict[str, Any],
+    candidate_dir: Path,
+    baseline_dir: Path,
+    grader_dir: Path,
+) -> dict[str, Any]:
+    """Claude arms load only the workspace's project settings and skills, never the operator's."""
+    providers = []
+    for label, working_dir in (("candidate", candidate_dir), ("baseline", baseline_dir)):
+        config = copy.deepcopy(profile["config"])
+        config.update({"working_dir": str(working_dir.resolve()), "setting_sources": ["project"]})
+        providers.append({"id": profile["provider"], "label": label, "config": config})
+    grader_config = copy.deepcopy(profile["config"])
+    grader_config.update({"working_dir": str(grader_dir.resolve()), "setting_sources": [],
+                          "custom_allowed_tools": [], "permission_mode": "default"})
+    return {
+        "description": f"Agent Skills comparison: {skill_name}/{case['id']}",
+        "prompts": ["{{request}}"],
+        "providers": providers,
+        "tests": [
+            {
+                "description": case["id"],
+                "vars": {"request": case["prompt"]},
+                "assert": [
+                    {"type": "skill-used", "value": skill_name, "metric": "skill-used"},
+                    {
+                        "type": "llm-rubric",
+                        "value": build_rubric(case),
+                        "metric": "behavior",
+                        "provider": {"id": profile["provider"], "config": grader_config},
+                    },
+                ],
+            }
+        ],
+    }
+
+
+def subscription_env(environ: dict[str, str]) -> dict[str, str]:
+    return {key: value for key, value in environ.items() if key not in PAID_CLAUDE_KEYS}
 
 
 def _provider_label(row: dict[str, Any]) -> str:
@@ -688,6 +758,7 @@ def run_case(
     promptfoo_version: str,
     codex_sdk_version: str,
     dry_run: bool,
+    claude_agent_sdk_version: str = DEFAULT_CLAUDE_AGENT_SDK_VERSION,
 ) -> dict[str, Any]:
     task_dir.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=f"farplane-eval-{_safe_label(case['id'])}-") as temp:
@@ -703,6 +774,7 @@ def run_case(
                 destination=candidate_dir,
                 installed_skill=candidate_skill,
                 skill_name=skill_name,
+                skills_home=skills_dir(profile),
             )
             baseline_before = materialize_workspace(
                 skill_root=skill_root,
@@ -710,11 +782,13 @@ def run_case(
                 destination=baseline_dir,
                 installed_skill=baseline_skill,
                 skill_name=skill_name,
+                skills_home=skills_dir(profile),
             )
             if candidate_before != baseline_before:
                 raise AdapterError(f"eval {case['id']} candidate and baseline fixtures differ before execution")
-            for working_dir in (candidate_dir, baseline_dir, grader_dir):
-                make_agent_home(working_dir)
+            if not is_claude(profile):
+                for working_dir in (candidate_dir, baseline_dir, grader_dir):
+                    make_agent_home(working_dir)
 
             config = build_promptfoo_config(
                 skill_name=skill_name,
@@ -733,7 +807,8 @@ def run_case(
                 "--package",
                 f"promptfoo@{promptfoo_version}",
                 "--package",
-                f"@openai/codex-sdk@{codex_sdk_version}",
+                (f"@anthropic-ai/claude-agent-sdk@{claude_agent_sdk_version}" if is_claude(profile)
+                 else f"@openai/codex-sdk@{codex_sdk_version}"),
                 "promptfoo",
                 "eval",
                 "--config",
@@ -753,7 +828,7 @@ def run_case(
                     "config": str(config_path),
                 }
 
-            env = os.environ.copy()
+            env = subscription_env(dict(os.environ)) if is_claude(profile) else os.environ.copy()
             env["PROMPTFOO_DISABLE_TELEMETRY"] = "1"
             env["PROMPTFOO_DISABLE_UPDATE"] = "1"
             completed = subprocess.run(command, text=True, capture_output=True, env=env, check=False)
@@ -801,6 +876,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--label", required=True)
     parser.add_argument("--promptfoo-version", default=DEFAULT_PROMPTFOO_VERSION)
     parser.add_argument("--codex-sdk-version", default=DEFAULT_CODEX_SDK_VERSION)
+    parser.add_argument("--claude-agent-sdk-version", default=DEFAULT_CLAUDE_AGENT_SDK_VERSION)
     parser.add_argument("--dry-run", action="store_true")
     return parser
 
@@ -839,6 +915,7 @@ def main(argv: list[str] | None = None) -> int:
                     promptfoo_version=args.promptfoo_version,
                     codex_sdk_version=args.codex_sdk_version,
                     dry_run=args.dry_run,
+                    claude_agent_sdk_version=args.claude_agent_sdk_version,
                 )
             )
         source_after = {str(path): snapshot_tree(path) if path.is_dir() else hashlib.sha256(path.read_bytes()).hexdigest() for path in source_paths}
