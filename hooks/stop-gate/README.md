@@ -89,6 +89,8 @@ practice). It runs `claude -p` with no tools, settings, MCP or hooks, and with
 `ANTHROPIC_API_KEY` removed, so it bills the subscription. A timeout, missing
 `claude` binary or bad reply skips it and logs `"reader": "unavailable"`.
 Jev itself goes straight to TypeSafe (`TYPESAFE_API_KEY`), not OpenRouter.
+When the subscription limit is spent the reader fails open; it never falls back
+to a paid key.
 
 The reader also names the blocker the answer stops on and says whether the
 agent could clear it now with its own tools (rerun, start a server, install,

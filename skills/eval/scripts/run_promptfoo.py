@@ -344,6 +344,21 @@ def _claude_config(
     }
 
 
+def claude_sdk_modules(version: str) -> Path:
+    """Promptfoo resolves the Claude SDK from the config's folder, not from npx, so keep one
+    install per version under ~/.farplane and link it beside each task config."""
+    prefix = Path.home() / ".farplane" / "evals" / "node" / f"claude-agent-sdk-{version}"
+    modules = prefix / "node_modules"
+    if not (modules / "@anthropic-ai" / "claude-agent-sdk").is_dir():
+        prefix.mkdir(parents=True, exist_ok=True)
+        done = subprocess.run(["npm", "install", "--prefix", str(prefix), "--no-audit", "--no-fund",
+                               f"@anthropic-ai/claude-agent-sdk@{version}"],
+                              text=True, capture_output=True, check=False)
+        if done.returncode != 0:
+            raise AdapterError(f"npm could not install the Claude Agent SDK: {done.stderr[-400:]}")
+    return modules
+
+
 def subscription_env(environ: dict[str, str]) -> dict[str, str]:
     return {key: value for key, value in environ.items() if key not in PAID_CLAUDE_KEYS}
 
@@ -828,6 +843,8 @@ def run_case(
                     "config": str(config_path),
                 }
 
+            if is_claude(profile) and not (task_dir / "node_modules").exists():
+                (task_dir / "node_modules").symlink_to(claude_sdk_modules(claude_agent_sdk_version))
             env = subscription_env(dict(os.environ)) if is_claude(profile) else os.environ.copy()
             env["PROMPTFOO_DISABLE_TELEMETRY"] = "1"
             env["PROMPTFOO_DISABLE_UPDATE"] = "1"

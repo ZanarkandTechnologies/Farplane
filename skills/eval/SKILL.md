@@ -44,6 +44,9 @@ key (Kenji, 29 Oct 2026):
 | Replay a real thread | `claude -p --resume <session-id> --fork-session "<new turn>"`; the fork leaves the original thread untouched |
 | Judges, graders, fan-out | a Claude Code Workflow or subagents reading prepared inputs and writing verdict files; never a script around Claude API calls |
 
+When the subscription's usage limit is hit, defer the run until it resets and say so.
+Never fall back to OpenRouter, `ANTHROPIC_BASE_URL` or an Anthropic API key for Claude.
+
 ## Skill Signature
 
 ```text
