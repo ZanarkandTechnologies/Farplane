@@ -199,6 +199,33 @@ def build_rubric(case: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def agent_home(working_dir: Path) -> Path:
+    """The HOME an eval agent runs with: a sibling of its workspace, never the operator's."""
+    return working_dir.resolve().parent / f"{working_dir.name}-home"
+
+
+def make_agent_home(working_dir: Path) -> Path:
+    """Create an empty HOME and CODEX_HOME for one eval agent.
+
+    Codex otherwise loads the operator's global AGENTS.md, config, hooks, and installed
+    skills from ~/.codex, so both arms would follow the operator's own instructions and could
+    load the live copy of the skill under test. Credentials stay in place through a symlink.
+    """
+    home = agent_home(working_dir)
+    codex_home = home / ".codex"
+    codex_home.mkdir(parents=True)
+    auth = Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex") / "auth.json"
+    if auth.is_file():
+        (codex_home / "auth.json").symlink_to(auth)
+    return home
+
+
+def _isolated_env(config: dict[str, Any], working_dir: Path) -> dict[str, Any]:
+    # Applied last so a profile's cli_env cannot point an agent back at the operator's home.
+    home = agent_home(working_dir)
+    return {**config.get("cli_env", {}), "HOME": str(home), "CODEX_HOME": str(home / ".codex")}
+
+
 def build_promptfoo_config(
     *,
     skill_name: str,
@@ -212,6 +239,7 @@ def build_promptfoo_config(
     for label, working_dir in (("candidate", candidate_dir), ("baseline", baseline_dir)):
         config = copy.deepcopy(profile["config"])
         config["working_dir"] = str(working_dir.resolve())
+        config["cli_env"] = _isolated_env(config, working_dir)
         if (working_dir / ".git").is_dir():
             # workspace-write keeps .git read-only; a set-up repo must be committable.
             config["additional_directories"] = [str((working_dir / ".git").resolve())]
@@ -220,6 +248,7 @@ def build_promptfoo_config(
     grader_config.update(
         {
             "working_dir": str(grader_dir.resolve()),
+            "cli_env": _isolated_env(grader_config, grader_dir),
             "sandbox_mode": "read-only",
             "approval_policy": "never",
             "network_access_enabled": False,
@@ -684,6 +713,8 @@ def run_case(
             )
             if candidate_before != baseline_before:
                 raise AdapterError(f"eval {case['id']} candidate and baseline fixtures differ before execution")
+            for working_dir in (candidate_dir, baseline_dir, grader_dir):
+                make_agent_home(working_dir)
 
             config = build_promptfoo_config(
                 skill_name=skill_name,

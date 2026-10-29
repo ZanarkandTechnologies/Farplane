@@ -212,10 +212,51 @@ class PromptfooAdapterTests(unittest.TestCase):
         baseline_config = dict(baseline.pop("config"))
         self.assertNotEqual(candidate.pop("label"), baseline.pop("label"))
         self.assertNotEqual(candidate_config.pop("working_dir"), baseline_config.pop("working_dir"))
+        candidate_env = candidate_config.pop("cli_env")
+        baseline_env = baseline_config.pop("cli_env")
+        self.assertEqual(candidate_env.keys(), baseline_env.keys())
+        self.assertNotEqual(candidate_env["HOME"], baseline_env["HOME"])
         self.assertEqual(candidate, baseline)
         self.assertEqual(candidate_config, baseline_config)
         self.assertEqual(config["tests"][0]["assert"][0]["type"], "skill-used")
         self.assertEqual(config["tests"][0]["assert"][1]["type"], "llm-rubric")
+
+    def test_every_agent_runs_with_its_own_home_not_the_operators(self) -> None:
+        manifest = runner.load_manifest(EVAL_FILE)
+        profile = runner.load_profile(PROFILE_FILE)
+        profile["config"]["cli_env"] = {"CODEX_HOME": str(Path.home() / ".codex"), "HTTPS_PROXY": "http://proxy"}
+        root = Path("/tmp/eval-root")
+        config = runner.build_promptfoo_config(
+            skill_name=manifest["skill_name"],
+            case=manifest["evals"][0],
+            profile=profile,
+            candidate_dir=root / "candidate",
+            baseline_dir=root / "baseline",
+            grader_dir=root / "grader",
+        )
+        grader = config["tests"][0]["assert"][1]["provider"]["config"]
+        agents = {provider["label"]: provider["config"] for provider in config["providers"]} | {"grader": grader}
+        for label, agent in agents.items():
+            home = Path(agent["cli_env"]["HOME"])
+            self.assertEqual(home, root.resolve() / f"{label}-home")
+            self.assertEqual(agent["cli_env"]["CODEX_HOME"], str(home / ".codex"))
+            self.assertEqual(agent["cli_env"]["HTTPS_PROXY"], "http://proxy")
+            self.assertNotIn(str(Path.home()), agent["cli_env"]["HOME"])
+
+    def test_agent_home_is_empty_but_keeps_credentials_in_place(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            real = Path(temp) / "real-codex"
+            real.mkdir()
+            (real / "auth.json").write_text("{}", encoding="utf-8")
+            (real / "AGENTS.md").write_text("operator rules", encoding="utf-8")
+            workspace = Path(temp) / "candidate"
+            workspace.mkdir()
+            with mock.patch.dict(runner.os.environ, {"CODEX_HOME": str(real)}):
+                home = runner.make_agent_home(workspace)
+            codex_home = home / ".codex"
+            self.assertEqual(sorted(path.name for path in codex_home.iterdir()), ["auth.json"])
+            self.assertEqual((codex_home / "auth.json").resolve(), (real / "auth.json").resolve())
+            self.assertEqual(home, runner.agent_home(workspace))
 
     def test_export_normalization_preserves_rows_and_deltas(self) -> None:
         normalized = runner.normalize_export(

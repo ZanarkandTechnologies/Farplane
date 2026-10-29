@@ -36,6 +36,7 @@ The existing runner continues to own project suites and behavior traces.
 | Pre-run aggregate prediction for a comparative/causal eval | Metric Card plus ticket/program, experiment plan, comparison artifact, or run notes | Task query, assertions, or runner schema by default |
 | Project-suite/behavior-trace runner behavior | `run_evals.py` plus tests and templates | Promptfoo adapter |
 | Codex eval session/hook/notify isolation | `run_evals.py` mandatory argument tail | Optional Codex profiles |
+| Promptfoo agent isolation from the operator's global AGENTS.md, config, and installed skills | `run_promptfoo.py` per-agent empty `HOME`/`CODEX_HOME` | Promptfoo profile `cli_env` |
 | Deterministic structural invariant | Validator, lint, or unit test | LLM eval |
 | Judgment-heavy placement or prioritization | `harness` place mode, `review`, or eval rubric | Hook |
 
