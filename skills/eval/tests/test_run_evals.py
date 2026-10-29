@@ -412,6 +412,37 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertEqual(staged.stat().st_mode & 0o222, 0)
             self.assertIn(str(staged.resolve()), staged_task.context)
 
+    def test_agent_skills_eval_resolves_skill_relative_fixture(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill_root = root / "skills" / "demo"
+            fixture = skill_root / "evals" / "fixtures" / "input.txt"
+            fixture.parent.mkdir(parents=True)
+            fixture.write_text("fixture value\n")
+            path = skill_root / "evals" / "evals.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "skill_name": "demo",
+                        "evals": [
+                            {
+                                "id": "skill_relative",
+                                "prompt": "Check the supplied input.",
+                                "expected_output": "A result.",
+                                "files": ["evals/fixtures/input.txt"],
+                            }
+                        ],
+                    }
+                )
+            )
+            task = runner.load_tasks(path, target_root=root)[0]
+            staged_task = runner.stage_task_files(task, root, root / "run" / task.id)
+
+            self.assertEqual(task.files, ("skills/demo/evals/fixtures/input.txt",))
+            staged = root / "run" / task.id / "fixtures" / "skills" / "demo" / "evals" / "fixtures" / "input.txt"
+            self.assertEqual(staged.read_text(), "fixture value\n")
+            self.assertIn(str(staged.resolve()), staged_task.context)
+
     def test_only_a_verdict_passes(self) -> None:
         self.assertTrue(runner.normalize_judge({"verdict": "A"})["pass"])
         self.assertFalse(runner.normalize_judge({"verdict": "B"})["pass"])

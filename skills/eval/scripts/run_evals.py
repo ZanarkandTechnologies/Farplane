@@ -341,12 +341,19 @@ def load_tasks(
         if not isinstance(files, list) or not all(isinstance(file, str) and file.strip() for file in files):
             raise EvalError(f"{path}: task {item.get('id', '<unknown>')} files must be non-empty strings")
         resolved_root = (target_root or path.parent).resolve()
+        # An Agent Skills manifest (skills/<name>/evals/evals.json) names files
+        # relative to its skill root, as the Promptfoo runner resolves them.
+        skill_root = path.parent.parent.resolve() if path.parent.name == "evals" else None
         normalized_files: list[str] = []
         for file in files:
             relative = Path(file.strip())
             if relative.is_absolute():
                 raise EvalError(f"{path}: task {item.get('id', '<unknown>')} file must be target-root relative: {file}")
             source = (resolved_root / relative).resolve()
+            if skill_root is not None and (skill_root / relative).resolve().is_file():
+                source = (skill_root / relative).resolve()
+                if source.is_relative_to(resolved_root):
+                    relative = source.relative_to(resolved_root)
             if not source.is_relative_to(resolved_root):
                 raise EvalError(f"{path}: task {item.get('id', '<unknown>')} file escapes target root: {file}")
             if not source.is_file():

@@ -28,7 +28,7 @@ The existing runner continues to own project suites and behavior traces.
 | One user ask and expected behavior | `evals/evals.json` row | Profile or shared fixture |
 | Agent-Skills suite shape, UI metadata, feature binding, extension boundary | `bin/core/eval_contract.py` + `farplane lint evals` | Runner-local normalizers or untyped case fields |
 | Promptfoo skill execution, `skill-used`, rubric grading, raw export | Promptfoo | A second Farplane executor or authored Promptfoo suite |
-| Agent Skills manifest projection, clean variant workspaces, normalized receipt | `run_promptfoo.py` plus focused tests | Promptfoo YAML checked in beside `evals.json` |
+| Agent Skills manifest projection, clean variant workspaces, normalized receipt (including a `skill-used` miss corrected when command output printed the skill's frontmatter) | `run_promptfoo.py` plus focused tests | Promptfoo YAML checked in beside `evals.json` |
 | Skill-specific regression coverage | `skills/<skill>/evals/evals.json` | Global harness task file |
 | Cross-skill or workflow behavior coverage | `.farplane/evals/tasks/harness_tasks.json` or reusable examples | One skill package |
 | AGENTS.md or system-prompt behavior coverage | `.farplane/evals/tasks/agents_md_tasks.json` | Skill-local task file |

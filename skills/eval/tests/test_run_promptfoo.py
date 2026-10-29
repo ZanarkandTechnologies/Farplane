@@ -229,6 +229,62 @@ class PromptfooAdapterTests(unittest.TestCase):
         self.assertEqual(normalized["candidate"]["workspace_delta"]["created"], ["handoff.txt"])
         self.assertEqual(normalized["candidate"]["assertions"][0]["assertion"]["type"], "skill-used")
 
+    def skill_read_row(self, aggregated_output: str) -> dict:
+        command = "/bin/zsh -lc \"sed -n '1,240p' .agents/skills/handoff-preparer/SKILL.md && sed -n 1p notes.md\""
+        return {
+            "provider": {"id": "openai:codex-sdk", "label": "candidate"},
+            "success": False,
+            "score": 0.4,
+            "response": {
+                "output": "candidate output",
+                "metadata": {"attemptedSkillCalls": [{"name": "handoff-preparer"}]},
+                "raw": json.dumps(
+                    {
+                        "items": [
+                            {
+                                "type": "command_execution",
+                                "command": command,
+                                "aggregated_output": aggregated_output,
+                                "exit_code": 1,
+                                "status": "failed",
+                            }
+                        ]
+                    }
+                ),
+            },
+            "gradingResult": {
+                "pass": False,
+                "componentResults": [
+                    {
+                        "pass": False,
+                        "score": 0,
+                        "reason": "Missing required skill(s): handoff-preparer.",
+                        "assertion": {"type": "skill-used", "value": "handoff-preparer"},
+                    },
+                    {"pass": False, "score": 0.8, "assertion": {"type": "llm-rubric"}},
+                ],
+            },
+        }
+
+    def test_skill_read_printed_by_a_failed_chained_command_counts_as_used(self) -> None:
+        row = self.skill_read_row("---\nname: handoff-preparer\ndescription: x\n---\nsed: notes.md: No such file\n")
+        normalized = runner.normalize_row(row, workspace_delta={})
+        skill_used = normalized["assertions"][0]
+        self.assertTrue(skill_used["pass"])
+        self.assertIn("exit code 1", skill_used["reason"])
+        self.assertAlmostEqual(normalized["score"], 0.9)
+        self.assertFalse(normalized["pass"])
+        self.assertEqual(normalized["skill_used_override"]["skill"], "handoff-preparer")
+        self.assertEqual(normalized["metadata"]["skillCalls"][0]["source"], "output-confirmed")
+        self.assertFalse(row["gradingResult"]["componentResults"][0]["pass"])
+
+    def test_failed_skill_read_without_printed_frontmatter_stays_failed(self) -> None:
+        row = self.skill_read_row("sed: .agents/skills/handoff-preparer/SKILL.md: No such file or directory\n")
+        normalized = runner.normalize_row(row, workspace_delta={})
+        self.assertFalse(normalized["assertions"][0]["pass"])
+        self.assertEqual(normalized["score"], 0.4)
+        self.assertNotIn("skill_used_override", normalized)
+
     def test_promptfoo_exit_100_is_a_completed_comparison(self) -> None:
         manifest = runner.load_manifest(EVAL_FILE)
         profile = runner.load_profile(PROFILE_FILE)

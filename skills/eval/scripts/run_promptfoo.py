@@ -277,6 +277,46 @@ def _response_output(response: Any) -> Any:
     return response
 
 
+def _command_items(response: dict[str, Any]) -> list[dict[str, Any]]:
+    raw = response.get("raw")
+    if isinstance(raw, str):
+        try:
+            raw = json.loads(raw)
+        except json.JSONDecodeError:
+            return []
+    items = raw.get("items") if isinstance(raw, dict) else None
+    if not isinstance(items, list):
+        return []
+    return [item for item in items if isinstance(item, dict) and item.get("type") == "command_execution"]
+
+
+def confirmed_skill_reads(response: dict[str, Any], skill_name: str) -> list[dict[str, Any]]:
+    """Return commands whose output printed the skill's own SKILL.md frontmatter.
+
+    Promptfoo's codex-sdk provider counts a skill as used only when the command naming
+    its SKILL.md exits 0, so `sed SKILL.md && <a later step that fails>` reads as merely
+    attempted. The skill's `name:` frontmatter line in the output proves the file
+    reached the agent whatever the chained exit code was.
+    """
+    name_line = re.compile(rf"^name:\s*[\"']?{re.escape(skill_name)}[\"']?\s*$", re.MULTILINE)
+    reads = []
+    for item in _command_items(response):
+        command = item.get("command")
+        output = item.get("aggregated_output")
+        if not isinstance(command, str) or not isinstance(output, str):
+            continue
+        if f"skills/{skill_name}/SKILL.md" in command and name_line.search(output):
+            reads.append({"command": command, "exit_code": item.get("exit_code")})
+    return reads
+
+
+def _component_score(component: dict[str, Any]) -> float:
+    score = component.get("score")
+    if isinstance(score, (int, float)) and not isinstance(score, bool):
+        return float(score)
+    return 1.0 if component.get("pass") is True else 0.0
+
+
 def normalize_row(row: dict[str, Any], *, workspace_delta: dict[str, list[str]]) -> dict[str, Any]:
     grading = row.get("gradingResult")
     if not isinstance(grading, dict):
@@ -286,19 +326,52 @@ def normalize_row(row: dict[str, Any], *, workspace_delta: dict[str, list[str]])
     success = row.get("success")
     if not isinstance(success, bool):
         success = grading.get("pass") if isinstance(grading.get("pass"), bool) else False
-    return {
+    score = row.get("score", grading.get("score"))
+    metadata = copy.deepcopy(response_dict.get("metadata", {}))
+    assertions = copy.deepcopy(grading.get("componentResults", row.get("componentResults", [])))
+    skill_used_override = None
+    for component in assertions:
+        assertion = component.get("assertion") if isinstance(component, dict) else None
+        if not isinstance(assertion, dict) or assertion.get("type") != "skill-used" or component.get("pass") is True:
+            continue
+        skill_name = assertion.get("value")
+        reads = confirmed_skill_reads(response_dict, skill_name) if isinstance(skill_name, str) else []
+        if not reads:
+            continue
+        exit_codes = sorted({str(read["exit_code"]) for read in reads})
+        component.update(
+            {
+                "pass": True,
+                "score": 1,
+                "reason": (
+                    f"Skill read confirmed from command output: {skill_name} SKILL.md frontmatter was printed "
+                    f"(command exit code {', '.join(exit_codes)}). Promptfoo reported: {component.get('reason', '')}"
+                ),
+            }
+        )
+        if isinstance(metadata, dict):
+            calls = metadata.setdefault("skillCalls", [])
+            calls.append({"name": skill_name, "path": f".agents/skills/{skill_name}/SKILL.md", "source": "output-confirmed"})
+        skill_used_override = {"skill": skill_name, "confirmed_reads": len(reads), "exit_codes": exit_codes}
+    if skill_used_override and assertions:
+        success = all(isinstance(component, dict) and component.get("pass") is True for component in assertions)
+        score = sum(_component_score(component) for component in assertions) / len(assertions)
+    normalized = {
         "provider": _provider_label(row),
         "pass": success,
-        "score": row.get("score", grading.get("score")),
+        "score": score,
         "reason": row.get("reason", grading.get("reason")),
         "output": _response_output(response),
         "error": response_dict.get("error") or row.get("error"),
         "latency_ms": response_dict.get("latencyMs", row.get("latencyMs")),
         "token_usage": response_dict.get("tokenUsage", row.get("tokenUsage")),
-        "metadata": response_dict.get("metadata", {}),
-        "assertions": grading.get("componentResults", row.get("componentResults", [])),
+        "metadata": metadata,
+        "assertions": assertions,
         "workspace_delta": workspace_delta,
     }
+    if skill_used_override:
+        normalized["skill_used_override"] = skill_used_override
+    return normalized
 
 
 def normalize_export(
