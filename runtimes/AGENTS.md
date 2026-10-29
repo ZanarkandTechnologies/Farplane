@@ -326,6 +326,11 @@ enforces the same rules, so a draft that passes needs no rewrite.
 5. **Next steps are titled by their gain**, not their work.
 6. **After 30+ minutes of work**, add `**Context:** You asked …; I …` under
    the decision for a user coming back later; skip it in a live exchange.
+7. **You did what was asked:** re-read the user's last three messages. If you
+   did a narrower, easier or different version, or are handing back work you
+   could do yourself, do the asked version now, or say in the first line what
+   you did instead and why. (22-29 Oct 2026: 3 in 4 of Kenji's corrections
+   were this, about the request 1-3 messages back, not a forgotten old rule.)
 
 - Omit the progress ledger when it would repeat obvious context.
 - Write plainly and concretely. Use short paragraphs under descriptive headings,

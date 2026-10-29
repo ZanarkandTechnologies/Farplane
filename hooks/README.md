@@ -13,6 +13,8 @@ explain behavior without maintaining duplicate registration snippets.
 | [skill-length](skill-length/README.md) | PostToolUse | Repair feedback for oversized edited skills |
 | [skill-invocation](skill-invocation/README.md) | PostToolUse | Records real skill invocations for skill heat |
 | [foreground-wait](foreground-wait/README.md) | PreToolUse | Denies a Claude Bash call that sleeps or polls in the foreground, with the background rerun to use |
+| [worktree-guard](worktree-guard/README.md) | PreToolUse | Denies `git worktree add` and a session with its own worktree unless Kenji asked (`FARPLANE_WORKTREE_OK=1`) |
+| [evidence-mode](evidence-mode/README.md) | UserPromptSubmit | States the evidence switch (awake: minimal proof, asleep: maximum) in every turn |
 | [user-turn](user-turn/README.md) | UserPromptSubmit | User-intent capture and optional skill suggestion |
 
 ## Install and inspect

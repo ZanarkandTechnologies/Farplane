@@ -36,6 +36,16 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "^(Bash|mcp__ccd_session__start_session)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.codex/hooks/worktree-guard/worktree_guard.sh\"",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "PostToolUse": [
