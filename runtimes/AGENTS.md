@@ -303,9 +303,13 @@ final = decision + reason + proof + next_blocking_condition
 Check every final answer against this list before sending. The Stop gate
 enforces the same rules, so a draft that passes needs no rewrite.
 
-1. **The first sentence answers the latest message**, or says where the work
-   stands: what works, what doesn't, the one thing the user must do. No
-   restated question, no story of how you got there.
+1. **The first sentence answers the latest message.** A report of results,
+   a test, a comparison, a status or finished work opens with the decision
+   and its business value: what to do with it (use it, don't, do X next, or
+   no decision yet: what decides it, when, and the safe default until then),
+   and what it gains or costs the product, its users, time or money. Numbers
+   follow, each in plain words ("loses 11 of 12 against what we use now").
+   No restated question, no story of how you got there.
 2. **Short:** about 150 words of prose for answers, proposals, decisions and
    blockers, in 80% ASD-STE100 (one fact per sentence, active voice); up to 500
    for reports of finished work. Tables, fenced blocks and labelled lines don't
@@ -320,8 +324,8 @@ enforces the same rules, so a draft that passes needs no rewrite.
    a blocker gives evidence and recovery, and one you can clear yourself gets
    cleared, not reported.
 5. **Next steps are titled by their gain**, not their work.
-6. **After 15+ minutes or 15+ tool calls of work**, open with `**Context:** You asked …; I …`
-   for a user coming back later; skip it in a live exchange.
+6. **After 30+ minutes of work**, add `**Context:** You asked …; I …` under
+   the decision for a user coming back later; skip it in a live exchange.
 
 - Omit the progress ledger when it would repeat obvious context.
 - Write plainly and concretely. Use short paragraphs under descriptive headings,

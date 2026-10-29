@@ -207,10 +207,9 @@ class StopGateTests(unittest.TestCase):
         from datetime import datetime, timezone
         now = datetime(2026, 10, 20, 12, 0, tzinfo=timezone.utc)
         self.assertFalse(continuation.long_turn("", now=now))
-        self.assertTrue(continuation.long_turn("2026-10-20T11:45:00Z", now=now))
-        self.assertFalse(continuation.long_turn("2026-10-20T11:50:00Z", now=now))
-        self.assertTrue(continuation.long_turn("2026-10-20T11:58:00Z", 15, now=now))
-        self.assertFalse(continuation.long_turn("2026-10-20T11:58:00Z", 6, now=now))
+        self.assertTrue(continuation.long_turn("2026-10-20T11:30:00Z", now=now))
+        # A 20-minute live exchange gets no Context line, however many tools ran.
+        self.assertFalse(continuation.long_turn("2026-10-20T11:40:00Z", now=now))
         answer = {"shape": {"choice": "simple_answer"}}
         _, gaps = response_format.select_gaps(answer, files_changed=False, final="All six found.", long_turn=True)
         self.assertEqual(gaps, ["context_line"])
