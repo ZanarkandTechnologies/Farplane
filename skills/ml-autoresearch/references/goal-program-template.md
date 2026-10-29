@@ -46,9 +46,13 @@ selection:
   owner: active-goal
   hypothesis_tree: <hypothesis-tree.json>
   source_stage:
-    inputs: <local failures, supplied refs, configured Feed Scout signals, or bounded research>
+    misses: <today's best scored per case on every set; only its misses go forward, one row per miss; a held-out set is scored, never mined>
+    decision_tree: <splits are questions about a case answerable without the truth; each case kind names the technique that wins on all its cases, handled and missed; the shipped pipeline routes every case down this tree>
+    limiting_stage: <the stage whose truth input moves the end score most; missed cases inspected before naming a cause>
+    inputs: <local failures, supplied refs, configured Feed Scout signals, or bounded research, searched by case kind>
     technique_catalog: <for latency/size/on-device objectives, references/technique-catalog-efficient-inference.md; append verified outcomes to its Field results>
-    extracts: <techniques, mechanisms, variables, failure conditions, source refs>
+    extracts: <techniques, mechanisms, variables, failure conditions, source refs, predicted gains from ablation tables>
+    generation: add B to today's A (a swap of A stays defer until A + B is kept); combine methods whose misses differ, ending in a per-case pick down the decision tree; permutation, transfer, ablation, or new direction
   rule: choose execute | diagnose | report_now | request_feedback | stop; use goal-advisor references/choose-next.md only for real multi-option judgment
   before_each_experiment:
     inputs:
@@ -57,7 +61,7 @@ selection:
       - Goal turn comment learnings, prior selections, and rejected moves
       - current full-evaluator experiment receipts
       - remaining time, compute, spend, attempt, and patience budget
-    output: one next experiment + hypothesis + expected observation +
+    output: one next experiment + hypothesis + target misses + expected observation +
       observation horizon + confidence + falsifier + surprise trigger +
       changed boundary + expected reward + reward basis + material selection rationale + replan conditions
     rule: execute a mechanically implied move directly; otherwise apply goal-advisor references/choose-next.md
@@ -66,9 +70,10 @@ loop:
   baseline: run and record before any mutation
   round:
     - choose one experiment directly or through the choose-next comparison when ranking is genuinely needed
-    - preregister hypothesis, expected observation, observation horizon,
-      confidence, falsifier, surprise trigger, changed boundary, cost, guards,
-      and keep/kill rule
+    - before scoring, preregister hypothesis, target misses, expected
+      observation as a predicted number, observation horizon, confidence,
+      falsifier, surprise trigger, changed boundary, cost, guards, and
+      keep/kill rule
     - implement the smallest attributable delta on the mutable surface
     - run correctness smoke
     - when valid, run the exact full frozen evaluator
@@ -97,7 +102,11 @@ loop:
       append-only but remove them from causal evidence, change stale supported
       diagnostic and parent-cause labels to unresolved, mark the packet stale,
       and authorize only Goal Advisor regeneration
-    - keep | discard | repair_once | defer | failed
+    - keep | discard | repair_once | defer | failed; keep only on a primary
+      gain with every guard passing (with several test sets: a gain on most,
+      e.g. 2 of 3, none worse beyond its named noise band)
+    - after a keep, the new best's misses are the next source-stage input; a
+      case kind no technique covers stays open, not a tree node, naming its need
 
 after_each_turn:
   - read the issue body, hypothesis-tree.json, and the newest Goal turn comments within 80 lines

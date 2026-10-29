@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "case_id": "receipt-fields-next-round",
+  "source_class": "sanitized_user_regression_happy_path",
+  "campaign": {
+    "objective": "Read the merchant, date, and total fields from photographed shop receipts.",
+    "pipeline": [
+      "page crop: finds the receipt in the photo",
+      "line finder: splits the receipt into text lines",
+      "field reader: labels lines as merchant, date, or total"
+    ],
+    "primary_metric": "receipts with all three fields correct (higher is better)",
+    "test_sets": {
+      "shop_photos": 120,
+      "scanner": 90,
+      "second_city": 80
+    },
+    "evaluator_frozen": true,
+    "repeatability_band": "2 receipts per set",
+    "remaining_budget": {
+      "experiments": 4,
+      "gpu_hours": 6
+    }
+  },
+  "current_best": {
+    "method": "A: projection-profile line finder",
+    "scores": {
+      "shop_photos": 82,
+      "scanner": 77,
+      "second_city": 52
+    }
+  },
+  "miss_table": [
+    {
+      "kind": "tilted photo",
+      "count": 31,
+      "missed_by": [
+        "A"
+      ],
+      "note": "lines run diagonally; A cuts across them"
+    },
+    {
+      "kind": "faded thermal print",
+      "count": 22,
+      "missed_by": [
+        "A",
+        "C"
+      ],
+      "note": "light text; A finds no line gaps"
+    },
+    {
+      "kind": "handwritten total",
+      "count": 14,
+      "missed_by": [
+        "A",
+        "B"
+      ],
+      "note": "total written by hand under the print"
+    },
+    {
+      "kind": "two totals (tax and tip)",
+      "count": 12,
+      "missed_by": [
+        "A",
+        "B",
+        "C"
+      ],
+      "note": "lines found correctly, but two totals are printed"
+    }
+  ],
+  "truth_swap": {
+    "true page crop given": "+1 receipt across all sets",
+    "true text lines given": "+58 receipts across all sets",
+    "true field labels given on today's lines": "+9 receipts across all sets"
+  },
+  "saved_methods": {
+    "B": "learned text-line detector from Paper 1; misses handwritten totals, handles tilted photos and faded print",
+    "C": "deskew-then-profile from Paper 2; misses faded print, handles tilted photos and handwritten totals"
+  },
+  "sources": {
+    "paper_1": "Learned text-line detection. Ablation table: +7 points on its faded-print subset over a profile baseline; overall 0.86 vs 0.81 on its own benchmark.",
+    "paper_2": "Deskew before profiling. Ablation table: +11 points on its rotated-page subset; no change on upright pages."
+  },
+  "team_notes": [
+    "Paper 1 scores higher overall, so let's replace A with B.",
+    "The field reader feels like the weak step; maybe fine-tune it next.",
+    "Let's group the misses by how wrong the total was (off by under 1, off by over 10) and attack the worst group."
+  ]
+}

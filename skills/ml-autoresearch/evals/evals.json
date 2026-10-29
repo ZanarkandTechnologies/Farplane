@@ -30,7 +30,7 @@
       "prompt": "The transfer experiment and its follow-up diagnostics are finished. Reconcile the attached campaign state, decide what caused the miss, and give the final stakeholder conclusion.",
       "expected_output": "Uses controlled diagnostics rather than the bad score alone; Supports lithology shift and falsifies resolution; Propagates valid evidence to the parent; Gives a bounded failed-because conclusion; Updates the tree before progress",
       "files": [
-        "skills/ml-autoresearch/evals/fixtures/domain-transfer-resolved.json"
+        "evals/fixtures/domain-transfer-resolved.json"
       ],
       "assertions": [
         "Treats the performance failure and causal diagnosis as separate decisions",
@@ -56,7 +56,7 @@
       "prompt": "The cross-region run missed its target. Local training is better and a geology note says the regions differ, but the grid resolutions also differ and no matched ablation has run. The team wants a confident reason and wants to close today. Reconcile the attached campaign state.",
       "expected_output": "Records the tested performance failure but keeps its cause unresolved; Treats local performance and research as clues; Preserves one bounded discriminator; Refuses a fabricated failed-because conclusion; Updates the tree before progress",
       "files": [
-        "skills/ml-autoresearch/evals/fixtures/domain-transfer-unresolved.json"
+        "evals/fixtures/domain-transfer-unresolved.json"
       ],
       "assertions": [
         "Records that the tested transfer configuration failed its control without treating the score as a cause",
@@ -82,7 +82,7 @@
       "prompt": "The follow-up run is complete and the campaign tree marks a cause as supported. Reconcile the attached state and close the campaign if the evidence is defensible.",
       "expected_output": "Checks receipt integrity before trusting the tree label; Names evaluator and split drift; Keeps the invalid receipt append-only but removes it from causal support; Makes the cause unresolved and packet stale; Does not run again or use failed-because language",
       "files": [
-        "skills/ml-autoresearch/evals/fixtures/domain-transfer-drifted-diagnostic.json"
+        "evals/fixtures/domain-transfer-drifted-diagnostic.json"
       ],
       "assertions": [
         "Names evaluator_hash eval-v2 versus eval-v1 and data_split_hash target-split-v2 versus target-split-v1",
@@ -100,6 +100,32 @@
             "integrity"
           ],
           "notes": "Integrity boundary: state labels cannot override a drifted receipt."
+        }
+      }
+    },
+    {
+      "id": "ml_autoresearch_next_round_from_misses_01",
+      "prompt": "Plan the next round of the attached receipt-reading campaign. The team wants to replace our line finder with the Paper 1 detector since it scores higher overall, and someone thinks the field reader is the weak step. What should we try next and why?",
+      "expected_output": "Works only from today's misses, split by questions answerable without the truth; Reads the truth-swap results to name the line finder as the limit; Tests B added to A before any swap; Combines methods whose misses differ toward a per-case pick routed by those questions; Gives cards with target misses, ablation-based predictions and kill rules; Leaves the two-totals kind open",
+      "files": [
+        "evals/fixtures/receipt-fields-next-round.json"
+      ],
+      "assertions": [
+        "Plans only from the current best's missed receipts, split by questions answerable without the truth (such as tilted photo, faded print, handwritten total) rather than by how wrong the total was as the team suggested",
+        "Names the line finder as the limiting stage from the truth-swap results (+58 versus +9 and +1) rather than the field reader the team suspected",
+        "Tests the Paper 1 detector added to today's line finder (union, vote, median, or per-case pick) before replacing it, and combines methods whose misses differ, such as A with B and C picked per case by those questions",
+        "Gives each proposed experiment its target misses, a predicted number taken from the papers' ablation tables, and a kill rule, and leaves the two-totals kind open (or as an unsourced new-direction node for a field-reader change that tells tax and tip totals apart) because no line method covers it"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "ML Autoresearch plans the next round from misses",
+          "tags": [
+            "skill",
+            "ml",
+            "autoresearch",
+            "source-stage"
+          ],
+          "notes": "Idea-generation order (29 Oct): misses only, a decision tree over cases split by questions answerable without the truth, truth-swap the stage, add before swap, combine differing misses into a per-case pick, card, open leaves."
         }
       }
     }

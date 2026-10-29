@@ -16,15 +16,11 @@ allowed-tools: Read, Glob, Grep, Bash
 Use this when an ML training or inference system has a frozen evaluator, a
 measurable objective, a bounded mutable surface, and enough compute authority
 for repeated experiments. Use one campaign ticket for one stable objective,
-evaluator, data boundary, and budget. Experiments are append-only progress
-entries and evidence receipts, not tickets.
+evaluator, data boundary, and budget; experiments are receipts, not tickets.
 
 This adapts Karpathy's minimal Autoresearch loop—baseline, one code experiment,
-evaluate, keep or discard, repeat—into Farplane's visible Goal Packet. The
-active Goal chooses the next action from eligible leaves and accumulated
-evidence; the choose-next comparison applies only to a real multi-option choice.
-Native Goal is the sole continuation engine. Goal Advisor compiles the packet
-but does not choose ML techniques.
+evaluate, keep or discard, repeat—into Farplane's visible Goal Packet. Native
+Goal is the sole continuation engine.
 
 ## Skill Signature
 
@@ -45,8 +41,8 @@ state:
 gates:
   target_exists; owning_ticket_exists; mutable_surface_bounded;
   evaluator_frozen; metric_and_direction_named; baseline_recorded;
-  guards_and_budget_named; source_stage_grounded; hypothesis_tree_bound;
-  packet_approved
+  guards_and_budget_named; misses_split; source_stage_grounded;
+  hypothesis_tree_bound; packet_approved
 
 routes:
   goal-advisor | research |
@@ -57,7 +53,7 @@ fails:
   fixed_ladder_ignoring_progress; multiple_confounding_deltas;
   unbounded_compute_or_spend; result_cherry_pick; receipt_overwrite;
   ticket_per_attempt; second_runner_or_continuation_owner; self_approved_claim;
-  invented_budget_or_guard_threshold
+  invented_budget_or_guard_threshold; swap_before_add
 ```
 
 ## Decision Backbone
@@ -66,7 +62,7 @@ Every campaign plan, policy, packet, and active-turn decision must make this
 named composition explicit:
 
 ```text
-source_stage(local evidence + technique catalog + Feed Scout/research inputs?)
+source_stage(today's misses + limiting stage + catalog + Feed Scout/research?)
   -> techniques + mechanisms + variables
 campaign.initialize_tree(initial hypothesis candidates)
 goal_advisor(issue ticket sections + program preset + hypothesis-tree.json)
@@ -80,29 +76,27 @@ native_goal(updated packet state) -> continue | replan | block | complete
 ```
 
 The campaign Goal Packet always contains the issue's ticket sections, `## Goal
-program`, `hypothesis-tree.json`, and Goal turn comments. `## Goal program` owns
-source/search policy; the tree owns current hypotheses, results, and insights;
-Goal turn comments own append-only selections and mutation receipts. Goal Advisor is only the
-packet/native-Goal compiler. Metric Advisor is setup/repair only. Use the
-choose-next comparison only when several experiments need judgment; otherwise the
-Goal executes the mechanically implied move directly.
+program` (owns source/search policy), `hypothesis-tree.json` (owns current
+hypotheses, results, and insights), and Goal turn comments (own append-only
+selections and mutation receipts). Goal Advisor is only the packet/native-Goal
+compiler; Metric Advisor is setup/repair only. Use choose-next only when several
+experiments need judgment; otherwise the Goal executes the implied move directly.
 
 ## Phase Boundary
 
-Keep setup and cheap local grounding inline. Route uncertain metrics to Metric
-Advisor. Route a missing, stale, or evidence-thin technique frontier to bounded
-research or Best Of Worlds before ranking. Use Agent QA or review when the
-agent, evaluator integrity, leakage boundary, or final scientific claim needs
-independent judgment. External compute, spend, uploads, or services still need
-the authority named by the ticket.
+Keep setup and cheap local grounding inline. Route uncertain metrics to Goal
+Advisor [metrics](../goal-advisor/references/metrics.md). Route a missing, stale,
+or evidence-thin technique frontier to bounded research or Best Of Worlds before
+ranking. Use Agent QA or review when the agent, evaluator integrity, leakage
+boundary, or final scientific claim needs independent judgment. External compute,
+spend, uploads, or services still need the authority named by the ticket.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] 1. Bind the campaign contract.
   - [ ] Read the owning ticket, target code/docs, mutable surface, frozen
-    evaluator and data boundary, primary metric and direction, guards, budget,
-    and the first-load Todo List guardrails.
+    evaluator and data boundary, primary metric and direction, guards, budget.
   - [ ] Route an obvious deterministic bug to direct implementation instead of
     opening an experiment campaign.
   - [ ] Do not invent a GPU/time/spend/attempt ceiling, metric threshold, guard
@@ -114,26 +108,36 @@ the authority named by the ticket.
     environment, and baseline candidate before mutation.
   - [ ] Run the baseline through the exact full evaluator; use smokes only for
     correctness, never promotion.
-- [ ] 3. Run the source stage and seed the hypothesis tree.
-  - [ ] Start with local failures, the optional technique catalog, supplied
-    references, and configured Feed Scout signals. When credible coverage is
-    missing or stale, route bounded [research](../research/SKILL.md)
-    (papers or synthesis).
-  - [ ] Extract applicable techniques, mechanisms, variables, failure
-    conditions, and source refs; record source dispositions before use.
-  - [ ] Generate intervention hypotheses through combination, permutation,
-    transfer, ablation, or new direction. Give each an expected observation,
-    falsifier, expected compounding reward, and short reward basis in
-    `hypothesis-tree.json`. Do not rank or select until every eligible initial
-    node has all four fields; an unlabeled or merely implied reward basis is an
-    incomplete node, not a selectable hypothesis. Each `reward_basis` must say
-    what compounds—reusable capability, information that prunes the tree,
-    options unlocked, or proof accelerated—not merely restate expected metric
-    lift.
+- [ ] 3. Run the source stage and seed the hypothesis tree from today's misses.
+  - [ ] Score today's best on every set; only its misses go forward, one row per
+    miss, and a held-out set is scored, never mined. Split them by questions
+    answerable without the truth (is the wall glass?) into a decision tree over
+    case kinds: each kind gets the technique that wins on all its cases, handled
+    and missed, and the shipped pipeline routes every case down that tree. Give
+    one stage the truth; the largest end-score move names the limiting stage.
+    Look at missed cases before naming a cause.
+  - [ ] Per case kind, ask why against the target docs: what does a technique
+    see that today's method does not? Search local failures, the optional
+    technique catalog, supplied refs, and Feed Scout signals by case kind; route
+    bounded [research](../research/SKILL.md) when coverage is missing or stale.
+    Extract techniques, mechanisms, variables, failure conditions, source refs,
+    and ablation-table gains; record source dispositions before use.
+  - [ ] Generate hypotheses: add B to today's A (union, vote, median, per-case
+    pick) so A's wins stay, keeping any swap of A `defer` until A + B is kept and
+    A's own misses are the limit; combine methods whose misses differ, ending in
+    a per-case pick down that tree; add permutation, transfer, ablation, or new
+    direction. Card each in `hypothesis-tree.json`: `target_misses`, expected
+    observation as a predicted number (ablation tables when sourced), falsifier,
+    kill rule, cost, expected compounding reward, and reward basis; rank or
+    select only once every eligible initial node has the whole card. An unlabeled
+    or merely implied reward basis is an incomplete node. Each `reward_basis`
+    must say what compounds—reusable capability, information that prunes the
+    tree, options unlocked, or proof accelerated—not merely restate expected
+    metric lift. An uncovered case kind stays open, not a node, naming its need.
   - [ ] When several credible initial hypotheses need judgment, use
     [choose-next](../goal-advisor/references/choose-next.md) for one ordinal comparison
     including outside options. Skip this hop when one move is mechanically
-    implied. Do not use a tournament, persistent rank, or numeric lift.
+    implied. No tournament, persistent rank, or uncalibrated numeric lift.
 - [ ] 4. Use [Goal Advisor](../goal-advisor/SKILL.md) to instantiate
   [the ML Goal program preset](references/goal-program-template.md) into the
   owning issue's `## Goal program`, create or update `hypothesis-tree.json` and
@@ -142,13 +146,11 @@ the authority named by the ticket.
 - [ ] 5. Select the next experiment from current evidence.
   - [ ] Apply `choose_next` to `## Goal program` policy, eligible pending tree
     leaves, recent Goal turn comment learnings, current full-evaluator receipts,
-    and remaining budget. Use the choose-next comparison only for a multi-option
-    judgment. Do not continue a fixed roadmap order.
-  - [ ] Preregister one hypothesis, expected observation, observation horizon,
-    named confidence, falsifier, surprise trigger, changed boundary, expected
-    information, cost, guards, and keep/kill rule. Label `falsifier` and
-    `surprise_trigger` separately; one failure threshold cannot silently stand
-    in for both.
+    and remaining budget. Do not continue a fixed roadmap order.
+  - [ ] Before scoring, preregister the selected node's card plus observation
+    horizon, named confidence, surprise trigger, changed boundary, expected
+    information, and guards. Label `falsifier` and `surprise_trigger`
+    separately; one failure threshold cannot silently stand in for both.
 - [ ] 6. Execute and record one bounded experiment.
   - [ ] Modify only the allowed surface, run correctness smokes, then run the
     exact full frozen evaluator when valid.
@@ -196,10 +198,11 @@ the authority named by the ticket.
     falsified; stale the packet; and allow only Goal Advisor regeneration.
 - [ ] 7. Continue, replan, or stop mechanically.
   - [ ] Keep only candidates that improve the primary objective while every
-    guard passes; prefer the simpler candidate when materially tied.
-  - [ ] Replan after every valid full result. Stop on success, supported
-    negative conclusion, exhausted useful frontier, stale packet, blocker, or
-    budget before silently expanding scope.
+    guard passes (several test sets: a gain on most, e.g. 2 of 3, none worse
+    beyond its named noise band); prefer the simpler one when materially tied.
+  - [ ] Replan after every valid full result; the new best's misses re-enter
+    step 3. Stop on success, supported negative conclusion, exhausted useful
+    frontier, stale packet, blocker, or budget before silently expanding scope.
   - [ ] Treat evaluator or split drift as an execution-eligibility failure,
     not a reporting caveat. Preserve the drifted receipt append-only, mark the
     packet stale, and do not select, preregister, repair, rerun, or recommend a
@@ -255,8 +258,6 @@ next_action:
 
 ## Gotchas
 
-- Do not mistake search volume for research quality. Prefer the experiment that
-  best distinguishes the current bottleneck or unlocks reusable capability.
 - Do not let the choose-next comparison become an ML executor or state store. It returns
   a decision; the campaign tree and receipts preserve state.
 - Do not mutate the evaluator, split, primary metric, or prohibited inputs to
@@ -274,8 +275,6 @@ next_action:
   several eligible experiments need judgment.
 - [Goal Advisor](../goal-advisor/SKILL.md) — packet and native Goal compiler;
   never the technique selector.
-- [Metric Advisor](../goal-advisor/SKILL.md) — use when the primary metric,
-  direction, guard, or anti-metric is unclear.
 - [Karpathy Autoresearch program](https://github.com/karpathy/autoresearch/blob/master/program.md)
   — source pattern only; Farplane's bounded local contract is authoritative.
 
@@ -294,20 +293,21 @@ Packet: issue ticket sections + ## Goal program + hypothesis-tree.json + Goal tu
 Tree: source synthesis + eligible pending leaves + current branch state
 Progress: Goal turn comment learnings + current full-evaluator receipt refs
 Selector: eligible moves + direct or choose-next rationale + outside-option comparison
-Experiment: hypothesis + falsifier + changed boundary + guards + cost
+Experiment: hypothesis + target misses + falsifier + changed boundary + guards + cost
 Expectation: expected observation + horizon + confidence + surprise trigger
 Writeback: receipt ref + decision + learned constraint + tree mutation + next action
 ```
 
-For a source-stage request with concrete inputs, also render the extracted
-`Source refs`, `Techniques`, `Mechanisms`, `Variables`, and `Failure conditions`,
-followed by concrete initial nodes. Every node includes `hypothesis`,
-`mechanism`, `expected_observation`, `falsifier`, `expected_reward`,
-`reward_basis`, and `source_refs`; render those labels for every node before
-making one ordinal choose-next selection. Do not replace these outputs
-with a setup checklist or infer a shared reward basis across nodes. Label the
-comparison `Choose-next comparison`, apply it through `choose_next`, and
-name the selected node or blocking input explicitly.
+For a source-stage or next-round request with concrete inputs, also render the
+`Decision tree`, `Limiting stage`, extracted `Source refs`, `Techniques`,
+`Mechanisms`, `Variables`, and `Failure conditions`, then concrete initial
+nodes. Every node includes `hypothesis`, `target_misses`, `mechanism`,
+`expected_observation`, `falsifier`, `kill_rule`, `cost`, `expected_reward`,
+`reward_basis`, and `source_refs`; render those labels for every node before one
+ordinal choose-next selection. Do not replace these outputs with a setup
+checklist or infer a shared reward basis across nodes. Label the comparison
+`Choose-next comparison`, apply it through `choose_next`, and name the selected
+node or blocking input explicitly.
 
 For a surprise request, explicitly render the bounded diagnostic children,
 credible sibling leaves preserved for breadth, outcome branches (`repair |
