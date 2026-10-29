@@ -104,7 +104,8 @@ or robot or simulation behaviour). Jev judges what the user would see, so launch
 code that changes how bunker workers behave counts.
 
 - **New feature** (completed change or a run's last progress update, files
-  edited): needs an embedded or linked `.mp4`, `.mov` or `.webm`, or an
+  edited), only while the [evidence switch](../evidence-mode/README.md) is
+  asleep: needs an embedded or linked `.mp4`, `.mov` or `.webm`, or an
   `Unverified:` line saying why there is no video. Screenshots and links alone
   get one nudge to record it.
 - **Anything else** (completed change, files edited): any citation means the

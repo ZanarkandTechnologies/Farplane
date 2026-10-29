@@ -722,7 +722,8 @@ def _evaluate(payload: Mapping[str, object], environ: Mapping[str, str], client:
                              # A relay of another session's news answers no question.
                              if not (state["event_turn"] and gap == "unanswered")],
                 proof_only=proof_only,
-                long_turn=bool(state["long_turn"]))
+                long_turn=bool(state["long_turn"]),
+                evidence=response_format.evidence_mode())
             trace.update(shape=shape, gaps=gaps, scores={
                 key.removeprefix("gap::"): value.get("noul") for key, value in answers.items()
                 if (key.startswith("gap::") or key == "visible_feature") and isinstance(value, dict)})

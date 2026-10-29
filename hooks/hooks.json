@@ -12,6 +12,12 @@
           },
           {
             "type": "command",
+            "command": "python3 \"$HOME/.codex/hooks/evidence-mode/evidence.py\" --hook",
+            "statusMessage": "Evidence switch — tells the turn how much proof to gather (awake: minimal, asleep: maximum)",
+            "timeout": 5
+          },
+          {
+            "type": "command",
             "command": "python3 \"$HOME/.codex/hooks/lifecycle-telemetry/farplane_console_ping.py\" --expect-event UserPromptSubmit",
             "statusMessage": "Telemetry — user turn started (observation only)",
             "timeout": 5

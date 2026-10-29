@@ -158,6 +158,7 @@ INSTALL_HOOK_DIRS=(
   skill-length
   skill-invocation
   foreground-wait
+  evidence-mode
   user-turn
   shared
 )
@@ -586,6 +587,7 @@ done
 link_path "$REPO_DIR/bin/core" "$TARGET_DIR/bin/core"
 link_path "$REPO_DIR/runtimes/codex/notify.py" "$TARGET_DIR/bin/notify.py"
 link_global_cli "$TARGET_DIR/bin/farplane"
+link_path "$REPO_DIR/hooks/evidence-mode/evidence.py" "${FARPLANE_CLI_LINK_DIR:-$HOME/.local/bin}/evidence"
 
 for hook_name in "${INSTALL_HOOK_DIRS[@]}"; do
   link_path "$REPO_DIR/hooks/$hook_name" "$TARGET_DIR/hooks/$hook_name"

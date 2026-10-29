@@ -68,6 +68,9 @@ class StopGateTests(unittest.TestCase):
         self.path = Path(self.temp.name) / "transcript.jsonl"
         self.env = {"FARPLANE_CONFIG_DISABLE": "1"}
         self.logged = []
+        mode = patch.object(response_format, "evidence_mode", lambda: "asleep")  # the strict side, whatever the Mac says
+        mode.start()
+        self.addCleanup(mode.stop)
         log = patch.object(continuation, "append_decision", self.logged.append)
         log.start()
         self.addCleanup(log.stop)
@@ -109,6 +112,13 @@ class StopGateTests(unittest.TestCase):
                        "Done.\n- **Unverified:** no display to record on this host."):
             with self.subTest(final=proved):
                 self.assertIsNone(self.evaluate(rows, proved, Client(feature=0.9)))
+
+    def test_awake_switch_drops_the_video_demand(self):
+        rows = [human("Add the chore map."), edit_call()]
+        with patch.object(response_format, "evidence_mode", lambda: "awake"):
+            self.assertIsNone(self.evaluate(rows, "Done.\n![map](/tmp/map.png)", Client(feature=0.9)))
+            result = self.evaluate(rows, "Done.", Client(feature=0.9))
+            self.assertIn("Cite the proof", result["reason"])
 
     def test_length_nudges_stop_after_two(self):
         long = "word " * 600

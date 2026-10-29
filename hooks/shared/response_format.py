@@ -228,6 +228,19 @@ def has_video_proof(final: str) -> bool:
     return bool(_VIDEO.search(final) or _UNVERIFIED.search(final))
 
 
+def evidence_mode() -> str:
+    """awake or asleep from the evidence switch; asleep (the strict side) when it cannot be read."""
+    import importlib.util
+    path = Path(__file__).resolve().parents[1] / "evidence-mode" / "evidence.py"
+    try:
+        spec = importlib.util.spec_from_file_location("farplane_evidence", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)  # type: ignore[union-attr]
+        return module.resolve()[0]
+    except Exception:  # noqa: BLE001 - a broken switch must not break the gate
+        return "asleep"
+
+
 def is_edit_tool(name: object) -> bool:
     return name in _EDIT_TOOLS
 
@@ -252,8 +265,12 @@ def questions() -> dict[str, object]:
 
 def select_gaps(answers: Mapping[str, object], *, files_changed: bool, final: str,
                 reader_gaps: list[str] | None = None,
-                proof_only: bool = False, long_turn: bool = False) -> tuple[str, list[str]]:
+                proof_only: bool = False, long_turn: bool = False,
+                evidence: str = "asleep") -> tuple[str, list[str]]:
     """Return the chosen shape and at most MAX_GAPS gaps, most important first.
+
+    evidence is the evidence switch (hooks/evidence-mode): awake drops the video
+    demand, since Kenji is testing by hand; any cited proof is enough then.
 
     Order: proof, then the reader's gaps, absolute paths, and the shape's scored gaps.
     proof_only keeps just a proof gap: proof has its own nudge, so an earlier
@@ -286,7 +303,7 @@ def select_gaps(answers: Mapping[str, object], *, files_changed: bool, final: st
             *ranked]
     # A run's last progress update can report a new feature too. The video fix
     # also covers citing proof, so it replaces the generic proof nudge.
-    if (files_changed and shape in VIDEO_SHAPES and not has_video_proof(final)
+    if (evidence == "asleep" and files_changed and shape in VIDEO_SHAPES and not has_video_proof(final)
             and _score(answers.get("visible_feature")) >= GAP_THRESHOLD):
         gaps.insert(0, "video_proof")
     elif shape == "completed_change" and files_changed and not has_citation(final):

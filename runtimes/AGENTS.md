@@ -148,10 +148,17 @@ serious_work = ground -> decide -> plan? -> execute -> verify -> review?
   only when evidence or risk justifies it. Record the result and next inspection
   point. Use independent QA or review at the owning workflow's proof boundary
   when self-review cannot credibly prove the claim.
+- Scale proof to the evidence switch, which each turn states in its
+  `Evidence:` line (`evidence awake|asleep|auto` sets it; Kenji controls it).
+  Awake: Kenji tests by hand, so run the changed area's quick checks and add
+  one screenshot only when something visible changed; no recordings. Asleep:
+  prove everything yourself: every check and build of the changed area, step
+  screenshots, and one raw recording under 20 seconds for a new feature. Never
+  write a new recording script; use the project's walk or screenshot tool.
 - Before a PR is marked ready or merged, put the evidence in the PR
   description: the smallest proof of the claim (a screenshot, a raw recording
-  under 20 seconds, or the test output), plus before/after metrics only where a
-  number changed. Comments are working notes, the description is the record.
+  under 20 seconds when asleep, or the test output), plus before/after metrics
+  only where a number changed. Comments are working notes, the description is the record.
   Produce edited video only for content outsiders receive.
 - While working a ticket, fix every bug that blocks it or belongs to its scope,
   in the same change. Log only bugs outside its scope in the project's one
@@ -308,8 +315,8 @@ enforces the same rules, so a draft that passes needs no rewrite.
    reads as two things).
 4. **Shape fits the reply:** a change shows Before / After / Example; a
    proposal adds `Proof planned:`; a finished change cites its proof
-   (`Verified:` or a link, a short video for a new feature a person would
-   watch); a decision gives the recommendation, exact choice and safe default;
+   (`Verified:` or a link; when asleep, a short video for a new feature a
+   person would watch); a decision gives the recommendation, exact choice and safe default;
    a blocker gives evidence and recovery, and one you can clear yourself gets
    cleared, not reported.
 5. **Next steps are titled by their gain**, not their work.
@@ -397,7 +404,7 @@ enforces the same rules, so a draft that passes needs no rewrite.
 | Claim being proved | Proof surface |
 | --- | --- |
 | UI change | One screenshot; a before only when the change is subtle |
-| New feature or multi-step workflow | Its test run plus a raw recording under 20 seconds |
+| New feature or multi-step workflow | Its test run; asleep adds step screenshots and a raw recording under 20 seconds |
 | Long-running task (several goals, hours or threads) | A short recap linking each goal's evidence |
 | Anything outsiders receive (email, ad, post, page, message) | The delivered copy graded by `outbound-check` |
 | Other behavior | Command, log, check, or inspectable artifact |
@@ -420,8 +427,8 @@ enforces the same rules, so a draft that passes needs no rewrite.
 - Make diagrams understandable without color. Keep prose out of diagram boxes,
   and do not use visuals, media, or references to introduce unrelated breadth.
 - Embed the strongest relevant image or video. Use one screenshot for UI deltas,
-  a short raw recording for new features and changed multi-step workflows, and
-  inspectable artifacts for other changes. Do not require visual proof for nonvisual work.
+  a short raw recording for new features and changed multi-step workflows only
+  when the evidence switch is asleep, and inspectable artifacts for other changes. Do not require visual proof for nonvisual work.
 
 ### Completed change
 
