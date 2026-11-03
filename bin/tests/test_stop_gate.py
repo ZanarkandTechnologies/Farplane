@@ -329,18 +329,12 @@ class StopGateTests(unittest.TestCase):
         self.assertIsNone(self.evaluate([human("Is the canvas updated?")], final,
                                         Client(shape="simple_answer"), reader=facts(answers=False)))
 
-    def test_long_plain_answer_gets_cut_to_a_short_one(self):
+    def test_long_plain_answer_is_not_rewritten_shorter(self):
+        # The 150-word target is an AGENTS.md rule; the format check never forces a cut.
         answer = {"shape": {"choice": "simple_answer"}}
         long = "The matcher misses because the crop is cut. " * 32  # 256 words
         _, gaps = response_format.select_gaps(answer, files_changed=False, final=long)
-        self.assertEqual(gaps, ["short_answer"])
-        self.assertIn("ASD-STE100", response_format.feedback(gaps, "simple_answer"))
-        table = long[:200] + "\n\n| a | b |\n| --- | --- |\n" + "| x y z w | v u t s |\n" * 60
-        _, gaps = response_format.select_gaps(answer, files_changed=False, final=table)
         self.assertEqual(gaps, [])
-        report = {"shape": {"choice": "completed_change"}}
-        _, gaps = response_format.select_gaps(report, files_changed=False, final=long)
-        self.assertNotIn("short_answer", gaps)
 
     def test_format_nudges_stop_at_the_turn_ceiling(self):
         rows = [human("Fix it.")]

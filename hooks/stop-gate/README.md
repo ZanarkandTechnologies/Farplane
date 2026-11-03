@@ -32,12 +32,10 @@ the turn's age stands in; a live exchange gets none (the old 15-tool-call
 trigger asked for 392 Context lines in that same week). It is fixed, not scored, and a Context line of 40
 words or fewer is outside the length budget.
 
-Short answers are a fixed rule too: a simple answer, proposed change,
-decision or blocker with more than 250 prose words gets `short_answer` (about
-150 words in "80% ASD-STE100", the named plain-English standard). The target
-stays 150; the trigger sits at 250 so only clear misses come back. Labelled
-lines, tables and fenced blocks don't count. Completed changes and progress
-reports keep the 500-word budget.
+The format check never asks for a shorter answer. The 150-word target for
+answers, proposals, decisions and blockers lives in `runtimes/AGENTS.md`; a
+forced rewrite to 150 words dropped facts, numbers and reasoning from design
+answers (3 Nov 2026). The length check (order 1) keeps the hard cap.
 
 Before/After is a fixed rule, not a score: a completed change (files edited)
 or proposed change of 40 words or more must carry `Before:` and `After:` (or
