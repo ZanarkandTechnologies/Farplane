@@ -43,11 +43,14 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
      ([design-styles](../design-styles/SKILL.md) owns the vocabulary and
      house guards).
   2. **Saved taste.** Run
-     `farplane resource-bank tasty-pack "<2-4 story keywords>" --timeframe all --limit 20 --json`
-     with no output-type filter, and read each pinned element's recipe as a
-     candidate steal row with its exact values. When that store is down, or to
-     browse by kind, run `farplane library "<keywords>" --in design --type logo --json`
-     (Studio's Design Bank; each result carries a link to the picture to open).
+     `farplane library "<2-4 story keywords>" --in design --json` (Studio's
+     Design Bank: every saved style, graphic and brand pack; add
+     `--type logo` to browse by kind), and read each result's recipe as a
+     candidate steal row with its exact values. Open the promising pictures:
+     `--to <ticket folder>/refs` downloads them with `library.json`. They are
+     references to learn from, never to publish. Also try
+     `farplane resource-bank tasty-pack "<keywords>" --timeframe all --limit 20 --json`;
+     if it fails, say so and rely on the library.
   Record both in the library receipt. An empty pull is a stated result;
   skipping the pull is a miss.
 - [ ] **Three directions.** Propose three ways to tell the story, each through

@@ -34,8 +34,10 @@ block only the rows that stay unresolved. Tool unavailability is a blocker, not
 `searched_no_reference`; that result needs an executed search with specific
 candidate pages or asset IDs and fit decisions.
 
-Search order: supplied and local media, Resource Bank and reference anchors,
-then web, stock, archive, icon/illustration, footage, texture, or overlay
+Search order: supplied and local media, then Studio's library
+(`farplane library "<words>" --in footage --ready --to <folder>` for our footage
+with its rights in `library.json`; `--in design` for reference anchors, which
+teach but never ship), Resource Bank, then web, stock, archive, icon/illustration, footage, texture, or overlay
 libraries suited to the asset class. Record the exact query, specific asset
 page URL or ID (a search-results page is query evidence only), preview or
 metadata evidence, rights status, and the fit or reject reason. Keep the

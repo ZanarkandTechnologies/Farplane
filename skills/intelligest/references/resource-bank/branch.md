@@ -74,8 +74,11 @@ Phase detail lives in [phase router](phase-router.md); storage fields in
 8. Verify retrieval through Tasty Pack: the capture returns with source,
    analysis, note, transcript, complete elements, `pinned`, and `meta` counts
    and warnings; every example asset belongs to the capture's job. If Convex is
-   unavailable, return the analysis packet, a ready-to-write
-   `pending_capture_payload`, and the exact write blocker; never claim a save.
+   unavailable, save each element to Studio's library instead
+   (`farplane library --save <crop> --title ... --source-url ... --note ...`) and
+   verify with `farplane library "<title word>"`; if that fails too, return the
+   analysis packet, a ready-to-write `pending_capture_payload`, and the exact
+   write blocker; never claim a save.
 
 ## Gotchas
 
