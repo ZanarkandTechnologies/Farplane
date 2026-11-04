@@ -219,7 +219,7 @@ def _edit(args) -> None:
 def _remove(args) -> None:
     found = _search(id=args.remove, **{"in": "design"})
     if not found["design"]:
-        raise LibraryError(f"No picture has the id {args.remove}. Footage is removed on its Raw files page.")
+        raise LibraryError(f"No picture has the id {args.remove}. Footage has no remove: it may be the only copy, so a person deletes it by hand.")
     _call("DELETE", f"/api/design-bank/{args.remove}")
     print(f"Removed {_describe(found['design'][0])}")
 
