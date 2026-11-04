@@ -45,7 +45,9 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
   2. **Saved taste.** Run
      `farplane resource-bank tasty-pack "<2-4 story keywords>" --timeframe all --limit 20 --json`
      with no output-type filter, and read each pinned element's recipe as a
-     candidate steal row with its exact values.
+     candidate steal row with its exact values. When that store is down, or to
+     browse by kind, run `farplane library "<keywords>" --in design --type logo --json`
+     (Studio's Design Bank; each result carries a link to the picture to open).
   Record both in the library receipt. An empty pull is a stated result;
   skipping the pull is a miss.
 - [ ] **Three directions.** Propose three ways to tell the story, each through

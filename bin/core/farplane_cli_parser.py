@@ -21,6 +21,7 @@ from farplane_cli_commands import (
     run_check_ticket,
 )
 from farplane_cli_desk import run_desk_cli
+from farplane_cli_library import add_library_parser
 from farplane_cli_metrics import add_metrics_and_loop
 from farplane_skill_sync import run_sync_skills
 from farplane_lint import run_lint_cli
@@ -66,6 +67,8 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--dry-run", action="store_true", help="Print the Doppler-wrapped command without running it.")
     run.add_argument("extra", nargs=argparse.REMAINDER, help="Command to run after --.")
     run.set_defaults(func=run_with_doppler)
+
+    add_library_parser(sub)
 
     eval_command = sub.add_parser(
         "eval",
