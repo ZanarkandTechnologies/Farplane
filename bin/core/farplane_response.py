@@ -36,9 +36,9 @@ _PROOF_LINE = re.compile(
     re.IGNORECASE,
 )
 MAX_PROOF_LINE_WORDS = 40
-# Tables and fenced blocks sit outside the prose budget; this ceiling on the
-# whole answer stops prose from hiding in them.
-MAX_TOTAL_WORDS = 1200
+# Tables, fenced blocks and labelled lines sit outside the prose budget; this
+# ceiling counts every word, so a long answer cannot hide in them.
+MAX_TOTAL_WORDS = 500
 _TABLE_ROW = re.compile(r"^ {0,3}\|.*\|\s*$")
 _MEDIA_EXTENSIONS = (
     ".avif",

@@ -32,10 +32,10 @@ SHAPES: dict[str, dict[str, object]] = {
         "gaps": ["conclusion_first"],
     },
     "proposed_change": {
-        "skeleton": '**<What will change, in one plain sentence.>**\n\n> **Before:** <how it behaves now>\n>\n> **After:** <how it will behave>\n>\n> **Example:** <one concrete case>\n\n- **Proof planned:** <how it will be checked>',
+        "skeleton": '**<What will change, in one plain sentence.>**\n\n> **Before:** <how it behaves now>\n>\n> **After:** <how it will behave>\n>\n> **Example:** <one concrete case>',
         "template": "Proposed change",
         "description": "Proposes a design, plan, or change for the user to approve; nothing has been changed yet (files_changed is false).",
-        "gaps": ["before_after_example", "proof_planned"],
+        "gaps": ["before_after_example"],
     },
     "completed_change": {
         "skeleton": '### <Change name>\n\n**<Worked | Partial | Did not work>: <what works now, in plain words>.**\n\n> **Before:** <old behaviour>\n>\n> **After:** <new behaviour>\n>\n> **Example:** <one concrete case>\n\n- **Verified:** <check and result> (or **Unverified:** <why>)\n- **Limit:** <what remains, or the one thing the user must do>',
@@ -100,10 +100,6 @@ GAPS: dict[str, dict[str, str]] = {
     "before_after_example": {
         "fix": "Add a compact Before / After / Example blockquote for the change.",
         "question": "Does the final answer describe a behavior or design change without a clear before, after, and concrete example?" + _SCOPE,
-    },
-    "proof_planned": {
-        "fix": "Add one line naming how the proposed change will be proved.",
-        "question": "Does the proposed change omit how it will be checked or proved?" + _SCOPE,
     },
     "blocker_recovery": {
         "fix": "Name the blocker, the evidence, and the recovery path.",
@@ -317,7 +313,7 @@ def skeleton(shape: str | None, *, long_turn: bool = False) -> str:
 
 # Gaps that mean the answer's structure is wrong; only these carry the shape
 # template. Every other gap is an in-place edit, so the answer keeps its form.
-STRUCTURAL_GAPS = {"before_after_example", "proof_planned", "blocker_recovery",
+STRUCTURAL_GAPS = {"before_after_example", "blocker_recovery",
                    "decision_choice", "progress_ledger"}
 
 

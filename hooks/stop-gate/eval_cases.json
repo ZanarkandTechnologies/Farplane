@@ -40,8 +40,7 @@
     "files_changed": false,
     "expected_shape": "proposed_change",
     "expected_fixes": [
-      "before_after_example",
-      "proof_planned"
+      "before_after_example"
     ]
   },
   {
@@ -50,9 +49,7 @@
     "proposed_final": "Store each webhook's delivery ID and drop repeats.\n\n> **Before:** The provider retries on slow responses and we process the same event twice.\n>\n> **After:** A delivery-ID table rejects repeats before processing.\n>\n> **Example:** Event `evt_1` delivered twice creates one order.",
     "files_changed": false,
     "expected_shape": "proposed_change",
-    "expected_fixes": [
-      "proof_planned"
-    ]
+    "expected_fixes": []
   },
   {
     "id": "built-cited",
@@ -212,8 +209,7 @@
     "files_changed": false,
     "expected_shape": "proposed_change",
     "expected_fixes": [
-      "before_after_example",
-      "proof_planned"
+      "before_after_example"
     ]
   },
   {

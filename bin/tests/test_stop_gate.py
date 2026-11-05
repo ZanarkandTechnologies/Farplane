@@ -417,7 +417,7 @@ class StopGateTests(unittest.TestCase):
         self.assertEqual(list(client.calls[0]["questions"]), ["nudge", "proposal", "user_deciding"])
 
     def test_gaps_capped_at_two_and_feedback_never_adds_headings(self):
-        client = Client(shape="proposed_change", gaps={"before_after_example": 0.9, "proof_planned": 0.8})
+        client = Client(shape="proposed_change", gaps={"before_after_example": 0.9, "proposal_gain": 0.8})
         result = self.evaluate([human("Plan it.")], "We should improve caching.", client)
         self.assertEqual(result["reason"].count("**Add:**"), 2)
         self.assertIn("no empty headings", result["reason"])

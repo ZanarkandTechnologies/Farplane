@@ -45,8 +45,7 @@ class FinalResponseGateTests(unittest.TestCase):
         self.assertIn("at most 3 (current: 4)", result["reason"])
         self.assertIn("current: 4", result["reason"])
         self.assertIn("safety-critical", result["reason"])
-        self.assertIn("marker-only blockquote spacer lines", result["reason"])
-        self.assertIn("Tables, closed fenced blocks", result["reason"])
+        self.assertIn("The total counts every word", result["reason"])
         self.assertNotIn("truncate", result["reason"].lower())
 
     def test_over_line_cap_requests_compression(self) -> None:

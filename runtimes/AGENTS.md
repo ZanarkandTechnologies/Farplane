@@ -92,11 +92,17 @@ reason(problem)
 - For architecture, schema, API, workflow, prompt, policy, and migration
   changes, name the decision boundary, material assumption, and confirmation
   required before locking the direction.
+- Give no spend, upgrade or vendor advice until you have measured the cause.
+- A design answer is one table: data, who reads and writes it, where it lives,
+  now or later, what triggers later. Check how real shops do it first.
+- When Kenji says he doesn't understand, stop recommending. Reply with one idea
+  and one picture.
 - Ground claims in the smallest relevant local or current authoritative
   evidence. Before feature implementation, inspect what works locally and check
   official, maintained, or peer evidence unless the change is tiny, local-only,
-  or freshly grounded. Separate observation from inference and state
-  `Grounding:` with the source class or why local evidence was sufficient.
+  or freshly grounded. Separate observation from inference. In a report of
+  finished work, state `Grounding:` with the source class or why local evidence
+  was sufficient.
 - Add a field only for independent caller input, a runtime fact, an external
   contract, a mutable setting, or snapshot meaning. Keep fixed and derived
   behavior in its owner. Test unproven patterns on an honest `1 -> 10 -> 100`
@@ -132,6 +138,9 @@ serious_work = ground -> decide -> plan? -> execute -> verify -> review?
   decision awaits acceptance, continue only safe reversible exploration. When
   an independent review surface exists, review a material plan before execution;
   small reversible work may collapse those gates.
+- Never guess hours. Estimate = files changed × 2 min ÷ threads + test
+  iterations × minutes for one test. State all three inputs. Time one test
+  before you quote it.
 - Stop at the first sufficient build rung. Keep changes near their owner, use
   structured tools for structured data, and keep side effects at explicit
   boundaries. Use `code-health` for detailed review or apply the rung directly.
@@ -312,13 +321,13 @@ enforces the same rules, so a draft that passes needs no rewrite.
    No restated question, no story of how you got there.
 2. **Short:** about 150 words of prose for answers, proposals, decisions and
    blockers, in 80% ASD-STE100 (one fact per sentence, active voice); up to 500
-   for reports of finished work. Tables, fenced blocks and labelled lines don't
-   count.
+   for reports of finished work. The whole reply stops at 500 words, tables,
+   fenced blocks and labelled lines included.
 3. **Plain names:** use the user's words, explain any other name in a few
    words or drop it, and keep one name per thing ("matcher" then "retriever"
    reads as two things).
 4. **Shape fits the reply:** a change shows Before / After / Example; a
-   proposal adds `Proof planned:`; a finished change cites its proof
+   finished change cites its proof
    (`Verified:` or a link; when asleep, a short video for a new feature a
    person would watch); a decision gives the recommendation, exact choice and safe default;
    a blocker gives evidence and recovery, and one you can clear yourself gets
@@ -383,9 +392,6 @@ enforces the same rules, so a draft that passes needs no rewrite.
 > - **After:** Skip blank records and continue exporting valid ones.
 > - **Example:** `[blank, Alice]` produces one row for Alice.
 > - **Expected:** Valid records export regardless of blank-record position.
-> - **Proof planned:** Check blank-first, blank-middle, and all-blank inputs.
->
-> Grounding: Local export code and a reproduced failure.
 
 - Show a compact Before / After / Example preview before changing policy,
   prompts, workflows, UX, or architecture. Keep expected outcomes distinct from

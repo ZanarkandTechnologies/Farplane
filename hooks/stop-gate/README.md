@@ -123,11 +123,12 @@ One format nudge per user turn, even after more tool work. Proof
 keeps its own nudge: when no earlier format nudge asked for proof, the gate
 asks once more for the proof or video only.
 
-Everything the format check asks for is outside the length budget: labelled
+Everything the format check asks for is outside the prose budget: labelled
 `Before:`, `After:`, `Example:`, `Context:`, `Verified:`, `Unverified:`,
 `Limit:` and `Grounding:` lines (at most 40 words), and tables and fenced
-blocks. So a format nudge never re-triggers the length check, and length nudges
-stop after two per user turn.
+blocks. The 500-word ceiling on the whole answer still counts them, so a format
+nudge can re-trigger the length check; length nudges stop after two per user
+turn.
 
 ## Install and control
 

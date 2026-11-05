@@ -31,8 +31,8 @@ Tables, closed fenced blocks (Mermaid, wireframe, ASCII diagrams, code), exact
 media embed lines, marker-only blockquote spacers, labelled lines (`Before:`,
 `After:`, `Example:`, `Context:`, `Verified:`, `Unverified:`, `Limit:`,
 `Grounding:`) of at most 40 words, and a final link-only References/Citations
-section are outside the prose budget. A 1,200-word ceiling on the whole answer
-stops prose hiding in tables or blocks. These are counted by the shared
+section are outside the prose budget. A 500-word ceiling on the whole answer
+counts all of them, so a long answer cannot hide there. These are counted by the shared
 [`response accountant`](../../bin/core/farplane_response.py). Inspect a draft with
 `farplane response check --stdin --json`.
 

@@ -133,12 +133,9 @@ def gate_response(
         "- **Remove:** Process narration, repeated context, generic advice, and "
         "unasked follow-up offers.\n"
         "- **Prefer:** Links to durable artifacts over copied detail.\n"
-        "- **Budget exclusions:** Tables, closed fenced blocks (Mermaid, diagrams, "
-        "code), exact image/video embed lines, marker-only blockquote spacer lines, "
-        "labelled `Before:`/`After:`/`Example:`/`Context:`/`Verified:`/`Unverified:`/"
-        "`Limit:`/`Grounding:` lines of at most 40 words, and a final link-only "
-        "References/Citations section are outside the prose budget. Keep tables and "
-        "diagrams; cut prose.\n"
+        "- **Budget:** The total counts every word: tables, closed fenced blocks "
+        "(Mermaid, diagrams, code), labelled lines and references too. Cut them as "
+        "well as prose.\n"
         "- **Return:** The revised final answer only; do not mention this gate."
     )
     return {"decision": "block", "reason": reason}
