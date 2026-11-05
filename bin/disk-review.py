@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Weekly read-only review of this Mac's disk and apps. Proposes; never deletes.
+"""Weekly review of this Mac's disk and apps, plus one narrow automatic clean-up.
 
 Run by the disk-review scheduled task. Measures free space, the largest
 folders, regenerable caches and build outputs, temp-folder leftovers and
@@ -9,15 +9,24 @@ exact command to remove it and how to get it back.
 
   disk-review.py            scan, save snapshot + report, print JSON summary
   disk-review.py --no-save  scan and print the report, save nothing
+  disk-review.py --clean    also delete stale items from AUTO_ROOTS, then scan
 
-Nothing here removes, moves or rewrites anything outside its own state folder
-(.farplane/disk-review/). The commands in the report are for Kenji to run.
+Without --clean nothing outside its own state folder (.farplane/disk-review/)
+changes. --clean only touches AUTO_ROOTS, three caches that come back by
+themselves. Everything else stays a proposal for Kenji. dashboard.html in the
+state folder shows it all.
+
+"Last changed", not "last used": APFS sets a file's access time only on the
+first read after a change (tested 5 Nov 2026: later reads leave it alone), so a
+model loaded daily looks untouched. That is why a cached model named in Oures
+code is kept whatever its date.
 """
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
+import html
 import json
 import os
 import plistlib
@@ -98,6 +107,20 @@ BUILD_DIRS = {
 }
 BUILD_MIN_KB = 500 * 1024
 SKIP_HOME_CHILDREN = {"Library", "Movies", "Pictures", "Music", ".Trash"}
+
+# Automatic clean-up. Each root holds folders that return without any step from
+# Kenji: Hugging Face models on next load, npx packages on next run, Xcode
+# builds on next build. Add a root only if that holds.
+AUTO_ROOTS = [HOME / ".cache/huggingface/hub", HOME / ".npm/_npx",
+              HOME / "Library/Developer/Xcode/DerivedData"]
+AUTO_CLEAN_DAYS = 14
+AUTO_SOON_DAYS = 7                 # the job runs weekly: these are due next run
+AUTO_MIN_KB = 50 * 1024
+OWN_HF_ACCOUNT = "KenjiPcx"        # datasets he uploaded are his data, not a cache
+CODE_ROOT = HOME / "Eddison" / "oures"
+REVIEW_ROOTS = [HOME / "Eddison/research", HOME / "Eddison/research/scan-verify",
+                HOME / "Eddison/oures/.claude/worktrees", HOME / "archive"]
+REVIEW_MIN_KB = 512 * 1024
 
 
 def run(cmd: list[str], timeout: int = 1800) -> str:
@@ -511,6 +534,147 @@ def scan_home() -> dict[str, int]:
 # ---------------------------------------------------------------- history
 
 
+def last_changed_days(path: Path, budget: int = 300000) -> tuple[int, bool]:
+    """Days since anything under path changed, and whether the walk finished."""
+    newest, seen = 0.0, 0
+    for base, dirs, files in os.walk(path):
+        for name in files + dirs + [""]:
+            try:
+                newest = max(newest, os.lstat(os.path.join(base, name)).st_mtime)
+            except OSError:
+                pass
+            seen += 1
+        if seen > budget:
+            break
+    age = (dt.datetime.now() - dt.datetime.fromtimestamp(newest)).days if newest else 9999
+    return age, seen <= budget
+
+
+def auto_items() -> list[dict]:
+    """Every folder in AUTO_ROOTS with its age and, if it must stay, the reason."""
+    running = run(["ps", "-axo", "command"])
+    items = []
+    for root in AUTO_ROOTS:
+        if not root.is_dir():
+            continue
+        hub = root.name == "hub"
+        for p in sorted(root.iterdir()):
+            if p.is_symlink() or not p.is_dir() or (hub and not p.name.startswith(("models--", "datasets--"))):
+                continue
+            kb = du_one(p)
+            if kb < AUTO_MIN_KB:
+                continue
+            days, complete = last_changed_days(p)
+            name, keep = p.name, None
+            if hub:
+                name = p.name.split("--", 1)[1].replace("--", "/")
+                if name.startswith(OWN_HF_ACCOUNT + "/"):
+                    keep = "your own data"
+                elif run(["git", "-C", str(CODE_ROOT), "grep", "-l", "-F", name]).strip():
+                    keep = "named in Oures code"
+            if not keep and p.name in running:
+                keep = "running now"
+            if not keep and not complete:
+                keep = "too large to date"
+            items.append({"path": str(p), "name": name, "kind": root.name, "kb": kb, "days": days, "keep": keep})
+    return items
+
+
+def clean(items: list[dict]) -> list[dict]:
+    """Delete due items, then let brew and uv prune their own caches. Logs each."""
+    done = []
+    for i in items:
+        p = Path(i["path"])
+        if i["keep"] or i["days"] < AUTO_CLEAN_DAYS or p.parent not in AUTO_ROOTS:
+            continue
+        if run(["lsof", "+D", str(p)]).strip():
+            i["keep"] = "open now"
+            continue
+        try:
+            shutil.rmtree(p)
+        except OSError as e:
+            i["keep"] = f"delete failed: {e}"
+            continue
+        done.append({"date": TODAY.isoformat(), "path": i["path"], "name": i["name"], "kb": i["kb"], "days": i["days"]})
+    for label, path, cmd in (("uv cache prune", HOME / ".cache/uv", ["uv", "cache", "prune"]),
+                             ("brew cleanup", HOME / "Library/Caches/Homebrew", ["brew", "cleanup", f"--prune={AUTO_CLEAN_DAYS}"])):
+        before = du_one(path) if path.exists() else 0
+        run(cmd)
+        after = du_one(path) if path.exists() else 0
+        if before - after > 1024:
+            done.append({"date": TODAY.isoformat(), "path": str(path), "name": label, "kb": before - after, "days": 0})
+    if done:
+        STATE.mkdir(parents=True, exist_ok=True)
+        with (STATE / "cleaned.jsonl").open("a") as f:
+            f.writelines(json.dumps(d) + "\n" for d in done)
+    return done
+
+
+def review_folders() -> list[dict]:
+    """Kenji's folders worth a look, biggest first. Shown only, never deleted."""
+    out = {}
+    for root in REVIEW_ROOTS:
+        if root.is_dir():
+            for path, kb in du_tree(root, 1).items():
+                if kb >= REVIEW_MIN_KB and Path(path) not in REVIEW_ROOTS:
+                    out[path] = kb
+    rows = []
+    for path, kb in sorted(out.items(), key=lambda x: -x[1]):
+        days, complete = last_changed_days(Path(path))
+        rows.append({"path": path, "kb": kb, "days": days, "complete": complete})
+    return rows
+
+
+def age(days: int) -> str:
+    return "today" if days == 0 else "1 day ago" if days == 1 else f"{days} days ago"
+
+
+def table(heads: list[str], rows: list[list[str]], empty: str) -> str:
+    if not rows:
+        return f'<p class="note">{html.escape(empty)}</p>'
+    th = "".join(f"<th>{html.escape(h)}</th>" for h in heads)
+    tr = "".join("<tr>" + "".join(f"<td>{html.escape(c)}</td>" for c in r) + "</tr>" for r in rows)
+    return f"<table><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table>"
+
+
+def dashboard(r: dict) -> str:
+    free, total = r["free"]["free_kb"], r["free"]["total_kb"]
+    used_pct = round(100 * (total - free) / total)
+    soon = [i for i in r["auto"] if not i["keep"] and i["days"] >= AUTO_SOON_DAYS]
+    kept = [i for i in r["auto"] if i["keep"]]
+    safe = [i for i in r["auto"] if not i["keep"] and i["days"] < AUTO_SOON_DAYS]
+    log = []
+    if (STATE / "cleaned.jsonl").exists():
+        log = [json.loads(x) for x in (STATE / "cleaned.jsonl").read_text().splitlines()][-25:][::-1]
+    folders = [[tilde(f["path"]), gb(f["kb"]), age(f["days"]) if f["complete"] else f"at most {age(f['days'])}"] for f in r["review"]]
+    items = lambda rows, last: [[i["name"], i["kind"], gb(i["kb"]), age(i["days"])] + ([i["keep"]] if last else []) for i in rows]
+    trash_note = "Space in the Trash only returns when you empty it."
+    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Mac disk</title><style>
+:root{{--bg:#f6f5f2;--ink:#1d1c1a;--mute:#6d6a64;--line:#dedbd3;--bar:#d3cfc5;--fill:#1d1c1a}}
+@media (prefers-color-scheme:dark){{:root{{--bg:#191917;--ink:#ecebe6;--mute:#a09d95;--line:#35342f;--bar:#35342f;--fill:#ecebe6}}}}
+*{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,system-ui,sans-serif}}
+main{{max-width:880px;margin:0 auto;padding:40px 16px 64px}}h1{{font-size:44px;line-height:1.1;margin:0;letter-spacing:-.02em;font-variant-numeric:tabular-nums}}
+h2{{font-size:17px;margin:44px 0 2px}}.note{{color:var(--mute);margin:0 0 12px}}.bar{{height:8px;background:var(--bar);margin:16px 0 8px}}.bar i{{display:block;height:100%;background:var(--fill)}}
+.wrap{{overflow-x:auto}}table{{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}}th{{text-align:left;font-weight:500;color:var(--mute);font-size:13px}}
+th,td{{padding:7px 16px 7px 0;border-bottom:1px solid var(--line);vertical-align:top}}td:first-child{{overflow-wrap:anywhere}}td:not(:first-child),th:not(:first-child){{white-space:nowrap}}
+</style></head><body><main>
+<h1>{gb(free)} free</h1><div class="bar"><i style="width:{used_pct}%"></i></div>
+<p class="note">{gb(total - free)} used of {gb(total)}. Checked {r['date']}. {trash_note}</p>
+<h2>Due for automatic removal</h2><p class="note">Unchanged for {AUTO_SOON_DAYS}+ days, so gone by the next Monday run once they pass {AUTO_CLEAN_DAYS}. Each comes back by itself on next use.</p>
+<div class="wrap">{table(["Item", "Cache", "Size", "Last changed"], items(soon, False), "Nothing is due.")}</div>
+<h2>Removed automatically</h2><p class="note">Latest 25.</p>
+<div class="wrap">{table(["Item", "Removed", "Size"], [[x["name"], x["date"], gb(x["kb"])] for x in log], "Nothing has been removed yet.")}</div>
+<h2>Caches kept</h2><p class="note">Old, but protected.</p>
+<div class="wrap">{table(["Item", "Cache", "Size", "Last changed", "Why"], items(kept, True), "None.")}</div>
+<h2>Recent caches</h2>
+<div class="wrap">{table(["Item", "Cache", "Size", "Last changed"], items(safe, False), "None.")}</div>
+<h2>Your folders, your call</h2><p class="note">Never removed automatically. Macs do not record when a folder was last read, so this shows when it last changed.</p>
+<div class="wrap">{table(["Folder", "Size", "Last changed"], folders, "None over 0.5 GB.")}</div>
+</main></body></html>
+"""
+
+
 def load_snapshots() -> list[dict]:
     snaps = []
     for f in sorted((STATE / "snapshots").glob("*.json")):
@@ -582,8 +746,10 @@ def render(r: dict) -> str:
     else:
         line += "; first run, no baseline yet"
     L.append(line + "\n")
+    removed = sum(c["kb"] for c in r["cleaned"])
+    L.append(f"**Removed automatically:** {gb(removed)} ({len(r['cleaned'])} items)\n")
     L.append(f"**Proposed total:** {gb(r['proposed_kb'])} you could free with the commands below. "
-             "Nothing was deleted; every command is yours to run.\n")
+             "Every command is yours to run.\n")
 
     L.append("## Largest folders\n")
     for p, kb, kids in r["top_folders"]:
@@ -687,6 +853,7 @@ def render(r: dict) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--no-save", action="store_true", help="print the report, save nothing")
+    ap.add_argument("--clean", action="store_true", help=f"delete AUTO_ROOTS items unchanged for {AUTO_CLEAN_DAYS}+ days")
     args = ap.parse_args()
 
     history = load_snapshots()
@@ -701,7 +868,12 @@ def main() -> int:
         timings[name] = round((dt.datetime.now() - t).total_seconds())
         return out
 
+    auto = timed("auto", auto_items)
+    cleaned = timed("clean", lambda: clean(auto)) if args.clean else []
+    gone = {c["path"] for c in cleaned}
+    auto = [i for i in auto if i["path"] not in gone]
     free = free_space()
+    review = timed("review", review_folders)
     home = timed("home", scan_home)
     temp_roots, temp_groups, temp_rest = timed("temp", scan_temp)
     for p, kb in temp_roots.items():
@@ -729,7 +901,7 @@ def main() -> int:
         "history_runs": len(history), "top_folders": top_folders(home), "temp_roots": temp_roots,
         "temp_groups": temp_groups, "temp_rest": temp_rest, "caches": caches, "builds": builds, "installers": installers,
         "apps": apps, "leaks": leaks, "proposed_kb": proposed,
-        "skipped": sorted(set(SKIPPED)),
+        "skipped": sorted(set(SKIPPED)), "auto": auto, "cleaned": cleaned, "review": review,
     }
     md = render(report)
     elapsed = round((dt.datetime.now() - started).total_seconds())
@@ -744,6 +916,7 @@ def main() -> int:
         (STATE / "snapshots" / f"{TODAY.isoformat()}.json").write_text(json.dumps(snap))
         report_path = STATE / "reports" / f"{TODAY.isoformat()}.md"
         report_path.write_text(md)
+        (STATE / "dashboard.html").write_text(dashboard(report))
     else:
         print(md)
 
@@ -768,7 +941,10 @@ def main() -> int:
                      "growth_gb": round(g["growth_kb"] / GB, 1) if g.get("growth_kb") is not None else None,
                      "creator": tilde(g["creator"][0]) if g["creator"] else None}
                     for g in temp_groups],
-        "skipped_containers": len(set(SKIPPED)), "first_run": not history, "scan_seconds": elapsed, "stage_seconds": timings, "deletions": "none",
+        "skipped_containers": len(set(SKIPPED)), "first_run": not history, "scan_seconds": elapsed, "stage_seconds": timings,
+        "dashboard": str(STATE / "dashboard.html"), "removed_gb": round(sum(c["kb"] for c in cleaned) / GB, 1),
+        "removed": [c["name"] for c in cleaned],
+        "due_gb": round(sum(i["kb"] for i in auto if not i["keep"] and i["days"] >= AUTO_SOON_DAYS) / GB, 1),
     }
     print(json.dumps(summary, indent=2))
     return 0
