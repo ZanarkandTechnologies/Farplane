@@ -19,6 +19,7 @@ if str(ROOT / "hooks" / "shared") not in sys.path:
 import thread_notes
 
 MAX_CONTEXT = 9500  # Claude Code moves hook context over 10,000 characters to a file.
+MAX_NOTES = 6000  # Most of the budget: the notes hold the goals and rules, messages only back them up.
 MAX_MESSAGE = 240
 MIN_WORDS = 4
 INJECTED = re.compile(r"<(system-reminder|task-notification|pasted_content)\b.*?</\1>", re.S)
@@ -66,7 +67,7 @@ def context(session_id: str, transcript: str) -> str:
     path = thread_notes.notes_path(session_id)
     if path is None:
         return ""
-    notes = thread_notes.read(session_id, thread_notes.MAX_OWN)
+    notes = thread_notes.read(session_id, MAX_NOTES)
     head = [RULE.format(path=path),
             f"Thread notes:\n{notes}" if notes else "This thread has no notes yet."]
     room = MAX_CONTEXT - sum(len(part) + 2 for part in head) - 40
