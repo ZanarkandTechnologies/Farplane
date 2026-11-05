@@ -6,8 +6,9 @@ A `parent: <session-id>` line links a sub-thread to the thread that started it;
 the parent may also be named by its desktop app id (`local_...`), which the
 prompt hook maps to the session id under `notes/.desktop/`.
 The Stop hook only reads: the thread's notes and its parent's, bounded. The
-prompt hook names the path once, on a thread's first prompt. Nothing is fetched
-and no model runs here.
+prompt hook names the path once, on a thread's first prompt, and the after-reset
+hook hands the notes back after a context reset. Nothing is fetched and no model
+runs here.
 """
 from __future__ import annotations
 
@@ -19,15 +20,17 @@ MAX_OWN = 4000
 MAX_PARENT = 2000
 SESSION_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{7,}")
 PARENT = re.compile(r"(?im)^\W*parent\W*:?\s*`?([A-Za-z0-9][A-Za-z0-9._-]{7,})")
+OPEN_GOALS = re.compile(r"(?ims)^##\s*open goals\b.*?(?=^##\s|\Z)")
 REMINDER = (
     "Farplane thread notes for this thread: {path}. If this message gives you a ticket "
     "or task scope, write it there first as a Task section (In scope, Out of scope, "
     "Done when, Design). If In scope, Done when or a design link is missing, ask the "
     "user once and wait instead of building. A link shared only for reference goes under "
-    "References. Keep Decisions, Progress and V2 candidates there as you work."
+    "References. Keep an Open goals section at the top, in the user's words, and "
+    "Decisions, Progress and V2 candidates there as you work."
 )
-SCOPE_RULE = ("Work only inside your notes' Task (and your parent's) until its Done when "
-              "checks pass. List ideas outside it in your answer and notes as v2 "
+SCOPE_RULE = ("Work only inside your notes' Open goals and Task (and your parent's) until "
+              "the Done when checks pass. List ideas outside it in your answer and notes as v2 "
               "candidates; do not build them.")
 
 
@@ -73,7 +76,18 @@ def read(session_id: str, limit: int) -> str | None:
     if path is None or not path.is_file():
         return None
     text = path.read_text(encoding="utf-8", errors="replace").strip()
-    return text[:limit] or None
+    return with_goals_first(text, limit) or None
+
+
+def with_goals_first(text: str, limit: int) -> str:
+    """Bounded notes that always keep the Open goals section."""
+    if len(text) <= limit:
+        return text
+    found = OPEN_GOALS.search(text)
+    if found is None or found.end() <= limit:
+        return text[:limit]
+    goals = found.group(0).strip()[:limit]
+    return f"{goals}\n\n{text[:found.start()]}{text[found.end():]}"[:limit]
 
 
 def parent_id(notes: str) -> str | None:

@@ -42,11 +42,13 @@ contract says how to keep it; Claude Code exposes the id as
 desktop `local_` id works too, mapped by the prompt hook under `notes/.desktop/`. When the
 thread has notes, the judge gets them as `thread_notes`, its parent's as
 `parent_notes`, plus the original request and the last five messages instead of
-twenty. It pushes only for unfinished work inside the notes' Task that its Done
-when checks still need; ideas outside it, under V2 candidates, or after the
+twenty. It pushes only for unfinished work inside the notes' Open goals or Task
+that the Done when checks still need; ideas outside it, under V2 candidates, or after the
 checks pass let the turn end, and a nudge adds a Scope line. The hook only reads
 these files (own up to 4 KB, parent up to 2 KB); it fetches nothing and runs no
-model of its own. Missing or unreadable notes behave as today. Code:
+model of its own. Long notes keep their `## Open goals` section inside that limit.
+After a context reset, [after-reset](../after-reset/README.md) hands the notes back.
+Missing or unreadable notes behave as today. Code:
 [`hooks/shared/thread_notes.py`](../shared/thread_notes.py).
 
 Every continuation request also asks whether the user is still deciding: a

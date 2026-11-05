@@ -1,6 +1,19 @@
 {
   "description": "Farplane: one blocking Stop gate (length, continuation, response format; at most one nudge per stop); classified lifecycle telemetry is observational, never completion authority.",
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.codex/hooks/after-reset/after_reset.py\"",
+            "statusMessage": "After reset — hands the thread its notes and the user's own words",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [

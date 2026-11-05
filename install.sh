@@ -158,6 +158,7 @@ INSTALL_HOOK_DIRS=(
   skill-length
   skill-invocation
   foreground-wait
+  after-reset
   worktree-guard
   evidence-mode
   user-turn

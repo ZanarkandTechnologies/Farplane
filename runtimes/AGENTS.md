@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.26
+template_version: 0.3.27
 -->
 # Global Agent Guidance
 
@@ -93,6 +93,10 @@ reason(problem)
   changes, name the decision boundary, material assumption, and confirmation
   required before locking the direction.
 - Give no spend, upgrade or vendor advice until you have measured the cause.
+- A question the user asks twice means the last answer failed. Stop defending
+  it and check the docs and code that same turn.
+- A rejected option states whether anyone tested it. Before saying something
+  does not exist, search the code, migrations and past threads.
 - A design answer is one table: data, who reads and writes it, where it lives,
   now or later, what triggers later. Check how real shops do it first.
 - When Kenji says he doesn't understand, stop recommending. Reply with one idea
@@ -216,6 +220,12 @@ goal = ticket + program + progress + artifacts
   sub-thread copies it into its notes and stays inside both Tasks. Record ideas
   outside Task under V2 candidates instead of building them. The Stop hook
   reads these notes to scope its push.
+- Start those notes with `## Open goals`: every ask that outlives the turn, in
+  the user's words, added when it is made. Only the user closes one. Rewrite
+  Task when the thread's goal changes. A plan that parks an open goal or marks
+  it out of scope says so in its reply and asks first. After a context reset,
+  the after-reset hook hands back the notes and the user's own words; restore
+  anything the summary dropped.
 - Keep private handles, workspace IDs, services, local conventions, credentials,
   private runtime state, and unsanitized personal data out of shared artifacts.
 - When consolidating guidance, map each requirement to what retains it or to an
