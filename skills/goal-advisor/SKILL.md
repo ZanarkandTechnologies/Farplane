@@ -91,8 +91,8 @@ fails: hidden_loop; prompt_only_material_goal; full_history_first_load;
   Rule: Bind objective, mutable surface, metric/provider, guards, anti-metrics,
   budget, proof route, drift policy, and stops without copying the ticket.
   Compile `Contract Diagram -> Change Plan -> exit assertions -> proof` into the
-  Execution Path; reject missing, contradictory, or circular bindings. An
-  underspecified "clearly better" goal with no market baseline defaults to a
+  Execution Path; reject missing, contradictory, or circular bindings. Add
+  `unblock` bets and blocks; its touch test is turn one. An underspecified "clearly better" goal with no market baseline defaults to a
   `hybrid` frozen-scenario eval plus explicit human/reviewer judgment, with the
   rubric and threshold left unresolved. Compile delayed `accept | kill |
   monitor` only for matured Reward work. Diagnose blocking failures with

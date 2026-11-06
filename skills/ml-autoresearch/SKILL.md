@@ -148,8 +148,9 @@ returns: packet state, best candidate or a negative/blocked result, residual ris
   guard passing (several test sets: a gain on most, e.g. 2 of 3, none worse
   beyond its named noise band); prefer the simpler one when materially tied, and
   never cherry-pick a run. Replan after every valid full result; the new best's
-  misses re-enter N2. Stop on success, supported negative conclusion, exhausted
-  frontier, stale packet, blocker, or budget, never by silently expanding scope.
+  misses re-enter N2. A block ends one node: run `unblock` and take the next.
+  Stop on success, a supported negative, an exhausted frontier, every node
+  waiting, a stale packet, or budget, never by silently expanding scope.
 
   Assert:
   - A negative stop or surprise echoes its preregistered expected observation,

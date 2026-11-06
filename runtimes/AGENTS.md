@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.27
+template_version: 0.3.28
 -->
 # Global Agent Guidance
 
@@ -64,7 +64,7 @@ template_version: 0.3.27
   report it with its undo path instead of ending the turn on a question.
   Before ending a turn that finishes, kills, or materially changes a `Now`
   item, rewrite that line; never append a log there.
-- When a route is blocked, try the next one before reporting. Browser order:
+- When a route is blocked, use `unblock` and try the next one before reporting. Browser order:
   built-in browser, then the user's logged-in browser, then desktop control.
 
 ### Decide independently and ground the result

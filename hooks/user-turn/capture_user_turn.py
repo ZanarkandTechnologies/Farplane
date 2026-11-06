@@ -8,6 +8,7 @@ Normalization and persistence rules live in
 from __future__ import annotations
 
 import json
+import re
 import os
 import sys
 from pathlib import Path
@@ -63,6 +64,21 @@ def notes_reminder(payload: dict[str, object]) -> list[str]:
     return [line] if line else []
 
 
+GOAL_CONTROLS = {"clear", "stop", "off", "reset", "none", "cancel", "pause", "resume", "status"}
+
+
+def goal_reminder(prompt: str) -> list[str]:
+    """A goal set by hand skips Goal Advisor, so the turn that sets one gets the start checks."""
+    text = re.sub(r"^<command-name>/goal</command-name>.*?<command-args>", "/goal ", prompt.lstrip(), flags=re.S)
+    if not re.match(r"/goal\s", text):
+        return []
+    argument = re.sub(r"</command-args>.*", "", text, flags=re.S).removeprefix("/goal").strip().lower()
+    if not argument or argument in GOAL_CONTROLS:
+        return []
+    return ["This turn sets a goal. Load the `unblock` skill first: write a finish line a thread can check, "
+            "three ranked bets and a blocks table, and run its touch test. A block ends one bet, not the goal."]
+
+
 def main() -> int:
     payload = read_payload()
     if payload.get("hook_event_name") != "UserPromptSubmit":
@@ -75,7 +91,7 @@ def main() -> int:
         return 0
 
     # Every project gets the notes reminder, with or without a Farplane root.
-    context = notes_reminder(payload)
+    context = notes_reminder(payload) + goal_reminder(prompt)
     project_root = project_root_from_payload(payload)
     if project_root is None:
         emit_context(context)

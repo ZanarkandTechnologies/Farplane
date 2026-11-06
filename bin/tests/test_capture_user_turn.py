@@ -17,6 +17,19 @@ for RUNTIME_DIR in (ROOT / "hooks" / "user-turn", ROOT / "hooks" / "shared", ROO
 import capture_user_turn
 
 
+class GoalReminderTests(unittest.TestCase):
+    def test_a_goal_gets_the_start_checks(self) -> None:
+        for prompt in ("/goal make the room perfect", "/goal clear the failing tests", "/goal status page loads",
+                       "<command-name>/goal</command-name><command-args>ship it</command-args>"):
+            self.assertIn("`unblock`", capture_user_turn.goal_reminder(prompt)[0])
+
+    def test_other_prompts_stay_quiet(self) -> None:
+        for prompt in ("/goal clear", "/goal pause", "/goal off", "/goal cancel", "/goal", "hello",
+                       "<command-name>/goal</command-name><command-args>clear</command-args>",
+                       "why did <command-name>/goal</command-name> stop?"):
+            self.assertEqual(capture_user_turn.goal_reminder(prompt), [])
+
+
 class CaptureUserTurnTelemetryTests(unittest.TestCase):
     def setUp(self) -> None:
         # Keep the thread-notes marker out of the real home.

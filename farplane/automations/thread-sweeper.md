@@ -13,7 +13,7 @@ target:
 schedule:
   type: active_hours_interval
   timezone: local
-  active_hours: "08:00-22:00"
+  active_hours: "00:00-23:59"
   interval_minutes: 120
 ---
 Find agent threads in the Claude desktop app that went quiet before their work
@@ -24,7 +24,7 @@ nothing for this job; the transcript is the source of truth.
 Work in `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`.
 
 Params:
-idle_after = 3h
+idle_after = 3h; 1h between 22:00 and 08:00
 lookback = 72h (threads quiet longer than this are left alone)
 waiting_hold = 7d (a thread waiting on Kenji stays tracked this long)
 max_nudges = 2
@@ -66,7 +66,8 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    group named `Parked`. Load `state` (missing file = empty). Also keep any
    thread whose `state.verdict` is `waiting`, up to `waiting_hold` idle, even
    past `lookback`. Skip a session whose `lastActivityAt` equals its
-   `state.last_seen`: nothing has happened since the last verdict. The app
+   `state.last_seen`, unless it is `waiting` with no `notified_at`: nothing
+   has happened since the last verdict. The app
    also bumps `lastActivityAt` without a new turn (artifact or notification
    writes); when `list_events` shows no turn after the one last judged, keep
    the earlier verdict and set `last_seen` to the new time.
@@ -78,7 +79,8 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    - `waiting`: it needs something only Kenji can give: spend over the weekly
      cap, a password, login, account, CAPTCHA, OAuth grant or payment detail,
      a physical action, posting or messaging under his name, or a taste or
-     product choice he has to make; or it ends with a line starting
+     product choice he has to make; or it is discussing a design or rewrite
+     with him before coding; or it ends with a line starting
      `Waiting on Kenji:`.
    - `stopped`: it ended mid-work: it says it will continue or names a next
      step it could run itself, it hit an error, tool failure, interrupt or
@@ -94,7 +96,8 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    - `stopped` with `state.nudges < max_nudges`: send the thread one message
      with `send_message`, then add 1 to `nudges`:
      `Thread Sweeper: this thread has been quiet for <h> hours and its last
-     turn looks unfinished (<reason>). Continue from where you stopped; a
+     turn looks unfinished (<reason>). Continue from where you stopped; if a
+     block stopped you, load the `unblock` skill and take its next move; a
      go-ahead for reversible work within the spend cap is already granted
      by the standing permissions in ~/.farplane/USER.md. If you
      are truly blocked on Kenji, end your turn with one line "Waiting on Kenji:
@@ -105,8 +108,8 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
      one in `state.notified_question` (he has already been told).
    Reset `nudges` to 0 when the latest user turn in the transcript is Kenji's
    own message rather than a Thread Sweeper message. If `send_message` is
-   refused, record `nudge refused` as the action and add the thread to the
-   Kenji list with the reason `stalled; tap to restart: <reason>`.
+   refused, record `nudge refused` as the action, set the verdict to `waiting`,
+   and add the thread to the Kenji list with the reason `stalled; tap to restart: <reason>`.
 
 4. **Tell Kenji once.** If the Kenji list is not empty, send one Telegram
    message with `$notify` (intent `blocker`, title `Thread Sweeper`, no thread
@@ -114,9 +117,10 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
    blocker in at most 25 words, and its `link`. End with: `Reply in the
    thread itself (tap its link).` Then set `notified_at` and
    `notified_question` for those threads. Send nothing when the list is empty.
-   Record the message id the script prints as the delivery receipt.
+   Between 22:00 and 08:00, send nothing: leave `notified_at` empty so the
+   first run after 08:00 sends the list. Record the message id the script prints as the delivery receipt.
 
-   **Daily reminder.** On the first run of each local day, if any tracked
+   **Daily reminder.** On the first run after 08:00 each local day, if any tracked
    thread is still `waiting` and was told on an earlier day, add one
    `Still waiting on you` section to that run's message (or send it alone),
    oldest first: title, days waiting, the question in at most 15 words, its

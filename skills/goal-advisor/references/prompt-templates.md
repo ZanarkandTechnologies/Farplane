@@ -149,7 +149,9 @@ route, drift policy, after-turn routine, heartbeat or batch rules, and stop
 conditions. Specs, designs, boards, and artifacts are constraints, evidence,
 and context; they do not expand scope unless the ticket sections say so.
 Preserve Scope, Delta, Change Plan, Done, QA Strategy, Docs Strategy, Agent
-Contract, Run Hints, budget, blocker policy, and stop conditions. `Scope: Out`
+Contract, Run Hints, budget, blocker policy, and stop conditions. On a block,
+follow the `unblock` skill, whose touch test runs first; the stops above still
+win. `Scope: Out`
 wins unless the issue is updated and this packet is regenerated. Load extra
 references only through the Reference Manifest for their named consumer.
 

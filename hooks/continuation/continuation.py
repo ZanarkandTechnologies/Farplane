@@ -69,7 +69,7 @@ NUDGE = (
     "using tools when the task requires them. Do not stop at a diagnosis, progress "
     "report, proposed next step, or promise.\n"
     "- **Respect:** Pauses, scope limits, approvals, safety boundaries, and budgets.\n"
-    "- **Recover:** If one path is blocked, pursue a safe in-scope alternative.\n"
+    "- **Recover:** If one path is blocked, load the `unblock` skill and take its next move.\n"
     "- **Stop only when:** The request is complete or genuinely blocked; then give "
     "the result or specific blocker with evidence."
 )
