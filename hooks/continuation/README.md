@@ -20,7 +20,10 @@ or CI run that will report back, or waits on the user.
 The feedback uses a level-four Markdown heading plus labeled instruction bullets.
 It asks Codex to take one concrete action, using tools when the task requires
 them, while retaining the existing scope, approval, safety, and budget boundaries.
-A hidden version marker keeps in-flight sessions parseable when this text changes.
+A hidden version marker tags the feedback. Editing its text under the same marker
+needs the old text kept in `KNOWN_NUDGES`, or sessions that already received it
+read as ambiguous and the gate allows every later stop; a pinned test fails until
+that is done.
 
 It reads complete JSONL rows from a bounded 1 MiB opening window and 8 MiB recent
 window, preserving the opening/latest requests without loading a long rollout's

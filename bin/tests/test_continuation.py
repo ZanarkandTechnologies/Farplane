@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -162,6 +163,28 @@ class ContinuationTests(unittest.TestCase):
 
         self.assertIsNotNone(self.run_gate(final="I will test next.", active=True))
         self.assertEqual(self.client.calls[-1]["state"]["own_nudges_this_user_turn"], 1)
+
+    def test_pre_unblock_v3_nudges_still_count_within_same_user_turn(self):
+        # Sent before 6 Nov 2026; unknown v3 text made the gate allow unchecked.
+        for body in (gate.LEGACY_NUDGE_V3_RECOVER,
+                     gate.LEGACY_NUDGE_V3_RECOVER + gate.LEGACY_SCOPE_LINE_V1,
+                     gate.PROPOSAL_NUDGE + gate.LEGACY_SCOPE_LINE_V1):
+            with self.subTest(body=body[-60:]):
+                self.client.calls.clear()
+                self.rows = user("Implement and test it.") + [
+                    self.desktop_hook(body), *WORK,
+                              message("assistant", "I will test next.")]
+                self.assertIsNotNone(self.run_gate(final="I will test next.", active=True))
+                state = self.client.calls[-1]["state"]
+                self.assertEqual(state["own_nudges_this_user_turn"], 1)
+
+    def test_nudge_text_edits_keep_the_old_text_parseable(self):
+        sent = "\x00".join([gate.NUDGE, gate.BLOCKER_NUDGE, gate.PROPOSAL_NUDGE,
+                            gate.SCOPE_LINE])
+        self.assertEqual(
+            hashlib.sha256(sent.encode()).hexdigest()[:16], "a5ec1e800351b8a1",
+            "Nudge or scope text changed under the same tag: add the old text to "
+            "KNOWN_NUDGES (as LEGACY_*), then update this pin.")
 
     def desktop_hook(self, body):
         row = message("user", '<hook_prompt hook_run_id="stop:5:/synthetic/hooks.json">'

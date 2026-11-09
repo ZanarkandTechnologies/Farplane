@@ -95,8 +95,20 @@ PROPOSAL_NUDGE = (
 )
 # With thread notes, each nudge also keeps the agent inside their scope.
 SCOPE_LINE = f"\n- **Scope:** {thread_notes.SCOPE_RULE}"
-KNOWN_NUDGES = {LEGACY_NUDGE_V1, LEGACY_NUDGE_V2, NUDGE, BLOCKER_NUDGE, PROPOSAL_NUDGE,
-                NUDGE + SCOPE_LINE, BLOCKER_NUDGE + SCOPE_LINE, PROPOSAL_NUDGE + SCOPE_LINE}
+# Text already sent to live sessions under the v3 tag. A transcript holding a tagged
+# nudge the parser does not know reads as ambiguous and the gate allows every later
+# stop unchecked (107 silent allows, 6-8 Nov 2026), so edits keep the old text here.
+LEGACY_NUDGE_V3_RECOVER = NUDGE.replace(
+    "load the `unblock` skill and take its next move.",
+    "pursue a safe in-scope alternative.")
+LEGACY_SCOPE_LINE_V1 = (
+    "\n- **Scope:** Work only inside your notes' Task (and your parent's) until its "
+    "Done when checks pass. List ideas outside it in your answer and notes as v2 "
+    "candidates; do not build them.")
+KNOWN_NUDGES = {LEGACY_NUDGE_V1, LEGACY_NUDGE_V2} | {
+    body + scope
+    for body in (NUDGE, LEGACY_NUDGE_V3_RECOVER, BLOCKER_NUDGE, PROPOSAL_NUDGE)
+    for scope in ("", SCOPE_LINE, LEGACY_SCOPE_LINE_V1)}
 TAG_PATTERN = re.compile(
     r"(?:\[farplane-continuation:v\d+\]|<!-- farplane-continuation:v\d+ -->)"
 )
