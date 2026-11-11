@@ -160,6 +160,7 @@ INSTALL_HOOK_DIRS=(
   foreground-wait
   after-reset
   worktree-guard
+  spend-approval
   evidence-mode
   user-turn
   shared
