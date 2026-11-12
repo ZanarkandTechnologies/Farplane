@@ -139,6 +139,23 @@ class ThreadNotesTests(unittest.TestCase):
         self.assertIn("ask the user once and wait instead of building", first)
         self.assertEqual(thread_notes.first_prompt_reminder("fresh-session-1"), "")
 
+    def test_a_fork_inherits_its_originals_notes(self):
+        self.note("original-session-1", "## Open goals\n- Kenji: back half is the real render\n")
+        self.transcript.write_text('{"type":"user","sessionId":"original-session-1"}\n{"type":"custom-title","sessionId":"forked-session-1"}\n')
+        thread_notes.inherit("forked-session-1", str(self.transcript))
+        copied = (self.dir / "notes" / "forked-session-1.md").read_text()
+        self.assertIn("back half is the real render", copied)
+        self.assertIn("Forked from original-session-1", copied)
+        self.assertEqual(thread_notes.first_prompt_reminder("forked-session-1"), "")
+
+    def test_inherit_leaves_existing_or_unrelated_notes_alone(self):
+        self.note("forked-session-1", "own notes")
+        self.transcript.write_text('{"sessionId":"original-session-1"}\n')
+        thread_notes.inherit("forked-session-1", str(self.transcript))
+        self.assertEqual((self.dir / "notes" / "forked-session-1.md").read_text(), "own notes")
+        thread_notes.inherit("fresh-session-2", str(self.transcript))
+        self.assertFalse((self.dir / "notes" / "fresh-session-2.md").exists())
+
     def test_no_reminder_once_the_thread_has_notes(self):
         self.note("child-session-1", PARENT)
         self.assertEqual(thread_notes.first_prompt_reminder("child-session-1"), "")

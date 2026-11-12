@@ -67,6 +67,7 @@ def context(session_id: str, transcript: str) -> str:
     path = thread_notes.notes_path(session_id)
     if path is None:
         return ""
+    thread_notes.inherit(session_id, transcript)
     notes = thread_notes.read(session_id, MAX_NOTES)
     head = [RULE.format(path=path),
             f"Thread notes:\n{notes}" if notes else "This thread has no notes yet."]

@@ -20,6 +20,7 @@ MAX_OWN = 4000
 MAX_PARENT = 2000
 SESSION_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{7,}")
 PARENT = re.compile(r"(?im)^\W*parent\W*:?\s*`?([A-Za-z0-9][A-Za-z0-9._-]{7,})")
+FORK_SOURCE = re.compile(r'"sessionId":\s*"([A-Za-z0-9][A-Za-z0-9._-]{7,})"')
 OPEN_GOALS = re.compile(r"(?ims)^##\s*open goals\b.*?(?=^##\s|\Z)")
 REMINDER = (
     "Farplane thread notes for this thread: {path}. If this message gives you a ticket "
@@ -51,6 +52,28 @@ def resolve(parent: str) -> str:
     if parent.startswith("local_") and alias.is_file():
         return alias.read_text(encoding="utf-8").strip()
     return parent
+
+
+def inherit(session_id: str, transcript: str) -> None:
+    """A forked thread keeps its original's notes: the fork gets a new session id, but its
+    transcript still starts with the original's rows. Copies them once; quiet on any error."""
+    path = notes_path(session_id)
+    if path is None or path.exists() or not transcript:
+        return
+    try:
+        with open(transcript, encoding="utf-8", errors="replace") as handle:
+            for _, line in zip(range(400), handle):
+                found = FORK_SOURCE.search(line)
+                if not found or found.group(1) == session_id.strip():
+                    continue
+                source = notes_path(found.group(1))
+                if source is not None and source.is_file():
+                    text = source.read_text(encoding="utf-8", errors="replace").rstrip()
+                    path.write_text(f"{text}\n\nForked from {found.group(1)}; notes copied from there.\n",
+                                    encoding="utf-8")
+                return
+    except OSError:
+        return
 
 
 def first_prompt_reminder(session_id: str) -> str:

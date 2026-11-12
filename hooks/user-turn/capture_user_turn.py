@@ -58,6 +58,7 @@ def notes_reminder(payload: dict[str, object]) -> list[str]:
     session_id = str(payload.get("session_id") or "")
     try:
         thread_notes.remember_desktop_id(session_id, os.environ.get("CLAUDE_CODE_HOST_SESSION_ID", ""))
+        thread_notes.inherit(session_id, str(payload.get("transcript_path") or ""))
         line = thread_notes.first_prompt_reminder(session_id)
     except OSError:
         line = ""
