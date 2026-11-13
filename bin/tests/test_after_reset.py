@@ -55,6 +55,15 @@ class AfterResetTests(unittest.TestCase):
         self.assertIn("customize the medusa server", text)
         self.assertIn("Your context was just reset", text)
 
+    def test_a_sub_thread_gets_its_parents_notes_back_after_a_reset(self):
+        parent = "6f1c2a9e-0000-4000-8000-00000000abcd"
+        (self.dir / "notes" / f"{parent}.md").write_text("## Decisions\n- no clay renders\n", encoding="utf-8")
+        (self.dir / "notes" / f"{SESSION}.md").write_text(f"parent: {parent}\n## Open goals\n- {GOAL}\n", encoding="utf-8")
+        text = after_reset.context(SESSION, str(self.transcript))
+        self.assertIn("no clay renders", text)
+        self.assertIn("customize the medusa server", text)
+        self.assertLess(len(text), after_reset.MAX_CONTEXT)
+
     def test_thread_without_notes_still_gets_the_messages_and_the_path(self):
         text = after_reset.context(SESSION, str(self.transcript))
         self.assertIn("no notes yet", text)

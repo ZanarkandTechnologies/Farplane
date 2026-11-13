@@ -71,6 +71,9 @@ def context(session_id: str, transcript: str) -> str:
     notes = thread_notes.read(session_id, MAX_NOTES)
     head = [RULE.format(path=path),
             f"Thread notes:\n{notes}" if notes else "This thread has no notes yet."]
+    parent = thread_notes.parent_context(thread_notes.parent_id(notes or ""), session_id, 1500)
+    if parent:
+        head.append(parent)
     room = MAX_CONTEXT - sum(len(part) + 2 for part in head) - 40
     kept: list[str] = []
     for message in reversed(user_messages(transcript)):

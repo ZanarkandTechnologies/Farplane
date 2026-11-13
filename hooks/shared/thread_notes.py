@@ -47,11 +47,44 @@ def remember_desktop_id(session_id: str, desktop_id: str) -> None:
 
 
 def resolve(parent: str) -> str:
-    """A parent named by its desktop id becomes its session id when known."""
-    alias = NOTES_DIR / ".desktop" / parent
-    if parent.startswith("local_") and alias.is_file():
-        return alias.read_text(encoding="utf-8").strip()
-    return parent
+    """A parent named by its desktop id, or a short prefix of either id, becomes the
+    session id whose notes exist; unknown names come back unchanged."""
+    parent = parent.strip().strip("`")
+    aliases = NOTES_DIR / ".desktop"
+    if parent.startswith("local_"):
+        if (aliases / parent).is_file():
+            return (aliases / parent).read_text(encoding="utf-8").strip()
+        found = sorted(aliases.glob(f"{parent}*")) if aliases.is_dir() else []
+        if len(found) == 1:
+            return found[0].read_text(encoding="utf-8").strip()
+        parent = parent.removeprefix("local_")
+    if not SESSION_ID.fullmatch(parent) or (NOTES_DIR / f"{parent}.md").is_file():
+        return parent
+    found = sorted(NOTES_DIR.glob(f"{parent}*.md"))
+    return found[0].stem if len(found) == 1 else parent
+
+
+def transcript_of(session_id: str) -> Path | None:
+    found = sorted(Path.home().glob(f".claude/projects/*/{session_id}.jsonl"))
+    return found[0] if found else None
+
+
+def parent_context(parent: str | None, own_id: str, limit: int = MAX_PARENT) -> str:
+    """The parent's notes and transcript path, so a sub-thread checks its parent's words."""
+    parent = resolve(parent) if parent else ""
+    if not parent or parent == own_id.strip():
+        return ""
+    notes = read(parent, limit)
+    transcript = transcript_of(parent) if SESSION_ID.fullmatch(parent) else None
+    if not notes and transcript is None:
+        return ""
+    parts = [f"Parent thread {parent}."]
+    if notes:
+        parts.append(f"Its notes (its decisions bind you too):\n{notes}")
+    if transcript is not None:
+        parts.append(f"Its transcript: {transcript}. When the user says it was already decided or "
+                     "shown, search the user's words there and in your own transcript before any doc.")
+    return "\n".join(parts)
 
 
 def inherit(session_id: str, transcript: str) -> None:

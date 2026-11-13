@@ -183,6 +183,31 @@ class ThreadNotesTests(unittest.TestCase):
         self.note("child-session-1", "parent: local_00000000-dead\n## Task\nx")
         self.assertEqual(thread_notes.load("child-session-1"), ("parent: local_00000000-dead\n## Task\nx", None))
 
+    def test_short_parent_ids_resolve_to_their_notes(self):
+        self.note(PARENT_ID, PARENT)
+        thread_notes.remember_desktop_id(PARENT_ID, "local_f54127db-801a-4ef6-9443-c089a334a11c")
+        self.note("child-session-1", "parent: local_f54127db\n## Task\nx")
+        self.assertIn("fly mode", thread_notes.load("child-session-1")[1])
+        self.note("child-session-2", f"parent: `{PARENT_ID[:8]}`\n## Task\nx")
+        self.assertIn("fly mode", thread_notes.load("child-session-2")[1])
+
+    def test_a_sub_thread_is_handed_its_parents_notes_and_transcript(self):
+        self.note(PARENT_ID, PARENT)
+        with patch.object(thread_notes, "transcript_of", lambda sid: Path(f"/x/{sid}.jsonl")):
+            text = thread_notes.parent_context(PARENT_ID, "child-session-1")
+            self.assertIn("fly mode", text)
+            self.assertIn(f"/x/{PARENT_ID}.jsonl", text)
+            self.assertEqual(thread_notes.parent_context(PARENT_ID, PARENT_ID), "")
+            self.assertEqual(thread_notes.parent_context(None, "child-session-1"), "")
+
+    def test_first_prompt_of_a_sub_thread_carries_its_parent(self):
+        self.note(PARENT_ID, PARENT)
+        import capture_user_turn as capture
+        lines = capture.notes_reminder({"session_id": "child-session-9",
+                                        "prompt": f"Brief.\nparent: {PARENT_ID}\nDo the thing."})
+        self.assertIn("fly mode", lines[0])
+        self.assertIn("child-session-9.md", lines[0])
+
 
 if __name__ == "__main__":
     unittest.main()
