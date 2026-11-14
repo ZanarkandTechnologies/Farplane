@@ -69,7 +69,7 @@ class SpendApprovalTest(unittest.TestCase):
         (self.dir / "grant").write_text(f"{int(time.time()) - 1}\nold\n5\n")
         self.assertIn("deny", hook(SPENDS[0], self.dir))
 
-    def test_two_dollars_or_less_opens_without_a_code_up_to_ten_a_day(self) -> None:
+    def test_one_dollar_or_less_opens_without_a_code_up_to_ten_a_day(self) -> None:
         r = approve("request", "Solv3R on one L4", "--usd", "0.3", "--minutes", "90", approvals=self.dir, sent=self.sent)
         self.assertEqual(r.returncode, 0)
         self.assertIn("without a code", r.stdout)
@@ -78,11 +78,15 @@ class SpendApprovalTest(unittest.TestCase):
         self.assertEqual(hook(SPENDS[0], self.dir), "")
         until = int((self.dir / "grant").read_text().split()[0])
         self.assertLessEqual(until, int(time.time()) + 60 * 60)  # a small spend never opens more than an hour
-        for _ in range(4):
-            approve("request", "more", "--usd", "2", approvals=self.dir, sent=self.sent)
-        r = approve("request", "one too many", "--usd", "2", approvals=self.dir, sent=self.sent)  # 0.3 + 8 + 2 > 10
+        for _ in range(9):
+            approve("request", "more", "--usd", "1", approvals=self.dir, sent=self.sent)
+        self.assertNotIn("Code:", self.sent.read_text())
+        r = approve("request", "one too many", "--usd", "1", approvals=self.dir, sent=self.sent)  # 0.3 + 9 + 1 > 10
         self.assertIn("Ask Kenji for the code", r.stdout)
         self.assertIn("Code: ", self.sent.read_text())
+        r = approve("request", "a $2 run", "--usd", "2", approvals=self.tmp / "fresh", sent=self.sent)
+        self.assertIn("Ask Kenji for the code", r.stdout)  # over $1 always needs the code
+        self.assertIn("smaller run", r.stdout)
 
     def test_three_wrong_codes_cancel(self) -> None:
         approve("request", "x", "--usd", "3", approvals=self.dir, sent=self.sent)

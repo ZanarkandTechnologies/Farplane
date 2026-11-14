@@ -2,7 +2,7 @@
 """Kenji's phone approval for Modal spend (spend_approval.sh).
 
   approve.py request "<what and why>" --usd 5 --minutes 60   sends a 6-digit code to Kenji's Telegram, prints no code
-                                                             ($2 or less opens at once, up to $10 a day; Kenji gets one line)
+                                                             ($1 or less opens at once, up to $10 a day; Kenji gets one line)
   approve.py grant <code>                                    opens the window when the code matches
   approve.py status                                          shows the open window or pending request
 
@@ -26,9 +26,10 @@ DIR = Path(os.environ.get("FARPLANE_APPROVALS", Path.home() / ".farplane" / "app
 PENDING, GRANT, LOG = DIR / "pending.json", DIR / "grant", DIR / "log.md"
 SENDER = Path(__file__).resolve().parents[2] / "skills" / "notify" / "scripts" / "send_message.py"
 CODE_TTL, MAX_TRIES = 30 * 60, 3
-# Kenji, 13 Nov 2026: "its fine if its below 2 usd". 16 of 24 requests in the gate's first four days were $2 or less
-# and most of their codes were never answered, so those open at once; a day's small ones stop at $10.
-AUTO_USD, AUTO_DAY = 2.0, 10.0
+# Kenji, 14 Nov 2026: "lets make the rule $1 or less", and tests stay as lean as possible. 15 of the gate's first 27
+# requests were $1 or less and most codes were never answered, so those open at once; a day's
+# small ones stop at $10.
+AUTO_USD, AUTO_DAY = 1.0, 10.0
 
 
 def stamp() -> str:
@@ -64,7 +65,7 @@ def auto_today() -> float:
 
 
 def open_small(what: str, usd: float, minutes: int) -> int:
-    """A request of $2 or less opens the window at once and tells Kenji in one line."""
+    """A request of $1 or less opens the window at once and tells Kenji in one line."""
     DIR.mkdir(parents=True, exist_ok=True)
     until = int(time.time()) + min(minutes, 60) * 60
     if GRANT.exists():  # never shorten a window Kenji opened with a code
@@ -94,7 +95,9 @@ def request(what: str, usd: float, minutes: int) -> int:
     send(f"Modal spend approval\n{what}\nUp to ${usd:g} for {minutes} min.\nCode: {code}\n"
          "Give the code to the thread only if you agree.")
     log(f"requested: {what} (up to ${usd:g}, {minutes} min)")
-    print(f"Sent to Kenji's phone: {what} (up to ${usd:g}, {minutes} min). Ask Kenji for the code.")
+    print(f"Sent to Kenji's phone: {what} (up to ${usd:g}, {minutes} min). Ask Kenji for the code. "
+          f"If a smaller run would answer the same question (one room, one GPU, a cached image), ask for that instead: "
+          f"${AUTO_USD:g} or less opens at once.")
     return 0
 
 

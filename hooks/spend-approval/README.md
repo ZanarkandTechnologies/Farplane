@@ -15,11 +15,13 @@ window. `approve.py` opens one:
 
 | Request | What happens |
 | --- | --- |
-| `approve.py request "<what>" --usd 2` or less | Opens at once for up to 60 minutes and sends Kenji one line (Kenji, 13 Nov 2026: "its fine if its below 2 usd"). A day's small requests stop at $10; after that they need a code. |
+| `approve.py request "<what>" --usd 1` or less | Opens at once for up to 60 minutes and sends Kenji one line (Kenji, 14 Nov 2026: "lets make the rule $1 or less"). A day's small requests stop at $10; after that they need a code. |
 | `approve.py request "<what>" --usd 5 --minutes 60` | Sends a 6-digit code to Kenji's phone only. `approve.py grant <code>` opens the window. Three wrong codes or 30 minutes cancel it. |
 
-Why small requests skip the code: 16 of the first 24 requests were $2 or
-less, and 14 of the 24 never got an answer, so threads sat idle for cents.
+Why small requests skip the code: 15 of the first 27 requests were $1 or
+less, and 15 of the 27 never got an answer, so threads sat idle for cents.
+Both messages tell the thread to ask for the leanest run that answers the
+question, never a large budget.
 
 The hook stays silent for read-only Modal commands (`modal app list`, `modal
 volume ls`) and for commands that only read or name `deploy/release.sh`
