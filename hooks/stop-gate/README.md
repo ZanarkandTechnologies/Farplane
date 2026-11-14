@@ -73,8 +73,8 @@ one gap:
   an app notice (no words of the user's own) never gets `unanswered`. This catches turns that end on a one-line status
   such as "The simulator finished; the runner is fetching them."
 - `process_narration` true, or two or more unexplained names (ticket or
-  session codes, commit hashes, branches, internal tools; paths, links and
-  commands do not count), with `status_first` false → `cold_read`: lead with
+  session codes, commit hashes, branches, internal tools; paths, links,
+  commands and terms a software engineer knows, such as npm or MCP, do not count), with `status_first` false → `cold_read`: lead with
   the overall state in plain words.
 - Two or more unexplained names with the status first → `plain_names`: say
   what each is in a few words, or drop it. One name alone passes, because

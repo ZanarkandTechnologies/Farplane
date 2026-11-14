@@ -199,6 +199,10 @@ class StopGateTests(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertTrue(reader_check.known_name(name, final, "coding widgetry issues"))
         self.assertFalse(reader_check.known_name("carve", final, ""))
+        for name in ("npm", "Claude Code plugin", "`MCP`"):
+            with self.subTest(name=name):
+                self.assertTrue(reader_check.known_name(name, final, ""))
+        self.assertFalse(reader_check.known_name("local_a1b2c3", final, ""))
         self.assertTrue(reader_check.opens_with_status("### Fix\n**Context:** You asked x.\n\n**Partial: y.**"))
         self.assertFalse(reader_check.opens_with_status("I reran the scorer, then the parser."))
         self.assertTrue(reader_check.clip_request("a" * 4000 + "ASK").endswith("ASK"))
