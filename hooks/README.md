@@ -15,6 +15,8 @@ explain behavior without maintaining duplicate registration snippets.
 | [foreground-wait](foreground-wait/README.md) | PreToolUse | Denies a Claude Bash call that sleeps or polls in the foreground, with the background rerun to use |
 | [after-reset](after-reset/README.md) | SessionStart (compact) | Hands a thread its notes and the user's own words right after a context reset, without using the summary. |
 | [worktree-guard](worktree-guard/README.md) | PreToolUse | Denies `git worktree add` and a session with its own worktree unless Kenji asked (`FARPLANE_WORKTREE_OK=1`) |
+| [spend-approval](spend-approval/README.md) | PreToolUse | A Modal run or a release needs Kenji's phone code; $2 or less opens at once, up to $10 a day |
+| [turn-clock](turn-clock/README.md) | PostToolUse | Every 45 minutes since the user's message, tells a Claude thread to ship and report the smallest finished ask |
 | [evidence-mode](evidence-mode/README.md) | UserPromptSubmit | States the evidence switch (awake: minimal proof, asleep: maximum) in every turn |
 | [user-turn](user-turn/README.md) | UserPromptSubmit | User-intent capture and optional skill suggestion |
 

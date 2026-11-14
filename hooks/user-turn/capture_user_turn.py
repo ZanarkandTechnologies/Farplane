@@ -11,6 +11,7 @@ import json
 import re
 import os
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -51,6 +52,19 @@ def emit_context(lines: list[str]) -> None:
     if lines:
         print(json.dumps({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit",
                                                  "additionalContext": "\n\n".join(lines)}}))
+
+
+def start_turn_clock(payload: dict[str, object]) -> None:
+    """Record when the user spoke, for the turn clock (hooks/turn-clock); quiet on any error."""
+    session_id = str(payload.get("session_id") or "").strip()
+    if not re.fullmatch(r"[A-Za-z0-9_-]{8,}", session_id):
+        return
+    try:
+        turns = Path(os.environ.get("FARPLANE_TURNS") or Path.home() / ".farplane" / "turns")
+        turns.mkdir(parents=True, exist_ok=True)
+        (turns / session_id).write_text(f"{int(time.time())}\n0\n", encoding="utf-8")
+    except OSError:
+        pass
 
 
 def notes_reminder(payload: dict[str, object]) -> list[str]:
@@ -94,6 +108,7 @@ def main() -> int:
     if is_internal_user_prompt(prompt):
         return 0
 
+    start_turn_clock(payload)
     # Every project gets the notes reminder, with or without a Farplane root.
     context = notes_reminder(payload) + goal_reminder(prompt)
     project_root = project_root_from_payload(payload)

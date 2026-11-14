@@ -32,6 +32,18 @@ template_version: 0.3.28
 > finish it or resolve its blocker. “Will installing it affect other projects?”
 > asks for an explanation.
 
+- Confirm the ticket before building (Kenji, 14 Nov 2026: "it goes already
+  without waiting for a def of done"). When a message starts new work that is
+  more than a quick thing (over about 15 minutes, a paid run, or a finish the
+  user has not stated), reply first with the ticket in at most six lines: In
+  scope, Out of scope, Done when (a check the user can run or see) and the
+  estimate, then wait for the OK or a correction. Read-only exploration may
+  continue meanwhile. Write the agreed ticket into the thread notes' Task.
+  Skip the ticket for a fix or correction to agreed work, a question, a
+  follow-up inside an agreed ticket, a `/goal` whose condition the user wrote,
+  and anything the user says to just do. When the evidence switch is asleep,
+  state the ticket and proceed.
+
 | Authority state | Action |
 | --- | --- |
 | Authorized and in scope | Proceed; try a safe alternative when blocked. |
@@ -301,6 +313,13 @@ delegate(context_ref, claim, bounded_output, proof_target) -> owned_result
   until the user answers. Start work the user asked to split off
   (`user_asked`), propose your own follow-ups as `own_initiative` cards, or
   end the turn.
+- A thread that waits on the user says so where the user will see it. End
+  the turn with one line `Waiting on Kenji: <the one action>`, and in the
+  Claude app pin the thread (`mcp__ccd_sidebar__set_pinned`, `self`); unpin it
+  at the user's next message. When the answer shows outside chat (a merged
+  PR, a pushed commit, a file), start a background until-loop on it before
+  ending the turn, so the thread resumes within a minute of the answer (13
+  Nov 2026: a thread woke 70 minutes after the merge it was waiting for).
 - Edit repository-owned source and use its install or sync route. Do not patch
   installed copies unless requested. Do not commit secrets, private runtime
   state, generated scratch, or unsanitized data. Do not expand global prompts

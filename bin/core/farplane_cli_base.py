@@ -27,7 +27,7 @@ RUNTIME_NOTIFY_DISABLED_FILE = ".farplane-notify-disabled"
 MANAGED_HOOK_DIRS = (
     "continuation", "response-length", "stop-gate", "lifecycle-telemetry", "skill-length",
     "skill-invocation", "user-turn", "foreground-wait", "after-reset", "evidence-mode",
-    "worktree-guard", "spend-approval", "shared",
+    "worktree-guard", "spend-approval", "turn-clock", "shared",
 )
 # Installed-only migration links keep already-running Codex cached commands alive.
 HOOK_MIGRATION_LINKS = {

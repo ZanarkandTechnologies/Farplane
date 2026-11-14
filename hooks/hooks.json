@@ -85,6 +85,17 @@
         ]
       },
       {
+        "matcher": "^(Bash|Edit|Write)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.codex/hooks/turn-clock/turn_clock.sh\"",
+            "statusMessage": "Turn clock — every 45 minutes since the user's message, says to ship the smallest finished ask",
+            "timeout": 5
+          }
+        ]
+      },
+      {
         "matcher": "^(Skill|Bash)$",
         "hooks": [
           {

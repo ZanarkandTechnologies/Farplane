@@ -58,6 +58,18 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
      open it and answer or stop it`, once per session.
    If an archive or move is refused, record `refused` and go on.
 
+0b. **Restart turns that died on an API error.** Run
+   `python3 bin/frozen-threads.py check --minutes 10` and take each `frozen`
+   item with `"restart": true` and `"scheduled": false`: its last turn ended
+   on a connection or server error, and nothing restarts it by itself (on 13
+   Nov 2026 one sat 3.75 hours until Kenji typed "Try again"). `idle_after`
+   does not apply. Unless `state` already holds that item's `uuid` as
+   `restarted_uuid` for the session, `send_message` to its `session`:
+   `Try again: your last turn ended on an API error (<the error text>), not
+   on your work. Continue from where it stopped.` Then store `restarted_uuid`
+   and count it as `restarted`. If the send is refused, add the thread to
+   the Kenji list as `died on an API error; tap to restart`.
+
 1. **List candidates.** Call `list_sessions` (session management tools) with
    limit 100. Keep sessions that are not archived, not running, and whose
    `lastActivityAt` is between `lookback` and `idle_after` ago. Drop this run's
@@ -129,7 +141,7 @@ report = `.farplane/reports/thread-sweeper/<YYYY-MM-DD>.md` (one section per run
 
 5. **Write state and report.** Save `state` as
    `{session_id: {title, last_seen, verdict, nudges, notified_at,
-   notified_question}}`, dropping sessions outside `lookback`, except
+   notified_question, restarted_uuid}}`, dropping sessions outside `lookback`, except
    `waiting` threads inside `waiting_hold`. Append a run section to `report`: the run time,
    then a table `thread | idle h | verdict | action | reason`, with each thread
    linked by its `link`, then the counts.
@@ -145,7 +157,7 @@ that gap and stop.
 
 Final response:
 - Counts: candidates, skipped unchanged, done, waiting, stopped, nudged,
-  escalated, Telegram sent or not (with the delivery receipt).
+  restarted, escalated, Telegram sent or not (with the delivery receipt).
 - The report path.
 - Automation runs: archived, filed in `Automations: needs you`, stuck,
   refused.

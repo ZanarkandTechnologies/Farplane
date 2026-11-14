@@ -161,6 +161,7 @@ INSTALL_HOOK_DIRS=(
   after-reset
   worktree-guard
   spend-approval
+  turn-clock
   evidence-mode
   user-turn
   shared

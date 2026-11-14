@@ -19,6 +19,8 @@ SPENDS = (
     "cd ~/Eddison/oures && sh deploy/release.sh dev idol 2>&1 | tail -6",
     "MODAL_PROFILE=kenjipcx modal shell --env dev oures-walls",
     "doppler run -p oures -c prd -- modal serve services/stream/modal_app.py",
+    "./deploy/release.sh prod",
+    "doppler run -p oures -c dev -- deploy/release.sh dev",
 )
 FREE = (
     "modal app list --env dev",
@@ -26,6 +28,8 @@ FREE = (
     "modal volume ls --env dev oures-ai-cache /",
     "cat services/scan-build/modal_app.py",
     "git status",
+    "grep -n live-scan-check AGENTS.md deploy/release.sh",
+    "cat deploy/release.sh | head -40",
 )
 
 
@@ -65,8 +69,23 @@ class SpendApprovalTest(unittest.TestCase):
         (self.dir / "grant").write_text(f"{int(time.time()) - 1}\nold\n5\n")
         self.assertIn("deny", hook(SPENDS[0], self.dir))
 
+    def test_two_dollars_or_less_opens_without_a_code_up_to_ten_a_day(self) -> None:
+        r = approve("request", "Solv3R on one L4", "--usd", "0.3", "--minutes", "90", approvals=self.dir, sent=self.sent)
+        self.assertEqual(r.returncode, 0)
+        self.assertIn("without a code", r.stdout)
+        self.assertNotIn("Code:", self.sent.read_text())
+        self.assertFalse((self.dir / "pending.json").exists())
+        self.assertEqual(hook(SPENDS[0], self.dir), "")
+        until = int((self.dir / "grant").read_text().split()[0])
+        self.assertLessEqual(until, int(time.time()) + 60 * 60)  # a small spend never opens more than an hour
+        for _ in range(4):
+            approve("request", "more", "--usd", "2", approvals=self.dir, sent=self.sent)
+        r = approve("request", "one too many", "--usd", "2", approvals=self.dir, sent=self.sent)  # 0.3 + 8 + 2 > 10
+        self.assertIn("Ask Kenji for the code", r.stdout)
+        self.assertIn("Code: ", self.sent.read_text())
+
     def test_three_wrong_codes_cancel(self) -> None:
-        approve("request", "x", "--usd", "1", approvals=self.dir, sent=self.sent)
+        approve("request", "x", "--usd", "3", approvals=self.dir, sent=self.sent)
         code = self.sent.read_text().split("Code: ")[1][:6]
         wrong = "000000" if code != "000000" else "111111"
         for _ in range(3):

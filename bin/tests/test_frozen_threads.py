@@ -59,6 +59,17 @@ class PendingTests(unittest.TestCase):
         events = [prompt(1), reply(2, tools=["t1"]), result(3, "t1", "The user doesn't want to proceed with this tool use.")]
         self.assertIsNone(watch.pending(events, NOW))
 
+    def test_a_turn_that_died_on_a_connection_error_is_pending(self):
+        died = dict(reply(2), isApiErrorMessage=True, error="server_error",
+                    message={"id": "m2", "content": [{"type": "text", "text": "API Error: Can't reach the API server"}]})
+        e = watch.pending([prompt(1), died], NOW)
+        self.assertEqual(e["uuid"], "a2")
+        self.assertTrue(watch.died_on_error(e))
+        self.assertIn("Try again", watch.describe(e))
+        spent = dict(died, error="rate_limit")  # a spent weekly limit: a retry cannot help
+        self.assertIsNone(watch.pending([prompt(1), spent], NOW))
+        self.assertIsNone(watch.pending([prompt(1), died, prompt(3), reply(4)], NOW))
+
     def test_cleanup_notice_without_a_turn_is_ignored(self):
         events = [prompt(1), reply(2), note(5, "<task-notification>\n<task-id>__orphan_summary__:shell</task-id>")]
         self.assertIsNone(watch.pending(events, NOW))

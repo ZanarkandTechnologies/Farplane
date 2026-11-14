@@ -99,6 +99,16 @@ def tools_still_running(events: list[dict], j: int, now: float) -> bool:
     return bool(asked - got)
 
 
+# A turn that ended on an API error is worth one "Try again", except when a retry cannot help.
+NO_RETRY = {"rate_limit", "authentication_failed", "billing_error", "invalid_request", "oauth_org_not_allowed",
+            "account_on_hold", "verification_required"}
+
+
+def died_on_error(e: dict) -> bool:
+    """The app's own error line ended the turn (13 Nov 2026: one sat 3.75 hours until Kenji typed "Try again")."""
+    return e["type"] == "assistant" and bool(e.get("isApiErrorMessage")) and e.get("error") not in NO_RETRY
+
+
 def pending(events: list[dict], now: float) -> dict | None:
     """The event still waiting on the model at `now`, or None when the thread is not waiting on it."""
     for j in range(len(events) - 1, -1, -1):
@@ -107,7 +117,9 @@ def pending(events: list[dict], now: float) -> dict | None:
             continue
         kind = e["type"]
         if kind == "assistant":
-            return None  # the model answered; a tool it called may still be running, which is not a freeze
+            # the model answered (a tool it called may still be running, which is not a freeze),
+            # unless the "answer" is the app's error line for a turn that died
+            return e if died_on_error(e) else None
         if kind == "system":
             sub = e.get("subtype")
             if sub == "api_error":
@@ -134,6 +146,8 @@ def pending(events: list[dict], now: float) -> dict | None:
 
 
 def describe(e: dict) -> str:
+    if e["type"] == "assistant":
+        return "a turn that died on an API error (" + re.sub(r"\s+", " ", text_of(e["message"].get("content")))[:80] + "); it needs \"Try again\""
     if e["type"] == "system":
         err = e.get("error") or {}
         return "an API retry (" + (err.get("formatted") or err.get("message") or "error") + ")"
@@ -195,7 +209,7 @@ def find_frozen(minutes: float, now: float, only: Path | None = None) -> list[di
             continue
         out.append({"session": r["sessionId"], "title": r.get("title") or "(untitled)", "since": e["timestamp"],
                     "uuid": e.get("uuid"), "waiting_on": describe(e), "minutes": round((now - ts(e["timestamp"])) / 60),
-                    "scheduled": bool(r.get("scheduledTaskId"))})
+                    "scheduled": bool(r.get("scheduledTaskId")), "restart": died_on_error(e)})
     return sorted(out, key=lambda x: -x["minutes"])
 
 

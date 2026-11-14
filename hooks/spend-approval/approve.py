@@ -2,6 +2,7 @@
 """Kenji's phone approval for Modal spend (spend_approval.sh).
 
   approve.py request "<what and why>" --usd 5 --minutes 60   sends a 6-digit code to Kenji's Telegram, prints no code
+                                                             ($2 or less opens at once, up to $10 a day; Kenji gets one line)
   approve.py grant <code>                                    opens the window when the code matches
   approve.py status                                          shows the open window or pending request
 
@@ -14,6 +15,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import secrets
 import subprocess
 import sys
@@ -24,6 +26,9 @@ DIR = Path(os.environ.get("FARPLANE_APPROVALS", Path.home() / ".farplane" / "app
 PENDING, GRANT, LOG = DIR / "pending.json", DIR / "grant", DIR / "log.md"
 SENDER = Path(__file__).resolve().parents[2] / "skills" / "notify" / "scripts" / "send_message.py"
 CODE_TTL, MAX_TRIES = 30 * 60, 3
+# Kenji, 13 Nov 2026: "its fine if its below 2 usd". 16 of 24 requests in the gate's first four days were $2 or less
+# and most of their codes were never answered, so those open at once; a day's small ones stop at $10.
+AUTO_USD, AUTO_DAY = 2.0, 10.0
 
 
 def stamp() -> str:
@@ -49,7 +54,38 @@ def send(text: str) -> None:
     subprocess.run(cmd, input=text, text=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
+def auto_today() -> float:
+    """Dollars opened without a code today, read from the log."""
+    if not LOG.exists():
+        return 0.0
+    day = time.strftime("%Y-%m-%d", time.localtime())
+    found = re.findall(rf"^- {day} \S+ opened without a code.*\(up to \$([0-9.]+)\)$", LOG.read_text(encoding="utf-8"), re.M)
+    return sum(float(x) for x in found)
+
+
+def open_small(what: str, usd: float, minutes: int) -> int:
+    """A request of $2 or less opens the window at once and tells Kenji in one line."""
+    DIR.mkdir(parents=True, exist_ok=True)
+    until = int(time.time()) + min(minutes, 60) * 60
+    if GRANT.exists():  # never shorten a window Kenji opened with a code
+        first = GRANT.read_text(encoding="utf-8").split("\n", 1)[0]
+        until = max(until, int(first)) if first.isdigit() else until
+    spent = auto_today() + usd
+    GRANT.write_text(f"{until}\n{what}\n{usd}\n", encoding="utf-8")
+    hour = time.strftime("%H:%M", time.localtime(until))
+    log(f"opened without a code until {hour}: {what} (up to ${usd:g})")
+    try:
+        send(f"Modal spend, no code needed (${AUTO_USD:g} or less)\n{what}\nUp to ${usd:g}; ${spent:g} of ${AUTO_DAY:g} today.")
+    except (OSError, subprocess.CalledProcessError):
+        log("could not tell Kenji's phone about the line above")
+    print(f"Approved without a code until {hour}: {what} (up to ${usd:g}; ${spent:g} of ${AUTO_DAY:g} small spends today). "
+          "Log it with `farplane spend add`.")
+    return 0
+
+
 def request(what: str, usd: float, minutes: int) -> int:
+    if 0 < usd <= AUTO_USD and auto_today() + usd <= AUTO_DAY:
+        return open_small(what, usd, minutes)
     code = f"{secrets.randbelow(10**6):06d}"
     salt = secrets.token_hex(8)
     DIR.mkdir(parents=True, exist_ok=True)
