@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.28
+template_version: 0.3.29
 -->
 # Global Agent Guidance
 
@@ -109,6 +109,21 @@ reason(problem)
   it and check the docs and code that same turn.
 - A rejected option states whether anyone tested it. Before saying something
   does not exist, search the code, migrations and past threads.
+- Research verdicts (Kenji, 14 Nov 2026). Before calling a paper, model or
+  idea bad: (1) reproduce its reported number on its own data, code and
+  settings, at its smallest published size; until that passes, a bad result
+  on our data means "our setup is unverified". (2) Ask why the authors got X
+  and we got Y: list what differs (input size, crop, orientation, units,
+  coordinate frame, mode, checkpoint, preprocessing, scorer, truth), test the
+  top three, and run one case where the method must work. (3) Drop an idea
+  only when its physical claim is measured false, when perfect input still
+  does not move the product measure beyond noise, or when three faithful
+  designs, each fixing the last one's named failure, stay flat; anything else
+  is alive, or parked with a "revisit when" line. (4) A verdict names the
+  setup, the reproduction status and the cause class: idea, design, setup or
+  measure. (5) Test lean: each step is the smallest run that could change the
+  decision, and persistence means more small tries, never a bigger budget.
+  Picking bets (the ideal map, both idea sources) is in `ml-autoresearch`.
 - A design answer is one table: data, who reads and writes it, where it lives,
   now or later, what triggers later. Check how real shops do it first.
 - When Kenji says he doesn't understand, stop recommending. Reply with one idea

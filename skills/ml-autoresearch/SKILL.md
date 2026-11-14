@@ -172,8 +172,8 @@ returns: packet state, best candidate or a negative/blocked result, residual ris
 
 ## Gotchas
 
-- Replacing today's method with a paper's higher-scoring one before testing it
-  added loses the cases today's method already wins.
+- Replacing today's method with a paper's higher-scoring one before testing it added loses the cases today's method already wins.
+- [Research taste](references/research-taste.md) binds every step: map the ideal solution and both idea sources before N3; reproduce an outside method's own number in N1; suspect the setup before the idea in N5; drop only for its three reasons in N6; test lean.
 
 ## Output
 
