@@ -30,9 +30,11 @@ from final_response_gate import (  # noqa: E402
     configured_max_prose_words, gate_response,
 )
 import response_format  # noqa: E402
+import thread_notes  # noqa: E402
 
 CHECKS_ENV = "FARPLANE_STOP_CHECKS"
-ALL_CHECKS = frozenset({"length", "spec", "continuation", "format"})
+ALL_CHECKS = frozenset({"length", "spec", "notes", "continuation", "format"})
+NOTES_MARKER = "<!-- farplane-notes:v1 -->"
 SPEC_MARKER = "<!-- farplane-spec:v1 -->"
 COMMITS = re.compile(r"\bgit\b[^\n;|&]*\bcommit\b")
 OWNER_DOC = re.compile(r"(?i)\b(?:PRD|NLSPEC|SPEC|DESIGN|STRUCTURE|ARCHITECTURE|AGENTS|README|CANON|SKILL)"
@@ -48,6 +50,33 @@ SPEC_NUDGE = (
     "`Spec: no change` and why (a pure fix, a test, a tool).\n"
     "- **Return:** The final answer with that line; do not mention this gate."
 )
+
+
+def notes_gate(payload: dict) -> dict | None:
+    """One ask per turn: trim a notes section the next reset would cut (16 Nov 2026:
+    a 75 KB notes file lost the user's design at every reset)."""
+    session, path = payload.get("session_id"), payload.get("transcript_path")
+    if not isinstance(session, str) or not isinstance(path, str):
+        return None
+    cut = thread_notes.cut_at_reset(session)
+    if not cut:
+        return None
+    lines, _ = bounded_rollout_lines(Path(path))
+    for line in reversed(lines):
+        row = json.loads(line)
+        entry = claude_entry(row) if isinstance(row, dict) else None
+        if entry and entry[0] == "user":
+            break
+        if NOTES_MARKER in line:
+            return None
+    return {"decision": "block", "reason": (
+        f"#### Thread notes too long\n\n{NOTES_MARKER}\n\n"
+        f"- **Seen:** {thread_notes.notes_path(session)} will be cut at the next context reset: "
+        f"{'; '.join(cut)}.\n"
+        "- **Fix now:** Keep Open goals to asks the user has not closed, in his words. Keep Task "
+        "to the current In scope, Out of scope, Done when and Design. Keep Decisions to ones "
+        "still in force. Move status lines and history to Progress; delete nothing the user said.\n"
+        "- **Return:** Your final answer unchanged; do not mention this gate.")}
 
 
 def spec_gate(payload: dict) -> dict | None:
@@ -133,14 +162,24 @@ def run_gate(payload: dict, *, credential_child: bool = False) -> dict | None:
             result = None
         if result:
             return result
+    if "notes" in checks and not credential_child:
+        try:
+            result = notes_gate(payload)
+        except (OSError, ValueError):
+            result = None
+        if result:
+            return result
     if checks & {"continuation", "format"}:
-        return jev_gate(payload, checks - {"length", "spec"}, env, credential_child=credential_child)
+        return jev_gate(payload, checks - {"length", "spec", "notes"}, env,
+                        credential_child=credential_child)
     return None
 
 
 def gate_name(reason: str) -> str:
     if response_format.TAG in reason:
         return "response-format"
+    if NOTES_MARKER in reason:
+        return "notes"
     if SPEC_MARKER in reason:
         return "spec"
     if "farplane-continuation" in reason:

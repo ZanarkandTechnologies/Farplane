@@ -466,6 +466,26 @@ class EntrypointTests(unittest.TestCase):
         self.assertIsNone(self.spec_result([commit, human("thanks")]))
         self.assertEqual(stop_gate.gate_name(stop_gate.SPEC_NUDGE), "spec")
 
+    def test_notes_a_reset_would_cut_get_one_trim_ask(self):
+        # 16 Nov 2026: a 75 KB notes file whose Open goals was a status log.
+        import thread_notes
+        session = "387c4ea3-c470-4e42-a2cf-464652b76c14"
+        with tempfile.TemporaryDirectory() as folder, patch.object(thread_notes, "NOTES_DIR", Path(folder)):
+            path = Path(folder) / "t.jsonl"
+            path.write_text(json.dumps(human("go")))
+            payload = {"session_id": session, "transcript_path": str(path)}
+            notes = Path(folder) / f"{session}.md"
+            self.assertIsNone(stop_gate.notes_gate(payload))
+            notes.write_text("## Open goals\n- one ask\n\n## Progress\n" + "- done\n" * 3000)
+            self.assertIsNone(stop_gate.notes_gate(payload))
+            notes.write_text("## Open goals\n" + "- STATE: job passed\n" * 400 + "\n## Task\n- Done when: x\n")
+            reason = stop_gate.notes_gate(payload)["reason"]
+            self.assertIn("Open goals (", reason)
+            self.assertNotIn("Task (", reason)
+            self.assertEqual(stop_gate.gate_name(reason), "notes")
+            path.write_text("\n".join(json.dumps(r) for r in (human("go"), hook(reason))))
+            self.assertIsNone(stop_gate.notes_gate(payload))
+
     def test_gate_names_follow_the_reason_marker(self):
         self.assertEqual(stop_gate.gate_name(response_format.feedback(["proof"])), "response-format")
         self.assertEqual(stop_gate.gate_name(continuation.NUDGE), "continuation")

@@ -18,6 +18,7 @@ import re
 NOTES_DIR = Path.home() / ".farplane" / "memory" / "notes"
 MAX_OWN = 4000
 MAX_PARENT = 2000
+RESET_LIMIT = 6000  # what the after-reset hook hands back (its MAX_NOTES)
 SESSION_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{7,}")
 PARENT = re.compile(r"(?im)^\W*parent\W*:?\s*`?([A-Za-z0-9][A-Za-z0-9._-]{7,})")
 FORK_SOURCE = re.compile(r'"sessionId":\s*"([A-Za-z0-9][A-Za-z0-9._-]{7,})"')
@@ -169,6 +170,20 @@ def with_goals_first(text: str, limit: int) -> str:
     if rest.strip() and budget - used > 40:
         parts.append(rest.strip()[:budget - used])
     return "\n\n".join([warning, *parts])[:limit]
+
+
+def cut_at_reset(session_id: str, limit: int = RESET_LIMIT) -> list[str]:
+    """Kept sections of this thread's notes that a reset would cut: each is longer
+    than its share of the reset budget. Empty when the notes fit or do not exist."""
+    path = notes_path(session_id)
+    if path is None or not path.is_file():
+        return []
+    text = path.read_text(encoding="utf-8", errors="replace").strip()
+    if len(text) <= limit:
+        return []
+    found = {name: KEPT[name].search(text) for name, _ in SHARES}
+    return [f"{name.capitalize()} ({len(found[name].group(0)):,} characters, room for {int(limit * share):,})"
+            for name, share in SHARES if found[name] and len(found[name].group(0)) > limit * share]
 
 
 def parent_id(notes: str) -> str | None:
