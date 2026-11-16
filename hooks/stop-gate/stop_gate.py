@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""The one blocking Stop gate: length, then continuation, then response format.
+"""The one blocking Stop gate: length, spec, then continuation, then response format.
 
-Each stop returns at most one block. Length is deterministic and runs first;
-continuation and format share one Jev request. No completion authority.
+Each stop returns at most one block. Length and spec are deterministic and run
+first; continuation and format share one Jev request. No completion authority.
 """
 from __future__ import annotations
 
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -16,7 +17,9 @@ ROOT = Path(__file__).resolve().parents[2]
 for directory in (ROOT / "hooks" / "shared", ROOT / "hooks" / "continuation", ROOT / "bin" / "core"):
     sys.path.insert(0, str(directory))
 
-from continuation import evaluate_stop, last_turn_answer, length_nudges_this_turn  # noqa: E402
+from continuation import (  # noqa: E402
+    bounded_rollout_lines, claude_entry, evaluate_stop, last_turn_answer, length_nudges_this_turn,
+)
 from runtime_config import load_runtime_env  # noqa: E402
 from hook_delivery import report_gate_block  # noqa: E402
 from skill_suggestion import _provider_config  # noqa: E402
@@ -29,7 +32,50 @@ from final_response_gate import (  # noqa: E402
 import response_format  # noqa: E402
 
 CHECKS_ENV = "FARPLANE_STOP_CHECKS"
-ALL_CHECKS = frozenset({"length", "continuation", "format"})
+ALL_CHECKS = frozenset({"length", "spec", "continuation", "format"})
+SPEC_MARKER = "<!-- farplane-spec:v1 -->"
+COMMITS = re.compile(r"\bgit\b[^\n;|&]*\bcommit\b")
+OWNER_DOC = re.compile(r"(?i)\b(?:PRD|NLSPEC|SPEC|DESIGN|STRUCTURE|ARCHITECTURE|AGENTS|README|CANON|SKILL)"
+                       r"[\w.-]*\.md\b|/specs?/|/docs/[^\s\"']*\.md")
+SPEC_LINE = re.compile(r"(?im)^[\s>*+-]*[*_`]{0,2}spec[*_`]{0,2}\s*:")
+SPEC_NUDGE = (
+    f"#### Spec in the same change\n\n{SPEC_MARKER}\n\n"
+    "- **Seen:** This turn committed, and no PRD, spec or structure document was touched.\n"
+    "- **If behaviour, data shape or folder layout changed:** update the owner document "
+    "now, in a commit of its own if the first is pushed. When none covers it, write the "
+    "missing section.\n"
+    "- **Answer:** Add one `Spec:` line naming the section you changed, or "
+    "`Spec: no change` and why (a pure fix, a test, a tool).\n"
+    "- **Return:** The final answer with that line; do not mention this gate."
+)
+
+
+def spec_gate(payload: dict) -> dict | None:
+    """One ask per turn: a turn that committed names the spec it changed (16 Nov 2026:
+    718 Rooms code commits against 2 PRD commits in 14 days)."""
+    final, path = payload.get("last_assistant_message"), payload.get("transcript_path")
+    if not isinstance(path, str) or (isinstance(final, str) and SPEC_LINE.search(final)):
+        return None
+    lines, _ = bounded_rollout_lines(Path(path))
+    committed = False
+    for line in reversed(lines):
+        row = json.loads(line)
+        if not isinstance(row, dict):
+            continue
+        entry = claude_entry(row)
+        if entry and entry[0] == "user":
+            break
+        if SPEC_MARKER in line:
+            return None
+        message = row.get("message")
+        content = message.get("content") if isinstance(message, dict) else None
+        for part in content if row.get("type") == "assistant" and isinstance(content, list) else []:
+            if isinstance(part, dict) and part.get("type") == "tool_use":
+                call = json.dumps(part.get("input"))
+                if OWNER_DOC.search(call):
+                    return None
+                committed = committed or bool(COMMITS.search(call))
+    return {"decision": "block", "reason": SPEC_NUDGE} if committed else None
 
 
 def configured_checks(env: dict[str, str]) -> frozenset[str]:
@@ -80,14 +126,23 @@ def run_gate(payload: dict, *, credential_child: bool = False) -> dict | None:
                                configured_max_prose_lines(env))
         if result:
             return result
+    if "spec" in checks and not credential_child:
+        try:
+            result = spec_gate(payload)
+        except (OSError, ValueError):
+            result = None
+        if result:
+            return result
     if checks & {"continuation", "format"}:
-        return jev_gate(payload, checks - {"length"}, env, credential_child=credential_child)
+        return jev_gate(payload, checks - {"length", "spec"}, env, credential_child=credential_child)
     return None
 
 
 def gate_name(reason: str) -> str:
     if response_format.TAG in reason:
         return "response-format"
+    if SPEC_MARKER in reason:
+        return "spec"
     if "farplane-continuation" in reason:
         return "continuation"
     return "response-length"

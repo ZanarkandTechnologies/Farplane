@@ -36,6 +36,16 @@ _PROOF_LINE = re.compile(
     re.IGNORECASE,
 )
 MAX_PROOF_LINE_WORDS = 40
+# Same-page and theory lines (16 Nov 2026): the reply that restates the user's point
+# and shows the reasoning was being cut by the length limit, so these labelled
+# lines count toward neither budget. Long ones stay prose.
+_SAME_PAGE_LINE = re.compile(
+    r"^ {0,3}(?:>\s*)?(?:[-*+]\s+)?[*_`]{0,2}"
+    r"(?:got it|plan|concerns|facts|theory|wrong if|sure)"
+    r"[*_`]{0,2}\s*:[*_`]{0,2}\s+\S",
+    re.IGNORECASE,
+)
+MAX_SAME_PAGE_LINE_WORDS = 60
 # Tables, fenced blocks and labelled lines sit outside the prose budget; this
 # ceiling counts every word, so a long answer cannot hide in them.
 MAX_TOTAL_WORDS = 500
@@ -255,8 +265,15 @@ def measure_response(markdown: str) -> ResponseMeasure:
         and index not in fence_indices
         and _is_proof_line(line)
     }
+    same_page_indices = {
+        index
+        for index, line in enumerate(lines)
+        if index not in fence_indices and index not in reference_indices
+        and _SAME_PAGE_LINE.match(line) and len(line.split()) <= MAX_SAME_PAGE_LINE_WORDS
+    }
     prose_indices = (
         set(range(len(lines)))
+        - same_page_indices
         - reference_indices
         - mermaid_indices
         - wireframe_indices
@@ -278,7 +295,7 @@ def measure_response(markdown: str) -> ResponseMeasure:
     proof_lines = selected(proof_indices)
     reference_lines = selected(reference_indices)
     return ResponseMeasure(
-        total_words=_word_count(lines),
+        total_words=_word_count(lines) - _word_count(selected(same_page_indices)),
         total_nonblank_lines=_nonblank_count(lines),
         prose_words=_word_count(prose_lines),
         prose_nonblank_lines=_nonblank_count(prose_lines),

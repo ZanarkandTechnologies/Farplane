@@ -445,6 +445,27 @@ class EntrypointTests(unittest.TestCase):
             self.assertIsNone(stop_gate.run_gate({"hook_event_name": "Stop", "last_assistant_message": "ok"}))
         jev.assert_not_called()
 
+    def spec_result(self, rows, final="Done."):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "t.jsonl"
+            path.write_text("\n".join(json.dumps(r) for r in rows))
+            return stop_gate.spec_gate({"last_assistant_message": final, "transcript_path": str(path)})
+
+    def test_a_commit_with_no_spec_touched_asks_for_the_spec_line_once(self):
+        # 16 Nov 2026: 718 Rooms code commits against 2 PRD commits in 14 days.
+        def bash(command):
+            return {"type": "assistant", "message": {"role": "assistant", "content": [
+                {"type": "tool_use", "name": "Bash", "input": {"command": command}}]}}
+        commit = bash("cd /repo && git add src/a.ts && git commit -m 'Keep RoomPlan boxes'")
+        rows = [human("fix it"), bash("npm test"), commit]
+        self.assertIn("Spec in the same change", self.spec_result(rows)["reason"])
+        self.assertIsNone(self.spec_result(rows, "Done.\n- **Spec:** no change, a pure fix."))
+        self.assertIsNone(self.spec_result(rows + [bash("sed -i '' 's/a/b/' docs/PRD_rooms.md")]))
+        self.assertIsNone(self.spec_result(rows + [hook(stop_gate.SPEC_NUDGE)]))
+        self.assertIsNone(self.spec_result([human("fix it"), bash("npm test")]))
+        self.assertIsNone(self.spec_result([commit, human("thanks")]))
+        self.assertEqual(stop_gate.gate_name(stop_gate.SPEC_NUDGE), "spec")
+
     def test_gate_names_follow_the_reason_marker(self):
         self.assertEqual(stop_gate.gate_name(response_format.feedback(["proof"])), "response-format")
         self.assertEqual(stop_gate.gate_name(continuation.NUDGE), "continuation")

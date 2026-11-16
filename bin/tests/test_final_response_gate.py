@@ -28,6 +28,13 @@ class FinalResponseGateTests(unittest.TestCase):
     def test_under_cap_allows(self) -> None:
         self.assertIsNone(gate.gate_response(self.payload("one two"), 3, 2))
 
+    def test_same_page_and_theory_lines_do_not_count(self) -> None:
+        # 16 Nov 2026: the length limit was cutting the restated point and the reasoning.
+        lines = ["Got it: " + "word " * 50, "- **Theory:** " + "word " * 50, "`Wrong if:` " + "word " * 50]
+        self.assertIsNone(gate.gate_response(self.payload("\n".join(lines + ["one two"])), 3, 2))
+        hidden = "Plan: " + "word " * 80
+        self.assertIsNotNone(gate.gate_response(self.payload(hidden), 3, 2))
+
     def test_exact_cap_allows(self) -> None:
         self.assertIsNone(gate.gate_response(self.payload("one two three"), 3, 2))
 

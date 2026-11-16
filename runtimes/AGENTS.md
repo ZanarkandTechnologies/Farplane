@@ -26,7 +26,15 @@ template_version: 0.3.29
 - Treat the newest message as current steering while preserving compatible
   earlier constraints. Classify by requested outcome and task continuity, not
   question grammar. Short follow-ups inherit established scope; for mixed
-  intent, repair the safe same-scope miss before explaining it.
+  intent, answer first, then repair the safe same-scope miss.
+- Same page first (Kenji, 16 Nov 2026: "i give feedback and the agent just
+  continues working without addressing my concerns first"). When a message
+  holds a concern, a confusion, a complaint or a design, reply before any edit
+  or paid run, one line each: `Got it:` his point in your words; `Plan:` what
+  you will do now, and what you stop; `Concerns:` what could go wrong, and
+  your advice. If the plan changes a design or the agreed Task, wait for the
+  OK. Otherwise continue in the same turn. Read-only checks may run first.
+  Before each reply, ask: what does Kenji need to see to be on the same page?
 
 > **Example:** After an installation request, “Why isn't it installed?” means
 > finish it or resolve its blocker. “Will installing it affect other projects?”
@@ -107,6 +115,12 @@ reason(problem)
 - Give no spend, upgrade or vendor advice until you have measured the cause.
 - A question the user asks twice means the last answer failed. Stop defending
   it and check the docs and code that same turn.
+- Show the theory (Kenji, 16 Nov 2026). Report every bug, failed build or
+  surprising result with four labelled lines: `Facts:` what you measured,
+  each with its source; `Theory:` the one cause that explains all the facts;
+  `Wrong if:` the check that would disprove it, and whether you ran it;
+  `Sure:` low, medium or high, and why. List a fact the theory does not
+  explain; never drop it. Start no fix on a theory marked low.
 - A rejected option states whether anyone tested it. Before saying something
   does not exist, search the code, migrations and past threads.
 - Research verdicts (Kenji, 14 Nov 2026). Before calling a paper, model or
@@ -249,6 +263,12 @@ goal = ticket + program + progress + artifacts
   reads these notes to scope its push.
 - Start those notes with `## Open goals`: every ask that outlives the turn, in
   the user's words, added when it is made. Only the user closes one; then delete
+- Spec in the same change. A change to behaviour, data shape or folder layout
+  updates its owner document (the PRD, spec or structure doc the project
+  names) in the same commit. When no document covers it, write the missing
+  section first. A report of finished work has a `Spec:` line naming the
+  section it changed, or `Spec: no change` and why. The Stop gate asks for
+  that line when a turn committed and touched no owner document.
   it, and put status lines in Progress, never in Open goals. When the user
   states a design or changes the goal ("it was supposed to…"), rewrite Task and
   add a Decision that same turn, quoting them. A plan that parks an open goal or
@@ -364,11 +384,14 @@ enforces the same rules, so a draft that passes needs no rewrite.
    no decision yet: what decides it, when, and the safe default until then),
    and what it gains or costs the product, its users, time or money. Numbers
    follow, each in plain words ("loses 11 of 12 against what we use now").
-   No restated question, no story of how you got there.
+   Do not restate a plain question, and tell no story of how you got there.
+   A concern or a design is restated under `Got it:`.
 2. **Short:** about 150 words of prose for answers, proposals, decisions and
    blockers, in 80% ASD-STE100 (one fact per sentence, active voice); up to 500
    for reports of finished work. The whole reply stops at 500 words, tables,
-   fenced blocks and labelled lines included.
+   fenced blocks and labelled lines included. The `Got it:`, `Plan:`,
+   `Concerns:`, `Facts:`, `Theory:`, `Wrong if:` and `Sure:` lines do not
+   count, up to 60 words each.
 3. **Plain names:** use the user's words, explain any other name in a few
    words or drop it, and keep one name per thing ("matcher" then "retriever"
    reads as two things).
