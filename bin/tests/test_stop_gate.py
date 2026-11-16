@@ -238,6 +238,28 @@ class StopGateTests(unittest.TestCase):
         _, gaps = response_format.select_gaps({"shape": {"choice": "simple_answer"}}, files_changed=False, final=long)
         self.assertNotIn("before_after_example", gaps)
 
+    def test_same_page_reply_is_not_sent_back_for_a_template(self):
+        # 16 Nov 2026: a bug report in the contract's own shape got the Proposed
+        # change template, and the thread printed its answer twice.
+        reply = ("Confirmed: Google sign-in on dev is broken.\n\n**Got it:** you cannot sign in on dev.\n\n"
+                 "Facts:\n- the token swap answers 200, then the Convex call answers 401.\n\n"
+                 "Theory: a race between the first session request and the swap.\n\n"
+                 "Plan: wait for the swap before mounting the provider, in three files.\n\n"
+                 "Concerns: the fix needs a commit during the refactor, so I need your go. " + "More detail. " * 10)
+        for shape, gap in (("proposed_change", "before_after_example"), ("decision_needed", "decision_choice"),
+                           ("blocked", "blocker_recovery")):
+            with self.subTest(shape=shape):
+                answers = {"shape": {"choice": shape}, f"gap::{gap}": {"noul": 0.9}}
+                _, gaps = response_format.select_gaps(answers, files_changed=False, final=reply)
+                self.assertEqual(gaps, [])
+        # One label is not the shape, and a finished change still shows its delta.
+        plain = "Plan: wait for the swap before mounting the provider. " + "More detail here. " * 20
+        _, gaps = response_format.select_gaps({"shape": {"choice": "proposed_change"}}, files_changed=False, final=plain)
+        self.assertEqual(gaps, ["before_after_example"])
+        _, gaps = response_format.select_gaps({"shape": {"choice": "completed_change"}}, files_changed=True,
+                                              final=reply + " Verified: tests pass.")
+        self.assertEqual(gaps, ["before_after_example"])
+
     def test_nonvisual_change_keeps_any_citation_as_proof(self):
         rows = [human("Bump the timeout."), edit_call()]
         self.assertIsNone(self.evaluate(rows, "Done. Verified: config test passes.", Client(feature=0.2)))

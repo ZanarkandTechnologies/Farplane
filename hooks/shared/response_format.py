@@ -6,6 +6,9 @@ relative-path check. Proof is deterministic: a completed change that changed
 files and cites nothing gets one proof nudge; any citation means the agent did
 not forget, except that a new feature a person would watch needs a video or
 `Unverified:`. Proof keeps its own nudge after a format nudge is spent.
+A same-page reply (`Got it:` / `Plan:` / `Concerns:`, or `Facts:` / `Theory:`)
+that reports no finished change is already in its shape: it gets no structural
+gap, so no template and no rewrite. Reader, path and proof gaps still apply.
 """
 from __future__ import annotations
 
@@ -175,6 +178,18 @@ def has_before_after(final: str) -> bool:
     return bool(_BEFORE.search(final) and _AFTER.search(final))
 
 
+# The contract's own reply shapes (runtimes/AGENTS.md, "Same page first" and "Show
+# the theory"). 16 Nov 2026: a bug report with Facts, Theory, Plan and Concerns was
+# sent back for a Before / After template, and the thread printed its answer twice.
+_SAME_PAGE_LABEL = re.compile(
+    r"(?im)^[\s>*_`#-]*(got it|plan|concerns|facts|theory|wrong if)[*_`]*\s*:")
+
+
+def has_same_page(final: str) -> bool:
+    """Two or more of the same-page or theory labels, each opening a line."""
+    return len({found.lower() for found in _SAME_PAGE_LABEL.findall(final)}) >= 2
+
+
 # Only change reports carry the delta; a status relay or an answer in a turn
 # that also edited files is not one.
 BEFORE_AFTER_SHAPES = {"completed_change", "proposed_change"}
@@ -275,6 +290,8 @@ def select_gaps(answers: Mapping[str, object], *, files_changed: bool, final: st
         # and it outranks the progress ledger.
         ranked = ["before_after_example",
                   *(n for n in ranked if n not in ("before_after_example", "progress_ledger"))]
+    if shape != "completed_change" and has_same_page(final):
+        ranked = [name for name in ranked if name not in STRUCTURAL_GAPS]
     # Next steps can close any shape, so their gain line is scored for every shape.
     if "proposal_gain" not in ranked and _score(answers.get("gap::proposal_gain")) >= GAP_THRESHOLD:
         ranked.append("proposal_gain")
