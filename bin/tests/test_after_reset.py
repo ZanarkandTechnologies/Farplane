@@ -82,8 +82,20 @@ class AfterResetTests(unittest.TestCase):
         notes = "## Task\n" + "old progress\n" * 800 + f"\n## Open goals\n- {GOAL}\n\n## Later\nmore\n"
         kept = thread_notes.with_goals_first(notes, thread_notes.MAX_OWN)
         self.assertLessEqual(len(kept), thread_notes.MAX_OWN)
-        self.assertTrue(kept.startswith("## Open goals"))
+        self.assertIn("## Open goals", kept.split("\n\n")[1])
         self.assertIn(GOAL, kept)
+
+    def test_long_open_goals_log_does_not_push_out_task_and_decisions(self):
+        # 16 Nov 2026: a 75 KB notes file whose Open goals was a status log; the reset
+        # handed back only that log, never the Task or the user's design decision.
+        notes = ("## Open goals\n" + "- STATE: release ok, job passed, watcher running\n" * 1500
+                 + "\n## Parent\nparent: abcdefgh123\n\n## Task\n- Done when: one shared back half\n"
+                 + "\n## Decisions\n- LiDAR and video share the back half\n\n## Progress\nold\n")
+        kept = thread_notes.with_goals_first(notes, after_reset.MAX_NOTES)
+        self.assertLessEqual(len(kept), after_reset.MAX_NOTES)
+        self.assertIn("Done when: one shared back half", kept)
+        self.assertIn("LiDAR and video share the back half", kept)
+        self.assertIn("Trim Open goals", kept)
 
     def test_short_notes_are_unchanged(self):
         self.assertEqual(thread_notes.with_goals_first("## Task\nshort", 100), "## Task\nshort")

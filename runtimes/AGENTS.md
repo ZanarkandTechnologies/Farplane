@@ -248,11 +248,13 @@ goal = ticket + program + progress + artifacts
   outside Task under V2 candidates instead of building them. The Stop hook
   reads these notes to scope its push.
 - Start those notes with `## Open goals`: every ask that outlives the turn, in
-  the user's words, added when it is made. Only the user closes one. Rewrite
-  Task when the thread's goal changes. A plan that parks an open goal or marks
-  it out of scope says so in its reply and asks first. After a context reset,
-  the after-reset hook hands back the notes and the user's own words; restore
-  anything the summary dropped.
+  the user's words, added when it is made. Only the user closes one; then delete
+  it, and put status lines in Progress, never in Open goals. When the user
+  states a design or changes the goal ("it was supposed to…"), rewrite Task and
+  add a Decision that same turn, quoting them. A plan that parks an open goal or
+  marks it out of scope says so in its reply and asks first. After a context
+  reset, the after-reset hook hands back the notes and the user's own words;
+  restore anything the summary dropped.
 - Keep private handles, workspace IDs, services, local conventions, credentials,
   private runtime state, and unsanitized personal data out of shared artifacts.
 - When consolidating guidance, map each requirement to what retains it or to an

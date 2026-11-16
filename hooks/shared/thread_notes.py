@@ -22,6 +22,9 @@ SESSION_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{7,}")
 PARENT = re.compile(r"(?im)^\W*parent\W*:?\s*`?([A-Za-z0-9][A-Za-z0-9._-]{7,})")
 FORK_SOURCE = re.compile(r'"sessionId":\s*"([A-Za-z0-9][A-Za-z0-9._-]{7,})"')
 OPEN_GOALS = re.compile(r"(?ims)^##\s*open goals\b.*?(?=^##\s|\Z)")
+KEPT = {name: re.compile(rf"(?ims)^##\s*{name}\b.*?(?=^##\s|\Z)")
+        for name in ("open goals", "task", "decisions")}
+SHARES = (("open goals", 0.4), ("task", 0.35), ("decisions", 0.25))
 REMINDER = (
     "Farplane thread notes for this thread: {path}. If this message gives you a ticket "
     "or task scope, write it there first as a Task section (In scope, Out of scope, "
@@ -136,14 +139,36 @@ def read(session_id: str, limit: int) -> str | None:
 
 
 def with_goals_first(text: str, limit: int) -> str:
-    """Bounded notes that always keep the Open goals section."""
+    """Bounded notes that always keep Open goals, Task and Decisions.
+
+    Long notes used to be cut from the top, so a log-style Open goals section
+    pushed Task and Decisions out of every reset (16 Nov 2026: a 75 KB notes file
+    lost the user's stated design this way). Each kept section gets a share of the
+    limit; what a short section leaves over goes to the next, then to the rest.
+    """
     if len(text) <= limit:
         return text
-    found = OPEN_GOALS.search(text)
-    if found is None or found.end() <= limit:
-        return text[:limit]
-    goals = found.group(0).strip()[:limit]
-    return f"{goals}\n\n{text[:found.start()]}{text[found.end():]}"[:limit]
+    warning = (f"[Notes are {len(text):,} characters; only {limit:,} fit here. Open goals, Task "
+               "and Decisions come first, each cut to its share. Trim Open goals to asks still "
+               "open and move status lines to Progress.]")
+    budget = max(limit - len(warning) - 2, 0)
+    spans = {name: KEPT[name].search(text) for name in KEPT}
+    parts: list[str] = []
+    spare = 0
+    for name, share in SHARES:
+        room = int(budget * share) + spare
+        found = spans[name]
+        body = found.group(0).strip() if found else ""
+        if body:
+            parts.append(body[:room])
+        spare = max(room - len(body) - 2, 0)
+    rest = text
+    for found in sorted((s for s in spans.values() if s), key=lambda s: s.start(), reverse=True):
+        rest = rest[:found.start()] + rest[found.end():]
+    used = sum(len(part) + 2 for part in parts)
+    if rest.strip() and budget - used > 40:
+        parts.append(rest.strip()[:budget - used])
+    return "\n\n".join([warning, *parts])[:limit]
 
 
 def parent_id(notes: str) -> str | None:
