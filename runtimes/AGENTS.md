@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.29
+template_version: 0.3.30
 -->
 # Global Agent Guidance
 
@@ -223,6 +223,13 @@ serious_work = ground -> decide -> plan? -> execute -> verify -> review?
   check when recurrence cost justifies a durable guard.
 - Run checks proportionate to the change. Do not add tests that merely mirror
   the implementation or repeat broad suites without new evidence or risk.
+- One commit per ticket (Kenji, 17 Nov 2026: "i only want commits when they
+  represent real net gains"). A commit is a finished scope of work: a ticket
+  whose Done when is met, or a bug fixed and proven. Tries, partial steps,
+  renames, debug edits and a fix of your own fix stay uncommitted until then,
+  and land as one commit whose message states the gain. Never commit to save
+  progress, to make a check run, or because time passed. In a shared checkout
+  commit by path, so other threads' work stays out of it.
 
 ### Load relevant context and preserve durable state
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 # PostToolUse (Bash, Edit, Write): once every 45 minutes since Kenji's last message, tell the thread to ship and
-# report the smallest finished ask instead of holding it inside a long turn. Claude only.
+# report the smallest finished ask instead of holding it inside a long turn (it never asks for a commit). Claude only.
 # capture_user_turn.py writes the start time at each user message: <turns>/<session id> = "<epoch>\n<slots told>\n".
 # Plain sh with builtins: a tool call inside the first 45 minutes spawns only `date`.
 
@@ -23,4 +23,4 @@ slot=$(( (now - start) / ${FARPLANE_TURN_CLOCK_SECONDS:-2700} ))
 [ "$slot" -gt "$told" ] || exit 0
 printf '%s\n%s\n' "$start" "$slot" > "$file"
 minutes=$(( (now - start) / 60 ))
-printf '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"Turn clock: %s minutes since the last user message and no reply yet. If that message held more than one ask, or a small ask sits inside bigger work, finish the smallest one now, commit it on its own and say so in one line, then carry on. A step that only waits on a job belongs in the background. Do not end the turn because of this note."}}\n' "$minutes"
+printf '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"Turn clock: %s minutes since the last user message and no reply yet. If that message held more than one ask, or a small ask sits inside bigger work, finish the smallest one now and say so in one line, then carry on; commit only a finished ticket or a proven bug fix. A step that only waits on a job belongs in the background. Do not end the turn because of this note."}}\n' "$minutes"

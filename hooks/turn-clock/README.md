@@ -4,7 +4,8 @@
 - **Entrypoint:** `turn_clock.sh` (five-second timeout; plain `sh` with
   builtins, so a tool call costs one `date`).
 - **Purpose:** Every 45 minutes since the user's last message, tell the thread
-  to finish the smallest ask, commit it on its own and say so, then carry on.
+  to finish the smallest ask and say so, then carry on. It does not ask for a
+  commit: a commit is one finished ticket or proven bug fix (17 Nov 2026).
   On 13 Nov 2026 five asks lost about 15 hours this way: a small change (white
   dots on a scan) was finished early but sat inside a 12-hour turn bundled
   with two larger ones, so Kenji could not use it.
