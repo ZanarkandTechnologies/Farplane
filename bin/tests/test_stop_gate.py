@@ -155,9 +155,9 @@ class StopGateTests(unittest.TestCase):
         # Restating the status after a nudge earns no second nudge.
         self.assertIsNone(self.evaluate(nudged, "The parser fix is next.", Client(nudge=0.9), checks=checks))
         self.assertTrue(self.logged[-1]["idle_after_nudge"])
-        result = self.evaluate([*nudged, bash, bash], "Parser fixed; the writer is next.",
-                               Client(nudge=0.9), checks=checks)
-        self.assertEqual(result["reason"], continuation.NUDGE)
+        # One push per user turn: new work earns no second one either.
+        self.assertIsNone(self.evaluate([*nudged, bash, bash], "Parser fixed; the writer is next.",
+                                        Client(nudge=0.9), checks=checks))
 
     def test_no_continuation_push_when_the_answer_waits_on_the_user(self):
         checks = frozenset({"continuation"})
@@ -452,14 +452,13 @@ class StopGateTests(unittest.TestCase):
 class EntrypointTests(unittest.TestCase):
     def test_length_blocks_first_without_a_jev_call(self):
         payload = {"hook_event_name": "Stop", "last_assistant_message": "word " * 600}
-        with patch.object(stop_gate, "load_runtime_env", return_value={}), \
+        with patch.object(stop_gate, "load_runtime_env", return_value={"FARPLANE_STOP_CHECKS": "length"}), \
                 patch.object(stop_gate, "jev_gate") as jev:
             result = stop_gate.run_gate(payload)
         self.assertIn("Response length", result["reason"])
         jev.assert_not_called()
 
     def test_checks_env_selects_checks(self):
-        self.assertEqual(stop_gate.configured_checks({}), stop_gate.ALL_CHECKS)
         self.assertEqual(stop_gate.configured_checks({"FARPLANE_STOP_CHECKS": "length, bogus"}),
                          frozenset({"length"}))
         with patch.object(stop_gate, "load_runtime_env", return_value={"FARPLANE_STOP_CHECKS": "length"}), \

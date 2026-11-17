@@ -2,13 +2,32 @@
 
 - **Event:** `Stop` (five-second timeout).
 - **Entrypoint:** `stop_gate.py`.
-- **Purpose:** The one blocking Stop handler. It runs three checks in order and
-  returns at most one block per stop. It cannot certify Goal or ticket completion.
+- **Purpose:** The one blocking Stop handler. It returns at most one block per
+  stop. It cannot certify Goal or ticket completion.
+
+## What runs by default (17 Nov 2026)
+
+No check polices the wording of an answer. Kenji, 17 Nov 2026: "im sick and
+tired of multiple rehooks ... cover the topline in the agents.md and dont cature
+bottom line with the hooks". In the 7 days before, the gate sent answers back
+1,986 times (continuation 825, format 811, length 301, spec 31, notes 3); 329
+turns were sent back twice or more, because each check took its own round.
+
+| Check | Default | Runs when |
+| --- | --- | --- |
+| Spec line | On | A turn committed and touched no owner document; one ask per turn |
+| Notes size | On | The thread notes would be cut at the next context reset; one ask per turn |
+| Continuation (keep-working push) | On, asleep only | The evidence switch (`hooks/evidence-mode/evidence.py`) says asleep; one push per user turn. Awake, the operator is there to say "continue" |
+| Length | Off | Only when `FARPLANE_STOP_CHECKS` names `length` |
+| Response format | Off | Only when `FARPLANE_STOP_CHECKS` names `format` |
+
+The answer rules themselves live in `runtimes/AGENTS.md` (Output Formatting).
+The sections below describe each check as it behaves when it is on.
 
 | Order | Check | How | Blocks when |
 | --- | --- | --- | --- |
 | 1 | Length | Deterministic ([`farplane_response.py`](../../bin/core/farplane_response.py)) | Prose is over the word or line limit |
-| 2 | Continuation | Haiku reader's blocker facts, then Jev `nudge` and `proposal` scores ([`continuation.py`](../continuation/continuation.py)) | The answer stops on a blocker the agent can clear itself (not on a plan or decision question), `nudge` ≥ 0.5, or `proposal` ≥ 0.5: it offers a next step it could take itself that adds value to the user's goal and needs nothing from the user; fewer than three continuation nudges this user turn |
+| 2 | Continuation | Haiku reader's blocker facts, then Jev `nudge` and `proposal` scores ([`continuation.py`](../continuation/continuation.py)) | The answer stops on a blocker the agent can clear itself (not on a plan or decision question), `nudge` ≥ 0.5, or `proposal` ≥ 0.5: it offers a next step it could take itself that adds value to the user's goal and needs nothing from the user; one continuation nudge per user turn, and only while the evidence switch says asleep |
 | 3 | Response format | Jev `shape`, `gap::<section>` and `visible_feature` scores, the Haiku reader check ([`reader_check.py`](../shared/reader_check.py)), and fixed rules ([`response_format.py`](../shared/response_format.py)) | The reader says the answer misses the user, a gap of the chosen shape scores ≥ 0.6, a file is named by a relative path, a new feature has no video, or a completed change that edited files cites nothing |
 
 Continuation and format share one Jev request. Format nudges at most once per
@@ -136,7 +155,8 @@ Registration lives only in [`hooks/hooks.json`](../hooks.json). Run
 `farplane hooks install` (Codex) or `install.sh --runtime claude` (Claude Code),
 then review/trust the changed command in Codex `/hooks`.
 
-`FARPLANE_STOP_CHECKS` selects checks (default `length,continuation,format`);
+`FARPLANE_STOP_CHECKS` selects checks (default `spec,notes,continuation`; add
+`length` or `format` to turn those back on);
 unknown names are ignored. Provider settings and credential scope are shared with
 continuation: missing credentials, provider errors and unknown transcript
 provenance allow the stop silently. Every thread is checked: one another session started (its prompt is an SDK

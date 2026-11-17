@@ -154,15 +154,17 @@ class ContinuationTests(unittest.TestCase):
         self.rows += [self.desktop_hook(gate.LEGACY_NUDGE_V1), *WORK,
                       message("assistant", "I will test next.")]
 
-        self.assertIsNotNone(self.run_gate(final="I will test next.", active=True))
-        self.assertEqual(self.client.calls[-1]["state"]["own_nudges_this_user_turn"], 1)
+        # One push per user turn (17 Nov 2026): the old one counts, so no second.
+        self.assertIsNone(self.run_gate(final="I will test next.", active=True))
+        self.assertEqual(self.client.calls, [])
 
     def test_previous_v2_nudge_still_counts_within_same_user_turn(self):
         self.rows += [self.desktop_hook(gate.LEGACY_NUDGE_V2), *WORK,
                       message("assistant", "I will test next.")]
 
-        self.assertIsNotNone(self.run_gate(final="I will test next.", active=True))
-        self.assertEqual(self.client.calls[-1]["state"]["own_nudges_this_user_turn"], 1)
+        # One push per user turn (17 Nov 2026): the old one counts, so no second.
+        self.assertIsNone(self.run_gate(final="I will test next.", active=True))
+        self.assertEqual(self.client.calls, [])
 
     def test_pre_unblock_v3_nudges_still_count_within_same_user_turn(self):
         # Sent before 6 Nov 2026; unknown v3 text made the gate allow unchecked.
@@ -174,9 +176,8 @@ class ContinuationTests(unittest.TestCase):
                 self.rows = user("Implement and test it.") + [
                     self.desktop_hook(body), *WORK,
                               message("assistant", "I will test next.")]
-                self.assertIsNotNone(self.run_gate(final="I will test next.", active=True))
-                state = self.client.calls[-1]["state"]
-                self.assertEqual(state["own_nudges_this_user_turn"], 1)
+                self.assertIsNone(self.run_gate(final="I will test next.", active=True))
+                self.assertEqual(self.client.calls, [])
 
     def test_nudge_text_edits_keep_the_old_text_parseable(self):
         sent = "\x00".join([gate.NUDGE, gate.BLOCKER_NUDGE, gate.PROPOSAL_NUDGE,
@@ -194,10 +195,8 @@ class ContinuationTests(unittest.TestCase):
         return row
 
     def test_desktop_hook_envelope_counts_and_caps_nudges(self):
+        self.assertIsNotNone(self.run_gate())
         self.rows += [self.desktop_hook(gate.NUDGE), *WORK]
-        self.assertIsNotNone(self.run_gate(active=True))
-        self.assertEqual(self.client.calls[-1]["state"]["own_nudges_this_user_turn"], 1)
-        self.rows += [self.desktop_hook(gate.NUDGE) for _ in range(2)]
         self.client.calls.clear()
         self.assertIsNone(self.run_gate(active=True))
         self.assertEqual(self.client.calls, [])
@@ -238,10 +237,11 @@ class ContinuationTests(unittest.TestCase):
                 self.assertIsNone(self.run_gate(active=True))
         self.assertEqual(self.client.calls, [])
 
-    def test_one_prior_nudge_allows_progress_sensitive_reassessment(self):
+    def test_one_push_per_user_turn_even_after_new_work(self):
+        # 17 Nov 2026: 825 pushes in a week, in chains of up to 30; one is the cap.
         self.rows += [message("user", gate.NUDGE), *WORK, message("assistant", "Tests found a bug; I'll fix it.")]
-        self.assertIsNotNone(self.run_gate(active=True))
-        self.assertEqual(self.client.calls[0]["state"]["own_nudges_this_user_turn"], 1)
+        self.assertIsNone(self.run_gate(active=True))
+        self.assertEqual(self.client.calls, [])
 
     def test_unknown_hook_retry_and_unrecognized_marker_fail_open(self):
         self.assertIsNone(self.run_gate(active=True))

@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""The one blocking Stop gate: length, spec, then continuation, then response format.
+"""The one blocking Stop gate: spec, notes, then the keep-working push.
 
-Each stop returns at most one block. Length and spec are deterministic and run
-first; continuation and format share one Jev request. No completion authority.
+Each stop returns at most one block. By default no check polices the wording of
+an answer (Kenji, 17 Nov 2026: "cover the topline in the agents.md and dont
+capture bottom line with the hooks"); the length and format checks run only when
+FARPLANE_STOP_CHECKS names them. The keep-working push (continuation) runs only
+while the evidence switch says the operator is asleep. No completion authority.
 """
 from __future__ import annotations
 
@@ -32,8 +35,12 @@ from final_response_gate import (  # noqa: E402
 import response_format  # noqa: E402
 import thread_notes  # noqa: E402
 
+sys.path.insert(0, str(ROOT / "hooks" / "evidence-mode"))
+import evidence  # noqa: E402
+
 CHECKS_ENV = "FARPLANE_STOP_CHECKS"
 ALL_CHECKS = frozenset({"length", "spec", "notes", "continuation", "format"})
+DEFAULT_CHECKS = frozenset({"spec", "notes", "continuation"})
 NOTES_MARKER = "<!-- farplane-notes:v1 -->"
 SPEC_MARKER = "<!-- farplane-spec:v1 -->"
 COMMITS = re.compile(r"\bgit\b[^\n;|&]*\bcommit\b")
@@ -110,8 +117,16 @@ def spec_gate(payload: dict) -> dict | None:
 def configured_checks(env: dict[str, str]) -> frozenset[str]:
     raw = env.get(CHECKS_ENV)
     if raw is None:
-        return ALL_CHECKS
+        return DEFAULT_CHECKS
     return frozenset(part.strip() for part in raw.split(",")) & ALL_CHECKS
+
+
+def operator_asleep() -> bool:
+    """Awake, the operator is there to say "continue"; a push only costs them a round."""
+    try:
+        return evidence.resolve()[0] == "asleep"
+    except Exception:
+        return False
 
 
 def jev_gate(payload: dict, checks: frozenset[str], env: dict[str, str], *,
@@ -150,6 +165,9 @@ def run_gate(payload: dict, *, credential_child: bool = False) -> dict | None:
             pass
     env = load_runtime_env()
     checks = configured_checks(env)
+    if "length" not in checks:
+        # No length check will block, so the keep-working push must not wait for one.
+        payload = {**payload, LENGTH_CAPPED_KEY: True}
     if "length" in checks and not credential_child:
         result = gate_response(payload, configured_max_prose_words(env),
                                configured_max_prose_lines(env))
@@ -169,6 +187,8 @@ def run_gate(payload: dict, *, credential_child: bool = False) -> dict | None:
             result = None
         if result:
             return result
+    if "continuation" in checks and not credential_child and not operator_asleep():
+        checks -= {"continuation"}
     if checks & {"continuation", "format"}:
         return jev_gate(payload, checks - {"length", "spec", "notes"}, env,
                         credential_child=credential_child)

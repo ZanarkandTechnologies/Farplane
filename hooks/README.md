@@ -6,7 +6,7 @@ explain behavior without maintaining duplicate registration snippets.
 
 | Folder | Codex event | Responsibility |
 | --- | --- | --- |
-| [stop-gate](stop-gate/README.md) | Stop | The one blocking Stop gate: length, then continuation, then response format |
+| [stop-gate](stop-gate/README.md) | Stop | The one blocking Stop gate: spec line, notes size, and a keep-working push while the operator is asleep; length and format checks are off by default |
 | [continuation](continuation/README.md) | Stop (via stop-gate) | Bounded Jev continuation advice |
 | [response-length](response-length/README.md) | Stop (via stop-gate) | Deterministic final-answer prose limits |
 | [lifecycle-telemetry](lifecycle-telemetry/README.md) | UserPromptSubmit, Stop, SubagentStart, SubagentStop | Classified lifecycle observations |

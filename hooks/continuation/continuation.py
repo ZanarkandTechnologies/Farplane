@@ -36,7 +36,7 @@ MAX_MESSAGES = 20
 # With thread notes holding the scope, the judge needs only the latest exchange.
 NOTES_MESSAGES = 5
 MAX_TEXT = 2400
-MAX_NUDGES = 3
+MAX_NUDGES = 1  # one push per user turn (17 Nov 2026: chains of three restated a wait)
 # A repeat continuation nudge needs real work since the last one: after a nudge
 # the agent answered with at most one tool call, another nudge was churn 3 times
 # in 4 (Claude transcripts, 22-26 Oct 2026).

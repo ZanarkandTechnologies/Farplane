@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.30
+template_version: 0.3.31
 -->
 # Global Agent Guidance
 
@@ -382,8 +382,9 @@ delegate(context_ref, claim, bounded_output, proof_target) -> owned_result
 final = decision + reason + proof + next_blocking_condition
 ```
 
-Check every final answer against this list before sending. The Stop gate
-enforces the same rules, so a draft that passes needs no rewrite.
+Check every final answer against this list before sending. No hook checks
+the wording after you (Kenji, 17 Nov 2026: "cover the topline in the
+agents.md"), so a miss reaches the user as sent.
 
 1. **The first sentence answers the latest message.** A report of results,
    a test, a comparison, a status or finished work opens with the decision
