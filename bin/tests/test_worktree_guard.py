@@ -1,13 +1,14 @@
 import json
 import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
 GUARD = Path(__file__).resolve().parents[2] / "hooks" / "worktree-guard" / "worktree_guard.sh"
 
 
-def decide(tool, tool_input):
-    payload = json.dumps({"tool_name": tool, "tool_input": tool_input})
+def decide(tool, tool_input, cwd=None):
+    payload = json.dumps({"tool_name": tool, "cwd": cwd or "/nonexistent", "tool_input": tool_input})
     out = subprocess.run(["sh", str(GUARD)], input=payload, capture_output=True, text=True).stdout
     return json.loads(out)["hookSpecificOutput"]["permissionDecision"] if out.strip() else "allow"
 
@@ -28,6 +29,15 @@ class WorktreeGuardTest(unittest.TestCase):
         self.assertEqual(decide(tool, {"title": "x", "use_worktree": True}), "deny")
         self.assertEqual(decide(tool, {"title": "x", "use_worktree": False}), "allow")
         self.assertEqual(decide(tool, {"title": "worktree notes"}), "allow")
+
+    def test_repo_that_opted_in_may_add_worktrees(self):
+        with tempfile.TemporaryDirectory() as d:
+            subprocess.run(["git", "init", "-q", d], check=True)
+            add = {"command": "git worktree add .claude/worktrees/x -b fix/x origin/dev"}
+            self.assertEqual(decide("Bash", add, d), "deny")
+            subprocess.run(["git", "-C", d, "config", "farplane.worktreePerChange", "true"], check=True)
+            self.assertEqual(decide("Bash", add, d), "allow")
+            self.assertEqual(decide("mcp__ccd_session__start_session", {"title": "x", "use_worktree": True}, d), "allow")
 
 
 if __name__ == "__main__":

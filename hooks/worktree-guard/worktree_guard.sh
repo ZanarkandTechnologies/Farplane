@@ -7,6 +7,10 @@
 IFS= read -r payload || [ -n "$payload" ] || exit 0
 case $payload in *worktree*) ;; *) exit 0 ;; esac
 input=$(printf '%s' "$payload" | sed -e 's/.*"tool_input"//' -e 's/\\[nt]/ /g')
+# A repo that works one worktree per change opts out (Oures, Kenji 19 Nov 2026: "yes worktree per change"):
+#   git config farplane.worktreePerChange true
+cwd=$(printf '%s' "$payload" | sed -n 's/.*"cwd": *"\([^"]*\)".*/\1/p')
+[ -n "$cwd" ] && [ "$(git -C "$cwd" config --bool farplane.worktreePerChange 2>/dev/null)" = true ] && exit 0
 case $payload in
   *'"tool_name":"Bash"'* | *'"tool_name": "Bash"'*)
     printf '%s' "$input" | grep -Eq '\bworktree +add\b' || exit 0
@@ -16,4 +20,4 @@ case $payload in
   *) exit 0 ;;
 esac
 
-printf '%s\n' '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Blocked new worktree: Kenji allows a new git worktree only when he asks for one (or, in Oures, for a Chairhorse task). Work in the existing shared checkout for this version instead, commit only your own files, pull --no-rebase, push; for a new session pass use_worktree: false. If Kenji asked in his own words, or this is a Chairhorse task, rerun as FARPLANE_WORKTREE_OK=1 git worktree add ... and quote his words in your reply."}}'
+printf '%s\n' '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Blocked new worktree: Kenji allows a new git worktree only when he asks for one (or the repo sets git config farplane.worktreePerChange true, as Oures does: run it from that checkout). Work in the existing shared checkout for this version instead, commit only your own files, pull --no-rebase, push; for a new session pass use_worktree: false. If Kenji asked in his own words, rerun as FARPLANE_WORKTREE_OK=1 git worktree add ... and quote his words in your reply."}}'

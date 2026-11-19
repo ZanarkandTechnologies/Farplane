@@ -8,7 +8,10 @@
   it, because three copies of the Oures rulebook disagreed and older ones say "branch in a
   worktree". This guard denies the call and says what to do instead.
 - **Override:** `FARPLANE_WORKTREE_OK=1 git worktree add ...` when Kenji asked in his own
-  words (or, in Oures, for a Chairhorse task); the reply quotes him.
+  words; the reply quotes him.
+- **Repo opt-out:** a repo that works one worktree per change sets
+  `git config farplane.worktreePerChange true`; calls whose `cwd` is in it pass (Oures,
+  Kenji 19 Nov 2026: "yes worktree per change").
 
 ## Checks
 
